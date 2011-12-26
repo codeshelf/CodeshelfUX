@@ -1,5 +1,6 @@
 goog.provide('closureexample.foo.Bar');
 goog.require('goog.dom');
+
 /**
  * @constructor
  */

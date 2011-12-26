@@ -13,3 +13,5 @@ closureexample.init = function(appTitle, parent) {
 	var bar = new closureexample.foo.Bar(parent);
 	bar.showContent();
 };
+
+goog.exportSymbol('closureexample.init', closureexample.init);

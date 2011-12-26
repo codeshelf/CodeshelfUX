@@ -2,12 +2,15 @@
 <html>
 	<head>
 		<title>Closure Test</title>
-		<script type="text/javascript" src="../lib/GoogleClosureLibrary/closure/goog/base.js"></script>
+		<!-- Uncompiled
+		<script type="text/javascript" src="../lib/closure/goog/base.js"></script>
 		<script type="text/javascript" src="js_uncompiled/deps.js"></script>
 		<script type="text/javascript" src="js_uncompiled/init.js"></script>
+		-->
+		<script type="text/javascript" src="js/example.js"></script>
 	</head>
 	<body>
-		<div id="main"></div>
+		<div id="main">
 		<script type="text/javascript">
 			closureexample.init( 'Test', document.getElementById('main') );
 		</script>
