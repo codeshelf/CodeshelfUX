@@ -6,7 +6,7 @@ closureexample.init = function(appTitle, parent) {
 	var header = {
 		'style' : 'background:#FF0000'
 	};
-	var content = "Application " + appTitle + " Starting"
+	var content = "Application " + appTitle + " Starting";
 	var element = goog.dom.createDom('div', header, content);
 	goog.dom.appendChild(parent, element);
 

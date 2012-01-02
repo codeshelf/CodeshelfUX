@@ -7,6 +7,7 @@ goog.require('goog.dom');
 closureexample.foo.Bar = function(parent) {
 	this.parent = parent;
 }
+;
 
 closureexample.foo.Bar.prototype.showContent = function() {
 	var element = goog.dom.createDom('div', {
@@ -14,3 +15,4 @@ closureexample.foo.Bar.prototype.showContent = function() {
 	}, "This was created in the Bar class");
 	goog.dom.appendChild(this.parent, element);
 }
+;
