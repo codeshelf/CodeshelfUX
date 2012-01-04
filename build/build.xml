@@ -10,11 +10,22 @@
 
 	<property name="src.dir" value="src" />
 
-	<target name="compile">
+	<target name="lint">
+		<exec command="/usr/local/bin/gjslint">
+			<arg value="-r" />
+			<arg value="src/js_uncompiled" />
+			<arg value="--nojsdoc" />
+		</exec>
+	</target>
+
+	<target name="deps.writer">
 		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/depswriter.py" pythonpath="${basedir}" optimize="0">
 			<arg value="--root_with_prefix=../src ../../../../src" />
 			<arg value="--output_file=../src/js_uncompiled/deps.js" />
 		</py-run>
+	</target>
+
+	<target name="compile">
 		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/closurebuilder.py" pythonpath="${basedir}" optimize="0">
 			<arg value="--root=../lib/GoogleClosureLibrary/closure/" />
 			<arg value="--root=../lib/GoogleClosureLibrary/third_party/" />
