@@ -1,570 +1,596 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>goog.fx.Dragger</title>
-<meta charset="utf-8">
-<link rel="stylesheet" href="css/demo.css">
-<link rel="stylesheet" href="../lib/SlickGrid/slick.grid.css"
-	type="text/css" media="screen" />
-<link rel="stylesheet" href="../lib/SlickGrid/controls/slick.pager.css"
-	type="text/css" media="screen" />
-<link rel="stylesheet"
-	href="../lib/SlickGrid/css/smoothness/jquery-ui-1.8.16.custom.css"
-	type="text/css" media="screen" />
-<link rel="stylesheet" href="css/examples.css" type="text/css"
-	media="screen" />
-<link rel="stylesheet"
-	href="../lib/SlickGrid/controls/slick.columnpicker.css" type="text/css"
-	media="screen" />
-<script src="../lib/GoogleClosureLibrary/closure/goog/base.js"
-	type="text/javascript"></script>
-<script src="../lib/GoogleClosureLibrary/closure/goog/deps.js"
-	type="text/javascript"></script>
-<script type="text/javascript">
-	goog.require('goog.fx.Dragger');
-	goog.require('goog.dom');
-	goog.require('goog.style');
-	goog.require('goog.dom.query');
-	goog.require('goog.window');
-</script>
-<style type="text/css">
-#frame {
-	position: absolute;
-	left: 49px;
-	top: 49px;
-	width: 1602px;
-	height: 702px;
-	border: 1px solid #999;
-	background-color: #F0F0F0;
-}
+	<title>goog.fx.Dragger</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="css/demo.css">
+	<link rel="stylesheet" href="../lib/SlickGrid/slick.grid.css"
+		  type="text/css" media="screen"/>
+	<link rel="stylesheet" href="../lib/SlickGrid/controls/slick.pager.css"
+		  type="text/css" media="screen"/>
+	<link rel="stylesheet"
+		  href="../lib/SlickGrid/css/smoothness/jquery-ui-1.8.16.custom.css"
+		  type="text/css" media="screen"/>
+	<link rel="stylesheet" href="css/examples.css" type="text/css"
+		  media="screen"/>
+	<link rel="stylesheet"
+		  href="../lib/SlickGrid/controls/slick.columnpicker.css" type="text/css"
+		  media="screen"/>
+	<script src="../lib/GoogleClosureLibrary/closure/goog/base.js"
+			type="text/javascript"></script>
+	<script src="../lib/GoogleClosureLibrary/closure/goog/deps.js"
+			type="text/javascript"></script>
+	<script type="text/javascript">
+		goog.require('goog.fx.Dragger');
+		goog.require('goog.dom');
+		goog.require('goog.style');
+		goog.require('goog.dom.query');
+		goog.require('goog.window');
+	</script>
+	<style type="text/css">
+		#frame {
+			position:         absolute;
+			left:             49px;
+			top:              49px;
+			width:            1602px;
+			height:           702px;
+			border:           1px solid #999;
+			background-color: #F0F0F0;
+		}
 
-.window {
-	position: absolute;
-	left: 150px;
-	top: 110px;
-	width: 300px;
-	height: 100px;
-	background-color: rgb(200, 200, 250);
-	border: 1px solid #99F;
-	font: bold 11px/18px arial;
-	text-indent: 10px;
-	color: #FFF;
-}
+		.window {
+			position:         absolute;
+			left:             150px;
+			top:              110px;
+			width:            300px;
+			height:           100px;
+			background-color: rgb(200, 200, 250);
+			border:           1px solid #99F;
+			font:             bold 11px/18px arial;
+			text-indent:      10px;
+			color:            #FFF;
+		}
 
-#win2 {
-	top: 250px;
-	width: 400px;
-	background-color: rgb(250, 200, 200);
-	border: 1px solid #F99;
-	background-color: rgb(250, 200, 200);
-}
+		#win2 {
+			top:              250px;
+			width:            400px;
+			background-color: rgb(250, 200, 200);
+			border:           1px solid #F99;
+		}
 
-#win3 {
-	left: 500px;
-	background-color: rgb(150, 200, 150);
-	border: 1px solid #6A6;
-}
+		#win3 {
+			left:             500px;
+			background-color: rgb(150, 200, 150);
+			border:           1px solid #6A6;
+		}
 
-.bar {
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	width: 300px;
-	height: 20px;
-	background-color: #99F;
-	cursor: default;
-}
+		.bar {
+			position:         absolute;
+			left:             0;
+			top:              0;
+			width:            300px;
+			height:           20px;
+			background-color: #99F;
+			cursor:           default;
+		}
 
-#win2 .bar {
-	background-color: #F99;
-	height: 20px;
-}
+		#win2 .bar {
+			background-color: #F99;
+			height:           20px;
+		}
 
-#win3 .bar {
-	background-color: #6A6;
-}
+		#win3 .bar {
+			background-color: #6A6;
+		}
 
-#ghostbox {
-	position: absolute;
-	left: 100px;
-	top: 625px;
-	width: 600px;
-	height: 20px;
-}
+		#ghostbox {
+			position: absolute;
+			left:     100px;
+			top:      625px;
+			width:    600px;
+			height:   20px;
+		}
 
-.block {
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	width: 125px;
-	height: 20px;
-	font: bold 11px/18px arial;
-	background-color: #AAA;
-	color: #EEE;
-	text-align: center;
-	border: 1px solid #666;
-}
+		.block {
+			position:         absolute;
+			left:             0;
+			top:              0;
+			width:            125px;
+			height:           20px;
+			font:             bold 11px/18px arial;
+			background-color: #AAA;
+			color:            #EEE;
+			text-align:       center;
+			border:           1px solid #666;
+		}
 
-.ghost0 {
-	left: 0px;
-}
+		.ghost0 {
+			left: 0;
+		}
 
-.ghost1 {
-	left: 130px;
-}
+		.ghost1 {
+			left: 130px;
+		}
 
-.ghost2 {
-	left: 260px;
-}
+		.ghost2 {
+			left: 260px;
+		}
 
-.ghost3 {
-	left: 390px;
-}
+		.ghost3 {
+			left: 390px;
+		}
 
-.cell-title {
-	font-weight: bold;
-}
+		.cell-title {
+			font-weight: bold;
+		}
 
-.cell-effort-driven {
-	text-align: center;
-}
+		.cell-effort-driven {
+			text-align: center;
+		}
 
-.cell-selection {
-	border-right-color: silver;
-	border-right-style: solid;
-	background: #f5f5f5;
-	color: gray;
-	text-align: right;
-	font-size: 10px;
-}
+		.cell-selection {
+			border-right-color: silver;
+			border-right-style: solid;
+			background:         #f5f5f5;
+			color:              gray;
+			text-align:         right;
+			font-size:          10px;
+		}
 
-.slick-row.selected .cell-selection {
-	background-color: transparent;
-	/* show default selected row background */
-}
-</style>
+		.slick-row.selected .cell-selection {
+			background-color: transparent;
+			/* show default selected row background */
+		}
+	</style>
 </head>
 <body>
-	<div id="frame"></div>
+<div id="frame"></div>
 
-	<div id="win1" class="window">
-		<div class="bar">
-			<label>1. Drag Me...</label>
-		</div>
+<div id="win1" class="window">
+	<div class="bar">
+		<label>1. Drag Me...</label>
 	</div>
-	<div id="win2" class="window">
-		<div class="bar" style="width: 600px">
-			<div class="drag">
-				<label>2. Drag Me...</label>
-			</div>
-			<div style="width: 600px">
-				<div class="grid-header" style="width: 100%">
-					<label>Table</label> <span style="float: right"
-						class="ui-icon ui-icon-search" title="Toggle search panel"
-						onclick="toggleFilterRow()"></span>
-				</div>
-				<div id="myGrid" style="width: 100%; height: 200px;"></div>
-				<div id="pager" style="width: 100%; height: 20px;"></div>
-			</div>
-		</div>
+</div>
+<div id="win2" class="window" style="width: 600px; height: 220px">
+	<div class="bar" style="width: 100%">
+		<label>2. Drag Me...</label>
+		<!--div class="drag">
+		   </div-->
 	</div>
-	<div id="win3" class="window">
-		<div class="bar">
-			<label>3. Drag Me...</label>
+	<div id="myTable" style="width: 100%; height: 100%">
+		<div class="grid-header" style="width: 100%; height: 20px">
+			<label>SlickGrid</label> <span style="float: right"
+										   class="ui-icon ui-icon-search" title="Toggle search panel"
+										   onclick="toggleFilterRow()"></span>
 		</div>
+		<div id="myGrid" style="width: 100%; height: 100%;"></div>
+		<div id="pager" style="width: 100%; height: 20px;"></div>
 	</div>
+</div>
+<div id="win3" class="window">
+	<div class="bar">
+		<label>3. Drag Me...</label>
+	</div>
+</div>
 
-	<script type="text/javascript">
-		var $ = goog.dom.getElement;
+<script type="text/javascript">
+	var $ = goog.dom.getElement;
 
-		// WINDOW EXAMPLE
-		//================
+	// WINDOW EXAMPLE
+	//================
 
-		var Z = 5;
+	var Z = 5;
 
-		var limits = new goog.math.Rect(50, 50, 1000, 500);
+	var limits = new goog.math.Rect(50, 50, 750, 600);
 
-		var window1 = new goog.fx.Dragger($('win1'), goog.dom.query("#win1 .bar")[0], limits);
-		var window2 = new goog.fx.Dragger($('win2'), goog.dom.query("#win2 .drag")[0], limits);
-		var window3 = new goog.fx.Dragger($('win3'), goog.dom.query("#win3 .bar")[0], limits);
+	var window1 = $('win1');
+	var window2 = $('win2');
+	var window3 = $('win3');
+	var dragger1 = new goog.fx.Dragger(window1, goog.dom.query("#win1 .bar")[0], limits);
+	var dragger2 = new goog.fx.Dragger($('win2'), goog.dom.query("#win2 .bar")[0], limits);
+	var resizer2 = new goog.fx.Dragger($('pager'), goog.dom.query("#pager")[0], limits);
+	var dragger3 = new goog.fx.Dragger($('win3'), goog.dom.query("#win3 .bar")[0], limits);
 
-		dragBox = goog.dom.query("#win2")[0];
-		window2.defaultAction = function(x, y) {
-			dragBox.style.width = this.target.style.left + x + 'px';
-			dragBox.style.height = this.target.style.top + y + 'px';
+	var theWindow = $('win2');
+
+	dragger3.setHysteresis(6);
+
+	function createMoverStart(mover) {
+		var moverFunc = function moveWindowSetZ(e) {
+			mover.style.zIndex = Z++;
+			goog.style.setOpacity(mover, 0.50);
 		};
+		return moverFunc;
+	}
 
-		window3.setHysteresis(6);
-
-		function setZ(e) {
-			this.target.style.zIndex = Z++;
-			goog.style.setOpacity(this.target, 0.50);
+	function createMoverEnd(mover) {
+		var moverFunc = function moveWindowEnd(e) {
+			goog.style.setOpacity(mover, 1);
 		}
+		return moverFunc;
+	}
 
-		function end(e) {
-			goog.style.setOpacity(this.target, 1);
-		}
+	goog.events.listen(dragger1, 'start', createMoverStart(window1));
+	goog.events.listen(dragger2, 'start', createMoverStart(window2));
+	goog.events.listen(resizer2, 'start', createMoverStart(window2));
+	goog.events.listen(dragger3, 'start', createMoverStart(window3));
 
-		goog.events.listen(window1, 'start', setZ);
-		goog.events.listen(window2, 'start', setZ);
-		goog.events.listen(window3, 'start', setZ);
+	goog.events.listen(dragger1, 'end', createMoverEnd(window1));
+	goog.events.listen(dragger2, 'end', createMoverEnd(window2));
+	goog.events.listen(resizer2, 'end', createMoverEnd(window2));
+	goog.events.listen(dragger3, 'end', createMoverEnd(window3));
 
-		goog.events.listen(window1, 'end', end);
-		goog.events.listen(window2, 'end', end);
-		goog.events.listen(window3, 'end', end);
+	goog.events.listen(window, 'unload', function (e) {
+		dragger1.dispose();
+		dragger2.dispose();
+		resizer2.dispose();
+		dragger3.dispose();
+	});
+</script>
+<script src="../lib/SlickGrid/lib/firebugx.js" type="text/javascript"></script>
 
-		goog.events.listen(window, 'unload', function(e) {
-			window1.dispose();
-			window2.dispose();
-			window3.dispose();
-		});
-	</script>
-	<script src="../lib/SlickGrid/lib/firebugx.js" type="text/javascript"></script>
-
-	<script src="../lib/SlickGrid/lib/jquery-1.7.min.js"
+<script src="../lib/SlickGrid/lib/jquery-1.7.min.js"
 		type="text/javascript"></script>
-	<script src="../lib/SlickGrid/lib/jquery-ui-1.8.16.custom.min.js"
+<script src="../lib/SlickGrid/lib/jquery-ui-1.8.16.custom.min.js"
 		type="text/javascript"></script>
-	<script src="../lib/SlickGrid/lib/jquery.event.drag-2.0.min.js"
-		type="text/javascript"></script>
-
-	<script src="../lib/SlickGrid/slick.core.js" type="text/javascript"></script>
-	<script src="../lib/SlickGrid/slick.editors.js" type="text/javascript"></script>
-	<script src="../lib/SlickGrid/plugins/slick.rowselectionmodel.js"
-		type="text/javascript"></script>
-	<script src="../lib/SlickGrid/slick.grid.js" type="text/javascript"></script>
-	<script src="../lib/SlickGrid/slick.dataview.js" type="text/javascript"></script>
-	<script src="../lib/SlickGrid/controls/slick.pager.js"
-		type="text/javascript"></script>
-	<script src="../lib/SlickGrid/controls/slick.columnpicker.js"
+<script src="../lib/SlickGrid/lib/jquery.event.drag-2.0.min.js"
 		type="text/javascript"></script>
 
-	<script type="text/javascript">
-		var dataView;
-		var grid;
-		var data = [];
-		var selectedRowIds = [];
+<script src="../lib/SlickGrid/slick.core.js" type="text/javascript"></script>
+<script src="../lib/SlickGrid/slick.editors.js" type="text/javascript"></script>
+<script src="../lib/SlickGrid/plugins/slick.rowselectionmodel.js"
+		type="text/javascript"></script>
+<script src="../lib/SlickGrid/slick.grid.js" type="text/javascript"></script>
+<script src="../lib/SlickGrid/slick.dataview.js" type="text/javascript"></script>
+<script src="../lib/SlickGrid/controls/slick.pager.js"
+		type="text/javascript"></script>
+<script src="../lib/SlickGrid/controls/slick.columnpicker.js"
+		type="text/javascript"></script>
 
-		var columns = [ {
-			id : "sel",
-			name : "#",
-			field : "num",
-			behavior : "select",
-			cssClass : "cell-selection",
-			width : 40,
-			cannotTriggerInsert : true,
-			resizable : false,
-			selectable : false
-		}, {
-			id : "title",
-			name : "Title",
-			field : "title",
-			width : 120,
-			minWidth : 120,
-			cssClass : "cell-title",
-			editor : TextCellEditor,
-			validator : requiredFieldValidator,
-			sortable : true
-		}, {
-			id : "duration",
-			name : "Duration",
-			field : "duration",
-			editor : TextCellEditor,
-			sortable : true
-		}, {
-			id : "%",
-			name : "% Complete",
-			field : "percentComplete",
-			width : 80,
-			resizable : false,
-			formatter : GraphicalPercentCompleteCellFormatter,
-			editor : PercentCompleteCellEditor,
-			sortable : true
-		}, {
-			id : "start",
-			name : "Start",
-			field : "start",
-			minWidth : 60,
-			editor : DateCellEditor,
-			sortable : true
-		}, {
-			id : "finish",
-			name : "Finish",
-			field : "finish",
-			minWidth : 60,
-			editor : DateCellEditor,
-			sortable : true
-		}, {
-			id : "effort-driven",
-			name : "Effort Driven",
-			width : 80,
-			minWidth : 20,
-			maxWidth : 80,
-			cssClass : "cell-effort-driven",
-			field : "effortDriven",
-			formatter : BoolCellFormatter,
-			editor : YesNoCheckboxCellEditor,
-			cannotTriggerInsert : true,
-			sortable : true
-		} ];
+<script type="text/javascript">
+var dataView;
+var grid;
+var data = [];
+var selectedRowIds = [];
 
-		var options = {
-			editable : true,
-			enableAddRow : true,
-			enableCellNavigation : true,
-			asyncEditorLoading : true,
-			forceFitColumns : false,
-			topPanelHeight : 25
+var columns = [
+	{
+		id:                 "sel",
+		name:               "#",
+		field:              "num",
+		behavior:           "select",
+		cssClass:           "cell-selection",
+		width:              40,
+		cannotTriggerInsert:true,
+		resizable:          false,
+		selectable:         false
+	},
+	{
+		id:       "title",
+		name:     "Title",
+		field:    "title",
+		width:    120,
+		minWidth: 120,
+		cssClass: "cell-title",
+		editor:   TextCellEditor,
+		validator:requiredFieldValidator,
+		sortable: true
+	},
+	{
+		id:      "duration",
+		name:    "Duration",
+		field:   "duration",
+		editor:  TextCellEditor,
+		sortable:true
+	},
+	{
+		id:       "%",
+		name:     "% Complete",
+		field:    "percentComplete",
+		minWidth: 80,
+		resizable:true,
+		formatter:GraphicalPercentCompleteCellFormatter,
+		editor:   PercentCompleteCellEditor,
+		sortable: true
+	},
+	{
+		id:      "start",
+		name:    "Start",
+		field:   "start",
+		minWidth:60,
+		editor:  DateCellEditor,
+		sortable:true
+	},
+	{
+		id:      "finish",
+		name:    "Finish",
+		field:   "finish",
+		minWidth:60,
+		editor:  DateCellEditor,
+		sortable:true
+	},
+	{
+		id:                 "effort-driven",
+		name:               "Effort Driven",
+		width:              80,
+		minWidth:           20,
+		cssClass:           "cell-effort-driven",
+		field:              "effortDriven",
+		formatter:          BoolCellFormatter,
+		editor:             YesNoCheckboxCellEditor,
+		cannotTriggerInsert:true,
+		sortable:           true
+	}
+];
+
+var options = {
+	editable:            false,
+	enableAddRow:        true,
+	enableCellNavigation:true,
+	asyncEditorLoading:  true,
+	forceFitColumns:     true,
+	topPanelHeight:      25
+};
+
+var sortcol = "title";
+var sortdir = 1;
+var percentCompleteThreshold = 0;
+var searchString = "";
+
+function requiredFieldValidator(value) {
+	if (value == null || value == undefined || !value.length)
+		return {
+			valid:false,
+			msg:  "This is a required field"
 		};
+	else
+		return {
+			valid:true,
+			msg:  null
+		};
+}
 
-		var sortcol = "title";
-		var sortdir = 1;
-		var percentCompleteThreshold = 0;
-		var searchString = "";
+function myFilter(item, args) {
+	if (item["percentComplete"] < args.percentCompleteThreshold)
+		return false;
 
-		function requiredFieldValidator(value) {
-			if (value == null || value == undefined || !value.length)
-				return {
-					valid : false,
-					msg : "This is a required field"
-				};
-			else
-				return {
-					valid : true,
-					msg : null
-				};
-		}
+	return !(args.searchString != "" && item["title"].indexOf(args.searchString) == -1);
 
-		function myFilter(item, args) {
-			if (item["percentComplete"] < args.percentCompleteThreshold)
-				return false;
 
-			if (args.searchString != "" && item["title"].indexOf(args.searchString) == -1)
-				return false;
+}
 
-			return true;
-		}
+function percentCompleteSort(a, b) {
+	return a["percentComplete"] - b["percentComplete"];
+}
 
-		function percentCompleteSort(a, b) {
-			return a["percentComplete"] - b["percentComplete"];
-		}
+function comparer(a, b) {
+	var x = a[sortcol], y = b[sortcol];
+	return (x == y ? 0 : (x > y ? 1 : -1));
+}
 
-		function comparer(a, b) {
-			var x = a[sortcol], y = b[sortcol];
-			return (x == y ? 0 : (x > y ? 1 : -1));
-		}
+function toggleFilterRow() {
+	if ($(grid.getTopPanel()).is(":visible"))
+		grid.hideTopPanel();
+	else
+		grid.showTopPanel();
+}
 
-		function toggleFilterRow() {
-			if ($(grid.getTopPanel()).is(":visible"))
-				grid.hideTopPanel();
-			else
-				grid.showTopPanel();
-		}
-
-		$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all").mouseover(function(e) {
+$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all").mouseover(
+		function (e) {
 			$(e.target).addClass("ui-state-hover")
-		}).mouseout(function(e) {
+		}).mouseout(function (e) {
 			$(e.target).removeClass("ui-state-hover")
 		});
 
-		$(function() {
-			// prepare the data
-			for ( var i = 0; i < 50000; i++) {
-				var d = (data[i] = {});
+$(function () {
+	// prepare the data
+	for (var i = 0; i < 50000; i++) {
+		var d = (data[i] = {});
 
-				d["id"] = "id_" + i;
-				d["num"] = i;
-				d["title"] = "Task " + i;
-				d["duration"] = "5 days";
-				d["percentComplete"] = Math.round(Math.random() * 100);
-				d["start"] = "01/01/2009";
-				d["finish"] = "01/05/2009";
-				d["effortDriven"] = (i % 5 == 0);
+		d["id"] = "id_" + i;
+		d["num"] = i;
+		d["title"] = "Task " + i;
+		d["duration"] = "5 days";
+		d["percentComplete"] = Math.round(Math.random() * 100);
+		d["start"] = "01/01/2009";
+		d["finish"] = "01/05/2009";
+		d["effortDriven"] = (i % 5 == 0);
+	}
+
+	dataView = new Slick.Data.DataView();
+	grid = new Slick.Grid("#myGrid", dataView, columns, options);
+	grid.setSelectionModel(new Slick.RowSelectionModel());
+
+	resizer2.defaultAction = function (x, y) {
+		leftDim = parseInt(theWindow.style.left, 10);
+		topDim = parseInt(theWindow.style.top, 10);
+		width = this.screenX - leftDim;
+		height = y + 20 - topDim
+		theWindow.style.width = width + 'px';
+		theWindow.style.height = height + 'px';
+		grid.resizeCanvas();
+		grid.autosizeColumns();
+	};
+
+	var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
+	var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
+
+	// move the filter panel defined in a hidden div into grid top panel
+	$("#inlineFilterPanel").appendTo(grid.getTopPanel()).show();
+
+	grid.onCellChange.subscribe(function (e, args) {
+		dataView.updateItem(args.item.id, args.item);
+	});
+
+	grid.onAddNewRow.subscribe(function (e, args) {
+		var item = {
+			"num":            data.length,
+			"id":             "new_" + (Math.round(Math.random() * 10000)),
+			"title":          "New task",
+			"duration":       "1 day",
+			"percentComplete":0,
+			"start":          "01/01/2009",
+			"finish":         "01/01/2009",
+			"effortDriven":   false
+		};
+		$.extend(item, args.item);
+		dataView.addItem(item);
+	});
+
+	grid.onKeyDown.subscribe(function (e) {
+		// select all rows on ctrl-a
+		if (e.which != 65 || !e.ctrlKey)
+			return false;
+
+		var rows = [];
+		selectedRowIds = [];
+
+		for (var i = 0; i < dataView.getLength(); i++) {
+			rows.push(i);
+			selectedRowIds.push(dataView.getItem(i).id);
+		}
+
+		grid.setSelectedRows(rows);
+		e.preventDefault();
+	});
+
+	grid.onSelectedRowsChanged.subscribe(function (e) {
+		selectedRowIds = [];
+		var rows = grid.getSelectedRows();
+		for (var i = 0, l = rows.length; i < l; i++) {
+			var item = dataView.getItem(rows[i]);
+			if (item)
+				selectedRowIds.push(item.id);
+		}
+	});
+
+	grid.onSort.subscribe(function (e, args) {
+		sortdir = args.sortAsc ? 1 : -1;
+		sortcol = args.sortCol.field;
+
+		if ($.browser.msie && $.browser.version <= 8) {
+			// using temporary Object.prototype.toString override
+			// more limited and does lexicographic sort only by default, but can be much faster
+
+			var percentCompleteValueFn = function () {
+				var val = this["percentComplete"];
+				if (val < 10)
+					return "00" + val;
+				else if (val < 100)
+					return "0" + val;
+				else
+					return val;
+			};
+
+			// use numeric sort of % and lexicographic for everything else
+			dataView.fastSort((sortcol == "percentComplete") ? percentCompleteValueFn : sortcol, args.sortAsc);
+		} else {
+			// using native sort with comparer
+			// preferred method but can be very slow in IE with huge datasets
+			dataView.sort(comparer, args.sortAsc);
+		}
+	});
+
+	// wire up model events to drive the grid
+	dataView.onRowCountChanged.subscribe(function (e, args) {
+		grid.updateRowCount();
+		grid.render();
+	});
+
+	dataView.onRowsChanged.subscribe(function (e, args) {
+		grid.invalidateRows(args.rows);
+		grid.render();
+
+		if (selectedRowIds.length > 0) {
+			// since how the original data maps onto rows has changed,
+			// the selected rows in the grid need to be updated
+			var selRows = [];
+			for (var i = 0; i < selectedRowIds.length; i++) {
+				var idx = dataView.getRowById(selectedRowIds[i]);
+				if (idx != undefined)
+					selRows.push(idx);
 			}
 
-			dataView = new Slick.Data.DataView();
-			grid = new Slick.Grid("#myGrid", dataView, columns, options);
-			grid.setSelectionModel(new Slick.RowSelectionModel());
+			grid.setSelectedRows(selRows);
+		}
+	});
 
-			var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
-			var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
+	dataView.onPagingInfoChanged.subscribe(function (e, pagingInfo) {
+		var isLastPage = pagingInfo.pageSize * (pagingInfo.pageNum + 1) - 1 >= pagingInfo.totalRows;
+		var enableAddRow = isLastPage || pagingInfo.pageSize == 0;
+		var options = grid.getOptions();
 
-			// move the filter panel defined in a hidden div into grid top panel
-			$("#inlineFilterPanel").appendTo(grid.getTopPanel()).show();
-
-			grid.onCellChange.subscribe(function(e, args) {
-				dataView.updateItem(args.item.id, args.item);
+		if (options.enableAddRow != enableAddRow)
+			grid.setOptions({
+				enableAddRow:enableAddRow
 			});
+	});
 
-			grid.onAddNewRow.subscribe(function(e, args) {
-				var item = {
-					"num" : data.length,
-					"id" : "new_" + (Math.round(Math.random() * 10000)),
-					"title" : "New task",
-					"duration" : "1 day",
-					"percentComplete" : 0,
-					"start" : "01/01/2009",
-					"finish" : "01/01/2009",
-					"effortDriven" : false
-				};
-				$.extend(item, args.item);
-				dataView.addItem(item);
-			});
+	var h_runfilters = null;
 
-			grid.onKeyDown.subscribe(function(e) {
-				// select all rows on ctrl-a
-				if (e.which != 65 || !e.ctrlKey)
-					return false;
+	// wire up the slider to apply the filter to the model
+	$("#pcSlider,#pcSlider2").slider({
+		"range":"min",
+		"slide":function (event, ui) {
+			Slick.GlobalEditorLock.cancelCurrentEdit();
 
-				var rows = [];
-				selectedRowIds = [];
-
-				for ( var i = 0; i < dataView.getLength(); i++) {
-					rows.push(i);
-					selectedRowIds.push(dataView.getItem(i).id);
-				}
-
-				grid.setSelectedRows(rows);
-				e.preventDefault();
-			});
-
-			grid.onSelectedRowsChanged.subscribe(function(e) {
-				selectedRowIds = [];
-				var rows = grid.getSelectedRows();
-				for ( var i = 0, l = rows.length; i < l; i++) {
-					var item = dataView.getItem(rows[i]);
-					if (item)
-						selectedRowIds.push(item.id);
-				}
-			});
-
-			grid.onSort.subscribe(function(e, args) {
-				sortdir = args.sortAsc ? 1 : -1;
-				sortcol = args.sortCol.field;
-
-				if ($.browser.msie && $.browser.version <= 8) {
-					// using temporary Object.prototype.toString override
-					// more limited and does lexicographic sort only by default, but can be much faster
-
-					var percentCompleteValueFn = function() {
-						var val = this["percentComplete"];
-						if (val < 10)
-							return "00" + val;
-						else if (val < 100)
-							return "0" + val;
-						else
-							return val;
-					};
-
-					// use numeric sort of % and lexicographic for everything else
-					dataView.fastSort((sortcol == "percentComplete") ? percentCompleteValueFn : sortcol, args.sortAsc);
-				} else {
-					// using native sort with comparer
-					// preferred method but can be very slow in IE with huge datasets
-					dataView.sort(comparer, args.sortAsc);
-				}
-			});
-
-			// wire up model events to drive the grid
-			dataView.onRowCountChanged.subscribe(function(e, args) {
-				grid.updateRowCount();
-				grid.render();
-			});
-
-			dataView.onRowsChanged.subscribe(function(e, args) {
-				grid.invalidateRows(args.rows);
-				grid.render();
-
-				if (selectedRowIds.length > 0) {
-					// since how the original data maps onto rows has changed,
-					// the selected rows in the grid need to be updated
-					var selRows = [];
-					for ( var i = 0; i < selectedRowIds.length; i++) {
-						var idx = dataView.getRowById(selectedRowIds[i]);
-						if (idx != undefined)
-							selRows.push(idx);
-					}
-
-					grid.setSelectedRows(selRows);
-				}
-			});
-
-			dataView.onPagingInfoChanged.subscribe(function(e, pagingInfo) {
-				var isLastPage = pagingInfo.pageSize * (pagingInfo.pageNum + 1) - 1 >= pagingInfo.totalRows;
-				var enableAddRow = isLastPage || pagingInfo.pageSize == 0;
-				var options = grid.getOptions();
-
-				if (options.enableAddRow != enableAddRow)
-					grid.setOptions({
-						enableAddRow : enableAddRow
-					});
-			});
-
-			var h_runfilters = null;
-
-			// wire up the slider to apply the filter to the model
-			$("#pcSlider,#pcSlider2").slider({
-				"range" : "min",
-				"slide" : function(event, ui) {
-					Slick.GlobalEditorLock.cancelCurrentEdit();
-
-					if (percentCompleteThreshold != ui.value) {
-						window.clearTimeout(h_runfilters);
-						h_runfilters = window.setTimeout(updateFilter, 10);
-						percentCompleteThreshold = ui.value;
-					}
-				}
-			});
-
-			// wire up the search textbox to apply the filter to the model
-			$("#txtSearch,#txtSearch2").keyup(function(e) {
-				Slick.GlobalEditorLock.cancelCurrentEdit();
-
-				// clear on Esc
-				if (e.which == 27)
-					this.value = "";
-
-				searchString = this.value;
-				updateFilter();
-			});
-
-			function updateFilter() {
-				dataView.setFilterArgs({
-					percentCompleteThreshold : percentCompleteThreshold,
-					searchString : searchString
-				});
-				dataView.refresh();
+			if (percentCompleteThreshold != ui.value) {
+				window.clearTimeout(h_runfilters);
+				h_runfilters = window.setTimeout(updateFilter, 10);
+				percentCompleteThreshold = ui.value;
 			}
+		}
+	});
 
-			$("#btnSelectRows").click(function() {
-				if (!Slick.GlobalEditorLock.commitCurrentEdit()) {
-					return;
-				}
+	// wire up the search textbox to apply the filter to the model
+	$("#txtSearch,#txtSearch2").keyup(function (e) {
+		Slick.GlobalEditorLock.cancelCurrentEdit();
 
-				var rows = [];
-				selectedRowIds = [];
+		// clear on Esc
+		if (e.which == 27)
+			this.value = "";
 
-				for ( var i = 0; i < 10 && i < dataView.getLength(); i++) {
-					rows.push(i);
-					selectedRowIds.push(dataView.getItem(i).id);
-				}
+		searchString = this.value;
+		updateFilter();
+	});
 
-				grid.setSelectedRows(rows);
-			});
+	function updateFilter() {
+		dataView.setFilterArgs({
+			percentCompleteThreshold:percentCompleteThreshold,
+			searchString:            searchString
+		});
+		dataView.refresh();
+	}
 
-			// initialize the model after all the events have been hooked up
-			dataView.beginUpdate();
-			dataView.setItems(data);
-			dataView.setFilterArgs({
-				percentCompleteThreshold : percentCompleteThreshold,
-				searchString : searchString
-			});
-			dataView.setFilter(myFilter);
-			dataView.endUpdate();
+	$("#btnSelectRows").click(function () {
+		if (!Slick.GlobalEditorLock.commitCurrentEdit()) {
+			return;
+		}
 
-			$("#gridContainer").resizable();
-		})
-	</script>
+		var rows = [];
+		selectedRowIds = [];
+
+		for (var i = 0; i < 10 && i < dataView.getLength(); i++) {
+			rows.push(i);
+			selectedRowIds.push(dataView.getItem(i).id);
+		}
+
+		grid.setSelectedRows(rows);
+	});
+
+	// initialize the model after all the events have been hooked up
+	dataView.beginUpdate();
+	dataView.setItems(data);
+	dataView.setFilterArgs({
+		percentCompleteThreshold:percentCompleteThreshold,
+		searchString:            searchString
+	});
+	dataView.setFilter(myFilter);
+	dataView.endUpdate();
+
+	$("#gridContainer").resizable();
+})
+</script>
 </body>
 </html>
 <!--
