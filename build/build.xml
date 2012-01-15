@@ -18,8 +18,17 @@
 		</exec>
 	</target>
 
+	<target name="templates">
+		<java jar="./lib/GoogleClosureTemplates/SoyToJsSrcCompiler.jar" fork="true" failonerror="true" maxmemory="128m">
+			<arg value="--outputPathFormat" />
+			<arg value="./src/templates/{INPUT_FILE_NAME_NO_EXT}_generated.js" />
+			<arg value="./src/templates/codeshelf.soy" />
+		</java>
+	</target>
+
 	<target name="deps.writer">
 		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/depswriter.py" pythonpath="${basedir}" optimize="0">
+			<arg value="--root_with_prefix=../lib/SlickGrid ../../../SlickGrid" />
 			<arg value="--root_with_prefix=../src ../../../../src" />
 			<arg value="--output_file=../src/js_uncompiled/deps.js" />
 		</py-run>
@@ -27,14 +36,16 @@
 
 	<target name="compile">
 		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/closurebuilder.py" pythonpath="${basedir}" optimize="0">
-			<arg value="--root=../lib/GoogleClosureLibrary/closure/" />
-			<arg value="--root=../lib/GoogleClosureLibrary/third_party/" />
-			<arg value="--root=../src/js_uncompiled" />
-			<arg value="--namespace=closureexample.init" />
+			<arg value="--path ../lib/GoogleClosureLibrary/closure/" />
+			<arg value="--path ../lib/GoogleClosureLibrary/third_party/" />
+			<arg value="--path ../lib/SlickGrid/" />
+			<arg value="--path ../lib/GoogleClosureTemplates/soyutils_usegoog.js" />
+			<arg value="--path ../src/js_uncompiled" />
+			<arg value="--namespace=codeshelf" />
 			<arg value="--output_mode=compiled" />
 			<arg value="--compiler_jar=../lib/GoogleClosureLibrary/compiler.jar" />
 			<arg value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
-			<arg value="--output_file=../src/js/example.js" />
+			<arg value="--output_file=../src/js/codeshelf.js" />
 		</py-run>
 	</target>
 

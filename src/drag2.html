@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>goog.fx.Dragger</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="css/demo.css">
+	<link rel="stylesheet" href="../lib/SlickGrid/slick.grid.css"
+		  type="text/css" media="screen"/>
+	<link rel="stylesheet" href="../lib/SlickGrid/controls/slick.pager.css"
+		  type="text/css" media="screen"/>
+	<link rel="stylesheet"
+		  href="../lib/SlickGrid/css/smoothness/jquery-ui-1.8.16.custom.css"
+		  type="text/css" media="screen"/>
+	<link rel="stylesheet" href="css/examples.css" type="text/css"
+		  media="screen"/>
+	<link rel="stylesheet"
+		  href="../lib/SlickGrid/controls/slick.columnpicker.css" type="text/css"
+		  media="screen"/>
+	<script src="../lib/GoogleClosureLibrary/closure/goog/base.js"
+			type="text/javascript"></script>
+	<script src="./js_uncompiled/deps.js"
+			type="text/javascript"></script>
+	<script type="text/javascript">
+		goog.require('goog.fx.Dragger');
+		goog.require('goog.dom');
+		goog.require('goog.style');
+		goog.require('goog.dom.query');
+		goog.require('goog.window');
+		goog.require('goog.events');
+		goog.require('goog.events.EventType');
+		goog.require('goog.math.Size');
+		goog.require('goog.dom.ViewportSizeMonitor');
+	</script>
+	<style type="text/css">
+		#frame {
+			position:         absolute;
+			left:             49px;
+			top:              49px;
+			width:            1602px;
+			height:           702px;
+			border:           1px solid #999;
+			background-color: #F0F0F0;
+		}
+
+		.window {
+			position:         absolute;
+			left:             150px;
+			top:              110px;
+			width:            300px;
+			height:           100px;
+			background-color: rgb(200, 200, 250);
+			border:           1px solid #99F;
+			font:             bold 11px/18px arial;
+			text-indent:      10px;
+			color:            #FFF;
+		}
+
+		#win2 {
+			top:              250px;
+			width:            400px;
+			background-color: rgb(250, 200, 200);
+			border:           1px solid #F99;
+		}
+
+		#win3 {
+			left:             500px;
+			background-color: rgb(150, 200, 150);
+			border:           1px solid #6A6;
+		}
+
+		.bar {
+			position:         absolute;
+			left:             0;
+			top:              0;
+			width:            300px;
+			height:           20px;
+			background-color: #99F;
+			cursor:           default;
+		}
+
+		#win2 .bar {
+			background-color: #F99;
+			height:           20px;
+		}
+
+		#win3 .bar {
+			background-color: #6A6;
+		}
+
+		#ghostbox {
+			position: absolute;
+			left:     100px;
+			top:      625px;
+			width:    600px;
+			height:   20px;
+		}
+
+		.block {
+			position:         absolute;
+			left:             0;
+			top:              0;
+			width:            125px;
+			height:           20px;
+			font:             bold 11px/18px arial;
+			background-color: #AAA;
+			color:            #EEE;
+			text-align:       center;
+			border:           1px solid #666;
+		}
+
+		.ghost0 {
+			left: 0;
+		}
+
+		.ghost1 {
+			left: 130px;
+		}
+
+		.ghost2 {
+			left: 260px;
+		}
+
+		.ghost3 {
+			left: 390px;
+		}
+
+		.cell-title {
+			font-weight: bold;
+		}
+
+		.cell-effort-driven {
+			text-align: center;
+		}
+
+		.cell-selection {
+			border-right-color: silver;
+			border-right-style: solid;
+			background:         #f5f5f5;
+			color:              gray;
+			text-align:         right;
+			font-size:          10px;
+		}
+
+		.slick-row.selected .cell-selection {
+			background-color: transparent;
+			/* show default selected row background */
+		}
+	</style>
+</head>
+<body style="background-image: url('../src/images/STS-125.jpg')">
+	<div id="frame"></div>
+
+	<div id="win1" class="window">
+		<div class="bar">
+			<label>1. Drag Me...</label>
+		</div>
+	</div>
+	<div id="win2" class="window" style="width: 600px; height: 220px">
+		<div class="bar" style="width: 100%">
+			<label>2. Drag Me...</label>
+			<!--div class="drag">
+					   </div-->
+		</div>
+		<div id="myTable" style="width: 100%; height: 100%">
+			<div class="grid-header" style="width: 100%; height: 20px">
+				<label>SlickGrid</label> <span style="float: right"
+											   class="ui-icon ui-icon-search" title="Toggle search panel"
+											   onclick="toggleFilterRow()"></span>
+			</div>
+			<div id="myGrid" style="width: 100%; height: 100%;"></div>
+			<div id="pager" style="width: 100%; height: 20px;"></div>
+		</div>
+	</div>
+	<div id="win3" class="window">
+		<div class="bar">
+			<label>3. Drag Me...</label>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		var $ = goog.dom.getElement;
+
+		// WINDOW EXAMPLE
+		//================
+
+		var Z = 5;
+
+		var limits = new goog.math.Rect(50, 50, 750, 600);
+
+		var window1 = $('win1');
+		var window2 = $('win2');
+		var window3 = $('win3');
+		var dragger1 = new goog.fx.Dragger(window1, goog.dom.query("#win1 .bar")[0], limits);
+		var dragger2 = new goog.fx.Dragger($('win2'), goog.dom.query("#win2 .bar")[0], limits);
+		var resizer2 = new goog.fx.Dragger($('pager'), goog.dom.query("#pager")[0], limits);
+		var dragger3 = new goog.fx.Dragger($('win3'), goog.dom.query("#win3 .bar")[0], limits);
+
+		var theWindow = $('win2');
+
+		dragger3.setHysteresis(6);
+
+		function createMoverStart(mover) {
+			var moverFunc = function moveWindowSetZ(e) {
+				mover.style.zIndex = Z++;
+				goog.style.setOpacity(mover, 0.50);
+			};
+			return moverFunc;
+		}
+
+		function createMoverEnd(mover) {
+			var moverFunc = function moveWindowEnd(e) {
+				goog.style.setOpacity(mover, 1);
+			}
+			return moverFunc;
+		}
+
+		goog.events.listen(dragger1, 'start', createMoverStart(window1));
+		goog.events.listen(dragger2, 'start', createMoverStart(window2));
+		goog.events.listen(resizer2, 'start', createMoverStart(window2));
+		goog.events.listen(dragger3, 'start', createMoverStart(window3));
+
+		goog.events.listen(dragger1, 'end', createMoverEnd(window1));
+		goog.events.listen(dragger2, 'end', createMoverEnd(window2));
+		goog.events.listen(resizer2, 'end', createMoverEnd(window2));
+		goog.events.listen(dragger3, 'end', createMoverEnd(window3));
+
+		goog.events.listen(window, 'unload', function (e) {
+			dragger1.dispose();
+			dragger2.dispose();
+			resizer2.dispose();
+			dragger3.dispose();
+		});
+
+		var frame = $('frame');
+		frame.style.top = '20px';
+		frame.style.left = '20px';
+		function updateFrameSize(size) {
+			//goog.style.setSize(goog.dom.getElement('frame'), size);
+			frame.style.width = size.width - 40 + 'px';
+			frame.style.height = size.height - 30 + 'px';
+		}
+		updateFrameSize(goog.dom.getViewportSize());
+
+		// Start listening for viewport size changes.
+		var vsm = new goog.dom.ViewportSizeMonitor();
+		goog.events.listen(vsm, goog.events.EventType.RESIZE, function (e) {
+			size = vsm.getSize();
+			size.height -= 10;
+			updateFrameSize(size);
+		});
+
+	</script>
+	<script type="text/javascript">
+		goog.require('codeshelf.listview');
+	</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<html>
+<head>
+<title>The Hello World of Closure Templates</title>
+<script src="../lib/GoogleClosureLibrary/closure/goog/base.js"
+	type="text/javascript"></script>
+<script src="../lib/GoogleClosureLibrary/closure/goog/deps.js"
+	type="text/javascript"></script>
+<script>
+goog.require('goog.soy');
+goog.require('goog.string.StringBuffer');
+</script>
+<script type="text/javascript"
+	src="../lib/GoogleClosureTemplates/soyutils_usegoog.js"></script>
+<script type="text/javascript" src="./templates/codeshelf_generated.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		// Exercise the .helloWorld template
+		document.write(codeshelf.helloWorld());
+		// Exercise the .helloName template
+		document.write('<hr>' + codeshelf.helloName({
+			name : 'Ana'
+		}));
+		// Exercise the .helloNames template
+		document.write('<hr>' + codeshelf.helloNames({
+			name : 'Ana',
+			additionalNames : [ 'Bob', 'Cid', 'Dee' ]
+		}));
+	</script>
+</body>
+</html>
