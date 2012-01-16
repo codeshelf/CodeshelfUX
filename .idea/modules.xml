@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/CodeShelfRIA.iml" filepath="$PROJECT_DIR$/.idea/CodeShelfRIA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/CodeShelfUX.iml" filepath="$PROJECT_DIR$/.idea/CodeShelfUX.iml" />
     </modules>
   </component>
 </project>

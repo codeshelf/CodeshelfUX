@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="CodeShelfRIA" default="" basedir="..">
+<project name="CodeShelfUX" default="" basedir="..">
 
 	<taskdef resource="pyAntTasks.properties">
 		<classpath>
@@ -36,15 +36,18 @@
 
 	<target name="compile">
 		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/closurebuilder.py" pythonpath="${basedir}" optimize="0">
-			<arg value="--path ../lib/GoogleClosureLibrary/closure/" />
-			<arg value="--path ../lib/GoogleClosureLibrary/third_party/" />
-			<arg value="--path ../lib/SlickGrid/" />
-			<arg value="--path ../lib/GoogleClosureTemplates/soyutils_usegoog.js" />
-			<arg value="--path ../src/js_uncompiled" />
-			<arg value="--namespace=codeshelf" />
+			<arg value="--root=../lib/GoogleClosureLibrary/closure/" />
+			<arg value="--root=../lib/GoogleClosureLibrary/third_party/" />
+			<arg value="--root=../lib/GoogleClosureTemplates/" />
+			<arg value="--root=../lib/SlickGrid/" />
+			<arg value="--root=../src/js_uncompiled" />
+			<arg value="--namespace=codeshelf.mainpage" />
 			<arg value="--output_mode=compiled" />
 			<arg value="--compiler_jar=../lib/GoogleClosureLibrary/compiler.jar" />
 			<arg value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
+			<arg value="--compiler_flags=--create_source_map=../src/js/codeshelf.map" />
+			<arg value="--compiler_flags=--formatting=PRETTY_PRINT" />
+			<arg value="--compiler_flags=--debug" />
 			<arg value="--output_file=../src/js/codeshelf.js" />
 		</py-run>
 	</target>

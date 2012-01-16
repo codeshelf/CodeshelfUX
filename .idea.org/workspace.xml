@@ -16,7 +16,7 @@
 			<change type="MODIFICATION" beforePath="$PROJECT_DIR$/.project" afterPath="$PROJECT_DIR$/.project"/>
 			<change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/drag.html" afterPath="$PROJECT_DIR$/src/drag.html"/>
 		</list>
-		<ignored path="CodeShelfRIA.iws"/>
+		<ignored path="CodeShelfUX.iws"/>
 		<ignored path=".idea/workspace.xml"/>
 		<option name="TRACKING_ENABLED" value="true"/>
 		<option name="SHOW_DIALOG" value="false"/>
@@ -32,7 +32,7 @@
 		<disable_hints/>
 	</component>
 	<component name="FavoritesManager">
-		<favorites_list name="CodeShelfRIA"/>
+		<favorites_list name="CodeShelfUX"/>
 	</component>
 	<component name="FileEditorManager">
 		<leaf/>
@@ -106,7 +106,7 @@
 				<subPane>
 					<PATH>
 						<PATH_ELEMENT>
-							<option name="myItemId" value="CodeShelfRIA"/>
+							<option name="myItemId" value="CodeShelfUX"/>
 							<option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode"/>
 						</PATH_ELEMENT>
 					</PATH>
