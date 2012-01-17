@@ -8,6 +8,10 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
 goog.require('goog.dom.ViewportSizeMonitor');
+goog.require('jquery.rotate');
+
+var codeshelflogo = $("#codeshelflogo");
+codeshelflogo.rotate(-90);
 
 var $ = goog.dom.getElement;
 
@@ -15,8 +19,10 @@ var $ = goog.dom.getElement;
 // ================
 
 var Z = 5;
+var frameTop = 5;
+var frameLeft = 5;
 
-var limits = new goog.math.Rect(50, 50, 750, 600);
+var limits = new goog.math.Rect(frameTop, frameLeft, 750, 600);
 
 var window1 = $('win1');
 var window2 = $('win2');
@@ -63,12 +69,12 @@ goog.events.listen(window, 'unload', function(e) {
 });
 
 var frame = $('frame');
-frame.style.top = '20px';
-frame.style.left = '20px';
+frame.style.top = frameTop + 5 + 'px';
+frame.style.left = frameLeft + 'px';
 function updateFrameSize(size) {
 	// goog.style.setSize(goog.dom.getElement('frame'), size);
-	frame.style.width = size.width - 40 + 'px';
-	frame.style.height = size.height - 30 + 'px';
+	frame.style.width = size.width - 15 + 'px';
+	frame.style.height = size.height - 5 + 'px';
 }
 updateFrameSize(goog.dom.getViewportSize());
 

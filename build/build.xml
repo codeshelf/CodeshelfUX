@@ -18,7 +18,7 @@
 		</exec>
 	</target>
 
-	<target name="templates">
+	<target name="process.templates">
 		<java jar="./lib/GoogleClosureTemplates/SoyToJsSrcCompiler.jar" fork="true" failonerror="true" maxmemory="128m">
 			<arg value="--outputPathFormat" />
 			<arg value="./src/templates/{INPUT_FILE_NAME_NO_EXT}_generated.js" />
@@ -26,8 +26,19 @@
 		</java>
 	</target>
 
+	<target name="generate.css">
+		<echo>${user.dir}</echo>
+		<java jar="./lib/GoogleClosureStylesheets/closure-stylesheets-20111230.jar" fork="true" failonerror="true" maxmemory="128m">
+			<arg value="--pretty-print" />
+			<arg value="--output-file" />
+			<arg value="./src/css/codeshelf_generated.css" />
+			<arg value="./src/css/codeshelf.gss" />
+		</java>
+	</target>
+
 	<target name="deps.writer">
 		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/depswriter.py" pythonpath="${basedir}" optimize="0">
+			<arg value="--root_with_prefix=../lib/JQuery ../../../JQuery" />
 			<arg value="--root_with_prefix=../lib/SlickGrid ../../../SlickGrid" />
 			<arg value="--root_with_prefix=../src ../../../../src" />
 			<arg value="--output_file=../src/js_uncompiled/deps.js" />

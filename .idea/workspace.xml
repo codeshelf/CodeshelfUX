@@ -5,17 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c319b0c7-b9cf-46f5-90a5-b0a625c84957" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.externalToolBuilders/GJSLint.launch" afterPath="$PROJECT_DIR$/.externalToolBuilders/GJSLint.launch" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/css/demo.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/css/emojipicker.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/css/emojisprite.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/css/examples.css" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.externalToolBuilders/GoogleClosureTemplates.launch" afterPath="$PROJECT_DIR$/.externalToolBuilders/GoogleClosureTemplates.launch" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.externalToolBuilders/js-test-driver.launch" afterPath="$PROJECT_DIR$/.externalToolBuilders/js-test-driver.launch" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea.org/.name" afterPath="$PROJECT_DIR$/.idea.org/.name" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.project" afterPath="$PROJECT_DIR$/.project" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea.org/workspace.xml" afterPath="$PROJECT_DIR$/.idea.org/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.project" afterPath="$PROJECT_DIR$/.project" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/build.xml" afterPath="$PROJECT_DIR$/build/build.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/drag2.html" afterPath="$PROJECT_DIR$/src/drag2.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/controls/slick.columnpicker.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/controls/slick.columnpicker.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/lib/jquery.simulate.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/lib/jquery.simulate.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/slick.core.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/slick.core.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/slick.grid.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/slick.grid.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/drag3.html" afterPath="$PROJECT_DIR$/src/drag3.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/ListView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/ListView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/MainPage.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/MainPage.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/deps.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/deps.js" />
     </list>
     <ignored path="CodeShelfUX.iws" />
@@ -38,19 +42,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="drag2.html" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/drag2.html">
+      <file leaf-file-name="drag3.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/drag3.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="246" column="0" selection-start="6571" selection-end="6653" vertical-scroll-proportion="0.86538464">
+            <state line="19" column="48" selection-start="888" selection-end="888" vertical-scroll-proportion="0.33246416">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="drag3.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/drag3.html">
+      <file leaf-file-name="drag2.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/drag2.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="39" selection-start="1405" selection-end="1405" vertical-scroll-proportion="0.0">
+            <state line="246" column="0" selection-start="6571" selection-end="6653" vertical-scroll-proportion="0.33333334">
               <folding />
             </state>
           </provider>
@@ -74,8 +78,8 @@
         <option value="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/browserchannel.js" />
         <option value="$PROJECT_DIR$/src/drag.html" />
         <option value="$PROJECT_DIR$/src/index.html" />
-        <option value="$PROJECT_DIR$/src/drag3.html" />
         <option value="$PROJECT_DIR$/src/drag2.html" />
+        <option value="$PROJECT_DIR$/src/drag3.html" />
       </list>
     </option>
   </component>
@@ -194,10 +198,10 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="options.lastSelected" value="preferences.sourceCode.General" />
     <property name="recentsLimit" value="5" />
-    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.lastSelected" value="preferences.sourceCode.General" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RunManager" selected="JsTestDriver.tests.jstd">
     <configuration default="false" name="drag.html" type="JavascriptDebugSession" factoryName="Local" temporary="true">
@@ -266,12 +270,12 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1440" height="874" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32980132" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20277777" sideWeight="0.0" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3298611" sideWeight="0.0" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -412,16 +416,16 @@
         <state line="15" column="61" selection-start="693" selection-end="693" vertical-scroll-proportion="0.018656716" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/drag3.html">
+    <entry file="file://$PROJECT_DIR$/src/drag2.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="39" selection-start="1405" selection-end="1405" vertical-scroll-proportion="0.0">
+        <state line="246" column="0" selection-start="6571" selection-end="6653" vertical-scroll-proportion="0.33333334">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/drag2.html">
+    <entry file="file://$PROJECT_DIR$/src/drag3.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="246" column="0" selection-start="6571" selection-end="6653" vertical-scroll-proportion="0.86538464">
+        <state line="19" column="48" selection-start="888" selection-end="888" vertical-scroll-proportion="0.33246416">
           <folding />
         </state>
       </provider>

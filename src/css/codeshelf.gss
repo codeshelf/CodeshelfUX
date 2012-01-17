@@ -1,0 +1,160 @@
+@def BG_COLOR				rgb(240, 240, 240);
+@def FLOATING_FONT_COLOR	rgb(187, 187, 187);
+
+@def DIALOG_BORDER_COLOR	rgb(107, 144, 218);
+@def DIALOG_BG_COLOR		BG_COLOR;
+
+@def MAIN_FONT				"league-gothic-1","league-gothic-2",sans-serif;
+@def MAIN_FONT_SIZE			120px;
+@def MAIN_LINE_HEIGHT		100%;
+@def MAIN_MARGIN_BOTTOM		3px;
+@def MAIN_TEXT_TRANSFORM	lowercase;
+
+body {
+	background-color: BG_COLOR;
+}
+
+.dialog {
+	background-color: DIALOG_BG_COLOR;
+	border: 1px solid DIALOG_BORDER_COLOR;
+}
+
+#rotate {
+	float:left;
+	/* for firefox, safari, chrome, etc. */
+	-webkit-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	/* for ie */
+	writing-mode: tb-rl;
+	filter: flipv fliph;
+}
+
+h1 {
+	color: FLOATING_FONT_COLOR;
+	font-family: MAIN_FONT;
+	font-size: MAIN_FONT_SIZE;
+	line-height: MAIN_LINE_HEIGHT;
+	margin-top: MAIN_MARGIN_BOTTOM;
+	text-transform: MAIN_TEXT_TRANSFORM;
+	letter-spacing:-0.06em;
+}
+
+#frame {
+	position:         absolute;
+	left:             10px;
+	top:              10px;
+	width:            1602px;
+	height:           702px;
+	border:           1px solid FLOATING_FONT_COLOR;
+	background-color: BG_COLOR;
+}
+
+.window {
+	position:			absolute;
+	left:				150px;
+	top:				110px;
+	width:				300px;
+	height:				100px;
+	background-color:	rgb(200, 200, 250);
+	border:				1px solid #99F;
+	font:				bold 11px/18px arial;
+	text-indent:		10px;
+	color:				#FFF;
+}
+
+#codeshelflogo {
+	top:				175px;
+	left:				-140px;
+	position:			absolute;
+}
+
+#win2 {
+	top:				250px;
+	width:				400px;
+	background-color:	rgb(250, 200, 200);
+	border:				1px solid #F99;
+}
+
+#win3 {
+	left:				500px;
+	background-color:	rgb(150, 200, 150);
+	border:				1px solid #6A6;
+}
+
+.bar {
+	position:         absolute;
+	left:             0;
+	top:              0;
+	width:            300px;
+	height:           20px;
+	background-color: #99F;
+	cursor:           default;
+}
+
+#win2 .bar {
+	background-color: #F99;
+	height:           20px;
+}
+
+#win3 .bar {
+	background-color: #6A6;
+}
+
+#ghostbox {
+	position: absolute;
+	left:     100px;
+	top:      625px;
+	width:    600px;
+	height:   20px;
+}
+
+.block {
+	position:         absolute;
+	left:             0;
+	top:              0;
+	width:            125px;
+	height:           20px;
+	font:             bold 11px/18px arial;
+	background-color: #AAA;
+	color:            #EEE;
+	text-align:       center;
+	border:           1px solid #666;
+}
+
+.ghost0 {
+	left: 0;
+}
+
+.ghost1 {
+	left: 130px;
+}
+
+.ghost2 {
+	left: 260px;
+}
+
+.ghost3 {
+	left: 390px;
+}
+
+.cell-title {
+	font-weight: bold;
+}
+
+.cell-effort-driven {
+	text-align: center;
+}
+
+.cell-selection {
+	border-right-color: silver;
+	border-right-style: solid;
+	background:         #f5f5f5;
+	color:              gray;
+	text-align:         right;
+	font-size:          10px;
+}
+
+.slick-row.selected .cell-selection {
+	background-color: transparent;
+	/* show default selected row background */
+}
