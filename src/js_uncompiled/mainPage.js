@@ -10,13 +10,8 @@ goog.require('goog.math.Size');
 goog.require('goog.dom.ViewportSizeMonitor');
 goog.require('jquery.rotate');
 
-var codeshelflogo = $("#codeshelflogo");
-codeshelflogo.rotate(-90);
-
-var $ = goog.dom.getElement;
-
-// WINDOW EXAMPLE
-// ================
+//var codeshelflogo = $('#codeshelflogo');
+//codeshelflogo.rotate(-90);
 
 var Z = 5;
 var frameTop = 5;
@@ -24,15 +19,15 @@ var frameLeft = 5;
 
 var limits = new goog.math.Rect(frameTop, frameLeft, 750, 600);
 
-var window1 = $('win1');
-var window2 = $('win2');
-var window3 = $('win3');
-var dragger1 = new goog.fx.Dragger(window1, goog.dom.query("#win1 .bar")[0], limits);
-var dragger2 = new goog.fx.Dragger($('win2'), goog.dom.query("#win2 .bar")[0], limits);
-var resizer2 = new goog.fx.Dragger($('pager'), goog.dom.query("#pager")[0], limits);
-var dragger3 = new goog.fx.Dragger($('win3'), goog.dom.query("#win3 .bar")[0], limits);
+var window1 = goog.dom.getElement('win1');
+var window2 = goog.dom.getElement('win2');
+var window3 = goog.dom.getElement('win3');
+var dragger1 = new goog.fx.Dragger(window1, goog.dom.query('#win1 .bar')[0], limits);
+var dragger2 = new goog.fx.Dragger(goog.dom.getElement('win2'), goog.dom.query('#win2 .bar')[0], limits);
+var resizer2 = new goog.fx.Dragger(goog.dom.getElement('pager'), goog.dom.query('#pager')[0], limits);
+var dragger3 = new goog.fx.Dragger(goog.dom.getElement('win3'), goog.dom.query('#win3 .bar')[0], limits);
 
-var theWindow = $('win2');
+var theWindow = goog.dom.getElement('win2');
 
 dragger3.setHysteresis(6);
 
@@ -68,7 +63,7 @@ goog.events.listen(window, 'unload', function(e) {
 	dragger3.dispose();
 });
 
-var frame = $('frame');
+var frame = goog.dom.getElement('#frame');
 frame.style.top = frameTop + 5 + 'px';
 frame.style.left = frameLeft + 'px';
 function updateFrameSize(size) {
