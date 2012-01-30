@@ -20,19 +20,24 @@ function enterLaunchWindow() {
 	goog.dom.appendChild(goog.dom.getDocument().body, backgroundImageElement);
 
 	// Create DOM structure to represent the launch code.
-	var launchCodeElement = goog.dom.createDom('div', {'class':'goog-roundedpanel-content'}, null);
-	var launcherElement = goog.dom.createDom('div', {'id':'launchCodePanel'}, launchCodeElement);
-	goog.dom.appendChild(goog.dom.getDocument().body, launcherElement);
+	//var launchCode = goog.dom.createDom('div', {'id':'launchCodeLabel'}, launchCodePanelContent);
+	var launchCodeInput = goog.dom.createDom('input', {'type':'text', 'id':'launchCodeInput', 'class':'dataEntry'}, null);
+	var launchCodeLabel = goog.dom.createDom('div', {'id':'launchCodeLabel', 'class':'dataEntry'}, 'Launch Code:', launchCodeInput);
+	var launchCodePanelContent = goog.dom.createDom('div', {'class':'goog-roundedpanel-content'}, launchCodeLabel);
+	launchCodeLabel.style.marginTop = '15px';
+	launchCodeLabel.style.marginLeft = '15px';
+
+	var launchCodePanel = goog.dom.createDom('div', {'id':'launchCodePanel'}, launchCodePanelContent);
+	goog.dom.appendChild(goog.dom.getDocument().body, launchCodePanel);
 
 	// Set the dimensions of the panel and decorate roundedPanel.
-	var roundedPanelNode = goog.dom.getElement('launchCodePanel');
 	var radius = 25;
 	var borderWidth = 5;
-	var borderColor = '#a0a0a0';
-	var backgroundColor = '#d0d0d0';
+	var borderColor = '#a0a0a0';//goog.style.getCascadedStyle(launchCodePanel, 'border-color');
+	var backgroundColor = '#d0d0d0';//goog.style.getCascadedStyle(launchCodePanel, 'background-color');
 	var corners = 15;
-	launchCodePanel = goog.ui.RoundedPanel.create(radius, borderWidth, borderColor, backgroundColor, corners);
-	launchCodePanel.decorate(roundedPanelNode);
+	var roundedLaunchCodePanel = goog.ui.RoundedPanel.create(radius, borderWidth, borderColor, backgroundColor, corners);
+	roundedLaunchCodePanel.decorate(launchCodePanel);
 }
 
 

@@ -1,57 +1,88 @@
 @def BG_COLOR				rgb(240, 240, 240);
-@def FLOATING_FONT_COLOR	rgb(187, 187, 187);
+
+@def LAUNCH_BORDER_COLOR	rgb(160, 160, 160);
+@def LAUNCH_BACK_COLOR		rgb(208, 208, 208);
 
 @def DIALOG_BORDER_COLOR	rgb(107, 144, 218);
 @def DIALOG_BG_COLOR		BG_COLOR;
 
-@def MAIN_FONT				"league-gothic-1","league-gothic-2",sans-serif;
-@def MAIN_FONT_SIZE			120px;
-@def MAIN_LINE_HEIGHT		100%;
-@def MAIN_MARGIN_BOTTOM		3px;
-@def MAIN_TEXT_TRANSFORM	lowercase;
+@def LOGO_FONT				"league-gothic-1","league-gothic-2",sans-serif;
+@def LOGO_FONT_COLOR		rgb(187, 187, 187);
+@def LOGO_FONT_SIZE			120px;
+@def LOGO_LINE_HEIGHT		100%;
+@def LOGO_MARGIN_BOTTOM		3px;
+@def LOGO_TEXT_TRANSFORM	lowercase;
+
+@def DATA_FONT				"league-gothic-1","league-gothic-2",sans-serif;
+@def DATA_FONT_COLOR		rgb(0, 0, 0);
+@def DATA_FONT_SIZE			15px;
+@def DATA_LINE_HEIGHT		100%;
+@def DATA_TEXT_TRANSFORM	lowercase;
 
 body {
-	background-color: BG_COLOR;
+	background-color:	BG_COLOR;
 }
 
 .background_image {
-	width:    99.9%;
-	position: absolute;
-	top:      0;
-	left:     0;
+	width:				99.9%;
+	position:			absolute;
+	top:				0;
+	left:				0;
 }
 
 .dialog {
-	background-color: DIALOG_BG_COLOR;
-	border: 1px solid DIALOG_BORDER_COLOR;
+	background-color:	DIALOG_BG_COLOR;
+	border:				1px solid DIALOG_BORDER_COLOR;
+}
+
+.rotate {
+	float:				left;
+	/* for firefox, safari, chrome, etc. */
+	-webkit-transform:	rotate(-90deg);
+	-moz-transform:		rotate(-90deg);
+	/* for ie */
+	writing-mode:		tb-rl;
+	filter:				flipv fliph;
 }
 
 #launchCodePanel {
-	width:		300px;
-	height:		50px;
-	position:	absolute;
-	top:		20%;
-	left:		10%;
+	width:				300px;
+	height:				50px;
+	position:			absolute;
+	top:				20%;
+	left:				10%;
+	color:				DATA_FONT_COLOR;
+	/*border-color:		LAUNCH_BORDER_COLOR;
+	background-color:	LAUNCH_BACK_COLOR;*/
 }
 
 h1 {
-	color: FLOATING_FONT_COLOR;
-	font-family: MAIN_FONT;
-	font-size: MAIN_FONT_SIZE;
-	line-height: MAIN_LINE_HEIGHT;
-	margin-top: MAIN_MARGIN_BOTTOM;
-	text-transform: MAIN_TEXT_TRANSFORM;
-	letter-spacing:-0.06em;
+	color:				LOGO_FONT_COLOR;
+	font-family:		LOGO_FONT;
+	font-size:			LOGO_FONT_SIZE;
+	line-height:		LOGO_LINE_HEIGHT;
+	margin-top:			LOGO_MARGIN_BOTTOM;
+	text-transform:		LOGO_TEXT_TRANSFORM;
+	letter-spacing:		-0.06em;
+}
+
+.dataEntry {
+	color:				DATA_FONT_COLOR;
+	font-family:		DATA_FONT;
+	font-size:			DATA_FONT_SIZE;
+	line-height:		DATA_LINE_HEIGHT;
+	text-transform:		DATA_TEXT_TRANSFORM;
+	letter-spacing:		-0.06em;
 }
 
 #frame {
-	position:         absolute;
-	left:             10px;
-	top:              10px;
-	width:            1602px;
-	height:           702px;
-	border:           1px solid FLOATING_FONT_COLOR;
-	background-color: BG_COLOR;
+	position:			absolute;
+	left:				10px;
+	top:				10px;
+	width:				1602px;
+	height:				702px;
+	border:				1px solid LOGO_FONT_COLOR;
+	background-color:	BG_COLOR;
 }
 
 .window {
@@ -87,79 +118,79 @@ h1 {
 }
 
 .bar {
-	position:         absolute;
-	left:             0;
-	top:              0;
-	width:            300px;
-	height:           20px;
-	background-color: #99F;
-	cursor:           default;
+	position:			absolute;
+	left:				0;
+	top:				0;
+	width:				300px;
+	height:				20px;
+	background-color:	#99F;
+	cursor:				default;
 }
 
 #win2 .bar {
-	background-color: #F99;
-	height:           20px;
+	background-color:	#F99;
+	height:				20px;
 }
 
 #win3 .bar {
-	background-color: #6A6;
+	background-color:	#6A6;
 }
 
 #ghostbox {
-	position: absolute;
-	left:     100px;
-	top:      625px;
-	width:    600px;
-	height:   20px;
+	position:			absolute;
+	left:				100px;
+	top:				625px;
+	width:				600px;
+	height:				20px;
 }
 
 .block {
-	position:         absolute;
-	left:             0;
-	top:              0;
-	width:            125px;
-	height:           20px;
-	font:             bold 11px/18px arial;
-	background-color: #AAA;
-	color:            #EEE;
-	text-align:       center;
-	border:           1px solid #666;
+	position:			absolute;
+	left:				0;
+	top:				0;
+	width:				125px;
+	height:				20px;
+	font:				bold 11px/18px arial;
+	background-color:	#AAA;
+	color:				#EEE;
+	text-align:			center;
+	border:				1px solid #666;
 }
 
 .ghost0 {
-	left: 0;
+	left:				0;
 }
 
 .ghost1 {
-	left: 130px;
+	left:				130px;
 }
 
 .ghost2 {
-	left: 260px;
+	left:				260px;
 }
 
 .ghost3 {
-	left: 390px;
+	left:				390px;
 }
 
 .cell-title {
-	font-weight: bold;
+	font-weight:		bold;
 }
 
 .cell-effort-driven {
-	text-align: center;
+	text-align:			center;
 }
 
 .cell-selection {
-	border-right-color: silver;
-	border-right-style: solid;
-	background:         #f5f5f5;
-	color:              gray;
-	text-align:         right;
-	font-size:          10px;
+	border-right-color:	silver;
+	border-right-style:	solid;
+	background:			#f5f5f5;
+	color:				gray;
+	text-align:			right;
+	font-size:			10px;
 }
 
 .slick-row.selected .cell-selection {
-	background-color: transparent;
+	background-color:	transparent;
 	/* show default selected row background */
 }
