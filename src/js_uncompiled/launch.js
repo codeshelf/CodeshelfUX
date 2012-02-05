@@ -11,6 +11,7 @@ goog.require('goog.ui.RoundedPanel');
 goog.require('goog.math.Size');
 goog.require('goog.dom.ViewportSizeMonitor');
 goog.require('goog.net.WebSocket');
+goog.require('goog.json');
 
 var websocket = new goog.net.WebSocket();
 
@@ -54,23 +55,23 @@ function enterLaunchWindow() {
 
 function initWebSocket() {
 	var handler = new goog.events.EventHandler();
+	handler.listen(websocket, goog.net.WebSocket.EventType.ERROR, onError);
 	handler.listen(websocket, goog.net.WebSocket.EventType.OPENED, onOpen);
-	handler.listen(websocket, goog.net.WebSocket.EventType.OPENED, onClose);
+	handler.listen(websocket, goog.net.WebSocket.EventType.CLOSED, onClose);
 	handler.listen(websocket, goog.net.WebSocket.EventType.MESSAGE, onMessage);
+}
 
-	try {
-		websocket.open('ws://127.0.0.1:8080');
-	} catch (e) {
-		//
-	}
+function onError() {
+	alert('Error');
 }
 
 function onOpen() {
-	//alert('Open');
+	alert('Open');
 }
 
 function onClose() {
-	//alert('Close');
+	alert('Close');
+	websocket.close();
 }
 
 function onMessage() {
@@ -84,7 +85,23 @@ function exitLaunchWindow() {
 function launchCodeCheck() {
 	var launchCodeInput = goog.dom.getElement('launchCodeInput');
 	//alert('Launch code: ' + launchCodeInput.value);
-	websocket.send(launchCodeInput.value);
+
+	// Put it into JSON format:
+	var result = {
+		command:'LAUNCH_CODE',
+		details:{
+			launchCode:launchCodeInput.value
+		}
+	}
+
+	try {
+		if (!websocket.isOpen()) {
+			websocket.open('ws://127.0.0.1:8080');
+		}
+		websocket.send(goog.json.serialize(result));
+	} catch (e) {
+		//
+	}
 }
 
 function initApplication() {
