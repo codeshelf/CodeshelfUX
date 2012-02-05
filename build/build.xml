@@ -21,7 +21,7 @@
 	<target name="process.templates">
 		<java jar="./lib/GoogleClosureTemplates/SoyToJsSrcCompiler.jar" fork="true" failonerror="true" maxmemory="128m">
 			<arg value="--outputPathFormat" />
-			<arg value="./src/templates/{INPUT_FILE_NAME_NO_EXT}_generated.js" />
+			<arg value="./src/js_uncompiled/{INPUT_FILE_NAME_NO_EXT}_generated.js" />
 			<arg value="./src/templates/codeshelf.soy" />
 		</java>
 	</target>
@@ -39,9 +39,10 @@
 	<target name="deps.writer">
 		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/depswriter.py" pythonpath="${basedir}" optimize="0">
 			<arg value="--root_with_prefix=../lib/GoogleClosureLibrary ../../" />
+			<arg value="--root_with_prefix=../lib/GoogleClosureTemplates ../../../GoogleClosureTemplates" />
 			<arg value="--root_with_prefix=../lib/JQuery ../../../JQuery" />
 			<arg value="--root_with_prefix=../lib/SlickGrid ../../../SlickGrid" />
-			<arg value="--root_with_prefix=../src ../../../src" />
+			<arg value="--root_with_prefix=../src ../../../../src" />
 			<arg value="--output_file=../src/js_uncompiled/deps.js" />
 		</py-run>
 	</target>
