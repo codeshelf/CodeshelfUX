@@ -88,15 +88,22 @@ function launchCodeCheck() {
 
 	// Put it into JSON format:
 	var result = {
-		command:'LAUNCH_CODE',
-		details:{
+		id:  0,
+		type:'LAUNCH_CODE',
+		data:{
 			launchCode:launchCodeInput.value
 		}
 	}
+	// Use getUid to get a new UID for this object.
+	// (The call mutates the object, but we don't want to send that over the stream, so remove the mutation and just use the ID.)
+	result.id = goog.getUid(result);
+	goog.removeUid(result);
 
 	try {
 		if (!websocket.isOpen()) {
 			websocket.open('ws://127.0.0.1:8080');
+			//while (!websocket.isOpen()) {
+			//}
 		}
 		websocket.send(goog.json.serialize(result));
 	} catch (e) {
