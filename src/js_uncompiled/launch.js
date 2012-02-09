@@ -1,5 +1,6 @@
 goog.provide('codeshelf.launch');
 goog.require('codeshelf.templates');
+goog.require('codeshelf.websession')
 goog.require('soy');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
@@ -8,8 +9,6 @@ goog.require('goog.style');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.RoundedPanel');
-goog.require('goog.math.Size');
-goog.require('goog.dom.ViewportSizeMonitor');
 goog.require('goog.net.WebSocket');
 goog.require('goog.json');
 
@@ -49,55 +48,8 @@ function enterLaunchWindow() {
 	roundedLaunchCodePanel.decorate(launchCodePanel);
 
 	launchCodeInput.onchange = launchCodeCheck;
-}
-
-function initWebSocket() {
-
-	/**
-	 * Strategy for reconnection that backs off linearly with a 1 second offset.
-	 * @param {number} attempt The number of reconnects since the last connection.
-	 * @return {number} The amount of time to the next reconnect, in milliseconds.
-	 */
-
-	codeshelfApp.attempt = 0;
-
-	function linearBackOff() {
-		return (codeshelfApp.attempt++ * 1000) + 1000;
-	}
-
-	var websocket = new goog.net.WebSocket(true, linearBackOff);
-	var handler = new goog.events.EventHandler();
-	handler.listen(websocket, goog.net.WebSocket.EventType.ERROR, onError);
-	handler.listen(websocket, goog.net.WebSocket.EventType.OPENED, onOpen);
-	handler.listen(websocket, goog.net.WebSocket.EventType.CLOSED, onClose);
-	handler.listen(websocket, goog.net.WebSocket.EventType.MESSAGE, onMessage);
-
-	try {
-		if (!websocket.isOpen()) {
-			websocket.open('ws://127.0.0.1:8080');
-			//while (!websocket.isOpen()) {
-			//}
-		}
-	} catch (e) {
-		//
-	}
-	return websocket;
-}
-
-function onError() {
-	alert('Error');
-}
-
-function onOpen() {
-	alert('Open');
-}
-
-function onClose() {
-	alert('Close');
-}
-
-function onMessage(messageEvent) {
-	alert('Message:' + messageEvent.message);
+	launchCodeInput.focus();
+	launchCodeInput.select();
 }
 
 function exitLaunchWindow() {
@@ -105,39 +57,13 @@ function exitLaunchWindow() {
 }
 
 function launchCodeCheck() {
-	var launchCodeInput = goog.dom.getElement('launchCodeInput');
-	//alert('Launch code: ' + launchCodeInput.value);
-
-	// Put it into JSON format:
-	var launchCommand = {
-		id:  0,
-		type:'LAUNCH_CODE',
-		data:{
-			launchCode:launchCodeInput.value
-		}
+	var launchCodeInput = {
+		launchCode:goog.dom.getElement('launchCodeInput').value
 	}
-	// Use getUid to get a new UID for this object.
-	// (The call mutates the object, but we don't want to send that over the stream, so remove the mutation and just use the ID.)
-	launchCommand.id = goog.getUid(launchCommand);
-	goog.removeUid(launchCommand);
-
-	// Attempt to send the command.
-	try {
-		if (!codeshelfApp.websocket.isOpen()) {
-			Alert('WebSocket not open: try again later');
-		} else {
-			codeshelfApp.websocket.send(goog.json.serialize(launchCommand));
-		}
-	} catch (e) {
-
-	}
+	var launchCommand = codeshelf.websession.createCommand(codeshelf.websession.CommandType.LAUNCH_CODE, launchCodeInput);
+	codeshelf.websession.sendCommand(launchCommand, handleResponse);
 }
 
-var codeshelfApp = {};
-
-function initApplication() {
-	codeshelfApp.websocket = initWebSocket();
-	enterLaunchWindow();
+function handleResponse(command) {
+	Alert("Command: " + comand);
 }
-
-initApplication();
