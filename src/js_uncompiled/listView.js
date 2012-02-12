@@ -7,7 +7,7 @@ goog.require('slickgrid.grid');
 goog.require('slickgrid.dataview');
 goog.require('slickgrid.pager');
 goog.require('slickgrid.columnpicker');
-goog.require('jquery.min');
+goog.require('jquery');
 
 var dataView;
 var grid;
@@ -133,7 +133,8 @@ $(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all").mouseover(
 	$(e.target).removeClass("ui-state-hover")
 });
 
-$(function() {
+//$(function() {
+function launchListView() {
 	// prepare the data
 	for ( var i = 0; i < 50000; i++) {
 		var d = (data[i] = {});
@@ -341,4 +342,5 @@ $(function() {
 	dataView.endUpdate();
 
 	$("#gridContainer").resizable();
-})
+}
+//)

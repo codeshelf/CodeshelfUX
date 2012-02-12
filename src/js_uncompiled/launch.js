@@ -1,6 +1,7 @@
 goog.provide('codeshelf.launch');
 goog.require('codeshelf.templates');
-goog.require('codeshelf.websession')
+goog.require('codeshelf.websession');
+goog.require('codeshelf.mainpage');
 goog.require('soy');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
@@ -12,7 +13,7 @@ goog.require('goog.ui.RoundedPanel');
 goog.require('goog.net.WebSocket');
 goog.require('goog.json');
 
-function enterLaunchWindow() {
+codeshelf.launch.enterLaunchWindow = function () {
 //	var doc = goog.dom.getDocument();
 //	doc.write('<img id="background_image" class="background_image" src="../src/images/STS-125.jpg" alt=""/>');
 //	doc.write('<div id="launchCodePanel"></div>');
@@ -47,23 +48,44 @@ function enterLaunchWindow() {
 	var launchCodePanel = goog.dom.getElement('launchCodePanel');
 	roundedLaunchCodePanel.decorate(launchCodePanel);
 
-	launchCodeInput.onchange = launchCodeCheck;
+	launchCodeInput.onchange = codeshelf.launch.launchCodeCheck;
 	launchCodeInput.focus();
 	launchCodeInput.select();
 }
 
-function exitLaunchWindow() {
-
+codeshelf.launch.exitLaunchWindow = function () {
+	goog.dom.removeChildren(goog.dom.getDocument().body);
+	codeshelf.mainpage.launch();
 }
 
-function launchCodeCheck() {
+codeshelf.launch.launchCodeCheck = function () {
 	var launchCodeInput = {
 		launchCode:goog.dom.getElement('launchCodeInput').value
 	}
 	var launchCommand = codeshelf.websession.createCommand(codeshelf.websession.CommandType.LAUNCH_CODE, launchCodeInput);
-	codeshelf.websession.sendCommand(launchCommand, handleResponse);
+	codeshelf.websession.sendCommand(launchCommand, codeshelf.launch.handleLaunchCodeResponse);
 }
 
-function handleResponse(command) {
-	Alert("Command: " + comand);
+codeshelf.launch.handleLaunchCodeResponse = function (command) {
+	if (!command.hasOwnProperty('type')) {
+		alert('response has no type');
+	} else {
+		if (!command.type == codeshelf.websession.LAUNCH_CODE_RESULT) {
+			alert('response wrong type');
+		} else {
+			if (!command.hasOwnProperty('data')) {
+				alert('reponse has no data');
+			} else {
+				if (!command.data.hasOwnProperty(codeshelf.websession.CommandType.LAUNCH_CODE_RESULT)) {
+					alert('response has no launch code result');
+				} else {
+					if (command.data.LAUNCH_CODE_RESULT == "SUCCEED") {
+						codeshelf.launch.exitLaunchWindow();
+					} else {
+						alert('Lauch code invalid');
+					}
+				}
+			}
+		}
+	}
 }

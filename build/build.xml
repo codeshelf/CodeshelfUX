@@ -20,6 +20,7 @@
 
 	<target name="process.templates">
 		<java jar="./lib/GoogleClosureTemplates/SoyToJsSrcCompiler.jar" fork="true" failonerror="true" maxmemory="128m">
+			<arg value="--shouldProvideRequireSoyNamespaces" />
 			<arg value="--outputPathFormat" />
 			<arg value="./src/js_uncompiled/{INPUT_FILE_NAME_NO_EXT}_generated.js" />
 			<arg value="./src/templates/codeshelf.soy" />

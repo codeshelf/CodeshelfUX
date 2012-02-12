@@ -14,7 +14,8 @@ goog.require('goog.json');
 var codeshelfWebsession = {};
 
 codeshelf.websession.CommandType = {
-	LAUNCH_CODE:'LAUNCH_CODE'
+	LAUNCH_CODE:'LAUNCH_CODE',
+	LAUNCH_CODE_RESULT:'LAUNCH_CODE_RESULT'
 };
 
 codeshelf.websession.initWebSocket = function () {
@@ -92,7 +93,7 @@ codeshelf.websession.onClose = function () {
 }
 
 codeshelf.websession.onMessage = function (messageEvent) {
-	alert('Message:' + messageEvent.message);
+//	alert('Message:' + messageEvent.message);
 
 	command = goog.json.parse(messageEvent.message);
 

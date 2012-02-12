@@ -2,13 +2,14 @@ goog.provide('codeshelf.application');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.websession')
 goog.require('codeshelf.launch')
+goog.require('codeshelf.mainpage')
 goog.require('soy');
 
 var codeshelfApp = {};
 
 function initApplication_() {
 	codeshelfApp.websocket = codeshelf.websession.initWebSocket();
-	enterLaunchWindow();
+	codeshelf.launch.enterLaunchWindow();
 }
 
 // Launch the application.

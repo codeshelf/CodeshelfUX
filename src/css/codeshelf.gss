@@ -1,10 +1,11 @@
-@def BG_COLOR				rgb(240, 240, 240);
+@def LAUNCH_BG_COLOR		rgb(0, 0, 0);
+@def MAIN_BG_COLOR			rgb(240, 240, 240);
 
 @def LAUNCH_BORDER_COLOR	rgb(160, 160, 160);
 @def LAUNCH_BACK_COLOR		rgb(208, 208, 208);
 
 @def DIALOG_BORDER_COLOR	rgb(107, 144, 218);
-@def DIALOG_BG_COLOR		BG_COLOR;
+@def DIALOG_BG_COLOR		MAIN_BG_COLOR;
 
 @def LOGO_FONT				"league-gothic-1","league-gothic-2",sans-serif;
 @def LOGO_FONT_COLOR		rgb(187, 187, 187);
@@ -19,8 +20,12 @@
 @def DATA_LINE_HEIGHT		100%;
 @def DATA_TEXT_TRANSFORM	lowercase;
 
-body {
-	background-color:	BG_COLOR;
+.launch_body {
+	background-color:	LAUNCH_BG_COLOR;
+}
+
+.main_body {
+	background-color:	MAIN_BG_COLOR;
 }
 
 .background_image {
@@ -82,7 +87,7 @@ h1 {
 	width:				1602px;
 	height:				702px;
 	border:				1px solid LOGO_FONT_COLOR;
-	background-color:	BG_COLOR;
+	background-color:	MAIN_BG_COLOR;
 }
 
 .window {
