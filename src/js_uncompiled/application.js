@@ -7,11 +7,18 @@ goog.require('soy');
 
 var codeshelfApp = {};
 
-function initApplication_() {
+codeshelf.application.startApplication_ = function () {
+	// Remove all markup from the URL - we'll build it from the app itself.
+	goog.dom.removeChildren(goog.dom.getDocument().body);
 	codeshelfApp.websocket = codeshelf.websession.initWebSocket();
 	codeshelf.launch.enterLaunchWindow();
 }
 
+codeshelf.application.restartApplication = function (reason) {
+	alert('Application restarted: ' + reason + '.');
+	codeshelf.application.startApplication_();
+}
+
 // Launch the application.
-initApplication_();
+codeshelf.application.startApplication_();
 

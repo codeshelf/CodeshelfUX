@@ -1,6 +1,7 @@
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.listview');
+goog.require('codeshelf.facilityeditor');
 goog.require('goog.fx.Dragger');
 goog.require('goog.dom');
 goog.require('goog.style');
@@ -18,6 +19,7 @@ goog.require('jquery.rotate');
 var resizer2;
 var Z;
 var theWindow;
+var frame;
 
 codeshelf.mainpage.launch = function () {
 
@@ -59,7 +61,7 @@ codeshelf.mainpage.launch = function () {
 		dragger3.dispose();
 	});
 
-	var frame = goog.dom.query('#frame')[0];
+	frame = goog.dom.query('#frame')[0];
 	frame.style.top = frameTop + 5 + 'px';
 	frame.style.left = frameLeft + 'px';
 
@@ -74,6 +76,7 @@ codeshelf.mainpage.launch = function () {
 	});
 
 	launchListView();
+	codeshelf.facilityeditor.startEditor();
 }
 
 codeshelf.mainpage.createMoverStart = function (mover) {

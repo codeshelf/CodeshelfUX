@@ -13,13 +13,23 @@ goog.require('goog.json');
 
 var codeshelfWebsession = {};
 
+if (typeof MozWebSocket != "undefined") {
+	var WebSocket = MozWebSocket;
+}
+
 codeshelf.websession.CommandType = {
-	LAUNCH_CODE:'LAUNCH_CODE',
+	LAUNCH_CODE:       'LAUNCH_CODE',
 	LAUNCH_CODE_RESULT:'LAUNCH_CODE_RESULT'
+};
+
+codeshelf.websession.State = {
+	UNVALIDATED:'UNVALIDATED',
+	VALIDATED:  'VALIDATED'
 };
 
 codeshelf.websession.initWebSocket = function () {
 
+	codeshelfWebsession.state = codeshelf.websession.State.UNVALIDATED;
 	codeshelfWebsession.pendingCommands = new Object();
 
 	/**
@@ -68,7 +78,7 @@ codeshelf.websession.sendCommand = function (command, callbackFunction) {
 	// Attempt to send the command.
 	try {
 		if (!codeshelfApp.websocket.isOpen()) {
-			Alert('WebSocket not open: try again later');
+			alert('WebSocket not open: try again later');
 		} else {
 			// Put the pending command callback function in the map.
 			codeshelfWebsession.pendingCommands[command.id] = callbackFunction;
@@ -81,20 +91,20 @@ codeshelf.websession.sendCommand = function (command, callbackFunction) {
 }
 
 codeshelf.websession.onError = function () {
-	//alert('Error');
+	codeshelfWebsession.state = codeshelf.websession.State.UNVALIDATED;
+	codeshelf.application.restartApplication('websocket error');
 }
 
 codeshelf.websession.onOpen = function () {
-	//alert('Open');
+
 }
 
 codeshelf.websession.onClose = function () {
-	//alert('Close');
+	codeshelfWebsession.state = codeshelf.websession.State.UNVALIDATED;
+	codeshelf.application.restartApplication('websocket closed unexpectedly');
 }
 
 codeshelf.websession.onMessage = function (messageEvent) {
-//	alert('Message:' + messageEvent.message);
-
 	command = goog.json.parse(messageEvent.message);
 
 	callbackFunction = codeshelfWebsession.pendingCommands[command.id];

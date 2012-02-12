@@ -20,6 +20,8 @@
 @def DATA_LINE_HEIGHT		100%;
 @def DATA_TEXT_TRANSFORM	lowercase;
 
+@def WINDOWBAR_HEIGHT		20px;
+
 .launch_body {
 	background-color:	LAUNCH_BG_COLOR;
 }
@@ -109,15 +111,17 @@ h1 {
 	position:			absolute;
 }
 
+#win1 {
+	background-color:	rgb(200, 200, 250);
+	border:				1px solid #F99;
+}
+
 #win2 {
-	top:				250px;
-	width:				400px;
 	background-color:	rgb(250, 200, 200);
 	border:				1px solid #F99;
 }
 
 #win3 {
-	left:				500px;
 	background-color:	rgb(150, 200, 150);
 	border:				1px solid #6A6;
 }
@@ -126,8 +130,8 @@ h1 {
 	position:			absolute;
 	left:				0;
 	top:				0;
-	width:				300px;
-	height:				20px;
+	width:				100%;
+	height:				WINDOWBAR_HEIGHT;
 	background-color:	#99F;
 	cursor:				default;
 }
@@ -198,4 +202,11 @@ h1 {
 .slick-row.selected .cell-selection {
 	background-color:	transparent;
 	/* show default selected row background */
+}
+
+#facility_map {
+	position:			relative;
+	width:				100%;
+	height:				100%;
+	top:				WINDOWBAR_HEIGHT;
 }
