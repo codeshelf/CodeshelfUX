@@ -2,7 +2,7 @@
 // Please do not edit.
 goog.addDependency('../../../../src/js_uncompiled/application.js', ['codeshelf.application'], ['codeshelf.launch', 'codeshelf.mainpage', 'codeshelf.templates', 'codeshelf.websession', 'soy']);
 goog.addDependency('../../../../src/js_uncompiled/codeshelf_generated.js', ['codeshelf.templates'], ['soy', 'soy.StringBuilder']);
-goog.addDependency('../../../../src/js_uncompiled/facilityEditor.js', ['codeshelf.facilityeditor'], ['codeshelf.templates']);
+goog.addDependency('../../../../src/js_uncompiled/facilityEditor.js', ['codeshelf.facilityeditor'], ['codeshelf.templates', 'goog.events.EventHandler', 'goog.events.EventType']);
 goog.addDependency('../../../../src/js_uncompiled/launch.js', ['codeshelf.launch'], ['codeshelf.mainpage', 'codeshelf.templates', 'codeshelf.websession', 'goog.dom', 'goog.dom.query', 'goog.events', 'goog.events.EventType', 'goog.json', 'goog.net.WebSocket', 'goog.style', 'goog.ui.RoundedPanel', 'goog.window', 'soy']);
 goog.addDependency('../../../../src/js_uncompiled/listView.js', ['codeshelf.listview'], ['jquery', 'slickgrid.columnpicker', 'slickgrid.core', 'slickgrid.dataview', 'slickgrid.editors', 'slickgrid.firebugx', 'slickgrid.grid', 'slickgrid.pager', 'slickgrid.rowselection']);
 goog.addDependency('../../../../src/js_uncompiled/mainPage.js', ['codeshelf.mainpage'], ['codeshelf.facilityeditor', 'codeshelf.listview', 'codeshelf.templates', 'goog.dom', 'goog.dom.ViewportSizeMonitor', 'goog.dom.query', 'goog.events', 'goog.events.EventType', 'goog.fx.Dragger', 'goog.math.Size', 'goog.style', 'goog.window', 'jquery.rotate']);

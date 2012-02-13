@@ -1,5 +1,7 @@
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
+goog.require('goog.events.EventType');
+goog.require('goog.events.EventHandler');
 
 var codeshelfFacilityEditor = {};
 
@@ -9,9 +11,10 @@ codeshelf.facilityeditor.startEditor = function () {
 
 	var demoCenter = new google.maps.LatLng(37.717198, -121.517029);
 	var myOptions = {
-		zoom:     16,
-		center:   demoCenter,
-		mapTypeId:google.maps.MapTypeId.HYBRID
+		zoom:                  16,
+		center:                demoCenter,
+		mapTypeId:             google.maps.MapTypeId.HYBRID,
+		disableDoubleClickZoom:true
 	}
 	map = new google.maps.Map(goog.dom.query('#facility_map')[0], myOptions);
 
@@ -28,10 +31,27 @@ function PolygonCreator(map) {
 //create pen to draw on map
 	this.map = map;
 	this.pen = new Pen(this.map);
+	this.clickTimeout = null;
 	var thisOjb = this;
-	this.event = google.maps.event.addListener(thisOjb.map, 'click', function (event) {
-		thisOjb.pen.draw(event.latLng);
+	this.clickHandler = google.maps.event.addListener(thisOjb.map, 'click', function (event) {
+//		this.clickTimeout = setTimeout(function () {
+			thisOjb.pen.draw(event.latLng);
+//		}, 500);
 	});
+//	this.doubleClickHandler = google.maps.event.addListener(thisOjb.map, 'dblclick', function (event) {
+//		clearTimeout(this.clickTimeout);
+//		var dot = thisOjb.pen.getListOfDots()[0];
+//		thisOjb.pen.draw(dot.getLatLng());
+//	});
+//	codeshelfFacilityEditor.handler = new goog.events.EventHandler();
+//	codeshelfFacilityEditor.handler.listen(thisOjb.map, goog.events.EventType.CLICK, function (event) {
+//		this.event = event;
+//		thisOjb.pen.draw(event.latLng);
+//	});
+//	codeshelfFacilityEditor.handler.listen(thisOjb.map, goog.events.EventType.DBLCLICK, function (event) {
+//		this.event = event;
+//		thisOjb.pen.draw(this.listOfDots[0].getLatLng());
+//	});
 
 	this.showData = function () {
 		return this.pen.getData();
@@ -47,9 +67,28 @@ function PolygonCreator(map) {
 		if (null != this.pen.polygon) {
 			this.pen.polygon.remove();
 		}
-		google.maps.event.removeListener(this.event);
+		google.maps.event.removeListener(this.clickHandler);
+		google.maps.event.removeListener(this.doubleClickHandler);
 	}
 }
+
+//codeshelf.facilityEditor.handleMouseEvent = function(e) {
+//	this.logger_.fine('Received event ' + e.type);
+//	var node = this.getNodeFromEvent_(e);
+//	if (node) {
+//		switch (e.type) {
+//			case goog.events.EventType.MOUSEDOWN:
+//				node.onMouseDown(e);
+//				break;
+//			case goog.events.EventType.CLICK:
+//				node.onClick_(e);
+//				break;
+//			case goog.events.EventType.DBLCLICK:
+//				node.onDoubleClick_(e);
+//				break;
+//		}
+//	}
+//};
 /*
  * pen class
  */

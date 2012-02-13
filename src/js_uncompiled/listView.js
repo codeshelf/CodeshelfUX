@@ -22,8 +22,9 @@ var columns = [ {
 	cssClass : "cell-selection",
 	width : 40,
 	cannotTriggerInsert : true,
-	resizable : false,
-	selectable : false
+	resizable : true,
+	selectable : false,
+	sortable: true
 }, {
 	id : "title",
 	name : "Title",
