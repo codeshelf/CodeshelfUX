@@ -3,375 +3,350 @@ goog.require('codeshelf.templates');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
 
-var codeshelfFacilityEditor = {};
+codeshelf.facilityeditor = function () {
 
-codeshelf.facilityeditor.startEditor = function () {
+	var map_;
+	var pen_;
+	var clickHandler_;
+	var doubleClickHandler_;
+	var clickTimeout_;
 
-	//goog.dom.appendChild(goog.dom.query('#map')[0], soy.renderAsElement(codeshelf.templates.googleMapsScripts));
+	return {
+		start:function () {
+			// Safeway DC Tracy, CA
+			var demoLatLng = new google.maps.LatLng(37.717198, -121.517029);
+			var myOptions = {
+				zoom:                  16,
+				center:                demoLatLng,
+				mapTypeId:             google.maps.MapTypeId.HYBRID,
+				disableDoubleClickZoom:true
+			}
+			map_ = new google.maps.Map(goog.dom.query('#facility_map')[0], myOptions);
+			pen_ = codeshelf.facilityeditor.pen(map_);
 
-	var demoCenter = new google.maps.LatLng(37.717198, -121.517029);
-	var myOptions = {
-		zoom:                  16,
-		center:                demoCenter,
-		mapTypeId:             google.maps.MapTypeId.HYBRID,
-		disableDoubleClickZoom:true
-	}
-	map = new google.maps.Map(goog.dom.query('#facility_map')[0], myOptions);
+			clickHandler_ = google.maps.event.addListener(map_, 'click', function (event) {
+				clickTimeout_ = setTimeout(function () {
+					pen_.draw(event.latLng);
+				}, 250);
+			});
 
-	var creator = new PolygonCreator(map);
-}
+			doubleClickHandler_ = google.maps.event.addListener(map_, 'dblclick', function (event) {
+				clearTimeout(clickTimeout_);
+				pen_.draw(pen_.getListOfDots()[0].getLatLng());
+			});
+		},
 
-/*
- * Polygon creator class
- * Developed by The Di Lab
- * www.the-di-lab.com
- * 22.06.2010
- */
-function PolygonCreator(map) {
-//create pen to draw on map
-	this.map = map;
-	this.pen = new Pen(this.map);
-	this.clickTimeout = null;
-	var thisOjb = this;
-	this.clickHandler = google.maps.event.addListener(thisOjb.map, 'click', function (event) {
-//		this.clickTimeout = setTimeout(function () {
-			thisOjb.pen.draw(event.latLng);
-//		}, 500);
-	});
-//	this.doubleClickHandler = google.maps.event.addListener(thisOjb.map, 'dblclick', function (event) {
-//		clearTimeout(this.clickTimeout);
-//		var dot = thisOjb.pen.getListOfDots()[0];
-//		thisOjb.pen.draw(dot.getLatLng());
-//	});
-//	codeshelfFacilityEditor.handler = new goog.events.EventHandler();
-//	codeshelfFacilityEditor.handler.listen(thisOjb.map, goog.events.EventType.CLICK, function (event) {
-//		this.event = event;
-//		thisOjb.pen.draw(event.latLng);
-//	});
-//	codeshelfFacilityEditor.handler.listen(thisOjb.map, goog.events.EventType.DBLCLICK, function (event) {
-//		this.event = event;
-//		thisOjb.pen.draw(this.listOfDots[0].getLatLng());
-//	});
+		exit:function () {
+			pen_.deleteMis();
+			if (null != pen_.polygon) {
+				pen_.polygon.remove();
+			}
+			google.maps.event.removeListener(clickHandler_);
+			google.maps.event.removeListener(doubleClickHandler_);
+		},
 
-	this.showData = function () {
-		return this.pen.getData();
-	}
+		showData:function () {
+			return pen_.getData();
+		},
 
-	this.showColor = function () {
-		return this.pen.getColor();
-	}
-
-//destroy the pen
-	this.destroy = function () {
-		this.pen.deleteMis();
-		if (null != this.pen.polygon) {
-			this.pen.polygon.remove();
+		showColor:function () {
+			return pen_.getColor();
 		}
-		google.maps.event.removeListener(this.clickHandler);
-		google.maps.event.removeListener(this.doubleClickHandler);
 	}
 }
 
-//codeshelf.facilityEditor.handleMouseEvent = function(e) {
-//	this.logger_.fine('Received event ' + e.type);
-//	var node = this.getNodeFromEvent_(e);
-//	if (node) {
-//		switch (e.type) {
-//			case goog.events.EventType.MOUSEDOWN:
-//				node.onMouseDown(e);
-//				break;
-//			case goog.events.EventType.CLICK:
-//				node.onClick_(e);
-//				break;
-//			case goog.events.EventType.DBLCLICK:
-//				node.onDoubleClick_(e);
-//				break;
-//		}
-//	}
-//};
 /*
  * pen class
  */
-function Pen(map) {
-	this.map = map;
-	this.listOfDots = new Array();
-	this.polyline = null;
-	this.polygon = null;
-	this.currentDot = null;
-//draw function
-	this.draw = function (latLng) {
-		if (null != this.polygon) {
-			alert('Click Reset to draw another');
-		} else {
-			if (this.currentDot != null && this.listOfDots.length > 1 && this.currentDot == this.listOfDots[0]) {
-				this.drawPloygon(this.listOfDots);
+codeshelf.facilityeditor.pen = function (map) {
+
+	map_ = map;
+	listOfDots_ = new Array();
+	polyline_ = null;
+	polygon_ = null;
+	currentDot_ = null;
+
+	return {
+		//draw function
+		draw:         function (latLng) {
+			if (null != polygon_) {
+				alert('Click Reset to draw another');
 			} else {
-//remove previous line
-				if (null != this.polyline) {
-					this.polyline.remove();
-				}
-//draw Dot
-				var dot = new Dot(latLng, this.map, this);
-				this.listOfDots.push(dot);
-//draw line
-				if (this.listOfDots.length > 1) {
-					this.polyline = new Line(this.listOfDots, this.map);
+				if (currentDot_ != null && listOfDots_.length > 1 && currentDot_ == listOfDots_[0]) {
+					drawPloygon(listOfDots_);
+				} else {
+					//remove previous line
+					if (null != polyline_) {
+						polyline_.remove();
+					}
+					//draw Dot
+					var dot = codeshelf.facilityeditor.dot(latLng, map_, this);
+					listOfDots_.push(dot);
+					//draw line
+					if (listOfDots_.length > 1) {
+						polyline_ = codeshelf.facilityeditor.line(listOfDots_, map_);
+					}
 				}
 			}
-		}
-	}
-//draw ploygon
-	this.drawPloygon = function (listOfDots, color, des, id) {
-		this.polygon = new Polygon(listOfDots, this.map, this, color, des, id);
-		this.deleteMis();
-	}
-//delete all dots and polylines
-	this.deleteMis = function () {
-//delete dots
-		$.each(this.listOfDots, function (index, value) {
-			value.remove();
-		});
-		this.listOfDots.length = 0;
-//delete lines
-		if (null != this.polyline) {
-			this.polyline.remove();
-			this.polyline = null;
-		}
-	}
-//cancel
-	this.cancel = function () {
-		if (null != this.polygon) {
-			(this.polygon.remove());
-		}
-		this.polygon = null;
-		this.deleteMis();
-	}
-//setter
-	this.setCurrentDot = function (dot) {
-		this.currentDot = dot;
-	}
-//getter
-	this.getListOfDots = function () {
-		return this.listOfDots;
-	}
-//get plots data
-	this.getData = function () {
-		if (this.polygon != null) {
-			var data = "";
-			var paths = this.polygon.getPlots();
-//get paths
-			paths.getAt(0).forEach(function (value, index) {
-				data += (value.toString());
+		},
+		//draw ploygon
+		drawPloygon:  function (listOfDots, color, des, id) {
+			polygon_ = codeshelf.facilityeditor.polygon(listOfDots, map, this, color, des, id);
+			deleteMis();
+		},
+		//delete all dots and polylines
+		deleteMis:    function () {
+			//delete dots
+			$.each(listOfDots, function (index, value) {
+				value.remove();
 			});
-			return data;
-		} else {
-			return null;
+			listOfDots_.length = 0;
+			//delete lines
+			if (null != polyline_) {
+				polyline_.remove();
+				polyline_ = null;
+			}
+		},
+		//cancel
+		cancel:       function () {
+			if (null != polygon_) {
+				(polygon_.remove());
+			}
+			polygon_ = null;
+			deleteMis();
+		},
+		//setter
+		setCurrentDot:function (dot) {
+			currentDot_ = dot;
+		},
+		//getter
+		getListOfDots:function () {
+			return listOfDots_;
+		},
+		//get plots data
+		getData:      function () {
+			if (polygon_ != null) {
+				var data = "";
+				var paths = polygon_.getPlots();
+				//get paths
+				paths.getAt(0).forEach(function (value, index) {
+					data += (value.toString());
+				});
+				return data;
+			} else {
+				return null;
+			}
+		},
+		//get color
+		getColor:     function () {
+			if (polygon_ != null) {
+				var color = polygon_.getColor();
+				return color;
+			} else {
+				return null;
+			}
 		}
-	}
-//get color
-	this.getColor = function () {
-		if (this.polygon != null) {
-			var color = this.polygon.getColor();
-			return color;
-		} else {
-			return null;
-		}
-
 	}
 }
 
 /* Child of Pen class
  * dot class
  */
-function Dot(latLng, map, pen) {
-//property
-	this.latLng = latLng;
-	this.parent = pen;
-
-	this.markerObj = new google.maps.Marker({
-		position:this.latLng,
+codeshelf.facilityeditor.dot = function (latLng, map, pen) {
+	//property
+	var latLng_ = latLng;
+	var parent_ = pen;
+	var markerObj_ = new google.maps.Marker({
+		position:latLng,
 		map:     map
 	});
 
-//closure
-	this.addListener = function () {
-		var parent = this.parent;
-		var thisMarker = this.markerObj;
+	//closure
+	addListener = function () {
+		var parent = parent_;
+		var thisMarker = markerObj_;
 		var thisDot = this;
 		google.maps.event.addListener(thisMarker, 'click', function () {
-			parent.setCurrentDot(thisDot);
-			parent.draw(thisMarker.getPosition());
+			parent_.setCurrentDot(thisDot);
+			parent_.draw(thisMarker.getPosition());
 		});
 	}
-	this.addListener();
+	addListener();
 
-//getter
-	this.getLatLng = function () {
-		return this.latLng;
-	}
+	return {
+		//getter
+		getLatLng:function () {
+			return latLng_;
+		},
 
-	this.getMarkerObj = function () {
-		return this.markerObj;
-	}
+		getMarkerObj:function () {
+			return markerObj_;
+		},
 
-	this.remove = function () {
-		this.markerObj.setMap(null);
+		remove:function () {
+			markerObj_.setMap(null);
+		}
 	}
 }
 
 /* Child of Pen class
  * Line class
  */
-function Line(listOfDots, map) {
-	this.listOfDots = listOfDots;
-	this.map = map;
-	this.coords = new Array();
-	this.polylineObj = null;
+codeshelf.facilityeditor.line = function (listOfDots, map) {
+	var listOfDots_ = listOfDots;
+	var map_ = map;
+	var coords_ = new Array();
+	var polylineObj_ = null;
 
-	if (this.listOfDots.length > 1) {
-		var thisObj = this;
-		$.each(this.listOfDots, function (index, value) {
-			thisObj.coords.push(value.getLatLng());
+	if (listOfDots_.length > 1) {
+		$.each(listOfDots_, function (index, value) {
+			coords_.push(value.getLatLng());
 		});
 
-		this.polylineObj = new google.maps.Polyline({
-			path:         this.coords,
+		polylineObj_ = new google.maps.Polyline({
+			path:         coords_,
 			strokeColor:  "#FF0000",
 			strokeOpacity:1.0,
 			strokeWeight: 2,
-			map:          this.map
+			map:          map_
 		});
 	}
 
-	this.remove = function () {
-		this.polylineObj.setMap(null);
+	return	{
+		remove:function () {
+			polylineObj_.setMap(null);
+		}
 	}
 }
 
 /* Child of Pen class
  * polygon class
  */
-function Polygon(listOfDots, map, pen, color) {
-	this.listOfDots = listOfDots;
-	this.map = map;
-	this.coords = new Array();
-	this.parent = pen;
-	this.des = 'Hello';
+codeshelf.facilityeditor.polygon = function (listOfDots, map, pen, color) {
+	listOfDots_ = listOfDots;
+	map_ = map;
+	coords_ = new Array();
+	parent_ = pen;
+	des_ = 'Hello';
 
 
 	var thisObj = this;
-	$.each(this.listOfDots, function (index, value) {
+	$.each(listOfDots_, function (index, value) {
 		thisObj.coords.push(value.getLatLng());
 	});
 
-	this.polygonObj = new google.maps.Polygon({
-		paths:        this.coords,
+	polygonObj_ = new google.maps.Polygon({
+		paths:        coords_,
 		strokeColor:  "#FF0000",
 		strokeOpacity:0.8,
 		strokeWeight: 2,
 		fillColor:    "#FF0000",
 		fillOpacity:  0.35,
-		map:          this.map
+		map:          map_
 	});
 
-	this.remove = function () {
-		this.info.remove();
-		this.polygonObj.setMap(null);
-	}
+	info = codeshelf.facilityeditor.info(this, map_);
 
-//getter
-	this.getContent = function () {
-		return this.des;
-	}
-
-
-	this.getPolygonObj = function () {
-		return this.polygonObj;
-	}
-
-	this.getListOfDots = function () {
-		return this.listOfDots;
-	}
-
-	this.getPlots = function () {
-		return this.polygonObj.getPaths();
-	}
-
-	this.getColor = function () {
-		return this.getPolygonObj().fillColor;
-	}
-
-//setter
-	this.setColor = function (color) {
-		return this.getPolygonObj().setOptions(
-			{fillColor:      color,
-				strokeColor: color,
-				strokeWeight:2
-			}
-		);
-	}
-
-
-	this.info = new Info(this, this.map);
-
-//closure
-	this.addListener = function () {
-		var info = this.info;
-		var thisPolygon = this.polygonObj;
+	//closure
+	addListener = function () {
+		var info = info_;
+		var thisPolygon = polygonObj_;
 		google.maps.event.addListener(thisPolygon, 'rightclick', function (event) {
 			info.show(event.latLng);
 		});
 	}
-	this.addListener();
+	addListener();
 
+	return {
+		remove:    function () {
+			info_.remove();
+			polygonObj_.setMap(null);
+		},
+
+		//getter
+		getContent:function () {
+			return des_;
+		},
+
+
+		getPolygonObj:function () {
+			return polygonObj_;
+		},
+
+		getListOfDots:function () {
+			return listOfDots_;
+		},
+
+		getPlots:function () {
+			return polygonObj_.getPaths();
+		},
+
+		getColor:function () {
+			return getPolygonObj().fillColor;
+		},
+
+//setter
+		setColor:function (color) {
+			return getPolygonObj().setOptions(
+				{fillColor:      color,
+					strokeColor: color,
+					strokeWeight:2
+				}
+			);
+		}
+	}
 }
 
 /*
  * Child of Polygon class
  * Info Class
  */
-function Info(polygon, map) {
-	this.parent = polygon;
-	this.map = map;
+codeshelf.facilityeditor.info = function (polygon, map) {
+	var parent_ = polygon;
+	var map_ = map;
 
-	this.color = document.createElement('input');
+	var color = document.createElement('input');
 
-	this.button = document.createElement('input');
-	$(this.button).attr('type', 'button');
-	$(this.button).val("Change Color");
-	var thisOjb = this;
+	var button = document.createElement('input');
+	$(button).attr('type', 'button');
+	$(button).val("Change Color");
 
-
-//change color action
-	this.changeColor = function () {
-		thisOjb.parent.setColor($(thisOjb.color).val());
-	}
-
-//get content
-	this.getContent = function () {
-		var content = document.createElement('div');
-
-		$(this.color).val(this.parent.getColor());
-		$(this.button).click(function () {
-			thisObj.changeColor();
-		});
-
-		$(content).append(this.color);
-		$(content).append(this.button);
-		return content;
-	}
-
-	thisObj = this;
-	this.infoWidObj = new google.maps.InfoWindow({
+	var infoWidObj_ = new google.maps.InfoWindow({
 		content:thisObj.getContent()
 	});
 
-	this.show = function (latLng) {
-		this.infoWidObj.setPosition(latLng);
-		this.infoWidObj.open(this.map);
-	}
+	return {
+		//change color action
+		changeColor:function () {
+			parent_.setColor($(thisOjb.color).val());
+		},
 
-	this.remove = function () {
-		this.infoWidObj.close();
+		//get content
+		getContent: function () {
+			var content = document.createElement('div');
+
+			$(color_).val(parent_.getColor());
+			$(button_).click(function () {
+				changeColor();
+			});
+
+			$(content).append(color_);
+			$(content).append(button_);
+			return content;
+		},
+
+		show:function (latLng) {
+			infoWidObj_.setPosition(latLng);
+			infoWidObj_.open(map_);
+		},
+
+		remove:function () {
+			infoWidObj_.close();
+		}
 	}
+}
+
+codeshelf.facilityeditor.startEditor = function () {
+	var facilityEditor = codeshelf.facilityeditor();
+	facilityEditor.start();
 }
