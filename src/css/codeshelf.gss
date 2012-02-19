@@ -1,28 +1,36 @@
-@def LAUNCH_BG_COLOR		rgb(0, 0, 0);
-@def MAIN_BG_COLOR			rgb(240, 240, 240);
+@def LAUNCH_BG_COLOR				rgb(0, 0, 0);
+@def MAIN_BG_COLOR					rgb(240, 240, 240);
 
-@def LAUNCH_BORDER_COLOR	rgb(160, 160, 160);
-@def LAUNCH_BACK_COLOR		rgb(208, 208, 208);
+@def LAUNCH_BORDER_COLOR			rgb(160, 160, 160);
+@def LAUNCH_BACK_COLOR				rgb(208, 208, 208);
 
-@def DIALOG_BORDER_COLOR	rgb(107, 144, 218);
-@def DIALOG_BG_COLOR		MAIN_BG_COLOR;
+@def DIALOG_BORDER_COLOR			rgb(107, 144, 218);
+@def DIALOG_BG_COLOR				MAIN_BG_COLOR;
 
-@def LOGO_FONT				"league-gothic-1","league-gothic-2",sans-serif;
-@def LOGO_FONT_COLOR		rgb(187, 187, 187);
-@def LOGO_FONT_SIZE			120px;
-@def LOGO_LINE_HEIGHT		100%;
-@def LOGO_MARGIN_BOTTOM		3px;
-@def LOGO_TEXT_TRANSFORM	lowercase;
+@def LOGO_FONT						"league-gothic-1","league-gothic-2",sans-serif;
+@def LOGO_FONT_COLOR				rgb(187, 187, 187);
+@def LOGO_FONT_SIZE					120px;
+@def LOGO_LINE_HEIGHT				100%;
+@def LOGO_MARGIN_BOTTOM				3px;
+@def LOGO_TEXT_TRANSFORM			lowercase;
 
-@def DATA_FONT				"league-gothic-1","league-gothic-2",sans-serif;
-@def DATA_FONT_COLOR		rgb(0, 0, 0);
-@def DATA_FONT_SIZE			15px;
-@def DATA_LINE_HEIGHT		100%;
-@def DATA_TEXT_TRANSFORM	lowercase;
+@def DATA_FONT						"league-gothic-1","league-gothic-2",sans-serif;
+@def DATA_FONT_COLOR				rgb(0, 0, 0);
+@def DATA_FONT_SIZE					15px;
+@def DATA_LINE_HEIGHT				100%;
+@def DATA_TEXT_TRANSFORM			lowercase;
 
-@def WINDOWBAR_HEIGHT		20px;
+@def WINDOWBAR_HEIGHT				20px;
 
-@def FACILITY_TOOLBAR_WIDTH	32px;
+/* 32px + 2px each side for spacing. */
+@def FACILITY_TOOLBAR_WIDTH			36px;  
+@def FACILITY_TOOLBAR_HEIGHT		36px;
+
+@def FACILITY_TOOLBAR_BACKGROUND	rgb(220, 220, 220);
+@def FACILITY_ICON_BACKGROUND		rgb(200, 200, 200);
+
+/* ================================================================== */
+/* Styles */
 
 .launch_body {
 	background-color:	LAUNCH_BG_COLOR;
@@ -238,9 +246,18 @@ h1 {
 
 #facility_editor_toolbar {
 	width:				FACILITY_TOOLBAR_WIDTH;
+	background:			FACILITY_TOOLBAR_BACKGROUND;
 }
 
 .facility_editor_tool {
-	width:				32px;
-	height:				32px;
+	position:			relative;
+	width:				FACILITY_TOOLBAR_WIDTH;
+	height:				FACILITY_TOOLBAR_HEIGHT;
+}
+
+.facility_editor_tool_icon {
+	position:			absolute;
+	top:				2px;
+	left:				2px;
+	background:			FACILITY_ICON_BACKGROUND;
 }

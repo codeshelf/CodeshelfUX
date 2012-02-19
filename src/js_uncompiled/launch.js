@@ -20,8 +20,8 @@ codeshelf.launch.enterLaunchWindow = function () {
 //	var launchDiv = goog.dom.getElement('launchCodePanel');
 //	launchDiv.write('<div class="goog-roundedpanel-content"></div>');
 
-	var backgroundImageElement = goog.dom.createDom('img', {'id':'background_image', 'class':'background_image', 'src':'../src/images/STS-125.jpg', 'alt':''}, null);
-	goog.dom.appendChild(goog.dom.getDocument().body, backgroundImageElement);
+//	var backgroundImageElement = goog.dom.createDom('img', {'id':'background_image', 'class':'background_image', 'src':'../src/images/STS-125.jpg', 'alt':''}, null);
+//	goog.dom.appendChild(goog.dom.getDocument().body, backgroundImageElement);
 
 	// Create DOM structure to represent the launch code.
 	//var launchCode = goog.dom.createDom('div', {'id':'launchCodeLabel'}, launchCodePanelContent);
