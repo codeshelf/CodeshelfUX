@@ -16,9 +16,7 @@ goog.require('jquery.rotate');
 //var codeshelflogo = $('#codeshelflogo');
 //codeshelflogo.rotate(-90);
 
-var resizer2;
 var Z;
-var theWindow;
 var frame;
 
 codeshelf.mainpage.launch = function () {
@@ -37,10 +35,32 @@ codeshelf.mainpage.launch = function () {
 	var window3 = goog.dom.getElement('win3');
 	var dragger1 = new goog.fx.Dragger(window1, goog.dom.query('#win1 .bar')[0], limits);
 	var dragger2 = new goog.fx.Dragger(goog.dom.getElement('win2'), goog.dom.query('#win2 .bar')[0], limits);
-	resizer2 = new goog.fx.Dragger(goog.dom.getElement('pager'), goog.dom.query('#pager')[0], limits);
-	var dragger3 = new goog.fx.Dragger(goog.dom.getElement('win3'), goog.dom.query('#win3 .bar')[0], limits);
+	var resizer2 = new goog.fx.Dragger(goog.dom.query('#win2 .pager')[0], goog.dom.query('#pager')[0], limits);
+	var dragger3 = new goog.fx.Dragger(goog.dom.getElement('win3'), goog.dom.query('#win3 .bar')[0]);
+	var resizer3 = new goog.fx.Dragger(goog.dom.query('#win3 .pager')[0], goog.dom.query('#win3 .pager')[0]);
 
-	theWindow = goog.dom.getElement('win2');
+	resizer2.defaultAction = function(x, y) {
+		leftDim = parseInt(window2.style.left, 10);
+		topDim = parseInt(window2.style.top, 10);
+		width = this.screenX - leftDim;
+		height = y + 20 - topDim
+		window2.style.width = width + 'px';
+		window2.style.height = height + 'px';
+		grid.resizeCanvas();
+		grid.autosizeColumns();
+	};
+
+	resizer3.defaultAction = function(x, y) {
+		leftDim = parseInt(window3.style.left, 10);
+		topDim = parseInt(window3.style.top, 10);
+		width = this.screenX - leftDim;
+		height = y + 20 - topDim
+		window3.style.width = width + 'px';
+		window3.style.height = height + 'px';
+		grid.resizeCanvas();
+		grid.autosizeColumns();
+	};
+
 
 	dragger3.setHysteresis(6);
 

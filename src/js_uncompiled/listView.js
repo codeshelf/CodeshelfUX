@@ -154,17 +154,6 @@ function launchListView() {
 	grid = new Slick.Grid("#myGrid", dataView, columns, options);
 	grid.setSelectionModel(new Slick.RowSelectionModel());
 
-	resizer2.defaultAction = function(x, y) {
-		leftDim = parseInt(theWindow.style.left, 10);
-		topDim = parseInt(theWindow.style.top, 10);
-		width = this.screenX - leftDim;
-		height = y + 20 - topDim
-		theWindow.style.width = width + 'px';
-		theWindow.style.height = height + 'px';
-		grid.resizeCanvas();
-		grid.autosizeColumns();
-	};
-
 	var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
 	var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
 

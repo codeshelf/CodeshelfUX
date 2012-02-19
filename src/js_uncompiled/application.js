@@ -12,6 +12,10 @@ codeshelf.application.startApplication_ = function () {
 	goog.dom.removeChildren(goog.dom.getDocument().body);
 	codeshelfApp.websocket = codeshelf.websession.initWebSocket();
 	codeshelf.launch.enterLaunchWindow();
+	
+	// Cause automatic login to save on test time.
+	setTimeout(function() {codeshelf.launch.launchCodeCheck();},1250);
+
 }
 
 codeshelf.application.restartApplication = function (reason) {

@@ -4,7 +4,6 @@ goog.require('soy');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.window');
-goog.require('goog.style');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.RoundedPanel');

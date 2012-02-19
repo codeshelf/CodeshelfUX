@@ -19,7 +19,10 @@ codeshelf.facilityeditor = function () {
 				zoom:                  16,
 				center:                demoLatLng,
 				mapTypeId:             google.maps.MapTypeId.HYBRID,
-				disableDoubleClickZoom:true
+				disableDoubleClickZoom:true,
+				panControl:            false,
+				rotateControl:         true,
+				streetViewControl:     false
 			}
 			map_ = new google.maps.Map(goog.dom.query('#facility_map')[0], myOptions);
 			pen_ = codeshelf.facilityeditor.pen(map_);
@@ -60,20 +63,20 @@ codeshelf.facilityeditor = function () {
  */
 codeshelf.facilityeditor.pen = function (map) {
 
-	map_ = map;
-	listOfDots_ = new Array();
-	polyline_ = null;
-	polygon_ = null;
-	currentDot_ = null;
+	var map_ = map;
+	var listOfDots_ = new Array();
+	var polyline_ = null;
+	var polygon_ = null;
+	var currentDot_ = null;
 
-	return {
+	var thisPen = {
 		//draw function
 		draw:         function (latLng) {
 			if (null != polygon_) {
 				alert('Click Reset to draw another');
 			} else {
 				if (currentDot_ != null && listOfDots_.length > 1 && currentDot_ == listOfDots_[0]) {
-					drawPloygon(listOfDots_);
+					this.drawPolygon(listOfDots_);
 				} else {
 					//remove previous line
 					if (null != polyline_) {
@@ -90,14 +93,14 @@ codeshelf.facilityeditor.pen = function (map) {
 			}
 		},
 		//draw ploygon
-		drawPloygon:  function (listOfDots, color, des, id) {
+		drawPolygon:  function (listOfDots, color, des, id) {
 			polygon_ = codeshelf.facilityeditor.polygon(listOfDots, map, this, color, des, id);
-			deleteMis();
+			thisPen.deleteMis();
 		},
 		//delete all dots and polylines
 		deleteMis:    function () {
 			//delete dots
-			$.each(listOfDots, function (index, value) {
+			$.each(listOfDots_, function (index, value) {
 				value.remove();
 			});
 			listOfDots_.length = 0;
@@ -113,7 +116,7 @@ codeshelf.facilityeditor.pen = function (map) {
 				(polygon_.remove());
 			}
 			polygon_ = null;
-			deleteMis();
+			thisPen.deleteMis();
 		},
 		//setter
 		setCurrentDot:function (dot) {
@@ -147,6 +150,8 @@ codeshelf.facilityeditor.pen = function (map) {
 			}
 		}
 	}
+
+	return thisPen;
 }
 
 /* Child of Pen class
@@ -161,19 +166,7 @@ codeshelf.facilityeditor.dot = function (latLng, map, pen) {
 		map:     map
 	});
 
-	//closure
-	addListener = function () {
-		var parent = parent_;
-		var thisMarker = markerObj_;
-		var thisDot = this;
-		google.maps.event.addListener(thisMarker, 'click', function () {
-			parent_.setCurrentDot(thisDot);
-			parent_.draw(thisMarker.getPosition());
-		});
-	}
-	addListener();
-
-	return {
+	var thisDot = {
 		//getter
 		getLatLng:function () {
 			return latLng_;
@@ -187,6 +180,18 @@ codeshelf.facilityeditor.dot = function (latLng, map, pen) {
 			markerObj_.setMap(null);
 		}
 	}
+
+	//closure
+	addListener = function () {
+		google.maps.event.addListener(markerObj_, 'click', function () {
+			parent_.setCurrentDot(thisDot);
+			parent_.draw(markerObj_.getPosition());
+		});
+	}
+	addListener();
+
+	return thisDot;
+
 }
 
 /* Child of Pen class
@@ -229,35 +234,7 @@ codeshelf.facilityeditor.polygon = function (listOfDots, map, pen, color) {
 	parent_ = pen;
 	des_ = 'Hello';
 
-
-	var thisObj = this;
-	$.each(listOfDots_, function (index, value) {
-		thisObj.coords.push(value.getLatLng());
-	});
-
-	polygonObj_ = new google.maps.Polygon({
-		paths:        coords_,
-		strokeColor:  "#FF0000",
-		strokeOpacity:0.8,
-		strokeWeight: 2,
-		fillColor:    "#FF0000",
-		fillOpacity:  0.35,
-		map:          map_
-	});
-
-	info = codeshelf.facilityeditor.info(this, map_);
-
-	//closure
-	addListener = function () {
-		var info = info_;
-		var thisPolygon = polygonObj_;
-		google.maps.event.addListener(thisPolygon, 'rightclick', function (event) {
-			info.show(event.latLng);
-		});
-	}
-	addListener();
-
-	return {
+	var thisPolygon = {
 		remove:    function () {
 			info_.remove();
 			polygonObj_.setMap(null);
@@ -267,7 +244,6 @@ codeshelf.facilityeditor.polygon = function (listOfDots, map, pen, color) {
 		getContent:function () {
 			return des_;
 		},
-
 
 		getPolygonObj:function () {
 			return polygonObj_;
@@ -282,12 +258,12 @@ codeshelf.facilityeditor.polygon = function (listOfDots, map, pen, color) {
 		},
 
 		getColor:function () {
-			return getPolygonObj().fillColor;
+			return polygonObj_.fillColor;
 		},
 
-//setter
+		//setter
 		setColor:function (color) {
-			return getPolygonObj().setOptions(
+			return polygonObj_.setOptions(
 				{fillColor:      color,
 					strokeColor: color,
 					strokeWeight:2
@@ -295,6 +271,34 @@ codeshelf.facilityeditor.polygon = function (listOfDots, map, pen, color) {
 			);
 		}
 	}
+
+	$.each(listOfDots_, function (index, value) {
+		coords_.push(value.getLatLng());
+	});
+
+	polygonObj_ = new google.maps.Polygon({
+		paths:        coords_,
+		strokeColor:  "#FF0000",
+		strokeOpacity:0.8,
+		strokeWeight: 2,
+		fillColor:    "#FF0000",
+		fillOpacity:  0.35,
+		map:          map_
+	});
+
+	var info = codeshelf.facilityeditor.info(thisPolygon, map_);
+
+	//closure
+	addListener = function () {
+		var thisPolygon = polygonObj_;
+		var info_ = info;
+		google.maps.event.addListener(thisPolygon, 'rightclick', function (event) {
+			info_.show(event.latLng);
+		});
+	}
+	addListener();
+
+	return thisPolygon;
 }
 
 /*
@@ -305,17 +309,13 @@ codeshelf.facilityeditor.info = function (polygon, map) {
 	var parent_ = polygon;
 	var map_ = map;
 
-	var color = document.createElement('input');
+	var color_ = document.createElement('input');
 
-	var button = document.createElement('input');
-	$(button).attr('type', 'button');
-	$(button).val("Change Color");
+	var button_ = document.createElement('input');
+	$(button_).attr('type', 'button');
+	$(button_).val("Change Color");
 
-	var infoWidObj_ = new google.maps.InfoWindow({
-		content:thisObj.getContent()
-	});
-
-	return {
+	var thisInfo = {
 		//change color action
 		changeColor:function () {
 			parent_.setColor($(thisOjb.color).val());
@@ -344,6 +344,12 @@ codeshelf.facilityeditor.info = function (polygon, map) {
 			infoWidObj_.close();
 		}
 	}
+
+	var infoWidObj_ = new google.maps.InfoWindow({
+		content:thisInfo.getContent()
+	});
+
+	return thisInfo;
 }
 
 codeshelf.facilityeditor.startEditor = function () {
