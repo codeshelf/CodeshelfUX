@@ -1,5 +1,7 @@
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
+goog.require('codeshelf.websession');
+goog.require('codeshelf.mainpage');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
 
@@ -13,6 +15,11 @@ codeshelf.facilityeditor = function () {
 
 	return {
 		start:function () {
+
+			var queryCommand = codeshelf.websession.createCommand(codeshelf.websession.CommandType.OBJECT_QUERY_REQ, 'test');
+			codeshelf.websession.sendCommand(queryCommand, codeshelf.facilityeditor.webSessionCommandCallback);
+
+
 			// Safeway DC Tracy, CA
 			var demoLatLng = new google.maps.LatLng(37.717198, -121.517029);
 			var myOptions = {
@@ -54,6 +61,31 @@ codeshelf.facilityeditor = function () {
 
 		showColor:function () {
 			return pen_.getColor();
+		}
+	}
+}
+
+codeshelf.facilityeditor.webSessionCommandCallback = function (command) {
+	if (!command.hasOwnProperty('type')) {
+		alert('response has no type');
+	} else {
+		if (!command.type == codeshelf.websession.LAUNCH_CODE_RESULT) {
+			alert('response wrong type');
+		} else {
+			if (!command.hasOwnProperty('data')) {
+				alert('reponse has no data');
+			} else {
+				if (!command.data.hasOwnProperty(codeshelf.websession.CommandType.LAUNCH_CODE_RESULT)) {
+					alert('response has no launch code result');
+				} else {
+					if (command.data.LAUNCH_CODE_RESULT == "SUCCEED") {
+						codeshelfWebsession.state = codeshelf.websession.State.VALIDATED;
+						codeshelf.launch.exitLaunchWindow();
+					} else {
+						alert('Lauch code invalid');
+					}
+				}
+			}
 		}
 	}
 }

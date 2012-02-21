@@ -2,7 +2,6 @@ goog.provide('codeshelf.launch');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.websession');
 goog.require('codeshelf.mainpage');
-goog.require('soy');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.window');
@@ -63,23 +62,23 @@ codeshelf.launch.launchCodeCheck = function () {
 		launchCode:goog.dom.getElement('launchCodeInput').value
 	}
 	var launchCommand = codeshelf.websession.createCommand(codeshelf.websession.CommandType.LAUNCH_CODE, launchCodeInput);
-	codeshelf.websession.sendCommand(launchCommand, codeshelf.launch.launchCodeResponseCallback);
+	codeshelf.websession.sendCommand(launchCommand, codeshelf.launch.webSessionCommandCallback);
 }
 
-codeshelf.launch.launchCodeResponseCallback = function (command) {
+codeshelf.launch.webSessionCommandCallback = function (command) {
 	if (!command.hasOwnProperty('type')) {
 		alert('response has no type');
 	} else {
-		if (!command.type == codeshelf.websession.LAUNCH_CODE_RESULT) {
+		if (!command.type == codeshelf.websession.LAUNCH_CODE_RESP) {
 			alert('response wrong type');
 		} else {
 			if (!command.hasOwnProperty('data')) {
 				alert('reponse has no data');
 			} else {
-				if (!command.data.hasOwnProperty(codeshelf.websession.CommandType.LAUNCH_CODE_RESULT)) {
+				if (!command.data.hasOwnProperty(codeshelf.websession.CommandType.LAUNCH_CODE_RESP)) {
 					alert('response has no launch code result');
 				} else {
-					if (command.data.LAUNCH_CODE_RESULT == "SUCCEED") {
+					if (command.data.LAUNCH_CODE_RESP == "SUCCEED") {
 						codeshelfWebsession.state = codeshelf.websession.State.VALIDATED;
 						codeshelf.launch.exitLaunchWindow();
 					} else {
