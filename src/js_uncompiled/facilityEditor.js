@@ -73,20 +73,18 @@ codeshelf.facilityeditor.webSessionCommandCallback = function (command) {
 	if (!command.hasOwnProperty('type')) {
 		alert('response has no type');
 	} else {
-		if (!command.type == codeshelf.websession.LAUNCH_CODE_RESULT) {
+		if (!command.type == codeshelf.websession.OBJECT_QUERY_RESP) {
 			alert('response wrong type');
 		} else {
 			if (!command.hasOwnProperty('data')) {
 				alert('reponse has no data');
 			} else {
-				if (!command.data.hasOwnProperty(codeshelf.websession.CommandType.LAUNCH_CODE_RESULT)) {
-					alert('response has no launch code result');
+				if (!command.data.hasOwnProperty('objects')) {
+					alert('response has no result');
 				} else {
-					if (command.data.LAUNCH_CODE_RESULT == "SUCCEED") {
-						codeshelfWebsession.state = codeshelf.websession.State.VALIDATED;
-						codeshelf.launch.exitLaunchWindow();
-					} else {
-						alert('Lauch code invalid');
+					for (var i = 0; i< command.data.objects.length; i++) {
+						var object = command.data.objects[i];
+						alert("Object: " + object.description);
 					}
 				}
 			}

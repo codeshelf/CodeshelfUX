@@ -20,10 +20,15 @@ codeshelf.websession.CommandType = {
 	LAUNCH_CODE:       'LAUNCH_CODE',
 	LAUNCH_CODE_RESP:  'LAUNCH_CODE_RESP',
 	OBJECT_QUERY_REQ:  'OBJECT_QUERY_REQ',
+	OBJECT_QUERY_RESP:  'OBJECT_QUERY_RESP',
 	OBJECT_GETBYID_REQ:'OBJECT_GETBYID_REQ',
+	OBJECT_GETBYID_RESP:'OBJECT_GETBYID_RESP',
 	OBJECT_CREATE_REQ: 'OBJECT_CREATE_REQ',
-	OBJECT_CHANGE_REQ: 'OBJECT_CHANGE_REQ',
-	OBJECT_DELETE_REQ: 'OBJECT_DELETE_REQ'
+	OBJECT_CREATE_RESP: 'OBJECT_CREATE_RESP',
+	OBJECT_UPDATE_REQ: 'OBJECT_CHANGE_REQ',
+	OBJECT_UPDATE_RESP: 'OBJECT_CHANGE_RESP',
+	OBJECT_DELETE_REQ: 'OBJECT_DELETE_REQ',
+	OBJECT_DELETE_RESP: 'OBJECT_DELETE_RESP'
 };
 
 codeshelf.websession.State = {
@@ -56,6 +61,9 @@ codeshelf.websession.initWebSocket = function () {
 	try {
 		if (!websocket.isOpen()) {
 			websocket.open('ws://127.0.0.1:8080');
+//			while (!websocket.isOpen()) {
+//				setTimeout(500);
+//			}
 		}
 	} catch (e) {
 		//
