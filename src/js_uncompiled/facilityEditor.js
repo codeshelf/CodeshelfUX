@@ -16,7 +16,11 @@ codeshelf.facilityeditor = function () {
 	return {
 		start:function () {
 
-			var queryCommand = codeshelf.websession.createCommand(codeshelf.websession.CommandType.OBJECT_QUERY_REQ, 'test');
+			var data = {
+				class: 'com.gadgetworks.codeshelf.model.persist.Facility',
+				query: "id = '12345'"
+			}
+			var queryCommand = codeshelf.websession.createCommand(codeshelf.websession.CommandType.OBJECT_QUERY_REQ, data);
 			codeshelf.websession.sendCommand(queryCommand, codeshelf.facilityeditor.webSessionCommandCallback);
 
 
