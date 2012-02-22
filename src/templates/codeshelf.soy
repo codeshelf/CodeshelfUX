@@ -81,15 +81,16 @@
 				<div class='bar'>
 					<label>Listview 2</label>
 				</div>
-				<div id='myTable' style='width: 100%; height: 100%'>
-					<div class='grid-header' style='width: 100%; height: 20px'>
-						<label>SlickGrid</label> <span style='float: right'
-													   class='ui-icon ui-icon-search'
-													   title='Toggle search panel'
-													   onclick='toggleFilterRow()'></span>
+				<div id='myTable' style='position: relative; width: 100%; height: 100%'>
+					<div id='myGridHeader' class='grid-header' style='width: 100%; height: 20px'>
+						<label>Tasks</label> 
+						<span style='float: right'
+								class='ui-icon ui-icon-search'
+								title='Toggle search panel'
+								onclick='toggleFilterRow()'></span>
 					</div>
-					<div id='myGrid' style='width: 100%; height: 100%;'></div>
-					<div class='pager' style='width: 100%; height: 10px;'></div>
+					<div id='myGrid' style='width: 100%;'></div>
+					<div id='myPager' class='pager' style='width: 100%; height: 10px;'></div>
 				</div>
 			</div>
 			<div id='win3' class='window' style='top: 50px; left: 775px; height: 600px; width: 600px'>

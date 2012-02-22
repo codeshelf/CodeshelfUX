@@ -261,3 +261,44 @@ h1 {
 	left:				2px;
 	background:			FACILITY_ICON_BACKGROUND;
 }
+
+#win2 {
+	width:				100%;
+	box-flex:			1;
+	-moz-box-flex:		1;
+	-webkit-box-flex:	1;
+	-ms-box-flex:		1;
+
+	display:			box;
+	box-orient:			vertical;
+	display:			-moz-box;
+	-moz-box-orient:	vertical;
+	display:			-webkit-box;
+	-webkit-box-orient:	vertical;
+	display:			-ms-box;
+	-ms-box-orient:		vertical;
+}
+
+#myTable {
+	box-flex:			1;
+	-moz-box-flex:		1;
+	-webkit-box-flex:	1;
+	-ms-box-flex:		1;
+
+	display:			box;
+	box-orient:			vertical;
+	display:			-moz-box;
+	-moz-box-orient:	vertical;
+	display:			-webkit-box;
+	-webkit-box-orient:	vertical;
+	display:			-ms-box;
+	-ms-box-orient:		vertical;
+}
+
+#myGrid {
+	box-flex:			1;
+	-moz-box-flex:		1;
+	-webkit-box-flex:	1;
+	-ms-box-flex:		1;
+}
+

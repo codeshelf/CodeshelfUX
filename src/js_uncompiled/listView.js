@@ -78,7 +78,7 @@ var columns = [ {
 } ];
 
 var options = {
-	editable : false,
+	editable : true,
 	enableAddRow : true,
 	enableCellNavigation : true,
 	asyncEditorLoading : true,
@@ -154,7 +154,7 @@ function launchListView() {
 	grid = new Slick.Grid("#myGrid", dataView, columns, options);
 	grid.setSelectionModel(new Slick.RowSelectionModel());
 
-	var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
+	//var pager = new Slick.Controls.Pager(dataView, grid, $("#myPager"));
 	var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
 
 	// move the filter panel defined in a hidden div into grid top panel
