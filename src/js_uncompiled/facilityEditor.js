@@ -17,10 +17,11 @@ codeshelf.facilityeditor = function () {
 		start:function () {
 
 			var data = {
-				class: 'com.gadgetworks.codeshelf.model.persist.Facility',
-				query: "id = '12345'"
+				class:       codeshelfWebsession.organziation.className,
+				persistentId:codeshelfWebsession.organziation.persistentId,
+				getterMethod:'getFacilities'
 			}
-			var queryCommand = codeshelf.websession.createCommand(codeshelf.websession.CommandType.OBJECT_QUERY_REQ, data);
+			var queryCommand = codeshelf.websession.createCommand(codeshelf.websession.CommandType.OBJECT_GETTER_REQ, data);
 			codeshelf.websession.sendCommand(queryCommand, codeshelf.facilityeditor.webSessionCommandCallback);
 
 
@@ -73,18 +74,18 @@ codeshelf.facilityeditor.webSessionCommandCallback = function (command) {
 	if (!command.hasOwnProperty('type')) {
 		alert('response has no type');
 	} else {
-		if (!command.type == codeshelf.websession.OBJECT_QUERY_RESP) {
+		if (!command.type == codeshelf.websession.OBJECT_GETTER_RESP) {
 			alert('response wrong type');
 		} else {
 			if (!command.hasOwnProperty('data')) {
 				alert('reponse has no data');
 			} else {
-				if (!command.data.hasOwnProperty('objects')) {
+				if (!command.data.hasOwnProperty('result')) {
 					alert('response has no result');
 				} else {
-					for (var i = 0; i< command.data.objects.length; i++) {
-						var object = command.data.objects[i];
-						alert("Object: " + object.description);
+					for (var i = 0; i < command.data.result.length; i++) {
+						var object = command.data.result[i];
+						alert("Object: " + object.className + " " + object.description);
 					}
 				}
 			}

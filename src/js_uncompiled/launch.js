@@ -61,7 +61,7 @@ codeshelf.launch.launchCodeCheck = function () {
 	var launchCodeInput = {
 		launchCode:goog.dom.getElement('launchCodeInput').value
 	}
-	var launchCommand = codeshelf.websession.createCommand(codeshelf.websession.CommandType.LAUNCH_CODE, launchCodeInput);
+	var launchCommand = codeshelf.websession.createCommand(codeshelf.websession.CommandType.LAUNCH_CODE_CHECK, launchCodeInput);
 	codeshelf.websession.sendCommand(launchCommand, codeshelf.launch.webSessionCommandCallback);
 }
 
@@ -80,6 +80,7 @@ codeshelf.launch.webSessionCommandCallback = function (command) {
 				} else {
 					if (command.data.LAUNCH_CODE_RESP == "SUCCEED") {
 						codeshelfWebsession.state = codeshelf.websession.State.VALIDATED;
+						codeshelfWebsession.organziation = command.data.organization;
 						codeshelf.launch.exitLaunchWindow();
 					} else {
 						alert('Lauch code invalid');

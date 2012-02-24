@@ -1,12 +1,6 @@
 goog.provide('codeshelf.websession');
-goog.require('codeshelf.templates');
-goog.require('soy');
-goog.require('goog.dom');
-goog.require('goog.dom.query');
-goog.require('goog.window');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
-goog.require('goog.ui.RoundedPanel');
 goog.require('goog.net.WebSocket');
 goog.require('goog.json');
 
@@ -17,17 +11,17 @@ if (typeof MozWebSocket != "undefined") {
 }
 
 codeshelf.websession.CommandType = {
-	LAUNCH_CODE:       'LAUNCH_CODE',
-	LAUNCH_CODE_RESP:  'LAUNCH_CODE_RESP',
-	OBJECT_QUERY_REQ:  'OBJECT_QUERY_REQ',
-	OBJECT_QUERY_RESP:  'OBJECT_QUERY_RESP',
-	OBJECT_GETBYID_REQ:'OBJECT_GETBYID_REQ',
+	LAUNCH_CODE_CHECK:  'LAUNCH_CODE_CHECK',
+	LAUNCH_CODE_RESP:   'LAUNCH_CODE_RESP',
+	OBJECT_GETTER_REQ:  'OBJECT_GETTER_REQ',
+	OBJECT_GETTER_RESP: 'OBJECT_GETTER_RESP',
+	OBJECT_GETBYID_REQ: 'OBJECT_GETBYID_REQ',
 	OBJECT_GETBYID_RESP:'OBJECT_GETBYID_RESP',
-	OBJECT_CREATE_REQ: 'OBJECT_CREATE_REQ',
+	OBJECT_CREATE_REQ:  'OBJECT_CREATE_REQ',
 	OBJECT_CREATE_RESP: 'OBJECT_CREATE_RESP',
-	OBJECT_UPDATE_REQ: 'OBJECT_CHANGE_REQ',
+	OBJECT_UPDATE_REQ:  'OBJECT_CHANGE_REQ',
 	OBJECT_UPDATE_RESP: 'OBJECT_CHANGE_RESP',
-	OBJECT_DELETE_REQ: 'OBJECT_DELETE_REQ',
+	OBJECT_DELETE_REQ:  'OBJECT_DELETE_REQ',
 	OBJECT_DELETE_RESP: 'OBJECT_DELETE_RESP'
 };
 
