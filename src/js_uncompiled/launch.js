@@ -6,84 +6,74 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.window');
 goog.require('goog.style');
-goog.require('goog.events');
-goog.require('goog.events.EventType');
 goog.require('goog.ui.RoundedPanel');
-goog.require('goog.net.WebSocket');
-goog.require('goog.json');
 
-codeshelf.launch.enterLaunchWindow = function () {
-//	var doc = goog.dom.getDocument();
-//	doc.write('<img id="background_image" class="background_image" src="../src/images/STS-125.jpg" alt=""/>');
-//	doc.write('<div id="launchCodePanel"></div>');
-//	var launchDiv = goog.dom.getElement('launchCodePanel');
-//	launchDiv.write('<div class="goog-roundedpanel-content"></div>');
+codeshelf.launchWindow = function () {
 
-//	var backgroundImageElement = goog.dom.createDom('img', {'id':'background_image', 'class':'background_image', 'src':'../src/images/STS-125.jpg', 'alt':''}, null);
-//	goog.dom.appendChild(goog.dom.getDocument().body, backgroundImageElement);
+	var websession_;
+	var application_;
+	var thisLaunchWindow_;
 
-	// Create DOM structure to represent the launch code.
-	//var launchCode = goog.dom.createDom('div', {'id':'launchCodeLabel'}, launchCodePanelContent);
-//	var launchCodeInput = goog.dom.createDom('input', {'type':'text', 'id':'launchCodeInput', 'class':'dataEntry'}, null);
-//	var launchCodeLabel = goog.dom.createDom('div', {'id':'launchCodeLabel', 'class':'dataEntry'}, 'Launch Code:', launchCodeInput);
-//	var launchCodePanelContent = goog.dom.createDom('div', {'class':'goog-roundedpanel-content'}, launchCodeLabel);
-//	launchCodeLabel.style.marginTop = '15px';
-//	launchCodeLabel.style.marginLeft = '15px';
-//
-//	var launchCodePanel = goog.dom.createDom('div', {'id':'launchCodePanel'}, launchCodePanelContent);
-//	goog.dom.appendChild(goog.dom.getDocument().body, launchCodePanel);
+	return {
 
-	//goog.dom.getDocument().body.innerHTML += codeshelf.templates.launchCodeDialog();
-	goog.dom.appendChild(goog.dom.getDocument().body, soy.renderAsElement(codeshelf.templates.launchCodeDialog));
-	var launchCodeInput = goog.dom.getElement('launchCodeInput');
+		enterLaunchWindow:function (application, websession) {
 
-	// Set the dimensions of the panel and decorate roundedPanel.
-	var radius = 25;
-	var borderWidth = 5;
-	var borderColor = '#a0a0a0';//goog.style.getCascadedStyle(launchCodePanel, 'border-color');
-	var backgroundColor = '#d0d0d0';//goog.style.getCascadedStyle(launchCodePanel, 'background-color');
-	var corners = 15;
-	var roundedLaunchCodePanel = goog.ui.RoundedPanel.create(radius, borderWidth, borderColor, backgroundColor, corners);
-	var launchCodePanel = goog.dom.getElement('launchCodePanel');
-	roundedLaunchCodePanel.decorate(launchCodePanel);
+			application_ = application;
+			websession_ = websession;
+			thisLaunchWindow_ = this;
 
-	launchCodeInput.onchange = codeshelf.launch.launchCodeCheck;
-	launchCodeInput.focus();
-	launchCodeInput.select();
-}
+			goog.dom.appendChild(goog.dom.getDocument().body, soy.renderAsElement(codeshelf.templates.launchCodeDialog));
+			var launchCodeInput = goog.dom.getElement('launchCodeInput');
 
-codeshelf.launch.exitLaunchWindow = function () {
-	goog.dom.removeChildren(goog.dom.getDocument().body);
-	codeshelf.mainpage.launch();
-}
+			// Set the dimensions of the panel and decorate roundedPanel.
+			var radius = 25;
+			var borderWidth = 5;
+			var borderColor = '#a0a0a0';//goog.style.getCascadedStyle(launchCodePanel, 'border-color');
+			var backgroundColor = '#d0d0d0';//goog.style.getCascadedStyle(launchCodePanel, 'background-color');
+			var corners = 15;
+			var roundedLaunchCodePanel = goog.ui.RoundedPanel.create(radius, borderWidth, borderColor, backgroundColor, corners);
+			var launchCodePanel = goog.dom.getElement('launchCodePanel');
+			roundedLaunchCodePanel.decorate(launchCodePanel);
 
-codeshelf.launch.launchCodeCheck = function () {
-	var launchCodeInput = {
-		launchCode:goog.dom.getElement('launchCodeInput').value
-	}
-	var launchCommand = codeshelf.websession.createCommand(codeshelf.websession.CommandType.LAUNCH_CODE_CHECK, launchCodeInput);
-	codeshelf.websession.sendCommand(launchCommand, codeshelf.launch.webSessionCommandCallback);
-}
+			launchCodeInput.onchange = this.launchCodeCheck;
+			launchCodeInput.focus();
+			launchCodeInput.select();
+		},
 
-codeshelf.launch.webSessionCommandCallback = function (command) {
-	if (!command.hasOwnProperty('type')) {
-		alert('response has no type');
-	} else {
-		if (!command.type == codeshelf.websession.LAUNCH_CODE_RESP) {
-			alert('response wrong type');
-		} else {
-			if (!command.hasOwnProperty('data')) {
-				alert('reponse has no data');
+		exitLaunchWindow:function () {
+			goog.dom.removeChildren(goog.dom.getDocument().body);
+			codeshelf.mainpage.launch(application_);
+		},
+
+		launchCodeCheck:function () {
+			var launchCodeInput = {
+				launchCode:goog.dom.getElement('launchCodeInput').value
+			}
+			var launchCommand = websession_.createCommand(kWebSessionCommandType.LAUNCH_CODE_CHECK, launchCodeInput);
+			websession_.sendCommand(launchCommand, this.webSessionCommandCallback);
+		},
+
+		webSessionCommandCallback:function (command) {
+			if (!command.hasOwnProperty('type')) {
+				alert('response has no type');
 			} else {
-				if (!command.data.hasOwnProperty(codeshelf.websession.CommandType.LAUNCH_CODE_RESP)) {
-					alert('response has no launch code result');
+				if (!command.type == kWebSessionCommandType.LAUNCH_CODE_RESP) {
+					alert('response wrong type');
 				} else {
-					if (command.data.LAUNCH_CODE_RESP == "SUCCEED") {
-						codeshelfWebsession.state = codeshelf.websession.State.VALIDATED;
-						codeshelfWebsession.organziation = command.data.organization;
-						codeshelf.launch.exitLaunchWindow();
+					if (!command.hasOwnProperty('data')) {
+						alert('reponse has no data');
 					} else {
-						alert('Lauch code invalid');
+						if (!command.data.hasOwnProperty(kWebSessionCommandType.LAUNCH_CODE_RESP)) {
+							alert('response has no launch code result');
+						} else {
+							if (command.data.LAUNCH_CODE_RESP == "SUCCEED") {
+								websession_.setState(kWebsessionState.VALIDATED);
+								application_.setOrganization(command.data.organization);
+								thisLaunchWindow_.exitLaunchWindow();
+							} else {
+								alert('Lauch code invalid');
+							}
+						}
 					}
 				}
 			}

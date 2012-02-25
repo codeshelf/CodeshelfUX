@@ -4,13 +4,11 @@ goog.require('goog.events.EventType');
 goog.require('goog.net.WebSocket');
 goog.require('goog.json');
 
-var codeshelfWebsession = {};
-
 if (typeof MozWebSocket != "undefined") {
 	var WebSocket = MozWebSocket;
 }
 
-codeshelf.websession.CommandType = {
+const kWebSessionCommandType = {
 	LAUNCH_CODE_CHECK:  'LAUNCH_CODE_CHECK',
 	LAUNCH_CODE_RESP:   'LAUNCH_CODE_RESP',
 	OBJECT_GETTER_REQ:  'OBJECT_GETTER_REQ',
@@ -25,96 +23,114 @@ codeshelf.websession.CommandType = {
 	OBJECT_DELETE_RESP: 'OBJECT_DELETE_RESP'
 };
 
-codeshelf.websession.State = {
+const kWebsessionState = {
 	UNVALIDATED:'UNVALIDATED',
 	VALIDATED:  'VALIDATED'
 };
 
-codeshelf.websession.initWebSocket = function () {
+codeshelf.websession = function () {
 
-	codeshelfWebsession.state = codeshelf.websession.State.UNVALIDATED;
-	codeshelfWebsession.pendingCommands = new Object();
+	var state_;
+	var pendingCommands_;
+	var connectAttempts_ = 0;
+	var application_;
+	var websocket_;
 
-	/**
-	 * Strategy for reconnection that backs off linearly with a 1 second offset.
-	 * @return {number} The amount of time to the next reconnect, in milliseconds.
-	 */
+	return {
 
-	codeshelfWebsession.attempt = 0;
-	function linearBackOff() {
-		return (codeshelfWebsession.attempt++ * 1000) + 1000;
-	}
+		getState: function() {
+			return state_;
+		},
 
-	var websocket = new goog.net.WebSocket(true, linearBackOff);
-	codeshelfWebsession.handler = new goog.events.EventHandler();
-	codeshelfWebsession.handler.listen(websocket, goog.net.WebSocket.EventType.ERROR, codeshelf.websession.onError);
-	codeshelfWebsession.handler.listen(websocket, goog.net.WebSocket.EventType.OPENED, codeshelf.websession.onOpen);
-	codeshelfWebsession.handler.listen(websocket, goog.net.WebSocket.EventType.CLOSED, codeshelf.websession.onClose);
-	codeshelfWebsession.handler.listen(websocket, goog.net.WebSocket.EventType.MESSAGE, codeshelf.websession.onMessage);
+		setState: function(state) {
+			state_ = state;
+		},
 
-	try {
-		if (!websocket.isOpen()) {
-			websocket.open('ws://127.0.0.1:8080');
+		initWebSocket:function (application) {
+
+			application_ = application;
+			state_ = kWebsessionState.UNVALIDATED;
+			pendingCommands_ = new Object();
+
+			/**
+			 * Strategy for reconnection that backs off linearly with a 1 second offset.
+			 * @return {number} The amount of time to the next reconnect, in milliseconds.
+			 */
+
+			function linearBackOff() {
+				return (connectAttempts_++ * 1000) + 1000;
+			}
+
+			websocket_ = new goog.net.WebSocket(true, linearBackOff);
+			pendingCommands_ = new goog.events.EventHandler();
+			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.ERROR, this.onError);
+			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.OPENED, this.onOpen);
+			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.CLOSED, this.onClose);
+			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.MESSAGE, this.onMessage);
+
+			try {
+				if (!websocket_.isOpen()) {
+					websocket_.open('ws://127.0.0.1:8080');
 //			while (!websocket.isOpen()) {
 //				setTimeout(500);
 //			}
+				}
+			} catch (e) {
+				//
+			}
+		},
+
+		createCommand:function (commandType, data) {
+			var command = {
+				id:  goog.events.getUniqueId('cmdid'),
+				type:commandType,
+				data:data
+			}
+			return command;
+		},
+
+		sendCommand:function (command, callbackFunction) {
+
+			//goog.events.listen(pendingCommands_, command.id, responseFunction);
+			//pendingCommands_.dispatchEvent(command.id);
+			//goog.events.unlisten(pendingCommands_, command.id, responseFunction);
+
+			// Attempt to send the command.
+			try {
+				if (!websocket_.isOpen()) {
+					alert('WebSocket not open: try again later');
+				} else {
+					// Put the pending command callback function in the map.
+					pendingCommands_[command.id] = callbackFunction;
+
+					websocket_.send(goog.json.serialize(command));
+				}
+			} catch (e) {
+
+			}
+		},
+
+		onError:function () {
+			state_ = kWebsessionState.UNVALIDATED;
+			application_.restartApplication('websocket error');
+		},
+
+		onOpen:function () {
+
+		},
+
+		onClose:function () {
+			state_ = kWebsessionState.UNVALIDATED;
+			application_.restartApplication('websocket closed unexpectedly');
+		},
+
+		onMessage:function (messageEvent) {
+			command = goog.json.parse(messageEvent.message);
+
+			callbackFunction = pendingCommands_[command.id];
+			if (callbackFunction != null) {
+				callbackFunction(command);
+			}
 		}
-	} catch (e) {
-		//
-	}
-	return websocket;
-}
-
-codeshelf.websession.createCommand = function (commandType, data) {
-	var command = {
-		id:  goog.events.getUniqueId('cmdid'),
-		type:commandType,
-		data:data
-	}
-	return command;
-}
-
-codeshelf.websession.sendCommand = function (command, callbackFunction) {
-
-
-	//goog.events.listen(codeshelfWebsession.handler, command.id, responseFunction);
-	//codeshelfWebsession.handler.dispatchEvent(command.id);
-	//goog.events.unlisten(codeshelfWebsession.handler, command.id, responseFunction);
-
-	// Attempt to send the command.
-	try {
-		if (!codeshelfApp.websocket.isOpen()) {
-			alert('WebSocket not open: try again later');
-		} else {
-			// Put the pending command callback function in the map.
-			codeshelfWebsession.pendingCommands[command.id] = callbackFunction;
-
-			codeshelfApp.websocket.send(goog.json.serialize(command));
-		}
-	} catch (e) {
-
-	}
-}
-
-codeshelf.websession.onError = function () {
-	codeshelfWebsession.state = codeshelf.websession.State.UNVALIDATED;
-	codeshelf.application.restartApplication('websocket error');
-}
-
-codeshelf.websession.onOpen = function () {
-
-}
-
-codeshelf.websession.onClose = function () {
-	codeshelfWebsession.state = codeshelf.websession.State.UNVALIDATED;
-	codeshelf.application.restartApplication('websocket closed unexpectedly');
-}
-
-codeshelf.websession.onMessage = function (messageEvent) {
-	command = goog.json.parse(messageEvent.message);
-
-	callbackFunction = codeshelfWebsession.pendingCommands[command.id];
-	if (callbackFunction != null) {
-		callbackFunction(command);
 	}
 }

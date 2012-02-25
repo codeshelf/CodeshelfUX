@@ -12,18 +12,24 @@ codeshelf.facilityeditor = function () {
 	var clickHandler_;
 	var doubleClickHandler_;
 	var clickTimeout_;
+	var application_;
 
 	return {
-		start:function () {
+		start:function (application) {
+
+			application_ = application;
+
+			var organization = application_.getOrganization();
 
 			var data = {
-				class:       codeshelfWebsession.organziation.className,
-				persistentId:codeshelfWebsession.organziation.persistentId,
+				class:       organization.className,
+				persistentId:organization.persistentId,
 				getterMethod:'getFacilities'
 			}
-			var queryCommand = codeshelf.websession.createCommand(codeshelf.websession.CommandType.OBJECT_GETTER_REQ, data);
-			codeshelf.websession.sendCommand(queryCommand, codeshelf.facilityeditor.webSessionCommandCallback);
 
+			var websession = application_.getWebsession();
+			var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
+			websession.sendCommand(getFacilitiesCmd, codeshelf.facilityeditor.webSessionCommandCallback);
 
 			// Safeway DC Tracy, CA
 			var demoLatLng = new google.maps.LatLng(37.717198, -121.517029);
@@ -385,9 +391,4 @@ codeshelf.facilityeditor.info = function (polygon, map) {
 	});
 
 	return thisInfo;
-}
-
-codeshelf.facilityeditor.startEditor = function () {
-	var facilityEditor = codeshelf.facilityeditor();
-	facilityEditor.start();
 }

@@ -19,7 +19,7 @@ goog.require('jquery.rotate');
 var Z;
 var frame;
 
-codeshelf.mainpage.launch = function () {
+codeshelf.mainpage.launch = function (application) {
 
 	goog.dom.setProperties(goog.dom.getDocument().body, {class:'main_body'});
 	goog.dom.appendChild(goog.dom.getDocument().body, soy.renderAsElement(codeshelf.templates.mainPage));
@@ -39,7 +39,7 @@ codeshelf.mainpage.launch = function () {
 	var dragger3 = new goog.fx.Dragger(goog.dom.getElement('win3'), goog.dom.query('#win3 .bar')[0]);
 	var resizer3 = new goog.fx.Dragger(goog.dom.query('#win3 .pager')[0], goog.dom.query('#win3 .pager')[0]);
 
-	resizer2.defaultAction = function(x, y) {
+	resizer2.defaultAction = function (x, y) {
 		leftDim = parseInt(window2.style.left, 10);
 		topDim = parseInt(window2.style.top, 10);
 		width = this.screenX - leftDim;
@@ -50,7 +50,7 @@ codeshelf.mainpage.launch = function () {
 		grid.autosizeColumns();
 	};
 
-	resizer3.defaultAction = function(x, y) {
+	resizer3.defaultAction = function (x, y) {
 		leftDim = parseInt(window3.style.left, 10);
 		topDim = parseInt(window3.style.top, 10);
 		width = this.screenX - leftDim;
@@ -96,7 +96,8 @@ codeshelf.mainpage.launch = function () {
 	});
 
 	launchListView();
-	codeshelf.facilityeditor.startEditor();
+	var facilityEditor = codeshelf.facilityeditor();
+	facilityEditor.start(application);
 }
 
 codeshelf.mainpage.createMoverStart = function (mover) {

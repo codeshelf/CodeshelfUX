@@ -1,28 +1,58 @@
 goog.provide('codeshelf.application');
-goog.require('codeshelf.templates');
 goog.require('codeshelf.websession')
 goog.require('codeshelf.launch')
 goog.require('codeshelf.mainpage')
-goog.require('soy');
 
-var codeshelfApp = {};
+codeshelf.application = function () {
 
-codeshelf.application.startApplication_ = function () {
-	// Remove all markup from the URL - we'll build it from the app itself.
-	goog.dom.removeChildren(goog.dom.getDocument().body);
-	codeshelfApp.websocket = codeshelf.websession.initWebSocket();
-	codeshelf.launch.enterLaunchWindow();
+	var webSession_;
+	var launchWindow_;
+	var organization_;
 
-	// Cause automatic login to save on test time.
-	setTimeout(function() {codeshelf.launch.launchCodeCheck();},1250);
+	return {
 
-}
+		getWebsession:function () {
+			return webSession_
+		},
 
-codeshelf.application.restartApplication = function (reason) {
-	alert('Application restarted: ' + reason + '.');
-	codeshelf.application.startApplication_();
+		setWebsession:function (webSession) {
+			webSession_ = webSession;
+		},
+
+		getOrganization:function () {
+			return organization_
+		},
+
+		setOrganization:function (organization) {
+			organization_ = organization;
+		},
+
+		startApplication:function () {
+			webSession_ = codeshelf.websession();
+			webSession_.initWebSocket(this);
+			this.initApplication_();
+		},
+
+		restartApplication:function (reason) {
+			alert('Application restarted: ' + reason + '.');
+			this.initApplication_();
+		},
+
+		initApplication_:function () {
+			// Remove all markup from the URL - we'll build it from the app itself.
+			goog.dom.removeChildren(goog.dom.getDocument().body);
+			launchWindow_ = codeshelf.launchWindow();
+			launchWindow_.enterLaunchWindow(this, webSession_);
+
+			// Cause automatic login to save on test time.
+			setTimeout(function () {
+				launchWindow_.launchCodeCheck();
+			}, 1250);
+		}
+	}
 }
 
 // Launch the application.
-codeshelf.application.startApplication_();
+var application = codeshelf.application();
+application.startApplication();
 
