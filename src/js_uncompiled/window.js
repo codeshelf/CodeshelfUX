@@ -13,7 +13,7 @@ codeshelf.window = function() {
 	var z_ = 0;
 
 	return {
-		init: function(title, parent, limits) {
+		init: function(title, parent, limits, resizeFunction) {
 
 			parent_ = parent;
 			limits_ = limits;
@@ -23,9 +23,7 @@ codeshelf.window = function() {
 
 			var label = goog.dom.query('.windowTitle', window_)[0];
 			label.innerHTML = title;
-		},
 
-		open: function() {
 			var windowBar = goog.dom.query('.windowBar', window_)[0];
 			var windowResizer = goog.dom.query('.windowResizer', window_)[0];
 
@@ -50,7 +48,12 @@ codeshelf.window = function() {
 				height = y + topDim - 10;
 				window_.style.width = width + 'px';
 				window_.style.height = height + 'px';
+				resizeFunction();
 			};
+		},
+
+		open: function() {
+
 		},
 
 		close: function() {

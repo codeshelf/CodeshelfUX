@@ -111,15 +111,16 @@ h1 {
 
 .window {
 	position:			absolute;
-	left:				50px;
-	top:				50px;
-	width:				400px;
-	height:				200px;
+	left:				125px;
+	top:				25px;
+	width:				600px;
+	height:				500px;
 	background-color:	rgb(200, 200, 250);
-	border:				1px solid #99F;
+	border:				1px solid #999;
 	font:				bold 11px/18px arial;
 	text-indent:		10px;
 	color:				#FFF;
+	overflow:			hide;
 	
 	display:			box;
 	box-orient:			vertical;
@@ -177,36 +178,9 @@ h1 {
 	background-color:	#99F;
 }
 
-#win1 {
-	background-color:	rgb(200, 200, 250);
-	border:				1px solid #F99;
-}
-
 #win2 {
 	background-color:	rgb(250, 200, 200);
 	border:				1px solid #F99;
-}
-
-#win3 {
-	background-color:	rgb(150, 200, 150);
-	border:				1px solid #6A6;
-	display:			box;
-	box-orient:			vertical;
-	display:			-moz-box;
-	-moz-box-orient:	vertical;
-	display:			-webkit-box;
-	-webkit-box-orient:	vertical;
-	display:			-ms-box;
-	-ms-box-orient:		vertical;
-}
-
-#win2 .bar {
-	background-color:	#F99;
-	height:				20px;
-}
-
-#win3 .bar {
-	background-color:	#6A6;
 }
 
 #ghostbox {
@@ -296,6 +270,7 @@ h1 {
 .facilityEditorToolbar {
 	width:				FACILITY_TOOLBAR_WIDTH;
 	background:			FACILITY_TOOLBAR_BACKGROUND;
+	overflow:			hidden;
 }
 
 .facilityEditorTool {

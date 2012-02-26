@@ -13,9 +13,10 @@ codeshelf.facilityeditor = function () {
 	var doubleClickHandler_;
 	var clickTimeout_;
 	var application_;
+	var mapPane_;
 
 	return {
-		start:function (application, windowContentElement) {
+		start:function (application, parentFrame) {
 
 			application_ = application;
 
@@ -42,8 +43,17 @@ codeshelf.facilityeditor = function () {
 				rotateControl:         true,
 				streetViewControl:     false
 			}
+
 			//map_ = new google.maps.Map(goog.dom.query('#facility_map')[0], myOptions);
-			map_ = new google.maps.Map(windowContentElement, myOptions);
+			var editorWindow = codeshelf.window();
+			editorWindow.init("Facility Editor", parentFrame, undefined, this.resizeFunction);
+			editorWindow.open();
+			var content = editorWindow.getContentElement();
+
+			var innerPane = soy.renderAsElement(codeshelf.templates.facilityEditor);
+			goog.dom.appendChild(content, innerPane);
+			mapPane_ = goog.dom.query('.facilityMap', innerPane)[0];
+			map_ = new google.maps.Map(mapPane_, myOptions);
 			pen_ = codeshelf.facilityeditor.pen(map_);
 
 			clickHandler_ = google.maps.event.addListener(map_, 'click', function (event) {
@@ -56,6 +66,10 @@ codeshelf.facilityeditor = function () {
 				clearTimeout(clickTimeout_);
 				pen_.draw(pen_.getListOfDots()[0].getLatLng());
 			});
+		},
+
+		resizeFunction:function () {
+			google.maps.event.trigger(mapPane_, 'resize');
 		},
 
 		exit:function () {
