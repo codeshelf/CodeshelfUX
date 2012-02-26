@@ -132,13 +132,6 @@ h1 {
 	-ms-box-orient:		vertical;
 }
 
-.bar {
-	width:				100%;
-	height:				WINDOWBAR_HEIGHT;
-	background-color:	#99F;
-	cursor:				default;
-}
-
 .windowBar {
 	width:				100%;
 	height:				WINDOWBAR_HEIGHT;

@@ -29,7 +29,7 @@ li {
 	border: 1px solid gray;
 	border-bottom: 0;
 	border-top: 0;
-	background: url('../../lib/SlickGrid/images/header-bg.gif') repeat-x center top;
+	background: url('../lib/SlickGrid/images/header-bg.gif') repeat-x center top;
 	color: black;
 	height: 24px;
 	line-height: 24px;

@@ -2,9 +2,14 @@ goog.provide('codeshelf.window');
 goog.require('goog.style');
 goog.require('goog.dom.query');
 
-codeshelf.window = function() {
+var windowList = [];
+var xPosOffset = 0;
+var yPosOffset = 0;
 
-	var window_;
+codeshelf.window = function () {
+
+	var thisWindow_;
+	var windowElement_;
 	var parent_;
 	var contentPane_;
 	var limits_;
@@ -12,76 +17,112 @@ codeshelf.window = function() {
 	var resizer_;
 	var z_ = 0;
 
-	return {
-		init: function(title, parent, limits, resizeFunction) {
+	thisWindow_ = {
+		init:function (title, parent, limits, resizeFunction) {
 
 			parent_ = parent;
 			limits_ = limits;
-			window_ = soy.renderAsElement(codeshelf.templates.window);
+			windowList[windowList.length] = thisWindow_;
+			windowElement_ = soy.renderAsElement(codeshelf.templates.window);
+			goog.dom.appendChild(parent_, windowElement_);
 
-			goog.dom.appendChild(parent_, window_);
+			// Set the window to the next stagger position.
+			var curTop = parseInt(goog.style.getComputedStyle(windowElement_, 'top'), 10);
+			windowElement_.style.top = curTop + xPosOffset + 'px';
+			xPosOffset += 25;
+			var curLeft = parseInt(goog.style.getComputedStyle(windowElement_, 'left'), 10);
+			windowElement_.style.left = curLeft + yPosOffset + 'px';
+			yPosOffset += 25;
 
-			var label = goog.dom.query('.windowTitle', window_)[0];
+
+			var label = goog.dom.query('.windowTitle', windowElement_)[0];
 			label.innerHTML = title;
 
-			var windowBar = goog.dom.query('.windowBar', window_)[0];
-			var windowResizer = goog.dom.query('.windowResizer', window_)[0];
+			var windowBar = goog.dom.query('.windowBar', windowElement_)[0];
+			var windowResizer = goog.dom.query('.windowResizer', windowElement_)[0];
 
-			dragger_ = new goog.fx.Dragger(window_, windowBar, limits_);
+			dragger_ = new goog.fx.Dragger(windowElement_, windowBar, limits_);
 			resizer_ = new goog.fx.Dragger(windowResizer, windowResizer, limits_);
 
-			goog.events.listen(dragger_, 'start', this.moverStart(window_));
-			goog.events.listen(dragger_, 'end', this.moverEnd(window_));
+			goog.events.listen(windowBar, goog.events.EventType.MOUSEDOWN, this.focusWindowEventHandler(thisWindow_));
 
-			goog.events.listen(resizer_, 'start', this.moverStart(window_));
-			goog.events.listen(resizer_, 'end', this.moverEnd(window_));
+			goog.events.listen(dragger_, 'start', this.moverStart(windowElement_));
+			goog.events.listen(dragger_, 'end', this.moverEnd(windowElement_));
 
-			goog.events.listen(window_, 'unload', function (e) {
+			goog.events.listen(resizer_, 'start', this.moverStart(windowElement_));
+			goog.events.listen(resizer_, 'end', this.moverEnd(windowElement_));
+
+			goog.events.listen(windowElement_, goog.events.EventType.UNLOAD, function (e) {
 				dragger_.dispose();
 				resizer_.dispose();
 			});
 
 			resizer_.defaultAction = function (x, y) {
-				leftDim = parseInt(window_.style.left, 10);
-				topDim = parseInt(window_.style.top, 10);
+				leftDim = parseInt(windowElement_.style.left, 10);
+				topDim = parseInt(windowElement_.style.top, 10);
 				width = this.screenX - leftDim;
 				height = y + topDim - 10;
-				window_.style.width = width + 'px';
-				window_.style.height = height + 'px';
+				windowElement_.style.width = width + 'px';
+				windowElement_.style.height = height + 'px';
 				resizeFunction();
 			};
 		},
 
-		open: function() {
+		open:function () {
+			thisWindow_.focusWindow();
+		},
+
+		close:function () {
 
 		},
 
-		close: function() {
-
-		},
-
-		getContentElement: function() {
-			contentPane_ = goog.dom.query('.windowContent', window_)[0];
+		getContentElement:function () {
+			contentPane_ = goog.dom.query('.windowContent', windowElement_)[0];
 			return contentPane_;
+		},
+
+		setZ:function (z) {
+			windowElement_.style.zIndex = z;
+		},
+
+		focusWindowEventHandler:function (aWindow) {
+			var focusWindow_ = aWindow;
+			var focusFuction = function(event) {
+				thisWindow_.focusWindow();
+			}
+			return focusFuction;
+		},
+
+		focusWindow:function () {
+			// Loop throught all of the windows, and set their Z to 0, but set this window's Z to 1.
+			for (var i in windowList) {
+				aWindow = windowList[i];
+				if (aWindow === thisWindow_) {
+					aWindow.setZ(1);
+				} else {
+					aWindow.setZ(0);
+				}
+			}
 		},
 
 		moverStart:function (mover) {
 			var mover_ = mover;
 
-			var moverFunc = function moveWindowSetZ(e) {
-				mover_.style.zIndex = z_++;
+			var moverFunction = function moveWindowStart(event) {
 				goog.style.setOpacity(mover_, 0.50);
 			};
-			return moverFunc;
+			return moverFunction;
 		},
 
 		moverEnd:function (mover) {
 			var mover_ = mover;
 
-			var moverFunc = function moveWindowEnd(e) {
+			var moverFunction = function moveWindowEnd(event) {
 				goog.style.setOpacity(mover_, 1);
 			}
-			return moverFunc;
+			return moverFunction;
 		}
 	}
+
+	return thisWindow_;
 }

@@ -41,7 +41,9 @@ codeshelf.facilityeditor = function () {
 				disableDoubleClickZoom:true,
 				panControl:            false,
 				rotateControl:         true,
-				streetViewControl:     false
+				streetViewControl:     false,
+				draggableCursor:       'url(file://../src/images/push-pin.png), auto',
+				heading:               180
 			}
 
 			//map_ = new google.maps.Map(goog.dom.query('#facility_map')[0], myOptions);
