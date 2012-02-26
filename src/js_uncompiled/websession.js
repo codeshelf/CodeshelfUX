@@ -35,14 +35,15 @@ codeshelf.websession = function () {
 	var connectAttempts_ = 0;
 	var application_;
 	var websocket_;
+	var currentPage_;
 
 	return {
 
-		getState: function() {
+		getState:function () {
 			return state_;
 		},
 
-		setState: function(state) {
+		setState:function (state) {
 			state_ = state;
 		},
 
@@ -110,8 +111,13 @@ codeshelf.websession = function () {
 			}
 		},
 
+		setCurrentPage:function (currentPage) {
+			currentPage_ = currentPage;
+		},
+
 		onError:function () {
 			state_ = kWebsessionState.UNVALIDATED;
+			currentPage_.exit();
 			application_.restartApplication('websocket error');
 		},
 
@@ -121,6 +127,7 @@ codeshelf.websession = function () {
 
 		onClose:function () {
 			state_ = kWebsessionState.UNVALIDATED;
+			currentPage_.exit();
 			application_.restartApplication('websocket closed unexpectedly');
 		},
 

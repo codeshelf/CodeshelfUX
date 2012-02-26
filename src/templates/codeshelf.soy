@@ -65,65 +65,108 @@
 {/template}
 
 /**
+ * The template for a window.
+ */
+{template .window}
+<div class='window'>
+	<div class='windowBar'>
+		<label class='windowTitle'>Window</label>
+	</div>
+	<div class='windowContent'>
+	</div>
+	<div class='windowFooter'>
+		<div class='windowResizer'>
+		</div>
+	</div>
+</div>
+{/template}
+
+/**
+ * The template for the facility editor.
+ */
+{template .facilityEditor}
+<div class='facilityEditor'>
+	<div class='facilityMap'>
+	</div>
+	<div class='facilityEditorToolbar'>
+		<div class='facilityEditorTool'>
+			<img id='rackIcon' class='facilityIditorToolIcon' src='../src/images/rack-icon.png' alt='' height='32' width='32'>
+		</div>
+		<div class='facilityEditorTool'>
+		</div>
+		<div class='facilityEditorTool'>
+		</div>
+		<div class='facilityEditorTool'>
+		</div>
+		<div class='facilityEditorTool'>
+		</div>
+		<div class='facilityEditorTool'>
+		</div>
+		<div class='facilityEditorTool'>
+		</div>
+		<div class='facilityEditorTool'>
+		</div>
+		<div class='facilityEditorTool'>
+		</div>
+	</div>
+</div>
+{/template}
+
+/**
  * The template for the main page.
  */
 {template .mainPage}
- 		<div id='frame'>
-			<div id='codeshelflogo' class='rotate'>
-				<h1>codeshelf</h1>
+<div id='frame'>
+	<div id='codeshelflogo' class='rotate'>
+		<h1>codeshelf</h1>
+	</div>
+	<div id='win2' class='window' style='top: 50px; left: 150px; width: 600px; height: 400px'>
+		<div class='bar'>
+			<label>Listview 2</label>
+		</div>
+		<div id='myTable' style='position: relative; width: 100%; height: 100%'>
+			<div id='myGridHeader' class='grid-header' style='width: 100%; height: 20px'>
+				<label>Tasks</label> 
+				<span style='float: right'
+						class='ui-icon ui-icon-search'
+						title='Toggle search panel'
+						onclick='toggleFilterRow()'></span>
 			</div>
-			<div id='win1' class='window' style='top: 550px; left: 150px; width: 300px; height: 100px'>
-				<div class='bar'>
-					<label>Window 1</label>
-				</div>
+			<div id='myGrid' style='width: 100%;'></div>
+			<div id='myPager' class='pager' style='width: 100%; height: 10px;'></div>
+		</div>
+	</div>
+	<!--div id='win3' class='window' style='top: 50px; left: 775px; height: 600px; width: 600px'>
+		<div class='bar'>
+			<label>Facility Editor</label>
+		</div>
+		<div id='facilityEditor'>
+			<div id='facilityMap'>
 			</div>
-			<div id='win2' class='window' style='top: 50px; left: 150px; width: 600px; height: 400px'>
-				<div class='bar'>
-					<label>Listview 2</label>
+			<div id='facilityEditorToolbar'>
+				<div class='facilityEditorTool'>
+					<img id='rackIcon' class='facilityIditorToolIcon' src='../src/images/rack-icon.png' alt='' height='32' width='32'>
 				</div>
-				<div id='myTable' style='position: relative; width: 100%; height: 100%'>
-					<div id='myGridHeader' class='grid-header' style='width: 100%; height: 20px'>
-						<label>Tasks</label> 
-						<span style='float: right'
-								class='ui-icon ui-icon-search'
-								title='Toggle search panel'
-								onclick='toggleFilterRow()'></span>
-					</div>
-					<div id='myGrid' style='width: 100%;'></div>
-					<div id='myPager' class='pager' style='width: 100%; height: 10px;'></div>
+				<div class='facilityEditorTool'>
 				</div>
-			</div>
-			<div id='win3' class='window' style='top: 50px; left: 775px; height: 600px; width: 600px'>
-				<div class='bar'>
-					<label>Facility Editor</label>
+				<div class='facilityEditorTool'>
 				</div>
-				<div id='facility_editor'>
-					<div id='facility_map'>
-					</div>
-					<div id='facility_editor_toolbar'>
-						<div class='facility_editor_tool'>
-							<img id='rack_icon' class='facility_editor_tool_icon' src='../src/images/rack-icon.png' alt='' height='32' width='32'>
-						</div>
-						<div class='facility_editor_tool'>
-						</div>
-						<div class='facility_editor_tool'>
-						</div>
-						<div class='facility_editor_tool'>
-						</div>
-						<div class='facility_editor_tool'>
-						</div>
-						<div class='facility_editor_tool'>
-						</div>
-						<div class='facility_editor_tool'>
-						</div>
-						<div class='facility_editor_tool'>
-						</div>
-						<div class='facility_editor_tool'>
-						</div>
-					</div>
+				<div class='facilityEditorTool'>
 				</div>
-				<div class='pager' style='width: 100%; height: 10px;'>
+				<div class='facilityEditorTool'>
+				</div>
+				<div class='facilityEditorTool'>
+				</div>
+				<div class='facilityEditorTool'>
+				</div>
+				<div class='facilityEditorTool'>
+				</div>
+				<div class='facilityEditorTool'>
 				</div>
 			</div>
 		</div>
+		<div class='pager' style='width: 100%; height: 10px;'>
+		</div>
+	</div-->
+</div>
 {/template}

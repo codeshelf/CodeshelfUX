@@ -42,7 +42,7 @@ codeshelf.application = function () {
 			// Remove all markup from the URL - we'll build it from the app itself.
 			goog.dom.removeChildren(goog.dom.getDocument().body);
 			launchWindow_ = codeshelf.launchWindow();
-			launchWindow_.enterLaunchWindow(this, webSession_);
+			launchWindow_.enter(this, webSession_);
 
 			// Cause automatic login to save on test time.
 			setTimeout(function () {

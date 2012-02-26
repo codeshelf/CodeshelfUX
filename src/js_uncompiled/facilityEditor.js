@@ -15,7 +15,7 @@ codeshelf.facilityeditor = function () {
 	var application_;
 
 	return {
-		start:function (application) {
+		start:function (application, windowContentElement) {
 
 			application_ = application;
 
@@ -42,7 +42,8 @@ codeshelf.facilityeditor = function () {
 				rotateControl:         true,
 				streetViewControl:     false
 			}
-			map_ = new google.maps.Map(goog.dom.query('#facility_map')[0], myOptions);
+			//map_ = new google.maps.Map(goog.dom.query('#facility_map')[0], myOptions);
+			map_ = new google.maps.Map(windowContentElement, myOptions);
 			pen_ = codeshelf.facilityeditor.pen(map_);
 
 			clickHandler_ = google.maps.event.addListener(map_, 'click', function (event) {

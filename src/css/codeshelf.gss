@@ -21,6 +21,7 @@
 @def DATA_TEXT_TRANSFORM			lowercase;
 
 @def WINDOWBAR_HEIGHT				20px;
+@def WINDOWFOOTER_HEIGHT			10px;
 
 /* 32px + 2px each side for spacing. */
 @def FACILITY_TOOLBAR_WIDTH			36px;  
@@ -110,15 +111,24 @@ h1 {
 
 .window {
 	position:			absolute;
-	left:				150px;
-	top:				110px;
-	width:				300px;
-	height:				100px;
+	left:				50px;
+	top:				50px;
+	width:				400px;
+	height:				200px;
 	background-color:	rgb(200, 200, 250);
 	border:				1px solid #99F;
 	font:				bold 11px/18px arial;
 	text-indent:		10px;
 	color:				#FFF;
+	
+	display:			box;
+	box-orient:			vertical;
+	display:			-moz-box;
+	-moz-box-orient:	vertical;
+	display:			-webkit-box;
+	-webkit-box-orient:	vertical;
+	display:			-ms-box;
+	-ms-box-orient:		vertical;
 }
 
 .bar {
@@ -126,6 +136,45 @@ h1 {
 	height:				WINDOWBAR_HEIGHT;
 	background-color:	#99F;
 	cursor:				default;
+}
+
+.windowBar {
+	width:				100%;
+	height:				WINDOWBAR_HEIGHT;
+	background-color:	#99F;
+	cursor:				default;
+}
+
+.windowContent {
+	width:				100%;
+
+	display:			box;
+	box-orient:			vertical;
+	display:			-moz-box;
+	-moz-box-orient:	vertical;
+	display:			-webkit-box;
+	-webkit-box-orient:	vertical;
+	display:			-ms-box;
+	-ms-box-orient:		vertical;
+
+	box-flex:			1;
+	-moz-box-flex:		1;
+	-webkit-box-flex:	1;
+	-ms-box-flex:		1;
+}
+
+.windowFooter {
+	width:				100%;
+	height:				WINDOWFOOTER_HEIGHT;
+	background-color:	rgb(200, 200, 250);
+}
+
+.windowResizer {
+	position:			static;
+	float:				right;
+	height:				WINDOWFOOTER_HEIGHT;
+	width:				WINDOWFOOTER_HEIGHT;
+	background-color:	#99F;
 }
 
 #win1 {
@@ -219,7 +268,7 @@ h1 {
 	/* show default selected row background */
 }
 
-#facility_editor {
+.facilityEditor {
 	position:			relative;
 	width:				100%;
 	box-flex:			1;
@@ -237,25 +286,25 @@ h1 {
 	-ms-box-orient:		horizontal;
 }
 
-#facility_map {
+.facilityMap {
 	box-flex:			1;
 	-moz-box-flex:		1;
 	-webkit-box-flex:	1;
 	-ms-box-flex:		1;
 }
 
-#facility_editor_toolbar {
+.facilityEditorToolbar {
 	width:				FACILITY_TOOLBAR_WIDTH;
 	background:			FACILITY_TOOLBAR_BACKGROUND;
 }
 
-.facility_editor_tool {
+.facilityEditorTool {
 	position:			relative;
 	width:				FACILITY_TOOLBAR_WIDTH;
 	height:				FACILITY_TOOLBAR_HEIGHT;
 }
 
-.facility_editor_tool_icon {
+.facilityEditorToolIcon {
 	position:			absolute;
 	top:				2px;
 	left:				2px;
@@ -301,4 +350,64 @@ h1 {
 	-webkit-box-flex:	1;
 	-ms-box-flex:		1;
 }
+
+.modal-dialog {
+	width: 430px;
+	background: #c1d9ff;
+	border: 1px solid #3a5774;
+	color: #000;
+	padding: 4px;
+	position: absolute;
+}
+
+.modal-dialog a,
+.modal-dialog a:link,
+.modal-dialog a:visited  {
+	color: #06c;
+	cursor: pointer;
+}
+
+.modal-dialog-bg {
+	background: #666;
+	left: 0;
+	position: absolute;
+	top: 0;
+}
+
+.modal-dialog-title {
+	background: #e0edfe;
+	color: #000;
+	cursor: pointer;
+	font-size: 120%;
+	font-weight: bold;
+
+	/* Add padding on the right to ensure the close button has room. */
+	padding: 8px 31px 8px 8px;
+
+	position: relative;
+	_zoom: 1; /* Ensures proper width in IE6 RTL. */
+}
+
+.modal-dialog-title-close {
+	/* Client apps may override the URL at which they serve the sprite. */
+	background: #e0edfe url(//ssl.gstatic.com/editor/editortoolbar.png) no-repeat -528px 0;
+	cursor: default;
+	height: 15px;
+	position: absolute;
+	right: 10px;
+	top: 8px;
+	width: 15px;
+	vertical-align: middle;
+}
+
+.modal-dialog-buttons,
+.modal-dialog-content {
+	background-color: #fff;
+	padding: 8px;
+}
+
+.goog-buttonset-default {
+	font-weight: bold;
+}
+
 

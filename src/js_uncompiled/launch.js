@@ -16,11 +16,13 @@ codeshelf.launchWindow = function () {
 
 	return {
 
-		enterLaunchWindow:function (application, websession) {
+		enter:function (application, websession) {
 
 			application_ = application;
 			websession_ = websession;
 			thisLaunchWindow_ = this;
+
+			websession_.setCurrentPage(this);
 
 			goog.dom.appendChild(goog.dom.getDocument().body, soy.renderAsElement(codeshelf.templates.launchCodeDialog));
 			var launchCodeInput = goog.dom.getElement('launchCodeInput');
@@ -40,9 +42,9 @@ codeshelf.launchWindow = function () {
 			launchCodeInput.select();
 		},
 
-		exitLaunchWindow:function () {
+		exit:function () {
+			websession_.setCurrentPage(undefined);
 			goog.dom.removeChildren(goog.dom.getDocument().body);
-			codeshelf.mainpage.launch(application_);
 		},
 
 		launchCodeCheck:function () {
@@ -69,7 +71,9 @@ codeshelf.launchWindow = function () {
 							if (command.data.LAUNCH_CODE_RESP == "SUCCEED") {
 								websession_.setState(kWebsessionState.VALIDATED);
 								application_.setOrganization(command.data.organization);
-								thisLaunchWindow_.exitLaunchWindow();
+								thisLaunchWindow_.exit();
+								var mainpage = codeshelf.mainpage();
+								mainpage.enter(application_, websession_);
 							} else {
 								alert('Lauch code invalid');
 							}

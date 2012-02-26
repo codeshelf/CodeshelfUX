@@ -2,6 +2,7 @@ goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.listview');
 goog.require('codeshelf.facilityeditor');
+goog.require('codeshelf.window');
 goog.require('goog.fx.Dragger');
 goog.require('goog.dom');
 goog.require('goog.style');
@@ -13,112 +14,137 @@ goog.require('goog.math.Size');
 goog.require('goog.dom.ViewportSizeMonitor');
 goog.require('jquery.rotate');
 
-//var codeshelflogo = $('#codeshelflogo');
-//codeshelflogo.rotate(-90);
+codeshelf.mainpage = function () {
 
-var Z;
-var frame;
+	var application_;
+	var websession_;
+	var thisMainpage_;
+	var frame_;
+	var frameTop_ = 5;
+	var frameLeft_ = 5;
+	var limits_;
 
-codeshelf.mainpage.launch = function (application) {
+	return {
 
-	goog.dom.setProperties(goog.dom.getDocument().body, {class:'main_body'});
-	goog.dom.appendChild(goog.dom.getDocument().body, soy.renderAsElement(codeshelf.templates.mainPage));
+		enter:function (application, websession) {
 
-	Z = 5;
-	var frameTop = 5;
-	var frameLeft = 5;
+			application_ = application;
+			websession_ = websession;
+			thisMainpage_ = this;
 
-	var limits = new goog.math.Rect(frameTop, frameLeft, 750, 600);
+			websession_.setCurrentPage(this);
 
-	var window1 = goog.dom.getElement('win1');
-	var window2 = goog.dom.getElement('win2');
-	var window3 = goog.dom.getElement('win3');
-	var dragger1 = new goog.fx.Dragger(window1, goog.dom.query('#win1 .bar')[0], limits);
-	var dragger2 = new goog.fx.Dragger(goog.dom.getElement('win2'), goog.dom.query('#win2 .bar')[0], limits);
-	var resizer2 = new goog.fx.Dragger(goog.dom.query('#win2 .pager')[0], goog.dom.query('#pager')[0], limits);
-	var dragger3 = new goog.fx.Dragger(goog.dom.getElement('win3'), goog.dom.query('#win3 .bar')[0]);
-	var resizer3 = new goog.fx.Dragger(goog.dom.query('#win3 .pager')[0], goog.dom.query('#win3 .pager')[0]);
+			goog.dom.setProperties(goog.dom.getDocument().body, {class:'main_body'});
+			goog.dom.appendChild(goog.dom.getDocument().body, soy.renderAsElement(codeshelf.templates.mainPage));
 
-	resizer2.defaultAction = function (x, y) {
-		leftDim = parseInt(window2.style.left, 10);
-		topDim = parseInt(window2.style.top, 10);
-		width = this.screenX - leftDim;
-		height = y + 20 - topDim
-		window2.style.width = width + 'px';
-		window2.style.height = height + 'px';
-		grid.resizeCanvas();
-		grid.autosizeColumns();
-	};
+			z_ = 5;
+			frame_ = goog.dom.query('#frame')[0];
+			frame_.style.top = frameTop_ + 5 + 'px';
+			frame_.style.left = frameLeft_ + 'px';
 
-	resizer3.defaultAction = function (x, y) {
-		leftDim = parseInt(window3.style.left, 10);
-		topDim = parseInt(window3.style.top, 10);
-		width = this.screenX - leftDim;
-		height = y + 20 - topDim
-		window3.style.width = width + 'px';
-		window3.style.height = height + 'px';
-		grid.resizeCanvas();
-		grid.autosizeColumns();
-	};
+			limits_ = new goog.math.Rect(frameTop_, frameLeft_, 750, 600);
 
+			//var window1 = goog.dom.getElement('win1');
+			var window2 = goog.dom.getElement('win2');
+//			var window3 = goog.dom.getElement('win3');
 
-	dragger3.setHysteresis(6);
+//			var dragger1 = new goog.fx.Dragger(window1, goog.dom.query('#win1 .bar')[0], limits_);
+			var dragger2 = new goog.fx.Dragger(goog.dom.getElement('win2'), goog.dom.query('#win2 .bar')[0], limits_);
+			var resizer2 = new goog.fx.Dragger(goog.dom.query('#win2 .pager')[0], goog.dom.query('#win2 .pager')[0], limits_);
+//			var dragger3 = new goog.fx.Dragger(goog.dom.getElement('win3'), goog.dom.query('#win3 .bar')[0]);
+//			var resizer3 = new goog.fx.Dragger(goog.dom.query('#win3 .pager')[0], goog.dom.query('#win3 .pager')[0]);
 
-	goog.events.listen(dragger1, 'start', codeshelf.mainpage.createMoverStart(window1));
-	goog.events.listen(dragger2, 'start', codeshelf.mainpage.createMoverStart(window2));
-	goog.events.listen(resizer2, 'start', codeshelf.mainpage.createMoverStart(window2));
-	goog.events.listen(dragger3, 'start', codeshelf.mainpage.createMoverStart(window3));
+			resizer2.defaultAction = function (x, y) {
+				leftDim = parseInt(window2.style.left, 10);
+				topDim = parseInt(window2.style.top, 10);
+				width = this.screenX - leftDim;
+				height = y + 20 - topDim
+				window2.style.width = width + 'px';
+				window2.style.height = height + 'px';
+				grid.resizeCanvas();
+				grid.autosizeColumns();
+			};
 
-	goog.events.listen(dragger1, 'end', codeshelf.mainpage.createMoverEnd(window1));
-	goog.events.listen(dragger2, 'end', codeshelf.mainpage.createMoverEnd(window2));
-	goog.events.listen(resizer2, 'end', codeshelf.mainpage.createMoverEnd(window2));
-	goog.events.listen(dragger3, 'end', codeshelf.mainpage.createMoverEnd(window3));
+//			resizer3.defaultAction = function (x, y) {
+//				leftDim = parseInt(window3.style.left, 10);
+//				topDim = parseInt(window3.style.top, 10);
+//				width = this.screenX - leftDim;
+//				height = y + 20 - topDim
+//				window3.style.width = width + 'px';
+//				window3.style.height = height + 'px';
+//				grid.resizeCanvas();
+//				grid.autosizeColumns();
+//			};
 
-	goog.events.listen(window, 'unload', function (e) {
-		dragger1.dispose();
-		dragger2.dispose();
-		resizer2.dispose();
-		dragger3.dispose();
-	});
+//			dragger3.setHysteresis(6);
 
-	frame = goog.dom.query('#frame')[0];
-	frame.style.top = frameTop + 5 + 'px';
-	frame.style.left = frameLeft + 'px';
+//			goog.events.listen(dragger1, 'start', thisMainpage_.createMoverStart(window1));
+			goog.events.listen(dragger2, 'start', thisMainpage_.createMoverStart(window2));
+			goog.events.listen(resizer2, 'start', thisMainpage_.createMoverStart(window2));
+//			goog.events.listen(dragger3, 'start', thisMainpage_.createMoverStart(window3));
+//			goog.events.listen(resizer3, 'start', thisMainpage_.createMoverStart(window3));
 
-	codeshelf.mainpage.updateFrameSize(goog.dom.getViewportSize());
+//			goog.events.listen(dragger1, 'end', thisMainpage_.createMoverEnd(window1));
+			goog.events.listen(dragger2, 'end', thisMainpage_.createMoverEnd(window2));
+			goog.events.listen(resizer2, 'end', thisMainpage_.createMoverEnd(window2));
+//			goog.events.listen(dragger3, 'end', thisMainpage_.createMoverEnd(window3));
+//			goog.events.listen(resizer3, 'end', thisMainpage_.createMoverEnd(window3));
 
-// Start listening for viewport size changes.
-	var vsm = new goog.dom.ViewportSizeMonitor();
-	goog.events.listen(vsm, goog.events.EventType.RESIZE, function (e) {
-		size = vsm.getSize();
-		size.height -= 10;
-		codeshelf.mainpage.updateFrameSize(size);
-	});
+			goog.events.listen(window, 'unload', function (e) {
+//				dragger1.dispose();
+				dragger2.dispose();
+				resizer2.dispose();
+//				dragger3.dispose();
+//				resizer3.dispose();
+			});
 
-	launchListView();
-	var facilityEditor = codeshelf.facilityeditor();
-	facilityEditor.start(application);
-}
+			this.updateFrameSize(goog.dom.getViewportSize());
 
-codeshelf.mainpage.createMoverStart = function (mover) {
-	var moverFunc = function moveWindowSetZ(e) {
-		mover.style.zIndex = Z++;
-		goog.style.setOpacity(mover, 0.50);
-	};
-	return moverFunc;
-}
+			// Start listening for viewport size changes.
+			var vsm = new goog.dom.ViewportSizeMonitor();
+			goog.events.listen(vsm, goog.events.EventType.RESIZE, function (e) {
+				size = vsm.getSize();
+				size.height -= 10;
+				thisMainpage_.updateFrameSize(size);
+			});
 
-codeshelf.mainpage.createMoverEnd = function (mover) {
-	var moverFunc = function moveWindowEnd(e) {
-		goog.style.setOpacity(mover, 1);
+			launchListView();
+
+			var window1 = codeshelf.window();
+			window1.init("Facility Editor", frame_, limits_);
+
+			var facilityEditor = codeshelf.facilityeditor();
+			var content = window1.getContentElement();
+			var innerPane = soy.renderAsElement(codeshelf.templates.facilityEditor);
+			goog.dom.appendChild(content, innerPane);
+			var mapPane = goog.dom.query('.facilityMap', innerPane)[0];
+			window1.open();
+			facilityEditor.start(application, mapPane);
+		},
+
+		exit:function () {
+			websession_.setCurrentPage(undefined);
+		},
+
+		createMoverStart:function (mover) {
+			var moverFunc = function moveWindowSetZ(e) {
+				mover.style.zIndex = z_++;
+				goog.style.setOpacity(mover, 0.50);
+			};
+			return moverFunc;
+		},
+
+		createMoverEnd:function (mover) {
+			var moverFunc = function moveWindowEnd(e) {
+				goog.style.setOpacity(mover, 1);
+			}
+			return moverFunc;
+		},
+
+		updateFrameSize:function (size) {
+			// goog.style.setSize(goog.dom.getElement('frame'), size);
+			frame_.style.width = size.width - 15 + 'px';
+			frame_.style.height = size.height - 5 + 'px';
+		}
 	}
-	return moverFunc;
 }
-
-codeshelf.mainpage.updateFrameSize = function (size) {
-	// goog.style.setSize(goog.dom.getElement('frame'), size);
-	frame.style.width = size.width - 15 + 'px';
-	frame.style.height = size.height - 5 + 'px';
-}
-
-//codeshelf.mainpage.launch();
