@@ -1,6 +1,14 @@
+/*******************************************************************************
+ *  CodeShelfUX
+ *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
+ *  $Id: window.js,v 1.4 2012/03/04 06:57:13 jeffw Exp $
+ *******************************************************************************/
 goog.provide('codeshelf.window');
 goog.require('goog.style');
 goog.require('goog.dom.query');
+goog.require('goog.events');
+goog.require('goog.events.EventType');
+goog.require('goog.fx.Dragger');
 
 var windowList = [];
 var xPosOffset = 0;

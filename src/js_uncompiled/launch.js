@@ -1,3 +1,8 @@
+/*******************************************************************************
+ *  CodeShelfUX
+ *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
+ *  $Id: launch.js,v 1.15 2012/03/04 06:57:13 jeffw Exp $
+ *******************************************************************************/
 goog.provide('codeshelf.launch');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.websession');
@@ -14,15 +19,14 @@ codeshelf.launchWindow = function () {
 	var application_;
 	var thisLaunchWindow_;
 
-	return {
+	thisLaunchWindow_ = {
 
 		enter:function (application, websession) {
 
 			application_ = application;
 			websession_ = websession;
-			thisLaunchWindow_ = this;
 
-			websession_.setCurrentPage(this);
+			websession_.setCurrentPage(thisLaunchWindow_);
 
 			goog.dom.appendChild(goog.dom.getDocument().body, soy.renderAsElement(codeshelf.templates.launchCodeDialog));
 			var launchCodeInput = goog.dom.getElement('launchCodeInput');
@@ -37,7 +41,12 @@ codeshelf.launchWindow = function () {
 			var launchCodePanel = goog.dom.getElement('launchCodePanel');
 			roundedLaunchCodePanel.decorate(launchCodePanel);
 
-			launchCodeInput.onchange = this.launchCodeCheck;
+			//launchCodeInput.onchange = thisLaunchWindow_.launchCodeCheck;
+			launchCodeInput.onkeydown = function (event) {
+				if (event.keyCode == 13) {
+					thisLaunchWindow_.launchCodeCheck();
+				}
+			}
 			launchCodeInput.focus();
 			launchCodeInput.select();
 		},
@@ -52,7 +61,7 @@ codeshelf.launchWindow = function () {
 				launchCode:goog.dom.getElement('launchCodeInput').value
 			}
 			var launchCommand = websession_.createCommand(kWebSessionCommandType.LAUNCH_CODE_CHECK, launchCodeInput);
-			websession_.sendCommand(launchCommand, this.webSessionCommandCallback);
+			websession_.sendCommand(launchCommand, thisLaunchWindow_.webSessionCommandCallback);
 		},
 
 		webSessionCommandCallback:function (command) {
@@ -83,4 +92,6 @@ codeshelf.launchWindow = function () {
 			}
 		}
 	}
+
+	return thisLaunchWindow_;
 }

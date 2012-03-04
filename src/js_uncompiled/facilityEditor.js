@@ -1,3 +1,8 @@
+/*******************************************************************************
+ *  CodeShelfUX
+ *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
+ *  $Id: facilityEditor.js,v 1.13 2012/03/04 06:57:13 jeffw Exp $
+ *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.websession');

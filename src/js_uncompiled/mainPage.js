@@ -1,18 +1,19 @@
+/*******************************************************************************
+ *  CodeShelfUX
+ *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
+ *  $Id: mainPage.js,v 1.10 2012/03/04 06:57:13 jeffw Exp $
+ *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.listview');
 goog.require('codeshelf.facilityeditor');
 goog.require('codeshelf.window');
-goog.require('goog.fx.Dragger');
 goog.require('goog.dom');
-goog.require('goog.style');
 goog.require('goog.dom.query');
-goog.require('goog.window');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
 goog.require('goog.dom.ViewportSizeMonitor');
-goog.require('jquery.rotate');
 
 codeshelf.mainpage = function () {
 
@@ -38,7 +39,7 @@ codeshelf.mainpage = function () {
 			goog.dom.appendChild(goog.dom.getDocument().body, soy.renderAsElement(codeshelf.templates.mainPage));
 
 			z_ = 5;
-			frame_ = goog.dom.query('#frame')[0];
+			frame_ = goog.dom.query('.frame')[0];
 			frame_.style.top = frameTop_ + 5 + 'px';
 			frame_.style.left = frameLeft_ + 'px';
 

@@ -1,3 +1,11 @@
+/*******************************************************************************
+ *  CodeShelfUX
+ *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
+ *  $Id: codeshelf.gss,v 1.12 2012/03/04 06:57:13 jeffw Exp $
+ *******************************************************************************/
+
+/* Defines and mixins ----------------------------------------------------------- */
+ 
 @def LAUNCH_BG_COLOR				rgb(0, 0, 0);
 @def MAIN_BG_COLOR					rgb(240, 240, 240);
 
@@ -30,8 +38,25 @@
 @def FACILITY_TOOLBAR_BACKGROUND	rgb(220, 220, 220);
 @def FACILITY_ICON_BACKGROUND		rgb(200, 200, 200);
 
-/* ================================================================== */
-/* Styles */
+@defmixin FLEX_BOX() {
+	box-flex:			1;
+	-moz-box-flex:		1;
+	-webkit-box-flex:	1;
+	-ms-box-flex:		1;
+}
+
+@defmixin DISPLAY_BOX(ORIENTATION) {
+	display:			box;
+	box-orient:			ORIENTATION;
+	display:			-moz-box;
+	-moz-box-orient:	ORIENTATION;
+	display:			-webkit-box;
+	-webkit-box-orient:	ORIENTATION;
+	display:			-ms-box;
+	-ms-box-orient:		ORIENTATION;
+}
+
+/* Styles ------------------------------------------------------------------------- */
 
 .launch_body {
 	background-color:	LAUNCH_BG_COLOR;
@@ -74,7 +99,13 @@
 	background-color:	LAUNCH_BACK_COLOR;*/
 }
 
-h1 {
+#logoBox {
+	top:				175px;
+	left:				-140px;
+	position:			absolute;
+}
+
+.codeshelfLogo {
 	color:				LOGO_FONT_COLOR;
 	font-family:		LOGO_FONT;
 	font-size:			LOGO_FONT_SIZE;
@@ -93,13 +124,9 @@ h1 {
 	letter-spacing:		-0.06em;
 }
 
-#codeshelflogo {
-	top:				175px;
-	left:				-140px;
-	position:			absolute;
-}
+/* Frame classes ---------------------------------------------------------------- */
 
-#frame {
+.frame {
 	position:			absolute;
 	left:				10px;
 	top:				10px;
@@ -108,6 +135,8 @@ h1 {
 	border:				1px solid LOGO_FONT_COLOR;
 	background-color:	MAIN_BG_COLOR;
 }
+
+/* Window classes --------------------------------------------------------------- */
 
 .window {
 	position:			absolute;
@@ -121,15 +150,7 @@ h1 {
 	text-indent:		10px;
 	color:				#FFF;
 	overflow:			hide;
-	
-	display:			box;
-	box-orient:			vertical;
-	display:			-moz-box;
-	-moz-box-orient:	vertical;
-	display:			-webkit-box;
-	-webkit-box-orient:	vertical;
-	display:			-ms-box;
-	-ms-box-orient:		vertical;
+	@mixin				DISPLAY_BOX(vertical);
 }
 
 .windowBar {
@@ -141,20 +162,8 @@ h1 {
 
 .windowContent {
 	width:				100%;
-
-	display:			box;
-	box-orient:			vertical;
-	display:			-moz-box;
-	-moz-box-orient:	vertical;
-	display:			-webkit-box;
-	-webkit-box-orient:	vertical;
-	display:			-ms-box;
-	-ms-box-orient:		vertical;
-
-	box-flex:			1;
-	-moz-box-flex:		1;
-	-webkit-box-flex:	1;
-	-ms-box-flex:		1;
+	@mixin				DISPLAY_BOX(vertical);
+	@mixin				FLEX_BOX();
 }
 
 .windowFooter {
@@ -171,19 +180,6 @@ h1 {
 	background-color:	#99F;
 }
 
-#win2 {
-	background-color:	rgb(250, 200, 200);
-	border:				1px solid #F99;
-}
-
-#ghostbox {
-	position:			absolute;
-	left:				100px;
-	top:				625px;
-	width:				600px;
-	height:				20px;
-}
-
 .block {
 	position:			absolute;
 	left:				0;
@@ -195,22 +191,6 @@ h1 {
 	color:				#EEE;
 	text-align:			center;
 	border:				1px solid #666;
-}
-
-.ghost0 {
-	left:				0;
-}
-
-.ghost1 {
-	left:				130px;
-}
-
-.ghost2 {
-	left:				260px;
-}
-
-.ghost3 {
-	left:				390px;
 }
 
 .cell-title {
@@ -235,29 +215,33 @@ h1 {
 	/* show default selected row background */
 }
 
+/* Facility editor classes --------------------------------------------------------------- */
+
+.dataEntry {
+	color:				LOGO_FONT_COLOR;
+	font-family:		LOGO_FONT;
+	line-height:		LOGO_LINE_HEIGHT;
+	margin-top:			LOGO_MARGIN_BOTTOM;
+	text-transform:		LOGO_TEXT_TRANSFORM;
+	letter-spacing:		-0.06em;
+}
+
+.facilityDialog {
+	position:			relative;
+	width:				100%;
+	@mixin				FLEX_BOX();
+	@mixin				DISPLAY_BOX(vertical);
+}
+
 .facilityEditor {
 	position:			relative;
 	width:				100%;
-	box-flex:			1;
-	-moz-box-flex:		1;
-	-webkit-box-flex:	1;
-	-ms-box-flex:		1;
-
-	display:			box;
-	box-orient:			horizontal;
-	display:			-moz-box;
-	-moz-box-orient:	horizontal;
-	display:			-webkit-box;
-	-webkit-box-orient:	horizontal;
-	display:			-ms-box;
-	-ms-box-orient:		horizontal;
+	@mixin				FLEX_BOX();
+	@mixin				DISPLAY_BOX(horizontal);
 }
 
 .facilityMap {
-	box-flex:			1;
-	-moz-box-flex:		1;
-	-webkit-box-flex:	1;
-	-ms-box-flex:		1;
+	@mixin				FLEX_BOX();
 }
 
 .facilityEditorToolbar {
@@ -279,37 +263,9 @@ h1 {
 	background:			FACILITY_ICON_BACKGROUND;
 }
 
-#win2 {
-	width:				100%;
-	box-flex:			1;
-	-moz-box-flex:		1;
-	-webkit-box-flex:	1;
-	-ms-box-flex:		1;
-
-	display:			box;
-	box-orient:			vertical;
-	display:			-moz-box;
-	-moz-box-orient:	vertical;
-	display:			-webkit-box;
-	-webkit-box-orient:	vertical;
-	display:			-ms-box;
-	-ms-box-orient:		vertical;
-}
-
 #myTable {
-	box-flex:			1;
-	-moz-box-flex:		1;
-	-webkit-box-flex:	1;
-	-ms-box-flex:		1;
-
-	display:			box;
-	box-orient:			vertical;
-	display:			-moz-box;
-	-moz-box-orient:	vertical;
-	display:			-webkit-box;
-	-webkit-box-orient:	vertical;
-	display:			-ms-box;
-	-ms-box-orient:		vertical;
+	@mixin				FLEX_BOX();
+	@mixin				DISPLAY_BOX(vertical);
 }
 
 #myGrid {

@@ -1,62 +1,6 @@
 {namespace codeshelf.templates}
 
 /**
- * Says hello to the world.
- */
-{template .helloWorld}
-	Hello world!
-{/template}
-
-/**
- * Greets a person using 'Hello' by default.
- * @param name The name of the person.
- * @param? greetingWord Optional greeting word to use instead of 'Hello'.
- */
-{template .helloName}
-	{if not $greetingWord}
-		Hello {$name}!
-	{else}
-		{$greetingWord} {$name}!
-	{/if}
-{/template}
-
-/**
- * Greets a person and optionally a list of other people.
- * @param name The name of the person.
- * @param additionalNames The additional names to greet. May be an empty list.
- */
-{template .helloNames}
-	// Greet the person.
-	{call .helloName data="all" /}<br>
-	// Greet the additional people.
-	{foreach $additionalName in $additionalNames}
-		{call .helloName}
-			{param name: $additionalName /}
-		{/call}
-		{if not isLast($additionalName)}
-			<br>  // break after every line except the last
-		{/if}
-		{ifempty}
-			No additional people to greet.
-	{/foreach}
-{/template}
-
-/**
- * Present the launch code dialog
- */
-{template .launchCodeDialog}
-<img id="background_image" class="background_image" src="../src/images/STS-125.jpg" alt="">
-<div id='launchCodePanel' class='goog-roundedpanel'>
-	<div class='goog-roundedpanel-content'>
-		<div class='dataEntry' style='margin-top: 15px; margin-left: 15px;'>
-			Launch Code:
-			<input type='text' id='launchCodeInput' class='dataEntry' value='12345'>
-		</div>
-	</div>
-</div>
-{/template}
-
-/**
  * Include the Google Maps API
  */
 {template .googleMapsScripts}
@@ -82,31 +26,15 @@
 {/template}
 
 /**
- * The template for the facility editor.
+ * Present the launch code dialog
  */
-{template .facilityEditor}
-<div class='facilityEditor'>
-	<div class='facilityMap'>
-	</div>
-	<div class='facilityEditorToolbar'>
-		<div class='facilityEditorTool'>
-			<img id='rackIcon' class='facilityEditorToolIcon' src='../src/images/rack-icon.png' alt='' height='32' width='32'>
-		</div>
-		<div class='facilityEditorTool'>
-		</div>
-		<div class='facilityEditorTool'>
-		</div>
-		<div class='facilityEditorTool'>
-		</div>
-		<div class='facilityEditorTool'>
-		</div>
-		<div class='facilityEditorTool'>
-		</div>
-		<div class='facilityEditorTool'>
-		</div>
-		<div class='facilityEditorTool'>
-		</div>
-		<div class='facilityEditorTool'>
+{template .launchCodeDialog}
+<img id="background_image" class="background_image" src="../src/images/STS-125.jpg" alt="">
+<div id='launchCodePanel' class='goog-roundedpanel'>
+	<div class='goog-roundedpanel-content'>
+		<div class='dataEntry' style='margin-top: 15px; margin-left: 15px;'>
+			Launch Code:
+			<input type='text' id='launchCodeInput' class='dataEntry' value='12345'>
 		</div>
 	</div>
 </div>
@@ -116,25 +44,43 @@
  * The template for the main page.
  */
 {template .mainPage}
-<div id='frame'>
-	<div id='codeshelflogo' class='rotate'>
-		<h1>codeshelf</h1>
+<div class='frame'>
+	<div id='logoBox' class='rotate'>
+		<h1 class='codeshelfLogo'>codeshelf</h1>
 	</div>
-	<!--div id='win2' class='window' style='top: 50px; left: 150px; width: 600px; height: 400px'>
-		<div class='bar'>
-			<label>Listview 2</label>
+</div>
+{/template}
+
+/**
+ * The template for the facility editor.
+ */
+{template .facilityEditor}
+<div class='facilityDialog'>
+    <input type='text' id='faciliotyId' class='dataEntry' value='Facility Name'>
+	<div class='facilityEditor'>
+		<div class='facilityMap'>
 		</div>
-		<div id='myTable' style='position: relative; width: 100%; height: 100%'>
-			<div id='myGridHeader' class='grid-header' style='width: 100%; height: 20px'>
-				<label>Tasks</label> 
-				<span style='float: right'
-						class='ui-icon ui-icon-search'
-						title='Toggle search panel'
-						onclick='toggleFilterRow()'></span>
+		<div class='facilityEditorToolbar'>
+			<div class='facilityEditorTool'>
+				<img id='rackIcon' class='facilityEditorToolIcon' src='../src/images/rack-icon.png' alt='' height='32' width='32'>
 			</div>
-			<div id='myGrid' style='width: 100%;'></div>
-			<div id='myPager' class='pager' style='width: 100%; height: 10px;'></div>
+			<div class='facilityEditorTool'>
+			</div>
+			<div class='facilityEditorTool'>
+			</div>
+			<div class='facilityEditorTool'>
+			</div>
+			<div class='facilityEditorTool'>
+			</div>
+			<div class='facilityEditorTool'>
+			</div>
+			<div class='facilityEditorTool'>
+			</div>
+			<div class='facilityEditorTool'>
+			</div>
+			<div class='facilityEditorTool'>
+			</div>
 		</div>
-	</div-->
+	</div>
 </div>
 {/template}

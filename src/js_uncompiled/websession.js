@@ -1,8 +1,14 @@
+/*******************************************************************************
+ *  CodeShelfUX
+ *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
+ *  $Id: websession.js,v 1.10 2012/03/04 06:57:13 jeffw Exp $
+ *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.net.WebSocket');
 goog.require('goog.json');
+goog.require('goog.array');
 
 if (typeof MozWebSocket != "undefined") {
 	var WebSocket = MozWebSocket;
@@ -31,6 +37,7 @@ const kWebsessionState = {
 codeshelf.websession = function () {
 
 	var state_;
+	var websocketStarted_ = false;
 	var pendingCommands_;
 	var connectAttempts_ = 0;
 	var application_;
@@ -99,7 +106,7 @@ codeshelf.websession = function () {
 			// Attempt to send the command.
 			try {
 				if (!websocket_.isOpen()) {
-					alert('WebSocket not open: try again later');
+					//alert('WebSocket not open: try again later');
 				} else {
 					// Put the pending command callback function in the map.
 					pendingCommands_[command.id] = callbackFunction;
@@ -118,17 +125,27 @@ codeshelf.websession = function () {
 		onError:function () {
 			state_ = kWebsessionState.UNVALIDATED;
 			currentPage_.exit();
-			application_.restartApplication('websocket error');
+			var reason;
+			if (websocketStarted_) {
+				reason = 'websocket error';
+				websocketStarted_ = false;
+			}
+			application_.restartApplication(reason);
 		},
 
 		onOpen:function () {
-
+			websocketStarted_ = true;
 		},
 
 		onClose:function () {
 			state_ = kWebsessionState.UNVALIDATED;
 			currentPage_.exit();
-			application_.restartApplication('websocket closed unexpectedly');
+			var reason;
+			if (websocketStarted_) {
+				reason = 'websocket closed unexpectedly';
+				websocketStarted_ = false;
+			}
+			application_.restartApplication(reason);
 		},
 
 		onMessage:function (messageEvent) {
@@ -137,7 +154,8 @@ codeshelf.websession = function () {
 			callbackFunction = pendingCommands_[command.id];
 			if (callbackFunction != null) {
 				callbackFunction(command);
-			}
+				delete pendingCommands_[command.id];
+			};
 		}
-	}
-}
+	};
+};

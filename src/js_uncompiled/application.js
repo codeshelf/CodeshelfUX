@@ -1,3 +1,8 @@
+/*******************************************************************************
+ *  CodeShelfUX
+ *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
+ *  $Id: application.js,v 1.8 2012/03/04 06:57:13 jeffw Exp $
+ *******************************************************************************/
 goog.provide('codeshelf.application');
 goog.require('codeshelf.websession')
 goog.require('codeshelf.launch')
@@ -34,7 +39,9 @@ codeshelf.application = function () {
 		},
 
 		restartApplication:function (reason) {
-			alert('Application restarted: ' + reason + '.');
+			if (reason !== undefined) {
+				alert('Application restarted: ' + reason + '.');
+			}
 			this.initApplication_();
 		},
 
@@ -46,7 +53,7 @@ codeshelf.application = function () {
 
 			// Cause automatic login to save on test time.
 			setTimeout(function () {
-				launchWindow_.launchCodeCheck();
+//				launchWindow_.launchCodeCheck();
 			}, 1250);
 		}
 	}
