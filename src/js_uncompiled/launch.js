@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: launch.js,v 1.15 2012/03/04 06:57:13 jeffw Exp $
+ *  $Id: launch.js,v 1.16 2012/03/05 04:38:03 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.launch');
 goog.require('codeshelf.templates');
@@ -61,36 +61,38 @@ codeshelf.launchWindow = function () {
 				launchCode:goog.dom.getElement('launchCodeInput').value
 			}
 			var launchCommand = websession_.createCommand(kWebSessionCommandType.LAUNCH_CODE_CHECK, launchCodeInput);
-			websession_.sendCommand(launchCommand, thisLaunchWindow_.webSessionCommandCallback);
+			websession_.sendCommand(launchCommand, thisLaunchWindow_.getCallback(kWebSessionCommandType.LAUNCH_CODE_RESP));
 		},
 
-		webSessionCommandCallback:function (command) {
-			if (!command.hasOwnProperty('type')) {
-				alert('response has no type');
-			} else {
-				if (!command.type == kWebSessionCommandType.LAUNCH_CODE_RESP) {
-					alert('response wrong type');
-				} else {
-					if (!command.hasOwnProperty('data')) {
-						alert('reponse has no data');
+		getCallback:function (expectedResponseType) {
+			var expectedResponseType_ = expectedResponseType;
+			var callback = {
+				exec:                   function (command) {
+					if (!command.data.hasOwnProperty(kWebSessionCommandType.LAUNCH_CODE_RESP)) {
+						alert('response has no launch code result');
 					} else {
-						if (!command.data.hasOwnProperty(kWebSessionCommandType.LAUNCH_CODE_RESP)) {
-							alert('response has no launch code result');
+						if (command.data.LAUNCH_CODE_RESP == "SUCCEED") {
+							websession_.setState(kWebsessionState.VALIDATED);
+							application_.setOrganization(command.data.organization);
+							thisLaunchWindow_.exit();
+							var mainpage = codeshelf.mainpage();
+							mainpage.enter(application_, websession_);
 						} else {
-							if (command.data.LAUNCH_CODE_RESP == "SUCCEED") {
-								websession_.setState(kWebsessionState.VALIDATED);
-								application_.setOrganization(command.data.organization);
-								thisLaunchWindow_.exit();
-								var mainpage = codeshelf.mainpage();
-								mainpage.enter(application_, websession_);
-							} else {
-								alert('Lauch code invalid');
-							}
+							alert('Lauch code invalid');
 						}
 					}
+				},
+				getExpectedResponseType:function () {
+					return expectedResponseType_;
+				},
+				remainActive:           function () {
+					return false;
 				}
 			}
+
+			return callback;
 		}
+
 	}
 
 	return thisLaunchWindow_;

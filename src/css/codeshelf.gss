@@ -1,11 +1,14 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: codeshelf.gss,v 1.12 2012/03/04 06:57:13 jeffw Exp $
+ *  $Id: codeshelf.gss,v 1.13 2012/03/05 04:38:03 jeffw Exp $
  *******************************************************************************/
 
 /* Defines and mixins ----------------------------------------------------------- */
- 
+
+@def FRAME_BORDER_COLOR				rgb(187, 187, 187);
+@def FRAME_BG_COLOR					rgb(240, 240, 240);
+
 @def LAUNCH_BG_COLOR				rgb(0, 0, 0);
 @def MAIN_BG_COLOR					rgb(240, 240, 240);
 
@@ -15,18 +18,19 @@
 @def DIALOG_BORDER_COLOR			rgb(107, 144, 218);
 @def DIALOG_BG_COLOR				MAIN_BG_COLOR;
 
-@def LOGO_FONT						"league-gothic-1","league-gothic-2",sans-serif;
+@def LOGO_FONT_FAMILY				"league-gothic-1","league-gothic-2",sans-serif;
 @def LOGO_FONT_COLOR				rgb(187, 187, 187);
 @def LOGO_FONT_SIZE					120px;
 @def LOGO_LINE_HEIGHT				100%;
 @def LOGO_MARGIN_BOTTOM				3px;
 @def LOGO_TEXT_TRANSFORM			lowercase;
 
-@def DATA_FONT						"league-gothic-1","league-gothic-2",sans-serif;
-@def DATA_FONT_COLOR				rgb(0, 0, 0);
-@def DATA_FONT_SIZE					15px;
-@def DATA_LINE_HEIGHT				100%;
-@def DATA_TEXT_TRANSFORM			lowercase;
+@def DATAENTRY_FONT_FAMILY			"league-gothic-1","league-gothic-2",sans-serif;
+@def DATAENTRY_FONT_COLOR			rgb(100, 100, 100);
+@def DATAENTRY_FONT_SIZE			14px;
+@def DATAENTRY_LINE_HEIGHT			100%;
+@def DATAENTRY_MARGIN_BOTTOM		3px;
+@def DATAENTRY_TEXT_TRANSFORM		lowercase;
 
 @def WINDOWBAR_HEIGHT				20px;
 @def WINDOWFOOTER_HEIGHT			10px;
@@ -56,6 +60,26 @@
 	-ms-box-orient:		ORIENTATION;
 }
 
+@defmixin LOGO_TEXT(FONT_SIZE) {
+	font-size:			FONT_SIZE;
+	color:				LOGO_FONT_COLOR;
+	font-family:		LOGO_FONT_FAMILY;
+	line-height:		LOGO_LINE_HEIGHT;
+	margin-top:			LOGO_MARGIN_BOTTOM;
+	text-transform:		LOGO_TEXT_TRANSFORM;
+	letter-spacing:		-0.06em;
+}
+
+@defmixin DATAENTRY_TEXT(FONT_SIZE) {
+	font-size:			FONT_SIZE;
+	color:				DATAENTRY_FONT_COLOR;
+	font-family:		DATAENTRY_FONT_FAMILY;
+	line-height:		DATAENTRY_LINE_HEIGHT;
+	margin-top:			DATAENTRY_MARGIN_BOTTOM;
+	/*text-transform:		DATAENTRY_TEXT_TRANSFORM;*/
+	/*letter-spacing:		-0.06em;*/
+}
+
 /* Styles ------------------------------------------------------------------------- */
 
 .launch_body {
@@ -63,7 +87,7 @@
 }
 
 .main_body {
-	background-color:	MAIN_BG_COLOR;
+	background-color:	FRAME_BG_COLOR;
 }
 
 .background_image {
@@ -94,9 +118,7 @@
 	position:			absolute;
 	top:				20%;
 	left:				10%;
-	color:				DATA_FONT_COLOR;
-	/*border-color:		LAUNCH_BORDER_COLOR;
-	background-color:	LAUNCH_BACK_COLOR;*/
+	@mixin				DATAENTRY_TEXT(12px);
 }
 
 #logoBox {
@@ -106,22 +128,11 @@
 }
 
 .codeshelfLogo {
-	color:				LOGO_FONT_COLOR;
-	font-family:		LOGO_FONT;
-	font-size:			LOGO_FONT_SIZE;
-	line-height:		LOGO_LINE_HEIGHT;
-	margin-top:			LOGO_MARGIN_BOTTOM;
-	text-transform:		LOGO_TEXT_TRANSFORM;
-	letter-spacing:		-0.06em;
+	@mixin				LOGO_TEXT(LOGO_FONT_SIZE);
 }
 
 .dataEntry {
-	color:				DATA_FONT_COLOR;
-	font-family:		DATA_FONT;
-	font-size:			DATA_FONT_SIZE;
-	line-height:		DATA_LINE_HEIGHT;
-	text-transform:		DATA_TEXT_TRANSFORM;
-	letter-spacing:		-0.06em;
+	@mixin				DATAENTRY_TEXT(DATAENTRY_FONT_SIZE);
 }
 
 /* Frame classes ---------------------------------------------------------------- */
@@ -132,8 +143,8 @@
 	top:				10px;
 	width:				1602px;
 	height:				702px;
-	border:				1px solid LOGO_FONT_COLOR;
-	background-color:	MAIN_BG_COLOR;
+	border:				1px solid FRAME_BORDER_COLOR;
+	background-color:	FRAME_BG_COLOR;
 }
 
 /* Window classes --------------------------------------------------------------- */
@@ -216,15 +227,6 @@
 }
 
 /* Facility editor classes --------------------------------------------------------------- */
-
-.dataEntry {
-	color:				LOGO_FONT_COLOR;
-	font-family:		LOGO_FONT;
-	line-height:		LOGO_LINE_HEIGHT;
-	margin-top:			LOGO_MARGIN_BOTTOM;
-	text-transform:		LOGO_TEXT_TRANSFORM;
-	letter-spacing:		-0.06em;
-}
 
 .facilityDialog {
 	position:			relative;

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.10 2012/03/04 06:57:13 jeffw Exp $
+ *  $Id: websession.js,v 1.11 2012/03/05 04:38:03 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.events');
@@ -15,18 +15,20 @@ if (typeof MozWebSocket != "undefined") {
 }
 
 const kWebSessionCommandType = {
-	LAUNCH_CODE_CHECK:  'LAUNCH_CODE_CHECK',
-	LAUNCH_CODE_RESP:   'LAUNCH_CODE_RESP',
-	OBJECT_GETTER_REQ:  'OBJECT_GETTER_REQ',
-	OBJECT_GETTER_RESP: 'OBJECT_GETTER_RESP',
-	OBJECT_GETBYID_REQ: 'OBJECT_GETBYID_REQ',
-	OBJECT_GETBYID_RESP:'OBJECT_GETBYID_RESP',
-	OBJECT_CREATE_REQ:  'OBJECT_CREATE_REQ',
-	OBJECT_CREATE_RESP: 'OBJECT_CREATE_RESP',
-	OBJECT_UPDATE_REQ:  'OBJECT_CHANGE_REQ',
-	OBJECT_UPDATE_RESP: 'OBJECT_CHANGE_RESP',
-	OBJECT_DELETE_REQ:  'OBJECT_DELETE_REQ',
-	OBJECT_DELETE_RESP: 'OBJECT_DELETE_RESP'
+	LAUNCH_CODE_CHECK:         'LAUNCH_CODE_CHECK',
+	LAUNCH_CODE_RESP:          'LAUNCH_CODE_RESP',
+	OBJECT_GETTER_REQ:         'OBJECT_GETTER_REQ',
+	OBJECT_GETTER_RESP:        'OBJECT_GETTER_RESP',
+	OBJECT_GETBYID_REQ:        'OBJECT_GETBYID_REQ',
+	OBJECT_GETBYID_RESP:       'OBJECT_GETBYID_RESP',
+	OBJECT_CREATE_REQ:         'OBJECT_CREATE_REQ',
+	OBJECT_CREATE_RESP:        'OBJECT_CREATE_RESP',
+	OBJECT_UPDATE_REQ:         'OBJECT_CHANGE_REQ',
+	OBJECT_UPDATE_RESP:        'OBJECT_CHANGE_RESP',
+	OBJECT_DELETE_REQ:         'OBJECT_DELETE_REQ',
+	OBJECT_DELETE_RESP:        'OBJECT_DELETE_RESP',
+	OBJECT_FIELD_LISTENER_REQ: 'OBJECT_FIELD_LISTENER_REQ',
+	OBJECT_FIELD_LISTENER_RESP:'OBJECT_FIELD_LISTENER_RESP'
 };
 
 const kWebsessionState = {
@@ -97,19 +99,14 @@ codeshelf.websession = function () {
 			return command;
 		},
 
-		sendCommand:function (command, callbackFunction) {
-
-			//goog.events.listen(pendingCommands_, command.id, responseFunction);
-			//pendingCommands_.dispatchEvent(command.id);
-			//goog.events.unlisten(pendingCommands_, command.id, responseFunction);
-
+		sendCommand:function (command, callback) {
 			// Attempt to send the command.
 			try {
 				if (!websocket_.isOpen()) {
 					//alert('WebSocket not open: try again later');
 				} else {
-					// Put the pending command callback function in the map.
-					pendingCommands_[command.id] = callbackFunction;
+					// Put the pending command callback in the map.
+					pendingCommands_[command.id] = callback;
 
 					websocket_.send(goog.json.serialize(command));
 				}
@@ -151,11 +148,29 @@ codeshelf.websession = function () {
 		onMessage:function (messageEvent) {
 			command = goog.json.parse(messageEvent.message);
 
-			callbackFunction = pendingCommands_[command.id];
-			if (callbackFunction != null) {
-				callbackFunction(command);
-				delete pendingCommands_[command.id];
-			};
+			callback = pendingCommands_[command.id];
+			if (callback == null) {
+				alert('callback for cmd was null');
+			} else {
+				if (!command.hasOwnProperty('type')) {
+					alert('response has no type');
+				} else {
+					if (command.type != callback.getExpectedResponseType()) {
+						alert('response wrong type');
+					} else {
+						if (!command.hasOwnProperty('data')) {
+							alert('reponse has no data');
+						} else {
+							callback.exec(command);
+						}
+					}
+				}
+
+				// Check if the callback shoudl remain active.
+				if (!callback.remainActive()) {
+					delete pendingCommands_[command.id];
+				}
+			}
 		}
 	};
 };

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.13 2012/03/04 06:57:13 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.14 2012/03/05 04:38:03 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -19,8 +19,9 @@ codeshelf.facilityeditor = function () {
 	var clickTimeout_;
 	var application_;
 	var mapPane_;
+	var thisFacilityEditor_;
 
-	return {
+	thisFacilityEditor_ = {
 		start:function (application, parentFrame) {
 
 			application_ = application;
@@ -35,7 +36,7 @@ codeshelf.facilityeditor = function () {
 
 			var websession = application_.getWebsession();
 			var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
-			websession.sendCommand(getFacilitiesCmd, codeshelf.facilityeditor.webSessionCommandCallback);
+			websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.getCallback(kWebSessionCommandType.OBJECT_GETTER_RESP));
 
 			// Safeway DC Tracy, CA
 			var demoLatLng = new google.maps.LatLng(37.717198, -121.517029);
@@ -94,31 +95,34 @@ codeshelf.facilityeditor = function () {
 
 		showColor:function () {
 			return pen_.getColor();
-		}
-	}
-}
+		},
 
-codeshelf.facilityeditor.webSessionCommandCallback = function (command) {
-	if (!command.hasOwnProperty('type')) {
-		alert('response has no type');
-	} else {
-		if (!command.type == codeshelf.websession.OBJECT_GETTER_RESP) {
-			alert('response wrong type');
-		} else {
-			if (!command.hasOwnProperty('data')) {
-				alert('reponse has no data');
-			} else {
-				if (!command.data.hasOwnProperty('result')) {
-					alert('response has no result');
-				} else {
-					for (var i = 0; i < command.data.result.length; i++) {
-						var object = command.data.result[i];
-						alert("Object: " + object.className + " " + object.description);
+		getCallback:function (expectedResponseType) {
+			var expectedResponseType_ = expectedResponseType;
+			var callback = {
+				exec:                   function (command) {
+					if (!command.data.hasOwnProperty('result')) {
+						alert('response has no result');
+					} else {
+						for (var i = 0; i < command.data.result.length; i++) {
+							var object = command.data.result[i];
+							alert("Object: " + object.className + " " + object.description);
+						}
 					}
+				},
+				getExpectedResponseType:function () {
+					return expectedResponseType_;
+				},
+				remainActive:           function () {
+					return false;
 				}
 			}
+
+			return callback;
 		}
 	}
+
+	return thisFacilityEditor_;
 }
 
 /*
@@ -280,7 +284,7 @@ codeshelf.facilityeditor.line = function (listOfDots, map) {
 		});
 	}
 
-	return	{
+	return    {
 		remove:function () {
 			polylineObj_.setMap(null);
 		}

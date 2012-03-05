@@ -34,7 +34,7 @@
 	<div class='goog-roundedpanel-content'>
 		<div class='dataEntry' style='margin-top: 15px; margin-left: 15px;'>
 			Launch Code:
-			<input type='text' id='launchCodeInput' class='dataEntry' value='12345'>
+			<input type='text' id='launchCodeInput' class='dataEntry' value='12345' style='margin-left: 5px; width: 50%;'>
 		</div>
 	</div>
 </div>
@@ -52,11 +52,28 @@
 {/template}
 
 /**
+ * The template for an dataObjectField.
+ * @param id the <input> ID.
+ * @param name the <input> name.
+ * @param title the <input> title.
+ * @param? pattern optional - the regex pattern for the <input>.
+ */
+{template .dataObjectField}
+<div class='dataObjectField'>
+	{if not $pattern}
+		<input id='{$id}' class='dataEntry' type='text' name='{$name}' title='{$title}' />
+	{else}
+		<input id='{$id}' class='dataEntry' type='text' name='{$name}' pattern='{$pattern}' title='{$title}' />
+	{/if}
+	<input></input>
+</div>
+{/template}
+
+/**
  * The template for the facility editor.
  */
 {template .facilityEditor}
 <div class='facilityDialog'>
-    <input type='text' id='faciliotyId' class='dataEntry' value='Facility Name'>
 	<div class='facilityEditor'>
 		<div class='facilityMap'>
 		</div>
