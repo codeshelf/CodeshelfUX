@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.14 2012/03/05 04:38:03 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.15 2012/03/19 04:05:23 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -36,7 +36,7 @@ codeshelf.facilityeditor = function () {
 
 			var websession = application_.getWebsession();
 			var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
-			websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.getCallback(kWebSessionCommandType.OBJECT_GETTER_RESP));
+			websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.getFacilitiesCallback(kWebSessionCommandType.OBJECT_GETTER_RESP));
 
 			// Safeway DC Tracy, CA
 			var demoLatLng = new google.maps.LatLng(37.717198, -121.517029);
@@ -97,7 +97,7 @@ codeshelf.facilityeditor = function () {
 			return pen_.getColor();
 		},
 
-		getCallback:function (expectedResponseType) {
+		getFacilitiesCallback:function (expectedResponseType) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                   function (command) {
@@ -106,7 +106,51 @@ codeshelf.facilityeditor = function () {
 					} else {
 						for (var i = 0; i < command.data.result.length; i++) {
 							var object = command.data.result[i];
-							alert("Object: " + object.className + " " + object.description);
+							//alert("Object: " + object.className + " " + object.description);
+
+							var data = {
+								class:        object.className,
+								objectIds:    [ object.persistentId ],
+								propertyNames:[ 'Id', 'Description' ]
+							}
+
+							var websession = application_.getWebsession();
+							var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_LISTENER_REQ, data);
+							websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.getFacilityListenerCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP));
+						}
+					}
+				},
+				getExpectedResponseType:function () {
+					return expectedResponseType_;
+				},
+				remainActive:           function () {
+					return false;
+				}
+			}
+
+			return callback;
+		},
+
+		getFacilityListenerCallback:function (expectedResponseType) {
+			var expectedResponseType_ = expectedResponseType;
+			var callback = {
+				exec:                   function (command) {
+					if (!command.data.hasOwnProperty('results')) {
+						alert('response has no results');
+					} else {
+						for (var i = 0; i < command.data.results.length; i++) {
+							var object = command.data.results[i];
+
+							var data = {
+								class:       object.className,
+								persistentId:object.persistentId,
+								setterMethod:'setDescription',
+								setterValue: new Date()
+							}
+
+							var websession = application_.getWebsession();
+							var setFacilityDescCmd = websession.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
+							websession.sendCommand(setFacilityDescCmd, thisFacilityEditor_.getFacilityListenerCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP));
 						}
 					}
 				},
