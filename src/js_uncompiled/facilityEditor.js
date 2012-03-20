@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.15 2012/03/19 04:05:23 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.16 2012/03/20 06:28:32 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -29,14 +29,14 @@ codeshelf.facilityeditor = function () {
 			var organization = application_.getOrganization();
 
 			var data = {
-				class:       organization.className,
+				className:   organization.className,
 				persistentId:organization.persistentId,
 				getterMethod:'getFacilities'
 			}
 
 			var websession = application_.getWebsession();
 			var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
-			websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.getFacilitiesCallback(kWebSessionCommandType.OBJECT_GETTER_RESP));
+			websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_GETTER_RESP));
 
 			// Safeway DC Tracy, CA
 			var demoLatLng = new google.maps.LatLng(37.717198, -121.517029);
@@ -97,60 +97,43 @@ codeshelf.facilityeditor = function () {
 			return pen_.getColor();
 		},
 
-		getFacilitiesCallback:function (expectedResponseType) {
+		facilityCommandsCallback:function (expectedResponseType) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                   function (command) {
 					if (!command.data.hasOwnProperty('result')) {
 						alert('response has no result');
 					} else {
-						for (var i = 0; i < command.data.result.length; i++) {
-							var object = command.data.result[i];
-							//alert("Object: " + object.className + " " + object.description);
+						if (command.type == kWebSessionCommandType.OBJECT_GETTER_RESP) {
+							for (var i = 0; i < command.data.result.length; i++) {
+								var object = command.data.result[i];
+								//alert("Object: " + object.className + " " + object.description);
 
-							var data = {
-								class:        object.className,
-								objectIds:    [ object.persistentId ],
-								propertyNames:[ 'Id', 'Description' ]
+								var data = {
+									className:    object.className,
+									objectIds:    [ object.persistentId ],
+									propertyNames:[ 'Id', 'Description' ]
+								}
+
+								var websession = application_.getWebsession();
+								var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_LISTENER_REQ, data);
+								websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP));
 							}
+						} else if (command.type == kWebSessionCommandType.OBJECT_LISTENER_RESP) {
+							for (var i = 0; i < command.data.result.length; i++) {
+								var object = command.data.result[i];
 
-							var websession = application_.getWebsession();
-							var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_LISTENER_REQ, data);
-							websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.getFacilityListenerCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP));
-						}
-					}
-				},
-				getExpectedResponseType:function () {
-					return expectedResponseType_;
-				},
-				remainActive:           function () {
-					return false;
-				}
-			}
+								var data = {
+									className:   object.ClassName,
+									persistentId:object.persistentId,
+									setterMethod:'setDescription',
+									setterValue: "'" + new Date() + "'"
+								}
 
-			return callback;
-		},
-
-		getFacilityListenerCallback:function (expectedResponseType) {
-			var expectedResponseType_ = expectedResponseType;
-			var callback = {
-				exec:                   function (command) {
-					if (!command.data.hasOwnProperty('results')) {
-						alert('response has no results');
-					} else {
-						for (var i = 0; i < command.data.results.length; i++) {
-							var object = command.data.results[i];
-
-							var data = {
-								class:       object.className,
-								persistentId:object.persistentId,
-								setterMethod:'setDescription',
-								setterValue: new Date()
+								var websession = application_.getWebsession();
+								var setFacilityDescCmd = websession.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
+								websession.sendCommand(setFacilityDescCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP));
 							}
-
-							var websession = application_.getWebsession();
-							var setFacilityDescCmd = websession.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
-							websession.sendCommand(setFacilityDescCmd, thisFacilityEditor_.getFacilityListenerCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP));
 						}
 					}
 				},

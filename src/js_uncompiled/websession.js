@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.12 2012/03/19 04:05:23 jeffw Exp $
+ *  $Id: websession.js,v 1.13 2012/03/20 06:28:32 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.events');
@@ -155,15 +155,15 @@ codeshelf.websession = function () {
 				if (!command.hasOwnProperty('type')) {
 					alert('response has no type');
 				} else {
-					if (command.type != callback.getExpectedResponseType()) {
-						alert('response wrong type');
-					} else {
+//					if (command.type != callback.getExpectedResponseType()) {
+//						alert('response wrong type');
+//					} else {
 						if (!command.hasOwnProperty('data')) {
 							alert('reponse has no data');
 						} else {
 							callback.exec(command);
 						}
-					}
+//					}
 				}
 
 				// Check if the callback shoudl remain active.
