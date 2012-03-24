@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.14 2012/03/24 06:49:37 jeffw Exp $
+ *  $Id: websession.js,v 1.15 2012/03/24 18:28:03 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.events');
@@ -170,7 +170,7 @@ codeshelf.websession = function () {
 //					}
 				}
 
-				// Check if the callback shoudl remain active.
+				// Check if the callback should remain active.
 				if (!callback.remainActive()) {
 					delete pendingCommands_[command.id];
 				}
