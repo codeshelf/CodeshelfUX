@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.16 2012/03/20 06:28:32 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.17 2012/03/24 06:49:37 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -37,6 +37,10 @@ codeshelf.facilityeditor = function () {
 			var websession = application_.getWebsession();
 			var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
 			websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_GETTER_RESP));
+
+			// Add the Google Maps scripts (There's no way to wait for this to load - put it in the header.)
+			//goog.dom.appendChild(goog.dom.getDocument().head, soy.renderAsElement(codeshelf.templates.googleMapsScripts));
+
 
 			// Safeway DC Tracy, CA
 			var demoLatLng = new google.maps.LatLng(37.717198, -121.517029);
@@ -133,7 +137,20 @@ codeshelf.facilityeditor = function () {
 								var websession = application_.getWebsession();
 								var setFacilityDescCmd = websession.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
 								websession.sendCommand(setFacilityDescCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP));
+
+
+								var data = {
+									className:    'Facility',
+									propertyNames:[ 'Id', 'Description' ],
+									filterClause:  'id = 12345'
+								}
+
+								var websession = application_.getWebsession();
+								var setFacilityFilterCmd = websession.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
+								websession.sendCommand(setFacilityFilterCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_FILTER_RESP));
 							}
+						} else if (command.type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+
 						}
 					}
 				},

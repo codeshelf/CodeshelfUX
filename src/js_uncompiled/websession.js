@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.13 2012/03/20 06:28:32 jeffw Exp $
+ *  $Id: websession.js,v 1.14 2012/03/24 06:49:37 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.events');
@@ -19,8 +19,6 @@ const kWebSessionCommandType = {
 	LAUNCH_CODE_RESP:    'LAUNCH_CODE_RESP',
 	OBJECT_GETTER_REQ:   'OBJECT_GETTER_REQ',
 	OBJECT_GETTER_RESP:  'OBJECT_GETTER_RESP',
-	OBJECT_GETBYID_REQ:  'OBJECT_GETBYID_REQ',
-	OBJECT_GETBYID_RESP: 'OBJECT_GETBYID_RESP',
 	OBJECT_CREATE_REQ:   'OBJECT_CREATE_REQ',
 	OBJECT_CREATE_RESP:  'OBJECT_CREATE_RESP',
 	OBJECT_UPDATE_REQ:   'OBJECT_UPDATE_REQ',
@@ -28,7 +26,9 @@ const kWebSessionCommandType = {
 	OBJECT_DELETE_REQ:   'OBJECT_DELETE_REQ',
 	OBJECT_DELETE_RESP:  'OBJECT_DELETE_RESP',
 	OBJECT_LISTENER_REQ: 'OBJECT_LISTENER_REQ',
-	OBJECT_LISTENER_RESP:'OBJECT_LISTENER_RESP'
+	OBJECT_LISTENER_RESP:'OBJECT_LISTENER_RESP',
+	OBJECT_FILTER_REQ:   'OBJECT_FILTER_REQ',
+	OBJECT_FILTER_RESP:  'OBJECT_FILTER_RESP'
 };
 
 const kWebsessionState = {
@@ -102,13 +102,17 @@ codeshelf.websession = function () {
 		sendCommand:function (command, callback) {
 			// Attempt to send the command.
 			try {
-				if (!websocket_.isOpen()) {
-					//alert('WebSocket not open: try again later');
+				if (callback == null) {
+					alert('callback for cmd was null');
 				} else {
-					// Put the pending command callback in the map.
-					pendingCommands_[command.id] = callback;
+					if (!websocket_.isOpen()) {
+						//alert('WebSocket not open: try again later');
+					} else {
+						// Put the pending command callback in the map.
+						pendingCommands_[command.id] = callback;
 
-					websocket_.send(goog.json.serialize(command));
+						websocket_.send(goog.json.serialize(command));
+					}
 				}
 			} catch (e) {
 
@@ -158,11 +162,11 @@ codeshelf.websession = function () {
 //					if (command.type != callback.getExpectedResponseType()) {
 //						alert('response wrong type');
 //					} else {
-						if (!command.hasOwnProperty('data')) {
-							alert('reponse has no data');
-						} else {
-							callback.exec(command);
-						}
+					if (!command.hasOwnProperty('data')) {
+						alert('reponse has no data');
+					} else {
+						callback.exec(command);
+					}
 //					}
 				}
 
