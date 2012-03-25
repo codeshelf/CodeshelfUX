@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataObjectField.js,v 1.1 2012/03/05 04:38:03 jeffw Exp $
+ *  $Id: dataObjectField.js,v 1.2 2012/03/25 01:36:30 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
@@ -30,7 +30,7 @@ codeshelf.dataobjectfield = function (application, parentElement, className, cla
 
 	var websession = application_.getWebsession();
 	var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
-	websession.sendCommand(getFacilitiesCmd, thisDataObjectField_.getCallback(kWebSessionCommandType.OBJECT_GETTER_RESP));
+	websession.sendCommand(getFacilitiesCmd, thisDataObjectField_.getCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
 
 	// Put the HTML markup in the parent element.
 	inputElement_ = codeshelf.templates.dataObjectField({name:'name', id:'id', title:'title'});
@@ -53,9 +53,6 @@ codeshelf.dataobjectfield = function (application, parentElement, className, cla
 				},
 				getExpectedResponseType:function () {
 					return expectedResponseType_;
-				},
-				remainActive:           function () {
-					return false;
 				}
 			}
 

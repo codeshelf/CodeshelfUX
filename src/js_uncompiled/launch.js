@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: launch.js,v 1.16 2012/03/05 04:38:03 jeffw Exp $
+ *  $Id: launch.js,v 1.17 2012/03/25 01:36:30 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.launch');
 goog.require('codeshelf.templates');
@@ -61,7 +61,7 @@ codeshelf.launchWindow = function () {
 				launchCode:goog.dom.getElement('launchCodeInput').value
 			}
 			var launchCommand = websession_.createCommand(kWebSessionCommandType.LAUNCH_CODE_CHECK, launchCodeInput);
-			websession_.sendCommand(launchCommand, thisLaunchWindow_.getCallback(kWebSessionCommandType.LAUNCH_CODE_RESP));
+			websession_.sendCommand(launchCommand, thisLaunchWindow_.getCallback(kWebSessionCommandType.LAUNCH_CODE_RESP), false);
 		},
 
 		getCallback:function (expectedResponseType) {
@@ -84,9 +84,6 @@ codeshelf.launchWindow = function () {
 				},
 				getExpectedResponseType:function () {
 					return expectedResponseType_;
-				},
-				remainActive:           function () {
-					return false;
 				}
 			}
 

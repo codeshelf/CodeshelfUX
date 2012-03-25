@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.15 2012/03/24 18:28:03 jeffw Exp $
+ *  $Id: websession.js,v 1.16 2012/03/25 01:36:30 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.events');
@@ -99,19 +99,24 @@ codeshelf.websession = function () {
 			return command;
 		},
 
-		sendCommand:function (command, callback) {
+		sendCommand:function (inCommand, inCallback, inRemainActive) {
 			// Attempt to send the command.
 			try {
-				if (callback == null) {
+				if (inCallback == null) {
 					alert('callback for cmd was null');
 				} else {
 					if (!websocket_.isOpen()) {
 						//alert('WebSocket not open: try again later');
 					} else {
 						// Put the pending command callback in the map.
-						pendingCommands_[command.id] = callback;
+						var commandWrapper = {
+							remainActive: inRemainActive,
+							command: inCommand,
+							callback: inCallback
+						}
+						pendingCommands_[inCommand.id] = commandWrapper;
 
-						websocket_.send(goog.json.serialize(command));
+						websocket_.send(goog.json.serialize(inCommand));
 					}
 				}
 			} catch (e) {
@@ -152,7 +157,8 @@ codeshelf.websession = function () {
 		onMessage:function (messageEvent) {
 			command = goog.json.parse(messageEvent.message);
 
-			callback = pendingCommands_[command.id];
+			commandWrapper = pendingCommands_[command.id];
+			callback = commandWrapper.callback;
 			if (callback == null) {
 				alert('callback for cmd was null');
 			} else {
@@ -171,7 +177,7 @@ codeshelf.websession = function () {
 				}
 
 				// Check if the callback should remain active.
-				if (!callback.remainActive()) {
+				if (!commandWrapper.remainActive) {
 					delete pendingCommands_[command.id];
 				}
 			}

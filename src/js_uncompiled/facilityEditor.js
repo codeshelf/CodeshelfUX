@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.17 2012/03/24 06:49:37 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.18 2012/03/25 01:36:30 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -36,7 +36,7 @@ codeshelf.facilityeditor = function () {
 
 			var websession = application_.getWebsession();
 			var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
-			websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_GETTER_RESP));
+			websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
 
 			// Add the Google Maps scripts (There's no way to wait for this to load - put it in the header.)
 			//goog.dom.appendChild(goog.dom.getDocument().head, soy.renderAsElement(codeshelf.templates.googleMapsScripts));
@@ -121,7 +121,7 @@ codeshelf.facilityeditor = function () {
 
 								var websession = application_.getWebsession();
 								var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_LISTENER_REQ, data);
-								websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP));
+								websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP), true);
 							}
 						} else if (command.type == kWebSessionCommandType.OBJECT_LISTENER_RESP) {
 							for (var i = 0; i < command.data.result.length; i++) {
@@ -136,7 +136,7 @@ codeshelf.facilityeditor = function () {
 
 								var websession = application_.getWebsession();
 								var setFacilityDescCmd = websession.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
-								websession.sendCommand(setFacilityDescCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP));
+								websession.sendCommand(setFacilityDescCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
 
 
 								var data = {
@@ -147,7 +147,7 @@ codeshelf.facilityeditor = function () {
 
 								var websession = application_.getWebsession();
 								var setFacilityFilterCmd = websession.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-								websession.sendCommand(setFacilityFilterCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_FILTER_RESP));
+								websession.sendCommand(setFacilityFilterCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 							}
 						} else if (command.type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
 
@@ -156,9 +156,6 @@ codeshelf.facilityeditor = function () {
 				},
 				getExpectedResponseType:function () {
 					return expectedResponseType_;
-				},
-				remainActive:           function () {
-					return false;
 				}
 			}
 
