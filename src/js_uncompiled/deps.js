@@ -2,7 +2,7 @@
 // Please do not edit.
 goog.addDependency('../../../../src/js_uncompiled/application.js', ['codeshelf.application'], ['codeshelf.launch', 'codeshelf.mainpage', 'codeshelf.websession']);
 goog.addDependency('../../../../src/js_uncompiled/codeshelf_generated.js', ['codeshelf.templates'], ['soy', 'soy.StringBuilder']);
-goog.addDependency('../../../../src/js_uncompiled/dataObjectField.js', ['codeshelf.dataobjectfield'], ['codeshelf.templates', 'codeshelf.websession', 'goog.events.EventHandler', 'goog.events.EventType']);
+goog.addDependency('../../../../src/js_uncompiled/dataObjectField.js', ['codeshelf.dataobjectfield'], ['codeshelf.templates', 'codeshelf.websession', 'goog.editor.Field', 'goog.events.EventHandler', 'goog.events.EventType']);
 goog.addDependency('../../../../src/js_uncompiled/facilityEditor.js', ['codeshelf.facilityeditor'], ['codeshelf.dataobjectfield', 'codeshelf.mainpage', 'codeshelf.templates', 'codeshelf.websession', 'goog.events.EventHandler', 'goog.events.EventType']);
 goog.addDependency('../../../../src/js_uncompiled/launch.js', ['codeshelf.launch'], ['codeshelf.mainpage', 'codeshelf.templates', 'codeshelf.websession', 'goog.dom', 'goog.dom.query', 'goog.style', 'goog.ui.RoundedPanel', 'goog.window']);
 goog.addDependency('../../../../src/js_uncompiled/listView.js', ['codeshelf.listview'], ['jquery', 'slickgrid.columnpicker', 'slickgrid.core', 'slickgrid.dataview', 'slickgrid.editors', 'slickgrid.firebugx', 'slickgrid.grid', 'slickgrid.pager', 'slickgrid.rowselection']);

@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c319b0c7-b9cf-46f5-90a5-b0a625c84957" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/css/codeshelf.gss" afterPath="$PROJECT_DIR$/src/css/codeshelf.gss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/css/listview.css" afterPath="$PROJECT_DIR$/src/css/listview.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/facilityEditor.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/facilityEditor.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/window.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/window.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/deps.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/deps.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/templates/codeshelf.soy" afterPath="$PROJECT_DIR$/src/templates/codeshelf.soy" />
     </list>
     <ignored path="CodeShelfUX.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,19 +30,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="dialog.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/dialog.html">
+      <file leaf-file-name="facilityEditor.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditor.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="0" selection-start="522" selection-end="562" vertical-scroll-proportion="-0.625">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="launch.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/launch.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="53" selection-start="1248" selection-end="1258" vertical-scroll-proportion="0.0">
+            <state line="139" column="97" selection-start="5163" selection-end="5229" vertical-scroll-proportion="-5.327273">
               <folding />
             </state>
           </provider>
@@ -51,7 +42,45 @@
       <file leaf-file-name="mainPage.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/mainPage.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="57" column="21" selection-start="1617" selection-end="1617" vertical-scroll-proportion="0.0">
+            <state line="96" column="37" selection-start="3151" selection-end="3151" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="launch.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/launch.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="78" column="42" selection-start="2975" selection-end="2980" vertical-scroll-proportion="-12.436363">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dataObjectField.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="70" column="29" selection-start="3080" selection-end="3080" vertical-scroll-proportion="0.5754717">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="field.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/field.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="1953" column="44" selection-start="60917" selection-end="60933" vertical-scroll-proportion="-2.5636363">
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="field_basic.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/editor/field_basic.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="50" column="29" selection-start="1641" selection-end="1741" vertical-scroll-proportion="-1.0394737">
               <folding />
             </state>
           </provider>
@@ -60,43 +89,7 @@
       <file leaf-file-name="listView.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/listView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="46" column="26" selection-start="1176" selection-end="1176" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dom.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/dom.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="1505" column="21" selection-start="47150" selection-end="47162" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="facilityEditor.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditor.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="84" selection-start="1381" selection-end="1381" vertical-scroll-proportion="0.38613862">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="window.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/window.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="34" column="28" selection-start="982" selection-end="982" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="style.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/style/style.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="103" column="27" selection-start="3690" selection-end="3717" vertical-scroll-proportion="0.0">
+            <state line="171" column="19" selection-start="4057" selection-end="4057" vertical-scroll-proportion="-2.5636363">
               <folding />
             </state>
           </provider>
@@ -105,7 +98,7 @@
       <file leaf-file-name="codeshelf.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/codeshelf.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="87" selection-start="796" selection-end="796" vertical-scroll-proportion="-6.875">
+            <state line="15" column="101" selection-start="1154" selection-end="1154" vertical-scroll-proportion="-8.571428">
               <folding />
             </state>
           </provider>
@@ -119,36 +112,62 @@
     </FindUsagesManager>
   </component>
   <component name="Git.Settings">
-    <option name="CHECKOUT_INCLUDE_TAGS" value="false" />
-    <option name="UPDATE_CHANGES_POLICY" value="STASH" />
     <option name="LINE_SEPARATORS_CONVERSION" value="ASK" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/drag.html" />
-        <option value="$PROJECT_DIR$/src/drag2.html" />
-        <option value="$PROJECT_DIR$/src/index.html" />
         <option value="$PROJECT_DIR$/src/drag3.html" />
         <option value="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/websocket.js" />
         <option value="$PROJECT_DIR$/src/css/codeshelf.gss" />
         <option value="$PROJECT_DIR$/lib/JQuery/jquery-1.7.1.js" />
         <option value="$PROJECT_DIR$/lib/SlickGrid/slick.editors.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/application.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/websession.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/launch.js" />
-        <option value="$PROJECT_DIR$/src/codeshelf.html" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/listView.js" />
+        <option value="$PROJECT_DIR$/src/templates/codeshelf.soy" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/application.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/window.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/magicField.js" />
+        <option value="$PROJECT_DIR$/src/codeshelf.html" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/launch.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/websession.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/facilityEditor.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="22" />
-    <option name="width" value="1434" />
-    <option name="height" value="869" />
+    <option name="width" value="1440" />
+    <option name="height" value="874" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>Control flow issuesJavaScript</id>
+          </State>
+          <State>
+            <id>Internationalization issues</id>
+          </State>
+          <State>
+            <id>JavaScript</id>
+          </State>
+          <State>
+            <id>Potentially confusing code constructsJavaScript</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>CSS</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -176,7 +195,16 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -217,7 +245,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="js_uncompiled" />
+              <option name="myItemId" value="templates" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -235,7 +263,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="images" />
+              <option name="myItemId" value="js_uncompiled" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -270,22 +298,8 @@
               <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-          </PATH>
-          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="CodeShelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeShelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleClosureLibrary" />
+              <option name="myItemId" value="SlickGrid" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -302,20 +316,22 @@
               <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="GoogleClosureLibrary" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="third_party" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="closure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="goog" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -393,7 +409,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="window" />
+              <option name="myItemId" value="editor" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -423,7 +439,41 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="dom" />
+              <option name="myItemId" value="demos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GoogleClosureLibrary" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="closure" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="goog" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="demos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="editor" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -435,12 +485,20 @@
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="preferences.keymap" />
+    <property name="options.lastSelected" value="preferences.sourceCode.Other Languages" />
     <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.splitter.details.proportions" value="0.2547847" />
     <property name="GoToClass.includeJavaFiles" value="false" />
   </component>
   <component name="RunManager" selected="JavaScript Debug.CodeShelf">
+    <configuration default="false" name="tests.jstd" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver" temporary="true">
+      <setting name="configLocationType" value="CONFIG_FILE" />
+      <setting name="settingsFile" value="$PROJECT_DIR$/build/tests.jstd" />
+      <setting name="serverType" value="INTERNAL" />
+      <RunnerSettings RunnerId="JsTestDriverClientRunner" />
+      <ConfigurationWrapper RunnerId="JsTestDriverClientRunner" />
+      <method />
+    </configuration>
     <configuration default="false" name="CodeShelf" type="JavascriptDebugSession" factoryName="Local" temporary="true">
       <JSDebuggerConfigurationSettings>
         <option name="engineId" value="chrome" />
@@ -450,22 +508,6 @@
       <ConfigurationWrapper RunnerId="JavascriptDebugRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="tests.jstd" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver" temporary="true">
-      <setting name="configLocationType" value="CONFIG_FILE" />
-      <setting name="settingsFile" value="$PROJECT_DIR$/build/tests.jstd" />
-      <setting name="serverType" value="INTERNAL" />
-      <RunnerSettings RunnerId="JsTestDriverClientRunner" />
-      <ConfigurationWrapper RunnerId="JsTestDriverClientRunner" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
-      <setting name="configLocationType" value="CONFIG_FILE" />
-      <setting name="settingsFile" value="" />
-      <setting name="serverType" value="INTERNAL" />
-      <method>
-        <option name="PhingTarget" enabled="false" />
-      </method>
-    </configuration>
     <configuration default="true" type="JavascriptDebugSession" factoryName="Local">
       <JSDebuggerConfigurationSettings>
         <option name="engineId" value="embedded" />
@@ -473,16 +515,33 @@
       </JSDebuggerConfigurationSettings>
       <method />
     </configuration>
-    <list size="2">
+    <list size="1">
       <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.CodeShelf" />
-      <item index="1" class="java.lang.String" itemvalue="JsTestDriver.tests.jstd" />
     </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
   <component name="StructureViewFactory">
     <option name="ACTIVE_ACTIONS" value="ALPHA_COMPARATOR" />
   </component>
-  <component name="SvnConfiguration" maxAnnotateRevisions="500">
+  <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false">
+    <option name="USER" value="" />
+    <option name="PASSWORD" value="" />
+    <option name="mySSHConnectionTimeout" value="30000" />
+    <option name="mySSHReadTimeout" value="30000" />
+    <option name="LAST_MERGED_REVISION" />
+    <option name="MERGE_DRY_RUN" value="false" />
+    <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
+    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
+    <option name="IGNORE_SPACES_IN_MERGE" value="false" />
+    <option name="DETECT_NESTED_COPIES" value="true" />
+    <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
+    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
+    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
+    <option name="FORCE_UPDATE" value="false" />
+    <configuration useDefault="false">$USER_HOME$/.subversion_IDEA</configuration>
+    <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
+  </component>
+  <component name="SvnConfiguration17" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false">
     <option name="USER" value="" />
     <option name="PASSWORD" value="" />
     <option name="mySSHConnectionTimeout" value="30000" />
@@ -509,19 +568,18 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1434" height="869" extended-state="0" />
-    <editor active="false" />
+    <frame x="0" y="22" width="1440" height="874" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32980132" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3292978" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27894002" sideWeight="0.3983051" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27894002" sideWeight="0.2639225" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32802126" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19124912" sideWeight="0.29482073" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19124912" sideWeight="0.3678619" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32980132" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="JsTestDriver Server" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32980132" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -531,6 +589,7 @@
       <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972324" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="JsTestDriver Server" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32980132" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -566,7 +625,10 @@
     <option name="INCLUDE_TEXT_INTO_PATCH" value="false" />
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
+    <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
+    <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
     <option name="LAST_COMMIT_MESSAGE" value="Facility editor work." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
@@ -589,106 +651,112 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/dialog.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="0" selection-start="522" selection-end="562" vertical-scroll-proportion="-0.625">
-          <folding />
-        </state>
+        <state line="131" column="36" selection-start="4161" selection-end="4167" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/dom.js">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/application.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1505" column="21" selection-start="47150" selection-end="47162" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/events.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="144" column="12" selection-start="4344" selection-end="4344" vertical-scroll-proportion="-13.787644">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/drag.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="152" column="32" selection-start="3263" selection-end="3263" vertical-scroll-proportion="0.6257796">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/jsaction/eventcontract.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="113" column="9" selection-start="4394" selection-end="4394" vertical-scroll-proportion="0.33267328">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/window/window_test.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="29" selection-start="1879" selection-end="1886" vertical-scroll-proportion="0.38045737">
+        <state line="49" column="59" selection-start="1286" selection-end="1309" vertical-scroll-proportion="0.42231947">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/codeshelf.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="87" selection-start="796" selection-end="796" vertical-scroll-proportion="-6.875">
+        <state line="15" column="101" selection-start="1154" selection-end="1154" vertical-scroll-proportion="-8.571428">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavascriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/DHTML.js">
+    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/gears/loggerclient.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2253" column="22" selection-start="37001" selection-end="37006" vertical-scroll-proportion="0.7">
+        <state line="118" column="18" selection-start="3632" selection-end="3632" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/eventtype.js">
+    <entry file="file://$PROJECT_DIR$/lib/SlickGrid/slick.grid.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="11" selection-start="1081" selection-end="1085" vertical-scroll-proportion="0.33333334">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/style/style.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="103" column="27" selection-start="3690" selection-end="3717" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/mainPage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="21" selection-start="1617" selection-end="1617" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/window.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="28" selection-start="982" selection-end="982" vertical-scroll-proportion="0.0">
+        <state line="1095" column="59" selection-start="43362" selection-end="43369" vertical-scroll-proportion="0.33333334">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/listView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="26" selection-start="1176" selection-end="1176" vertical-scroll-proportion="0.0">
+        <state line="171" column="19" selection-start="4057" selection-end="4057" vertical-scroll-proportion="-2.5636363">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/templates/codeshelf.soy">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/window.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="70" selection-start="1106" selection-end="1119" vertical-scroll-proportion="0.33267328">
+        <state line="49" column="16" selection-start="1563" selection-end="1563" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/codeshelf_generated.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="9" selection-start="597" selection-end="597" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/dom.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="940" column="9" selection-start="29881" selection-end="29881" vertical-scroll-proportion="0.33194155">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/launch.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="53" selection-start="1248" selection-end="1258" vertical-scroll-proportion="0.0" />
+        <state line="78" column="42" selection-start="2975" selection-end="2980" vertical-scroll-proportion="-12.436363">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/mainPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="96" column="37" selection-start="3151" selection-end="3151" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/websession.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="94" column="53" selection-start="2780" selection-end="2812" vertical-scroll-proportion="0.52272725">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/field.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1953" column="44" selection-start="60917" selection-end="60933" vertical-scroll-proportion="-2.5636363">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditor.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="84" selection-start="1381" selection-end="1381" vertical-scroll-proportion="0.38613862">
+        <state line="139" column="97" selection-start="5163" selection-end="5229" vertical-scroll-proportion="-5.327273">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/editor/field_basic.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="29" selection-start="1641" selection-end="1741" vertical-scroll-proportion="-1.0394737">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="70" column="29" selection-start="3080" selection-end="3080" vertical-scroll-proportion="0.5754717">
           <folding />
         </state>
       </provider>

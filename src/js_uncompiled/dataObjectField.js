@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataObjectField.js,v 1.3 2012/03/26 03:32:42 jeffw Exp $
+ *  $Id: dataObjectField.js,v 1.4 2012/03/26 05:17:26 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
@@ -9,6 +9,8 @@ goog.require('codeshelf.templates');
 goog.require('codeshelf.websession');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
+goog.require('goog.editor.Field');
+
 
 /**
  * Implements an input field backed by a remote data object.
@@ -28,6 +30,7 @@ codeshelf.dataobjectfield = function (websession, parentElement, className, clas
 	var classProperty_ = classProperty;
 	var classPersistenceId_ = classPersistenceId;
 	var inputElement_;
+	var googleField_;
 
 	thisDataObjectField_ = {
 
@@ -43,8 +46,13 @@ codeshelf.dataobjectfield = function (websession, parentElement, className, clas
 
 
 			// Put the HTML markup in the parent element.
-			inputElement_ = soy.renderAsElement(codeshelf.templates.dataObjectField, {name:'name', id:'id', title:'title'});
+			var fieldId = goog.events.getUniqueId('field');
+			inputElement_ = soy.renderAsElement(codeshelf.templates.dataObjectField, {name:'name', id:fieldId, title:'title'});
 			goog.dom.appendChild(parentElement_, inputElement_);
+			googleField_ = new goog.editor.Field(fieldId);
+			googleField_.makeEditable();
+
+			goog.events.listen(googleField_, goog.editor.Field.EventType.DELAYEDCHANGE, thisDataObjectField_.updateFieldContents);
 		},
 
 		getCallback:function (expectedResponseType) {
@@ -53,10 +61,14 @@ codeshelf.dataobjectfield = function (websession, parentElement, className, clas
 				exec:                   function (command) {
 					if (!command.data.hasOwnProperty('result')) {
 						alert('response has no result');
-					} else {
+					} else if (command.type == kWebSessionCommandType.OBJECT_LISTENER_RESP) {
 						for (var i = 0; i < command.data.result.length; i++) {
 							var object = command.data.result[i];
 
+							var html = googleField_.getCleanContents();
+							if (html !== object.Description) {
+								googleField_.setHtml(false, object.Description);
+							}
 						}
 					}
 				},
@@ -66,6 +78,20 @@ codeshelf.dataobjectfield = function (websession, parentElement, className, clas
 			}
 
 			return callback;
+		},
+
+		updateFieldContents:function () {
+			var html = googleField_.getCleanContents();
+
+			var data = {
+				className:   className_,
+				persistentId:classPersistenceId_,
+				setterMethod:'setDescription',
+				setterValue: html
+			}
+
+			var fieldUpdateCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
+			websession_.sendCommand(fieldUpdateCmd, thisDataObjectField_.getCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
 		}
 
 	}
