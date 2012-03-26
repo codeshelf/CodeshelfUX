@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataObjectField.js,v 1.4 2012/03/26 05:17:26 jeffw Exp $
+ *  $Id: dataObjectField.js,v 1.5 2012/03/26 07:40:52 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
@@ -52,7 +52,7 @@ codeshelf.dataobjectfield = function (websession, parentElement, className, clas
 			googleField_ = new goog.editor.Field(fieldId);
 			googleField_.makeEditable();
 
-			goog.events.listen(googleField_, goog.editor.Field.EventType.DELAYEDCHANGE, thisDataObjectField_.updateFieldContents);
+			goog.events.listen(googleField_, goog.editor.Field.EventType.BLUR, thisDataObjectField_.updateFieldContents);
 		},
 
 		getCallback:function (expectedResponseType) {
@@ -67,7 +67,7 @@ codeshelf.dataobjectfield = function (websession, parentElement, className, clas
 
 							var html = googleField_.getCleanContents();
 							if (html !== object.Description) {
-								googleField_.setHtml(false, object.Description);
+								googleField_.setHtml(false, object.Description, true);
 							}
 						}
 					}
