@@ -1,10 +1,11 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.11 2012/03/26 03:32:42 jeffw Exp $
+ *  $Id: mainPage.js,v 1.12 2012/03/26 22:49:50 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.templates');
+goog.require('codeshelf.listdemo');
 goog.require('codeshelf.listview');
 goog.require('codeshelf.facilityeditor');
 goog.require('codeshelf.window');
@@ -55,6 +56,9 @@ codeshelf.mainpage = function () {
 				thisMainpage_.updateFrameSize(size);
 			});
 
+			var listdemo = codeshelf.listdemo();
+			listdemo.launchListDemo(frame_);
+
 			var listview = codeshelf.listview();
 			listview.launchListView(frame_);
 
@@ -69,9 +73,6 @@ codeshelf.mainpage = function () {
 			var websession = application_.getWebsession();
 			var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
 			websession.sendCommand(getFacilitiesCmd, thisMainpage_.mainPageCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
-
-//			var facilityEditor = codeshelf.facilityeditor();
-//			facilityEditor.start(application, frame_);
 		},
 
 		exit:function () {

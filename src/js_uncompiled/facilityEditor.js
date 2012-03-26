@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.19 2012/03/26 03:32:42 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.20 2012/03/26 22:49:50 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -30,15 +30,6 @@ codeshelf.facilityeditor = function () {
 			websession_ = websession;
 			facilityPersistentId_ = facilityPersistentId;
 
-//			var data = {
-//				className:   organization_.className,
-//				persistentId:organization_.persistentId,
-//				getterMethod:'getFacilities'
-//			}
-//
-//			var getFacilitiesCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
-//			websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
-
 			// Add the Google Maps scripts (There's no way to wait for this to load - put it in the header.)
 			//goog.dom.appendChild(goog.dom.getDocument().head, soy.renderAsElement(codeshelf.templates.googleMapsScripts));
 
@@ -60,15 +51,15 @@ codeshelf.facilityeditor = function () {
 			var editorWindow = codeshelf.window();
 			editorWindow.init("Facility Editor", parentFrame, undefined, this.resizeFunction);
 			editorWindow.open();
-			var content = editorWindow.getContentElement();
+			var contentPane = editorWindow.getContentElement();
 
 			// Add the facility descriptor field.
-			var facilityDescField = codeshelf.dataobjectfield(websession_, content, 'Facility', 'Description', facilityPersistentId_);
+			var facilityDescField = codeshelf.dataobjectfield(websession_, contentPane, 'Facility', 'Description', facilityPersistentId_);
 			facilityDescField.start();
 
 			// Add the graphical editor.
 			var  editorPane = soy.renderAsElement(codeshelf.templates.facilityEditor);
-			goog.dom.appendChild(content,   editorPane);
+			goog.dom.appendChild(contentPane,   editorPane);
 			mapPane_ = goog.dom.query('.facilityMap',   editorPane)[0];
 			map_ = new google.maps.Map(mapPane_, myOptions);
 			pen_ = codeshelf.facilityeditor.pen(map_);

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: codeshelf.gss,v 1.13 2012/03/05 04:38:03 jeffw Exp $
+ *  $Id: codeshelf.gss,v 1.14 2012/03/26 22:49:50 jeffw Exp $
  *******************************************************************************/
 
 /* Defines and mixins ----------------------------------------------------------- */
@@ -27,9 +27,10 @@
 
 @def DATAENTRY_FONT_FAMILY			"league-gothic-1","league-gothic-2",sans-serif;
 @def DATAENTRY_FONT_COLOR			rgb(100, 100, 100);
-@def DATAENTRY_FONT_SIZE			14px;
+@def DATAENTRY_FONT_SIZE			13px;
 @def DATAENTRY_LINE_HEIGHT			100%;
-@def DATAENTRY_MARGIN_BOTTOM		3px;
+@def DATAENTRY_MARGIN_TOP			5px;
+@def DATAENTRY_MARGIN_BOTTOM		2px;
 @def DATAENTRY_TEXT_TRANSFORM		lowercase;
 
 @def WINDOWBAR_HEIGHT				20px;
@@ -75,7 +76,8 @@
 	color:				DATAENTRY_FONT_COLOR;
 	font-family:		DATAENTRY_FONT_FAMILY;
 	line-height:		DATAENTRY_LINE_HEIGHT;
-	margin-top:			DATAENTRY_MARGIN_BOTTOM;
+	margin-top:			DATAENTRY_MARGIN_TOP;
+	margin-bottom:		DATAENTRY_MARGIN_BOTTOM;
 	/*text-transform:		DATAENTRY_TEXT_TRANSFORM;*/
 	/*letter-spacing:		-0.06em;*/
 }
@@ -191,6 +193,15 @@
 	background-color:	#99F;
 }
 
+/* Field classes --------------------------------------------------------------- */
+
+.dataObjectField {
+	height:				18px;
+	@mixin				DATAENTRY_TEXT(13px);
+}
+
+/* ListView classes --------------------------------------------------------------- */
+
 .block {
 	position:			absolute;
 	left:				0;
@@ -224,6 +235,15 @@
 .slick-row.selected .cell-selection {
 	background-color:	transparent;
 	/* show default selected row background */
+}
+
+#myTable {
+	@mixin				FLEX_BOX();
+	@mixin				DISPLAY_BOX(vertical);
+}
+
+#myGrid {
+	@mixin				FLEX_BOX();
 }
 
 /* Facility editor classes --------------------------------------------------------------- */
@@ -263,18 +283,6 @@
 	top:				2px;
 	left:				2px;
 	background:			FACILITY_ICON_BACKGROUND;
-}
-
-#myTable {
-	@mixin				FLEX_BOX();
-	@mixin				DISPLAY_BOX(vertical);
-}
-
-#myGrid {
-	box-flex:			1;
-	-moz-box-flex:		1;
-	-webkit-box-flex:	1;
-	-ms-box-flex:		1;
 }
 
 .modal-dialog {

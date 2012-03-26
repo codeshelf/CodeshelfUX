@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataObjectField.js,v 1.5 2012/03/26 07:40:52 jeffw Exp $
+ *  $Id: dataObjectField.js,v 1.6 2012/03/26 22:49:50 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
@@ -9,7 +9,7 @@ goog.require('codeshelf.templates');
 goog.require('codeshelf.websession');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
-goog.require('goog.editor.Field');
+goog.require('goog.editor.SeamlessField');
 
 
 /**
@@ -49,7 +49,7 @@ codeshelf.dataobjectfield = function (websession, parentElement, className, clas
 			var fieldId = goog.events.getUniqueId('field');
 			inputElement_ = soy.renderAsElement(codeshelf.templates.dataObjectField, {name:'name', id:fieldId, title:'title'});
 			goog.dom.appendChild(parentElement_, inputElement_);
-			googleField_ = new goog.editor.Field(fieldId);
+			googleField_ = new goog.editor.SeamlessField(fieldId);
 			googleField_.makeEditable();
 
 			goog.events.listen(googleField_, goog.editor.Field.EventType.BLUR, thisDataObjectField_.updateFieldContents);

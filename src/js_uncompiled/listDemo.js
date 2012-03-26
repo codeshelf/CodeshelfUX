@@ -1,4 +1,4 @@
-goog.provide('codeshelf.listview');
+goog.provide('codeshelf.listdemo');
 goog.require('slickgrid.core');
 goog.require('slickgrid.firebugx');
 goog.require('slickgrid.editors');
@@ -9,21 +9,21 @@ goog.require('slickgrid.pager');
 goog.require('slickgrid.columnpicker');
 goog.require('jquery');
 
-codeshelf.listview = function () {
+$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all").mouseover(
+	function (e) {
+		$(e.target).addClass("ui-state-hover")
+	}).mouseout(function (e) {
+		$(e.target).removeClass("ui-state-hover")
+	});
 
-	$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all").mouseover(
-		function (e) {
-			$(e.target).addClass("ui-state-hover")
-		}).mouseout(function (e) {
-			$(e.target).removeClass("ui-state-hover")
-		});
+codeshelf.listdemo = function () {
 
-	var dataView_;
-	var grid_;
-	var data_ = [];
-	var selectedRowIds_ = [];
+	var dataView;
+	var grid;
+	var data = [];
+	var selectedRowIds = [];
 
-	var columns_ = [
+	var columns = [
 		{
 			id:                 "sel",
 			name:               "#",
@@ -94,7 +94,7 @@ codeshelf.listview = function () {
 		}
 	];
 
-	var options_ = {
+	var options = {
 		editable:            true,
 		enableAddRow:        true,
 		enableCellNavigation:true,
@@ -103,10 +103,10 @@ codeshelf.listview = function () {
 		topPanelHeight:      25
 	};
 
-	var sortcol_ = "title";
-	var sortdir_ = 1;
-	var percentCompleteThreshold_ = 0;
-	var searchString_ = "";
+	var sortcol = "title";
+	var sortdir = 1;
+	var percentCompleteThreshold = 0;
+	var searchString = "";
 
 	var thisListview_ = {
 		requiredFieldValidator:function (value) {
@@ -135,26 +135,26 @@ codeshelf.listview = function () {
 		},
 
 		comparer:function (a, b) {
-			var x = a[sortcol_], y = b[sortcol_];
+			var x = a[sortcol], y = b[sortcol];
 			return (x == y ? 0 : (x > y ? 1 : -1));
 		},
 
 		toggleFilterRow:function () {
-			if ($(grid_.getTopPanel()).is(":visible"))
-				grid_.hideTopPanel();
+			if ($(grid.getTopPanel()).is(":visible"))
+				grid.hideTopPanel();
 			else
-				grid_.showTopPanel();
+				grid.showTopPanel();
 		},
 
 		resizeFunction:function () {
-			grid_.resizeCanvas();
-			grid_.autosizeColumns();
+			grid.resizeCanvas();
+			grid.autosizeColumns();
 		},
 
-		launchListView:function (parentFrame) {
+		launchListDemo:function (parentFrame) {
 			// prepare the data
 			for (var i = 0; i < 50000; i++) {
-				var d = (data_[i] = {});
+				var d = (data[i] = {});
 
 				d["id"] = "id_" + i;
 				d["num"] = i;
@@ -170,23 +170,23 @@ codeshelf.listview = function () {
 			listViewWindow.init("List View", parentFrame, undefined, thisListview_.resizeFunction);
 			var contentElement = listViewWindow.getContentElement();
 			contentElement.innerHTML = '<div id="listViewGrid" class="windowContent"></div>';
-			dataView_ = new Slick.Data.DataView();
-			grid_ = new Slick.Grid(contentElement, dataView_, columns_, options_);
-			grid_.setSelectionModel(new Slick.RowSelectionModel());
+			dataView = new Slick.Data.DataView();
+			grid = new Slick.Grid('#listViewGrid', dataView, columns, options);
+			grid.setSelectionModel(new Slick.RowSelectionModel());
 
 			//var pager = new Slick.Controls.Pager(dataView, grid, $("#myPager"));
-			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
+			var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
 
 			// move the filter panel defined in a hidden div into grid top panel
-			$("#inlineFilterPanel").appendTo(grid_.getTopPanel()).show();
+			$("#inlineFilterPanel").appendTo(grid.getTopPanel()).show();
 
-			grid_.onCellChange.subscribe(function (e, args) {
-				dataView_.updateItem(args.item.id, args.item);
+			grid.onCellChange.subscribe(function (e, args) {
+				dataView.updateItem(args.item.id, args.item);
 			});
 
-			grid_.onAddNewRow.subscribe(function (e, args) {
+			grid.onAddNewRow.subscribe(function (e, args) {
 				var item = {
-					"num":            data_.length,
+					"num":            data.length,
 					"id":             "new_" + (Math.round(Math.random() * 10000)),
 					"title":          "New task",
 					"duration":       "1 day",
@@ -196,39 +196,39 @@ codeshelf.listview = function () {
 					"effortDriven":   false
 				};
 				$.extend(item, args.item);
-				dataView_.addItem(item);
+				dataView.addItem(item);
 			});
 
-			grid_.onKeyDown.subscribe(function (e) {
+			grid.onKeyDown.subscribe(function (e) {
 				// select all rows on ctrl-a
 				if (e.which != 65 || !e.ctrlKey)
 					return false;
 
 				var rows = [];
-				selectedRowIds_ = [];
+				selectedRowIds = [];
 
-				for (var i = 0; i < dataView_.getLength(); i++) {
+				for (var i = 0; i < dataView.getLength(); i++) {
 					rows.push(i);
-					selectedRowIds_.push(dataView_.getItem(i).id);
+					selectedRowIds.push(dataView.getItem(i).id);
 				}
 
-				grid_.setSelectedRows(rows);
+				grid.setSelectedRows(rows);
 				e.preventDefault();
 			});
 
-			grid_.onSelectedRowsChanged.subscribe(function (e) {
-				selectedRowIds_ = [];
-				var rows = grid_.getSelectedRows();
+			grid.onSelectedRowsChanged.subscribe(function (e) {
+				selectedRowIds = [];
+				var rows = grid.getSelectedRows();
 				for (var i = 0, l = rows.length; i < l; i++) {
-					var item = dataView_.getItem(rows[i]);
+					var item = dataView.getItem(rows[i]);
 					if (item)
-						selectedRowIds_.push(item.id);
+						selectedRowIds.push(item.id);
 				}
 			});
 
-			grid_.onSort.subscribe(function (e, args) {
-				sortdir_ = args.sortAsc ? 1 : -1;
-				sortcol_ = args.sortCol.field;
+			grid.onSort.subscribe(function (e, args) {
+				sortdir = args.sortAsc ? 1 : -1;
+				sortcol = args.sortCol.field;
 
 				if ($.browser.msie && $.browser.version <= 8) {
 					// using temporary Object.prototype.toString override
@@ -246,45 +246,45 @@ codeshelf.listview = function () {
 					};
 
 					// use numeric sort of % and lexicographic for everything else
-					dataView_.fastSort((sortcol_ == "percentComplete") ? percentCompleteValueFn : sortcol_, args.sortAsc);
+					dataView.fastSort((sortcol == "percentComplete") ? percentCompleteValueFn : sortcol, args.sortAsc);
 				} else {
 					// using native sort with comparer
 					// preferred method but can be very slow in IE with huge datasets
-					dataView_.sort(thisListview_.comparer, args.sortAsc);
+					dataView.sort(thisListview_.comparer, args.sortAsc);
 				}
 			});
 
 			// wire up model events to drive the grid
-			dataView_.onRowCountChanged.subscribe(function (e, args) {
-				grid_.updateRowCount();
-				grid_.render();
+			dataView.onRowCountChanged.subscribe(function (e, args) {
+				grid.updateRowCount();
+				grid.render();
 			});
 
-			dataView_.onRowsChanged.subscribe(function (e, args) {
-				grid_.invalidateRows(args.rows);
-				grid_.render();
+			dataView.onRowsChanged.subscribe(function (e, args) {
+				grid.invalidateRows(args.rows);
+				grid.render();
 
-				if (selectedRowIds_.length > 0) {
+				if (selectedRowIds.length > 0) {
 					// since how the original data maps onto rows has changed,
 					// the selected rows in the grid need to be updated
 					var selRows = [];
-					for (var i = 0; i < selectedRowIds_.length; i++) {
-						var idx = dataView_.getRowById(selectedRowIds_[i]);
+					for (var i = 0; i < selectedRowIds.length; i++) {
+						var idx = dataView.getRowById(selectedRowIds[i]);
 						if (idx != undefined)
 							selRows.push(idx);
 					}
 
-					grid_.setSelectedRows(selRows);
+					grid.setSelectedRows(selRows);
 				}
 			});
 
-			dataView_.onPagingInfoChanged.subscribe(function (e, pagingInfo) {
+			dataView.onPagingInfoChanged.subscribe(function (e, pagingInfo) {
 				var isLastPage = pagingInfo.pageSize * (pagingInfo.pageNum + 1) - 1 >= pagingInfo.totalRows;
 				var enableAddRow = isLastPage || pagingInfo.pageSize == 0;
-				var options = grid_.getOptions();
+				var options = grid.getOptions();
 
 				if (options.enableAddRow != enableAddRow)
-					grid_.setOptions({
+					grid.setOptions({
 						enableAddRow:enableAddRow
 					});
 			});
@@ -297,10 +297,10 @@ codeshelf.listview = function () {
 				"slide":function (event, ui) {
 					Slick.GlobalEditorLock.cancelCurrentEdit();
 
-					if (percentCompleteThreshold_ != ui.value) {
+					if (percentCompleteThreshold != ui.value) {
 						window.clearTimeout(h_runfilters);
 						h_runfilters = window.setTimeout(updateFilter, 10);
-						percentCompleteThreshold_ = ui.value;
+						percentCompleteThreshold = ui.value;
 					}
 				}
 			});
@@ -313,16 +313,16 @@ codeshelf.listview = function () {
 				if (e.which == 27)
 					thisListview_.value = "";
 
-				searchString_ = thisListview_.value;
+				searchString = thisListview_.value;
 				updateFilter();
 			});
 
 			function updateFilter() {
-				dataView_.setFilterArgs({
-					percentCompleteThreshold:percentCompleteThreshold_,
-					searchString:            searchString_
+				dataView.setFilterArgs({
+					percentCompleteThreshold:percentCompleteThreshold,
+					searchString:            searchString
 				});
-				dataView_.refresh();
+				dataView.refresh();
 			}
 
 			$("#btnSelectRows").click(function () {
@@ -331,25 +331,25 @@ codeshelf.listview = function () {
 				}
 
 				var rows = [];
-				selectedRowIds_ = [];
+				selectedRowIds = [];
 
-				for (var i = 0; i < 10 && i < dataView_.getLength(); i++) {
+				for (var i = 0; i < 10 && i < dataView.getLength(); i++) {
 					rows.push(i);
-					selectedRowIds_.push(dataView_.getItem(i).id);
+					selectedRowIds.push(dataView.getItem(i).id);
 				}
 
-				grid_.setSelectedRows(rows);
+				grid.setSelectedRows(rows);
 			});
 
 			// initialize the model after all the events have been hooked up
-			dataView_.beginUpdate();
-			dataView_.setItems(data_);
-			dataView_.setFilterArgs({
-				percentCompleteThreshold:percentCompleteThreshold_,
-				searchString:            searchString_
+			dataView.beginUpdate();
+			dataView.setItems(data);
+			dataView.setFilterArgs({
+				percentCompleteThreshold:percentCompleteThreshold,
+				searchString:            searchString
 			});
-			dataView_.setFilter(thisListview_.myFilter);
-			dataView_.endUpdate();
+			dataView.setFilter(thisListview_.myFilter);
+			dataView.endUpdate();
 
 			$("#gridContainer").resizable();
 		}
