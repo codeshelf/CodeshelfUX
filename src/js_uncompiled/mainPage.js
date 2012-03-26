@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.10 2012/03/04 06:57:13 jeffw Exp $
+ *  $Id: mainPage.js,v 1.11 2012/03/26 03:32:42 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.templates');
@@ -58,8 +58,20 @@ codeshelf.mainpage = function () {
 			var listview = codeshelf.listview();
 			listview.launchListView(frame_);
 
-			var facilityEditor = codeshelf.facilityeditor();
-			facilityEditor.start(application, frame_);
+			var organization = application_.getOrganization();
+
+			var data = {
+				className:   organization.className,
+				persistentId:organization.persistentId,
+				getterMethod:'getFacilities'
+			}
+
+			var websession = application_.getWebsession();
+			var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
+			websession.sendCommand(getFacilitiesCmd, thisMainpage_.mainPageCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
+
+//			var facilityEditor = codeshelf.facilityeditor();
+//			facilityEditor.start(application, frame_);
 		},
 
 		exit:function () {
@@ -70,6 +82,35 @@ codeshelf.mainpage = function () {
 			// goog.style.setSize(goog.dom.getElement('frame'), size);
 			frame_.style.width = size.width - 15 + 'px';
 			frame_.style.height = size.height - 5 + 'px';
+		},
+
+		mainPageCallback:function (expectedResponseType) {
+			var expectedResponseType_ = expectedResponseType;
+			var callback = {
+				exec:                   function (command) {
+					if (!command.data.hasOwnProperty('result')) {
+						alert('response has no result');
+					} else {
+						if (command.type == kWebSessionCommandType.OBJECT_GETTER_RESP) {
+							for (var i = 0; i < command.data.result.length; i++) {
+								var object = command.data.result[i];
+								try {
+									var facilityEditor = codeshelf.facilityeditor();
+									facilityEditor.start(websession_, application_.getOrganization(), frame_, object.persistentId);
+								}
+								catch (err) {
+									alert(err);
+								}
+
+							}
+						}
+					}
+				},
+				getExpectedResponseType:function () {
+					return expectedResponseType_;
+				}
+			}
+			return callback;
 		}
 	}
 }

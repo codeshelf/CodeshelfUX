@@ -1,12 +1,13 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.18 2012/03/25 01:36:30 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.19 2012/03/26 03:32:42 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.websession');
 goog.require('codeshelf.mainpage');
+goog.require('codeshelf.dataobjectfield');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
 
@@ -17,30 +18,29 @@ codeshelf.facilityeditor = function () {
 	var clickHandler_;
 	var doubleClickHandler_;
 	var clickTimeout_;
-	var application_;
+	var websession_;
+	var organization_;
 	var mapPane_;
 	var thisFacilityEditor_;
+	var facilityPersistentId_
 
 	thisFacilityEditor_ = {
-		start:function (application, parentFrame) {
+		start:function (websession, organization, parentFrame, facilityPersistentId) {
 
-			application_ = application;
+			websession_ = websession;
+			facilityPersistentId_ = facilityPersistentId;
 
-			var organization = application_.getOrganization();
-
-			var data = {
-				className:   organization.className,
-				persistentId:organization.persistentId,
-				getterMethod:'getFacilities'
-			}
-
-			var websession = application_.getWebsession();
-			var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
-			websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
+//			var data = {
+//				className:   organization_.className,
+//				persistentId:organization_.persistentId,
+//				getterMethod:'getFacilities'
+//			}
+//
+//			var getFacilitiesCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
+//			websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
 
 			// Add the Google Maps scripts (There's no way to wait for this to load - put it in the header.)
 			//goog.dom.appendChild(goog.dom.getDocument().head, soy.renderAsElement(codeshelf.templates.googleMapsScripts));
-
 
 			// Safeway DC Tracy, CA
 			var demoLatLng = new google.maps.LatLng(37.717198, -121.517029);
@@ -62,9 +62,14 @@ codeshelf.facilityeditor = function () {
 			editorWindow.open();
 			var content = editorWindow.getContentElement();
 
-			var innerPane = soy.renderAsElement(codeshelf.templates.facilityEditor);
-			goog.dom.appendChild(content, innerPane);
-			mapPane_ = goog.dom.query('.facilityMap', innerPane)[0];
+			// Add the facility descriptor field.
+			var facilityDescField = codeshelf.dataobjectfield(websession_, content, 'Facility', 'Description', facilityPersistentId_);
+			facilityDescField.start();
+
+			// Add the graphical editor.
+			var  editorPane = soy.renderAsElement(codeshelf.templates.facilityEditor);
+			goog.dom.appendChild(content,   editorPane);
+			mapPane_ = goog.dom.query('.facilityMap',   editorPane)[0];
 			map_ = new google.maps.Map(mapPane_, myOptions);
 			pen_ = codeshelf.facilityeditor.pen(map_);
 
@@ -119,36 +124,32 @@ codeshelf.facilityeditor = function () {
 									propertyNames:[ 'Id', 'Description' ]
 								}
 
-								var websession = application_.getWebsession();
-								var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_LISTENER_REQ, data);
-								websession.sendCommand(getFacilitiesCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP), true);
-							}
-						} else if (command.type == kWebSessionCommandType.OBJECT_LISTENER_RESP) {
-							for (var i = 0; i < command.data.result.length; i++) {
-								var object = command.data.result[i];
+								var getFacilitiesCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_LISTENER_REQ, data);
+								websession_.sendCommand(getFacilitiesCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP), true);
 
 								var data = {
-									className:   object.ClassName,
+									className:   object.className,
 									persistentId:object.persistentId,
 									setterMethod:'setDescription',
 									setterValue: "'" + new Date() + "'"
 								}
 
-								var websession = application_.getWebsession();
-								var setFacilityDescCmd = websession.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
-								websession.sendCommand(setFacilityDescCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
-
-
-								var data = {
-									className:    'Facility',
-									propertyNames:[ 'Id', 'Description' ],
-									filterClause:  'id = 12345'
-								}
-
-								var websession = application_.getWebsession();
-								var setFacilityFilterCmd = websession.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-								websession.sendCommand(setFacilityFilterCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+								var setFacilityDescCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
+								websession_.sendCommand(setFacilityDescCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
 							}
+						} else if (command.type == kWebSessionCommandType.OBJECT_LISTENER_RESP) {
+//							for (var i = 0; i < command.data.result.length; i++) {
+//								var object = command.data.result[i];
+//
+//								var data = {
+//									className:    'Facility',
+//									propertyNames:[ 'Id', 'Description' ],
+//									filterClause:  'id = 12345'
+//								}
+//
+//								var setFacilityFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
+//								websession_.sendCommand(setFacilityFilterCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+//							}
 						} else if (command.type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
 
 						}

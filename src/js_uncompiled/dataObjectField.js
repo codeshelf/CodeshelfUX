@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataObjectField.js,v 1.2 2012/03/25 01:36:30 jeffw Exp $
+ *  $Id: dataObjectField.js,v 1.3 2012/03/26 03:32:42 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
@@ -19,24 +19,33 @@ goog.require('goog.events.EventHandler');
  * @param {string} classProperty the name of the remote data class property that this field edits.
  * @param {stting} classPersistenceId the GUID of the class object instance that this field edits.
  */
-codeshelf.dataobjectfield = function (application, parentElement, className, classProperty, classPersistenceId) {
+codeshelf.dataobjectfield = function (websession, parentElement, className, classProperty, classPersistenceId) {
 
 	var thisDataObjectField_;
+	var websession_ = websession;
 	var parentElement_ = parentElement;
 	var className_ = className;
 	var classProperty_ = classProperty;
 	var classPersistenceId_ = classPersistenceId;
 	var inputElement_;
 
-	var websession = application_.getWebsession();
-	var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
-	websession.sendCommand(getFacilitiesCmd, thisDataObjectField_.getCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
-
-	// Put the HTML markup in the parent element.
-	inputElement_ = codeshelf.templates.dataObjectField({name:'name', id:'id', title:'title'});
-	goog.dom.appendChild(parentElement_, inputElement_);
-
 	thisDataObjectField_ = {
+
+		start:function () {
+			var data = {
+				className:    className_,
+				objectIds:    [ classPersistenceId_ ],
+				propertyNames:[ classProperty_ ]
+			}
+
+			var fieldListenerCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_LISTENER_REQ, data);
+			websession_.sendCommand(fieldListenerCmd, thisDataObjectField_.getCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP), true);
+
+
+			// Put the HTML markup in the parent element.
+			inputElement_ = soy.renderAsElement(codeshelf.templates.dataObjectField, {name:'name', id:'id', title:'title'});
+			goog.dom.appendChild(parentElement_, inputElement_);
+		},
 
 		getCallback:function (expectedResponseType) {
 			var expectedResponseType_ = expectedResponseType;
@@ -47,7 +56,7 @@ codeshelf.dataobjectfield = function (application, parentElement, className, cla
 					} else {
 						for (var i = 0; i < command.data.result.length; i++) {
 							var object = command.data.result[i];
-							alert("Object: " + object.className + " " + object.description);
+
 						}
 					}
 				},
