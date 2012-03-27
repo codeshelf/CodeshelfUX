@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.20 2012/03/26 22:49:50 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.21 2012/03/27 03:12:15 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -112,7 +112,7 @@ codeshelf.facilityeditor = function () {
 								var data = {
 									className:    object.className,
 									objectIds:    [ object.persistentId ],
-									propertyNames:[ 'Id', 'Description' ]
+									propertyNames:[ 'DomainId', 'Description' ]
 								}
 
 								var getFacilitiesCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_LISTENER_REQ, data);

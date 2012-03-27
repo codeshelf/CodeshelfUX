@@ -1,4 +1,5 @@
 goog.provide('codeshelf.listview');
+goog.require('codeshelf.listviewdatamodel');
 goog.require('slickgrid.core');
 goog.require('slickgrid.firebugx');
 goog.require('slickgrid.editors');
@@ -9,7 +10,7 @@ goog.require('slickgrid.pager');
 goog.require('slickgrid.columnpicker');
 goog.require('jquery');
 
-codeshelf.listview = function () {
+codeshelf.listview = function (domainObject) {
 
 	$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all").mouseover(
 		function (e) {
@@ -23,76 +24,27 @@ codeshelf.listview = function () {
 	var data_ = [];
 	var selectedRowIds_ = [];
 
-	var columns_ = [
-		{
-			id:                 "sel",
-			name:               "#",
-			field:              "num",
-			behavior:           "select",
-			cssClass:           "cell-selection",
-			width:              40,
-			cannotTriggerInsert:true,
-			resizable:          true,
-			selectable:         false,
-			sortable:           true
-		},
-		{
-			id:       "title",
-			name:     "Title",
-			field:    "title",
-			width:    120,
-			minWidth: 120,
-			cssClass: "cell-title",
-			editor:   TextCellEditor,
-			validator:this.requiredFieldValidator,
-			sortable: true
-		},
-		{
-			id:      "duration",
-			name:    "Duration",
-			field:   "duration",
-			editor:  TextCellEditor,
-			sortable:true
-		},
-		{
-			id:       "%",
-			name:     "% Complete",
-			field:    "percentComplete",
-			minWidth: 80,
-			resizable:true,
-			formatter:GraphicalPercentCompleteCellFormatter,
-			editor:   PercentCompleteCellEditor,
-			sortable: true
-		},
-		{
-			id:      "start",
-			name:    "Start",
-			field:   "start",
-			minWidth:60,
-			editor:  DateCellEditor,
-			sortable:true
-		},
-		{
-			id:      "finish",
-			name:    "Finish",
-			field:   "finish",
-			minWidth:60,
-			editor:  DateCellEditor,
-			sortable:true
-		},
-		{
-			id:                 "effort-driven",
-			name:               "Effort Driven",
-			width:              80,
-			minWidth:           20,
-			cssClass:           "cell-effort-driven",
-			field:              "effortDriven",
-			formatter:          BoolCellFormatter,
-			editor:             YesNoCheckboxCellEditor,
-			cannotTriggerInsert:true,
-			sortable:           true
+	// Compute the columns we need for this domain object.
+	var columns_ = [];
+	var properties = domainObject['properties'];
+	var count = 0;
+	for (property in properties) {
+		if (properties.hasOwnProperty(property)) {
+			var property = properties[property];
+			columns_[count++] = {
+				id:                 property.id,
+				name:               property.title,
+				field:              property.id,
+				behavior:           "select",
+				cssClass:           "cell-selection",
+				width:              property.width,
+				cannotTriggerInsert:true,
+				resizable:          true,
+				selectable:         false,
+				sortable:           true
+			}
 		}
-	];
+	}
 
 	var options_ = {
 		editable:            true,
@@ -171,6 +123,7 @@ codeshelf.listview = function () {
 			var contentElement = listViewWindow.getContentElement();
 			contentElement.innerHTML = '<div id="listViewGrid" class="windowContent"></div>';
 			dataView_ = new Slick.Data.DataView();
+			dataView_ = new codeshelf.listviewdatamodel.RemoteModel();
 			grid_ = new Slick.Grid(contentElement, dataView_, columns_, options_);
 			grid_.setSelectionModel(new Slick.RowSelectionModel());
 
