@@ -1,10 +1,14 @@
 {namespace codeshelf.templates}
 
 /**
- * Include the Google Maps API
+ * The template for the main page.
  */
-{template .googleMapsScripts}
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+{template .mainPage}
+<div class='frame'>
+	<div id='logoBox' class='rotate'>
+		<h1 class='codeshelfLogo'>codeshelf</h1>
+	</div>
+</div>
 {/template}
 
 /**
@@ -35,17 +39,6 @@
 			Launch Code:
 			<input type='text' id='launchCodeInput' class='dataEntry' value='12345' style='margin-left: 5px; width: 50%;'>
 		</div>
-	</div>
-</div>
-{/template}
-
-/**
- * The template for the main page.
- */
-{template .mainPage}
-<div class='frame'>
-	<div id='logoBox' class='rotate'>
-		<h1 class='codeshelfLogo'>codeshelf</h1>
 	</div>
 </div>
 {/template}
@@ -100,4 +93,19 @@
 		</div>
 	</div>
 </div>
+{/template}
+
+/**
+ * Listview content pane
+ */
+{template .listviewContentPane}
+<div id="listViewGrid" class="windowContent">
+</div>
+{/template}
+
+/**
+ * Include the Google Maps API
+ */
+{template .googleMapsScripts}
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 {/template}

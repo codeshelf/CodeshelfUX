@@ -1,11 +1,12 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: listViewDataModel.js,v 1.1 2012/03/27 03:12:15 jeffw Exp $
+ *  $Id: listViewDataModel.js,v 1.2 2012/03/27 06:22:45 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.listviewdatamodel');
 goog.require('jquery');
+goog.require('jquery.jsonp');
 goog.require('jquery.ui');
 goog.require('jquery.event.drag');
 goog.require('jquery.event.drop');
@@ -16,7 +17,7 @@ goog.require('jquery.event.drop');
 	 * Right now, it's hooked up to load all Apple-related Digg stories, but can
 	 * easily be extended to support and JSONP-compatible backend that accepts paging parameters.
 	 */
-	function RemoteModel() {
+	function DataModel() {
 		// private
 		var PAGESIZE = 50;
 		var data = {length:0};
@@ -168,6 +169,6 @@ goog.require('jquery.event.drop');
 		};
 	}
 
-	// Slick.Data.RemoteModel
-	$.extend(true, window, { codeshelf: { listviewdatamodel: { RemoteModel: RemoteModel }}});
+	// codeshelf.listviewdatamodel.DataModel
+	$.extend(true, window, { codeshelf: { listviewdatamodel: { DataModel: DataModel }}});
 })(jQuery);

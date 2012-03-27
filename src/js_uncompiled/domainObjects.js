@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: domainObjects.js,v 1.2 2012/03/27 03:12:15 jeffw Exp $
+ *  $Id: domainObjects.js,v 1.3 2012/03/27 06:22:45 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.domainobjects');
@@ -36,6 +36,27 @@ codeshelf.domainobjects = {
 				id:   'Description',
 				title:'Description',
 				width:100
+			}
+		}
+	},
+
+	digg:{
+		classname: 'com.gadgetworks.codeshelf.model.persist.Facility',
+		properties:{
+			index:   {
+				id:   'index',
+				title:'index',
+				width:25
+			},
+			diggs:   {
+				id:   'diggs',
+				title:'diggs',
+				width:25
+			},
+			description:{
+				id:   'description',
+				title:'description',
+				width:300
 			}
 		}
 	}
