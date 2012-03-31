@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.21 2012/03/27 03:12:15 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.22 2012/03/31 01:17:29 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -54,13 +54,13 @@ codeshelf.facilityeditor = function () {
 			var contentPane = editorWindow.getContentElement();
 
 			// Add the facility descriptor field.
-			var facilityDescField = codeshelf.dataobjectfield(websession_, contentPane, 'Facility', 'Description', facilityPersistentId_);
+			var facilityDescField = codeshelf.dataobjectfield(websession_, contentPane, codeshelf.domainobjects.facility.classname, codeshelf.domainobjects.facility.properties.description.id, facilityPersistentId_);
 			facilityDescField.start();
 
 			// Add the graphical editor.
-			var  editorPane = soy.renderAsElement(codeshelf.templates.facilityEditor);
-			goog.dom.appendChild(contentPane,   editorPane);
-			mapPane_ = goog.dom.query('.facilityMap',   editorPane)[0];
+			var editorPane = soy.renderAsElement(codeshelf.templates.facilityEditor);
+			goog.dom.appendChild(contentPane, editorPane);
+			mapPane_ = goog.dom.query('.facilityMap', editorPane)[0];
 			map_ = new google.maps.Map(mapPane_, myOptions);
 			pen_ = codeshelf.facilityeditor.pen(map_);
 

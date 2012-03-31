@@ -46,19 +46,12 @@
 /**
  * The template for an dataObjectField.
  * @param id the <input> ID.
- * @param name the <input> name.
- * @param title the <input> title.
- * @param? pattern optional - the regex pattern for the <input>.
+ * param name the <input> name.
+ * param title the <input> title.
+ * param? pattern optional - the regex pattern for the <input>.
  */
 {template .dataObjectField}
 <div id={$id} class='dataObjectField'>
-<!--
-	{if not $pattern}
-		<input id='{$id}' class='dataEntry' type='text' name='{$name}' title='{$title}' />
-	{else}
-		<input id='{$id}' class='dataEntry' type='text' name='{$name}' pattern='{$pattern}' title='{$title}' />
-	{/if}
--->
 </div>
 {/template}
 

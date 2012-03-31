@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataObjectField.js,v 1.6 2012/03/26 22:49:50 jeffw Exp $
+ *  $Id: dataObjectField.js,v 1.7 2012/03/31 01:17:29 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
@@ -65,9 +65,12 @@ codeshelf.dataobjectfield = function (websession, parentElement, className, clas
 						for (var i = 0; i < command.data.result.length; i++) {
 							var object = command.data.result[i];
 
-							var html = googleField_.getCleanContents();
-							if (html !== object.Description) {
-								googleField_.setHtml(false, object.Description, true);
+							// Make sure the class name and persistent ID match.
+							if ((object.className === className_) && (object.persistentId == classPersistenceId_)) {
+								var html = googleField_.getCleanContents();
+								if (html !== object[classProperty_]) {
+									googleField_.setHtml(false, object[classProperty_], true);
+								}
 							}
 						}
 					}
