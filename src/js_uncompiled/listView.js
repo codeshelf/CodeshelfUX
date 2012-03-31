@@ -10,7 +10,7 @@ goog.require('slickgrid.pager');
 goog.require('slickgrid.columnpicker');
 goog.require('jquery');
 
-codeshelf.listview = function (domainObject) {
+codeshelf.listview = function (websession, domainObject) {
 
 	$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all").mouseover(
 		function (e) {
@@ -19,19 +19,22 @@ codeshelf.listview = function (domainObject) {
 			$(e.target).removeClass("ui-state-hover")
 		});
 
+	var websession_ = websession;
+	var domainObject_ = domainObject;
 	var dataModel_;
 	var dataView_;
 	var grid_;
-	var data_ = [];
 	var selectedRowIds_ = [];
+	var properties_ = [];
 
 	// Compute the columns we need for this domain object.
 	var columns_ = [];
-	var properties = domainObject['properties'];
+	var properties = domainObject_['properties'];
 	var count = 0;
 	for (property in properties) {
 		if (properties.hasOwnProperty(property)) {
 			var property = properties[property];
+			properties_[count] = property.id;
 			columns_[count++] = {
 				id:                 property.id,
 				name:               property.title,
@@ -105,19 +108,6 @@ codeshelf.listview = function (domainObject) {
 		},
 
 		launchListView:function (parentFrame) {
-			// prepare the data
-			for (var i = 0; i < 50000; i++) {
-				var d = (data_[i] = {});
-
-				d["id"] = "id_" + i;
-				d["num"] = i;
-				d["title"] = "Task " + i;
-				d["duration"] = "5 days";
-				d["percentComplete"] = Math.round(Math.random() * 100);
-				d["start"] = "01/01/2009";
-				d["finish"] = "01/05/2009";
-				d["effortDriven"] = (i % 5 == 0);
-			}
 
 			listViewWindow = codeshelf.window();
 			listViewWindow.init("List View", parentFrame, undefined, thisListview_.resizeFunction);
@@ -131,40 +121,19 @@ codeshelf.listview = function (domainObject) {
 			grid_ = new Slick.Grid(contentElement, dataView_, columns_, options_);
 			grid_.setSelectionModel(new Slick.RowSelectionModel());
 
-			//var pager = new Slick.Controls.Pager(dataView, grid, $("#myPager"));
-			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
+			var data = {
+				className:    domainObject_.classname,
+				propertyNames:properties_,
+				filterClause: ''
+			}
 
-			grid_.onViewportChanged.subscribe(function (e, args) {
-				var vp = grid_.getViewport();
-				dataModel_.ensureData(vp.top, vp.bottom);
-			});
+			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
+			websession_.sendCommand(setListViewFilterCmd, thisListview_.getCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 
 			grid_.onSort.subscribe(function (e, args) {
 				dataModel_.setSort(args.sortCol.field, args.sortAsc ? 1 : -1);
 				var vp = grid_.getViewport();
 				dataModel_.ensureData(vp.top, vp.bottom);
-			});
-
-			// move the filter panel defined in a hidden div into grid top panel
-			$("#inlineFilterPanel").appendTo(grid_.getTopPanel()).show();
-
-			grid_.onCellChange.subscribe(function (e, args) {
-				dataView_.updateItem(args.item.id, args.item);
-			});
-
-			grid_.onAddNewRow.subscribe(function (e, args) {
-				var item = {
-					"num":            data_.length,
-					"id":             "new_" + (Math.round(Math.random() * 10000)),
-					"title":          "New task",
-					"duration":       "1 day",
-					"percentComplete":0,
-					"start":          "01/01/2009",
-					"finish":         "01/01/2009",
-					"effortDriven":   false
-				};
-				$.extend(item, args.item);
-				dataView_.addItem(item);
 			});
 
 			grid_.onKeyDown.subscribe(function (e) {
@@ -259,59 +228,9 @@ codeshelf.listview = function (domainObject) {
 
 			var h_runfilters = null;
 
-			// wire up the slider to apply the filter to the model
-			$("#pcSlider,#pcSlider2").slider({
-				"range":"min",
-				"slide":function (event, ui) {
-					Slick.GlobalEditorLock.cancelCurrentEdit();
-
-					if (percentCompleteThreshold_ != ui.value) {
-						window.clearTimeout(h_runfilters);
-						h_runfilters = window.setTimeout(updateFilter, 10);
-						percentCompleteThreshold_ = ui.value;
-					}
-				}
-			});
-
-			// wire up the search textbox to apply the filter to the model
-			$("#txtSearch,#txtSearch2").keyup(function (e) {
-				Slick.GlobalEditorLock.cancelCurrentEdit();
-
-				// clear on Esc
-				if (e.which == 27)
-					thisListview_.value = "";
-
-				searchString_ = thisListview_.value;
-				updateFilter();
-			});
-
-			function updateFilter() {
-				dataView_.setFilterArgs({
-					percentCompleteThreshold:percentCompleteThreshold_,
-					searchString:            searchString_
-				});
-				dataView_.refresh();
-			}
-
-			$("#btnSelectRows").click(function () {
-				if (!Slick.GlobalEditorLock.commitCurrentEdit()) {
-					return;
-				}
-
-				var rows = [];
-				selectedRowIds_ = [];
-
-				for (var i = 0; i < 10 && i < dataView_.getLength(); i++) {
-					rows.push(i);
-					selectedRowIds_.push(dataView_.getItem(i).id);
-				}
-
-				grid_.setSelectedRows(rows);
-			});
-
 			// initialize the model after all the events have been hooked up
 			dataView_.beginUpdate();
-			dataView_.setItems(data_);
+			//dataView_.setItems(data_);
 			dataView_.setFilterArgs({
 				percentCompleteThreshold:percentCompleteThreshold_,
 				searchString:            searchString_
@@ -320,6 +239,27 @@ codeshelf.listview = function (domainObject) {
 			dataView_.endUpdate();
 
 			$("#gridContainer").resizable();
+		},
+
+		getCallback:function (expectedResponseType) {
+			var expectedResponseType_ = expectedResponseType;
+			var callback = {
+				exec:                   function (command) {
+					if (!command.data.hasOwnProperty('result')) {
+						alert('response has no result');
+					} else if (command.type == kWebSessionCommandType.OBJECT_LISTENER_RESP) {
+						for (var i = 0; i < command.data.result.length; i++) {
+							var object = command.data.result[i];
+							dataView_.addItem();
+						}
+					}
+				},
+				getExpectedResponseType:function () {
+					return expectedResponseType_;
+				}
+			}
+
+			return callback;
 		}
 	}
 

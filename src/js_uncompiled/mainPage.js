@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.15 2012/03/30 23:23:08 jeffw Exp $
+ *  $Id: mainPage.js,v 1.16 2012/03/31 07:27:14 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.templates');
@@ -60,7 +60,7 @@ codeshelf.mainpage = function () {
 			var listdemo = codeshelf.listdemo();
 			listdemo.launchListDemo(frame_);
 
-			var listview = codeshelf.listview(codeshelf.domainobjects.digg);
+			var listview = codeshelf.listview(websession_, codeshelf.domainobjects.facility);
 			listview.launchListView(frame_);
 
 			var organization = application_.getOrganization();
