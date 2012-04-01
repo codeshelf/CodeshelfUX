@@ -40,7 +40,7 @@ codeshelf.listview = function (websession, domainObject) {
 				name:               property.title,
 				field:              property.id,
 				behavior:           "select",
-				cssClass:           "cell-selection",
+//				cssClass:           "cell-selection",
 				width:              property.width,
 				cannotTriggerInsert:true,
 				resizable:          true,
@@ -59,7 +59,7 @@ codeshelf.listview = function (websession, domainObject) {
 		topPanelHeight:      25
 	};
 
-	var sortcol_ = "title";
+	var sortcol_ = "Description";
 	var sortdir_ = 1;
 	var percentCompleteThreshold_ = 0;
 	var searchString_ = "";
@@ -83,14 +83,14 @@ codeshelf.listview = function (websession, domainObject) {
 				return false;
 
 			return !(args.searchString != "" && item["title"].indexOf(args.searchString) == -1);
-
-		},
-
-		percentCompleteSort:function (a, b) {
-			return a["percentComplete"] - b["percentComplete"];
 		},
 
 		comparer:function (a, b) {
+			for (column in columns_) {
+				if (columns_.hasOwnProperty(column)) {
+					var index = grid_.getColumnIndex(column.id);
+				}
+			}
 			var x = a[sortcol_], y = b[sortcol_];
 			return (x == y ? 0 : (x > y ? 1 : -1));
 		},
@@ -112,14 +112,13 @@ codeshelf.listview = function (websession, domainObject) {
 			listViewWindow = codeshelf.window();
 			listViewWindow.init("List View", parentFrame, undefined, thisListview_.resizeFunction);
 			var contentElement = listViewWindow.getContentElement();
-			//contentElement.innerHTML = '<div id="listViewGrid" class="windowContent"></div>';
 			goog.dom.appendChild(contentElement, soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
-			//dataModel_  = new codeshelf.listviewdatamodel.DataModel();
-			//grid_ = new Slick.Grid(contentElement, dataModel_.data, columns_, options_);
 			dataView_ = new Slick.Data.DataView();
 			grid_ = new Slick.Grid(contentElement, dataView_, columns_, options_);
 			grid_.setSelectionModel(new Slick.RowSelectionModel());
+
+			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
 			var data = {
 				className:    domainObject_.classname,
@@ -129,12 +128,6 @@ codeshelf.listview = function (websession, domainObject) {
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			websession_.sendCommand(setListViewFilterCmd, thisListview_.getCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
-
-			grid_.onSort.subscribe(function (e, args) {
-				dataModel_.setSort(args.sortCol.field, args.sortAsc ? 1 : -1);
-				var vp = grid_.getViewport();
-				dataModel_.ensureData(vp.top, vp.bottom);
-			});
 
 			grid_.onKeyDown.subscribe(function (e) {
 				// select all rows on ctrl-a
@@ -166,29 +159,7 @@ codeshelf.listview = function (websession, domainObject) {
 			grid_.onSort.subscribe(function (e, args) {
 				sortdir_ = args.sortAsc ? 1 : -1;
 				sortcol_ = args.sortCol.field;
-
-				if ($.browser.msie && $.browser.version <= 8) {
-					// using temporary Object.prototype.toString override
-					// more limited and does lexicographic sort only by default, but can
-					// be much faster
-
-					var percentCompleteValueFn = function () {
-						var val = this["percentComplete"];
-						if (val < 10)
-							return "00" + val;
-						else if (val < 100)
-							return "0" + val;
-						else
-							return val;
-					};
-
-					// use numeric sort of % and lexicographic for everything else
-					dataView_.fastSort((sortcol_ == "percentComplete") ? percentCompleteValueFn : sortcol_, args.sortAsc);
-				} else {
-					// using native sort with comparer
-					// preferred method but can be very slow in IE with huge datasets
-					dataView_.sort(thisListview_.comparer, args.sortAsc);
-				}
+				dataView_.sort(thisListview_.comparer, args.sortAsc);
 			});
 
 			// wire up model events to drive the grid
@@ -247,11 +218,23 @@ codeshelf.listview = function (websession, domainObject) {
 				exec:                   function (command) {
 					if (!command.data.hasOwnProperty('result')) {
 						alert('response has no result');
-					} else if (command.type == kWebSessionCommandType.OBJECT_LISTENER_RESP) {
+					} else if (command.type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
 						for (var i = 0; i < command.data.result.length; i++) {
 							var object = command.data.result[i];
-							dataView_.addItem();
+							if (object.opType === "add") {
+								dataView_.addItem(object);
+							} else if (object.opType === "update") {
+								var item = dataView_.getItemById(object.persistentId);
+								if (item === undefined) {
+									dataView_.addItem(object);
+								} else {
+									dataView_.updateItem(object.persistentId, object);
+								}
+							} else if (object.opType === "delete") {
+								dataView_.deleteItem(object.persistentId);
+							}
 						}
+						dataView_.sort(thisListview_.comparer, sortdir_);
 					}
 				},
 				getExpectedResponseType:function () {

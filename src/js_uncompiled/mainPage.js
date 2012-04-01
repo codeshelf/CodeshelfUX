@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.16 2012/03/31 07:27:14 jeffw Exp $
+ *  $Id: mainPage.js,v 1.17 2012/04/01 00:24:35 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.templates');
@@ -57,8 +57,8 @@ codeshelf.mainpage = function () {
 				thisMainpage_.updateFrameSize(size);
 			});
 
-			var listdemo = codeshelf.listdemo();
-			listdemo.launchListDemo(frame_);
+//			var listdemo = codeshelf.listdemo();
+//			listdemo.launchListDemo(frame_);
 
 			var listview = codeshelf.listview(websession_, codeshelf.domainobjects.facility);
 			listview.launchListView(frame_);
