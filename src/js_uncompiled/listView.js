@@ -41,6 +41,7 @@ codeshelf.listview = function (websession, domainObject) {
 				field:              property.id,
 				behavior:           "select",
 //				cssClass:           "cell-selection",
+				headerCssClass:     " ",
 				width:              property.width,
 				cannotTriggerInsert:true,
 				resizable:          true,
@@ -86,13 +87,16 @@ codeshelf.listview = function (websession, domainObject) {
 		},
 
 		comparer:function (a, b) {
-			for (column in columns_) {
-				if (columns_.hasOwnProperty(column)) {
-					var index = grid_.getColumnIndex(column.id);
+			var columnIndex = grid_.getColumnIndexArray();
+			for (columnId in columnIndex) {
+				if (columnIndex.hasOwnProperty(columnId)) {
+					if (a[columnId] !== b[columnId]) {
+						var x = a[columnId];
+						var y = b[columnId];
+						return (x == y ? 0 : (x > y ? 1 : -1));
+					}
 				}
 			}
-			var x = a[sortcol_], y = b[sortcol_];
-			return (x == y ? 0 : (x > y ? 1 : -1));
 		},
 
 		toggleFilterRow:function () {
@@ -144,6 +148,10 @@ codeshelf.listview = function (websession, domainObject) {
 
 				grid_.setSelectedRows(rows);
 				e.preventDefault();
+			});
+
+			grid_.onColumnsReordered.subscribe(function (e) {
+				dataView_.sort(thisListview_.comparer, sortdir_);
 			});
 
 			grid_.onSelectedRowsChanged.subscribe(function (e) {

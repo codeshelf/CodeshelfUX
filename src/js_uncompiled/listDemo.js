@@ -156,7 +156,7 @@ codeshelf.listdemo = function () {
 			for (var i = 0; i < 50000; i++) {
 				var d = (data[i] = {});
 
-				d["id"] = "id_" + i;
+				d["persistentId"] = "id_" + i;
 				d["num"] = i;
 				d["title"] = "Task " + i;
 				d["duration"] = "5 days";
