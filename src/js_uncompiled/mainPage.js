@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.18 2012/04/02 07:58:53 jeffw Exp $
+ *  $Id: mainPage.js,v 1.19 2012/04/10 08:01:20 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.templates');
@@ -9,6 +9,7 @@ goog.require('codeshelf.domainobjects');
 goog.require('codeshelf.listdemo');
 goog.require('codeshelf.listview');
 goog.require('codeshelf.facilityeditor');
+goog.require('codeshelf.initializenewclient');
 goog.require('codeshelf.window');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
@@ -73,7 +74,7 @@ codeshelf.mainpage = function () {
 
 			var websession = application_.getWebsession();
 			var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
-			websession.sendCommand(getFacilitiesCmd, thisMainpage_.mainPageCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
+			websession.sendCommand(getFacilitiesCmd, thisMainpage_.websocketCmdCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
 		},
 
 		exit:function () {
@@ -86,7 +87,7 @@ codeshelf.mainpage = function () {
 			frame_.style.height = size.height - 5 + 'px';
 		},
 
-		mainPageCallback:function (expectedResponseType) {
+		websocketCmdCallback:function (expectedResponseType) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                   function (command) {
@@ -94,16 +95,21 @@ codeshelf.mainpage = function () {
 						alert('response has no result');
 					} else {
 						if (command.type == kWebSessionCommandType.OBJECT_GETTER_RESP) {
-							for (var i = 0; i < command.data.result.length; i++) {
-								var object = command.data.result[i];
-								try {
-									var facilityEditor = codeshelf.facilityeditor();
-									facilityEditor.start(websession_, application_.getOrganization(), frame_, object.persistentId);
-								}
-								catch (err) {
-									alert(err);
-								}
+							if (command.data.result.length === 0) {
+								var clientInitializer = codeshelf.initializenewclient();
+								clientInitializer.start(websession_, application_.getOrganization(), frame_);
+							} else {
+								for (var i = 0; i < command.data.result.length; i++) {
+									var object = command.data.result[i];
+									try {
+										var facilityEditor = codeshelf.facilityeditor();
+										facilityEditor.start(websession_, application_.getOrganization(), frame_, object.persistentId);
+									}
+									catch (err) {
+										alert(err);
+									}
 
+								}
 							}
 						}
 					}

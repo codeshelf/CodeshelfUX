@@ -131,7 +131,7 @@ codeshelf.listview = function (websession, domainObject) {
 			}
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-			websession_.sendCommand(setListViewFilterCmd, thisListview_.getCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+			websession_.sendCommand(setListViewFilterCmd, thisListview_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 
 			grid_.onKeyDown.subscribe(function (e) {
 				// select all rows on ctrl-a
@@ -220,7 +220,7 @@ codeshelf.listview = function (websession, domainObject) {
 			$("#gridContainer").resizable();
 		},
 
-		getCallback:function (expectedResponseType) {
+		websocketCmdCallback:function (expectedResponseType) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                   function (command) {

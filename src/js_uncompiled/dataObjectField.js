@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataObjectField.js,v 1.7 2012/03/31 01:17:29 jeffw Exp $
+ *  $Id: dataObjectField.js,v 1.8 2012/04/10 08:01:20 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
@@ -42,7 +42,7 @@ codeshelf.dataobjectfield = function (websession, parentElement, className, clas
 			}
 
 			var fieldListenerCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_LISTENER_REQ, data);
-			websession_.sendCommand(fieldListenerCmd, thisDataObjectField_.getCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP), true);
+			websession_.sendCommand(fieldListenerCmd, thisDataObjectField_.websocketCmdCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP), true);
 
 
 			// Put the HTML markup in the parent element.
@@ -55,7 +55,7 @@ codeshelf.dataobjectfield = function (websession, parentElement, className, clas
 			goog.events.listen(googleField_, goog.editor.Field.EventType.BLUR, thisDataObjectField_.updateFieldContents);
 		},
 
-		getCallback:function (expectedResponseType) {
+		websocketCmdCallback:function (expectedResponseType) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                   function (command) {
@@ -94,7 +94,7 @@ codeshelf.dataobjectfield = function (websession, parentElement, className, clas
 			}
 
 			var fieldUpdateCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
-			websession_.sendCommand(fieldUpdateCmd, thisDataObjectField_.getCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
+			websession_.sendCommand(fieldUpdateCmd, thisDataObjectField_.websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
 		}
 
 	}

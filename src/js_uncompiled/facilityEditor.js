@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.22 2012/03/31 01:17:29 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.23 2012/04/10 08:01:20 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -57,6 +57,17 @@ codeshelf.facilityeditor = function () {
 			var facilityDescField = codeshelf.dataobjectfield(websession_, contentPane, codeshelf.domainobjects.facility.classname, codeshelf.domainobjects.facility.properties.description.id, facilityPersistentId_);
 			facilityDescField.start();
 
+			// Get the facility's location object.
+			var data = {
+				className:   codeshelf.domainobjects.facility.classname,
+				persistentId:facilityPersistentId_,
+				getterMethod:'getLocation'
+			}
+
+			var getLocationCommand = websession_.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
+			websession_.sendCommand(getLocationCommand, thisFacilityEditor_.websocketCmdCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
+
+
 			// Add the graphical editor.
 			var editorPane = soy.renderAsElement(codeshelf.templates.facilityEditor);
 			goog.dom.appendChild(contentPane, editorPane);
@@ -82,7 +93,7 @@ codeshelf.facilityeditor = function () {
 
 		exit:function () {
 			pen_.deleteMis();
-			if (null != pen_.polygon) {
+			if (pen_.polygon != null) {
 				pen_.polygon.remove();
 			}
 			google.maps.event.removeListener(clickHandler_);
@@ -97,7 +108,7 @@ codeshelf.facilityeditor = function () {
 			return pen_.getColor();
 		},
 
-		facilityCommandsCallback:function (expectedResponseType) {
+		websocketCmdCallback:function (expectedResponseType) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                   function (command) {
@@ -107,40 +118,14 @@ codeshelf.facilityeditor = function () {
 						if (command.type == kWebSessionCommandType.OBJECT_GETTER_RESP) {
 							for (var i = 0; i < command.data.result.length; i++) {
 								var object = command.data.result[i];
-								//alert("Object: " + object.className + " " + object.description);
 
-								var data = {
-									className:    object.className,
-									objectIds:    [ object.persistentId ],
-									propertyNames:[ 'DomainId', 'Description' ]
+								// Make sure the class name matches.
+								if (object.className === codeshelf.domainobjects.facility.classnam) {
+
 								}
-
-								var getFacilitiesCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_LISTENER_REQ, data);
-								websession_.sendCommand(getFacilitiesCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP), true);
-
-								var data = {
-									className:   object.className,
-									persistentId:object.persistentId,
-									setterMethod:'setDescription',
-									setterValue: "'" + new Date() + "'"
-								}
-
-								var setFacilityDescCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
-								websession_.sendCommand(setFacilityDescCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
 							}
 						} else if (command.type == kWebSessionCommandType.OBJECT_LISTENER_RESP) {
-//							for (var i = 0; i < command.data.result.length; i++) {
-//								var object = command.data.result[i];
-//
-//								var data = {
-//									className:    'Facility',
-//									propertyNames:[ 'Id', 'Description' ],
-//									filterClause:  'id = 12345'
-//								}
-//
-//								var setFacilityFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-//								websession_.sendCommand(setFacilityFilterCmd, thisFacilityEditor_.facilityCommandsCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
-//							}
+
 						} else if (command.type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
 
 						}
@@ -170,16 +155,17 @@ codeshelf.facilityeditor.pen = function (map) {
 	var currentDot_ = null;
 
 	var thisPen = {
-		//draw function
+
 		draw:         function (latLng) {
-			if (null != polygon_) {
+			if (polygon_ != null) {
 				alert('Click Reset to draw another');
 			} else {
+				// Figure out if we're clicking on an existing marker.
 				if (currentDot_ != null && listOfDots_.length > 1 && currentDot_ == listOfDots_[0]) {
 					this.drawPolygon(listOfDots_);
 				} else {
 					//remove previous line
-					if (null != polyline_) {
+					if (polyline_ != null) {
 						polyline_.remove();
 					}
 					//draw Dot
@@ -192,12 +178,12 @@ codeshelf.facilityeditor.pen = function (map) {
 				}
 			}
 		},
-		//draw ploygon
+
 		drawPolygon:  function (listOfDots, color, des, id) {
 			polygon_ = codeshelf.facilityeditor.polygon(listOfDots, map, this, color, des, id);
 			thisPen.deleteMis();
 		},
-		//delete all dots and polylines
+
 		deleteMis:    function () {
 			//delete dots
 			$.each(listOfDots_, function (index, value) {
@@ -205,28 +191,28 @@ codeshelf.facilityeditor.pen = function (map) {
 			});
 			listOfDots_.length = 0;
 			//delete lines
-			if (null != polyline_) {
+			if (polyline_ != null) {
 				polyline_.remove();
 				polyline_ = null;
 			}
 		},
-		//cancel
+
 		cancel:       function () {
-			if (null != polygon_) {
+			if (polygon_ != null) {
 				(polygon_.remove());
 			}
 			polygon_ = null;
 			thisPen.deleteMis();
 		},
-		//setter
+
 		setCurrentDot:function (dot) {
 			currentDot_ = dot;
 		},
-		//getter
+
 		getListOfDots:function () {
 			return listOfDots_;
 		},
-		//get plots data
+
 		getData:      function () {
 			if (polygon_ != null) {
 				var data = "";
@@ -240,7 +226,7 @@ codeshelf.facilityeditor.pen = function (map) {
 				return null;
 			}
 		},
-		//get color
+
 		getColor:     function () {
 			if (polygon_ != null) {
 				var color = polygon_.getColor();
