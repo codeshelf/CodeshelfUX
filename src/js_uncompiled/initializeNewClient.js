@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: initializeNewClient.js,v 1.1 2012/04/10 08:01:20 jeffw Exp $
+ *  $Id: initializeNewClient.js,v 1.2 2012/04/11 05:13:07 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.initializenewclient');
 goog.require('codeshelf.templates');
@@ -12,6 +12,7 @@ goog.require('goog.events.EventHandler');
 codeshelf.initializenewclient = function () {
 
 	var websession_;
+	var frame_;
 	var organization_;
 	var facilityPersistentId_;
 	var thisInitializeNewClient_;
@@ -20,6 +21,7 @@ codeshelf.initializenewclient = function () {
 		start:function (websession, organization, parentFrame) {
 			websession_ = websession;
 			organization_ = organization;
+			frame_ = parentFrame;
 			var position = {};
 			if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(thisInitializeNewClient_.posSucceed, thisInitializeNewClient_.posFail);
@@ -29,21 +31,7 @@ codeshelf.initializenewclient = function () {
 		},
 
 		posSucceed:function (position) {
-			var data = {
-				parentClassName:   codeshelf.domainobjects.organization.classname,
-				parentPersistentId:organization.persistentId,
-				className:         codeshelf.domainobjects.facility.classname,
-				propertyNames:     [
-					{DomainId:'F1'},
-					{Description:'First Facility'},
-					{PosType:'GPS'},
-					{PosX:position.coords.latitude},
-					{PosY:position.coords.longitude}
-				]
-			}
-
-			var newFacilityCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_CREATE_REQ, data);
-			websession_.sendCommand(newFacilityCmd, thisInitializeNewClient_.websocketCmdCallback(kWebSessionCommandType.OBJECT_CREATE_RESP), false);
+			thisInitializeNewClient_.createFacility(position.coords.longitude, position.coords.latitude);
 		},
 
 		posFail:function (error) {
@@ -58,6 +46,12 @@ codeshelf.initializenewclient = function () {
 					break;
 			}
 
+			// Since we don't know the user's location let's default to the Safeway DC Tracy, CA
+			thisInitializeNewClient_.createFacility(-121.517029, 37.717198);
+
+		},
+
+		createFacility:function (longitude, latitude) {
 			var data = {
 				parentClassName:   codeshelf.domainobjects.organization.classname,
 				parentPersistentId:organization_.persistentId,
@@ -66,8 +60,8 @@ codeshelf.initializenewclient = function () {
 					{name:'DomainId', value:'F1'},
 					{name:'Description', value:'First Facility'},
 					{name:'PosTypeByStr', value:'GPS'},
-					{name:'PosX', value:37.717198},
-					{name:'PosY', value:-121.517029},
+					{name:'PosX', value:longitude},
+					{name:'PosY', value:latitude}
 				]
 			}
 
@@ -82,7 +76,9 @@ codeshelf.initializenewclient = function () {
 					if (!command.data.hasOwnProperty('result')) {
 						alert('response has no result');
 					} else if (command.type == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-
+						var facility = command.data.result;
+						var facilityEditor = codeshelf.facilityeditor();
+						facilityEditor.start(websession_, organization_, frame_, facility);
 					}
 				},
 				getExpectedResponseType:function () {

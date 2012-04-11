@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.19 2012/04/10 08:01:20 jeffw Exp $
+ *  $Id: mainPage.js,v 1.20 2012/04/11 05:13:07 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.templates');
@@ -100,10 +100,10 @@ codeshelf.mainpage = function () {
 								clientInitializer.start(websession_, application_.getOrganization(), frame_);
 							} else {
 								for (var i = 0; i < command.data.result.length; i++) {
-									var object = command.data.result[i];
+									var facility = command.data.result[i];
 									try {
 										var facilityEditor = codeshelf.facilityeditor();
-										facilityEditor.start(websession_, application_.getOrganization(), frame_, object.persistentId);
+										facilityEditor.start(websession_, application_.getOrganization(), frame_, facility);
 									}
 									catch (err) {
 										alert(err);

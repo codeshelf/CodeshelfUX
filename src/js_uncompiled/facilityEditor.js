@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.23 2012/04/10 08:01:20 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.24 2012/04/11 05:13:07 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -22,19 +22,19 @@ codeshelf.facilityeditor = function () {
 	var organization_;
 	var mapPane_;
 	var thisFacilityEditor_;
-	var facilityPersistentId_
+	var facility_
 
 	thisFacilityEditor_ = {
-		start:function (websession, organization, parentFrame, facilityPersistentId) {
+		start:function (websession, organization, parentFrame, facility) {
 
 			websession_ = websession;
-			facilityPersistentId_ = facilityPersistentId;
+			facility_ = facility;
 
 			// Add the Google Maps scripts (There's no way to wait for this to load - put it in the header.)
 			//goog.dom.appendChild(goog.dom.getDocument().head, soy.renderAsElement(codeshelf.templates.googleMapsScripts));
 
 			// Safeway DC Tracy, CA
-			var demoLatLng = new google.maps.LatLng(37.717198, -121.517029);
+			var demoLatLng = new google.maps.LatLng(facility_.posY, facility_.posX);
 			var myOptions = {
 				zoom:                  16,
 				center:                demoLatLng,
@@ -54,19 +54,8 @@ codeshelf.facilityeditor = function () {
 			var contentPane = editorWindow.getContentElement();
 
 			// Add the facility descriptor field.
-			var facilityDescField = codeshelf.dataobjectfield(websession_, contentPane, codeshelf.domainobjects.facility.classname, codeshelf.domainobjects.facility.properties.description.id, facilityPersistentId_);
+			var facilityDescField = codeshelf.dataobjectfield(websession_, contentPane, codeshelf.domainobjects.facility.classname, codeshelf.domainobjects.facility.properties.description.id, facility_.persistentId);
 			facilityDescField.start();
-
-			// Get the facility's location object.
-			var data = {
-				className:   codeshelf.domainobjects.facility.classname,
-				persistentId:facilityPersistentId_,
-				getterMethod:'getLocation'
-			}
-
-			var getLocationCommand = websession_.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
-			websession_.sendCommand(getLocationCommand, thisFacilityEditor_.websocketCmdCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
-
 
 			// Add the graphical editor.
 			var editorPane = soy.renderAsElement(codeshelf.templates.facilityEditor);
