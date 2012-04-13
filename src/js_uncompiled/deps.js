@@ -4,7 +4,7 @@ goog.addDependency('../../../../src/js_uncompiled/application.js', ['codeshelf.a
 goog.addDependency('../../../../src/js_uncompiled/codeshelf_generated.js', ['codeshelf.templates'], ['soy', 'soy.StringBuilder']);
 goog.addDependency('../../../../src/js_uncompiled/dataObjectField.js', ['codeshelf.dataobjectfield'], ['codeshelf.templates', 'codeshelf.websession', 'goog.editor.SeamlessField', 'goog.events.EventHandler', 'goog.events.EventType']);
 goog.addDependency('../../../../src/js_uncompiled/domainObjects.js', ['codeshelf.domainobjects'], []);
-goog.addDependency('../../../../src/js_uncompiled/facilityEditor.js', ['codeshelf.facilityeditor'], ['codeshelf.dataobjectfield', 'codeshelf.mainpage', 'codeshelf.templates', 'codeshelf.websession', 'goog.events.EventHandler', 'goog.events.EventType']);
+goog.addDependency('../../../../src/js_uncompiled/facilityEditor.js', ['codeshelf.facilityeditor'], ['codeshelf.dataobjectfield', 'codeshelf.mainpage', 'codeshelf.templates', 'codeshelf.websession', 'goog.events.EventHandler', 'goog.events.EventType', 'jquery.css-rotate', 'jquery.css-transform']);
 goog.addDependency('../../../../src/js_uncompiled/initializeNewClient.js', ['codeshelf.initializenewclient'], ['codeshelf.templates', 'codeshelf.websession', 'goog.events.EventHandler', 'goog.events.EventType']);
 goog.addDependency('../../../../src/js_uncompiled/launch.js', ['codeshelf.launch'], ['codeshelf.mainpage', 'codeshelf.templates', 'codeshelf.websession', 'goog.dom', 'goog.dom.query', 'goog.style', 'goog.ui.RoundedPanel', 'goog.window']);
 goog.addDependency('../../../../src/js_uncompiled/listDemo.js', ['codeshelf.listdemo'], ['jquery', 'slickgrid.columnpicker', 'slickgrid.core', 'slickgrid.dataview', 'slickgrid.editors', 'slickgrid.firebugx', 'slickgrid.grid', 'slickgrid.pager', 'slickgrid.rowselection']);
@@ -17,6 +17,8 @@ goog.addDependency('../../../GoogleClosureTemplates/soyutils_usegoog.js', ['soy'
 goog.addDependency('../../../JQuery/jquery-1.7.1.js', ['jquery'], []);
 goog.addDependency('../../../JQuery/jquery-1.7.min.js', ['jquery.min'], []);
 goog.addDependency('../../../JQuery/jquery-ui-1.8.16.custom.min.js', ['jquery.ui'], []);
+goog.addDependency('../../../JQuery/jquery.css-rotate.js', ['jquery.css-rotate'], ['jquery']);
+goog.addDependency('../../../JQuery/jquery.css-transform.js', ['jquery.css-transform'], ['jquery']);
 goog.addDependency('../../../JQuery/jquery.event.drag-2.0.min.js', ['jquery.event.drag'], []);
 goog.addDependency('../../../JQuery/jquery.event.drop-2.0.min.js', ['jquery.event.drop'], []);
 goog.addDependency('../../../JQuery/jquery.jsonp-1.1.0.min.js', ['jquery.jsonp'], []);

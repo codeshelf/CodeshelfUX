@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.24 2012/04/11 05:13:07 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.25 2012/04/13 18:54:25 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -10,6 +10,42 @@ goog.require('codeshelf.mainpage');
 goog.require('codeshelf.dataobjectfield');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
+goog.require('jquery.css-rotate');
+goog.require('jquery.css-transform');
+
+/**
+ * @param {google.maps.LatLng} newLatLng
+ * @returns {number}
+ */
+google.maps.LatLng.prototype.distanceFrom = function(newLatLng) {
+	// setup our variables
+	var lat1 = this.lat();
+	var radianLat1 = lat1 * ( Math.PI  / 180 );
+	var lng1 = this.lng();
+	var radianLng1 = lng1 * ( Math.PI  / 180 );
+	var lat2 = newLatLng.lat();
+	var radianLat2 = lat2 * ( Math.PI  / 180 );
+	var lng2 = newLatLng.lng();
+	var radianLng2 = lng2 * ( Math.PI  / 180 );
+	// sort out the radius, MILES or KM?
+	var earth_radius = 3959; // (km = 6378.1) OR (miles = 3959) - radius of the earth
+
+	// sort our the differences
+	var diffLat =  ( radianLat1 - radianLat2 );
+	var diffLng =  ( radianLng1 - radianLng2 );
+	// put on a wave (hey the earth is round after all)
+	var sinLat = Math.sin( diffLat / 2  );
+	var sinLng = Math.sin( diffLng / 2  );
+
+	// maths - borrowed from http://www.opensourceconnections.com/wp-content/uploads/2009/02/clientsidehaversinecalculation.html
+	var a = Math.pow(sinLat, 2.0) + Math.cos(radianLat1) * Math.cos(radianLat2) * Math.pow(sinLng, 2.0);
+
+	// work out the distance
+	var distance = earth_radius * 2 * Math.asin(Math.min(1, Math.sqrt(a)));
+
+	// return the distance
+	return distance;
+}
 
 codeshelf.facilityeditor = function () {
 
@@ -21,6 +57,7 @@ codeshelf.facilityeditor = function () {
 	var websession_;
 	var organization_;
 	var mapPane_;
+	var mapRotatePane_;
 	var thisFacilityEditor_;
 	var facility_
 
@@ -41,10 +78,11 @@ codeshelf.facilityeditor = function () {
 				mapTypeId:             google.maps.MapTypeId.HYBRID,
 				disableDoubleClickZoom:true,
 				panControl:            false,
-				rotateControl:         true,
+				rotateControl:         false,
 				streetViewControl:     false,
 				draggableCursor:       'url(file://../src/images/push-pin.png), auto',
-				heading:               180
+				heading:               180,
+				tilt:                  0
 			}
 
 			//map_ = new google.maps.Map(goog.dom.query('#facility_map')[0], myOptions);
@@ -61,19 +99,37 @@ codeshelf.facilityeditor = function () {
 			var editorPane = soy.renderAsElement(codeshelf.templates.facilityEditor);
 			goog.dom.appendChild(contentPane, editorPane);
 			mapPane_ = goog.dom.query('.facilityMap', editorPane)[0];
+			mapRotatePane_ = $('.facilityMap');
 			map_ = new google.maps.Map(mapPane_, myOptions);
 			pen_ = codeshelf.facilityeditor.pen(map_);
 
-			clickHandler_ = google.maps.event.addListener(map_, 'click', function (event) {
+			clickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.CLICK, function (event) {
 				clickTimeout_ = setTimeout(function () {
 					pen_.draw(event.latLng);
 				}, 250);
 			});
 
-			doubleClickHandler_ = google.maps.event.addListener(map_, 'dblclick', function (event) {
+			doubleClickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.DBLCLICK, function (event) {
 				clearTimeout(clickTimeout_);
 				pen_.draw(pen_.getListOfDots()[0].getLatLng());
 			});
+
+			keyHandler_ = google.maps.event.addListener(map_, 'rightclick', function (event) {
+				mapRotatePane_.animate({rotate: '+=1deg'}, 0);
+			});
+
+			var data = {
+				className:    codeshelf.domainobjects.vertex.classname,
+				propertyNames:['PosXMeters', 'PosYMeters', 'SortOrder'],
+				filterClause: 'parentLocation.persistentId = :theId',
+				filterParams: [
+					{ name:"theId", value:facility_.persistentId}
+				]
+			}
+
+			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
+			websession_.sendCommand(setListViewFilterCmd, thisFacilityEditor_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+
 		},
 
 		resizeFunction:function () {
@@ -145,7 +201,7 @@ codeshelf.facilityeditor.pen = function (map) {
 
 	var thisPen = {
 
-		draw:         function (latLng) {
+		draw:function (latLng) {
 			if (polygon_ != null) {
 				alert('Click Reset to draw another');
 			} else {
@@ -168,12 +224,12 @@ codeshelf.facilityeditor.pen = function (map) {
 			}
 		},
 
-		drawPolygon:  function (listOfDots, color, des, id) {
+		drawPolygon:function (listOfDots, color, des, id) {
 			polygon_ = codeshelf.facilityeditor.polygon(listOfDots, map, this, color, des, id);
 			thisPen.deleteMis();
 		},
 
-		deleteMis:    function () {
+		deleteMis:function () {
 			//delete dots
 			$.each(listOfDots_, function (index, value) {
 				value.remove();
@@ -186,7 +242,7 @@ codeshelf.facilityeditor.pen = function (map) {
 			}
 		},
 
-		cancel:       function () {
+		cancel:function () {
 			if (polygon_ != null) {
 				(polygon_.remove());
 			}
@@ -202,7 +258,7 @@ codeshelf.facilityeditor.pen = function (map) {
 			return listOfDots_;
 		},
 
-		getData:      function () {
+		getData:function () {
 			if (polygon_ != null) {
 				var data = "";
 				var paths = polygon_.getPlots();
@@ -216,7 +272,7 @@ codeshelf.facilityeditor.pen = function (map) {
 			}
 		},
 
-		getColor:     function () {
+		getColor:function () {
 			if (polygon_ != null) {
 				var color = polygon_.getColor();
 				return color;

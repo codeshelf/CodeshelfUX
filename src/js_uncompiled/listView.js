@@ -127,7 +127,8 @@ codeshelf.listview = function (websession, domainObject) {
 			var data = {
 				className:    domainObject_.classname,
 				propertyNames:properties_,
-				filterClause: ''
+				filterClause: '',
+				filterParams: []
 			}
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
