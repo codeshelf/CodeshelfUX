@@ -1,10 +1,11 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.25 2012/04/13 18:54:25 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.26 2012/04/15 01:03:17 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
+goog.require('codeshelf.facilityeditorgmapsoverlay');
 goog.require('codeshelf.websession');
 goog.require('codeshelf.mainpage');
 goog.require('codeshelf.dataobjectfield');
@@ -13,29 +14,34 @@ goog.require('goog.events.EventHandler');
 goog.require('jquery.css-rotate');
 goog.require('jquery.css-transform');
 
+
+var newPoint;
+var longLat;
+var rotateDeg = 0;
+
 /**
  * @param {google.maps.LatLng} newLatLng
  * @returns {number}
  */
-google.maps.LatLng.prototype.distanceFrom = function(newLatLng) {
+google.maps.LatLng.prototype.distanceFrom = function (newLatLng) {
 	// setup our variables
 	var lat1 = this.lat();
-	var radianLat1 = lat1 * ( Math.PI  / 180 );
+	var radianLat1 = lat1 * ( Math.PI / 180 );
 	var lng1 = this.lng();
-	var radianLng1 = lng1 * ( Math.PI  / 180 );
+	var radianLng1 = lng1 * ( Math.PI / 180 );
 	var lat2 = newLatLng.lat();
-	var radianLat2 = lat2 * ( Math.PI  / 180 );
+	var radianLat2 = lat2 * ( Math.PI / 180 );
 	var lng2 = newLatLng.lng();
-	var radianLng2 = lng2 * ( Math.PI  / 180 );
+	var radianLng2 = lng2 * ( Math.PI / 180 );
 	// sort out the radius, MILES or KM?
 	var earth_radius = 3959; // (km = 6378.1) OR (miles = 3959) - radius of the earth
 
 	// sort our the differences
-	var diffLat =  ( radianLat1 - radianLat2 );
-	var diffLng =  ( radianLng1 - radianLng2 );
+	var diffLat = ( radianLat1 - radianLat2 );
+	var diffLng = ( radianLng1 - radianLng2 );
 	// put on a wave (hey the earth is round after all)
-	var sinLat = Math.sin( diffLat / 2  );
-	var sinLng = Math.sin( diffLng / 2  );
+	var sinLat = Math.sin(diffLat / 2);
+	var sinLng = Math.sin(diffLng / 2);
 
 	// maths - borrowed from http://www.opensourceconnections.com/wp-content/uploads/2009/02/clientsidehaversinecalculation.html
 	var a = Math.pow(sinLat, 2.0) + Math.cos(radianLat1) * Math.cos(radianLat2) * Math.pow(sinLng, 2.0);
@@ -60,6 +66,7 @@ codeshelf.facilityeditor = function () {
 	var mapRotatePane_;
 	var thisFacilityEditor_;
 	var facility_
+	var facilityEditorOverlay_;
 
 	thisFacilityEditor_ = {
 		start:function (websession, organization, parentFrame, facility) {
@@ -101,21 +108,31 @@ codeshelf.facilityeditor = function () {
 			mapPane_ = goog.dom.query('.facilityMap', editorPane)[0];
 			mapRotatePane_ = $('.facilityMap');
 			map_ = new google.maps.Map(mapPane_, myOptions);
+			facilityEditorOverlay_ = codeshelf.facilityeditorgmapsoverlay(map_);
 			pen_ = codeshelf.facilityeditor.pen(map_);
 
 			clickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.CLICK, function (event) {
-				clickTimeout_ = setTimeout(function () {
-					pen_.draw(event.latLng);
-				}, 250);
-			});
+					clickTimeout_ = setTimeout(function () {
+						var projection = facilityEditorOverlay_.getProjection();
+						var clickPoint = projection.fromLatLngToContainerPixel(event.latLng);
+						for (var deg = 0; deg <= 360; deg += 10) {
+							var rotatePoint = thisFacilityEditor_.rotatePoint(clickPoint.x, clickPoint.y, mapPane_.clientWidth / 2, mapPane_.clientHeight / 2, deg);
+							newPoint = new google.maps.Point(rotatePoint.x, rotatePoint.y);
+							longLat = projection.fromContainerPixelToLatLng(newPoint, true);
+							pen_.draw(longLat);
+						}
+					}, 250);
+				}
+			)
+			;
 
 			doubleClickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.DBLCLICK, function (event) {
 				clearTimeout(clickTimeout_);
-				pen_.draw(pen_.getListOfDots()[0].getLatLng());
+				pen_.deleteMis();
 			});
 
 			keyHandler_ = google.maps.event.addListener(map_, 'rightclick', function (event) {
-				mapRotatePane_.animate({rotate: '+=1deg'}, 0);
+				mapRotatePane_.animate({rotate:'+=1deg'}, 0);
 			});
 
 			var data = {
@@ -130,6 +147,21 @@ codeshelf.facilityeditor = function () {
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			websession_.sendCommand(setListViewFilterCmd, thisFacilityEditor_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 
+		},
+
+		rotatePoint:function (x, y, xm, ym, a) {
+			var cos = Math.cos,
+				sin = Math.sin,
+
+				a = a * Math.PI / 180, // Convert to radians because that's what
+			// JavaScript likes
+
+			// Subtract midpoints, so that midpoint is translated to origin
+			// and add it in the end again
+				xr = (x - xm) * cos(a) - (y - ym) * sin(a) + xm,
+				yr = (x - xm) * sin(a) + (y - ym) * cos(a) + ym;
+
+			return {'x':xr, 'y':yr};
 		},
 
 		resizeFunction:function () {
