@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.26 2012/04/15 01:03:17 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.27 2012/04/19 07:32:16 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -67,12 +67,17 @@ codeshelf.facilityeditor = function () {
 	var thisFacilityEditor_;
 	var facility_
 	var facilityEditorOverlay_;
+	var facilityOutlinePath_;
+	var facilityOutlineMarkers_ = [];
+	var facilityOutline_;
+	var facilityAnchorMarker_ = null;
 
 	thisFacilityEditor_ = {
 		start:function (websession, organization, parentFrame, facility) {
 
 			websession_ = websession;
 			facility_ = facility;
+			organization_ = organization;
 
 			// Add the Google Maps scripts (There's no way to wait for this to load - put it in the header.)
 			//goog.dom.appendChild(goog.dom.getDocument().head, soy.renderAsElement(codeshelf.templates.googleMapsScripts));
@@ -109,31 +114,89 @@ codeshelf.facilityeditor = function () {
 			mapRotatePane_ = $('.facilityMap');
 			map_ = new google.maps.Map(mapPane_, myOptions);
 			facilityEditorOverlay_ = codeshelf.facilityeditorgmapsoverlay(map_);
-			pen_ = codeshelf.facilityeditor.pen(map_);
+
+			//pen_ = codeshelf.facilityeditor.pen(map_);
+
+			// Setup the outline management for the facility.
+			facilityOutlinePath_ = new google.maps.MVCArray;
+			facilityOutline_ = new google.maps.Polyline({
+				strokeWeight:3,
+				fillColor:   '#5555FF'
+			});
+			facilityOutline_.setMap(map_);
+			facilityOutline_.setPath(new google.maps.MVCArray([facilityOutlinePath_]));
 
 			clickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.CLICK, function (event) {
 					clickTimeout_ = setTimeout(function () {
-						var projection = facilityEditorOverlay_.getProjection();
-						var clickPoint = projection.fromLatLngToContainerPixel(event.latLng);
-						for (var deg = 0; deg <= 360; deg += 10) {
-							var rotatePoint = thisFacilityEditor_.rotatePoint(clickPoint.x, clickPoint.y, mapPane_.clientWidth / 2, mapPane_.clientHeight / 2, deg);
-							newPoint = new google.maps.Point(rotatePoint.x, rotatePoint.y);
-							longLat = projection.fromContainerPixelToLatLng(newPoint, true);
-							pen_.draw(longLat);
+
+						facilityOutlinePath_.insertAt(facilityOutlinePath_.length, event.latLng);
+
+						var iconUrl = 'icons/marker_20_blue.png';
+
+						if (facilityOutlineMarkers_.length === 0) {
+							iconUrl = 'icons/marker_20_red.png';
 						}
+
+						var markerImage = new google.maps.MarkerImage(
+							iconUrl,
+							new google.maps.Size(12, 20),
+							new google.maps.Point(0, 0),
+							new google.maps.Point(6, 16)
+						);
+
+						var marker = new google.maps.Marker({
+							position: event.latLng,
+							map:      map_,
+							draggable:true,
+							icon:     markerImage
+						});
+
+						facilityOutlineMarkers_.push(marker);
+						marker.setTitle("#" + facilityOutlinePath_.length);
+
+						google.maps.event.addListener(marker, 'dragend', function () {
+								for (var i = 0, I = facilityOutlineMarkers_.length; i < I && facilityOutlineMarkers_[i] != marker; ++i);
+								facilityOutlinePath_.setAt(i, marker.getPosition());
+							}
+						);
+
+						if (facilityAnchorMarker_ === null) {
+							facilityAnchorMarker_ = marker;
+							google.maps.event.addListener(facilityAnchorMarker_, goog.events.EventType.CLICK, function () {
+									facilityOutline_.setMap(null);
+									facilityOutline_ = new google.maps.Polygon({
+										strokeWeight:3,
+										fillColor:   '#5555FF'
+									});
+									facilityOutline_.setMap(map_);
+									facilityOutline_.setPath(facilityOutlinePath_);
+								}
+							);
+						}
+
+						//pen_.draw(event.latLng);
+
+
+//						var projection = facilityEditorOverlay_.getProjection();
+//						var clickPoint = projection.fromLatLngToContainerPixel(event.latLng);
+//						for (var deg = 0; deg <= 360; deg += 10) {
+//							var rotatePoint = thisFacilityEditor_.rotatePoint(clickPoint.x, clickPoint.y, mapPane_.clientWidth / 2, mapPane_.clientHeight / 2, deg);
+//							newPoint = new google.maps.Point(rotatePoint.x, rotatePoint.y);
+//							longLat = projection.fromContainerPixelToLatLng(newPoint, true);
+//							pen_.draw(longLat);
+//						}
 					}, 250);
 				}
 			)
-			;
 
 			doubleClickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.DBLCLICK, function (event) {
 				clearTimeout(clickTimeout_);
-				pen_.deleteMis();
+				thisFacilityEditor_.deletePolyline();
 			});
 
-			keyHandler_ = google.maps.event.addListener(map_, 'rightclick', function (event) {
-				mapRotatePane_.animate({rotate:'+=1deg'}, 0);
-			});
+//			keyHandler_ = google.maps.event.addListener(map_, 'rightclick', function (event) {
+//				mapRotatePane_.animate({rotate:'+=1deg'}, 0);
+//			});
 
 			var data = {
 				className:    codeshelf.domainobjects.vertex.classname,
@@ -149,17 +212,34 @@ codeshelf.facilityeditor = function () {
 
 		},
 
+		deletePolyline: function() {
+			// Clear all of the markers from the map.
+			for (var i = 0; i < facilityOutlineMarkers_.length; ++i) {
+				facilityOutlineMarkers_[i].setMap(null);
+			}
+
+			facilityOutlinePath_.clear();
+			facilityOutlineMarkers_.length = 0;
+			facilityAnchorMarker_ = null;
+
+			facilityOutline_ = new google.maps.Polyline({
+				strokeWeight:3,
+				fillColor:   '#5555FF'
+			});
+			facilityOutline_.setMap(map_);
+			facilityOutline_.setPath(new google.maps.MVCArray([facilityOutlinePath_]));
+		},
+
 		rotatePoint:function (x, y, xm, ym, a) {
-			var cos = Math.cos,
-				sin = Math.sin,
+			var cos = Math.cos;
+			var sin = Math.sin;
 
-				a = a * Math.PI / 180, // Convert to radians because that's what
-			// JavaScript likes
+			// Convert to radians because that's what JavaScript likes
+			var a = a * Math.PI / 180;
 
-			// Subtract midpoints, so that midpoint is translated to origin
-			// and add it in the end again
-				xr = (x - xm) * cos(a) - (y - ym) * sin(a) + xm,
-				yr = (x - xm) * sin(a) + (y - ym) * cos(a) + ym;
+			// Subtract midpoints, so that midpoint is translated to origin and add it in the end again
+			var xr = (x - xm) * cos(a) - (y - ym) * sin(a) + xm;
+			var yr = (x - xm) * sin(a) + (y - ym) * cos(a) + ym;
 
 			return {'x':xr, 'y':yr};
 		},
@@ -219,6 +299,7 @@ codeshelf.facilityeditor = function () {
 
 	return thisFacilityEditor_;
 }
+
 
 /*
  * pen class
@@ -324,9 +405,19 @@ codeshelf.facilityeditor.dot = function (latLng, map, pen) {
 	//property
 	var latLng_ = latLng;
 	var parent_ = pen;
+
+	var markerImage = new google.maps.MarkerImage(
+		'icons/marker_20_red.png',
+		new google.maps.Size(12, 20),
+		new google.maps.Point(0, 0),
+		new google.maps.Point(6, 16)
+	);
+
 	var markerObj_ = new google.maps.Marker({
-		position:latLng,
-		map:     map
+		position: latLng,
+		map:      map,
+		draggable:true,
+		icon:     markerImage
 	});
 
 	var thisDot = {
@@ -352,6 +443,12 @@ codeshelf.facilityeditor.dot = function (latLng, map, pen) {
 		});
 	}
 	addListener();
+
+	google.maps.event.addListener(markerObj_, 'dragend', function () {
+			for (var i = 0, I = markers.length; i < I && markers[i] != marker; ++i);
+			path.setAt(i, marker.getPosition());
+		}
+	);
 
 	return thisDot;
 
