@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.27 2012/04/19 07:32:16 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.28 2012/04/20 07:00:54 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -128,53 +128,92 @@ codeshelf.facilityeditor = function () {
 
 			clickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.CLICK, function (event) {
 					clickTimeout_ = setTimeout(function () {
-
-						facilityOutlinePath_.insertAt(facilityOutlinePath_.length, event.latLng);
-
-						var iconUrl = 'icons/marker_20_blue.png';
-
-						if (facilityOutlineMarkers_.length === 0) {
-							iconUrl = 'icons/marker_20_red.png';
+						//thisFacilityEditor_.createVertex(event.latLng);
+						var data = {
+							parentClassName:   codeshelf.domainobjects.facility.classname,
+							parentPersistentId:facility_.persistentId,
+							className:         codeshelf.domainobjects.vertex.classname,
+							properties:        [
+								{name:'DomainId', value:'V'},
+								//{name:'Description', value:'First Facility'},
+								{name:'PosTypeByStr', value:'GPS'},
+								{name:'PosX', value:event.latLng.lng()},
+								{name:'PosY', value:event.latLng.lat()}
+							]
 						}
 
-						var markerImage = new google.maps.MarkerImage(
-							iconUrl,
-							new google.maps.Size(12, 20),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(6, 16)
-						);
+						var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_CREATE_REQ, data);
+						websession_.sendCommand(newVertexCmd, thisFacilityEditor_.websocketCmdCallback(kWebSessionCommandType.OBJECT_CREATE_RESP), false);
+					}, 250);
+				}
+			)
 
-						var marker = new google.maps.Marker({
-							position: event.latLng,
-							map:      map_,
-							draggable:true,
-							icon:     markerImage
+			doubleClickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.DBLCLICK, function (event) {
+				clearTimeout(clickTimeout_);
+				thisFacilityEditor_.deletePolyline();
+			});
+
+			var data = {
+				className:    codeshelf.domainobjects.vertex.classname,
+				propertyNames:['PosType', 'PosX', 'PosY', 'DrawOrder'],
+				filterClause: 'parentLocation.persistentId = :theId',
+				filterParams: [
+					{ name:"theId", value:facility_.persistentId}
+				]
+			}
+
+			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
+			websession_.sendCommand(setListViewFilterCmd, thisFacilityEditor_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+
+		},
+
+		createVertex: function(latLng) {
+			facilityOutlinePath_.insertAt(facilityOutlinePath_.length, latLng);
+
+			var iconUrl = 'icons/marker_20_blue.png';
+
+			if (facilityOutlineMarkers_.length === 0) {
+				iconUrl = 'icons/marker_20_red.png';
+			}
+
+			var markerImage = new google.maps.MarkerImage(
+				iconUrl,
+				new google.maps.Size(12, 20),
+				new google.maps.Point(0, 0),
+				new google.maps.Point(6, 16)
+			);
+
+			var marker = new google.maps.Marker({
+				position: latLng,
+				map:      map_,
+				draggable:true,
+				icon:     markerImage
+			});
+
+			facilityOutlineMarkers_.push(marker);
+			marker.setTitle("#" + facilityOutlinePath_.length);
+
+			google.maps.event.addListener(marker, 'dragend', function () {
+					for (var i = 0, I = facilityOutlineMarkers_.length; i < I && facilityOutlineMarkers_[i] != marker; ++i);
+					facilityOutlinePath_.setAt(i, marker.getPosition());
+				}
+			);
+
+			if (facilityAnchorMarker_ === null) {
+				facilityAnchorMarker_ = marker;
+				google.maps.event.addListener(facilityAnchorMarker_, goog.events.EventType.CLICK, function () {
+						facilityOutline_.setMap(null);
+						facilityOutline_ = new google.maps.Polygon({
+							strokeWeight:3,
+							fillColor:   '#5555FF'
 						});
+						facilityOutline_.setMap(map_);
+						facilityOutline_.setPath(facilityOutlinePath_);
+					}
+				);
+			}
 
-						facilityOutlineMarkers_.push(marker);
-						marker.setTitle("#" + facilityOutlinePath_.length);
-
-						google.maps.event.addListener(marker, 'dragend', function () {
-								for (var i = 0, I = facilityOutlineMarkers_.length; i < I && facilityOutlineMarkers_[i] != marker; ++i);
-								facilityOutlinePath_.setAt(i, marker.getPosition());
-							}
-						);
-
-						if (facilityAnchorMarker_ === null) {
-							facilityAnchorMarker_ = marker;
-							google.maps.event.addListener(facilityAnchorMarker_, goog.events.EventType.CLICK, function () {
-									facilityOutline_.setMap(null);
-									facilityOutline_ = new google.maps.Polygon({
-										strokeWeight:3,
-										fillColor:   '#5555FF'
-									});
-									facilityOutline_.setMap(map_);
-									facilityOutline_.setPath(facilityOutlinePath_);
-								}
-							);
-						}
-
-						//pen_.draw(event.latLng);
+			//pen_.draw(event.latLng);
 
 
 //						var projection = facilityEditorOverlay_.getProjection();
@@ -185,31 +224,6 @@ codeshelf.facilityeditor = function () {
 //							longLat = projection.fromContainerPixelToLatLng(newPoint, true);
 //							pen_.draw(longLat);
 //						}
-					}, 250);
-				}
-			)
-
-			doubleClickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.DBLCLICK, function (event) {
-				clearTimeout(clickTimeout_);
-				thisFacilityEditor_.deletePolyline();
-			});
-
-//			keyHandler_ = google.maps.event.addListener(map_, 'rightclick', function (event) {
-//				mapRotatePane_.animate({rotate:'+=1deg'}, 0);
-//			});
-
-			var data = {
-				className:    codeshelf.domainobjects.vertex.classname,
-				propertyNames:['PosXMeters', 'PosYMeters', 'SortOrder'],
-				filterClause: 'parentLocation.persistentId = :theId',
-				filterParams: [
-					{ name:"theId", value:facility_.persistentId}
-				]
-			}
-
-			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-			websession_.sendCommand(setListViewFilterCmd, thisFacilityEditor_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
-
 		},
 
 		deletePolyline: function() {
@@ -277,14 +291,23 @@ codeshelf.facilityeditor = function () {
 								var object = command.data.result[i];
 
 								// Make sure the class name matches.
-								if (object.className === codeshelf.domainobjects.facility.classnam) {
+								if (object.className === codeshelf.domainobjects.facility.classname) {
 
 								}
 							}
 						} else if (command.type == kWebSessionCommandType.OBJECT_LISTENER_RESP) {
 
 						} else if (command.type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+							for (var i = 0; i < command.data.result.length; i++) {
+								var object = command.data.result[i];
 
+								// Make sure the class name matches.
+								if (object.className === codeshelf.domainobjects.vertex.classname) {
+									var latLng = new google.maps.LatLng(object.PosY, object.PosX);
+
+									thisFacilityEditor_.createVertex(latLng);
+								}
+							}
 						}
 					}
 				},
