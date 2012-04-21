@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.28 2012/04/20 07:00:54 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.29 2012/04/21 08:23:30 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -121,7 +121,8 @@ codeshelf.facilityeditor = function () {
 			facilityOutlinePath_ = new google.maps.MVCArray;
 			facilityOutline_ = new google.maps.Polyline({
 				strokeWeight:3,
-				fillColor:   '#5555FF'
+				strokeColor: '#ff0000',
+				fillColor:   '#0000cc'
 			});
 			facilityOutline_.setMap(map_);
 			facilityOutline_.setPath(new google.maps.MVCArray([facilityOutlinePath_]));
@@ -167,7 +168,7 @@ codeshelf.facilityeditor = function () {
 
 		},
 
-		createVertex: function(latLng) {
+		createVertex:function (persistentId, latLng) {
 			facilityOutlinePath_.insertAt(facilityOutlinePath_.length, latLng);
 
 			var iconUrl = 'icons/marker_20_blue.png';
@@ -190,11 +191,13 @@ codeshelf.facilityeditor = function () {
 				icon:     markerImage
 			});
 
-			facilityOutlineMarkers_.push(marker);
+			var markerData = {marker:marker, persistentId:persistentId};
+
+			facilityOutlineMarkers_.push(markerData);
 			marker.setTitle("#" + facilityOutlinePath_.length);
 
 			google.maps.event.addListener(marker, 'dragend', function () {
-					for (var i = 0, I = facilityOutlineMarkers_.length; i < I && facilityOutlineMarkers_[i] != marker; ++i);
+					for (var i = 0, I = facilityOutlineMarkers_.length; i < I && facilityOutlineMarkers_[i].marker != marker; ++i);
 					facilityOutlinePath_.setAt(i, marker.getPosition());
 				}
 			);
@@ -205,7 +208,8 @@ codeshelf.facilityeditor = function () {
 						facilityOutline_.setMap(null);
 						facilityOutline_ = new google.maps.Polygon({
 							strokeWeight:3,
-							fillColor:   '#5555FF'
+							strokeColor: '#ff0000',
+							fillCOlor:   '#0000cc'
 						});
 						facilityOutline_.setMap(map_);
 						facilityOutline_.setPath(facilityOutlinePath_);
@@ -226,11 +230,21 @@ codeshelf.facilityeditor = function () {
 //						}
 		},
 
-		deletePolyline: function() {
+		deletePolyline:function () {
 			// Clear all of the markers from the map.
 			for (var i = 0; i < facilityOutlineMarkers_.length; ++i) {
-				facilityOutlineMarkers_[i].setMap(null);
+
+				var data = {
+					className:   codeshelf.domainobjects.vertex.classname,
+					persistentId:facilityOutlineMarkers_[i].persistentId
+				}
+
+				var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_DELETE_REQ, data);
+				websession_.sendCommand(newVertexCmd, thisFacilityEditor_.websocketCmdCallback(kWebSessionCommandType.OBJECT_DELETE_RESP), false);
+
+				facilityOutlineMarkers_[i].marker.setMap(null);
 			}
+
 
 			facilityOutlinePath_.clear();
 			facilityOutlineMarkers_.length = 0;
@@ -238,7 +252,8 @@ codeshelf.facilityeditor = function () {
 
 			facilityOutline_ = new google.maps.Polyline({
 				strokeWeight:3,
-				fillColor:   '#5555FF'
+				strokeColor: '#ff0000',
+				fillCOlor:   '#0000cc'
 			});
 			facilityOutline_.setMap(map_);
 			facilityOutline_.setPath(new google.maps.MVCArray([facilityOutlinePath_]));
@@ -295,8 +310,6 @@ codeshelf.facilityeditor = function () {
 
 								}
 							}
-						} else if (command.type == kWebSessionCommandType.OBJECT_LISTENER_RESP) {
-
 						} else if (command.type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
 							for (var i = 0; i < command.data.result.length; i++) {
 								var object = command.data.result[i];
@@ -305,8 +318,17 @@ codeshelf.facilityeditor = function () {
 								if (object.className === codeshelf.domainobjects.vertex.classname) {
 									var latLng = new google.maps.LatLng(object.PosY, object.PosX);
 
-									thisFacilityEditor_.createVertex(latLng);
+									thisFacilityEditor_.createVertex(object.persistentId, latLng);
 								}
+							}
+						} else if (command.type == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+							var object = command.data.result;
+
+							// Make sure the class name matches.
+							if (object.className === codeshelf.domainobjects.vertex.classname) {
+								var latLng = new google.maps.LatLng(object.posY, object.posX);
+
+								thisFacilityEditor_.createVertex(object.persistentId, latLng);
 							}
 						}
 					}
@@ -321,267 +343,6 @@ codeshelf.facilityeditor = function () {
 	}
 
 	return thisFacilityEditor_;
-}
-
-
-/*
- * pen class
- */
-codeshelf.facilityeditor.pen = function (map) {
-
-	var map_ = map;
-	var listOfDots_ = new Array();
-	var polyline_ = null;
-	var polygon_ = null;
-	var currentDot_ = null;
-
-	var thisPen = {
-
-		draw:function (latLng) {
-			if (polygon_ != null) {
-				alert('Click Reset to draw another');
-			} else {
-				// Figure out if we're clicking on an existing marker.
-				if (currentDot_ != null && listOfDots_.length > 1 && currentDot_ == listOfDots_[0]) {
-					this.drawPolygon(listOfDots_);
-				} else {
-					//remove previous line
-					if (polyline_ != null) {
-						polyline_.remove();
-					}
-					//draw Dot
-					var dot = codeshelf.facilityeditor.dot(latLng, map_, this);
-					listOfDots_.push(dot);
-					//draw line
-					if (listOfDots_.length > 1) {
-						polyline_ = codeshelf.facilityeditor.line(listOfDots_, map_);
-					}
-				}
-			}
-		},
-
-		drawPolygon:function (listOfDots, color, des, id) {
-			polygon_ = codeshelf.facilityeditor.polygon(listOfDots, map, this, color, des, id);
-			thisPen.deleteMis();
-		},
-
-		deleteMis:function () {
-			//delete dots
-			$.each(listOfDots_, function (index, value) {
-				value.remove();
-			});
-			listOfDots_.length = 0;
-			//delete lines
-			if (polyline_ != null) {
-				polyline_.remove();
-				polyline_ = null;
-			}
-		},
-
-		cancel:function () {
-			if (polygon_ != null) {
-				(polygon_.remove());
-			}
-			polygon_ = null;
-			thisPen.deleteMis();
-		},
-
-		setCurrentDot:function (dot) {
-			currentDot_ = dot;
-		},
-
-		getListOfDots:function () {
-			return listOfDots_;
-		},
-
-		getData:function () {
-			if (polygon_ != null) {
-				var data = "";
-				var paths = polygon_.getPlots();
-				//get paths
-				paths.getAt(0).forEach(function (value, index) {
-					data += (value.toString());
-				});
-				return data;
-			} else {
-				return null;
-			}
-		},
-
-		getColor:function () {
-			if (polygon_ != null) {
-				var color = polygon_.getColor();
-				return color;
-			} else {
-				return null;
-			}
-		}
-	}
-
-	return thisPen;
-}
-
-/* Child of Pen class
- * dot class
- */
-codeshelf.facilityeditor.dot = function (latLng, map, pen) {
-	//property
-	var latLng_ = latLng;
-	var parent_ = pen;
-
-	var markerImage = new google.maps.MarkerImage(
-		'icons/marker_20_red.png',
-		new google.maps.Size(12, 20),
-		new google.maps.Point(0, 0),
-		new google.maps.Point(6, 16)
-	);
-
-	var markerObj_ = new google.maps.Marker({
-		position: latLng,
-		map:      map,
-		draggable:true,
-		icon:     markerImage
-	});
-
-	var thisDot = {
-		//getter
-		getLatLng:function () {
-			return latLng_;
-		},
-
-		getMarkerObj:function () {
-			return markerObj_;
-		},
-
-		remove:function () {
-			markerObj_.setMap(null);
-		}
-	}
-
-	//closure
-	addListener = function () {
-		google.maps.event.addListener(markerObj_, 'click', function () {
-			parent_.setCurrentDot(thisDot);
-			parent_.draw(markerObj_.getPosition());
-		});
-	}
-	addListener();
-
-	google.maps.event.addListener(markerObj_, 'dragend', function () {
-			for (var i = 0, I = markers.length; i < I && markers[i] != marker; ++i);
-			path.setAt(i, marker.getPosition());
-		}
-	);
-
-	return thisDot;
-
-}
-
-/* Child of Pen class
- * Line class
- */
-codeshelf.facilityeditor.line = function (listOfDots, map) {
-	var listOfDots_ = listOfDots;
-	var map_ = map;
-	var coords_ = new Array();
-	var polylineObj_ = null;
-
-	if (listOfDots_.length > 1) {
-		$.each(listOfDots_, function (index, value) {
-			coords_.push(value.getLatLng());
-		});
-
-		polylineObj_ = new google.maps.Polyline({
-			path:         coords_,
-			strokeColor:  "#FF0000",
-			strokeOpacity:1.0,
-			strokeWeight: 2,
-			map:          map_
-		});
-	}
-
-	return    {
-		remove:function () {
-			polylineObj_.setMap(null);
-		}
-	}
-}
-
-/* Child of Pen class
- * polygon class
- */
-codeshelf.facilityeditor.polygon = function (listOfDots, map, pen, color) {
-	listOfDots_ = listOfDots;
-	map_ = map;
-	coords_ = new Array();
-	parent_ = pen;
-	des_ = 'Hello';
-
-	var thisPolygon = {
-		remove:    function () {
-			info_.remove();
-			polygonObj_.setMap(null);
-		},
-
-		//getter
-		getContent:function () {
-			return des_;
-		},
-
-		getPolygonObj:function () {
-			return polygonObj_;
-		},
-
-		getListOfDots:function () {
-			return listOfDots_;
-		},
-
-		getPlots:function () {
-			return polygonObj_.getPaths();
-		},
-
-		getColor:function () {
-			return polygonObj_.fillColor;
-		},
-
-		//setter
-		setColor:function (color) {
-			return polygonObj_.setOptions(
-				{fillColor:      color,
-					strokeColor: color,
-					strokeWeight:2
-				}
-			);
-		}
-	}
-
-	$.each(listOfDots_, function (index, value) {
-		coords_.push(value.getLatLng());
-	});
-
-	polygonObj_ = new google.maps.Polygon({
-		paths:        coords_,
-		strokeColor:  "#FF0000",
-		strokeOpacity:0.8,
-		strokeWeight: 2,
-		fillColor:    "#FF0000",
-		fillOpacity:  0.35,
-		map:          map_
-	});
-
-	var info = codeshelf.facilityeditor.info(thisPolygon, map_);
-
-	//closure
-	addListener = function () {
-		var thisPolygon = polygonObj_;
-		var info_ = info;
-		google.maps.event.addListener(thisPolygon, 'rightclick', function (event) {
-			info_.show(event.latLng);
-		});
-	}
-	addListener();
-
-	return thisPolygon;
 }
 
 /*
