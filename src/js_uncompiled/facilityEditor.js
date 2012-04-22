@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.31 2012/04/22 08:10:28 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.32 2012/04/22 20:15:11 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -132,7 +132,13 @@ codeshelf.facilityeditor = function () {
 					clickTimeout_ = setTimeout(function () {
 
 						if (canEditOutline_) {
-							var vertexNum = facilityOutlineVertices_.length;
+							var vertexNum = 0;
+							for (var i = 0; i < facilityOutlineVertices_.length; i++) {
+								if ((facilityOutlineVertices_[i] !== null ) && (facilityOutlineVertices_[i] !== undefined )) {
+									vertexNum++;
+								}
+							}
+
 							var data = {
 								parentClassName:   codeshelf.domainobjects.facility.classname,
 								parentPersistentId:facility_.persistentId,
@@ -216,7 +222,7 @@ codeshelf.facilityeditor = function () {
 							var data = {
 								className:   codeshelf.domainobjects.vertex.classname,
 								persistentId:vertex.persistentId,
-								properties:        [
+								properties:  [
 									{name:'PosX', value:marker.getPosition().lng()},
 									{name:'PosY', value:marker.getPosition().lat()}
 								]
@@ -258,7 +264,7 @@ codeshelf.facilityeditor = function () {
 //						}
 		},
 
-		handleUpdateVertexCmd: function(latLng, vertex) {
+		handleUpdateVertexCmd:function (latLng, vertex) {
 			// First see if the marker already exists.
 			var existingLatLng = facilityOutlinePath_.getAt(vertex.DrawOrder);
 
@@ -272,12 +278,15 @@ codeshelf.facilityeditor = function () {
 
 		},
 
-		handleDeleteVertexCmd: function(latLng, vertex) {
-			var vertextData = facilityOutlineVertices_[vertex.DrawOrder];
+		handleDeleteVertexCmd:function (latLng, vertex) {
+			var vertexData = facilityOutlineVertices_[vertex.DrawOrder];
 
 			if (vertexData !== undefined) {
 				vertexData.marker.setMap(null);
 				facilityOutlinePath_.setAt(vertex.DrawOrder, null);
+
+				facilityOutlineVertices_[vertex.DrawOrder].marker.setMap(null);
+				facilityOutlineVertices_[vertex.DrawOrder] = null;
 
 				if (vertex.DrawOrder === 0) {
 					facilityAnchorMarker_ = null;
@@ -296,8 +305,6 @@ codeshelf.facilityeditor = function () {
 
 				var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_DELETE_REQ, data);
 				websession_.sendCommand(newVertexCmd, thisFacilityEditor_.websocketCmdCallback(kWebSessionCommandType.OBJECT_DELETE_RESP), false);
-
-				facilityOutlineVertices_[i].marker.setMap(null);
 			}
 
 
