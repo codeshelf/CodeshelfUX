@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c319b0c7-b9cf-46f5-90a5-b0a625c84957" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/facilityEditor.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/facilityEditor.js" />
     </list>
     <ignored path="CodeShelfUX.iws" />
@@ -32,7 +30,7 @@
       <file leaf-file-name="facilityEditor.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditor.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="331" column="24" selection-start="11411" selection-end="11411" vertical-scroll-proportion="0.18078382">
+            <state line="392" column="20" selection-start="14007" selection-end="14007" vertical-scroll-proportion="0.8040455">
               <folding />
             </state>
           </provider>
@@ -214,12 +212,12 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="options.lastSelected" value="web.server" />
     <property name="recentsLimit" value="5" />
+    <property name="options.lastSelected" value="web.server" />
     <property name="DefaultHtmlFileTemplate" value="Html" />
-    <property name="GoToClass.includeJavaFiles" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2547847" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2547847" />
+    <property name="GoToClass.includeJavaFiles" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -308,9 +306,8 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972324" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3273165" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18819444" sideWeight="0.6979543" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18819444" sideWeight="0.29362214" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18819444" sideWeight="0.7015644" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18819444" sideWeight="0.29001203" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
@@ -321,6 +318,7 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3273165" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972324" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32851985" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -440,6 +438,16 @@
         <state line="11" column="1" selection-start="511" selection-end="511" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/initializeNewClient.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="69" column="0" selection-start="1675" selection-end="2357" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="91" column="36" selection-start="3616" selection-end="3617" vertical-scroll-proportion="0.59398496" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/gmaps.polyedit.example.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="0" selection-start="160" selection-end="180" vertical-scroll-proportion="0.0" />
@@ -450,21 +458,9 @@
         <state line="87" column="39" selection-start="3812" selection-end="3819" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/initializeNewClient.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="0" selection-start="1675" selection-end="2357" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="91" column="36" selection-start="3616" selection-end="3617" vertical-scroll-proportion="0.59398496">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditor.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="331" column="24" selection-start="11411" selection-end="11411" vertical-scroll-proportion="0.18078382">
+        <state line="392" column="20" selection-start="14007" selection-end="14007" vertical-scroll-proportion="0.8040455">
           <folding />
         </state>
       </provider>
