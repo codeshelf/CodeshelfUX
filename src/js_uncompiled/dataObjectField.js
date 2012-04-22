@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataObjectField.js,v 1.8 2012/04/10 08:01:20 jeffw Exp $
+ *  $Id: dataObjectField.js,v 1.9 2012/04/22 04:03:28 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
@@ -89,8 +89,9 @@ codeshelf.dataobjectfield = function (websession, parentElement, className, clas
 			var data = {
 				className:   className_,
 				persistentId:classPersistenceId_,
-				setterMethod:'setDescription',
-				setterValue: html
+				properties:        [
+					{name:'Description', value:html}
+				]
 			}
 
 			var fieldUpdateCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
