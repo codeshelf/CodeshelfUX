@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.34 2012/04/24 07:02:01 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.35 2012/04/25 02:50:19 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -65,12 +65,12 @@ codeshelf.facilityeditor = function () {
 	var mapRotatePane_;
 	var thisFacilityEditor_;
 	var facility_;
+	var facilityBounds_;
 	var facilityEditorOverlay_;
 	var facilityOutlinePath_;
 	var facilityOutlineVertices_ = [];
 	var facilityOutline_;
 	var facilityAnchorMarker_ = undefined;
-	var canEditFacility_ = true;
 	var canEditOutline_ = true;
 	var localUserCreatedMarker_ = false;
 
@@ -150,7 +150,7 @@ codeshelf.facilityeditor = function () {
 								properties:  [
 									{name:'PosTypeByStr', value:'GPS'},
 									{name:'PosX', value:event.latLng.lng()},
-									{name:'PosY', value:event.latLng.lat()},
+									{name:'PosY', value:event.latLng.lat()}
 								]
 							}
 							var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
@@ -184,6 +184,9 @@ codeshelf.facilityeditor = function () {
 
 		ensureOutlineStructures:function () {
 			if (facilityOutlinePath_ === undefined) {
+
+				facilityBounds_ = undefined;
+
 				// Setup the outline management for the facility.
 				facilityOutlinePath_ = new google.maps.MVCArray;
 				if (localUserCreatedMarker_ === true) {
@@ -218,15 +221,15 @@ codeshelf.facilityeditor = function () {
 
 		handleCreateVertexCmd:function (latLng, vertex) {
 
+			thisFacilityEditor_.ensureOutlineStructures();
+			facilityOutlinePath_.setAt(vertex.DrawOrder, latLng);
+			facilityOutline_.setVisible(true);
+
 			// The case where we're adding a new marker (maybe even the anchor marker) that we must show.
 			var iconUrl = 'icons/marker_20_blue.png';
 			if (vertex.DrawOrder === 0) {
 				iconUrl = 'icons/marker_20_red.png';
 			}
-
-			thisFacilityEditor_.ensureOutlineStructures();
-			facilityOutlinePath_.setAt(vertex.DrawOrder, latLng);
-			facilityOutline_.setVisible(true);
 
 			var markerImage = new google.maps.MarkerImage(
 				iconUrl,
@@ -276,17 +279,13 @@ codeshelf.facilityeditor = function () {
 				google.maps.event.addListener(facilityAnchorMarker_, goog.events.EventType.CLICK, function () {
 						if (canEditOutline_) {
 							facilityOutline_.setMap(null);
-							facilityOutline_ = new google.maps.Polygon({
-								strokeWeight:3,
-								strokeColor: '#ff0000',
-								fillCOlor:   '#0000cc'
-							});
-							facilityOutline_.setMap(map_);
-							facilityOutline_.setPath(facilityOutlinePath_);
+							thisFacilityEditor_.completePolygon();
 						}
 					}
 				)
 			}
+
+			thisFacilityEditor_.setBounds();
 
 //						var clickPoint = projection.fromLatLngToContainerPixel(event.latLng);
 //						for (var deg = 0; deg <= 360; deg += 10) {
@@ -295,6 +294,19 @@ codeshelf.facilityeditor = function () {
 //							longLat = projection.fromContainerPixelToLatLng(newPoint, true);
 //							pen_.draw(longLat);
 //						}
+		},
+
+		setBounds:function () {
+			// Figure out a new bounds for the facility outline.
+			if (facilityBounds_ === undefined) {
+				facilityBounds_ = new google.maps.LatLngBounds();
+			}
+			for (var i = 0; i < facilityOutlineVertices_.length; i++) {
+				var latLng = facilityOutlineVertices_[i].marker.getPosition();
+				facilityBounds_.extend(latLng);
+			}
+			map_.fitBounds(facilityBounds_);
+
 		},
 
 		handleUpdateVertexCmd:function (latLng, vertex) {
@@ -307,7 +319,7 @@ codeshelf.facilityeditor = function () {
 				var vertexData = facilityOutlineVertices_[vertex.DrawOrder];
 				vertexData.marker.setPosition(latLng);
 			}
-
+			thisFacilityEditor_.setBounds();
 		},
 
 		handleDeleteVertexCmd:function (latLng, vertex) {
@@ -352,6 +364,31 @@ codeshelf.facilityeditor = function () {
 			}
 		},
 
+		completePolygon:function () {
+			// First make the outline into a polygon.
+			facilityOutline_ = new google.maps.Polygon({
+				strokeWeight:3,
+				strokeColor: '#ff0000',
+				fillCOlor:   '#0000cc'
+			});
+			facilityOutline_.setMap(map_);
+			facilityOutline_.setPath(facilityOutlinePath_);
+
+			// Now make the second and last markers green.
+			var iconUrl = 'icons/marker_20_green.png';
+			var markerImage = new google.maps.MarkerImage(
+				iconUrl,
+				new google.maps.Size(12, 20),
+				new google.maps.Point(0, 0),
+				new google.maps.Point(6, 19)
+			);
+			var marker = facilityOutlineVertices_[1].marker;
+			marker.setIcon(markerImage);
+			var marker = facilityOutlineVertices_[facilityOutlineVertices_.length].marker;
+			marker.setIcon(markerImage);
+
+		},
+
 		rotatePoint:function (x, y, xm, ym, a) {
 			var cos = Math.cos;
 			var sin = Math.sin;
@@ -367,7 +404,9 @@ codeshelf.facilityeditor = function () {
 		},
 
 		resizeFunction:function () {
+			facilityBounds_ = undefined;
 			google.maps.event.trigger(mapPane_, 'resize');
+			thisFacilityEditor_.setBounds();
 		},
 
 		exit:function () {
