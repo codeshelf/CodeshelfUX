@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.35 2012/04/25 02:50:19 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.36 2012/04/25 06:29:10 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -113,7 +113,6 @@ codeshelf.facilityeditor = function () {
 			var editorPane = soy.renderAsElement(codeshelf.templates.facilityEditor);
 			goog.dom.appendChild(contentPane, editorPane);
 			mapPane_ = goog.dom.query('.facilityMap', editorPane)[0];
-			mapRotatePane_ = $('.facilityMap');
 			map_ = new google.maps.Map(mapPane_, myOptions);
 			facilityEditorOverlay_ = codeshelf.facilityeditorgmapsoverlay(map_);
 
@@ -296,19 +295,6 @@ codeshelf.facilityeditor = function () {
 //						}
 		},
 
-		setBounds:function () {
-			// Figure out a new bounds for the facility outline.
-			if (facilityBounds_ === undefined) {
-				facilityBounds_ = new google.maps.LatLngBounds();
-			}
-			for (var i = 0; i < facilityOutlineVertices_.length; i++) {
-				var latLng = facilityOutlineVertices_[i].marker.getPosition();
-				facilityBounds_.extend(latLng);
-			}
-			map_.fitBounds(facilityBounds_);
-
-		},
-
 		handleUpdateVertexCmd:function (latLng, vertex) {
 			if ((facilityOutlinePath_ === undefined) || (facilityOutlinePath_.getAt(vertex.DrawOrder) === undefined)) {
 				// If the outline or marker don't exist then create them.
@@ -382,11 +368,46 @@ codeshelf.facilityeditor = function () {
 				new google.maps.Point(0, 0),
 				new google.maps.Point(6, 19)
 			);
-			var marker = facilityOutlineVertices_[1].marker;
-			marker.setIcon(markerImage);
-			var marker = facilityOutlineVertices_[facilityOutlineVertices_.length].marker;
-			marker.setIcon(markerImage);
 
+			// The thing we need to rotate in GMaps is a map-div layer that's two layers down.
+			// Warning: this is a hack discovered by hacking into GMaps.
+			//mapRotatePane_ = mapRotatePane_[0].firstChild.firstChild;
+			mapRotatePane_ = $('.facilityMap > div:first-child > div:first-child');
+			mapRotatePane_[0].style.overflow = "visible";
+
+			// Setup green rotate marker #1.
+			var marker1 = facilityOutlineVertices_[1].marker;
+			var bearing1 = -1 * thisFacilityEditor_.bearing(facilityAnchorMarker_.getPosition(), marker1.getPosition());
+			marker1.setIcon(markerImage);
+			google.maps.event.addListener(marker1, goog.events.EventType.CLICK, function () {
+					if (canEditOutline_) {
+						map_.setCenter(facilityAnchorMarker_.getPosition());
+						mapRotatePane_.animate({rotate:bearing1 + 'deg'});
+						thisFacilityEditor_.setBounds();
+					}
+				}
+			)
+
+			// Setup green rotate marker #2.
+			var marker2 = facilityOutlineVertices_[facilityOutlineVertices_.length - 1].marker;
+			var bearing2 = thisFacilityEditor_.bearing(facilityAnchorMarker_.getPosition(), marker2.getPosition());
+			marker2.setIcon(markerImage);
+			google.maps.event.addListener(marker2, goog.events.EventType.CLICK, function () {
+					if (canEditOutline_) {
+						map_.setCenter(facilityAnchorMarker_.getPosition());
+						mapRotatePane_.animate({rotate:bearing2 + 'deg'});
+						thisFacilityEditor_.setBounds();
+					}
+				}
+			)
+		},
+
+		bearing:function (latLng1, latLng2) {
+			var dLong = latLng1.lng() - latLng2.lng();
+			var y = Math.sin(dLong) * Math.cos(latLng2.lat());
+			var x = Math.cos(latLng1.lat()) * Math.sin(latLng2.lat()) - Math.sin(latLng1.lat()) * Math.cos(latLng2.lat()) * Math.cos(dLong);
+			var bearing = Math.atan2(y, x) * 180 / Math.PI;
+			return bearing;
 		},
 
 		rotatePoint:function (x, y, xm, ym, a) {
@@ -401,6 +422,18 @@ codeshelf.facilityeditor = function () {
 			var yr = (x - xm) * sin(a) + (y - ym) * cos(a) + ym;
 
 			return {'x':xr, 'y':yr};
+		},
+
+		setBounds:function () {
+			// Figure out a new bounds for the facility outline.
+			if (facilityBounds_ === undefined) {
+				facilityBounds_ = new google.maps.LatLngBounds();
+			}
+			for (var i = 0; i < facilityOutlineVertices_.length; i++) {
+				var latLng = facilityOutlineVertices_[i].marker.getPosition();
+				facilityBounds_.extend(latLng);
+			}
+			map_.fitBounds(facilityBounds_);
 		},
 
 		resizeFunction:function () {
@@ -443,32 +476,8 @@ codeshelf.facilityeditor = function () {
 								}
 							}
 						} else if (command.type == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-//							var object = command.data.result;
-//
-//							// Make sure the class name matches.
-//							if (object.className === codeshelf.domainobjects.vertex.classname) {
-//								var latLng = new google.maps.LatLng(object.posY, object.posX);
-//
-//								thisFacilityEditor_.handleCreateVertexCmd(latLng, object);
-//							}
 						} else if (command.type == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-//							var object = command.data.result;
-//
-//							// Make sure the class name matches.
-//							if (object.className === codeshelf.domainobjects.vertex.classname) {
-//								var latLng = new google.maps.LatLng(object.posY, object.posX);
-//
-//								thisFacilityEditor_.handleUpdateVertexCmd(latLng, object);
-//							}
 						} else if (command.type == kWebSessionCommandType.OBJECT_DELETE_RESP) {
-//							var object = command.data.result;
-//
-//							// Make sure the class name matches.
-//							if (object.className === codeshelf.domainobjects.vertex.classname) {
-//								var latLng = new google.maps.LatLng(object.posY, object.posX);
-//
-//								thisFacilityEditor_.handleDeleteVertexCmd(latLng, object);
-//							}
 						}
 					}
 				},
