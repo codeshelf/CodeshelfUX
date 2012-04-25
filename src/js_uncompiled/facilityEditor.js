@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.36 2012/04/25 06:29:10 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.37 2012/04/25 07:26:24 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -377,7 +377,8 @@ codeshelf.facilityeditor = function () {
 
 			// Setup green rotate marker #1.
 			var marker1 = facilityOutlineVertices_[1].marker;
-			var bearing1 = -1 * thisFacilityEditor_.bearing(facilityAnchorMarker_.getPosition(), marker1.getPosition());
+			var bearing1 = 90 - google.maps.geometry.spherical.computeHeading(facilityAnchorMarker_.getPosition(), marker1.getPosition());
+			//var bearing1 = -1 * thisFacilityEditor_.bearing(facilityAnchorMarker_.getPosition(), marker1.getPosition()) / 2;
 			marker1.setIcon(markerImage);
 			google.maps.event.addListener(marker1, goog.events.EventType.CLICK, function () {
 					if (canEditOutline_) {
@@ -390,7 +391,8 @@ codeshelf.facilityeditor = function () {
 
 			// Setup green rotate marker #2.
 			var marker2 = facilityOutlineVertices_[facilityOutlineVertices_.length - 1].marker;
-			var bearing2 = thisFacilityEditor_.bearing(facilityAnchorMarker_.getPosition(), marker2.getPosition());
+			var bearing2 = 90 - google.maps.geometry.spherical.computeHeading(facilityAnchorMarker_.getPosition(), marker2.getPosition());
+			//var bearing2 = thisFacilityEditor_.bearing(facilityAnchorMarker_.getPosition(), marker2.getPosition()) / 2;
 			marker2.setIcon(markerImage);
 			google.maps.event.addListener(marker2, goog.events.EventType.CLICK, function () {
 					if (canEditOutline_) {
@@ -403,7 +405,7 @@ codeshelf.facilityeditor = function () {
 		},
 
 		bearing:function (latLng1, latLng2) {
-			var dLong = latLng1.lng() - latLng2.lng();
+			var dLong = Math.abs(latLng1.lng() - latLng2.lng());
 			var y = Math.sin(dLong) * Math.cos(latLng2.lat());
 			var x = Math.cos(latLng1.lat()) * Math.sin(latLng2.lat()) - Math.sin(latLng1.lat()) * Math.cos(latLng2.lat()) * Math.cos(dLong);
 			var bearing = Math.atan2(y, x) * 180 / Math.PI;
@@ -434,6 +436,7 @@ codeshelf.facilityeditor = function () {
 				facilityBounds_.extend(latLng);
 			}
 			map_.fitBounds(facilityBounds_);
+			//map_.setCenter(facilityAnchorMarker_.getPosition());
 		},
 
 		resizeFunction:function () {
