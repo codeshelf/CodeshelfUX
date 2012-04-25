@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.37 2012/04/25 07:26:24 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.38 2012/04/25 23:43:03 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -18,40 +18,6 @@ goog.require('jquery.css-transform');
 var newPoint;
 var longLat;
 var rotateDeg = 0;
-
-/**
- * @param {google.maps.LatLng} newLatLng
- * @returns {number}
- */
-google.maps.LatLng.prototype.distanceFrom = function (newLatLng) {
-	// setup our variables
-	var lat1 = this.lat();
-	var radianLat1 = lat1 * ( Math.PI / 180 );
-	var lng1 = this.lng();
-	var radianLng1 = lng1 * ( Math.PI / 180 );
-	var lat2 = newLatLng.lat();
-	var radianLat2 = lat2 * ( Math.PI / 180 );
-	var lng2 = newLatLng.lng();
-	var radianLng2 = lng2 * ( Math.PI / 180 );
-	// sort out the radius, MILES or KM?
-	var earth_radius = 3959; // (km = 6378.1) OR (miles = 3959) - radius of the earth
-
-	// sort our the differences
-	var diffLat = ( radianLat1 - radianLat2 );
-	var diffLng = ( radianLng1 - radianLng2 );
-	// put on a wave (hey the earth is round after all)
-	var sinLat = Math.sin(diffLat / 2);
-	var sinLng = Math.sin(diffLng / 2);
-
-	// maths - borrowed from http://www.opensourceconnections.com/wp-content/uploads/2009/02/clientsidehaversinecalculation.html
-	var a = Math.pow(sinLat, 2.0) + Math.cos(radianLat1) * Math.cos(radianLat2) * Math.pow(sinLng, 2.0);
-
-	// work out the distance
-	var distance = earth_radius * 2 * Math.asin(Math.min(1, Math.sqrt(a)));
-
-	// return the distance
-	return distance;
-}
 
 codeshelf.facilityeditor = function () {
 
@@ -73,6 +39,13 @@ codeshelf.facilityeditor = function () {
 	var facilityAnchorMarker_ = undefined;
 	var canEditOutline_ = true;
 	var localUserCreatedMarker_ = false;
+	var geocoder_;
+	var geocoderSearchButton_;
+	var geocoderTextField_;
+
+	var infoWindow = new google.maps.InfoWindow();
+	var totalBounds = new google.maps.LatLngBounds();
+	var overlays = [];
 
 	thisFacilityEditor_ = {
 		start:function (websession, organization, parentFrame, facility) {
@@ -84,7 +57,7 @@ codeshelf.facilityeditor = function () {
 			// Add the Google Maps scripts (There's no way to wait for this to load - put it in the header.)
 			//goog.dom.appendChild(goog.dom.getDocument().head, soy.renderAsElement(codeshelf.templates.googleMapsScripts));
 
-			// Safeway DC Tracy, CA
+			// Starting latlng is either the facility's origin point or the browser's current location (if we can get it).
 			var demoLatLng = new google.maps.LatLng(facility_.posY, facility_.posX);
 			var myOptions = {
 				zoom:                  16,
@@ -115,6 +88,21 @@ codeshelf.facilityeditor = function () {
 			mapPane_ = goog.dom.query('.facilityMap', editorPane)[0];
 			map_ = new google.maps.Map(mapPane_, myOptions);
 			facilityEditorOverlay_ = codeshelf.facilityeditorgmapsoverlay(map_);
+
+			// Setup GMaps geocoding to locate places for the user (if needed).
+			geocoder_ = new google.maps.Geocoder();
+			geocoder_.responseIndex = 0;
+			geocoder_.responseSet = [];
+
+			geocoderTextField_ = goog.dom.query('#geocoderText', editorPane)[0];
+			geocoderTextField_.onkeydown = function (event) {
+				if (event.keyCode == 13) {
+					geocoder_.geocode({'address':geocoderTextField_.value}, thisFacilityEditor_.computeGeoCodeResults);
+				}
+			}
+			geocoderTextField_.focus();
+			geocoderTextField_.select();
+
 
 			clickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.CLICK, function (event) {
 					clickTimeout_ = setTimeout(function () {
@@ -404,12 +392,77 @@ codeshelf.facilityeditor = function () {
 			)
 		},
 
-		bearing:function (latLng1, latLng2) {
-			var dLong = Math.abs(latLng1.lng() - latLng2.lng());
-			var y = Math.sin(dLong) * Math.cos(latLng2.lat());
-			var x = Math.cos(latLng1.lat()) * Math.sin(latLng2.lat()) - Math.sin(latLng1.lat()) * Math.cos(latLng2.lat()) * Math.cos(dLong);
-			var bearing = Math.atan2(y, x) * 180 / Math.PI;
-			return bearing;
+		computeGeoCodeResults:function (response, status) {
+			if (status == google.maps.GeocoderStatus.OK && response[0]) {
+				// we save them all
+				geocoder_.responseSet.push(response);
+				thisFacilityEditor_.showGeoCodeResult(0, geocoder_.responseIndex);
+				geocoder_.responseIndex++;
+			}
+		},
+
+		showGeoCodeResult:function (ind, setIndex) {
+			var results = geocoder_.responseSet[setIndex];
+			var box = results[ind].geometry.bounds;
+			var color = "#0000ff";
+			if (!box) {
+				color = "#ff0000";
+				box = results[ind].geometry.viewport;
+			}
+			var html = "No address";
+			if (results[ind].address_components[0]) {
+				html = results[ind].address_components[0].long_name;
+			}
+			var overlay = new google.maps.Rectangle({
+				map:        map_,
+				bounds:     box,
+				strokeColor:color,
+				fillColor:  color,
+				visible:    false
+			});
+			overlays.push(overlay);
+			map_.fitBounds(box);
+			totalBounds.union(box);
+
+			// infoWindow
+			overlay.setIndex = setIndex; // save that next geocode won't overwrite
+			overlay.story = [];
+			overlay.story.push("<b  class='dataEntry'>");
+			overlay.story.push(results[ind].formatted_address);
+			overlay.story.push("</b>");
+			overlay.story.push("<p class='dataEntry'>");
+			overlay.story.push(box.toUrlValue());
+			overlay.story.push("</p>");
+			if (results.length > 1) {
+				overlay.story.push("<p class='dataEntry'>Or is it one of these:</p>");
+				for (var i = 0; i < results.length; i++) {
+					overlay.index_ = i;
+					overlay.story.push(" <a class='dataEntry' href='javascript:thisFacilityEditor_.showGeoCodeResult(");
+					overlay.story.push(overlay.index_);
+					overlay.story.push(",");
+					overlay.story.push(overlay.setIndex);
+					overlay.story.push(");'>");
+					if (i != ind) {
+						overlay.story.push("&rArr;");
+					}
+					overlay.story.push("</a>&nbsp;&nbsp;");
+					if (i != ind) {
+						overlay.story.push("<b  class='dataEntry'>");
+						overlay.story.push(results[i].formatted_address);
+						overlay.story.push("</b>");
+					}
+					overlay.story.push("<br>");
+				}
+			}
+
+			infoWindow.setPosition(results[ind].geometry.location);
+			infoWindow.setContent(overlay.story.join(""));
+			infoWindow.open(map_);
+			google.maps.event.addListener(overlay, 'click', function () {
+				infoWindow.setPosition(results[ind].geometry.location);
+				infoWindow.setContent(overlay.story.join(""));
+				infoWindow.open(map_);
+			});
 		},
 
 		rotatePoint:function (x, y, xm, ym, a) {
@@ -427,16 +480,18 @@ codeshelf.facilityeditor = function () {
 		},
 
 		setBounds:function () {
-			// Figure out a new bounds for the facility outline.
-			if (facilityBounds_ === undefined) {
-				facilityBounds_ = new google.maps.LatLngBounds();
+			if (facilityOutlineVertices_.length > 2) {
+				// Figure out a new bounds for the facility outline.
+				if (facilityBounds_ === undefined) {
+					facilityBounds_ = new google.maps.LatLngBounds();
+				}
+				for (var i = 0; i < facilityOutlineVertices_.length; i++) {
+					var latLng = facilityOutlineVertices_[i].marker.getPosition();
+					facilityBounds_.extend(latLng);
+				}
+				map_.fitBounds(facilityBounds_);
+				//map_.setCenter(facilityAnchorMarker_.getPosition());
 			}
-			for (var i = 0; i < facilityOutlineVertices_.length; i++) {
-				var latLng = facilityOutlineVertices_[i].marker.getPosition();
-				facilityBounds_.extend(latLng);
-			}
-			map_.fitBounds(facilityBounds_);
-			//map_.setCenter(facilityAnchorMarker_.getPosition());
 		},
 
 		resizeFunction:function () {

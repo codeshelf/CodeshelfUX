@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: launch.js,v 1.18 2012/04/10 08:01:20 jeffw Exp $
+ *  $Id: launch.js,v 1.19 2012/04/25 23:43:03 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.launch');
 goog.require('codeshelf.templates');
@@ -53,6 +53,7 @@ codeshelf.launchWindow = function () {
 
 		exit:function () {
 			websession_.setCurrentPage(undefined);
+			launchCodeInput.onkeydown = undefined;
 			goog.dom.removeChildren(goog.dom.getDocument().body);
 		},
 

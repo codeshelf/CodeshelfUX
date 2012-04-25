@@ -60,7 +60,11 @@
  */
 {template .facilityEditor}
 <div class='facilityDialog'>
-	<div class='facilityEditor'>
+ 	<form id='geocoderForm'>
+		<input  id='geocoderText' type='text' size='40' title='Search for address'/>
+		<input  id='geocoderSearch' type='button' value='Search'/>
+ 	</form>
+ 	<div class='facilityEditor'>
 		<div class='facilityMap' >
 		</div>
 		<div class='facilityEditorToolbar'>
