@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: codeshelf.gss,v 1.15 2012/04/02 07:58:53 jeffw Exp $
+ *  $Id: codeshelf.gss,v 1.16 2012/04/26 09:32:55 jeffw Exp $
  *******************************************************************************/
 
 /* Defines and mixins ----------------------------------------------------------- */
@@ -32,6 +32,8 @@
 @def DATAENTRY_MARGIN_TOP			5px;
 @def DATAENTRY_MARGIN_BOTTOM		2px;
 @def DATAENTRY_TEXT_TRANSFORM		lowercase;
+
+@def INFOPOPUP_FONT_SIZE			10px;
 
 @def WINDOWBAR_HEIGHT				20px;
 @def WINDOWFOOTER_HEIGHT			10px;
@@ -137,6 +139,10 @@
 
 .dataEntry {
 	@mixin				DATAENTRY_TEXT(DATAENTRY_FONT_SIZE);
+}
+
+.infoPopup {
+	@mixin				DATAENTRY_TEXT(INFOPOPUP_FONT_SIZE);
 }
 
 /* Frame classes ---------------------------------------------------------------- */

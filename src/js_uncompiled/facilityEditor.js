@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.38 2012/04/25 23:43:03 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.39 2012/04/26 09:32:55 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -9,6 +9,7 @@ goog.require('codeshelf.facilityeditorgmapsoverlay');
 goog.require('codeshelf.websession');
 goog.require('codeshelf.mainpage');
 goog.require('codeshelf.dataobjectfield');
+goog.require('goog.dom.query');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
 goog.require('jquery.css-rotate');
@@ -40,12 +41,12 @@ codeshelf.facilityeditor = function () {
 	var canEditOutline_ = true;
 	var localUserCreatedMarker_ = false;
 	var geocoder_;
-	var geocoderSearchButton_;
 	var geocoderTextField_;
+	var googleField_;
 
-	var infoWindow = new google.maps.InfoWindow();
-	var totalBounds = new google.maps.LatLngBounds();
-	var overlays = [];
+	var infoWindow_ = new google.maps.InfoWindow();
+	var totalBounds_ = new google.maps.LatLngBounds();
+	var overlays_ = [];
 
 	thisFacilityEditor_ = {
 		start:function (websession, organization, parentFrame, facility) {
@@ -53,9 +54,6 @@ codeshelf.facilityeditor = function () {
 			websession_ = websession;
 			facility_ = facility;
 			organization_ = organization;
-
-			// Add the Google Maps scripts (There's no way to wait for this to load - put it in the header.)
-			//goog.dom.appendChild(goog.dom.getDocument().head, soy.renderAsElement(codeshelf.templates.googleMapsScripts));
 
 			// Starting latlng is either the facility's origin point or the browser's current location (if we can get it).
 			var demoLatLng = new google.maps.LatLng(facility_.posY, facility_.posX);
@@ -82,27 +80,38 @@ codeshelf.facilityeditor = function () {
 			var facilityDescField = codeshelf.dataobjectfield(websession_, contentPane, codeshelf.domainobjects.facility.classname, codeshelf.domainobjects.facility.properties.description.id, facility_.persistentId);
 			facilityDescField.start();
 
+			// Setup GMaps geocoding to locate places for the user (if needed).
+			geocoder_ = new google.maps.Geocoder();
+			geocoder_.responseIndex = 0;
+			geocoder_.responseSet = [];
+
+//			geocoderTextField_ = goog.dom.query('#geocoderText', editorPane)[0];
+//			geocoderTextField_.onkeydown = function (event) {
+//				if (event.keyCode == 13) {
+//					geocoder_.geocode({'address':geocoderTextField_.value}, thisFacilityEditor_.computeGeoCodeResults);
+//				}
+//			}
+//			geocoderTextField_.focus();
+//			geocoderTextField_.select();
+
+
+			var fieldId = goog.events.getUniqueId('search');
+			var inputElement_ = soy.renderAsElement(codeshelf.templates.dataObjectField, {name:'name', id:fieldId, title:'title'});
+			goog.dom.appendChild(contentPane, inputElement_);
+			googleField_ = new goog.editor.SeamlessField(fieldId);
+			googleField_.makeEditable();
+
+			goog.events.listen(googleField_, goog.editor.Field.EventType.BLUR, function (event) {
+				var contents = googleField_.getCleanContents();
+				geocoder_.geocode({'address':contents}, thisFacilityEditor_.computeGeoCodeResults);
+			});
+
 			// Add the graphical editor.
 			var editorPane = soy.renderAsElement(codeshelf.templates.facilityEditor);
 			goog.dom.appendChild(contentPane, editorPane);
 			mapPane_ = goog.dom.query('.facilityMap', editorPane)[0];
 			map_ = new google.maps.Map(mapPane_, myOptions);
 			facilityEditorOverlay_ = codeshelf.facilityeditorgmapsoverlay(map_);
-
-			// Setup GMaps geocoding to locate places for the user (if needed).
-			geocoder_ = new google.maps.Geocoder();
-			geocoder_.responseIndex = 0;
-			geocoder_.responseSet = [];
-
-			geocoderTextField_ = goog.dom.query('#geocoderText', editorPane)[0];
-			geocoderTextField_.onkeydown = function (event) {
-				if (event.keyCode == 13) {
-					geocoder_.geocode({'address':geocoderTextField_.value}, thisFacilityEditor_.computeGeoCodeResults);
-				}
-			}
-			geocoderTextField_.focus();
-			geocoderTextField_.select();
-
 
 			clickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.CLICK, function (event) {
 					clickTimeout_ = setTimeout(function () {
@@ -396,12 +405,12 @@ codeshelf.facilityeditor = function () {
 			if (status == google.maps.GeocoderStatus.OK && response[0]) {
 				// we save them all
 				geocoder_.responseSet.push(response);
-				thisFacilityEditor_.showGeoCodeResult(0, geocoder_.responseIndex);
+				thisFacilityEditor_.showGeocodeResult(0, geocoder_.responseIndex);
 				geocoder_.responseIndex++;
 			}
 		},
 
-		showGeoCodeResult:function (ind, setIndex) {
+		showGeocodeResult:function (ind, setIndex) {
 			var results = geocoder_.responseSet[setIndex];
 			var box = results[ind].geometry.bounds;
 			var color = "#0000ff";
@@ -420,48 +429,48 @@ codeshelf.facilityeditor = function () {
 				fillColor:  color,
 				visible:    false
 			});
-			overlays.push(overlay);
+			overlays_.push(overlay);
 			map_.fitBounds(box);
-			totalBounds.union(box);
+			totalBounds_.union(box);
 
-			// infoWindow
-			overlay.setIndex = setIndex; // save that next geocode won't overwrite
-			overlay.story = [];
-			overlay.story.push("<b  class='dataEntry'>");
-			overlay.story.push(results[ind].formatted_address);
-			overlay.story.push("</b>");
-			overlay.story.push("<p class='dataEntry'>");
-			overlay.story.push(box.toUrlValue());
-			overlay.story.push("</p>");
+			// Save that next geocode won't overwrite.
+			overlay.setIndex = setIndex;
 			if (results.length > 1) {
-				overlay.story.push("<p class='dataEntry'>Or is it one of these:</p>");
 				for (var i = 0; i < results.length; i++) {
-					overlay.index_ = i;
-					overlay.story.push(" <a class='dataEntry' href='javascript:thisFacilityEditor_.showGeoCodeResult(");
-					overlay.story.push(overlay.index_);
-					overlay.story.push(",");
-					overlay.story.push(overlay.setIndex);
-					overlay.story.push(");'>");
-					if (i != ind) {
-						overlay.story.push("&rArr;");
-					}
-					overlay.story.push("</a>&nbsp;&nbsp;");
-					if (i != ind) {
-						overlay.story.push("<b  class='dataEntry'>");
-						overlay.story.push(results[i].formatted_address);
-						overlay.story.push("</b>");
-					}
-					overlay.story.push("<br>");
+					results[i].id = 'addr' + i;
 				}
+					var mapSearchItems = soy.renderAsElement((function () {
+					var ind_ = ind;
+					return function () {
+						return    codeshelf.templates.gmapsAddrSearchInfoPopup({searchAddress:results[ind_].formatted_address, resultAddresses:results});
+					}
+				})());
+
+				for (var i = 0; i < results.length; i++) {
+
+					var selectorId = '> #' + results[i].id;
+					var addrElement = goog.dom.query(selectorId, mapSearchItems);
+					if (addrElement.length > 0) {
+						addrElement[0].onclick = (function () {
+							var thisOverlay_ = overlay;
+							var index_ = i;
+							return function () {
+								thisFacilityEditor_.showGeocodeResult(index_, thisOverlay_.setIndex);
+							}
+						})();
+					}
+				}
+
 			}
 
-			infoWindow.setPosition(results[ind].geometry.location);
-			infoWindow.setContent(overlay.story.join(""));
-			infoWindow.open(map_);
+			infoWindow_.setPosition(results[ind].geometry.location);
+			//infoWindow_.setContent(overlay.story.join(""));
+			infoWindow_.setContent(mapSearchItems);
+			infoWindow_.open(map_);
 			google.maps.event.addListener(overlay, 'click', function () {
-				infoWindow.setPosition(results[ind].geometry.location);
-				infoWindow.setContent(overlay.story.join(""));
-				infoWindow.open(map_);
+				infoWindow_.setPosition(results[ind].geometry.location);
+				infoWindow_.setContent(mapSearchItems);
+				infoWindow_.open(map_);
 			});
 		},
 

@@ -57,13 +57,10 @@
 
 /**
  * The template for the facility editor.
+ * 	<input  id='geocoderText' class='dataEntry' type='text' size='40' title='Search for address'/>
  */
 {template .facilityEditor}
 <div class='facilityDialog'>
- 	<form id='geocoderForm'>
-		<input  id='geocoderText' type='text' size='40' title='Search for address'/>
-		<input  id='geocoderSearch' type='button' value='Search'/>
- 	</form>
  	<div class='facilityEditor'>
 		<div class='facilityMap' >
 		</div>
@@ -105,4 +102,21 @@
  */
 {template .googleMapsScripts}
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+{/template}
+
+/**
+ * GMaps search address info box.
+ * @param searchAddress The address the user entered to search
+ * @param resultAddresses The additional names to greet. May be an empty list.
+ */
+{template .gmapsAddrSearchInfoPopup}
+<div>
+	<b class='infoPopup'>We found this address:</b><br>
+	<b class='infoPopup'>{$searchAddress}</b><br><br>
+	<b class='infoPopup'>Click on arrow for these other options:</b><br>
+	// List all of the address found
+	{foreach $resultAddress in $resultAddresses}
+		<a id='{$resultAddress.id}' class='infoPopup' >&rArr;</a>&nbsp;&nbsp;<b class='infoPopup'>{$resultAddress.formatted_address}</b><br>
+	{/foreach}
+</div>
 {/template}
