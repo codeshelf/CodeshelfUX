@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: codeshelf.gss,v 1.16 2012/04/26 09:32:55 jeffw Exp $
+ *  $Id: codeshelf.gss,v 1.17 2012/04/27 06:28:17 jeffw Exp $
  *******************************************************************************/
 
 /* Defines and mixins ----------------------------------------------------------- */
@@ -33,7 +33,14 @@
 @def DATAENTRY_MARGIN_BOTTOM		2px;
 @def DATAENTRY_TEXT_TRANSFORM		lowercase;
 
-@def INFOPOPUP_FONT_SIZE			10px;
+@def INFO_POPUP_FONT_FAMILY			"league-gothic-1","league-gothic-2",sans-serif;
+@def INFO_POPUP_FONT_COLOR			rgb(100, 100, 100);
+@def INFO_POPUP_LINK_COLOR			rgb(0, 0, 255);
+@def INFO_POPUP_FONT_SIZE			10px;
+@def INFO_POPUP_LINE_HEIGHT			100%;
+@def INFO_POPUP_MARGIN_TOP			5px;
+@def INFO_POPUP_MARGIN_BOTTOM		2px;
+@def INFO_POPUP_TEXT_TRANSFORM		lowercase;
 
 @def WINDOWBAR_HEIGHT				20px;
 @def WINDOWFOOTER_HEIGHT			10px;
@@ -81,8 +88,19 @@
 	line-height:		DATAENTRY_LINE_HEIGHT;
 	margin-top:			DATAENTRY_MARGIN_TOP;
 	margin-bottom:		DATAENTRY_MARGIN_BOTTOM;
-	/*text-transform:		DATAENTRY_TEXT_TRANSFORM;*/
-	/*letter-spacing:		-0.06em;*/
+	/*text-transform:	DATAENTRY_TEXT_TRANSFORM;*/
+	/*letter-spacing:	-0.06em;*/
+}
+
+@defmixin INFO_POPUP_TEXT(FONT_SIZE, FONT_COLOR) {
+	font-size:			FONT_SIZE;
+	color:				FONT_COLOR;
+	font-family:		INFO_POPUP_FONT_FAMILY;
+	line-height:		INFO_POPUP_LINE_HEIGHT;
+	margin-top:			INFO_POPUP_MARGIN_TOP;
+	margin-bottom:		INFO_POPUP_MARGIN_BOTTOM;
+	/*text-transform:	INFO_POPUP_TEXT_TRANSFORM;*/
+	/*letter-spacing:	-0.06em;*/
 }
 
 /* Styles ------------------------------------------------------------------------- */
@@ -142,7 +160,11 @@
 }
 
 .infoPopup {
-	@mixin				DATAENTRY_TEXT(INFOPOPUP_FONT_SIZE);
+	@mixin				INFO_POPUP_TEXT(INFO_POPUP_FONT_SIZE, INFO_POPUP_FONT_COLOR);
+}
+
+.infoPopupLink {
+	@mixin				INFO_POPUP_TEXT(INFO_POPUP_FONT_SIZE, INFO_POPUP_LINK_COLOR);
 }
 
 /* Frame classes ---------------------------------------------------------------- */

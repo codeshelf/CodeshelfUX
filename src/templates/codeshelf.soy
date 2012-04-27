@@ -116,7 +116,7 @@
 	<b class='infoPopup'>Click on arrow for these other options:</b><br>
 	// List all of the address found
 	{foreach $resultAddress in $resultAddresses}
-		<a id='{$resultAddress.id}' class='infoPopup' >&rArr;</a>&nbsp;&nbsp;<b class='infoPopup'>{$resultAddress.formatted_address}</b><br>
+		<a id='{$resultAddress.id}' class='infoPopupLink' >&rArr;</a>&nbsp;&nbsp;<b class='infoPopup'>{$resultAddress.formatted_address}</b><br>
 	{/foreach}
 </div>
 {/template}
