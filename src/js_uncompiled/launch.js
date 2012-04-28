@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: launch.js,v 1.20 2012/04/27 06:28:17 jeffw Exp $
+ *  $Id: launch.js,v 1.21 2012/04/28 00:38:44 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.launch');
 goog.require('codeshelf.templates');
@@ -13,7 +13,7 @@ goog.require('goog.window');
 goog.require('goog.style');
 goog.require('goog.ui.RoundedPanel');
 
-codeshelf.launchWindow = function () {
+codeshelf.launchWindow = function() {
 
 	var websession_;
 	var application_;
@@ -21,7 +21,7 @@ codeshelf.launchWindow = function () {
 
 	thisLaunchWindow_ = {
 
-		enter:function (application, websession) {
+		enter: function(application, websession) {
 
 			application_ = application;
 			websession_ = websession;
@@ -42,7 +42,7 @@ codeshelf.launchWindow = function () {
 			roundedLaunchCodePanel.decorate(launchCodePanel);
 
 			//launchCodeInput.onchange = thisLaunchWindow_.launchCodeCheck;
-			launchCodeInput.onkeydown = function (event) {
+			launchCodeInput.onkeydown = function(event) {
 				if (event.keyCode == 13) {
 					thisLaunchWindow_.launchCodeCheck();
 				}
@@ -51,23 +51,23 @@ codeshelf.launchWindow = function () {
 			launchCodeInput.select();
 		},
 
-		exit:function () {
+		exit: function() {
 			websession_.setCurrentPage(undefined);
 			goog.dom.removeChildren(goog.dom.getDocument().body);
 		},
 
-		launchCodeCheck:function () {
+		launchCodeCheck: function() {
 			var launchCodeInput = {
-				launchCode:goog.dom.getElement('launchCodeInput').value
+				launchCode: goog.dom.getElement('launchCodeInput').value
 			}
 			var launchCommand = websession_.createCommand(kWebSessionCommandType.LAUNCH_CODE_CHECK, launchCodeInput);
 			websession_.sendCommand(launchCommand, thisLaunchWindow_.websocketCmdCallback(kWebSessionCommandType.LAUNCH_CODE_RESP), false);
 		},
 
-		websocketCmdCallback:function (expectedResponseType) {
+		websocketCmdCallback: function(expectedResponseType) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
-				exec:                   function (command) {
+				exec:                    function(command) {
 					if (!command.data.hasOwnProperty(kWebSessionCommandType.LAUNCH_CODE_RESP)) {
 						alert('response has no launch code result');
 					} else {
@@ -82,15 +82,15 @@ codeshelf.launchWindow = function () {
 						}
 					}
 				},
-				getExpectedResponseType:function () {
+				getExpectedResponseType: function() {
 					return expectedResponseType_;
 				}
-			}
+			};
 
 			return callback;
 		}
 
-	}
+	};
 
 	return thisLaunchWindow_;
-}
+};

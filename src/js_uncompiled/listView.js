@@ -10,12 +10,12 @@ goog.require('slickgrid.pager');
 goog.require('slickgrid.columnpicker');
 goog.require('jquery');
 
-codeshelf.listview = function (websession, domainObject) {
+codeshelf.listview = function(websession, domainObject) {
 
 	$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all").mouseover(
-		function (e) {
+		function(e) {
 			$(e.target).addClass("ui-state-hover")
-		}).mouseout(function (e) {
+		}).mouseout(function(e) {
 			$(e.target).removeClass("ui-state-hover")
 		});
 
@@ -36,28 +36,28 @@ codeshelf.listview = function (websession, domainObject) {
 			var property = properties[property];
 			properties_[count] = property.id;
 			columns_[count++] = {
-				id:                 property.id,
-				name:               property.title,
-				field:              property.id,
-				behavior:           "select",
+				id:                  property.id,
+				name:                property.title,
+				field:               property.id,
+				behavior:            "select",
 //				cssClass:           "cell-selection",
-				headerCssClass:     " ",
-				width:              property.width,
-				cannotTriggerInsert:true,
-				resizable:          true,
-				selectable:         false,
-				sortable:           true
+				headerCssClass:      " ",
+				width:               property.width,
+				cannotTriggerInsert: true,
+				resizable:           true,
+				selectable:          false,
+				sortable:            true
 			}
 		}
 	}
 
 	var options_ = {
-		editable:            true,
-		enableAddRow:        true,
-		enableCellNavigation:true,
-		asyncEditorLoading:  true,
-		forceFitColumns:     true,
-		topPanelHeight:      25
+		editable:             true,
+		enableAddRow:         true,
+		enableCellNavigation: true,
+		asyncEditorLoading:   true,
+		forceFitColumns:      true,
+		topPanelHeight:       25
 	};
 
 	var sortcol_ = "Description";
@@ -66,27 +66,27 @@ codeshelf.listview = function (websession, domainObject) {
 	var searchString_ = "";
 
 	var thisListview_ = {
-		requiredFieldValidator:function (value) {
+		requiredFieldValidator: function(value) {
 			if (value == null || value == undefined || !value.length)
 				return {
-					valid:false,
-					msg:  "This is a required field"
+					valid: false,
+					msg:   "This is a required field"
 				};
 			else
 				return {
-					valid:true,
-					msg:  null
+					valid: true,
+					msg:   null
 				};
 		},
 
-		myFilter:function (item, args) {
+		myFilter: function(item, args) {
 			if (item["percentComplete"] < args.percentCompleteThreshold)
 				return false;
 
 			return !(args.searchString != "" && item["title"].indexOf(args.searchString) == -1);
 		},
 
-		comparer:function (a, b) {
+		comparer: function(a, b) {
 			var columnIndex = grid_.getColumnIndexArray();
 			for (columnId in columnIndex) {
 				if (columnIndex.hasOwnProperty(columnId)) {
@@ -99,19 +99,19 @@ codeshelf.listview = function (websession, domainObject) {
 			}
 		},
 
-		toggleFilterRow:function () {
+		toggleFilterRow: function() {
 			if ($(grid_.getTopPanel()).is(":visible"))
 				grid_.hideTopPanel();
 			else
 				grid_.showTopPanel();
 		},
 
-		resizeFunction:function () {
+		resizeFunction: function() {
 			grid_.resizeCanvas();
 			grid_.autosizeColumns();
 		},
 
-		launchListView:function (parentFrame) {
+		launchListView: function(parentFrame) {
 
 			listViewWindow = codeshelf.window();
 			listViewWindow.init("List View", parentFrame, undefined, thisListview_.resizeFunction);
@@ -125,16 +125,16 @@ codeshelf.listview = function (websession, domainObject) {
 			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
 			var data = {
-				className:    domainObject_.classname,
-				propertyNames:properties_,
-				filterClause: '',
-				filterParams: []
+				className:     domainObject_.classname,
+				propertyNames: properties_,
+				filterClause:  '',
+				filterParams:  []
 			}
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			websession_.sendCommand(setListViewFilterCmd, thisListview_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 
-			grid_.onKeyDown.subscribe(function (e) {
+			grid_.onKeyDown.subscribe(function(e) {
 				// select all rows on ctrl-a
 				if (e.which != 65 || !e.ctrlKey)
 					return false;
@@ -151,11 +151,11 @@ codeshelf.listview = function (websession, domainObject) {
 				e.preventDefault();
 			});
 
-			grid_.onColumnsReordered.subscribe(function (e) {
+			grid_.onColumnsReordered.subscribe(function(e) {
 				dataView_.sort(thisListview_.comparer, sortdir_);
 			});
 
-			grid_.onSelectedRowsChanged.subscribe(function (e) {
+			grid_.onSelectedRowsChanged.subscribe(function(e) {
 				selectedRowIds_ = [];
 				var rows = grid_.getSelectedRows();
 				for (var i = 0, l = rows.length; i < l; i++) {
@@ -165,19 +165,19 @@ codeshelf.listview = function (websession, domainObject) {
 				}
 			});
 
-			grid_.onSort.subscribe(function (e, args) {
+			grid_.onSort.subscribe(function(e, args) {
 				sortdir_ = args.sortAsc ? 1 : -1;
 				sortcol_ = args.sortCol.field;
 				dataView_.sort(thisListview_.comparer, args.sortAsc);
 			});
 
 			// wire up model events to drive the grid
-			dataView_.onRowCountChanged.subscribe(function (e, args) {
+			dataView_.onRowCountChanged.subscribe(function(e, args) {
 				grid_.updateRowCount();
 				grid_.render();
 			});
 
-			dataView_.onRowsChanged.subscribe(function (e, args) {
+			dataView_.onRowsChanged.subscribe(function(e, args) {
 				grid_.invalidateRows(args.rows);
 				grid_.render();
 
@@ -195,14 +195,14 @@ codeshelf.listview = function (websession, domainObject) {
 				}
 			});
 
-			dataView_.onPagingInfoChanged.subscribe(function (e, pagingInfo) {
+			dataView_.onPagingInfoChanged.subscribe(function(e, pagingInfo) {
 				var isLastPage = pagingInfo.pageSize * (pagingInfo.pageNum + 1) - 1 >= pagingInfo.totalRows;
 				var enableAddRow = isLastPage || pagingInfo.pageSize == 0;
 				var options = grid_.getOptions();
 
 				if (options.enableAddRow != enableAddRow)
 					grid_.setOptions({
-						enableAddRow:enableAddRow
+						enableAddRow: enableAddRow
 					});
 			});
 
@@ -212,8 +212,8 @@ codeshelf.listview = function (websession, domainObject) {
 			dataView_.beginUpdate();
 			//dataView_.setItems(data_);
 			dataView_.setFilterArgs({
-				percentCompleteThreshold:percentCompleteThreshold_,
-				searchString:            searchString_
+				percentCompleteThreshold: percentCompleteThreshold_,
+				searchString:             searchString_
 			});
 			dataView_.setFilter(thisListview_.myFilter);
 			dataView_.endUpdate();
@@ -221,10 +221,10 @@ codeshelf.listview = function (websession, domainObject) {
 			$("#gridContainer").resizable();
 		},
 
-		websocketCmdCallback:function (expectedResponseType) {
+		websocketCmdCallback: function(expectedResponseType) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
-				exec:                   function (command) {
+				exec:                    function(command) {
 					if (!command.data.hasOwnProperty('result')) {
 						alert('response has no result');
 					} else if (command.type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
@@ -246,7 +246,7 @@ codeshelf.listview = function (websession, domainObject) {
 						dataView_.sort(thisListview_.comparer, sortdir_);
 					}
 				},
-				getExpectedResponseType:function () {
+				getExpectedResponseType: function() {
 					return expectedResponseType_;
 				}
 			}

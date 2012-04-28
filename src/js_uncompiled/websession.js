@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.16 2012/03/25 01:36:30 jeffw Exp $
+ *  $Id: websession.js,v 1.17 2012/04/28 00:38:44 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.events');
@@ -10,35 +10,36 @@ goog.require('goog.net.WebSocket');
 goog.require('goog.json');
 goog.require('goog.array');
 
-if (typeof MozWebSocket != "undefined") {
+if (typeof MozWebSocket !== "undefined") {
 	var WebSocket = MozWebSocket;
 }
 
-const kWebSessionCommandType = {
-	LAUNCH_CODE_CHECK:   'LAUNCH_CODE_CHECK',
-	LAUNCH_CODE_RESP:    'LAUNCH_CODE_RESP',
-	OBJECT_GETTER_REQ:   'OBJECT_GETTER_REQ',
-	OBJECT_GETTER_RESP:  'OBJECT_GETTER_RESP',
-	OBJECT_CREATE_REQ:   'OBJECT_CREATE_REQ',
-	OBJECT_CREATE_RESP:  'OBJECT_CREATE_RESP',
-	OBJECT_UPDATE_REQ:   'OBJECT_UPDATE_REQ',
-	OBJECT_UPDATE_RESP:  'OBJECT_UPDATE_RESP',
-	OBJECT_DELETE_REQ:   'OBJECT_DELETE_REQ',
-	OBJECT_DELETE_RESP:  'OBJECT_DELETE_RESP',
-	OBJECT_LISTENER_REQ: 'OBJECT_LISTENER_REQ',
-	OBJECT_LISTENER_RESP:'OBJECT_LISTENER_RESP',
-	OBJECT_FILTER_REQ:   'OBJECT_FILTER_REQ',
-	OBJECT_FILTER_RESP:  'OBJECT_FILTER_RESP'
+var kWebSessionCommandType = {
+	LAUNCH_CODE_CHECK:    'LAUNCH_CODE_CHECK',
+	LAUNCH_CODE_RESP:     'LAUNCH_CODE_RESP',
+	OBJECT_GETTER_REQ:    'OBJECT_GETTER_REQ',
+	OBJECT_GETTER_RESP:   'OBJECT_GETTER_RESP',
+	OBJECT_CREATE_REQ:    'OBJECT_CREATE_REQ',
+	OBJECT_CREATE_RESP:   'OBJECT_CREATE_RESP',
+	OBJECT_UPDATE_REQ:    'OBJECT_UPDATE_REQ',
+	OBJECT_UPDATE_RESP:   'OBJECT_UPDATE_RESP',
+	OBJECT_DELETE_REQ:    'OBJECT_DELETE_REQ',
+	OBJECT_DELETE_RESP:   'OBJECT_DELETE_RESP',
+	OBJECT_LISTENER_REQ:  'OBJECT_LISTENER_REQ',
+	OBJECT_LISTENER_RESP: 'OBJECT_LISTENER_RESP',
+	OBJECT_FILTER_REQ:    'OBJECT_FILTER_REQ',
+	OBJECT_FILTER_RESP:   'OBJECT_FILTER_RESP'
 };
 
-const kWebsessionState = {
-	UNVALIDATED:'UNVALIDATED',
-	VALIDATED:  'VALIDATED'
+var kWebsessionState = {
+	UNVALIDATED: 'UNVALIDATED',
+	VALIDATED:   'VALIDATED'
 };
 
-codeshelf.websession = function () {
+codeshelf.websession = function() {
 
 	var state_;
+	var thisWebsession_;
 	var websocketStarted_ = false;
 	var pendingCommands_;
 	var connectAttempts_ = 0;
@@ -46,17 +47,17 @@ codeshelf.websession = function () {
 	var websocket_;
 	var currentPage_;
 
-	return {
+	thisWebsession_ = {
 
-		getState:function () {
+		getState: function() {
 			return state_;
 		},
 
-		setState:function (state) {
+		setState: function(state) {
 			state_ = state;
 		},
 
-		initWebSocket:function (application) {
+		initWebSocket: function(application) {
 
 			application_ = application;
 			state_ = kWebsessionState.UNVALIDATED;
@@ -73,10 +74,10 @@ codeshelf.websession = function () {
 
 			websocket_ = new goog.net.WebSocket(true, linearBackOff);
 			pendingCommands_ = new goog.events.EventHandler();
-			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.ERROR, this.onError);
-			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.OPENED, this.onOpen);
-			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.CLOSED, this.onClose);
-			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.MESSAGE, this.onMessage);
+			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.ERROR, thisWebsession_.onError);
+			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.OPENED, thisWebsession_.onOpen);
+			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.CLOSED, thisWebsession_.onClose);
+			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.MESSAGE, thisWebsession_.onMessage);
 
 			try {
 				if (!websocket_.isOpen()) {
@@ -90,16 +91,16 @@ codeshelf.websession = function () {
 			}
 		},
 
-		createCommand:function (commandType, data) {
+		createCommand: function(commandType, data) {
 			var command = {
-				id:  goog.events.getUniqueId('cmdid'),
-				type:commandType,
-				data:data
+				id:   goog.events.getUniqueId('cmdid'),
+				type: commandType,
+				data: data
 			}
 			return command;
 		},
 
-		sendCommand:function (inCommand, inCallback, inRemainActive) {
+		sendCommand: function(inCommand, inCallback, inRemainActive) {
 			// Attempt to send the command.
 			try {
 				if (inCallback == null) {
@@ -111,9 +112,9 @@ codeshelf.websession = function () {
 						// Put the pending command callback in the map.
 						var commandWrapper = {
 							remainActive: inRemainActive,
-							command: inCommand,
-							callback: inCallback
-						}
+							command:      inCommand,
+							callback:     inCallback
+						};
 						pendingCommands_[inCommand.id] = commandWrapper;
 
 						websocket_.send(goog.json.serialize(inCommand));
@@ -124,11 +125,11 @@ codeshelf.websession = function () {
 			}
 		},
 
-		setCurrentPage:function (currentPage) {
+		setCurrentPage: function(currentPage) {
 			currentPage_ = currentPage;
 		},
 
-		onError:function () {
+		onError: function() {
 			state_ = kWebsessionState.UNVALIDATED;
 			currentPage_.exit();
 			var reason;
@@ -139,11 +140,11 @@ codeshelf.websession = function () {
 			application_.restartApplication(reason);
 		},
 
-		onOpen:function () {
+		onOpen: function() {
 			websocketStarted_ = true;
 		},
 
-		onClose:function () {
+		onClose: function() {
 			state_ = kWebsessionState.UNVALIDATED;
 			currentPage_.exit();
 			var reason;
@@ -154,11 +155,11 @@ codeshelf.websession = function () {
 			application_.restartApplication(reason);
 		},
 
-		onMessage:function (messageEvent) {
-			command = goog.json.parse(messageEvent.message);
+		onMessage: function(messageEvent) {
+			var command = goog.json.parse(messageEvent.message);
 
-			commandWrapper = pendingCommands_[command.id];
-			callback = commandWrapper.callback;
+			var commandWrapper = pendingCommands_[command.id];
+			var callback = commandWrapper.callback;
 			if (callback == null) {
 				alert('callback for cmd was null');
 			} else {
@@ -183,4 +184,6 @@ codeshelf.websession = function () {
 			}
 		}
 	};
+
+	return thisWebsession_;
 };

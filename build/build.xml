@@ -54,15 +54,18 @@
 			<arg value="--root=../lib/GoogleClosureLibrary/third_party/" />
 			<arg value="--root=../lib/GoogleClosureTemplates/" />
 			<arg value="--root=../lib/SlickGrid/" />
+			<arg value="--root=../lib/JQuery/" />
 			<arg value="--root=../src/js_uncompiled" />
-			<arg value="--namespace=codeshelf.mainpage" />
+			<arg value="--namespace=codeshelf.application" />
 			<arg value="--output_mode=compiled" />
 			<arg value="--compiler_jar=../lib/GoogleClosureLibrary/compiler.jar" />
 			<arg value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
-			<arg value="--compiler_flags=--create_source_map=../src/js/codeshelf.map" />
+			<arg value="--compiler_flags=--create_source_map=../src/js_compiled/codeshelf.map" />
+			<arg value="--compiler_flags=--externs=../src/js_externs/google_maps_api_v3_8.js" />
+			<!--arg value="- -compiler_flags=- -externs=../src/js_externs/jquery-1.7.js" /-->
 			<arg value="--compiler_flags=--formatting=PRETTY_PRINT" />
 			<arg value="--compiler_flags=--debug" />
-			<arg value="--output_file=../src/js/codeshelf.js" />
+			<arg value="--output_file=../src/js_compiled/codeshelf.js" />
 		</py-run>
 	</target>
 

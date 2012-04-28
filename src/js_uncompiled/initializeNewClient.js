@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: initializeNewClient.js,v 1.2 2012/04/11 05:13:07 jeffw Exp $
+ *  $Id: initializeNewClient.js,v 1.3 2012/04/28 00:38:44 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.initializenewclient');
 goog.require('codeshelf.templates');
@@ -9,7 +9,7 @@ goog.require('codeshelf.websession');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
 
-codeshelf.initializenewclient = function () {
+codeshelf.initializenewclient = function() {
 
 	var websession_;
 	var frame_;
@@ -18,7 +18,7 @@ codeshelf.initializenewclient = function () {
 	var thisInitializeNewClient_;
 
 	thisInitializeNewClient_ = {
-		start:function (websession, organization, parentFrame) {
+		start: function(websession, organization, parentFrame) {
 			websession_ = websession;
 			organization_ = organization;
 			frame_ = parentFrame;
@@ -30,11 +30,11 @@ codeshelf.initializenewclient = function () {
 			}
 		},
 
-		posSucceed:function (position) {
+		posSucceed: function(position) {
 			thisInitializeNewClient_.createFacility(position.coords.longitude, position.coords.latitude);
 		},
 
-		posFail:function (error) {
+		posFail: function(error) {
 			switch (error.code) {
 				case error.PERMISSION_DENIED:
 					break;
@@ -51,17 +51,17 @@ codeshelf.initializenewclient = function () {
 
 		},
 
-		createFacility:function (longitude, latitude) {
+		createFacility: function(longitude, latitude) {
 			var data = {
-				parentClassName:   codeshelf.domainobjects.organization.classname,
-				parentPersistentId:organization_.persistentId,
-				className:         codeshelf.domainobjects.facility.classname,
-				properties:        [
-					{name:'DomainId', value:'F1'},
-					{name:'Description', value:'First Facility'},
-					{name:'PosTypeByStr', value:'GPS'},
-					{name:'PosX', value:longitude},
-					{name:'PosY', value:latitude}
+				parentClassName:    codeshelf.domainobjects.organization.classname,
+				parentPersistentId: organization_.persistentId,
+				className:          codeshelf.domainobjects.facility.classname,
+				properties:         [
+					{name: 'DomainId', value: 'F1'},
+					{name: 'Description', value: 'First Facility'},
+					{name: 'PosTypeByStr', value: 'GPS'},
+					{name: 'PosX', value: longitude},
+					{name: 'PosY', value: latitude}
 				]
 			}
 
@@ -69,10 +69,10 @@ codeshelf.initializenewclient = function () {
 			websession_.sendCommand(newFacilityCmd, thisInitializeNewClient_.websocketCmdCallback(kWebSessionCommandType.OBJECT_CREATE_RESP), false);
 		},
 
-		websocketCmdCallback:function (expectedResponseType) {
+		websocketCmdCallback: function(expectedResponseType) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
-				exec:                   function (command) {
+				exec:                    function(command) {
 					if (!command.data.hasOwnProperty('result')) {
 						alert('response has no result');
 					} else if (command.type == kWebSessionCommandType.OBJECT_CREATE_RESP) {
@@ -81,7 +81,7 @@ codeshelf.initializenewclient = function () {
 						facilityEditor.start(websession_, organization_, frame_, facility);
 					}
 				},
-				getExpectedResponseType:function () {
+				getExpectedResponseType: function() {
 					return expectedResponseType_;
 				}
 			}

@@ -10,119 +10,40 @@ goog.require('slickgrid.columnpicker');
 goog.require('jquery');
 
 $(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all").mouseover(
-	function (e) {
+	function(e) {
 		$(e.target).addClass("ui-state-hover")
-	}).mouseout(function (e) {
+	}).mouseout(function(e) {
 		$(e.target).removeClass("ui-state-hover")
 	});
 
-codeshelf.listdemo = function () {
+codeshelf.listdemo = function() {
 
 	var dataView;
 	var grid;
 	var data = [];
 	var selectedRowIds = [];
-
-	var columns = [
-		{
-			id:                 "sel",
-			name:               "#",
-			field:              "num",
-			behavior:           "select",
-			cssClass:           "cell-selection",
-			width:              40,
-			cannotTriggerInsert:true,
-			resizable:          true,
-			selectable:         false,
-			sortable:           true
-		},
-		{
-			id:       "title",
-			name:     "Title",
-			field:    "title",
-			width:    120,
-			minWidth: 120,
-			cssClass: "cell-title",
-			editor:   TextCellEditor,
-			validator:this.requiredFieldValidator,
-			sortable: true
-		},
-		{
-			id:      "duration",
-			name:    "Duration",
-			field:   "duration",
-			editor:  TextCellEditor,
-			sortable:true
-		},
-		{
-			id:       "%",
-			name:     "% Complete",
-			field:    "percentComplete",
-			minWidth: 80,
-			resizable:true,
-			formatter:GraphicalPercentCompleteCellFormatter,
-			editor:   PercentCompleteCellEditor,
-			sortable: true
-		},
-		{
-			id:      "start",
-			name:    "Start",
-			field:   "start",
-			minWidth:60,
-			editor:  DateCellEditor,
-			sortable:true
-		},
-		{
-			id:      "finish",
-			name:    "Finish",
-			field:   "finish",
-			minWidth:60,
-			editor:  DateCellEditor,
-			sortable:true
-		},
-		{
-			id:                 "effort-driven",
-			name:               "Effort Driven",
-			width:              80,
-			minWidth:           20,
-			cssClass:           "cell-effort-driven",
-			field:              "effortDriven",
-			formatter:          BoolCellFormatter,
-			editor:             YesNoCheckboxCellEditor,
-			cannotTriggerInsert:true,
-			sortable:           true
-		}
-	];
-
-	var options = {
-		editable:            true,
-		enableAddRow:        true,
-		enableCellNavigation:true,
-		asyncEditorLoading:  true,
-		forceFitColumns:     true,
-		topPanelHeight:      25
-	};
+	var thisListDemo_;
 
 	var sortcol = "title";
 	var sortdir = 1;
 	var percentCompleteThreshold = 0;
 	var searchString = "";
 
-	var thisListview_ = {
-		requiredFieldValidator:function (value) {
+	thisListDemo_ = {
+		requiredFieldValidator: function(value) {
 			if (value == null || value == undefined || !value.length)
 				return {
-					valid:false,
-					msg:  "This is a required field"
+					valid: false,
+					msg:   "This is a required field"
 				};
 			else
 				return {
-					valid:true,
-					msg:  null
+					valid: true,
+					msg:   null
 				};
 		},
 
-		myFilter:function (item, args) {
+		myFilter: function(item, args) {
 			if (item["percentComplete"] < args.percentCompleteThreshold)
 				return false;
 
@@ -130,28 +51,108 @@ codeshelf.listdemo = function () {
 
 		},
 
-		percentCompleteSort:function (a, b) {
+		percentCompleteSort: function(a, b) {
 			return a["percentComplete"] - b["percentComplete"];
 		},
 
-		comparer:function (a, b) {
+		comparer: function(a, b) {
 			var x = a[sortcol], y = b[sortcol];
 			return (x == y ? 0 : (x > y ? 1 : -1));
 		},
 
-		toggleFilterRow:function () {
+		toggleFilterRow: function() {
 			if ($(grid.getTopPanel()).is(":visible"))
 				grid.hideTopPanel();
 			else
 				grid.showTopPanel();
 		},
 
-		resizeFunction:function () {
+		resizeFunction: function() {
 			grid.resizeCanvas();
 			grid.autosizeColumns();
 		},
 
-		launchListDemo:function (parentFrame) {
+		launchListDemo: function(parentFrame) {
+			var columns = [
+				{
+					id:                  "sel",
+					name:                "#",
+					field:               "num",
+					behavior:            "select",
+					cssClass:            "cell-selection",
+					width:               40,
+					cannotTriggerInsert: true,
+					resizable:           true,
+					selectable:          false,
+					sortable:            true
+				},
+				{
+					id:        "title",
+					name:      "Title",
+					field:     "title",
+					width:     120,
+					minWidth:  120,
+					cssClass:  "cell-title",
+					editor:    TextCellEditor,
+					validator: thisListDemo_.requiredFieldValidator,
+					sortable:  true
+				},
+				{
+					id:       "duration",
+					name:     "Duration",
+					field:    "duration",
+					editor:   TextCellEditor,
+					sortable: true
+				},
+				{
+					id:        "%",
+					name:      "% Complete",
+					field:     "percentComplete",
+					minWidth:  80,
+					resizable: true,
+					formatter: GraphicalPercentCompleteCellFormatter,
+					editor:    PercentCompleteCellEditor,
+					sortable:  true
+				},
+				{
+					id:       "start",
+					name:     "Start",
+					field:    "start",
+					minWidth: 60,
+					editor:   DateCellEditor,
+					sortable: true
+				},
+				{
+					id:       "finish",
+					name:     "Finish",
+					field:    "finish",
+					minWidth: 60,
+					editor:   DateCellEditor,
+					sortable: true
+				},
+				{
+					id:                  "effort-driven",
+					name:                "Effort Driven",
+					width:               80,
+					minWidth:            20,
+					cssClass:            "cell-effort-driven",
+					field:               "effortDriven",
+					formatter:           BoolCellFormatter,
+					editor:              YesNoCheckboxCellEditor,
+					cannotTriggerInsert: true,
+					sortable:            true
+				}
+			];
+
+			var options = {
+				editable:             true,
+				enableAddRow:         true,
+				enableCellNavigation: true,
+				asyncEditorLoading:   true,
+				forceFitColumns:      true,
+				topPanelHeight:       25
+			};
+
 			// prepare the data
 			for (var i = 0; i < 50000; i++) {
 				var d = (data[i] = {});
@@ -167,7 +168,7 @@ codeshelf.listdemo = function () {
 			}
 
 			listViewWindow = codeshelf.window();
-			listViewWindow.init("List View", parentFrame, undefined, thisListview_.resizeFunction);
+			listViewWindow.init("List View", parentFrame, undefined, thisListDemo_.resizeFunction);
 			var contentElement = listViewWindow.getContentElement();
 			contentElement.innerHTML = '<div id="listViewGrid" class="windowContent"></div>';
 			dataView = new Slick.Data.DataView();
@@ -180,26 +181,26 @@ codeshelf.listdemo = function () {
 			// move the filter panel defined in a hidden div into grid top panel
 			$("#inlineFilterPanel").appendTo(grid.getTopPanel()).show();
 
-			grid.onCellChange.subscribe(function (e, args) {
+			grid.onCellChange.subscribe(function(e, args) {
 				dataView.updateItem(args.item.id, args.item);
 			});
 
-			grid.onAddNewRow.subscribe(function (e, args) {
+			grid.onAddNewRow.subscribe(function(e, args) {
 				var item = {
-					"num":            data.length,
-					"id":             "new_" + (Math.round(Math.random() * 10000)),
-					"title":          "New task",
-					"duration":       "1 day",
-					"percentComplete":0,
-					"start":          "01/01/2009",
-					"finish":         "01/01/2009",
-					"effortDriven":   false
+					"num":             data.length,
+					"id":              "new_" + (Math.round(Math.random() * 10000)),
+					"title":           "New task",
+					"duration":        "1 day",
+					"percentComplete": 0,
+					"start":           "01/01/2009",
+					"finish":          "01/01/2009",
+					"effortDriven":    false
 				};
 				$.extend(item, args.item);
 				dataView.addItem(item);
 			});
 
-			grid.onKeyDown.subscribe(function (e) {
+			grid.onKeyDown.subscribe(function(e) {
 				// select all rows on ctrl-a
 				if (e.which != 65 || !e.ctrlKey)
 					return false;
@@ -216,7 +217,7 @@ codeshelf.listdemo = function () {
 				e.preventDefault();
 			});
 
-			grid.onSelectedRowsChanged.subscribe(function (e) {
+			grid.onSelectedRowsChanged.subscribe(function(e) {
 				selectedRowIds = [];
 				var rows = grid.getSelectedRows();
 				for (var i = 0, l = rows.length; i < l; i++) {
@@ -226,7 +227,7 @@ codeshelf.listdemo = function () {
 				}
 			});
 
-			grid.onSort.subscribe(function (e, args) {
+			grid.onSort.subscribe(function(e, args) {
 				sortdir = args.sortAsc ? 1 : -1;
 				sortcol = args.sortCol.field;
 
@@ -235,7 +236,7 @@ codeshelf.listdemo = function () {
 					// more limited and does lexicographic sort only by default, but can
 					// be much faster
 
-					var percentCompleteValueFn = function () {
+					var percentCompleteValueFn = function() {
 						var val = this["percentComplete"];
 						if (val < 10)
 							return "00" + val;
@@ -250,17 +251,17 @@ codeshelf.listdemo = function () {
 				} else {
 					// using native sort with comparer
 					// preferred method but can be very slow in IE with huge datasets
-					dataView.sort(thisListview_.comparer, args.sortAsc);
+					dataView.sort(thisListDemo_.comparer, args.sortAsc);
 				}
 			});
 
 			// wire up model events to drive the grid
-			dataView.onRowCountChanged.subscribe(function (e, args) {
+			dataView.onRowCountChanged.subscribe(function(e, args) {
 				grid.updateRowCount();
 				grid.render();
 			});
 
-			dataView.onRowsChanged.subscribe(function (e, args) {
+			dataView.onRowsChanged.subscribe(function(e, args) {
 				grid.invalidateRows(args.rows);
 				grid.render();
 
@@ -278,14 +279,14 @@ codeshelf.listdemo = function () {
 				}
 			});
 
-			dataView.onPagingInfoChanged.subscribe(function (e, pagingInfo) {
+			dataView.onPagingInfoChanged.subscribe(function(e, pagingInfo) {
 				var isLastPage = pagingInfo.pageSize * (pagingInfo.pageNum + 1) - 1 >= pagingInfo.totalRows;
 				var enableAddRow = isLastPage || pagingInfo.pageSize == 0;
 				var options = grid.getOptions();
 
 				if (options.enableAddRow != enableAddRow)
 					grid.setOptions({
-						enableAddRow:enableAddRow
+						enableAddRow: enableAddRow
 					});
 			});
 
@@ -293,8 +294,8 @@ codeshelf.listdemo = function () {
 
 			// wire up the slider to apply the filter to the model
 			$("#pcSlider,#pcSlider2").slider({
-				"range":"min",
-				"slide":function (event, ui) {
+				"range": "min",
+				"slide": function(event, ui) {
 					Slick.GlobalEditorLock.cancelCurrentEdit();
 
 					if (percentCompleteThreshold != ui.value) {
@@ -306,26 +307,26 @@ codeshelf.listdemo = function () {
 			});
 
 			// wire up the search textbox to apply the filter to the model
-			$("#txtSearch,#txtSearch2").keyup(function (e) {
+			$("#txtSearch,#txtSearch2").keyup(function(e) {
 				Slick.GlobalEditorLock.cancelCurrentEdit();
 
 				// clear on Esc
 				if (e.which == 27)
-					thisListview_.value = "";
+					thisListDemo_.value = "";
 
-				searchString = thisListview_.value;
+				searchString = thisListDemo_.value;
 				updateFilter();
 			});
 
 			function updateFilter() {
 				dataView.setFilterArgs({
-					percentCompleteThreshold:percentCompleteThreshold,
-					searchString:            searchString
+					percentCompleteThreshold: percentCompleteThreshold,
+					searchString:             searchString
 				});
 				dataView.refresh();
 			}
 
-			$("#btnSelectRows").click(function () {
+			$("#btnSelectRows").click(function() {
 				if (!Slick.GlobalEditorLock.commitCurrentEdit()) {
 					return;
 				}
@@ -345,15 +346,15 @@ codeshelf.listdemo = function () {
 			dataView.beginUpdate();
 			dataView.setItems(data);
 			dataView.setFilterArgs({
-				percentCompleteThreshold:percentCompleteThreshold,
-				searchString:            searchString
+				percentCompleteThreshold: percentCompleteThreshold,
+				searchString:             searchString
 			});
-			dataView.setFilter(thisListview_.myFilter);
+			dataView.setFilter(thisListDemo_.myFilter);
 			dataView.endUpdate();
 
 			$("#gridContainer").resizable();
 		}
 	}
 
-	return thisListview_;
+	return thisListDemo_;
 }
