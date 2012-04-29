@@ -44,7 +44,7 @@
 			<arg value="--root_with_prefix=../lib/JQuery ../../../JQuery" />
 			<arg value="--root_with_prefix=../lib/SlickGrid ../../../SlickGrid" />
 			<arg value="--root_with_prefix=../src ../../../../src" />
-			<arg value="--output_file=../src/js_uncompiled/deps.js" />
+			<arg value="--output_file=../src/js_compiled/deps.js" />
 		</py-run>
 	</target>
 
@@ -53,18 +53,29 @@
 			<arg value="--root=../lib/GoogleClosureLibrary/closure/" />
 			<arg value="--root=../lib/GoogleClosureLibrary/third_party/" />
 			<arg value="--root=../lib/GoogleClosureTemplates/" />
-			<arg value="--root=../lib/SlickGrid/" />
 			<arg value="--root=../lib/JQuery/" />
+			<arg value="--root=../lib/SlickGrid/" />
 			<arg value="--root=../src/js_uncompiled" />
 			<arg value="--namespace=codeshelf.application" />
 			<arg value="--output_mode=compiled" />
 			<arg value="--compiler_jar=../lib/GoogleClosureLibrary/compiler.jar" />
 			<arg value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
 			<arg value="--compiler_flags=--create_source_map=../src/js_compiled/codeshelf.map" />
+			<arg value="--compiler_flags=--output_manifest=../src/js_compiled/codeshelf.manifest" />
+			<arg value="--compiler_flags=--create_name_map_files" />
 			<arg value="--compiler_flags=--externs=../src/js_externs/google_maps_api_v3_8.js" />
-			<!--arg value="- -compiler_flags=- -externs=../src/js_externs/jquery-1.7.js" /-->
+			<arg value="--compiler_flags=--externs=../src/js_externs/jquery-1.7.js" />
+			<arg value="--compiler_flags=--externs=../src/js_externs/jquery-ui.gw.js" />
 			<arg value="--compiler_flags=--formatting=PRETTY_PRINT" />
 			<arg value="--compiler_flags=--debug" />
+			<!--arg value="- -compiler_flags=- -warning_level=VERBOSE" /-->
+			<arg value="--compiler_flags=--output_wrapper &quot;(function(){%output%})();&quot;" />
+			<arg value="--compiler_flags=--manage_closure_dependencies" />
+			<arg value="--compiler_flags=--closure_entry_point=codeshelf.application" />
+			<arg value="--compiler_flags=--jscomp_warning=missingProperties" />
+			<arg value="--compiler_flags=--jscomp_warning=checkTypes" />
+			<arg value="--compiler_flags=--logging_level=FINEST" />
+			<arg value="--compiler_flags=--summary_detail_level=3" />
 			<arg value="--output_file=../src/js_compiled/codeshelf.js" />
 		</py-run>
 	</target>

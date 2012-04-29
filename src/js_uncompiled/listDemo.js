@@ -7,7 +7,7 @@ goog.require('slickgrid.grid');
 goog.require('slickgrid.dataview');
 goog.require('slickgrid.pager');
 goog.require('slickgrid.columnpicker');
-goog.require('jquery');
+goog.require('extern.jquery');
 
 $(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all").mouseover(
 	function(e) {
@@ -93,7 +93,7 @@ codeshelf.listdemo = function() {
 					width:     120,
 					minWidth:  120,
 					cssClass:  "cell-title",
-					editor:    TextCellEditor,
+					editor:    'TextCellEditor',
 					validator: thisListDemo_.requiredFieldValidator,
 					sortable:  true
 				},
@@ -101,7 +101,7 @@ codeshelf.listdemo = function() {
 					id:       "duration",
 					name:     "Duration",
 					field:    "duration",
-					editor:   TextCellEditor,
+					editor:   'TextCellEditor',
 					sortable: true
 				},
 				{
@@ -119,7 +119,7 @@ codeshelf.listdemo = function() {
 					name:     "Start",
 					field:    "start",
 					minWidth: 60,
-					editor:   DateCellEditor,
+					editor:   'DateCellEditor',
 					sortable: true
 				},
 				{
@@ -127,7 +127,7 @@ codeshelf.listdemo = function() {
 					name:     "Finish",
 					field:    "finish",
 					minWidth: 60,
-					editor:   DateCellEditor,
+					editor:   'DateCellEditor',
 					sortable: true
 				},
 				{

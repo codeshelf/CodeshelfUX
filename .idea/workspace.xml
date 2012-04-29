@@ -5,38 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c319b0c7-b9cf-46f5-90a5-b0a625c84957" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/codeshelf.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/drag.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/drag2.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/drag3.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/gmaps.polyedit.example.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/greeter.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/list-test.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/mapRotate.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/maplayerexample.html" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/html/codeshelf.dev.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/compiler.jar" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/compiler.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/build.xml" afterPath="$PROJECT_DIR$/build/build.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/JQuery/jquery-1.7.1.js" afterPath="$PROJECT_DIR$/lib/JQuery/jquery-1.7.1.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/JQuery/jquery.css-rotate.js" afterPath="$PROJECT_DIR$/lib/JQuery/jquery.css-rotate.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/JQuery/jquery.css-transform.js" afterPath="$PROJECT_DIR$/lib/JQuery/jquery.css-transform.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/lib/jquery-ui-1.8.16.custom.min.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/lib/jquery-ui-1.8.16.custom.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/lib/jquery.jsonp-1.1.0.min.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/lib/jquery.jsonp-1.1.0.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/slick.editors.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/slick.editors.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/application.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/application.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/html/codeshelf.html" afterPath="$PROJECT_DIR$/src/html/codeshelf.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/deps.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/deps.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/domainObjects.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/domainObjects.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/facilityEditor.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/facilityEditor.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/facilityEditorGmapsOverlay.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/facilityEditorGmapsOverlay.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/initializeNewClient.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/initializeNewClient.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/launch.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/launch.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/listDemo.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/listDemo.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/listView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/listView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/listViewDataModel.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/listViewDataModel.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/websession.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/websession.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/window.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/window.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/templates/codeshelf.soy" afterPath="$PROJECT_DIR$/src/templates/codeshelf.soy" />
     </list>
     <ignored path="CodeShelfUX.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -58,55 +39,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
+      <file leaf-file-name="websession.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/websession.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="12" column="39" selection-start="548" selection-end="548" vertical-scroll-proportion="0.2706767">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="jquery.css-transform.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/JQuery/jquery.css-transform.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="31" column="31" selection-start="922" selection-end="922" vertical-scroll-proportion="0.0">
+              <folding>
+                <marker date="1335650426000" expanded="true" signature="104:3357" placeholder="{...}" />
+                <marker date="1335650426000" expanded="true" signature="927:3357" placeholder="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="window.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/window.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="70" column="40" selection-start="2537" selection-end="2537" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="jquery-ui-1.8.16.custom.min.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/JQuery/jquery-ui-1.8.16.custom.min.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="47" column="103" selection-start="8060" selection-end="8060" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="jquery-ui-1.8.16.custom.min.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/lib/SlickGrid/lib/jquery-ui-1.8.16.custom.min.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="2" selection-start="2" selection-end="2" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="codeshelf.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/html/codeshelf.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="91" selection-start="960" selection-end="1007" vertical-scroll-proportion="-8.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="application.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/application.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="25" selection-start="483" selection-end="483" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="listDemo.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/listDemo.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="155" column="0" selection-start="3739" selection-end="3739" vertical-scroll-proportion="0.0">
+            <state line="106" column="20" selection-start="3353" selection-end="3353" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -125,22 +82,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/js_uncompiled/websession.js" />
-        <option value="$PROJECT_DIR$/lib/JQuery/jquery.css-rotate.js" />
-        <option value="$PROJECT_DIR$/lib/JQuery/jquery.css-transform.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/codeshelf_generated.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/listDemo.js" />
         <option value="$PROJECT_DIR$/lib/SlickGrid/slick.editors.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/facilityEditor.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/window.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/requireApp.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/application.js" />
-        <option value="$PROJECT_DIR$/src/html/codeshelf.html" />
-        <option value="$PROJECT_DIR$/lib/JQuery/jquery-1.7.1.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/facilityEditorGmapsOverlay.js" />
         <option value="$PROJECT_DIR$/src/js_externs/google_maps_api_v3_8.js" />
         <option value="$PROJECT_DIR$/lib/SlickGrid/lib/jquery-ui-1.8.16.custom.min.js" />
+        <option value="$PROJECT_DIR$/lib/JQuery/jquery-1.7.1.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/listDemo.js" />
+        <option value="$PROJECT_DIR$/src/html/codeshelf.html" />
+        <option value="$PROJECT_DIR$/src/html/codeshelf.dev.html" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/facilityEditor.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/listView.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/window.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/websession.js" />
+        <option value="$PROJECT_DIR$/lib/JQuery/jquery.css-transform.js" />
       </list>
     </option>
   </component>
@@ -277,7 +234,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="js_externs" />
+              <option name="myItemId" value="html" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -292,6 +249,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="JQuery" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -310,6 +285,9 @@
     <property name="GoToClass.includeJavaFiles" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/html" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/js_uncompiled" />
       <recent name="$PROJECT_DIR$/lib/JQuery" />
@@ -393,13 +371,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1440" height="874" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972324" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3273165" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18819444" sideWeight="0.30445248" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18819444" sideWeight="0.35980746" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3273165" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18819444" sideWeight="0.3309266" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18819444" sideWeight="0.33333334" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
@@ -474,43 +452,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/lib/JQuery/jquery.css-transform.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="25" selection-start="25" selection-end="25" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/codeshelf_generated.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="79" selection-start="1057" selection-end="1057" vertical-scroll-proportion="0.33199194" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/mainPage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="722" selection-end="722" vertical-scroll-proportion="0.36090225" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/SlickGrid/slick.editors.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="43" selection-start="1773" selection-end="1773" vertical-scroll-proportion="-9.132948" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/fx/dragger.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="140" column="0" selection-start="3945" selection-end="3945" vertical-scroll-proportion="0.5131579" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/application.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="25" selection-start="483" selection-end="483" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/listDemo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="155" column="0" selection-start="3739" selection-end="3739" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/base.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="166" column="5" selection-start="5893" selection-end="5893" vertical-scroll-proportion="0.33333334">
@@ -518,60 +459,108 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_externs/google_maps_api_v3_8.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4686" column="2" selection-start="90758" selection-end="90758" vertical-scroll-proportion="0.9860936" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/lib/JQuery/jquery-1.7.1.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="960" column="0" selection-start="24528" selection-end="24528" vertical-scroll-proportion="0.36409608">
+        <state line="7194" column="48" selection-start="192690" selection-end="192699" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/SlickGrid/slick.grid.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1073" column="44" selection-start="42494" selection-end="42494" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/mainPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="54" column="20" selection-start="1786" selection-end="1786" vertical-scroll-proportion="0.5411765">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/listView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="90" column="21" selection-start="2445" selection-end="2445" vertical-scroll-proportion="0.68235296">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/html/codeshelf.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="91" selection-start="960" selection-end="1007" vertical-scroll-proportion="-8.0">
+        <state line="14" column="106" selection-start="1022" selection-end="1022" vertical-scroll-proportion="0.32876712">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_externs/google_maps_api_v3_8.js">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/application.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4686" column="2" selection-start="90758" selection-end="90758" vertical-scroll-proportion="0.9860936">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+        <state line="9" column="25" selection-start="483" selection-end="483" vertical-scroll-proportion="0.02255639">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditorGmapsOverlay.js">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/listDemo.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="0" selection-start="511" selection-end="511" vertical-scroll-proportion="0.17910448">
+        <state line="129" column="46" selection-start="3089" selection-end="3089" vertical-scroll-proportion="0.85714287">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditor.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="45" selection-start="2123" selection-end="2123" vertical-scroll-proportion="0.8647282">
+        <state line="88" column="12" selection-start="2708" selection-end="2708" vertical-scroll-proportion="0.28448275">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/html/codeshelf.dev.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="37" selection-start="1024" selection-end="1101" vertical-scroll-proportion="0.3522505">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditorGmapsOverlay.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="36" selection-start="577" selection-end="603" vertical-scroll-proportion="0.31578946">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/initializeNewClient.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="79" column="28" selection-start="2774" selection-end="2774" vertical-scroll-proportion="0.5263158">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/window.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="40" selection-start="2537" selection-end="2537" vertical-scroll-proportion="0.0">
+        <state line="106" column="20" selection-start="3353" selection-end="3353" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/JQuery/jquery-ui-1.8.16.custom.min.js">
+    <entry file="file://$PROJECT_DIR$/lib/JQuery/jquery.css-transform.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="103" selection-start="8060" selection-end="8060" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="31" column="31" selection-start="922" selection-end="922" vertical-scroll-proportion="0.0">
+          <folding>
+            <marker date="1335650426000" expanded="true" signature="104:3357" placeholder="{...}" />
+            <marker date="1335650426000" expanded="true" signature="927:3357" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/SlickGrid/lib/jquery-ui-1.8.16.custom.min.js">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/websession.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="2" selection-start="2" selection-end="2" vertical-scroll-proportion="0.0">
+        <state line="12" column="39" selection-start="548" selection-end="548" vertical-scroll-proportion="0.2706767">
           <folding />
         </state>
       </provider>

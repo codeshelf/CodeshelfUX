@@ -1,15 +1,15 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: listViewDataModel.js,v 1.3 2012/04/28 00:38:44 jeffw Exp $
+ *  $Id: listViewDataModel.js,v 1.4 2012/04/29 09:58:22 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.listviewdatamodel');
-goog.require('jquery');
-goog.require('jquery.jsonp');
-goog.require('jquery.ui');
-goog.require('jquery.event.drag');
-goog.require('jquery.event.drop');
+goog.require('extern.jquery');
+goog.require('extern.jquery.jsonp');
+goog.require('extern.jquery.ui');
+goog.require('extern.jquery.event.drag');
+goog.require('extern.jquery.event.drop');
 
 (function($) {
 	/***

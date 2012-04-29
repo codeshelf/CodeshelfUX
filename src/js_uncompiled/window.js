@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: window.js,v 1.5 2012/04/28 00:38:44 jeffw Exp $
+ *  $Id: window.js,v 1.6 2012/04/29 09:58:22 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.window');
 goog.require('goog.style');
@@ -66,10 +66,10 @@ codeshelf.window = function() {
 			});
 
 			resizer_.defaultAction = function(x, y) {
-				leftDim = parseInt(windowElement_.style.left, 10);
-				topDim = parseInt(windowElement_.style.top, 10);
-				width = resizer_.clientX - leftDim;
-				height = y + topDim - 10;
+				var leftDim = parseInt(windowElement_.style.left, 10);
+				var topDim = parseInt(windowElement_.style.top, 10);
+				var width = resizer_.clientX - leftDim;
+				var height = y + topDim - 10;
 				windowElement_.style.width = width + 'px';
 				windowElement_.style.height = height + 'px';
 				resizeFunction();
@@ -104,7 +104,7 @@ codeshelf.window = function() {
 		focusWindow: function() {
 			// Loop throught all of the windows, and set their Z to 0, but set this window's Z to 1.
 			for (var i in windowList) {
-				aWindow = windowList[i];
+				var aWindow = windowList[i];
 				if (aWindow === thisWindow_) {
 					aWindow.setZ(1);
 				} else {

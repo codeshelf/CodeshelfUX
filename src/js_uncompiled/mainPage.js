@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.21 2012/04/28 00:38:44 jeffw Exp $
+ *  $Id: mainPage.js,v 1.22 2012/04/29 09:58:22 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.domainobjects');
@@ -41,7 +41,6 @@ codeshelf.mainpage = function() {
 			goog.dom.setProperties(goog.dom.getDocument().body, {'class': 'main_body'});
 			goog.dom.appendChild(goog.dom.getDocument().body, soy.renderAsElement(codeshelf.templates.mainPage));
 
-			z_ = 5;
 			frame_ = goog.dom.query('.frame')[0];
 			frame_.style.top = frameTop_ + 5 + 'px';
 			frame_.style.left = frameLeft_ + 'px';
@@ -53,7 +52,7 @@ codeshelf.mainpage = function() {
 			// Start listening for viewport size changes.
 			var vsm = new goog.dom.ViewportSizeMonitor();
 			goog.events.listen(vsm, goog.events.EventType.RESIZE, function(e) {
-				size = vsm.getSize();
+				var size = vsm.getSize();
 				size.height -= 10;
 				thisMainpage_.updateFrameSize(size);
 			});

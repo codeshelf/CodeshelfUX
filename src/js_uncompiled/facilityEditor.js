@@ -1,18 +1,18 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.40 2012/04/28 00:38:44 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.41 2012/04/29 09:58:22 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
-goog.require('codeshelf.facilityeditorgmapsoverlay');
+//goog.require('codeshelf.facilityeditorgmapsoverlay');
 goog.require('codeshelf.websession');
 goog.require('codeshelf.dataobjectfield');
 goog.require('goog.dom.query');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
-goog.require('jquery.css.rotate');
-goog.require('jquery.css.transform');
+goog.require('extern.jquery.css.rotate');
+goog.require('extern.jquery.css.transform');
 
 
 var newPoint;
@@ -21,16 +21,18 @@ var rotateDeg = 0;
 
 codeshelf.facilityeditor = function() {
 
+	var websession_;
+	var organization_;
+	var facility_;
+	var parentFrame_;
+
 	var map_;
 	var clickHandler_;
 	var doubleClickHandler_;
 	var clickTimeout_;
-	var websession_;
-	var organization_;
 	var mapPane_;
 	var mapRotatePane_;
 	var thisFacilityEditor_;
-	var facility_;
 	var facilityBounds_;
 	var facilityEditorOverlay_;
 	var facilityOutlinePath_;
@@ -43,8 +45,8 @@ codeshelf.facilityeditor = function() {
 	var geocoderTextField_;
 	var googleField_;
 
-	var infoWindow_ = new google.maps.InfoWindow();
-	var totalBounds_ = new google.maps.LatLngBounds();
+	var infoWindow_;
+	var totalBounds_;
 	var overlays_ = [];
 
 	thisFacilityEditor_ = {
@@ -53,6 +55,20 @@ codeshelf.facilityeditor = function() {
 			websession_ = websession;
 			facility_ = facility;
 			organization_ = organization;
+			parentFrame_ = parentFrame;
+
+			// Load the GMaps API and init() when done.
+			google.load('maps', '3', {other_params: 'sensor=false', callback: function() {
+				thisFacilityEditor_.init();
+			}});
+//
+//			var script = document.createElement("script");
+//			script.type = "text/javascript";
+//			script.src = "http://maps.googleapis.com/maps/api/js?sensor=FALSE&callback=thisFacilityEditor_.init";
+//			document.body.appendChild(script);
+		},
+
+		init: function() {
 
 			// Starting latlng is either the facility's origin point or the browser's current location (if we can get it).
 			var demoLatLng = new google.maps.LatLng(facility_.posY, facility_.posX);
@@ -69,9 +85,12 @@ codeshelf.facilityeditor = function() {
 				tilt:                   0
 			};
 
+			infoWindow_ = new google.maps.InfoWindow();
+			totalBounds_ = new google.maps.LatLngBounds();
+
 			//map_ = new google.maps.Map(goog.dom.query('#facility_map')[0], myOptions);
 			var editorWindow = codeshelf.window();
-			editorWindow.init("Facility Editor", parentFrame, undefined, thisFacilityEditor_.resizeFunction);
+			editorWindow.init("Facility Editor", parentFrame_, undefined, thisFacilityEditor_.resizeFunction);
 			editorWindow.open();
 			var contentPane = editorWindow.getContentElement();
 
@@ -110,7 +129,7 @@ codeshelf.facilityeditor = function() {
 			goog.dom.appendChild(contentPane, editorPane);
 			mapPane_ = goog.dom.query('.facilityMap', editorPane)[0];
 			map_ = new google.maps.Map(mapPane_, myOptions);
-			facilityEditorOverlay_ = codeshelf.facilityeditorgmapsoverlay(map_);
+//			facilityEditorOverlay_ = codeshelf.facilityeditorgmapsoverlay(map_);
 
 			clickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.CLICK, function(event) {
 					clickTimeout_ = setTimeout(function() {
@@ -509,10 +528,6 @@ codeshelf.facilityeditor = function() {
 		},
 
 		exit: function() {
-			pen_.deleteMis();
-			if (pen_.polygon != null) {
-				pen_.polygon.remove();
-			}
 			google.maps.event.removeListener(clickHandler_);
 			google.maps.event.removeListener(doubleClickHandler_);
 		},
@@ -557,55 +572,4 @@ codeshelf.facilityeditor = function() {
 	}
 
 	return thisFacilityEditor_;
-}
-
-/*
- * Child of Polygon class
- * Info Class
- */
-codeshelf.facilityeditor.info = function(polygon, map) {
-	var parent_ = polygon;
-	var map_ = map;
-
-	var color_ = document.createElement('input');
-
-	var button_ = document.createElement('input');
-	$(button_).attr('type', 'button');
-	$(button_).val("Change Color");
-
-	var thisInfo = {
-		//change color action
-		changeColor: function() {
-			parent_.setColor($(thisOjb.color).val());
-		},
-
-		//get content
-		getContent:  function() {
-			var content = document.createElement('div');
-
-			$(color_).val(parent_.getColor());
-			$(button_).click(function() {
-				changeColor();
-			});
-
-			$(content).append(color_);
-			$(content).append(button_);
-			return content;
-		},
-
-		show: function(latLng) {
-			infoWidObj_.setPosition(latLng);
-			infoWidObj_.open(map_);
-		},
-
-		remove: function() {
-			infoWidObj_.close();
-		}
-	}
-
-	var infoWidObj_ = new google.maps.InfoWindow({
-		content: thisInfo.getContent()
-	});
-
-	return thisInfo;
 }

@@ -8,7 +8,7 @@ goog.require('slickgrid.grid');
 goog.require('slickgrid.dataview');
 goog.require('slickgrid.pager');
 goog.require('slickgrid.columnpicker');
-goog.require('jquery');
+goog.require('extern.jquery');
 
 codeshelf.listview = function(websession, domainObject) {
 
@@ -88,7 +88,7 @@ codeshelf.listview = function(websession, domainObject) {
 
 		comparer: function(a, b) {
 			var columnIndex = grid_.getColumnIndexArray();
-			for (columnId in columnIndex) {
+			for (var columnId in columnIndex) {
 				if (columnIndex.hasOwnProperty(columnId)) {
 					if (a[columnId] !== b[columnId]) {
 						var x = a[columnId];
