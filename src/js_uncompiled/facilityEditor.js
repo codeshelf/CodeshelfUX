@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.41 2012/04/29 09:58:22 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.42 2012/04/30 11:19:27 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -58,7 +58,7 @@ codeshelf.facilityeditor = function() {
 			parentFrame_ = parentFrame;
 
 			// Load the GMaps API and init() when done.
-			google.load('maps', '3', {other_params: 'sensor=false', callback: function() {
+			google.load('maps', '3', {'other_params': 'sensor=false', 'callback': function() {
 				thisFacilityEditor_.init();
 			}});
 //
@@ -71,18 +71,18 @@ codeshelf.facilityeditor = function() {
 		init: function() {
 
 			// Starting latlng is either the facility's origin point or the browser's current location (if we can get it).
-			var demoLatLng = new google.maps.LatLng(facility_.posY, facility_.posX);
+			var demoLatLng = new google.maps.LatLng(facility_['posY'], facility_['posX']);
 			var myOptions = {
-				zoom:                   16,
-				center:                 demoLatLng,
-				mapTypeId:              google.maps.MapTypeId.ROADMAP,
-				disableDoubleClickZoom: true,
-				panControl:             false,
-				rotateControl:          false,
-				streetViewControl:      false,
-				draggableCursor:        'url(../../src/images/push-pin.png), auto',
-				heading:                180,
-				tilt:                   0
+				'zoom':                   16,
+				'center':                 demoLatLng,
+				'mapTypeId':              google.maps.MapTypeId.ROADMAP,
+				'disableDoubleClickZoom': true,
+				'panControl':             false,
+				'rotateControl':          false,
+				'streetViewControl':      false,
+				'draggableCursor':        'url(../../src/images/push-pin.png), auto',
+				'heading':                180,
+				'tilt':                   0
 			};
 
 			infoWindow_ = new google.maps.InfoWindow();
@@ -95,7 +95,7 @@ codeshelf.facilityeditor = function() {
 			var contentPane = editorWindow.getContentElement();
 
 			// Add the facility descriptor field.
-			var facilityDescField = codeshelf.dataobjectfield(websession_, contentPane, codeshelf.domainobjects.facility.classname, codeshelf.domainobjects.facility.properties.description.id, facility_.persistentId);
+			var facilityDescField = codeshelf.dataobjectfield(websession_, contentPane, codeshelf['domainobjects'].facility.classname, codeshelf['domainobjects'].facility.properties.description.id, facility_['persistentId']);
 			facilityDescField.start();
 
 			// Setup GMaps geocoding to locate places for the user (if needed).
@@ -141,16 +141,16 @@ codeshelf.facilityeditor = function() {
 
 							var vertexNum = thisFacilityEditor_.getNextVertexNum();
 							var data = {
-								parentClassName:    codeshelf.domainobjects.facility.classname,
-								parentPersistentId: facility_.persistentId,
-								className:          codeshelf.domainobjects.vertex.classname,
-								properties:         [
+								'parentClassName':    codeshelf['domainobjects'].facility['classname'],
+								'parentPersistentId': facility_['persistentId'],
+								'className':          codeshelf['domainobjects'].vertex['classname'],
+								'properties':         [
 									{name: 'DomainId', value: 'V' + vertexNum},
-									//{name:'Description', value:'First Facility'},
-									{name: 'PosTypeByStr', value: 'GPS'},
-									{name: 'PosX', value: event.latLng.lng()},
-									{name: 'PosY', value: event.latLng.lat()},
-									{name: 'DrawOrder', value: vertexNum}
+									//{name:'Description', 'value':'First Facility'},
+									{name: 'PosTypeByStr', 'value': 'GPS'},
+									{name: 'PosX', 'value': event.latLng.lng()},
+									{name: 'PosY', 'value': event.latLng.lat()},
+									{name: 'DrawOrder', 'value': vertexNum}
 								]
 							}
 
@@ -159,12 +159,12 @@ codeshelf.facilityeditor = function() {
 
 							// If this was the anchor vertex then set the location of the facility as well.
 							var data = {
-								className:    codeshelf.domainobjects.facility.classname,
-								persistentId: facility_.persistentId,
-								properties:   [
-									{name: 'PosTypeByStr', value: 'GPS'},
-									{name: 'PosX', value: event.latLng.lng()},
-									{name: 'PosY', value: event.latLng.lat()}
+								'className':    codeshelf['domainobjects'].facility.classname,
+								'persistentId': facility_['persistentId'],
+								'properties':   [
+									{'name': 'PosTypeByStr', 'value': 'GPS'},
+									{'name': 'PosX', 'value': event.latLng.lng()},
+									{'name': 'PosY', 'value': event.latLng.lat()}
 								]
 							}
 							var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
@@ -183,11 +183,11 @@ codeshelf.facilityeditor = function() {
 
 			// Create the filter to listen to all vertex updates for this facility.
 			var data = {
-				className:     codeshelf.domainobjects.vertex.classname,
-				propertyNames: ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
-				filterClause:  'parentLocation.persistentId = :theId',
-				filterParams:  [
-					{ name: "theId", value: facility_.persistentId}
+				'className':     codeshelf['domainobjects'].vertex.classname,
+				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
+				'filterClause':  'parentLocation.persistentId = :theId',
+				'filterParams':  [
+					{ 'name': "theId", 'value': facility_['persistentId']}
 				]
 			}
 
@@ -205,15 +205,15 @@ codeshelf.facilityeditor = function() {
 				facilityOutlinePath_ = new google.maps.MVCArray;
 				if (localUserCreatedMarker_ === true) {
 					facilityOutline_ = new google.maps.Polyline({
-						strokeWeight: 3,
-						strokeColor:  '#ff0000',
-						fillColor:    '#0000cc'
+						'strokeWeight': 3,
+						'strokeColor':  '#ff0000',
+						'fillColor':    '#0000cc'
 					});
 				} else {
 					facilityOutline_ = new google.maps.Polygon({
-						strokeWeight: 3,
-						strokeColor:  '#ff0000',
-						fillCOlor:    '#0000cc'
+						'strokeWeight': 3,
+						'strokeColor':  '#ff0000',
+						'fillColor':    '#0000cc'
 					});
 				}
 
@@ -236,12 +236,12 @@ codeshelf.facilityeditor = function() {
 		handleCreateVertexCmd: function(latLng, vertex) {
 
 			thisFacilityEditor_.ensureOutlineStructures();
-			facilityOutlinePath_.setAt(vertex.DrawOrder, latLng);
+			facilityOutlinePath_.setAt(vertex['DrawOrder'], latLng);
 			facilityOutline_.setVisible(true);
 
 			// The case where we're adding a new marker (maybe even the anchor marker) that we must show.
 			var iconUrl = '../icons/marker_20_blue.png';
-			if (vertex.DrawOrder === 0) {
+			if (vertex['DrawOrder'] === 0) {
 				iconUrl = '../icons/marker_20_red.png';
 			}
 
@@ -253,28 +253,28 @@ codeshelf.facilityeditor = function() {
 			);
 
 			var marker = new google.maps.Marker({
-				position:  latLng,
-				map:       map_,
-				draggable: true,
-				icon:      markerImage
+				'position':  latLng,
+				'map':       map_,
+				'draggable': true,
+				'icon':      markerImage
 			});
 
 			var vertexData = {marker: marker, vertex: vertex};
-			facilityOutlineVertices_[vertex.DrawOrder] = vertexData;
-			marker.setTitle(vertex.DomainId);
+			facilityOutlineVertices_[vertex['DrawOrder']] = vertexData;
+			marker.setTitle(vertex['DomainId']);
 
 			// Add a drag handler to the marker.
 			google.maps.event.addListener(marker, 'dragend', function() {
 					if (canEditOutline_) {
-						facilityOutlinePath_.setAt(vertexData.vertex.DrawOrder, marker.getPosition());
+						facilityOutlinePath_.setAt(vertexData.vertex['DrawOrder'], marker.getPosition());
 
 						if (canEditOutline_) {
 							var data = {
-								className:    codeshelf.domainobjects.vertex.classname,
-								persistentId: vertex.persistentId,
-								properties:   [
-									{name: 'PosX', value: marker.getPosition().lng()},
-									{name: 'PosY', value: marker.getPosition().lat()}
+								'className':    codeshelf['domainobjects'].vertex.classname,
+								'persistentId': vertex['persistentId'],
+								'properties':   [
+									{'name': 'PosX', 'value': marker.getPosition().lng()},
+									{'name': 'PosY', 'value': marker.getPosition().lat()}
 								]
 							}
 							var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
@@ -286,7 +286,7 @@ codeshelf.facilityeditor = function() {
 //			}
 
 			//  The vertex at DrawPos 0 goes to the anchor marker.
-			if (vertex.DrawOrder === 0) {
+			if (vertex['DrawOrder'] === 0) {
 				facilityAnchorMarker_ = marker;
 				// If the user clicks on the anchor marker then create a final marker on top of the anchor, and prevent further markers.
 				// When the update returns this will close the polyline into a polygon.
@@ -311,27 +311,27 @@ codeshelf.facilityeditor = function() {
 		},
 
 		handleUpdateVertexCmd: function(latLng, vertex) {
-			if ((facilityOutlinePath_ === undefined) || (facilityOutlinePath_.getAt(vertex.DrawOrder) === undefined)) {
+			if ((facilityOutlinePath_ === undefined) || (facilityOutlinePath_.getAt(vertex['DrawOrder']) === undefined)) {
 				// If the outline or marker don't exist then create them.
 				thisFacilityEditor_.handleCreateVertexCmd(latLng, vertex);
 			} else {
 				// The outline and marker exist, so update the  marker.
-				facilityOutlinePath_.setAt(vertex.DrawOrder, latLng);
-				var vertexData = facilityOutlineVertices_[vertex.DrawOrder];
+				facilityOutlinePath_.setAt(vertex['DrawOrder'], latLng);
+				var vertexData = facilityOutlineVertices_[vertex['DrawOrder']];
 				vertexData.marker.setPosition(latLng);
 			}
 			thisFacilityEditor_.setBounds();
 		},
 
 		handleDeleteVertexCmd: function(latLng, vertex) {
-			var vertexData = facilityOutlineVertices_[vertex.DrawOrder];
-			facilityOutlineVertices_[vertex.DrawOrder] = undefined;
+			var vertexData = facilityOutlineVertices_[vertex['DrawOrder']];
+			facilityOutlineVertices_[vertex['DrawOrder']] = undefined;
 
 			if (vertexData !== undefined) {
 				vertexData.marker.setMap(null);
-				facilityOutlinePath_.setAt(vertex.DrawOrder, undefined);
+				facilityOutlinePath_.setAt(vertex['DrawOrder'], undefined);
 
-				if (vertex.DrawOrder === 0) {
+				if (vertex['DrawOrder'] === 0) {
 					facilityAnchorMarker_ = undefined;
 				}
 			}
@@ -356,8 +356,8 @@ codeshelf.facilityeditor = function() {
 			for (var i = 0; i < facilityOutlineVertices_.length; ++i) {
 
 				var data = {
-					className:    codeshelf.domainobjects.vertex.classname,
-					persistentId: facilityOutlineVertices_[i].vertex.persistentId
+					'className':    codeshelf['domainobjects'].vertex['classname'],
+					'persistentId': facilityOutlineVertices_[i].vertex['persistentId']
 				}
 
 				var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_DELETE_REQ, data);
@@ -368,9 +368,9 @@ codeshelf.facilityeditor = function() {
 		completePolygon: function() {
 			// First make the outline into a polygon.
 			facilityOutline_ = new google.maps.Polygon({
-				strokeWeight: 3,
-				strokeColor:  '#ff0000',
-				fillCOlor:    '#0000cc'
+				'strokeWeight': 3,
+				'strokeColor':  '#ff0000',
+				'fillColor':    '#0000cc'
 			});
 			facilityOutline_.setMap(map_);
 			facilityOutline_.setPath(facilityOutlinePath_);
@@ -441,11 +441,11 @@ codeshelf.facilityeditor = function() {
 				html = results[ind].address_components[0].long_name;
 			}
 			var overlay = new google.maps.Rectangle({
-				map:         map_,
-				bounds:      box,
-				strokeColor: color,
-				fillColor:   color,
-				visible:     false
+				'map':         map_,
+				'bounds':      box,
+				'strokeColor': color,
+				'fillColor':   color,
+				'visible':     false
 			});
 			overlays_.push(overlay);
 			map_.fitBounds(box);
@@ -540,18 +540,18 @@ codeshelf.facilityeditor = function() {
 						alert('response has no result');
 					} else {
 						if (command.type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-							for (var i = 0; i < command.data.result.length; i++) {
-								var object = command.data.result[i];
+							for (var i = 0; i < command.data['result'].length; i++) {
+								var object = command.data['result'][i];
 
 								// Make sure the class name matches.
-								if (object.className === codeshelf.domainobjects.vertex.classname) {
-									var latLng = new google.maps.LatLng(object.PosY, object.PosX);
+								if (object['className'] === codeshelf['domainobjects'].vertex['classname']) {
+									var latLng = new google.maps.LatLng(object['PosY'], object['PosX']);
 
-									if (object.opType === 'create') {
+									if (object['opType'] === 'create') {
 										thisFacilityEditor_.handleCreateVertexCmd(latLng, object);
-									} else if (object.opType === 'update') {
+									} else if (object['opType'] === 'update') {
 										thisFacilityEditor_.handleUpdateVertexCmd(latLng, object);
-									} else if (object.opType === 'delete') {
+									} else if (object['opType'] === 'delete') {
 										thisFacilityEditor_.handleDeleteVertexCmd(latLng, object);
 									}
 								}

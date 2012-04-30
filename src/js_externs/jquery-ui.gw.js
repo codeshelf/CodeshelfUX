@@ -14,3 +14,10 @@ jQuery.widget.ui.mouse = {};
 jQuery.widget.ui.mouse.options;
 jQuery.widget.ui.dialog.overlay = {};
 jQuery.widget.ui.tabs = {};
+jQuery.widget.ui.sortable = {};
+jQuery.widget.ui.slider = {};
+jQuery.widget.ui.resizable = {};
+
+// Slick
+jQuery.Slick = function (arg, val) {};
+jQuery.fn.extend.SlickEditor = {};

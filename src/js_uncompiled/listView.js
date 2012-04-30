@@ -80,10 +80,11 @@ codeshelf.listview = function(websession, domainObject) {
 		},
 
 		myFilter: function(item, args) {
-			if (item["percentComplete"] < args.percentCompleteThreshold)
-				return false;
-
-			return !(args.searchString != "" && item["title"].indexOf(args.searchString) == -1);
+//			if (item["percentComplete"] < args["percentCompleteThreshold"])
+//				return false;
+//
+//			return !(args["searchString"] != "" && item["title"].indexOf(args["searchString"]) == -1);
+			return true;
 		},
 
 		comparer: function(a, b) {
@@ -125,10 +126,10 @@ codeshelf.listview = function(websession, domainObject) {
 			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
 			var data = {
-				className:     domainObject_.classname,
-				propertyNames: properties_,
-				filterClause:  '',
-				filterParams:  []
+				'className':     domainObject_.classname,
+				'propertyNames': properties_,
+				'filterClause':  '',
+				'filterParams':  []
 			}
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
@@ -215,7 +216,7 @@ codeshelf.listview = function(websession, domainObject) {
 				percentCompleteThreshold: percentCompleteThreshold_,
 				searchString:             searchString_
 			});
-			dataView_.setFilter(thisListview_.myFilter);
+			//dataView_.setFilter(thisListview_.myFilter);
 			dataView_.endUpdate();
 
 			$("#gridContainer").resizable();
@@ -228,19 +229,19 @@ codeshelf.listview = function(websession, domainObject) {
 					if (!command.data.hasOwnProperty('result')) {
 						alert('response has no result');
 					} else if (command.type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command.data.result.length; i++) {
-							var object = command.data.result[i];
-							if (object.opType === "add") {
+						for (var i = 0; i < command.data['result'].length; i++) {
+							var object = command.data['result'][i];
+							if (object['opType'] === "add") {
 								dataView_.addItem(object);
-							} else if (object.opType === "update") {
-								var item = dataView_.getItemById(object.persistentId);
+							} else if (object['opType'] === "update") {
+								var item = dataView_.getItemById(object['persistentId']);
 								if (item === undefined) {
 									dataView_.addItem(object);
 								} else {
-									dataView_.updateItem(object.persistentId, object);
+									dataView_.updateItem(object['persistentId'], object);
 								}
-							} else if (object.opType === "delete") {
-								dataView_.deleteItem(object.persistentId);
+							} else if (object['opType'] === "delete") {
+								dataView_.deleteItem(object['persistentId']);
 							}
 						}
 						dataView_.sort(thisListview_.comparer, sortdir_);

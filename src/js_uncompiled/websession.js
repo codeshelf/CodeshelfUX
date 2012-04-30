@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.17 2012/04/28 00:38:44 jeffw Exp $
+ *  $Id: websession.js,v 1.18 2012/04/30 11:19:27 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.events');
@@ -93,9 +93,9 @@ codeshelf.websession = function() {
 
 		createCommand: function(commandType, data) {
 			var command = {
-				id:   goog.events.getUniqueId('cmdid'),
-				type: commandType,
-				data: data
+				'id':   goog.events.getUniqueId('cmdid'),
+				'type': commandType,
+				'data': data
 			}
 			return command;
 		},

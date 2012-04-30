@@ -44,10 +44,10 @@ codeshelf.listdemo = function() {
 		},
 
 		myFilter: function(item, args) {
-			if (item["percentComplete"] < args.percentCompleteThreshold)
+			if (item["percentComplete"] < args["percentCompleteThreshold"])
 				return false;
 
-			return !(args.searchString != "" && item["title"].indexOf(args.searchString) == -1);
+			return !(args["searchString"] != "" && item["title"].indexOf(args["searchString"]) == -1);
 
 		},
 
@@ -93,7 +93,7 @@ codeshelf.listdemo = function() {
 					width:     120,
 					minWidth:  120,
 					cssClass:  "cell-title",
-					editor:    'TextCellEditor',
+					editor:    TextCellEditor,
 					validator: thisListDemo_.requiredFieldValidator,
 					sortable:  true
 				},
@@ -101,7 +101,7 @@ codeshelf.listdemo = function() {
 					id:       "duration",
 					name:     "Duration",
 					field:    "duration",
-					editor:   'TextCellEditor',
+					editor:   TextCellEditor,
 					sortable: true
 				},
 				{
@@ -119,7 +119,7 @@ codeshelf.listdemo = function() {
 					name:     "Start",
 					field:    "start",
 					minWidth: 60,
-					editor:   'DateCellEditor',
+					editor:   DateCellEditor,
 					sortable: true
 				},
 				{
@@ -127,7 +127,7 @@ codeshelf.listdemo = function() {
 					name:     "Finish",
 					field:    "finish",
 					minWidth: 60,
-					editor:   'DateCellEditor',
+					editor:   DateCellEditor,
 					sortable: true
 				},
 				{

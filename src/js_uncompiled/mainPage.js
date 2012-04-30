@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.22 2012/04/29 09:58:22 jeffw Exp $
+ *  $Id: mainPage.js,v 1.23 2012/04/30 11:19:27 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.domainobjects');
@@ -60,15 +60,15 @@ codeshelf.mainpage = function() {
 			var listdemo = codeshelf.listdemo();
 			listdemo.launchListDemo(frame_);
 
-			var listview = codeshelf.listview(websession_, codeshelf.domainobjects.facility);
+			var listview = codeshelf.listview(websession_, codeshelf.domainobjects['facility']);
 			listview.launchListView(frame_);
 
 			var organization = application_.getOrganization();
 
 			var data = {
-				className:    organization.className,
-				persistentId: organization.persistentId,
-				getterMethod: 'getFacilities'
+				'className':    organization['className'],
+				'persistentId': organization['persistentId'],
+				'getterMethod': 'getFacilities'
 			}
 
 			var websession = application_.getWebsession();
@@ -94,12 +94,12 @@ codeshelf.mainpage = function() {
 						alert('response has no result');
 					} else {
 						if (command.type == kWebSessionCommandType.OBJECT_GETTER_RESP) {
-							if (command.data.result.length === 0) {
+							if (command.data['result'].length === 0) {
 								var clientInitializer = codeshelf.initializenewclient();
 								clientInitializer.start(websession_, application_.getOrganization(), frame_);
 							} else {
-								for (var i = 0; i < command.data.result.length; i++) {
-									var facility = command.data.result[i];
+								for (var i = 0; i < command.data['result'].length; i++) {
+									var facility = command.data['result'][i];
 									try {
 										var facilityEditor = codeshelf.facilityeditor();
 										facilityEditor.start(websession_, application_.getOrganization(), frame_, facility);

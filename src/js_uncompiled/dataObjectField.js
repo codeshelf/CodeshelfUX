@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataObjectField.js,v 1.10 2012/04/28 00:38:44 jeffw Exp $
+ *  $Id: dataObjectField.js,v 1.11 2012/04/30 11:19:27 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
@@ -36,9 +36,9 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 
 		start: function() {
 			var data = {
-				className:     className_,
-				objectIds:     [ classPersistenceId_ ],
-				propertyNames: [ classProperty_ ]
+				'className':     className_,
+				'objectIds':     [ classPersistenceId_ ],
+				'propertyNames': [ classProperty_ ]
 			};
 
 			var fieldListenerCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_LISTENER_REQ, data);
@@ -63,10 +63,10 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 						alert('response has no result');
 					} else if (command.type === kWebSessionCommandType.OBJECT_LISTENER_RESP) {
 						for (var i = 0; i < command.data.result.length; i++) {
-							var object = command.data.result[i];
+							var object = command.data['result'][i];
 
 							// Make sure the class name and persistent ID match.
-							if ((object.className === className_) && (object.persistentId == classPersistenceId_)) {
+							if ((object['className'] === className_) && (object['persistentId'] == classPersistenceId_)) {
 								var html = googleField_.getCleanContents();
 								if (html !== object[classProperty_]) {
 									googleField_.setHtml(false, object[classProperty_], true);
@@ -87,10 +87,10 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 			var html = googleField_.getCleanContents();
 
 			var data = {
-				className:    className_,
-				persistentId: classPersistenceId_,
-				properties:   [
-					{name: 'Description', value: html}
+				'className':    className_,
+				'persistentId': classPersistenceId_,
+				'properties':   [
+					{'name': 'Description', 'value': html}
 				]
 			};
 
