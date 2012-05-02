@@ -75,82 +75,82 @@ codeshelf.listdemo = function() {
 		launchListDemo: function(parentFrame) {
 			var columns = [
 				{
-					id:                  "sel",
-					name:                "#",
-					field:               "num",
-					behavior:            "select",
-					cssClass:            "cell-selection",
-					width:               40,
-					cannotTriggerInsert: true,
-					resizable:           true,
-					selectable:          false,
-					sortable:            true
+					'id':                  "sel",
+					'name':                "#",
+					'field':               "num",
+					'behavior':            "select",
+					'cssClass':            "cell-selection",
+					'width':               40,
+					'cannotTriggerInsert': true,
+					'resizable':           true,
+					'selectable':          false,
+					'sortable':            true
 				},
 				{
-					id:        "title",
-					name:      "Title",
-					field:     "title",
-					width:     120,
-					minWidth:  120,
-					cssClass:  "cell-title",
-					editor:    TextCellEditor,
-					validator: thisListDemo_.requiredFieldValidator,
-					sortable:  true
+					'id':        "title",
+					'name':      "Title",
+					'field':     "title",
+					'width':     120,
+					'minWidth':  120,
+					'cssClass':  "cell-title",
+					'editor':    TextCellEditor,
+					'validator': thisListDemo_.requiredFieldValidator,
+					'sortable':  true
 				},
 				{
-					id:       "duration",
-					name:     "Duration",
-					field:    "duration",
-					editor:   TextCellEditor,
-					sortable: true
+					'id':       "duration",
+					'name':     "Duration",
+					'field':    "duration",
+					'editor':   TextCellEditor,
+					'sortable': true
 				},
 				{
-					id:        "%",
-					name:      "% Complete",
-					field:     "percentComplete",
-					minWidth:  80,
-					resizable: true,
-					formatter: GraphicalPercentCompleteCellFormatter,
-					editor:    PercentCompleteCellEditor,
-					sortable:  true
+					'id':        "%",
+					'name':      "% Complete",
+					'field':     "percentComplete",
+					'minWidth':  80,
+					'resizable': true,
+					'formatter': GraphicalPercentCompleteCellFormatter,
+					'editor':    PercentCompleteCellEditor,
+					'sortable':  true
 				},
 				{
-					id:       "start",
-					name:     "Start",
-					field:    "start",
-					minWidth: 60,
-					editor:   DateCellEditor,
-					sortable: true
+					'id':       "start",
+					'name':     "Start",
+					'field':    "start",
+					'minWidth': 60,
+					'editor':   DateCellEditor,
+					'sortable': true
 				},
 				{
-					id:       "finish",
-					name:     "Finish",
-					field:    "finish",
-					minWidth: 60,
-					editor:   DateCellEditor,
-					sortable: true
+					'id':       "finish",
+					'name':     "Finish",
+					'field':    "finish",
+					'minWidth': 60,
+					'editor':   DateCellEditor,
+					'sortable': true
 				},
 				{
-					id:                  "effort-driven",
-					name:                "Effort Driven",
-					width:               80,
-					minWidth:            20,
-					cssClass:            "cell-effort-driven",
-					field:               "effortDriven",
-					formatter:           BoolCellFormatter,
-					editor:              YesNoCheckboxCellEditor,
-					cannotTriggerInsert: true,
-					sortable:            true
+					'id':                  "effort-driven",
+					'name':                "Effort Driven",
+					'width':               80,
+					'minWidth':            20,
+					'cssClass':            "cell-effort-driven",
+					'field':               "effortDriven",
+					'formatter':           BoolCellFormatter,
+					'editor':              YesNoCheckboxCellEditor,
+					'cannotTriggerInsert': true,
+					'sortable':            true
 				}
 			];
 
 			var options = {
-				editable:             true,
-				enableAddRow:         true,
-				enableCellNavigation: true,
-				asyncEditorLoading:   true,
-				forceFitColumns:      true,
-				topPanelHeight:       25
+				'editable':             true,
+				'enableAddRow':         true,
+				'enableCellNavigation': true,
+				'asyncEditorLoading':   true,
+				'forceFitColumns':      true,
+				'topPanelHeight':       25
 			};
 
 			// prepare the data
@@ -349,7 +349,7 @@ codeshelf.listdemo = function() {
 				percentCompleteThreshold: percentCompleteThreshold,
 				searchString:             searchString
 			});
-			dataView.setFilter(thisListDemo_.myFilter);
+			//dataView.setFilter(thisListDemo_.myFilter);
 			dataView.endUpdate();
 
 			$("#gridContainer").resizable();

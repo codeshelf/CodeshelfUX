@@ -8,6 +8,8 @@ $.fn.scale = function (arg, val) {};
 jQuery.fn.rotate = function (arg, val) {};
 $.fn.rotate = function (arg, val) {};
 
+jQuery.fn.extend.find = function(selector) {};
+
 //jquery.ui
 jQuery.widget = function(name, options) {};
 jQuery.widget.ui.mouse = {};

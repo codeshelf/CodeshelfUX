@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.42 2012/04/30 11:19:27 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.43 2012/05/02 10:21:52 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -58,9 +58,11 @@ codeshelf.facilityeditor = function() {
 			parentFrame_ = parentFrame;
 
 			// Load the GMaps API and init() when done.
-			google.load('maps', '3', {'other_params': 'sensor=false', 'callback': function() {
-				thisFacilityEditor_.init();
-			}});
+			if (typeof google !== "undefined") {
+				google.load('maps', '3', {'other_params': 'sensor=false', 'callback': function() {
+					thisFacilityEditor_.init();
+				}});
+			}
 //
 //			var script = document.createElement("script");
 //			script.type = "text/javascript";
@@ -95,7 +97,7 @@ codeshelf.facilityeditor = function() {
 			var contentPane = editorWindow.getContentElement();
 
 			// Add the facility descriptor field.
-			var facilityDescField = codeshelf.dataobjectfield(websession_, contentPane, codeshelf['domainobjects'].facility.classname, codeshelf['domainobjects'].facility.properties.description.id, facility_['persistentId']);
+			var facilityDescField = codeshelf.dataobjectfield(websession_, contentPane, codeshelf.domainobjects.facility.classname, codeshelf.domainobjects.facility.properties.desc.id, facility_['persistentId']);
 			facilityDescField.start();
 
 			// Setup GMaps geocoding to locate places for the user (if needed).
@@ -141,9 +143,9 @@ codeshelf.facilityeditor = function() {
 
 							var vertexNum = thisFacilityEditor_.getNextVertexNum();
 							var data = {
-								'parentClassName':    codeshelf['domainobjects'].facility['classname'],
+								'parentClassName':    codeshelf.domainobjects.facility['classname'],
 								'parentPersistentId': facility_['persistentId'],
-								'className':          codeshelf['domainobjects'].vertex['classname'],
+								'className':          codeshelf.domainobjects.vertex['classname'],
 								'properties':         [
 									{name: 'DomainId', value: 'V' + vertexNum},
 									//{name:'Description', 'value':'First Facility'},
@@ -159,7 +161,7 @@ codeshelf.facilityeditor = function() {
 
 							// If this was the anchor vertex then set the location of the facility as well.
 							var data = {
-								'className':    codeshelf['domainobjects'].facility.classname,
+								'className':    codeshelf.domainobjects.facility.classname,
 								'persistentId': facility_['persistentId'],
 								'properties':   [
 									{'name': 'PosTypeByStr', 'value': 'GPS'},
@@ -183,7 +185,7 @@ codeshelf.facilityeditor = function() {
 
 			// Create the filter to listen to all vertex updates for this facility.
 			var data = {
-				'className':     codeshelf['domainobjects'].vertex.classname,
+				'className':     codeshelf.domainobjects.vertex.classname,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
 				'filterClause':  'parentLocation.persistentId = :theId',
 				'filterParams':  [
@@ -270,7 +272,7 @@ codeshelf.facilityeditor = function() {
 
 						if (canEditOutline_) {
 							var data = {
-								'className':    codeshelf['domainobjects'].vertex.classname,
+								'className':    codeshelf.domainobjects.vertex.classname,
 								'persistentId': vertex['persistentId'],
 								'properties':   [
 									{'name': 'PosX', 'value': marker.getPosition().lng()},
@@ -356,7 +358,7 @@ codeshelf.facilityeditor = function() {
 			for (var i = 0; i < facilityOutlineVertices_.length; ++i) {
 
 				var data = {
-					'className':    codeshelf['domainobjects'].vertex['classname'],
+					'className':    codeshelf.domainobjects.vertex['classname'],
 					'persistentId': facilityOutlineVertices_[i].vertex['persistentId']
 				}
 
@@ -544,7 +546,7 @@ codeshelf.facilityeditor = function() {
 								var object = command.data['result'][i];
 
 								// Make sure the class name matches.
-								if (object['className'] === codeshelf['domainobjects'].vertex['classname']) {
+								if (object['className'] === codeshelf.domainobjects.vertex.classname) {
 									var latLng = new google.maps.LatLng(object['PosY'], object['PosX']);
 
 									if (object['opType'] === 'create') {

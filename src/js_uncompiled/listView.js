@@ -29,35 +29,35 @@ codeshelf.listview = function(websession, domainObject) {
 
 	// Compute the columns we need for this domain object.
 	var columns_ = [];
-	var properties = domainObject_['properties'];
+	var properties = domainObject_.properties;
 	var count = 0;
 	for (property in properties) {
 		if (properties.hasOwnProperty(property)) {
 			var property = properties[property];
 			properties_[count] = property.id;
 			columns_[count++] = {
-				id:                  property.id,
-				name:                property.title,
-				field:               property.id,
-				behavior:            "select",
-//				cssClass:           "cell-selection",
-				headerCssClass:      " ",
-				width:               property.width,
-				cannotTriggerInsert: true,
-				resizable:           true,
-				selectable:          false,
-				sortable:            true
+				'id':                  property.id,
+				'name':                property.title,
+				'field':               property.id,
+				'behavior':            "select",
+//				'cssClass':           "cell-selection",
+				'headerCssClass':      " ",
+				'width':               property.width,
+				'cannotTriggerInsert': true,
+				'resizable':           true,
+				'selectable':          false,
+				'sortable':            true
 			}
 		}
 	}
 
 	var options_ = {
-		editable:             true,
-		enableAddRow:         true,
-		enableCellNavigation: true,
-		asyncEditorLoading:   true,
-		forceFitColumns:      true,
-		topPanelHeight:       25
+		'editable':             true,
+		'enableAddRow':         true,
+		'enableCellNavigation': true,
+		'asyncEditorLoading':   true,
+		'forceFitColumns':      true,
+		'topPanelHeight':       25
 	};
 
 	var sortcol_ = "Description";
