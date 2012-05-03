@@ -44,11 +44,8 @@ codeshelf.listdemo = function() {
 		},
 
 		myFilter: function(item, args) {
-			if (item["percentComplete"] < args["percentCompleteThreshold"])
-				return false;
-
-			return !(args["searchString"] != "" && item["title"].indexOf(args["searchString"]) == -1);
-
+			if (item)
+				return ('tru' === 'tru');
 		},
 
 		percentCompleteSort: function(a, b) {
@@ -171,12 +168,12 @@ codeshelf.listdemo = function() {
 			listViewWindow.init("List View", parentFrame, undefined, thisListDemo_.resizeFunction);
 			var contentElement = listViewWindow.getContentElement();
 			contentElement.innerHTML = '<div id="listViewGrid" class="windowContent"></div>';
-			dataView = new Slick.Data.DataView();
-			grid = new Slick.Grid('#listViewGrid', dataView, columns, options);
-			grid.setSelectionModel(new Slick.RowSelectionModel());
+			dataView = new $.Slick.Data.DataView();
+			grid = new $.Slick.Grid('#listViewGrid', dataView, columns, options);
+			grid.setSelectionModel(new $.Slick.RowSelectionModel());
 
-			//var pager = new Slick.Controls.Pager(dataView, grid, $("#myPager"));
-			var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
+			//var pager = new $.Slick.Controls.Pager(dataView, grid, $("#myPager"));
+			var columnpicker = new $.Slick.Controls.ColumnPicker(columns, grid, options);
 
 			// move the filter panel defined in a hidden div into grid top panel
 			$("#inlineFilterPanel").appendTo(grid.getTopPanel()).show();
@@ -284,7 +281,7 @@ codeshelf.listdemo = function() {
 				var enableAddRow = isLastPage || pagingInfo.pageSize == 0;
 				var options = grid.getOptions();
 
-				if (options.enableAddRow != enableAddRow)
+				if (options['enableAddRow'] != enableAddRow)
 					grid.setOptions({
 						enableAddRow: enableAddRow
 					});
@@ -296,7 +293,7 @@ codeshelf.listdemo = function() {
 			$("#pcSlider,#pcSlider2").slider({
 				"range": "min",
 				"slide": function(event, ui) {
-					Slick.GlobalEditorLock.cancelCurrentEdit();
+					$.Slick.GlobalEditorLock.cancelCurrentEdit();
 
 					if (percentCompleteThreshold != ui.value) {
 						window.clearTimeout(h_runfilters);
@@ -308,7 +305,7 @@ codeshelf.listdemo = function() {
 
 			// wire up the search textbox to apply the filter to the model
 			$("#txtSearch,#txtSearch2").keyup(function(e) {
-				Slick.GlobalEditorLock.cancelCurrentEdit();
+				$.Slick.GlobalEditorLock.cancelCurrentEdit();
 
 				// clear on Esc
 				if (e.which == 27)
@@ -327,7 +324,7 @@ codeshelf.listdemo = function() {
 			}
 
 			$("#btnSelectRows").click(function() {
-				if (!Slick.GlobalEditorLock.commitCurrentEdit()) {
+				if (!$.Slick.GlobalEditorLock.commitCurrentEdit()) {
 					return;
 				}
 

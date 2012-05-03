@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: listViewDataModel.js,v 1.4 2012/04/29 09:58:22 jeffw Exp $
+ *  $Id: listViewDataModel.js,v 1.5 2012/05/03 07:15:59 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.listviewdatamodel');
@@ -28,8 +28,8 @@ goog.require('extern.jquery.event.drop');
 		var req = null; // ajax request
 
 		// events
-		var onDataLoading = new Slick.Event();
-		var onDataLoaded = new Slick.Event();
+		var onDataLoading = new $.Slick.Event();
+		var onDataLoaded = new $.Slick.Event();
 
 
 		function init() {

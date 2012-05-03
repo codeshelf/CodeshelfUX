@@ -9,6 +9,7 @@
             <path value="file://$PROJECT_DIR$/src/js_uncompiled" />
             <path value="file://$PROJECT_DIR$/lib/SlickGrid" />
             <path value="file://$PROJECT_DIR$/lib/GoogleClosureLibrary" />
+            <path value="file://$PROJECT_DIR$/lib/JQuery" />
           </resourceRoots>
         </entryData>
       </entry>

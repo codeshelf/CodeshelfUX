@@ -80,11 +80,8 @@ codeshelf.listview = function(websession, domainObject) {
 		},
 
 		myFilter: function(item, args) {
-//			if (item["percentComplete"] < args["percentCompleteThreshold"])
-//				return false;
-//
-//			return !(args["searchString"] != "" && item["title"].indexOf(args["searchString"]) == -1);
-			return true;
+			if (item)
+				return ('tru' === 'tru');
 		},
 
 		comparer: function(a, b) {
@@ -119,11 +116,11 @@ codeshelf.listview = function(websession, domainObject) {
 			var contentElement = listViewWindow.getContentElement();
 			goog.dom.appendChild(contentElement, soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
-			dataView_ = new Slick.Data.DataView();
-			grid_ = new Slick.Grid(contentElement, dataView_, columns_, options_);
-			grid_.setSelectionModel(new Slick.RowSelectionModel());
+			dataView_ = new $.Slick.Data.DataView();
+			grid_ = new $.Slick.Grid(contentElement, dataView_, columns_, options_);
+			grid_.setSelectionModel(new $.Slick.RowSelectionModel());
 
-			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
+			var columnpicker = new $.Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
 			var data = {
 				'className':     domainObject_.classname,
@@ -201,7 +198,7 @@ codeshelf.listview = function(websession, domainObject) {
 				var enableAddRow = isLastPage || pagingInfo.pageSize == 0;
 				var options = grid_.getOptions();
 
-				if (options.enableAddRow != enableAddRow)
+				if (options['enableAddRow'] != enableAddRow)
 					grid_.setOptions({
 						enableAddRow: enableAddRow
 					});

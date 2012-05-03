@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: application.js,v 1.9 2012/04/28 00:38:44 jeffw Exp $
+ *  $Id: application.js,v 1.10 2012/05/03 07:15:59 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.application');
 goog.require('codeshelf.launch');
@@ -14,8 +14,9 @@ codeshelf.application = function() {
 	var webSession_;
 	var launchWindow_;
 	var organization_;
+	var thisApplication_;
 
-	return {
+	thisApplication_ = {
 
 		getWebsession: function() {
 			return webSession_;
@@ -36,14 +37,14 @@ codeshelf.application = function() {
 		startApplication: function() {
 			webSession_ = codeshelf.websession();
 			webSession_.initWebSocket(this);
-			this.initApplication_();
+			thisApplication_.initApplication_();
 		},
 
 		restartApplication: function(reason) {
 			if (reason !== undefined) {
 				alert('Application restarted: ' + reason + '.');
 			}
-			this.initApplication_();
+			thisApplication_.initApplication_();
 		},
 
 		initApplication_: function() {
@@ -58,6 +59,8 @@ codeshelf.application = function() {
 			}, 1250);
 		}
 	};
+
+	return thisApplication_;
 };
 
 // Launch the application.

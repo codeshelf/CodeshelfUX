@@ -21,5 +21,5 @@ jQuery.widget.ui.slider = {};
 jQuery.widget.ui.resizable = {};
 
 // Slick
-jQuery.Slick = function (arg, val) {};
-jQuery.fn.extend.SlickEditor = {};
+//jQuery.Slick = function (arg, val) {};
+//jQuery.fn.extend.SlickEditor = {};
