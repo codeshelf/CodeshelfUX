@@ -1,56 +1,74 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: codeshelf.gss,v 1.17 2012/04/27 06:28:17 jeffw Exp $
+ *  $Id: codeshelf.gss,v 1.18 2012/05/06 09:09:00 jeffw Exp $
  *******************************************************************************/
 
 /* Defines and mixins ----------------------------------------------------------- */
 
-@def FRAME_BORDER_COLOR				rgb(187, 187, 187);
-@def FRAME_BG_COLOR					rgb(240, 240, 240);
+/* Define standard colors (for later use in named styles) */
 
-@def LAUNCH_BG_COLOR				rgb(0, 0, 0);
-@def MAIN_BG_COLOR					rgb(240, 240, 240);
+@def WINDOW_FOREGROUND_LIGHT_COLOR			rgb(200, 200, 250);
+@def WINDOW_FOREGROUND_MED_COLOR			rgb(175, 175, 250);
+@def WINDOW_FOREGROUND_DARK_COLOR			rgb(153, 153, 250);
 
-@def LAUNCH_BORDER_COLOR			rgb(160, 160, 160);
-@def LAUNCH_BACK_COLOR				rgb(208, 208, 208);
+@def WINDOW_BACKGROUND_LIGHT_COLOR			rgb(187, 187, 250);
+@def WINDOW_BACKGROUND_MED_COLOR			rgb(175, 175, 250);
+@def WINDOW_BACKGROUND_DARK_COLOR			rgb(153, 153, 250);
 
-@def DIALOG_BORDER_COLOR			rgb(107, 144, 218);
-@def DIALOG_BG_COLOR				MAIN_BG_COLOR;
+@def WINDOW_BORDER_LIGHT_COLOR				rgb(221, 221, 221);
+@def WINDOW_BORDER_MED_COLOR				rgb(200, 200, 200);
+@def WINDOW_BORDER_DARK_COLOR				rgb(150, 150, 150);
 
-@def LOGO_FONT_FAMILY				"league-gothic-1","league-gothic-2",sans-serif;
-@def LOGO_FONT_COLOR				rgb(187, 187, 187);
-@def LOGO_FONT_SIZE					120px;
-@def LOGO_LINE_HEIGHT				100%;
-@def LOGO_MARGIN_BOTTOM				3px;
-@def LOGO_TEXT_TRANSFORM			lowercase;
+@def FRAME_BORDER_COLOR						rgb(187, 187, 187);
+@def FRAME_BACKGROUND_COLOR					rgb(240, 240, 240);
 
-@def DATAENTRY_FONT_FAMILY			"league-gothic-1","league-gothic-2",sans-serif;
-@def DATAENTRY_FONT_COLOR			rgb(100, 100, 100);
-@def DATAENTRY_FONT_SIZE			13px;
-@def DATAENTRY_LINE_HEIGHT			100%;
-@def DATAENTRY_MARGIN_TOP			5px;
-@def DATAENTRY_MARGIN_BOTTOM		2px;
-@def DATAENTRY_TEXT_TRANSFORM		lowercase;
+@def TEXT_DARK_COLOR						rgb(100, 100, 100);
+@def TEXT_LIGHT_COLOR						rgb(150, 150, 150);
 
-@def INFO_POPUP_FONT_FAMILY			"league-gothic-1","league-gothic-2",sans-serif;
-@def INFO_POPUP_FONT_COLOR			rgb(100, 100, 100);
-@def INFO_POPUP_LINK_COLOR			rgb(0, 0, 255);
-@def INFO_POPUP_FONT_SIZE			10px;
-@def INFO_POPUP_LINE_HEIGHT			100%;
-@def INFO_POPUP_MARGIN_TOP			5px;
-@def INFO_POPUP_MARGIN_BOTTOM		2px;
-@def INFO_POPUP_TEXT_TRANSFORM		lowercase;
+@def TEXT_BACKGROUND_LIGHT_COLOR			rgb(221, 221, 221);
+@def TEXT_BACKGROUND_MED_COLOR				rgb(200, 200, 200);
 
-@def WINDOWBAR_HEIGHT				20px;
-@def WINDOWFOOTER_HEIGHT			10px;
+/* Define standard fonts (for later use in named styles) */
+
+@def LAUNCH_BG_COLOR						rgb(0, 0, 0);
+@def LAUNCH_BORDER_COLOR					WINDOW_BORDER_DARK_COLOR;
+
+@def DIALOG_BORDER_COLOR					FRAME_BORDER_COLOR;
+@def DIALOG_BACKGROUND_COLOR				FRAME_BACKGROUND_COLOR;
+
+@def LOGO_FONT_FAMILY						"league-gothic-1","league-gothic-2",sans-serif;
+@def LOGO_FONT_COLOR						rgb(187, 187, 187);
+@def LOGO_FONT_SIZE							120px;
+@def LOGO_LINE_HEIGHT						100%;
+@def LOGO_MARGIN_BOTTOM						3px;
+@def LOGO_TEXT_TRANSFORM					lowercase;
+
+@def DATAENTRY_FONT_FAMILY					"league-gothic-1","league-gothic-2",sans-serif;
+@def DATAENTRY_FONT_SIZE					13px;
+@def DATAENTRY_LINE_HEIGHT					100%;
+@def DATAENTRY_MARGIN_TOP					5px;
+@def DATAENTRY_MARGIN_BOTTOM				2px;
+@def DATAENTRY_TEXT_TRANSFORM				lowercase;
+
+@def INFO_POPUP_FONT_FAMILY					"league-gothic-1","league-gothic-2",sans-serif;
+@def INFO_POPUP_FONT_COLOR					TEXT_DARK_COLOR;
+@def INFO_POPUP_LINK_COLOR					rgb(0, 0, 255);
+@def INFO_POPUP_FONT_SIZE					10px;
+@def INFO_POPUP_LINE_HEIGHT					100%;
+@def INFO_POPUP_MARGIN_TOP					5px;
+@def INFO_POPUP_MARGIN_BOTTOM				2px;
+@def INFO_POPUP_TEXT_TRANSFORM				lowercase;
+
+@def WINDOWBAR_HEIGHT						20px;
+@def WINDOWFOOTER_HEIGHT					10px;
+
+@def FACILITY_TOOLBAR_BACKGROUND			WINDOW_BACKGROUND_MED_COLOR;
+@def FACILITY_ICON_BACKGROUND				WINDOW_BACKGROUND_DARK_COLOR;
 
 /* 32px + 2px each side for spacing. */
-@def FACILITY_TOOLBAR_WIDTH			36px;  
-@def FACILITY_TOOLBAR_HEIGHT		36px;
-
-@def FACILITY_TOOLBAR_BACKGROUND	rgb(220, 220, 220);
-@def FACILITY_ICON_BACKGROUND		rgb(200, 200, 200);
+@def FACILITY_TOOLBAR_WIDTH					36px;  
+@def FACILITY_TOOLBAR_HEIGHT				36px;
 
 @defmixin FLEX_BOX() {
 	box-flex:			1;
@@ -81,15 +99,36 @@
 	letter-spacing:		-0.06em;
 }
 
-@defmixin DATAENTRY_TEXT(FONT_SIZE) {
+@defmixin WINDOW_LABEL(FONT_SIZE) {
 	font-size:			FONT_SIZE;
-	color:				DATAENTRY_FONT_COLOR;
+	color:				TEXT_DARK_COLOR;
 	font-family:		DATAENTRY_FONT_FAMILY;
 	line-height:		DATAENTRY_LINE_HEIGHT;
 	margin-top:			DATAENTRY_MARGIN_TOP;
 	margin-bottom:		DATAENTRY_MARGIN_BOTTOM;
 	/*text-transform:	DATAENTRY_TEXT_TRANSFORM;*/
 	/*letter-spacing:	-0.06em;*/
+}
+
+@defmixin WINDOW_FIELD(FONT_SIZE) {
+	background-color:	WINDOW_BACKGROUND_LIGHT_COLOR;
+	border:				0px;
+}
+
+@defmixin DIALOG_LABEL(FONT_SIZE) {
+	font-size:			FONT_SIZE;
+	color:				TEXT_DARK_COLOR;
+	font-family:		DATAENTRY_FONT_FAMILY;
+	line-height:		DATAENTRY_LINE_HEIGHT;
+	margin-top:			DATAENTRY_MARGIN_TOP;
+	margin-bottom:		DATAENTRY_MARGIN_BOTTOM;
+	/*text-transform:	DATAENTRY_TEXT_TRANSFORM;*/
+	/*letter-spacing:	-0.06em;*/
+}
+
+@defmixin DIALOG_FIELD(FONT_SIZE) {
+	background-color:	FRAME_BACKGROUND_COLOR;
+	border:				0px;
 }
 
 @defmixin INFO_POPUP_TEXT(FONT_SIZE, FONT_COLOR) {
@@ -110,7 +149,7 @@
 }
 
 .main_body {
-	background-color:	FRAME_BG_COLOR;
+	background-color:	FRAME_BACKGROUND_COLOR;
 }
 
 .background_image {
@@ -121,7 +160,7 @@
 }
 
 .dialog {
-	background-color:	DIALOG_BG_COLOR;
+	background-color:	DIALOG_BACKGROUND_COLOR;
 	border:				1px solid DIALOG_BORDER_COLOR;
 }
 
@@ -142,7 +181,6 @@
 	position:			absolute;
 	top:				20%;
 	left:				10%;
-	@mixin				DATAENTRY_TEXT(12px);
 }
 
 #logoBox {
@@ -155,8 +193,22 @@
 	@mixin				LOGO_TEXT(LOGO_FONT_SIZE);
 }
 
-.dataEntry {
-	@mixin				DATAENTRY_TEXT(DATAENTRY_FONT_SIZE);
+.dialogLabel {
+	@mixin				DIALOG_LABEL(DATAENTRY_FONT_SIZE);
+}
+
+.dialogField {
+	@mixin				DIALOG_LABEL(DATAENTRY_FONT_SIZE);
+	@mixin				DIALOG_FIELD(DATAENTRY_FONT_SIZE);
+}
+
+.windowLabel {
+	@mixin				WINDOW_LABEL(DATAENTRY_FONT_SIZE);
+}
+
+.windowField {
+	@mixin				WINDOW_LABEL(DATAENTRY_FONT_SIZE);
+	@mixin				WINDOW_FIELD(DATAENTRY_FONT_SIZE);
 }
 
 .infoPopup {
@@ -176,7 +228,7 @@
 	width:				1602px;
 	height:				702px;
 	border:				1px solid FRAME_BORDER_COLOR;
-	background-color:	FRAME_BG_COLOR;
+	background-color:	FRAME_BACKGROUND_COLOR;
 }
 
 /* Window classes --------------------------------------------------------------- */
@@ -187,8 +239,8 @@
 	top:				25px;
 	width:				600px;
 	height:				500px;
-	background-color:	rgb(200, 200, 250);
-	border:				1px solid #999;
+	background-color:	WINDOW_FOREGROUND_MED_COLOR;
+	border:				1px solid WINDOW_FOREGROUND_DARK_COLOR;
 	font:				bold 11px/18px arial;
 	text-indent:		10px;
 	color:				#FFF;
@@ -226,10 +278,11 @@
 
 /* Field classes --------------------------------------------------------------- */
 
+/*
 .dataObjectField {
 	height:				18px;
-	@mixin				DATAENTRY_TEXT(13px);
 }
+*/
 
 /* ListView classes --------------------------------------------------------------- */
 

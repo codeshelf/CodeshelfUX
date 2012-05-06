@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.43 2012/05/02 10:21:52 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.44 2012/05/06 09:09:00 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
 goog.require('codeshelf.templates');
@@ -77,12 +77,12 @@ codeshelf.facilityeditor = function() {
 			var myOptions = {
 				'zoom':                   16,
 				'center':                 demoLatLng,
-				'mapTypeId':              google.maps.MapTypeId.ROADMAP,
+				'mapTypeId':              google.maps.MapTypeId.HYBRID,
 				'disableDoubleClickZoom': true,
 				'panControl':             false,
 				'rotateControl':          false,
 				'streetViewControl':      false,
-				'draggableCursor':        'url(../../src/images/push-pin.png), auto',
+				//'draggableCursor':        'url(../../src/images/push-pin.png), auto',
 				'heading':                180,
 				'tilt':                   0
 			};
@@ -97,7 +97,7 @@ codeshelf.facilityeditor = function() {
 			var contentPane = editorWindow.getContentElement();
 
 			// Add the facility descriptor field.
-			var facilityDescField = codeshelf.dataobjectfield(websession_, contentPane, codeshelf.domainobjects.facility.classname, codeshelf.domainobjects.facility.properties.desc.id, facility_['persistentId']);
+			var facilityDescField = codeshelf.dataobjectfield(websession_, contentPane, codeshelf.domainobjects.facility.classname, codeshelf.domainobjects.facility.properties.desc.id, facility_['persistentId'], 'windowField', 'Facility name');
 			facilityDescField.start();
 
 			// Setup GMaps geocoding to locate places for the user (if needed).
@@ -105,25 +105,17 @@ codeshelf.facilityeditor = function() {
 			geocoder_.responseIndex = 0;
 			geocoder_.responseSet = [];
 
-//			geocoderTextField_ = goog.dom.query('#geocoderText', editorPane)[0];
-//			geocoderTextField_.onkeydown = function (event) {
-//				if (event.keyCode == 13) {
-//					geocoder_.geocode({'address':geocoderTextField_.value}, thisFacilityEditor_.computeGeoCodeResults);
-//				}
-//			}
-//			geocoderTextField_.focus();
-//			geocoderTextField_.select();
-
-
 			var fieldId = goog.events.getUniqueId('search');
-			var inputElement_ = soy.renderAsElement(codeshelf.templates.dataObjectField, {name: 'name', id: fieldId, title: 'title'});
-			goog.dom.appendChild(contentPane, inputElement_);
-			googleField_ = new goog.editor.SeamlessField(fieldId);
-			googleField_.makeEditable();
+			var fieldElement = soy.renderAsElement(codeshelf.templates.dataObjectField, {id: fieldId, class: 'windowField', label: 'Search address'});
+			goog.dom.appendChild(contentPane, fieldElement);
+			var inputElement = goog.dom.getElement(fieldId);
+			googleField_ = new goog.ui.LabelInput('Search address');
+			googleField_.decorate(inputElement);
 
-			goog.events.listen(googleField_, goog.editor.Field.EventType.BLUR, function(event) {
-				var contents = googleField_.getCleanContents();
-				geocoder_.geocode({'address': contents}, thisFacilityEditor_.computeGeoCodeResults);
+
+			goog.events.listen(inputElement, goog.editor.Field.EventType.BLUR, function(event) {
+				var text = googleField_.getValue();
+				geocoder_.geocode({'address': text}, thisFacilityEditor_.computeGeoCodeResults);
 			});
 
 			// Add the graphical editor.

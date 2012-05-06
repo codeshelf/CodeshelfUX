@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: launch.js,v 1.23 2012/04/30 11:19:27 jeffw Exp $
+ *  $Id: launch.js,v 1.24 2012/05/06 09:09:00 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.launch');
 goog.require('codeshelf.templates');
@@ -34,8 +34,8 @@ codeshelf.launchWindow = function() {
 			// Set the dimensions of the panel and decorate roundedPanel.
 			var radius = 25;
 			var borderWidth = 5;
-			var borderColor = '#a0a0a0';//goog.style.getCascadedStyle(launchCodePanel, 'border-color');
-			var backgroundColor = '#d0d0d0';//goog.style.getCascadedStyle(launchCodePanel, 'background-color');
+			var borderColor = '#a0a0a0'; //launchCodeInput.borderColor;
+			var backgroundColor = '#d0d0d0'; //launchCodeInput.backgroundColor;
 			var corners = 15;
 			var roundedLaunchCodePanel = goog.ui.RoundedPanel.create(radius, borderWidth, borderColor, backgroundColor, corners);
 			var launchCodePanel = goog.dom.getElement('launchCodePanel');

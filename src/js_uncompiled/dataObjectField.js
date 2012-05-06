@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataObjectField.js,v 1.11 2012/04/30 11:19:27 jeffw Exp $
+ *  $Id: dataObjectField.js,v 1.12 2012/05/06 09:09:00 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
@@ -10,6 +10,7 @@ goog.require('codeshelf.websession');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
 goog.require('goog.editor.SeamlessField');
+goog.require('goog.ui.LabelInput');
 
 
 /**
@@ -21,7 +22,7 @@ goog.require('goog.editor.SeamlessField');
  * @param {string} classProperty the name of the remote data class property that this field edits.
  * @param {stting} classPersistenceId the GUID of the class object instance that this field edits.
  */
-codeshelf.dataobjectfield = function(websession, parentElement, className, classProperty, classPersistenceId) {
+codeshelf.dataobjectfield = function(websession, parentElement, className, classProperty, classPersistenceId, cssClass, titleLabel) {
 
 	var thisDataObjectField_;
 	var websession_ = websession;
@@ -29,6 +30,8 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 	var className_ = className;
 	var classProperty_ = classProperty;
 	var classPersistenceId_ = classPersistenceId;
+	var cssClass_ = cssClass;
+	var titleLabel_ = titleLabel;
 	var inputElement_;
 	var googleField_;
 
@@ -47,12 +50,13 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 
 			// Put the HTML markup in the parent element.
 			var fieldId = goog.events.getUniqueId('field');
-			inputElement_ = soy.renderAsElement(codeshelf.templates.dataObjectField, {name: 'name', id: fieldId, title: 'title'});
-			goog.dom.appendChild(parentElement_, inputElement_);
-			googleField_ = new goog.editor.SeamlessField(fieldId);
-			googleField_.makeEditable();
+			var fieldElement = soy.renderAsElement(codeshelf.templates.dataObjectField, {id: fieldId, class: cssClass_, label: titleLabel_});
+			goog.dom.appendChild(parentElement_, fieldElement);
+			inputElement_ = goog.dom.getElement(fieldId);
+			googleField_ = new goog.ui.LabelInput(titleLabel_);
+			googleField_.decorate(inputElement_);
 
-			goog.events.listen(googleField_, goog.editor.Field.EventType.BLUR, thisDataObjectField_.updateFieldContents);
+			goog.events.listen(inputElement_, goog.editor.Field.EventType.BLUR, thisDataObjectField_.updateFieldContents);
 		},
 
 		websocketCmdCallback: function(expectedResponseType) {
@@ -67,9 +71,11 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 
 							// Make sure the class name and persistent ID match.
 							if ((object['className'] === className_) && (object['persistentId'] == classPersistenceId_)) {
-								var html = googleField_.getCleanContents();
-								if (html !== object[classProperty_]) {
-									googleField_.setHtml(false, object[classProperty_], true);
+								//var html = googleField_.getCleanContents();
+								var text = googleField_.getValue();
+								if (text !== object[classProperty_]) {
+									//googleField_.setHtml(false, object[classProperty_], true);
+									googleField_.setValue(object[classProperty_]);
 								}
 							}
 						}
@@ -84,18 +90,20 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 		},
 
 		updateFieldContents: function() {
-			var html = googleField_.getCleanContents();
+			if (googleField_.hasChanged()) {
+				var text = googleField_.getValue();
 
-			var data = {
-				'className':    className_,
-				'persistentId': classPersistenceId_,
-				'properties':   [
-					{'name': 'Description', 'value': html}
-				]
-			};
+				var data = {
+					'className':    className_,
+					'persistentId': classPersistenceId_,
+					'properties':   [
+						{'name': 'Description', 'value': text}
+					]
+				};
 
-			var fieldUpdateCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
-			websession_.sendCommand(fieldUpdateCmd, thisDataObjectField_.websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
+				var fieldUpdateCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
+				websession_.sendCommand(fieldUpdateCmd, thisDataObjectField_.websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
+			}
 		}
 
 	};

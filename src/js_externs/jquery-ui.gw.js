@@ -20,6 +20,18 @@ jQuery.widget.ui.sortable = {};
 jQuery.widget.ui.slider = {};
 jQuery.widget.ui.resizable = {};
 
+// jQuery sizzle support
+jQuery.expr.match = {};
+$.expr.match = {};
+$.expr.match.ID;
+$.expr.match.CLASS;
+$.expr.match.NAME;
+$.expr.match.ATTR;
+$.expr.match.TAG;
+$.expr.match.CHILD;
+$.expr.match.POS;
+$.expr.match.PSEUDO;
+
 // Slick
 //jQuery.Slick = function (arg, val) {};
 //jQuery.fn.extend.SlickEditor = {};
