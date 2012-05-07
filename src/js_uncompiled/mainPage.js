@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.24 2012/05/02 10:21:52 jeffw Exp $
+ *  $Id: mainPage.js,v 1.25 2012/05/07 06:34:27 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.domainobjects');
@@ -90,19 +90,22 @@ codeshelf.mainpage = function() {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
-					if (!command.data.hasOwnProperty('result')) {
+					if (!command.d.hasOwnProperty('r')) {
 						alert('response has no result');
 					} else {
-						if (command.type == kWebSessionCommandType.OBJECT_GETTER_RESP) {
-							if (command.data['result'].length === 0) {
+						if (command.t == kWebSessionCommandType.OBJECT_GETTER_RESP) {
+							if (command.d.r.length === 0) {
 								var clientInitializer = codeshelf.initializenewclient();
 								clientInitializer.start(websession_, application_.getOrganization(), frame_);
 							} else {
-								for (var i = 0; i < command.data['result'].length; i++) {
-									var facility = command.data['result'][i];
+								for (var i = 0; i < command.d.r.length; i++) {
+									var facility = command.d.r[i];
 									try {
 										var facilityEditor = codeshelf.facilityeditor();
 										facilityEditor.start(websession_, application_.getOrganization(), frame_, facility);
+
+										var workAreaEditor = codeshelf.workareaeditor();
+										workAreaEditor.start(websession_, frame_, facility);
 									}
 									catch (err) {
 										alert(err);

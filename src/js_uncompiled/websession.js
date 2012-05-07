@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.18 2012/04/30 11:19:27 jeffw Exp $
+ *  $Id: websession.js,v 1.19 2012/05/07 06:34:27 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.events');
@@ -15,20 +15,20 @@ if (typeof MozWebSocket !== "undefined") {
 }
 
 var kWebSessionCommandType = {
-	LAUNCH_CODE_CHECK:    'LAUNCH_CODE_CHECK',
-	LAUNCH_CODE_RESP:     'LAUNCH_CODE_RESP',
-	OBJECT_GETTER_REQ:    'OBJECT_GETTER_REQ',
-	OBJECT_GETTER_RESP:   'OBJECT_GETTER_RESP',
-	OBJECT_CREATE_REQ:    'OBJECT_CREATE_REQ',
-	OBJECT_CREATE_RESP:   'OBJECT_CREATE_RESP',
-	OBJECT_UPDATE_REQ:    'OBJECT_UPDATE_REQ',
-	OBJECT_UPDATE_RESP:   'OBJECT_UPDATE_RESP',
-	OBJECT_DELETE_REQ:    'OBJECT_DELETE_REQ',
-	OBJECT_DELETE_RESP:   'OBJECT_DELETE_RESP',
-	OBJECT_LISTENER_REQ:  'OBJECT_LISTENER_REQ',
-	OBJECT_LISTENER_RESP: 'OBJECT_LISTENER_RESP',
-	OBJECT_FILTER_REQ:    'OBJECT_FILTER_REQ',
-	OBJECT_FILTER_RESP:   'OBJECT_FILTER_RESP'
+	LAUNCH_CODE_CHECK:    'LAUNCH_CODE_RQ',
+	LAUNCH_CODE_RESP:     'LAUNCH_CODE_RS',
+	OBJECT_GETTER_REQ:    'OBJ_GET_RQ',
+	OBJECT_GETTER_RESP:   'OBJ_GET_RS',
+	OBJECT_CREATE_REQ:    'OBJ_CRE_RQ',
+	OBJECT_CREATE_RESP:   'OBJ_CRE_RS',
+	OBJECT_UPDATE_REQ:    'OBJ_UPD_RQ',
+	OBJECT_UPDATE_RESP:   'OBJ_UPD_RS',
+	OBJECT_DELETE_REQ:    'OBJ_DEL_RQ',
+	OBJECT_DELETE_RESP:   'OBJ_DEL_RS',
+	OBJECT_LISTENER_REQ:  'OBJ_LSN_RQ',
+	OBJECT_LISTENER_RESP: 'OBJ_LSN_RS',
+	OBJECT_FILTER_REQ:    'OBJ_FLT_RQ',
+	OBJECT_FILTER_RESP:   'OBJ_FLT_RS'
 };
 
 var kWebsessionState = {
@@ -82,9 +82,6 @@ codeshelf.websession = function() {
 			try {
 				if (!websocket_.isOpen()) {
 					websocket_.open('ws://127.0.0.1:8080');
-//			while (!websocket.isOpen()) {
-//				setTimeout(500);
-//			}
 				}
 			} catch (e) {
 				//
@@ -93,9 +90,9 @@ codeshelf.websession = function() {
 
 		createCommand: function(commandType, data) {
 			var command = {
-				'id':   goog.events.getUniqueId('cmdid'),
-				'type': commandType,
-				'data': data
+				'id':   goog.events.getUniqueId('cid'),
+				't': commandType,
+				'd': data
 			}
 			return command;
 		},
@@ -163,18 +160,14 @@ codeshelf.websession = function() {
 			if (callback == null) {
 				alert('callback for cmd was null');
 			} else {
-				if (!command.hasOwnProperty('type')) {
+				if (!command.hasOwnProperty('t')) {
 					alert('response has no type');
 				} else {
-//					if (command.type != callback.getExpectedResponseType()) {
-//						alert('response wrong type');
-//					} else {
-					if (!command.hasOwnProperty('data')) {
+					if (!command.hasOwnProperty('d')) {
 						alert('reponse has no data');
 					} else {
 						callback.exec(command);
 					}
-//					}
 				}
 
 				// Check if the callback should remain active.

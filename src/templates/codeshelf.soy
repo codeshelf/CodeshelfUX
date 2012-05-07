@@ -57,7 +57,6 @@
 
 /**
  * The template for the facility editor.
- * 	<input  id='geocoderText' class='dataEntry' type='text' size='40' title='Search for address'/>
  */
 {template .facilityEditor}
 <div class='facilityDialog'>
@@ -118,5 +117,14 @@
 	{foreach $resultAddress in $resultAddresses}
 		<a id='{$resultAddress.id}' class='infoPopupLink' >&rArr;</a>&nbsp;&nbsp;<b class='infoPopup'>{$resultAddress.formatted_address}</b><br>
 	{/foreach}
+</div>
+{/template}
+
+/**
+ * The template for the facility editor.
+ */
+{template .workAreaEditor}
+<div class='workAreaDialog'>
+
 </div>
 {/template}

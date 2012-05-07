@@ -223,21 +223,21 @@ codeshelf.listview = function(websession, domainObject) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
-					if (!command.data.hasOwnProperty('result')) {
+					if (!command.d.hasOwnProperty('r')) {
 						alert('response has no result');
-					} else if (command.type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command.data['result'].length; i++) {
-							var object = command.data['result'][i];
-							if (object['opType'] === "add") {
+					} else if (command.t == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+						for (var i = 0; i < command.d.r.length; i++) {
+							var object = command.d.r[i];
+							if (object['op'] === "cr") {
 								dataView_.addItem(object);
-							} else if (object['opType'] === "update") {
+							} else if (object['op'] === "up") {
 								var item = dataView_.getItemById(object['persistentId']);
 								if (item === undefined) {
 									dataView_.addItem(object);
 								} else {
 									dataView_.updateItem(object['persistentId'], object);
 								}
-							} else if (object['opType'] === "delete") {
+							} else if (object['op'] === "de") {
 								dataView_.deleteItem(object['persistentId']);
 							}
 						}

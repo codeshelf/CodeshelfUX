@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: launch.js,v 1.24 2012/05/06 09:09:00 jeffw Exp $
+ *  $Id: launch.js,v 1.25 2012/05/07 06:34:27 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.launch');
 goog.require('codeshelf.templates');
@@ -68,12 +68,12 @@ codeshelf.launchWindow = function() {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
-					if (!command.data.hasOwnProperty(kWebSessionCommandType.LAUNCH_CODE_RESP)) {
+					if (!command.d.hasOwnProperty(kWebSessionCommandType.LAUNCH_CODE_RESP)) {
 						alert('response has no launch code result');
 					} else {
-						if (command.data['LAUNCH_CODE_RESP'] == "SUCCEED") {
+						if (command.d['LAUNCH_CODE_RS'] == "SUCCEED") {
 							websession_.setState(kWebsessionState.VALIDATED);
-							application_.setOrganization(command.data['organization']);
+							application_.setOrganization(command.d['organization']);
 							thisLaunchWindow_.exit();
 							var mainpage = codeshelf.mainpage();
 							mainpage.enter(application_, websession_);

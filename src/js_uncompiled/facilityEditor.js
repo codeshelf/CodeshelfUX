@@ -1,23 +1,19 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditor.js,v 1.44 2012/05/06 09:09:00 jeffw Exp $
+ *  $Id: facilityEditor.js,v 1.45 2012/05/07 06:34:27 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditor');
-goog.require('codeshelf.templates');
-//goog.require('codeshelf.facilityeditorgmapsoverlay');
-goog.require('codeshelf.websession');
 goog.require('codeshelf.dataobjectfield');
+//goog.require('codeshelf.facilityeditorgmapsoverlay');
+goog.require('codeshelf.templates');
+goog.require('codeshelf.websession');
+goog.require('codeshelf.workareaeditor');
+goog.require('extern.jquery.css.rotate');
+goog.require('extern.jquery.css.transform');
 goog.require('goog.dom.query');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
-goog.require('extern.jquery.css.rotate');
-goog.require('extern.jquery.css.transform');
-
-
-var newPoint;
-var longLat;
-var rotateDeg = 0;
 
 codeshelf.facilityeditor = function() {
 
@@ -90,7 +86,6 @@ codeshelf.facilityeditor = function() {
 			infoWindow_ = new google.maps.InfoWindow();
 			totalBounds_ = new google.maps.LatLngBounds();
 
-			//map_ = new google.maps.Map(goog.dom.query('#facility_map')[0], myOptions);
 			var editorWindow = codeshelf.window();
 			editorWindow.init("Facility Editor", parentFrame_, undefined, thisFacilityEditor_.resizeFunction);
 			editorWindow.open();
@@ -295,6 +290,9 @@ codeshelf.facilityeditor = function() {
 
 			thisFacilityEditor_.setBounds();
 
+//			            var newPoint;
+//			            var longLat;
+//			            var rotateDeg = 0;
 //						var clickPoint = projection.fromLatLngToContainerPixel(event.latLng);
 //						for (var deg = 0; deg <= 360; deg += 10) {
 //							var rotatePoint = thisFacilityEditor_.rotatePoint(clickPoint.x, clickPoint.y, mapPane_.clientWidth / 2, mapPane_.clientHeight / 2, deg);
@@ -530,29 +528,29 @@ codeshelf.facilityeditor = function() {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
-					if (!command.data.hasOwnProperty('result')) {
+					if (!command.d.hasOwnProperty('r')) {
 						alert('response has no result');
 					} else {
-						if (command.type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-							for (var i = 0; i < command.data['result'].length; i++) {
-								var object = command.data['result'][i];
+						if (command.t == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+							for (var i = 0; i < command.d.r.length; i++) {
+								var object = command.d.r[i];
 
 								// Make sure the class name matches.
 								if (object['className'] === codeshelf.domainobjects.vertex.classname) {
 									var latLng = new google.maps.LatLng(object['PosY'], object['PosX']);
 
-									if (object['opType'] === 'create') {
+									if (object['op'] === 'cr') {
 										thisFacilityEditor_.handleCreateVertexCmd(latLng, object);
-									} else if (object['opType'] === 'update') {
+									} else if (object['op'] === 'up') {
 										thisFacilityEditor_.handleUpdateVertexCmd(latLng, object);
-									} else if (object['opType'] === 'delete') {
+									} else if (object['op'] === 'dl') {
 										thisFacilityEditor_.handleDeleteVertexCmd(latLng, object);
 									}
 								}
 							}
-						} else if (command.type == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-						} else if (command.type == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-						} else if (command.type == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+						} else if (command.t == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+						} else if (command.t == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+						} else if (command.t == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 						}
 					}
 				},

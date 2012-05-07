@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: initializeNewClient.js,v 1.5 2012/04/30 11:19:27 jeffw Exp $
+ *  $Id: initializeNewClient.js,v 1.6 2012/05/07 06:34:27 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.initializenewclient');
 goog.require('codeshelf.templates');
@@ -73,10 +73,10 @@ codeshelf.initializenewclient = function() {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
-					if (!command.data.hasOwnProperty('result')) {
+					if (!command.d.hasOwnProperty('r')) {
 						alert('response has no result');
-					} else if (command.type == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-						var facility = command.data.result;
+					} else if (command.t == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+						var facility = command.d.r;
 						var facilityEditor = codeshelf.facilityeditor();
 						facilityEditor.start(websession_, organization_, frame_, facility);
 					}
