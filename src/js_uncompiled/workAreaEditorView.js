@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditor.js,v 1.2 2012/05/08 01:02:01 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.1 2012/05/08 06:45:09 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -9,17 +9,21 @@ goog.require('codeshelf.templates');
 
 codeshelf.workareaeditorview = function(websession, facility) {
 
-	var thisWorkAreaEditor_;
+	var thisWorkAreaEditorView_;
 	var websession_ = websession;
 	var facility_ = facility;
-	var window_;
 	var graphics_;
 
-	thisWorkAreaEditor_ = {
+	thisWorkAreaEditorView_ = {
 
-		setupView: function(window, contentElement) {
-			window_ = window;
+		setupView: function(contentElement) {
+
+			// Compute the dimensions of the facility outline, and create a bounding rectangle for it.
+			// Create a draw canvas for the bounding rect.
+			// Compute the path for the facility outline and put it into the draw canavs.
+
 			graphics_ = goog.graphics.createGraphics(600, 200);
+
 		},
 
 		open: function() {
@@ -69,5 +73,5 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		}
 	}
 
-	return thisWorkAreaEditor_;
+	return thisWorkAreaEditorView_;
 }

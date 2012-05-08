@@ -1,11 +1,12 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.26 2012/05/08 01:02:01 jeffw Exp $
+ *  $Id: mainPage.js,v 1.27 2012/05/08 06:45:09 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.domainobjects');
 goog.require('codeshelf.facilityeditorview');
+goog.require('codeshelf.workareaeditorview');
 goog.require('codeshelf.initializenewclient');
 goog.require('codeshelf.listdemo');
 goog.require('codeshelf.listview');
@@ -55,6 +56,18 @@ codeshelf.mainpage = function() {
 				var size = vsm.getSize();
 				size.height -= 10;
 				thisMainpage_.updateFrameSize(size);
+			});
+
+			goog.events.listen(document, goog.events.EventType.KEYPRESS, function(e) {
+				if (e.keyCode === goog.events.KeyCodes.NUM_ZERO) {
+					if (focusedWindow < windowList.length - 1) {
+						focusedWindow++
+					} else {
+						focusedWindow = 0;
+					}
+					var window = windowList[focusedWindow];
+					window.focusWindow();
+				}
 			});
 
 			var listDemoView = codeshelf.listdemo();

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.1 2012/05/08 01:02:01 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.2 2012/05/08 06:45:09 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -20,7 +20,6 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 	var websession_ = websession;
 	var organization_ = organization;
 	var facility_ = facility;
-	var window_;
 
 	var map_;
 	var clickHandler_;
@@ -46,9 +45,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 	thisFacilityView = {
 
-		setupView: function(window, contentElement) {
-
-			window_ = window;
+		setupView: function(contentElement) {
 
 			// Starting latlng is either the facility's origin point or the browser's current location (if we can get it).
 			var demoLatLng = new google.maps.LatLng(facility_['posY'], facility_['posX']);

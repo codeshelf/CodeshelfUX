@@ -69,7 +69,7 @@ codeshelf.listdemo = function() {
 			grid.autosizeColumns();
 		},
 
-		setupView: function(window, contentElement) {
+		setupView: function(contentElement) {
 			var columns = [
 				{
 					'id':                  "sel",

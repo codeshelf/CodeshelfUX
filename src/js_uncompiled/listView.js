@@ -21,7 +21,6 @@ codeshelf.listview = function(websession, domainObject) {
 	var websession_ = websession;
 	var domainObject_ = domainObject;
 
-	var window_;
 	var dataView_;
 	var grid_;
 	var selectedRowIds_ = [];
@@ -36,9 +35,7 @@ codeshelf.listview = function(websession, domainObject) {
 	var searchString_;
 
 	var thisListview_ = {
-		setupView: function(window, contentElement) {
-
-			window_ = window;
+		setupView: function(contentElement) {
 
 			// Compute the columns we need for this domain object.
 			properties = domainObject_.properties;

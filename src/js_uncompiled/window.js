@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: window.js,v 1.7 2012/05/08 01:02:01 jeffw Exp $
+ *  $Id: window.js,v 1.8 2012/05/08 06:45:09 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.window');
 goog.require('goog.style');
@@ -13,6 +13,7 @@ goog.require('goog.fx.Dragger');
 var windowList = [];
 var xPosOffset = 0;
 var yPosOffset = 0;
+var focusedWindow = 0;
 
 codeshelf.window = function(title, view, parent, limits) {
 
@@ -77,7 +78,7 @@ codeshelf.window = function(title, view, parent, limits) {
 				view_.resize();
 			};
 
-			view_.setupView(thisWindow_, thisWindow_.getContentElement());
+			view_.setupView(thisWindow_.getContentElement());
 			view_.open();
 			thisWindow_.focusWindow();
 		},
@@ -104,7 +105,7 @@ codeshelf.window = function(title, view, parent, limits) {
 		},
 
 		focusWindow: function() {
-			// Loop throught all of the windows, and set their Z to 0, but set this window's Z to 1.
+			// Loop through all of the windows, and set their Z to 0, but set this window's Z to 1.
 			for (var i in windowList) {
 				var aWindow = windowList[i];
 				if (aWindow === thisWindow_) {

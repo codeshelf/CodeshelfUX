@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: codeshelf.gss,v 1.18 2012/05/06 09:09:00 jeffw Exp $
+ *  $Id: codeshelf.gss,v 1.19 2012/05/08 06:45:09 jeffw Exp $
  *******************************************************************************/
 
 /* Defines and mixins ----------------------------------------------------------- */
@@ -240,7 +240,7 @@
 	width:				600px;
 	height:				500px;
 	background-color:	WINDOW_FOREGROUND_MED_COLOR;
-	border:				1px solid WINDOW_FOREGROUND_DARK_COLOR;
+	border:				2px solid WINDOW_BORDER_DARK_COLOR;
 	font:				bold 11px/18px arial;
 	text-indent:		10px;
 	color:				#FFF;
