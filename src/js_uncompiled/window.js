@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: window.js,v 1.6 2012/04/29 09:58:22 jeffw Exp $
+ *  $Id: window.js,v 1.7 2012/05/08 01:02:01 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.window');
 goog.require('goog.style');
@@ -14,22 +14,24 @@ var windowList = [];
 var xPosOffset = 0;
 var yPosOffset = 0;
 
-codeshelf.window = function() {
+codeshelf.window = function(title, view, parent, limits) {
+
+	var title_ = title;
+	var view_ = view;
+	var parent_ = parent;
+	var limits_ = limits;
 
 	var thisWindow_;
 	var windowElement_;
-	var parent_;
 	var contentPane_;
-	var limits_;
 	var dragger_;
 	var resizer_;
 	var z_ = 0;
 
 	thisWindow_ = {
-		init: function(title, parent, limits, resizeFunction) {
 
-			parent_ = parent;
-			limits_ = limits;
+		open: function() {
+
 			windowList[windowList.length] = thisWindow_;
 			windowElement_ = soy.renderAsElement(codeshelf.templates.window);
 			goog.dom.appendChild(parent_, windowElement_);
@@ -72,16 +74,16 @@ codeshelf.window = function() {
 				var height = y + topDim - 10;
 				windowElement_.style.width = width + 'px';
 				windowElement_.style.height = height + 'px';
-				resizeFunction();
+				view_.resize();
 			};
-		},
 
-		open: function() {
+			view_.setupView(thisWindow_, thisWindow_.getContentElement());
+			view_.open();
 			thisWindow_.focusWindow();
 		},
 
 		close: function() {
-
+			view_.close();
 		},
 
 		getContentElement: function() {

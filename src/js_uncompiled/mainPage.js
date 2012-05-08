@@ -1,11 +1,11 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.25 2012/05/07 06:34:27 jeffw Exp $
+ *  $Id: mainPage.js,v 1.26 2012/05/08 01:02:01 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.domainobjects');
-goog.require('codeshelf.facilityeditor');
+goog.require('codeshelf.facilityeditorview');
 goog.require('codeshelf.initializenewclient');
 goog.require('codeshelf.listdemo');
 goog.require('codeshelf.listview');
@@ -57,11 +57,13 @@ codeshelf.mainpage = function() {
 				thisMainpage_.updateFrameSize(size);
 			});
 
-			var listdemo = codeshelf.listdemo();
-			listdemo.launchListDemo(frame_);
+			var listDemoView = codeshelf.listdemo();
+			var listDemoWindow = codeshelf.window('Large Demo List', listDemoView, frame_, undefined);
+			listDemoWindow.open();
 
-			var listview = codeshelf.listview(websession_, codeshelf.domainobjects.facility);
-			listview.launchListView(frame_);
+			var listView = codeshelf.listview(websession_, codeshelf.domainobjects.facility);
+			var listWindow = codeshelf.window('Facilities List', listView, frame_, undefined);
+			listWindow.open();
 
 			var organization = application_.getOrganization();
 
@@ -101,11 +103,18 @@ codeshelf.mainpage = function() {
 								for (var i = 0; i < command.d.r.length; i++) {
 									var facility = command.d.r[i];
 									try {
-										var facilityEditor = codeshelf.facilityeditor();
-										facilityEditor.start(websession_, application_.getOrganization(), frame_, facility);
+										// Load the GMaps API and init() when done.
+										if (typeof google !== "undefined") {
+											google.load('maps', '3', {'other_params': 'sensor=false', 'callback': function() {
+												var facilityEditorView = codeshelf.facilityeditorview(websession_, application_.getOrganization(), facility);
+												var facilityEditorWindow = codeshelf.window('Facility Editor', facilityEditorView, frame_, undefined);
+												facilityEditorWindow.open();
+											}});
+										}
 
-										var workAreaEditor = codeshelf.workareaeditor();
-										workAreaEditor.start(websession_, frame_, facility);
+										var workAreaEditorView = codeshelf.workareaeditorview(websession_, facility);
+										var workAreaEditorWindow = codeshelf.window('Workarea Editor', workAreaEditorView, frame_, undefined);
+										workAreaEditorWindow.open();
 									}
 									catch (err) {
 										alert(err);

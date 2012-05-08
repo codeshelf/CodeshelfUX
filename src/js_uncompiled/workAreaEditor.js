@@ -1,33 +1,33 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditor.js,v 1.1 2012/05/07 06:34:27 jeffw Exp $
+ *  $Id: workAreaEditor.js,v 1.2 2012/05/08 01:02:01 jeffw Exp $
  *******************************************************************************/
 
-goog.provide('codeshelf.workareaeditor');
+goog.provide('codeshelf.workareaeditorview');
 goog.require('codeshelf.templates');
 
-codeshelf.workareaeditor = function() {
+codeshelf.workareaeditorview = function(websession, facility) {
 
 	var thisWorkAreaEditor_;
-	var websession_;
-	var parentFrame_;
-	var facility_;
+	var websession_ = websession;
+	var facility_ = facility;
+	var window_;
 	var graphics_;
 
 	thisWorkAreaEditor_ = {
 
-		start: function(websession, parentFrame, facility) {
-
-			websession_ = websession;
-			parentFrame_ = parentFrame;
-			facility_ = facility;
-			var editorWindow = codeshelf.window();
-			editorWindow.init("Work Area Editor", parentFrame_, undefined, undefined);
-			editorWindow.open();
-			var contentPane = editorWindow.getContentElement();
-
+		setupView: function(window, contentElement) {
+			window_ = window;
 			graphics_ = goog.graphics.createGraphics(600, 200);
+		},
+
+		open: function() {
+
+		},
+
+		close: function() {
+
 		},
 
 		websocketCmdCallback: function(expectedResponseType) {

@@ -64,12 +64,12 @@ codeshelf.listdemo = function() {
 				grid.showTopPanel();
 		},
 
-		resizeFunction: function() {
+		resize: function() {
 			grid.resizeCanvas();
 			grid.autosizeColumns();
 		},
 
-		launchListDemo: function(parentFrame) {
+		setupView: function(window, contentElement) {
 			var columns = [
 				{
 					'id':                  "sel",
@@ -164,9 +164,6 @@ codeshelf.listdemo = function() {
 				d["effortDriven"] = (i % 5 == 0);
 			}
 
-			listViewWindow = codeshelf.window();
-			listViewWindow.init("List View", parentFrame, undefined, thisListDemo_.resizeFunction);
-			var contentElement = listViewWindow.getContentElement();
 			contentElement.innerHTML = '<div id="listViewGrid" class="windowContent"></div>';
 			dataView = new $.Slick.Data.DataView();
 			grid = new $.Slick.Grid('#listViewGrid', dataView, columns, options);
@@ -339,6 +336,9 @@ codeshelf.listdemo = function() {
 				grid.setSelectedRows(rows);
 			});
 
+		},
+
+		open: function() {
 			// initialize the model after all the events have been hooked up
 			dataView.beginUpdate();
 			dataView.setItems(data);
@@ -350,6 +350,10 @@ codeshelf.listdemo = function() {
 			dataView.endUpdate();
 
 			$("#gridContainer").resizable();
+		},
+
+		close: function() {
+
 		}
 	}
 
