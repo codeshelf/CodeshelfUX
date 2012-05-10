@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.2 2012/05/08 06:45:09 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.3 2012/05/10 07:14:43 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -27,7 +27,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 	var clickTimeout_;
 	var mapPane_;
 	var mapRotatePane_;
-	var thisFacilityView;
+	var thisFacilityView_;
 	var facilityBounds_;
 	var facilityEditorOverlay_;
 	var facilityOutlinePath_;
@@ -43,7 +43,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 	var totalBounds_;
 	var overlays_ = [];
 
-	thisFacilityView = {
+	thisFacilityView_ = {
 
 		setupView: function(contentElement) {
 
@@ -84,7 +84,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 			goog.events.listen(inputElement, goog.editor.Field.EventType.BLUR, function(event) {
 				var text = googleField_.getValue();
-				geocoder_.geocode({'address': text}, thisFacilityView.computeGeoCodeResults);
+				geocoder_.geocode({'address': text}, thisFacilityView_.computeGeoCodeResults);
 			});
 
 			// Add the graphical editor.
@@ -100,9 +100,9 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 						if (canEditOutline_) {
 							// We need to make sure the strucgtures get created before we set the user create marker.
 							localUserCreatedMarker_ = true;
-							thisFacilityView.ensureOutlineStructures();
+							thisFacilityView_.ensureOutlineStructures();
 
-							var vertexNum = thisFacilityView.getNextVertexNum();
+							var vertexNum = thisFacilityView_.getNextVertexNum();
 							var data = {
 								'parentClassName':    codeshelf.domainobjects.facility['classname'],
 								'parentPersistentId': facility_['persistentId'],
@@ -118,7 +118,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 							}
 
 							var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_CREATE_REQ, data);
-							websession_.sendCommand(newVertexCmd, thisFacilityView.websocketCmdCallback(kWebSessionCommandType.OBJECT_CREATE_RESP), false);
+							websession_.sendCommand(newVertexCmd, thisFacilityView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_CREATE_RESP), false);
 
 							// If this was the anchor vertex then set the location of the facility as well.
 							var data = {
@@ -131,7 +131,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 								]
 							}
 							var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
-							websession_.sendCommand(moveVertexCmd, thisFacilityView.websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
+							websession_.sendCommand(moveVertexCmd, thisFacilityView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
 						}
 					}, 250);
 				}
@@ -140,7 +140,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			doubleClickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.DBLCLICK, function(event) {
 				clearTimeout(clickTimeout_);
 				if (canEditOutline_) {
-					thisFacilityView.deleteFacilityOutline();
+					thisFacilityView_.deleteFacilityOutline();
 				}
 			});
 		},
@@ -157,7 +157,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			}
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-			websession_.sendCommand(setListViewFilterCmd, thisFacilityView.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+			websession_.sendCommand(setListViewFilterCmd, thisFacilityView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 		},
 
 		close:function() {
@@ -203,7 +203,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 		handleCreateVertexCmd: function(latLng, vertex) {
 
-			thisFacilityView.ensureOutlineStructures();
+			thisFacilityView_.ensureOutlineStructures();
 			facilityOutlinePath_.setAt(vertex['DrawOrder'], latLng);
 			facilityOutline_.setVisible(true);
 
@@ -246,7 +246,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 								]
 							}
 							var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
-							websession_.sendCommand(moveVertexCmd, thisFacilityView.websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
+							websession_.sendCommand(moveVertexCmd, thisFacilityView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
 						}
 					}
 				}
@@ -261,20 +261,20 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				google.maps.event.addListener(facilityAnchorMarker_, goog.events.EventType.CLICK, function() {
 						if (canEditOutline_) {
 							facilityOutline_.setMap(null);
-							thisFacilityView.completePolygon();
+							thisFacilityView_.completePolygon();
 						}
 					}
 				)
 			}
 
-			thisFacilityView.setBounds();
+			thisFacilityView_.setBounds();
 
 //			            var newPoint;
 //			            var longLat;
 //			            var rotateDeg = 0;
 //						var clickPoint = projection.fromLatLngToContainerPixel(event.latLng);
 //						for (var deg = 0; deg <= 360; deg += 10) {
-//							var rotatePoint = thisFacilityView.rotatePoint(clickPoint.x, clickPoint.y, mapPane_.clientWidth / 2, mapPane_.clientHeight / 2, deg);
+//							var rotatePoint = thisFacilityView_.rotatePoint(clickPoint.x, clickPoint.y, mapPane_.clientWidth / 2, mapPane_.clientHeight / 2, deg);
 //							newPoint = new google.maps.Point(rotatePoint.x, rotatePoint.y);
 //							longLat = projection.fromContainerPixelToLatLng(newPoint, true);
 //							pen_.draw(longLat);
@@ -284,14 +284,14 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		handleUpdateVertexCmd: function(latLng, vertex) {
 			if ((facilityOutlinePath_ === undefined) || (facilityOutlinePath_.getAt(vertex['DrawOrder']) === undefined)) {
 				// If the outline or marker don't exist then create them.
-				thisFacilityView.handleCreateVertexCmd(latLng, vertex);
+				thisFacilityView_.handleCreateVertexCmd(latLng, vertex);
 			} else {
 				// The outline and marker exist, so update the  marker.
 				facilityOutlinePath_.setAt(vertex['DrawOrder'], latLng);
 				var vertexData = facilityOutlineVertices_[vertex['DrawOrder']];
 				vertexData.marker.setPosition(latLng);
 			}
-			thisFacilityView.setBounds();
+			thisFacilityView_.setBounds();
 		},
 
 		handleDeleteVertexCmd: function(latLng, vertex) {
@@ -318,7 +318,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			if (shouldInit) {
 				facilityOutlinePath_ = undefined;
 				//localUserCreatedMarker_ = false;
-				thisFacilityView.ensureOutlineStructures();
+				thisFacilityView_.ensureOutlineStructures();
 			}
 		},
 
@@ -332,7 +332,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				}
 
 				var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_DELETE_REQ, data);
-				websession_.sendCommand(newVertexCmd, thisFacilityView.websocketCmdCallback(kWebSessionCommandType.OBJECT_DELETE_RESP), false);
+				websession_.sendCommand(newVertexCmd, thisFacilityView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_DELETE_RESP), false);
 			}
 		},
 
@@ -364,13 +364,13 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			// Setup green rotate marker #1.
 			var marker1 = facilityOutlineVertices_[1].marker;
 			var bearing1 = 90 - google.maps.geometry.spherical.computeHeading(facilityAnchorMarker_.getPosition(), marker1.getPosition());
-			//var bearing1 = -1 * thisFacilityView.bearing(facilityAnchorMarker_.getPosition(), marker1.getPosition()) / 2;
+			//var bearing1 = -1 * thisFacilityView_.bearing(facilityAnchorMarker_.getPosition(), marker1.getPosition()) / 2;
 			marker1.setIcon(markerImage);
 			google.maps.event.addListener(marker1, goog.events.EventType.CLICK, function() {
 					if (canEditOutline_) {
 						map_.setCenter(facilityAnchorMarker_.getPosition());
 						mapRotatePane_.animate({rotate: bearing1 + 'deg'});
-						thisFacilityView.setBounds();
+						thisFacilityView_.setBounds();
 					}
 				}
 			)
@@ -378,13 +378,13 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			// Setup green rotate marker #2.
 			var marker2 = facilityOutlineVertices_[facilityOutlineVertices_.length - 1].marker;
 			var bearing2 = 90 - google.maps.geometry.spherical.computeHeading(facilityAnchorMarker_.getPosition(), marker2.getPosition());
-			//var bearing2 = thisFacilityView.bearing(facilityAnchorMarker_.getPosition(), marker2.getPosition()) / 2;
+			//var bearing2 = thisFacilityView_.bearing(facilityAnchorMarker_.getPosition(), marker2.getPosition()) / 2;
 			marker2.setIcon(markerImage);
 			google.maps.event.addListener(marker2, goog.events.EventType.CLICK, function() {
 					if (canEditOutline_) {
 						map_.setCenter(facilityAnchorMarker_.getPosition());
 						mapRotatePane_.animate({rotate: bearing2 + 'deg'});
-						thisFacilityView.setBounds();
+						thisFacilityView_.setBounds();
 					}
 				}
 			)
@@ -394,7 +394,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			if (status == google.maps.GeocoderStatus.OK && response[0]) {
 				// we save them all
 				geocoder_.responseSet.push(response);
-				thisFacilityView.showGeocodeResult(0, geocoder_.responseIndex);
+				thisFacilityView_.showGeocodeResult(0, geocoder_.responseIndex);
 				geocoder_.responseIndex++;
 			}
 		},
@@ -444,7 +444,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 							var thisOverlay_ = overlay;
 							var index_ = i;
 							return function() {
-								thisFacilityView.showGeocodeResult(index_, thisOverlay_.setIndex);
+								thisFacilityView_.showGeocodeResult(index_, thisOverlay_.setIndex);
 							}
 						})();
 					}
@@ -495,7 +495,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		resize: function() {
 			facilityBounds_ = undefined;
 			google.maps.event.trigger(mapPane_, 'resize');
-			thisFacilityView.setBounds();
+			thisFacilityView_.setBounds();
 		},
 
 		exit: function() {
@@ -519,11 +519,11 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 									var latLng = new google.maps.LatLng(object['PosY'], object['PosX']);
 
 									if (object['op'] === 'cr') {
-										thisFacilityView.handleCreateVertexCmd(latLng, object);
+										thisFacilityView_.handleCreateVertexCmd(latLng, object);
 									} else if (object['op'] === 'up') {
-										thisFacilityView.handleUpdateVertexCmd(latLng, object);
+										thisFacilityView_.handleUpdateVertexCmd(latLng, object);
 									} else if (object['op'] === 'dl') {
-										thisFacilityView.handleDeleteVertexCmd(latLng, object);
+										thisFacilityView_.handleDeleteVertexCmd(latLng, object);
 									}
 								}
 							}
@@ -542,5 +542,5 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		}
 	}
 
-	return thisFacilityView;
+	return thisFacilityView_;
 }
