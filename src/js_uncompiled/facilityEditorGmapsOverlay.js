@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorGmapsOverlay.js,v 1.3 2012/05/08 01:02:01 jeffw Exp $
+ *  $Id: facilityEditorGmapsOverlay.js,v 1.4 2012/05/11 07:32:55 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorviewgmapsoverlay');
 
@@ -10,22 +10,29 @@ function ProtoHolder() {
 
 }
 
-ProtoHolder.prototype = new google.maps.OverlayView();
-
 codeshelf.facilityeditorviewgmapsoverlay = function(map) {
 
+	var thisOverlay_;
 	var map_ = map;
-	var thisOverlay_ = new ProtoHolder();
 
-	thisOverlay_.onAdd = function() {
+	thisOverlay_ = {
 
-	};
+		init: function() {
+			ProtoHolder.prototype = new google.maps.OverlayView();
 
-	thisOverlay_.draw = function() {
+			var thisOverlay_ = new ProtoHolder();
 
+			thisOverlay_.onAdd = function() {
+
+			};
+
+			thisOverlay_.draw = function() {
+
+			}
+
+			thisOverlay_.setMap(map);
+		}
 	}
-
-	thisOverlay_.setMap(map);
 
 	return thisOverlay_;
 }

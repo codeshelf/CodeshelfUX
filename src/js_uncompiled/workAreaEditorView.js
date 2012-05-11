@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.2 2012/05/10 07:14:43 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.3 2012/05/11 07:32:55 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -65,7 +65,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		computeBearing: function(lat1, lon1, lat2, lon2) {
 			var dLon = goog.math.toRadians(lon2 - lon1);
 			var y = Math.sin(dLon) * Math.cos(lat2);
-			var x = Math.cos(lat1)*Math.sin(lat2) - Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon);
+			var x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
 			var bearing = goog.math.toDegrees(Math.atan2(y, x));
 			return bearing;
 		},
@@ -73,9 +73,13 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		computePath: function() {
 
 			var lastVertex;
-			for (vertex in vertices) {
-				if (vertices.hasOwnProperty(vertex)) {
-					var vertex = vertices[vertex];
+			var firstVertex;
+			for (var i = 0; i < vertices.length; i++) {
+				var vertex = vertices[i];
+				if (vertex !== null) {
+					if (firstVertex === undefined) {
+						firstVertex = vertex;
+					}
 					if (lastVertex !== undefined) {
 						var dist = thisWorkAreaEditorView_.computeDistanceMeters(lastVertex.PosY, lastVertex.PosX, vertex.PosY, vertex.PosX);
 						var bearing = thisWorkAreaEditorView_.computeBearing(lastVertex.PosY, lastVertex.PosX, vertex.PosY, vertex.PosX);
@@ -85,6 +89,13 @@ codeshelf.workareaeditorview = function(websession, facility) {
 					}
 					lastVertex = vertex;
 				}
+			}
+			if (firstVertex !== lastVertex) {
+				var dist = thisWorkAreaEditorView_.computeDistanceMeters(lastVertex.PosY, lastVertex.PosX, firstVertex.PosY, firstVertex.PosX);
+				var bearing = thisWorkAreaEditorView_.computeBearing(lastVertex.PosY, lastVertex.PosX, firstVertex.PosY, firstVertex.PosX);
+				points[firstVertex.DrawOrder] = {};
+				points[firstVertex.DrawOrder].dist = dist;
+				points[firstVertex.DrawOrder].bearing = bearing;
 			}
 
 		},

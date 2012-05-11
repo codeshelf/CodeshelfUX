@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.3 2012/05/10 07:14:43 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.4 2012/05/11 07:32:55 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -29,7 +29,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 	var mapRotatePane_;
 	var thisFacilityView_;
 	var facilityBounds_;
-	var facilityEditorOverlay_;
+//	var facilityEditorOverlay_;
 	var facilityOutlinePath_;
 	var facilityOutlineVertices_ = [];
 	var facilityOutline_;
@@ -58,6 +58,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				'rotateControl':          false,
 				'streetViewControl':      false,
 				//'draggableCursor':        'url(../../src/images/push-pin.png), auto',
+				'draggableCursor':        'pointer',
 				'heading':                180,
 				'tilt':                   0
 			};
@@ -93,12 +94,13 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			mapPane_ = goog.dom.query('.facilityMap', editorPane)[0];
 			map_ = new google.maps.Map(mapPane_, myOptions);
 //			facilityEditorOverlay_ = codeshelf.facilityeditorviewgmapsoverlay(map_);
+//			facilityEditorOverlay_.init();
 
 			clickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.CLICK, function(event) {
 					clickTimeout_ = setTimeout(function() {
 
 						if (canEditOutline_) {
-							// We need to make sure the strucgtures get created before we set the user create marker.
+							// We need to make sure the structures get created before we set the user create marker.
 							localUserCreatedMarker_ = true;
 							thisFacilityView_.ensureOutlineStructures();
 

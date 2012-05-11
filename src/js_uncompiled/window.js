@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: window.js,v 1.8 2012/05/08 06:45:09 jeffw Exp $
+ *  $Id: window.js,v 1.9 2012/05/11 07:32:55 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.window');
 goog.require('goog.style');
@@ -25,6 +25,7 @@ codeshelf.window = function(title, view, parent, limits) {
 	var thisWindow_;
 	var windowElement_;
 	var contentPane_;
+	var windowBar_;
 	var dragger_;
 	var resizer_;
 	var z_ = 0;
@@ -49,13 +50,13 @@ codeshelf.window = function(title, view, parent, limits) {
 			var label = goog.dom.query('.windowTitle', windowElement_)[0];
 			label.innerHTML = title;
 
-			var windowBar = goog.dom.query('.windowBar', windowElement_)[0];
+			windowBar_ = goog.dom.query('.windowBar', windowElement_)[0];
 			var windowResizer = goog.dom.query('.windowResizer', windowElement_)[0];
 
-			dragger_ = new goog.fx.Dragger(windowElement_, windowBar, limits_);
+			dragger_ = new goog.fx.Dragger(windowElement_, windowBar_, limits_);
 			resizer_ = new goog.fx.Dragger(windowResizer, windowResizer, limits_);
 
-			goog.events.listen(windowBar, goog.events.EventType.MOUSEDOWN, thisWindow_.focusWindowEventHandler(thisWindow_));
+			goog.events.listen(windowBar_, goog.events.EventType.MOUSEDOWN, thisWindow_.focusWindowEventHandler(thisWindow_));
 
 			goog.events.listen(dragger_, 'start', thisWindow_.moverStart(windowElement_));
 			goog.events.listen(dragger_, 'end', thisWindow_.moverEnd(windowElement_));
@@ -92,6 +93,10 @@ codeshelf.window = function(title, view, parent, limits) {
 			return contentPane_;
 		},
 
+		getWindowBar: function() {
+			return windowBar_;
+		},
+
 		setZ: function(z) {
 			windowElement_.style.zIndex = z;
 		},
@@ -108,10 +113,13 @@ codeshelf.window = function(title, view, parent, limits) {
 			// Loop through all of the windows, and set their Z to 0, but set this window's Z to 1.
 			for (var i in windowList) {
 				var aWindow = windowList[i];
+				var windowBar = aWindow.getWindowBar();
 				if (aWindow === thisWindow_) {
 					aWindow.setZ(1);
+					windowBar.className = 'windowBar-selected';
 				} else {
 					aWindow.setZ(0);
+					windowBar.className = 'windowBar';
 				}
 			}
 		},

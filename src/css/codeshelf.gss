@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: codeshelf.gss,v 1.19 2012/05/08 06:45:09 jeffw Exp $
+ *  $Id: codeshelf.gss,v 1.20 2012/05/11 07:32:55 jeffw Exp $
  *******************************************************************************/
 
 /* Defines and mixins ----------------------------------------------------------- */
@@ -251,7 +251,14 @@
 .windowBar {
 	width:				100%;
 	height:				WINDOWBAR_HEIGHT;
-	background-color:	#99F;
+	background-color:	WINDOW_BACKGROUND_LIGHT_COLOR;
+	cursor:				default;
+}
+
+.windowBar-selected {
+	width:				100%;
+	height:				WINDOWBAR_HEIGHT;
+	background-color:	WINDOW_BACKGROUND_DARK_COLOR;
 	cursor:				default;
 }
 
