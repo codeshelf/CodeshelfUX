@@ -9,7 +9,7 @@ goog.require('slickgrid.pager');
 goog.require('slickgrid.columnpicker');
 goog.require('extern.jquery');
 
-codeshelf.listview = function(websession, domainObject) {
+codeshelf.listview = function(websession, domainObject, filterClause, filterParams) {
 
 	$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all").mouseover(
 		function(e) {
@@ -20,6 +20,8 @@ codeshelf.listview = function(websession, domainObject) {
 
 	var websession_ = websession;
 	var domainObject_ = domainObject;
+	var filterClause_ = filterClause;
+	var filterParams_ = filterParams;
 
 	var dataView_;
 	var grid_;
@@ -85,8 +87,8 @@ codeshelf.listview = function(websession, domainObject) {
 			var data = {
 				'className':     domainObject_.classname,
 				'propertyNames': properties_,
-				'filterClause':  '',
-				'filterParams':  []
+				'filterClause':  filterClause_,
+				'filterParams':  filterParams_
 			}
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);

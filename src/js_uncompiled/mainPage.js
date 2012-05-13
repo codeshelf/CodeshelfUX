@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.27 2012/05/08 06:45:09 jeffw Exp $
+ *  $Id: mainPage.js,v 1.28 2012/05/13 03:03:54 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.domainobjects');
@@ -36,6 +36,8 @@ codeshelf.mainpage = function() {
 			application_ = application;
 			websession_ = websession;
 			thisMainpage_ = this;
+
+			var organization = application_.getOrganization();
 
 			websession_.setCurrentPage(this);
 
@@ -74,11 +76,13 @@ codeshelf.mainpage = function() {
 			var listDemoWindow = codeshelf.window('Large Demo List', listDemoView, frame_, undefined);
 			listDemoWindow.open();
 
-			var listView = codeshelf.listview(websession_, codeshelf.domainobjects.facility);
+			var filter = 'parentOrganization.persistentId = :theId';
+			var filterParams = [
+				{ 'name': "theId", 'value': organization['persistentId']}
+			]
+			var listView = codeshelf.listview(websession_, codeshelf.domainobjects.facility, filter, filterParams);
 			var listWindow = codeshelf.window('Facilities List', listView, frame_, undefined);
 			listWindow.open();
-
-			var organization = application_.getOrganization();
 
 			var data = {
 				'className':    organization['className'],
