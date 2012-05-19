@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.5 2012/05/19 00:37:30 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.6 2012/05/19 06:51:13 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -72,10 +72,21 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		computeBearing: function(latArg1, lonArg1, latArg2, lonArg2) {
-			var dLon = lonArg2 - lonArg1;//goog.math.toRadians(lonArg2 - lonArg1);
-			var y = Math.sin(dLon) * Math.cos(latArg2);
-			var x = Math.cos(latArg1) * Math.sin(latArg2) - Math.sin(latArg1) * Math.cos(latArg2) * Math.cos(dLon);
-			var bearing = goog.math.toDegrees(Math.atan2(y, x));
+//			var dLon = lonArg2 - lonArg1;//goog.math.toRadians(lonArg2 - lonArg1);
+//			var y = Math.sin(dLon) * Math.cos(latArg2);
+//			var x = Math.cos(latArg1) * Math.sin(latArg2) - Math.sin(latArg1) * Math.cos(latArg2) * Math.cos(dLon);
+//			var bearing = goog.math.toDegrees(Math.atan2(y, x));
+//			return bearing;
+
+			var lat1 = goog.math.toRadians(latArg1)
+			var lat2 = goog.math.toRadians(latArg2);
+			var dLon = goog.math.toRadians(lonArg2 - lonArg1);
+
+			var dPhi = Math.log(Math.tan(lat2 / 2 + Math.PI / 4) / Math.tan(lat1 / 2 + Math.PI / 4));
+			if (Math.abs(dLon) > Math.PI) dLon = dLon > 0 ? -(2 * Math.PI - dLon) : (2 * Math.PI + dLon);
+			var bearing = Math.atan2(dLon, dPhi);
+			bearing = (goog.math.toDegrees(bearing) + 360) % 360;
+
 			return bearing;
 		},
 
@@ -139,7 +150,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 					}
 					var smallestDrawDim = Math.min(drawArea_.clientWidth, drawArea_.clientHeight);
 
-					point.x *= (smallestDrawDim / maxDim_) * 0.85;
+					point.x *= (smallestDrawDim / maxDim_);
 					point.y *= (smallestDrawDim / maxDim_);
 					// Transpose Y
 					point.y = drawArea_.clientHeight - point.y;
