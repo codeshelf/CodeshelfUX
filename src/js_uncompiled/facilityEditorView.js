@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.4 2012/05/11 07:32:55 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.5 2012/05/19 00:37:30 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -105,6 +105,38 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 							thisFacilityView_.ensureOutlineStructures();
 
 							var vertexNum = thisFacilityView_.getNextVertexNum();
+
+							// If two segments are within 85-95deg then make then exactly 90deg.
+							if (vertexNum > 1) {
+								var vertexA = facilityOutlineVertices_[vertexNum - 2];
+								var vertexB = facilityOutlineVertices_[vertexNum - 1];
+								var heading1 = google.maps.geometry.spherical.computeHeading(vertexA.marker.getPosition(), vertexB.marker.getPosition());
+								if (heading1 < 0) {
+									heading1 += 360;
+								}
+								var heading2 = google.maps.geometry.spherical.computeHeading(vertexB.marker.getPosition(), event.latLng);
+								if (heading2 < 0) {
+									heading2 += 360;
+								}
+								var diff = Math.abs(heading1 - heading2);
+								if (diff > 180) {
+									diff -= 180;
+								}
+								var dist = google.maps.geometry.spherical.computeDistanceBetween(vertexB.marker.getPosition(), event.latLng);
+								if ((diff > 80) && (diff < 100)) {
+									var adjust;
+									if (heading1 < heading2) {
+										adjust = 90 - diff;
+									} else {
+										adjust = diff - 90;
+									}
+									event.latLng = google.maps.geometry.spherical.computeOffset(vertexB.marker.getPosition(), dist, heading2 + adjust);
+								}
+							}
+
+							// If the this segment forms an angle of 85-95deg with an imaginary angle back to vertex zero
+							// then extend or shorten this segment to make it exactly 90deg.
+
 							var data = {
 								'parentClassName':    codeshelf.domainobjects.facility['classname'],
 								'parentPersistentId': facility_['persistentId'],
@@ -162,7 +194,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			websession_.sendCommand(setListViewFilterCmd, thisFacilityView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 		},
 
-		close:function() {
+		close: function() {
 
 		},
 
@@ -480,14 +512,18 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		},
 
 		setBounds: function() {
-			if (facilityOutlineVertices_.length > 2) {
+			var len = Object.size(facilityOutlineVertices_);
+			if (len > 2) {
 				// Figure out a new bounds for the facility outline.
 				if (facilityBounds_ === undefined) {
 					facilityBounds_ = new google.maps.LatLngBounds();
 				}
-				for (var i = 0; i < facilityOutlineVertices_.length; i++) {
-					var latLng = facilityOutlineVertices_[i].marker.getPosition();
-					facilityBounds_.extend(latLng);
+				for (var vertexPos in facilityOutlineVertices_) {
+					if (facilityOutlineVertices_.hasOwnProperty(vertexPos)) {
+						var vertex = facilityOutlineVertices_[vertexPos];
+						var latLng = vertex.marker.getPosition();
+						facilityBounds_.extend(latLng);
+					}
 				}
 				map_.fitBounds(facilityBounds_);
 				//map_.setCenter(facilityAnchorMarker_.getPosition());

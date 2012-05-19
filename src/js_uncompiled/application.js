@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: application.js,v 1.10 2012/05/03 07:15:59 jeffw Exp $
+ *  $Id: application.js,v 1.11 2012/05/19 00:37:30 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.application');
 goog.require('codeshelf.launch');
@@ -61,6 +61,14 @@ codeshelf.application = function() {
 	};
 
 	return thisApplication_;
+};
+
+Object.size = function(obj) {
+	var size = 0, key;
+	for (key in obj) {
+		if (obj.hasOwnProperty(key)) size++;
+	}
+	return size;
 };
 
 // Launch the application.
