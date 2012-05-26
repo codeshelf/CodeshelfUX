@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Arrowlets Example - Drag and Drop</title>
+	<link rel="stylesheet" type="text/css" href="style/common.css"/>
+	<link rel="stylesheet" type="text/css" href="style/example.css"/>
+
+	<!--script type="text/javascript" src="http://base2.googlecode.com/svn/version/1.0/base2-dom-fp.js"></script>
+	<script type="text/javascript" src="arrowlets/base2-bind-ie.js"></script-->
+	<script type="text/javascript" src="../../lib/Arrowlets/arrowlets.js"></script>
+
+	<style type="text/css">
+		#dragtarget {
+			float: right;
+			position:relative;
+			width: 100px; height: 100px;
+			text-align: center;
+			border: solid blue;
+			color: black;
+			background: white;
+			cursor: pointer;
+			padding: 1em 0;
+		}
+		#dragtarget * {
+			margin: 1em 0;
+		}
+	</style>
+</head>
+<body>
+<h1>Arrowlets</h1>
+
+<div id="toc"></div>
+<div id="main">
+	<h2>Example: Drag and Drop</h2>
+
+	<div id="dragtarget">Drag me!</div>
+
+	<p>Try dragging the box to the right.</p>
+
+	<h3>The code</h3>
+	<ul>
+		<li><a href="#dragproxy">Drag proxy</a></li>
+		<li><a href="#dragarrow">Arrowlets' drag-and-drop state machine</a></li>
+	</ul>
+
+	<h4 id="dragproxy">Drag proxy object implementing the animation</h4>
+	<script class="show" style="color: blue; background: #EEFFFF;">/* drag proxy separates the side effects */
+	function DragProxy(target) {
+		this.target = target;
+		this.dragging = false;
+	}
+	DragProxy.prototype.addEventListener =
+			function(eventname, handler, order) {
+				/* use a wider event-source when dragging */
+				var eventsource = this.dragging
+						? document : this.target;
+				eventsource.addEventListener(eventname, handler, order);
+			}
+	DragProxy.prototype.removeEventListener =
+			function(eventname, handler, order) {
+				var eventsource = this.dragging
+						? document : this.target;
+				eventsource.removeEventListener(eventname, handler, order);
+			}
+	DragProxy.prototype.setupDrag = function(event) {
+		/* setup drag-and-drop */
+		this.startx = event.clientX - parseInt(this.target.style.left || 0);
+		this.starty = event.clientY - parseInt(this.target.style.top || 0);
+		this.target.innerHTML = "Setup";
+		this.dragging = true;
+		event.preventDefault(); /* prevent text selection */
+	}
+	DragProxy.prototype.moveDrag = function(event) {
+		this.target.style.left = (event.clientX - this.startx) + "px";
+		this.target.style.top = (event.clientY - this.starty) + "px";
+		this.target.innerHTML = "Drag";
+	}
+	DragProxy.prototype.dropDrag = function(event) {
+		this.target.innerHTML = "Drop";
+		this.dragging = false;
+	}
+	DragProxy.prototype.cancelDrag = function(event) {
+		this.target.innerHTML = "Cancel";
+		this.dragging = false;
+	}
+	function DragElementA(target) {
+		return ElementA(target).next(function(el) {
+			return new DragProxy(el);
+		});
+	}
+	</script>
+
+	<h4 id="dragarrow">Arrow composition implementing the drag-and-drop state machine</h4>
+	<script class="show" style="color: brown; background: #FFEEFF;">/* drag-and-drop states */
+	function setupA(proxy, event) {
+		/* setup drag-and-drop */
+		proxy.setupDrag(event);
+		return proxy;
+	}
+	function dragA(proxy, event) {
+		/* perform dragging */
+		proxy.moveDrag(event);
+		return proxy;
+	}
+	function dropA(proxy, event) {
+		/* perform dropping */
+		proxy.dropDrag(event);
+		return proxy;
+	}
+	function cancelA(proxy, event) {
+		/* cancel drag-and-drop */
+		proxy.cancelDrag(event);
+		return proxy;
+	}
+
+	/* organize drag-and-drop into three parts */
+	var dragOrDropA =
+			(   ((EventA("mousemove").bind(dragA)).next(Repeat))
+					.or((EventA("mouseup").bind(dropA)).next(Done))
+					).repeat();
+
+	var dragDropOrCancelA =
+			((EventA("mousemove").bind(dragA)).next(dragOrDropA))
+					.or((EventA("mouseup").bind(cancelA)));
+
+	var dragAndDropA = /* drag-and-drop */
+			(EventA("mousedown").bind(setupA)).next(dragDropOrCancelA);
+
+	/* and set up on dragtarget */
+	DragElementA("dragtarget").next(dragAndDropA)
+			.next(Repeat).repeat().run();
+	</script>
+
+</div>
+</body>
+</html>

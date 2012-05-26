@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: launch.js,v 1.25 2012/05/07 06:34:27 jeffw Exp $
+ *  $Id: launch.js,v 1.26 2012/05/26 03:48:26 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.launch');
 goog.require('codeshelf.templates');
@@ -12,6 +12,7 @@ goog.require('goog.dom.query');
 goog.require('goog.window');
 goog.require('goog.style');
 goog.require('goog.ui.RoundedPanel');
+goog.require('arrowlets');
 
 codeshelf.launchWindow = function() {
 
@@ -57,6 +58,13 @@ codeshelf.launchWindow = function() {
 		},
 
 		launchCodeCheck: function() {
+//			var launchCodeInput = {
+//				'launchCode': 'O1'
+//			}
+//			var launchCommand = websession_.createCommand(kWebSessionCommandType.LAUNCH_CODE_CHECK, launchCodeInput);
+//			var requestA = WebSessionA(websession_, launchCommand, kWebSessionCommandType.LAUNCH_CODE_RESP);
+//			var progressA = requestA.next(Repeat).repeat().run();
+
 			var launchCodeInput = {
 				'launchCode': goog.dom.getElement('launchCodeInput').value
 			}

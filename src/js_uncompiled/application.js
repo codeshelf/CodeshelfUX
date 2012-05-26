@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: application.js,v 1.11 2012/05/19 00:37:30 jeffw Exp $
+ *  $Id: application.js,v 1.12 2012/05/26 03:48:26 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.application');
 goog.require('codeshelf.launch');
@@ -36,7 +36,7 @@ codeshelf.application = function() {
 
 		startApplication: function() {
 			webSession_ = codeshelf.websession();
-			webSession_.initWebSocket(this);
+			webSession_.initWebSocket(thisApplication_);
 			thisApplication_.initApplication_();
 		},
 
@@ -51,7 +51,7 @@ codeshelf.application = function() {
 			// Remove all markup from the URL - we'll build it from the app itself.
 			goog.dom.removeChildren(goog.dom.getDocument().body);
 			launchWindow_ = codeshelf.launchWindow();
-			launchWindow_.enter(this, webSession_);
+			launchWindow_.enter(thisApplication_, webSession_);
 
 			// Cause automatic login to save on test time.
 			setTimeout(function() {

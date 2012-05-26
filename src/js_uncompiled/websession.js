@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.19 2012/05/07 06:34:27 jeffw Exp $
+ *  $Id: websession.js,v 1.20 2012/05/26 03:48:26 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.events');
@@ -73,11 +73,11 @@ codeshelf.websession = function() {
 			}
 
 			websocket_ = new goog.net.WebSocket(true, linearBackOff);
-			pendingCommands_ = new goog.events.EventHandler();
-			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.ERROR, thisWebsession_.onError);
-			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.OPENED, thisWebsession_.onOpen);
-			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.CLOSED, thisWebsession_.onClose);
-			pendingCommands_.listen(websocket_, goog.net.WebSocket.EventType.MESSAGE, thisWebsession_.onMessage);
+			var webSocketEventHandler = new goog.events.EventHandler();
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.ERROR, thisWebsession_.onError);
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.OPENED, thisWebsession_.onOpen);
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.CLOSED, thisWebsession_.onClose);
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.MESSAGE, thisWebsession_.onMessage);
 
 			try {
 				if (!websocket_.isOpen()) {
@@ -120,6 +120,10 @@ codeshelf.websession = function() {
 			} catch (e) {
 
 			}
+		},
+
+		cancelCommand: function(inCommand) {
+			delete pendingCommands_[inCommand.id];
 		},
 
 		setCurrentPage: function(currentPage) {
@@ -172,7 +176,7 @@ codeshelf.websession = function() {
 
 				// Check if the callback should remain active.
 				if (!commandWrapper.remainActive) {
-					delete pendingCommands_[command.id];
+					thisWebsession_.cancelCommand(command);
 				}
 			}
 		}
