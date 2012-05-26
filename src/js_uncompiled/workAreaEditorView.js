@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.8 2012/05/26 08:01:15 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.9 2012/05/26 20:27:18 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -15,10 +15,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 	var facility_ = facility;
 	var graphics_;
 	var vertices_ = [];
-	var points_ = [];
-	var anchorPoint_;
 	var drawArea_;
-	var facilityBounds_ = { x: 0, y: 0 };
 	var rotateByDeg_ = 0;
 
 	thisWorkAreaEditorView_ = {
@@ -56,7 +53,6 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 		resize: function() {
 			graphics_.setSize(drawArea_.clientWidth, drawArea_.clientHeight);
-			facilityBounds_ = { x: 0, y: 0 };
 			thisWorkAreaEditorView_.draw();
 		},
 
@@ -119,116 +115,124 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			return coord;
 		},
 
-		normalizeCoordinates: function(mostNegPoint) {
+		convertGpsToPoints: function() {
 
+			var points = [];
 			// Compute all of the points for the facility relative to the anchor lat/long.
 			// (possibly negative if the anchor lat/long is east or south of other facility lat/longs.)
 			for (var i = 0; i < vertices_.length; i++) {
 				var vertex = vertices_[i];
 				if (i === 0) {
-					points_[0] = {};
-					points_[0].x = 0;
-					points_[0].y = 0;
-				} else if (points_[i - 1] !== undefined) {
+					points[0] = {};
+					points[0].x = 0;
+					points[0].y = 0;
+				} else if (points[i - 1] !== undefined) {
 					var lastVertex = vertices_[i - 1];
 					var coord = thisWorkAreaEditorView_.convertLatLongToXY(lastVertex.PosY, lastVertex.PosX, vertex.PosY, vertex.PosX);
-					points_[i] = {};
-					points_[i].x = points_[i - 1].x + coord.x;
-					points_[i].y = points_[i - 1].y + coord.y;
-					if (points_[i].x < mostNegPoint.x) {
-						mostNegPoint.x = points_[i].x;
-					}
-					if (points_[i].y < mostNegPoint.y) {
-						mostNegPoint.y = points_[i].y;
-					}
+					points[i] = {};
+					points[i].x = points[i - 1].x + coord.x;
+					points[i].y = points[i - 1].y + coord.y;
 
 					// Figure out the angle between point 1 and 2.
-					var polar = thisWorkAreaEditorView_.convertCartesianToPolar(points_[0], points_[1]);
+					var polar = thisWorkAreaEditorView_.convertCartesianToPolar(points[0], points[1]);
 					rotateByDeg_ = 0 - polar.angle;
 				}
 
 			}
-
-			// Translate the whole facility into positive coordinate space.
-			facilityBounds_ = { x: 0, y: 0 };
-			for (var i = 0; i < points_.length; i++) {
-				var point = points_[i];
-
-				point.x += Math.abs(mostNegPoint.x);
-				point.y += Math.abs(mostNegPoint.y);
-
-				if (point.x > facilityBounds_.x) {
-					facilityBounds_.x = point.x;
-				}
-
-				if (point.y > facilityBounds_.y) {
-					facilityBounds_.y = point.y;
-				}
-			}
-
-			// Remember the anchor point;
-			anchorPoint_ = points_[0];
-
+			return points;
 		},
 
-		rotatePoint: function(point, a) {
+		rotatePoint: function(aroundPoint, point, a) {
 			// Convert to radians because that's what JavaScript likes
 			var a = goog.math.toRadians(a);
 
 			// Find the midpoints for rotation.
-			var xm = anchorPoint_.x; //facilityBounds_.x / 2;
-			var ym = anchorPoint_.y; //facilityBounds_.y / 2;
+			var xm = aroundPoint.x;
+			var ym = aroundPoint.y;
 
 			// Subtract midpoints, so that midpoint is translated to origin and add it in the end again
 			var xr = (point.x - xm) * Math.cos(a) - (point.y - ym) * Math.sin(a) + xm;
 			var yr = (point.x - xm) * Math.sin(a) + (point.y - ym) * Math.cos(a) + ym;
 
 			// Return the rotated point.
-			return { x: xr, y: yr };
+			//return { x: xr, y: yr };
+			point.x = xr;
+			point.y = yr;
 		},
 
-		adjustPointForReferenceFrame: function(point, mostNegPoint) {
+		rotatePoints: function(points, mostNegPoint) {
+			for (var i = 0; i < points.length; i++) {
+				var point = points[i];
+				if (i > 0) {
+					thisWorkAreaEditorView_.rotatePoint(points[0], point, rotateByDeg_);
+				}
+				if (point.x < mostNegPoint.x) {
+					mostNegPoint.x = point.x;
+				}
+				if (point.y < mostNegPoint.y) {
+					mostNegPoint.y = point.y;
+				}
+			}
+		},
 
-			// Rotate the points, so that the primary path segment is aligned with 0deg or 90deg.
-			var resultPoint = thisWorkAreaEditorView_.rotatePoint(point, rotateByDeg_);
+		translatePoints: function(points, mostNegPoint, mostPosPoint) {
+			for (var i = 0; i < points.length; i++) {
+				var point = points[i];
+				point.x += Math.abs(mostNegPoint.x);
+				point.y += Math.abs(mostNegPoint.y);
 
-			// Scale it to 80% of the draw area.
-			var drawRatio = Math.min(drawArea_.clientHeight / facilityBounds_.y, drawArea_.clientWidth / facilityBounds_.x) * 0.9;
+				if (point.x > mostPosPoint.x) {
+					mostPosPoint.x = point.x;
+				}
+				if (point.y > mostPosPoint.y) {
+					mostPosPoint.y = point.y;
+				}
+			}
+		},
 
-			resultPoint.x *= drawRatio;
-			resultPoint.y *= drawRatio;
+		scalePoints: function(points, mostPosPoint, bufferPoint) {
+			for (var i = 0; i < points.length; i++) {
+				var point = points[i];
+				// Scale it to 80% of the draw area.
+				var drawRatio = Math.min((drawArea_.clientWidth - bufferPoint.x) / mostPosPoint.x, (drawArea_.clientHeight - bufferPoint.y) / mostPosPoint.y);
 
-			resultPoint.x += Math.abs(mostNegPoint.x);
-			resultPoint.y += Math.abs(mostNegPoint.y);
+				point.x *= drawRatio;
+				point.y *= drawRatio;
+			}
+			mostPosPoint.x *= drawRatio;
+			mostPosPoint.y *= drawRatio;
+		},
 
-			// Mirror Y since the zero scale is upside down in DOM.
-			resultPoint.y = drawArea_.clientHeight - resultPoint.y - (drawArea_.clientHeight - (facilityBounds_.y * drawRatio * 0.8));
-
-			return {x: resultPoint.x + 5, y: resultPoint.y};
+		mirrorYPoints: function(points, mostPosPoint, bufferPoint) {
+			for (var i = 0; i < points.length; i++) {
+				var point = points[i];
+				// Mirror Y since the zero scale is upside down in DOM.
+				point.y = drawArea_.clientHeight - point.y - (drawArea_.clientHeight - mostPosPoint.y) + bufferPoint.y / 2;
+			}
 		},
 
 		computePath: function(stroke) {
 			var path = new goog.graphics.Path();
 
-			points_ = [];
-			minDim_ = Math.min(drawArea_.clientWidth, drawArea_.clientHeight);
-			if (Object.size(vertices_) === vertices_.length) {
+			var mostNegPoint = { x: 0, y: 0 };
+			var mostPosPoint = { x: 0, y: 0 };
+			var bufferPoint = { x: 5, y: 10 };
+			if ((Object.size(vertices_) === vertices_.length) && (Object.size(vertices_) > 1)) {
 				mostNegPoint = { x: 0, y: 0};
-				thisWorkAreaEditorView_.normalizeCoordinates(mostNegPoint);
-				var firstPoint;
-				for (var i = 0; i < points_.length; i++) {
-					var point = points_[i];
-					// Transpose and rotate
-					var drawPoint = thisWorkAreaEditorView_.adjustPointForReferenceFrame(point, mostNegPoint);
-
+				var points = thisWorkAreaEditorView_.convertGpsToPoints();
+				thisWorkAreaEditorView_.rotatePoints(points, mostNegPoint);
+				thisWorkAreaEditorView_.translatePoints(points, mostNegPoint, mostPosPoint);
+				thisWorkAreaEditorView_.scalePoints(points, mostPosPoint, bufferPoint);
+				thisWorkAreaEditorView_.mirrorYPoints(points, mostPosPoint, bufferPoint);
+				for (var i = 0; i < points.length; i++) {
+					var point = points[i];
 					if (i === 0) {
-						path.moveTo(drawPoint.x, drawPoint.y);
-						firstPoint = drawPoint;
+						path.moveTo(point.x, point.y);
 					} else {
-						path.lineTo(drawPoint.x, drawPoint.y);
+						path.lineTo(point.x, point.y);
 					}
 				}
-				path.lineTo(firstPoint.x, firstPoint.y);
+				path.lineTo(points[0].x, points[0].y);
 			}
 			return path;
 		},
@@ -248,7 +252,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		draw: function() {
 			thisWorkAreaEditorView_.startDraw();
 			var path = thisWorkAreaEditorView_.computePath();
-			var stroke = new goog.graphics.Stroke(2, 'black');
+			var stroke = new goog.graphics.Stroke(1, 'grey');
 			thisWorkAreaEditorView_.drawPath(path, stroke);
 			thisWorkAreaEditorView_.endDraw();
 		},

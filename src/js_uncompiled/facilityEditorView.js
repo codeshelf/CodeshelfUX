@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.6 2012/05/26 08:01:15 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.7 2012/05/26 20:27:18 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -404,6 +404,8 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_DELETE_REQ, data);
 				websession_.sendCommand(newVertexCmd, thisFacilityView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_DELETE_RESP), false);
 			}
+			facilityOutline_.setPath(null);
+			facilityOutlinePath_ = undefined;
 		},
 
 		completePolygon: function() {
