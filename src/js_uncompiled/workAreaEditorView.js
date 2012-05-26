@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.9 2012/05/26 20:27:18 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.10 2012/05/26 22:05:28 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -194,7 +194,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			for (var i = 0; i < points.length; i++) {
 				var point = points[i];
 				// Scale it to 80% of the draw area.
-				var drawRatio = Math.min((drawArea_.clientWidth - bufferPoint.x) / mostPosPoint.x, (drawArea_.clientHeight - bufferPoint.y) / mostPosPoint.y);
+				var drawRatio = Math.min((graphics_.getPixelSize().width - bufferPoint.x * 2) / mostPosPoint.x, (graphics_.getPixelSize().height - bufferPoint.y) / mostPosPoint.y);
 
 				point.x *= drawRatio;
 				point.y *= drawRatio;
@@ -207,7 +207,11 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			for (var i = 0; i < points.length; i++) {
 				var point = points[i];
 				// Mirror Y since the zero scale is upside down in DOM.
-				point.y = drawArea_.clientHeight - point.y - (drawArea_.clientHeight - mostPosPoint.y) + bufferPoint.y / 2;
+				point.y = graphics_.getPixelSize().height - point.y - (graphics_.getPixelSize().height - mostPosPoint.y);
+
+				// Remove half of the buffer at the end to slide the image into the middle of the draw area.
+				point.x += (bufferPoint.x / 2);
+				point.y += (bufferPoint.y / 2);
 			}
 		},
 
@@ -216,7 +220,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 			var mostNegPoint = { x: 0, y: 0 };
 			var mostPosPoint = { x: 0, y: 0 };
-			var bufferPoint = { x: 5, y: 10 };
+			var bufferPoint = { x: 10, y: 10 };
 			if ((Object.size(vertices_) === vertices_.length) && (Object.size(vertices_) > 1)) {
 				mostNegPoint = { x: 0, y: 0};
 				var points = thisWorkAreaEditorView_.convertGpsToPoints();
@@ -252,7 +256,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		draw: function() {
 			thisWorkAreaEditorView_.startDraw();
 			var path = thisWorkAreaEditorView_.computePath();
-			var stroke = new goog.graphics.Stroke(1, 'grey');
+			var stroke = new goog.graphics.Stroke(1, 'black');
 			thisWorkAreaEditorView_.drawPath(path, stroke);
 			thisWorkAreaEditorView_.endDraw();
 		},
