@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.7 2012/05/26 03:48:26 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.8 2012/05/26 08:01:15 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -55,6 +55,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		resize: function() {
+			graphics_.setSize(drawArea_.clientWidth, drawArea_.clientHeight);
 			facilityBounds_ = { x: 0, y: 0 };
 			thisWorkAreaEditorView_.draw();
 		},
@@ -203,7 +204,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			// Mirror Y since the zero scale is upside down in DOM.
 			resultPoint.y = drawArea_.clientHeight - resultPoint.y - (drawArea_.clientHeight - (facilityBounds_.y * drawRatio * 0.8));
 
-			return {x: resultPoint.x, y: resultPoint.y};
+			return {x: resultPoint.x + 5, y: resultPoint.y};
 		},
 
 		computePath: function(stroke) {

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.5 2012/05/19 00:37:30 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.6 2012/05/26 08:01:15 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -26,7 +26,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 	var doubleClickHandler_;
 	var clickTimeout_;
 	var mapPane_;
-	var mapRotatePane_;
+//	var mapRotatePane_;
 	var thisFacilityView_;
 	var facilityBounds_;
 //	var facilityEditorOverlay_;
@@ -106,32 +106,11 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 							var vertexNum = thisFacilityView_.getNextVertexNum();
 
-							// If two segments are within 85-95deg then make then exactly 90deg.
+							// If two segments are close to 90deg then make then exactly 90deg.
 							if (vertexNum > 1) {
 								var vertexA = facilityOutlineVertices_[vertexNum - 2];
 								var vertexB = facilityOutlineVertices_[vertexNum - 1];
-								var heading1 = google.maps.geometry.spherical.computeHeading(vertexA.marker.getPosition(), vertexB.marker.getPosition());
-								if (heading1 < 0) {
-									heading1 += 360;
-								}
-								var heading2 = google.maps.geometry.spherical.computeHeading(vertexB.marker.getPosition(), event.latLng);
-								if (heading2 < 0) {
-									heading2 += 360;
-								}
-								var diff = Math.abs(heading1 - heading2);
-								if (diff > 180) {
-									diff -= 180;
-								}
-								var dist = google.maps.geometry.spherical.computeDistanceBetween(vertexB.marker.getPosition(), event.latLng);
-								if ((diff > 80) && (diff < 100)) {
-									var adjust;
-									if (heading1 < heading2) {
-										adjust = 90 - diff;
-									} else {
-										adjust = diff - 90;
-									}
-									event.latLng = google.maps.geometry.spherical.computeOffset(vertexB.marker.getPosition(), dist, heading2 + adjust);
-								}
+								thisFacilityView_.checkSquareness(event, vertexA.marker.getPosition(), vertexB.marker.getPosition());
 							}
 
 							// If the this segment forms an angle of 85-95deg with an imaginary angle back to vertex zero
@@ -196,6 +175,63 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 		close: function() {
 
+		},
+
+		checkSquareness: function(event, latLngA, latLngB) {
+			var heading1 = thisFacilityView_.getNormalizedHeading(latLngA, latLngB);
+			var heading2 = thisFacilityView_.getNormalizedHeading(latLngB, event.latLng);
+			var diff = Math.abs(heading1 - heading2);
+			if (diff > 180) {
+				diff -= 180;
+			}
+			var dist = google.maps.geometry.spherical.computeDistanceBetween(latLngB, event.latLng);
+			if ((diff > 80) && (diff < 100)) {
+				var adjust;
+				if (heading1 < heading2) {
+					adjust = 90 - diff;
+				} else {
+					adjust = diff - 90;
+				}
+				event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2 + adjust);
+			}
+
+			// Now check to see if we're close to 90deg of the anchor marker.
+			var anchorHeading = thisFacilityView_.getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
+			diff = Math.abs(heading2 - anchorHeading);
+			if (diff > 180) {
+				diff -= 180;
+			}
+			if ((diff > 80) && (diff < 100)) {
+				if (diff < 90) {
+					while (diff < 90) {
+						dist *= 1.001;
+						event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2 + adjust);
+						anchorHeading = thisFacilityView_.getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
+						diff = Math.abs(heading2 - anchorHeading);
+						if (diff > 180) {
+							diff -= 180;
+						}
+					}
+				} else {
+					while (diff > 90) {
+						dist *= 0.999;
+						event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2 + adjust);
+						anchorHeading = thisFacilityView_.getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
+						diff = Math.abs(heading2 - anchorHeading);
+						if (diff > 180) {
+							diff -= 180;
+						}
+					}
+				}
+			}
+		},
+
+		getNormalizedHeading: function(latLngA, latLngB) {
+			var heading = google.maps.geometry.spherical.computeHeading(latLngA, latLngB);
+			if (heading < 0) {
+				heading += 360;
+			}
+			return heading;
 		},
 
 		ensureOutlineStructures: function() {
@@ -389,39 +425,39 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				new google.maps.Point(6, 19)
 			);
 
-			// The thing we need to rotate in GMaps is a map-div layer that's two layers down.
-			// Warning: this is a hack discovered by hacking into GMaps.
-			//mapRotatePane_ = mapRotatePane_[0].firstChild.firstChild;
-			mapRotatePane_ = $('.facilityMap > div:first-child > div:first-child');
-			mapRotatePane_[0].style.overflow = "visible";
-
-			// Setup green rotate marker #1.
-			var marker1 = facilityOutlineVertices_[1].marker;
-			var bearing1 = 90 - google.maps.geometry.spherical.computeHeading(facilityAnchorMarker_.getPosition(), marker1.getPosition());
-			//var bearing1 = -1 * thisFacilityView_.bearing(facilityAnchorMarker_.getPosition(), marker1.getPosition()) / 2;
-			marker1.setIcon(markerImage);
-			google.maps.event.addListener(marker1, goog.events.EventType.CLICK, function() {
-					if (canEditOutline_) {
-						map_.setCenter(facilityAnchorMarker_.getPosition());
-						mapRotatePane_.animate({rotate: bearing1 + 'deg'});
-						thisFacilityView_.setBounds();
-					}
-				}
-			)
-
-			// Setup green rotate marker #2.
-			var marker2 = facilityOutlineVertices_[facilityOutlineVertices_.length - 1].marker;
-			var bearing2 = 90 - google.maps.geometry.spherical.computeHeading(facilityAnchorMarker_.getPosition(), marker2.getPosition());
-			//var bearing2 = thisFacilityView_.bearing(facilityAnchorMarker_.getPosition(), marker2.getPosition()) / 2;
-			marker2.setIcon(markerImage);
-			google.maps.event.addListener(marker2, goog.events.EventType.CLICK, function() {
-					if (canEditOutline_) {
-						map_.setCenter(facilityAnchorMarker_.getPosition());
-						mapRotatePane_.animate({rotate: bearing2 + 'deg'});
-						thisFacilityView_.setBounds();
-					}
-				}
-			)
+//			// The thing we need to rotate in GMaps is a map-div layer that's two layers down.
+//			// Warning: this is a hack discovered by hacking into GMaps.
+//			//mapRotatePane_ = mapRotatePane_[0].firstChild.firstChild;
+//			mapRotatePane_ = $('.facilityMap > div:first-child > div:first-child');
+//			mapRotatePane_[0].style.overflow = "visible";
+//
+//			// Setup green rotate marker #1.
+//			var marker1 = facilityOutlineVertices_[1].marker;
+//			var bearing1 = 90 - google.maps.geometry.spherical.computeHeading(facilityAnchorMarker_.getPosition(), marker1.getPosition());
+//			//var bearing1 = -1 * thisFacilityView_.bearing(facilityAnchorMarker_.getPosition(), marker1.getPosition()) / 2;
+//			marker1.setIcon(markerImage);
+//			google.maps.event.addListener(marker1, goog.events.EventType.CLICK, function() {
+//					if (canEditOutline_) {
+//						map_.setCenter(facilityAnchorMarker_.getPosition());
+//						mapRotatePane_.animate({rotate: bearing1 + 'deg'});
+//						thisFacilityView_.setBounds();
+//					}
+//				}
+//			)
+//
+//			// Setup green rotate marker #2.
+//			var marker2 = facilityOutlineVertices_[facilityOutlineVertices_.length - 1].marker;
+//			var bearing2 = 90 - google.maps.geometry.spherical.computeHeading(facilityAnchorMarker_.getPosition(), marker2.getPosition());
+//			//var bearing2 = thisFacilityView_.bearing(facilityAnchorMarker_.getPosition(), marker2.getPosition()) / 2;
+//			marker2.setIcon(markerImage);
+//			google.maps.event.addListener(marker2, goog.events.EventType.CLICK, function() {
+//					if (canEditOutline_) {
+//						map_.setCenter(facilityAnchorMarker_.getPosition());
+//						mapRotatePane_.animate({rotate: bearing2 + 'deg'});
+//						thisFacilityView_.setBounds();
+//					}
+//				}
+//			)
 		},
 
 		computeGeoCodeResults: function(response, status) {
