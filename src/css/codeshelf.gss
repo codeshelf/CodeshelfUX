@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: codeshelf.gss,v 1.20 2012/05/11 07:32:55 jeffw Exp $
+ *  $Id: codeshelf.gss,v 1.21 2012/05/27 03:34:58 jeffw Exp $
  *******************************************************************************/
 
 /* Defines and mixins ----------------------------------------------------------- */
@@ -70,11 +70,11 @@
 @def FACILITY_TOOLBAR_WIDTH					36px;  
 @def FACILITY_TOOLBAR_HEIGHT				36px;
 
-@defmixin FLEX_BOX() {
-	box-flex:			1;
-	-moz-box-flex:		1;
-	-webkit-box-flex:	1;
-	-ms-box-flex:		1;
+@defmixin FLEX_BOX(COUNT) {
+	box-flex:			COUNT;
+	-moz-box-flex:		COUNT;
+	-webkit-box-flex:	COUNT;
+	-ms-box-flex:		COUNT;
 	overflow:			hidden;
 }
 
@@ -266,7 +266,7 @@
 	width:				100%;
 	height:				100%;
 	@mixin				DISPLAY_BOX(vertical);
-	@mixin				FLEX_BOX();
+	@mixin				FLEX_BOX(1);
 }
 
 .windowFooter {
@@ -329,12 +329,12 @@
 }
 
 #myTable {
-	@mixin				FLEX_BOX();
+	@mixin				FLEX_BOX(1);
 	@mixin				DISPLAY_BOX(vertical);
 }
 
 #myGrid {
-	@mixin				FLEX_BOX();
+	@mixin				FLEX_BOX(1);
 }
 
 /* Facility editor classes --------------------------------------------------------------- */
@@ -342,19 +342,19 @@
 .facilityDialog {
 	position:			relative;
 /*	width:				100%;*/
-	@mixin				FLEX_BOX();
+	@mixin				FLEX_BOX(1);
 	@mixin				DISPLAY_BOX(vertical);
 }
 
 .facilityEditor {
 	position:			relative;
 /*	width:				100%;*/
-	@mixin				FLEX_BOX();
+	@mixin				FLEX_BOX(1);
 	@mixin				DISPLAY_BOX(horizontal);
 }
 
 .facilityMap {
-	@mixin				FLEX_BOX();
+	@mixin				FLEX_BOX(1);
 }
 
 .facilityEditorToolbar {
@@ -375,6 +375,34 @@
 	left:				2px;
 	background:			FACILITY_ICON_BACKGROUND;
 }
+
+/* Workarea editor classes --------------------------------------------------------------- */
+
+.workAreaEditorDialog {
+	position:			relative;
+	@mixin				FLEX_BOX(1);
+	@mixin				DISPLAY_BOX(vertical);
+}
+
+.workAreaEditor {
+	position:			relative;
+	@mixin				FLEX_BOX(1);
+	@mixin				DISPLAY_BOX(vertical);
+}
+
+.workAreaEditorPane {
+	position:			relative;
+	@mixin				FLEX_BOX(2);
+	@mixin				DISPLAY_BOX(vertical);
+}
+
+.workAreaEditorToolbar {
+	position:			relative;
+	@mixin				FLEX_BOX(1);
+	@mixin				DISPLAY_BOX(horizontal); 
+}
+
+/* Modal dialog classes --------------------------------------------------------------- */
 
 .modal-dialog {
 	width: 430px;
@@ -431,8 +459,152 @@
 	padding: 8px;
 }
 
-.goog-buttonset-default {
-	font-weight: bold;
-}
+    .icon {
+      height: 16px;
+      width: 16px;
+      background-image: url(../images/toolbar_icons.gif);
+      background-repeat: no-repeat;
+      vertical-align: middle;
+    }
 
+   .goog-edit-font .goog-toolbar-menu-button-caption {
+      color: #246;
+      width: 15ex;
+      overflow: hidden;
+    }
 
+    /* Font select options. */
+    .goog-edit-font-normal {
+      font-family: Arial, sans-serif;
+    }
+    .goog-edit-font-times {
+      font-family: Times, serif;
+    }
+    .goog-edit-font-courier {
+      font-family: "Courier New", Courier, monospace;
+    }
+    .goog-edit-font-georgia {
+      font-family: Georgia, serif;
+    }
+    .goog-edit-font-trebuchet {
+      font-family: "Trebuchet MS", sans-serif;
+    }
+    .goog-edit-font-verdana {
+      font-family: Verdana, sans-serif;
+    }
+
+    /* Font size. */
+    .goog-edit-font-size .goog-toolbar-menu-button-caption {
+      color: #246;
+      width: 5ex;
+    }
+
+    /* Bold. */
+    .goog-edit-bold {
+      background-position: 0;
+    }
+
+    /* Italic. */
+    .goog-edit-italic {
+      background-position: -16px;
+    }
+
+    /* Underline. */
+    .goog-edit-underline {
+      background-position: -32px;
+    }
+
+    /* Color. */
+    .goog-edit-color {
+      background-position: -48px;
+    }
+
+    /* Background color. */
+    .goog-edit-background {
+      background-position: -64px;
+    }
+
+    /* Menu buttons. */
+    .goog-edit-style,
+    .goog-edit-insert,
+    .goog-edit-link,
+    .goog-edit-spellcheck {
+      font-weight: bold;
+      color: #246;
+    }
+
+    /* Link. */
+    .goog-edit-link {
+      color: #009;
+      text-decoration: underline;
+    }
+
+    /* Insert menu. */
+    .goog-edit-insert-icon {
+      background-position: -80px;
+      vertical-align: bottom;
+    }
+    .goog-edit-insert-caption {
+      padding: 0 2px;
+      vertical-align: bottom;
+    }
+
+    /* List style menu. */
+    .goog-edit-list-style {
+      background-position: -96px;
+    }
+
+    /* Text alignment buttons. */
+    .goog-edit-align-left {
+      background-position: -128px;
+    }
+    .goog-edit-align-center {
+      background-position: -144px;
+    }
+    .goog-edit-align-right {
+      background-position: -160px;
+    }
+
+    /*
+     * Menu styles, overriding those in menus.css to make these menus a little
+     * more like the CCC editor UI design.
+     */
+
+    .goog-menu {
+      position: absolute;
+      margin: 0;
+      border-width: 1px;
+      border-style: solid;
+      border-color: #ccc #999 #999 #ccc;
+      padding: 0;
+      font: normal 10pt Arial, sans-serif;
+      color: #000;
+      background-color: #fff;
+      cursor: default;
+      outline: none;
+    }
+
+    .goog-menuitem {
+      margin: 0;
+      border: 0;
+      padding: 4px 32px 4px 4px;
+      color: #000;
+      background-color: #fff;
+      list-style: none;
+    }
+
+    .goog-menuitem-disabled {
+      color: #999;
+    }
+
+    .goog-menuitem-highlight {
+      background-color: #e8eef7 !important;
+    }
+
+    .goog-menuseparator {
+      position: relative;
+      margin: 2px 0;
+      border-top: 1px solid #999;
+      padding: 0;
+      outline: none;
+    }

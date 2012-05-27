@@ -89,6 +89,47 @@
 {/template}
 
 /**
+ * The template for the work area editor.
+ */
+{template .workAreaEditorToolbar}
+<div class='workAreaEditorToolbar goog-toolbar goog-toolbar-enabled'>
+	<div class='goog-toolbar-button'>
+		<img id='rackIcon' class='workAreaEditorToolIcon' src='../../src/images/rack-icon.png' alt='' height='32' width='32'>
+	</div>
+	<div class='goog-toolbar-button'><b><i>Fancy</i></b><u>Button</u></div>
+	<hr>
+	<div class='goog-toolbar-button goog-toolbar-button-enabled'>Disabled Button</div>
+	<div id='menuButton' class='goog-toolbar-menu-button'>
+		Menu Button
+		<div id='decoratedMenu' class='goog-menu'>
+			<div class='goog-menuitem'>Foo</div>
+			<div class='goog-menuitem'>Bar</div>
+			<hr>
+			<div class='goog-menuitem goog-menuitem-enabled'>Cake</div>
+		</div>
+	</div>
+	<hr>
+	<div class='goog-toolbar-toggle-button goog-toolbar-button-checked'>Toggle Button
+	</div>
+	<div class='goog-toolbar-toggle-button'>
+		<div class='icon goog-edit-underline'></div>
+	</div>
+</div>
+{/template}
+
+/**
+ * The template for the work area editor.
+ */
+{template .workAreaEditor}
+<div class='workAreaEditorDialog'>
+	<div class='workAreaEditor'>
+		<div class='workAreaEditorToolbarPane'></div>
+		<div class='workAreaEditorPane'></div>
+	</div>
+</div>
+{/template}
+
+/**
  * Listview content pane
  */
 {template .listviewContentPane}
@@ -117,14 +158,5 @@
 	{foreach $resultAddress in $resultAddresses}
 		<a id='{$resultAddress.id}' class='infoPopupLink' >&rArr;</a>&nbsp;&nbsp;<b class='infoPopup'>{$resultAddress.formatted_address}</b><br>
 	{/foreach}
-</div>
-{/template}
-
-/**
- * The template for the facility editor.
- */
-{template .workAreaEditor}
-<div class='workAreaDialog'>
-
 </div>
 {/template}

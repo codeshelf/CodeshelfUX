@@ -1,34 +1,72 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.10 2012/05/26 22:05:28 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.11 2012/05/27 03:34:58 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
 goog.require('codeshelf.templates');
 goog.require('goog.math');
+goog.require('goog.events');
+goog.require('goog.events.EventType');
+goog.require('goog.object');
+goog.require('goog.style');
+goog.require('goog.ui.Button');
+goog.require('goog.ui.ButtonSide');
+goog.require('goog.ui.Component.EventType');
+goog.require('goog.ui.Component.State');
+goog.require('goog.ui.Menu');
+goog.require('goog.ui.MenuItem');
+goog.require('goog.ui.Option');
+goog.require('goog.ui.SelectionModel');
+goog.require('goog.ui.Separator');
+goog.require('goog.ui.Toolbar');
+goog.require('goog.ui.ToolbarRenderer');
+goog.require('goog.ui.ToolbarButton');
+goog.require('goog.ui.ToolbarMenuButton');
+goog.require('goog.ui.ToolbarSelect');
+goog.require('goog.ui.ToolbarSeparator');
+goog.require('goog.ui.ToolbarToggleButton');
 
 codeshelf.workareaeditorview = function(websession, facility) {
 
 	var thisWorkAreaEditorView_;
 	var websession_ = websession;
 	var facility_ = facility;
+	var mainPane_;
+	var toolbar_;
 	var graphics_;
 	var vertices_ = [];
-	var drawArea_;
 	var rotateByDeg_ = 0;
 
 	thisWorkAreaEditorView_ = {
 
+		handleToolbarEvent: function(e) {
+			var a = 2;
+		},
+
 		setupView: function(contentElement) {
 
-			drawArea_ = contentElement;
+			// Add the toolbar
+			var workAreaEditor = soy.renderAsElement(codeshelf.templates.workAreaEditor);
+			goog.dom.appendChild(contentElement, workAreaEditor);
+
+			mainPane_ = workAreaEditor.getElementsByClassName('workAreaEditorPane')[0];
+			var toolbarPane = workAreaEditor.getElementsByClassName('workAreaEditorToolbarPane')[0];
+
+			var workAreaEditorToolbarDom = soy.renderAsElement(codeshelf.templates.workAreaEditorToolbar);
+			goog.dom.appendChild(toolbarPane, workAreaEditorToolbarDom);
+			toolbar_ = new goog.ui.Toolbar();
+			toolbar_.decorate(workAreaEditorToolbarDom);
+			toolbar_.setEnabled(true);
+			goog.events.listen(toolbar_, goog.object.getValues(goog.ui.Component.EventType), thisWorkAreaEditorView_.handleToolbarEvent);
+
 			// Compute the dimensions of the facility outline, and create a bounding rectangle for it.
 			// Create a draw canvas for the bounding rect.
 			// Compute the path for the facility outline and put it into the draw canavs.
 
-			graphics_ = goog.graphics.createGraphics(drawArea_.clientWidth, drawArea_.clientHeight);
-			graphics_.render(drawArea_);
+			graphics_ = goog.graphics.createGraphics(mainPane_.clientWidth, mainPane_.clientHeight);
+			graphics_.render(mainPane_);
 
 		},
 
@@ -52,7 +90,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		resize: function() {
-			graphics_.setSize(drawArea_.clientWidth, drawArea_.clientHeight);
+			graphics_.setSize(mainPane_.clientWidth, mainPane_.clientHeight);
 			thisWorkAreaEditorView_.draw();
 		},
 
