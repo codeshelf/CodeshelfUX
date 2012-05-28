@@ -1,25 +1,27 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.11 2012/05/27 03:34:58 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.12 2012/05/28 08:34:37 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
 goog.require('codeshelf.templates');
+goog.require('goog.dom');
+goog.require('goog.graphics');
 goog.require('goog.math');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.object');
 goog.require('goog.style');
-goog.require('goog.ui.Button');
-goog.require('goog.ui.ButtonSide');
-goog.require('goog.ui.Component.EventType');
-goog.require('goog.ui.Component.State');
-goog.require('goog.ui.Menu');
-goog.require('goog.ui.MenuItem');
-goog.require('goog.ui.Option');
-goog.require('goog.ui.SelectionModel');
-goog.require('goog.ui.Separator');
+//goog.require('goog.ui.Button');
+//goog.require('goog.ui.ButtonSide');
+//goog.require('goog.ui.Component.EventType');
+//goog.require('goog.ui.Component.State');
+//goog.require('goog.ui.Menu');
+//goog.require('goog.ui.MenuItem');
+//goog.require('goog.ui.Option');
+//goog.require('goog.ui.SelectionModel');
+//goog.require('goog.ui.Separator');
 goog.require('goog.ui.Toolbar');
 goog.require('goog.ui.ToolbarRenderer');
 goog.require('goog.ui.ToolbarButton');
@@ -60,6 +62,44 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			toolbar_.decorate(workAreaEditorToolbarDom);
 			toolbar_.setEnabled(true);
 			goog.events.listen(toolbar_, goog.object.getValues(goog.ui.Component.EventType), thisWorkAreaEditorView_.handleToolbarEvent);
+
+			goog.events.listen(mainPane_, 'mouseover',
+				function(e) {
+					mainPane_.onselectstart = function() {
+						return false;
+					};
+					mainPane_.onsmousedown = function() {
+						return false;
+					};
+				});
+
+			goog.events.listen(mainPane_, 'mouseout',
+				function(e) {
+					mainPane_.onselectstart = null;
+					mainPane_.onmousedown = null;
+				});
+
+			// Have the alignment buttons be controlled by a selection model.
+			var selectionModel = new goog.ui.SelectionModel();
+			selectionModel.setSelectionHandler(function(button, select) {
+				if (button) {
+					button.setChecked(select);
+				}
+			});
+
+			goog.array.forEach(['aisle-tool', 'staging-tool', 'door-tool'],
+				function(id) {
+					var button = toolbar_.getChild(id);
+					// Let the selection model control the button's checked state.
+					button.setAutoStates(goog.ui.Component.State.CHECKED, false);
+					selectionModel.addItem(button);
+					goog.events.listen(button, goog.ui.Component.EventType.ACTION,
+						function(e) {
+							selectionModel.setSelectedItem(e.target);
+						});
+				});
+			//toolbar_.getChildAt(0).setChecked(true);
+			selectionModel.setSelectedIndex(0);
 
 			// Compute the dimensions of the facility outline, and create a bounding rectangle for it.
 			// Create a draw canvas for the bounding rect.
@@ -279,8 +319,8 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			return path;
 		},
 
-		drawPath: function(path, stroke) {
-			graphics_.drawPath(path, stroke, null);
+		drawPath: function(path, stroke, fill) {
+			graphics_.drawPath(path, stroke, fill);
 		},
 
 		startDraw: function() {
@@ -294,8 +334,9 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		draw: function() {
 			thisWorkAreaEditorView_.startDraw();
 			var path = thisWorkAreaEditorView_.computePath();
-			var stroke = new goog.graphics.Stroke(1, 'black');
-			thisWorkAreaEditorView_.drawPath(path, stroke);
+			var stroke = new goog.graphics.Stroke(1.5, 'grey');
+			var fill = new goog.graphics.SolidFill('white');
+			thisWorkAreaEditorView_.drawPath(path, stroke, fill);
 			thisWorkAreaEditorView_.endDraw();
 		},
 

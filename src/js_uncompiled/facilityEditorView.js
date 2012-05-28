@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.7 2012/05/26 20:27:18 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.8 2012/05/28 08:34:37 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -55,7 +55,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				'mapTypeId':              google.maps.MapTypeId.HYBRID,
 				'disableDoubleClickZoom': true,
 				'panControl':             false,
-				'rotateControl':          false,
+				'rotateControl':          true,
 				'streetViewControl':      false,
 				//'draggableCursor':        'url(../../src/images/push-pin.png), auto',
 				'draggableCursor':        'pointer',

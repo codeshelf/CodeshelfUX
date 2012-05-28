@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: codeshelf.gss,v 1.21 2012/05/27 03:34:58 jeffw Exp $
+ *  $Id: codeshelf.gss,v 1.22 2012/05/28 08:34:37 jeffw Exp $
  *******************************************************************************/
 
 /* Defines and mixins ----------------------------------------------------------- */
@@ -242,7 +242,7 @@
 	background-color:	WINDOW_FOREGROUND_MED_COLOR;
 	border:				2px solid WINDOW_BORDER_DARK_COLOR;
 	font:				bold 11px/18px arial;
-	text-indent:		10px;
+	/*text-indent:		10px;*/
 	color:				#FFF;
 	overflow:			hide;
 	@mixin				DISPLAY_BOX(vertical);
@@ -392,6 +392,7 @@
 
 .workAreaEditorPane {
 	position:			relative;
+	cursor:				crosshair;
 	@mixin				FLEX_BOX(2);
 	@mixin				DISPLAY_BOX(vertical);
 }
