@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.8 2012/05/28 08:34:37 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.9 2012/05/31 04:58:31 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -96,66 +96,8 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 //			facilityEditorOverlay_ = codeshelf.facilityeditorviewgmapsoverlay(map_);
 //			facilityEditorOverlay_.init();
 
-			clickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.CLICK, function(event) {
-					clickTimeout_ = setTimeout(function() {
-
-						if (canEditOutline_) {
-							// We need to make sure the structures get created before we set the user create marker.
-							localUserCreatedMarker_ = true;
-							thisFacilityView_.ensureOutlineStructures();
-
-							var vertexNum = thisFacilityView_.getNextVertexNum();
-
-							// If two segments are close to 90deg then make then exactly 90deg.
-							if (vertexNum > 1) {
-								var vertexA = facilityOutlineVertices_[vertexNum - 2];
-								var vertexB = facilityOutlineVertices_[vertexNum - 1];
-								thisFacilityView_.checkSquareness(event, vertexA.marker.getPosition(), vertexB.marker.getPosition());
-							}
-
-							// If the this segment forms an angle of 85-95deg with an imaginary angle back to vertex zero
-							// then extend or shorten this segment to make it exactly 90deg.
-
-							var data = {
-								'parentClassName':    codeshelf.domainobjects.facility['classname'],
-								'parentPersistentId': facility_['persistentId'],
-								'className':          codeshelf.domainobjects.vertex['classname'],
-								'properties':         [
-									{name: 'DomainId', value: 'V' + vertexNum},
-									//{name:'Description', 'value':'First Facility'},
-									{name: 'PosTypeByStr', 'value': 'GPS'},
-									{name: 'PosX', 'value': event.latLng.lng()},
-									{name: 'PosY', 'value': event.latLng.lat()},
-									{name: 'DrawOrder', 'value': vertexNum}
-								]
-							}
-
-							var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_CREATE_REQ, data);
-							websession_.sendCommand(newVertexCmd, thisFacilityView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_CREATE_RESP), false);
-
-							// If this was the anchor vertex then set the location of the facility as well.
-							var data = {
-								'className':    codeshelf.domainobjects.facility.classname,
-								'persistentId': facility_['persistentId'],
-								'properties':   [
-									{'name': 'PosTypeByStr', 'value': 'GPS'},
-									{'name': 'PosX', 'value': event.latLng.lng()},
-									{'name': 'PosY', 'value': event.latLng.lat()}
-								]
-							}
-							var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
-							websession_.sendCommand(moveVertexCmd, thisFacilityView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
-						}
-					}, 250);
-				}
-			)
-
-			doubleClickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.DBLCLICK, function(event) {
-				clearTimeout(clickTimeout_);
-				if (canEditOutline_) {
-					thisFacilityView_.deleteFacilityOutline();
-				}
-			});
+			clickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.CLICK, thisFacilityView_.clickHandler);
+			doubleClickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.DBLCLICK, thisFacilityView_.doubleClickHandler);
 		},
 
 		open: function() {
@@ -175,6 +117,66 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 		close: function() {
 
+		},
+
+		clickHandler: function(event) {
+			clickTimeout_ = setTimeout(function() {
+
+				if (canEditOutline_) {
+					// We need to make sure the structures get created before we set the user create marker.
+					localUserCreatedMarker_ = true;
+					thisFacilityView_.ensureOutlineStructures();
+
+					var vertexNum = thisFacilityView_.getNextVertexNum();
+
+					// If two segments are close to 90deg then make then exactly 90deg.
+					if (vertexNum > 1) {
+						var vertexA = facilityOutlineVertices_[vertexNum - 2];
+						var vertexB = facilityOutlineVertices_[vertexNum - 1];
+						thisFacilityView_.checkSquareness(event, vertexA.marker.getPosition(), vertexB.marker.getPosition());
+					}
+
+					// If the this segment forms an angle of 85-95deg with an imaginary angle back to vertex zero
+					// then extend or shorten this segment to make it exactly 90deg.
+
+					var data = {
+						'parentClassName':    codeshelf.domainobjects.facility['classname'],
+						'parentPersistentId': facility_['persistentId'],
+						'className':          codeshelf.domainobjects.vertex['classname'],
+						'properties':         [
+							{name: 'DomainId', value: 'V' + vertexNum},
+							//{name:'Description', 'value':'First Facility'},
+							{name: 'PosTypeByStr', 'value': 'GPS'},
+							{name: 'PosX', 'value': event.latLng.lng()},
+							{name: 'PosY', 'value': event.latLng.lat()},
+							{name: 'DrawOrder', 'value': vertexNum}
+						]
+					}
+
+					var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_CREATE_REQ, data);
+					websession_.sendCommand(newVertexCmd, thisFacilityView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_CREATE_RESP), false);
+
+					// If this was the anchor vertex then set the location of the facility as well.
+					var data = {
+						'className':    codeshelf.domainobjects.facility.classname,
+						'persistentId': facility_['persistentId'],
+						'properties':   [
+							{'name': 'PosTypeByStr', 'value': 'GPS'},
+							{'name': 'PosX', 'value': event.latLng.lng()},
+							{'name': 'PosY', 'value': event.latLng.lat()}
+						]
+					}
+					var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
+					websession_.sendCommand(moveVertexCmd, thisFacilityView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
+				}
+			}, 250);
+		},
+
+		doubleClickHandler: function(event) {
+			clearTimeout(clickTimeout_);
+			if (canEditOutline_) {
+				thisFacilityView_.deleteFacilityOutline();
+			}
 		},
 
 		checkSquareness: function(event, latLngA, latLngB) {

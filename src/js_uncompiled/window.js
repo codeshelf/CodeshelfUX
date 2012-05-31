@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: window.js,v 1.9 2012/05/11 07:32:55 jeffw Exp $
+ *  $Id: window.js,v 1.10 2012/05/31 04:58:31 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.window');
 goog.require('goog.style');
@@ -58,11 +58,11 @@ codeshelf.window = function(title, view, parent, limits) {
 
 			goog.events.listen(windowBar_, goog.events.EventType.MOUSEDOWN, thisWindow_.focusWindowEventHandler(thisWindow_));
 
-			goog.events.listen(dragger_, 'start', thisWindow_.moverStart(windowElement_));
-			goog.events.listen(dragger_, 'end', thisWindow_.moverEnd(windowElement_));
+			goog.events.listen(dragger_, goog.fx.Dragger.EventType.START, thisWindow_.moverStart(windowElement_));
+			goog.events.listen(dragger_, goog.fx.Dragger.EventType.END, thisWindow_.moverEnd(windowElement_));
 
-			goog.events.listen(resizer_, 'start', thisWindow_.moverStart(windowElement_));
-			goog.events.listen(resizer_, 'end', thisWindow_.moverEnd(windowElement_));
+			goog.events.listen(resizer_, goog.fx.Dragger.EventType.START, thisWindow_.moverStart(windowElement_));
+			goog.events.listen(resizer_, goog.fx.Dragger.EventType.END, thisWindow_.moverEnd(windowElement_));
 
 			goog.events.listen(windowElement_, goog.events.EventType.UNLOAD, function(e) {
 				dragger_.dispose();

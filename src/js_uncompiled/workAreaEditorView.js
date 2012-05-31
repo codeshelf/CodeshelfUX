@@ -1,27 +1,20 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.12 2012/05/28 08:34:37 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.13 2012/05/31 04:58:31 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
 goog.require('codeshelf.templates');
 goog.require('goog.dom');
 goog.require('goog.graphics');
+goog.require('goog.graphics.paths');
 goog.require('goog.math');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
+goog.require('goog.fx.Dragger');
 goog.require('goog.object');
 goog.require('goog.style');
-//goog.require('goog.ui.Button');
-//goog.require('goog.ui.ButtonSide');
-//goog.require('goog.ui.Component.EventType');
-//goog.require('goog.ui.Component.State');
-//goog.require('goog.ui.Menu');
-//goog.require('goog.ui.MenuItem');
-//goog.require('goog.ui.Option');
-//goog.require('goog.ui.SelectionModel');
-//goog.require('goog.ui.Separator');
 goog.require('goog.ui.Toolbar');
 goog.require('goog.ui.ToolbarRenderer');
 goog.require('goog.ui.ToolbarButton');
@@ -35,11 +28,18 @@ codeshelf.workareaeditorview = function(websession, facility) {
 	var thisWorkAreaEditorView_;
 	var websession_ = websession;
 	var facility_ = facility;
+	var mouseDownHandler_;
+	var clickHandler_;
+	var doubleClickHandler_;
+	var dragger_;
+	var startDragPoint_;
 	var mainPane_;
 	var toolbar_;
 	var graphics_;
 	var vertices_ = [];
-	var rotateByDeg_ = 0;
+	var rotateFacilityByDeg_ = 0;
+	var facilityPath_;
+	var currentRect_;
 
 	thisWorkAreaEditorView_ = {
 
@@ -63,7 +63,11 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			toolbar_.setEnabled(true);
 			goog.events.listen(toolbar_, goog.object.getValues(goog.ui.Component.EventType), thisWorkAreaEditorView_.handleToolbarEvent);
 
-			goog.events.listen(mainPane_, 'mouseover',
+			clickHandler_ = goog.events.listen(mainPane_, goog.events.EventType.CLICK, thisWorkAreaEditorView_.clickHandler);
+			mouseDownHandler_ = goog.events.listen(mainPane_, goog.events.EventType.MOUSEDOWN, thisWorkAreaEditorView_.mouseDownHandler);
+			doublClickHandler_ = goog.events.listen(mainPane_, goog.events.EventType.DBLCLICK, thisWorkAreaEditorView_.doubleClickHandler);
+
+			goog.events.listen(mainPane_, goog.events.EventType.MOUSEOVER,
 				function(e) {
 					mainPane_.onselectstart = function() {
 						return false;
@@ -73,7 +77,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 					};
 				});
 
-			goog.events.listen(mainPane_, 'mouseout',
+			goog.events.listen(mainPane_, goog.events.EventType.MOUSEOUT,
 				function(e) {
 					mainPane_.onselectstart = null;
 					mainPane_.onmousedown = null;
@@ -127,6 +131,43 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 		close: function() {
 
+		},
+
+		exit: function() {
+			google.maps.event.removeListener(clickHandler_);
+			google.maps.event.removeListener(doubleClickHandler_);
+		},
+
+		clickHandler: function(event) {
+
+		},
+
+		mouseDownHandler: function(event) {
+			var dragTarget = goog.dom.createDom('div', { 'style': 'display:none;' });
+			dragger_ = new goog.fx.Dragger(dragTarget);
+			goog.events.listen(dragger_, goog.fx.Dragger.EventType.DRAG, thisWorkAreaEditorView_.draggerDrag);
+			goog.events.listen(dragger_, goog.fx.Dragger.EventType.END, thisWorkAreaEditorView_.draggerEnd);
+			dragger_.startDrag(event);
+			var stroke = new goog.graphics.Stroke(1, 'black');
+			var fill = new goog.graphics.SolidFill('red');
+			startDragPoint_ = { 'x': event.offsetX, y: event.offsetY };
+			currentRect_ = graphics_.drawRect(startDragPoint_.x, startDragPoint_.y, 0, 0, stroke, fill);
+		},
+
+		doubleClickHandler: function(event) {
+
+		},
+
+		draggerStart: function(event) {
+
+		},
+
+		draggerDrag: function(event) {
+			currentRect_.setPosition(startDragPoint_.x, startDragPoint_.y);
+			currentRect_.setSize(event.target.deltaX, event.target.deltaY);
+		},
+
+		draggerEnd: function(event) {
 		},
 
 		resize: function() {
@@ -213,7 +254,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 					// Figure out the angle between point 1 and 2.
 					var polar = thisWorkAreaEditorView_.convertCartesianToPolar(points[0], points[1]);
-					rotateByDeg_ = 0 - polar.angle;
+					rotateFacilityByDeg_ = 0 - polar.angle;
 				}
 
 			}
@@ -242,7 +283,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			for (var i = 0; i < points.length; i++) {
 				var point = points[i];
 				if (i > 0) {
-					thisWorkAreaEditorView_.rotatePoint(points[0], point, rotateByDeg_);
+					thisWorkAreaEditorView_.rotatePoint(points[0], point, rotateFacilityByDeg_);
 				}
 				if (point.x < mostNegPoint.x) {
 					mostNegPoint.x = point.x;
@@ -293,7 +334,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			}
 		},
 
-		computePath: function(stroke) {
+		computeFacilityPath: function(stroke) {
 			var path = new goog.graphics.Path();
 
 			var mostNegPoint = { x: 0, y: 0 };
@@ -333,10 +374,24 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 		draw: function() {
 			thisWorkAreaEditorView_.startDraw();
-			var path = thisWorkAreaEditorView_.computePath();
+			facilityPath_ = thisWorkAreaEditorView_.computeFacilityPath();
 			var stroke = new goog.graphics.Stroke(1.5, 'grey');
 			var fill = new goog.graphics.SolidFill('white');
-			thisWorkAreaEditorView_.drawPath(path, stroke, fill);
+			thisWorkAreaEditorView_.drawPath(facilityPath_, stroke, fill);
+
+//			stroke = new goog.graphics.Stroke(4, 'black');
+//			var fill = new goog.graphics.SolidFill('black');
+//			path.forEachSegment(function(segment, args) {
+//				if (segment === goog.graphics.Path.Segment.LINETO) {
+//					for (var argNum = 0; argNum < args.length; argNum += 4) {
+//						var pointA = { x: args[argNum], y: args[argNum + 1]}
+//						var pointB = { x: args[argNum + 2], y: args[argNum + 3]}
+//						var arrowPath = goog.graphics.paths.createArrow(pointA, pointB, 10, 10);
+//						thisWorkAreaEditorView_.drawPath(arrowPath, stroke, fill);
+//					}
+//				}
+//			});
+
 			thisWorkAreaEditorView_.endDraw();
 		},
 
