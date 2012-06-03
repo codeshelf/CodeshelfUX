@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.13 2012/05/31 04:58:31 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.14 2012/06/03 03:23:31 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -15,6 +15,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.fx.Dragger');
 goog.require('goog.object');
 goog.require('goog.style');
+goog.require('goog.ui.Dialog');
 goog.require('goog.ui.Toolbar');
 goog.require('goog.ui.ToolbarRenderer');
 goog.require('goog.ui.ToolbarButton');
@@ -22,6 +23,7 @@ goog.require('goog.ui.ToolbarMenuButton');
 goog.require('goog.ui.ToolbarSelect');
 goog.require('goog.ui.ToolbarSeparator');
 goog.require('goog.ui.ToolbarToggleButton');
+goog.require('raphael');
 
 codeshelf.workareaeditorview = function(websession, facility) {
 
@@ -35,6 +37,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 	var startDragPoint_;
 	var mainPane_;
 	var toolbar_;
+	var toolbarSelectionModel_;
 	var graphics_;
 	var vertices_ = [];
 	var rotateFacilityByDeg_ = 0;
@@ -78,14 +81,14 @@ codeshelf.workareaeditorview = function(websession, facility) {
 				});
 
 			goog.events.listen(mainPane_, goog.events.EventType.MOUSEOUT,
-				function(e) {
+				function(event) {
 					mainPane_.onselectstart = null;
 					mainPane_.onmousedown = null;
 				});
 
 			// Have the alignment buttons be controlled by a selection model.
-			var selectionModel = new goog.ui.SelectionModel();
-			selectionModel.setSelectionHandler(function(button, select) {
+			toolbarSelectionModel_ = new goog.ui.SelectionModel();
+			toolbarSelectionModel_.setSelectionHandler(function(button, select) {
 				if (button) {
 					button.setChecked(select);
 				}
@@ -96,14 +99,14 @@ codeshelf.workareaeditorview = function(websession, facility) {
 					var button = toolbar_.getChild(id);
 					// Let the selection model control the button's checked state.
 					button.setAutoStates(goog.ui.Component.State.CHECKED, false);
-					selectionModel.addItem(button);
+					toolbarSelectionModel_.addItem(button);
 					goog.events.listen(button, goog.ui.Component.EventType.ACTION,
 						function(e) {
-							selectionModel.setSelectedItem(e.target);
+							toolbarSelectionModel_.setSelectedItem(e.target);
 						});
 				});
 			//toolbar_.getChildAt(0).setChecked(true);
-			selectionModel.setSelectedIndex(0);
+			toolbarSelectionModel_.setSelectedIndex(0);
 
 			// Compute the dimensions of the facility outline, and create a bounding rectangle for it.
 			// Create a draw canvas for the bounding rect.
@@ -138,20 +141,29 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			google.maps.event.removeListener(doubleClickHandler_);
 		},
 
+		resize: function() {
+			graphics_.setSize(mainPane_.clientWidth, mainPane_.clientHeight);
+			thisWorkAreaEditorView_.draw();
+		},
+
 		clickHandler: function(event) {
 
 		},
 
 		mouseDownHandler: function(event) {
-			var dragTarget = goog.dom.createDom('div', { 'style': 'display:none;' });
-			dragger_ = new goog.fx.Dragger(dragTarget);
-			goog.events.listen(dragger_, goog.fx.Dragger.EventType.DRAG, thisWorkAreaEditorView_.draggerDrag);
-			goog.events.listen(dragger_, goog.fx.Dragger.EventType.END, thisWorkAreaEditorView_.draggerEnd);
-			dragger_.startDrag(event);
-			var stroke = new goog.graphics.Stroke(1, 'black');
-			var fill = new goog.graphics.SolidFill('red');
-			startDragPoint_ = { 'x': event.offsetX, y: event.offsetY };
-			currentRect_ = graphics_.drawRect(startDragPoint_.x, startDragPoint_.y, 0, 0, stroke, fill);
+			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_), event.offsetX, event.offsetY)) {
+				alert("Select a starting point inside the facility bounds.");
+			} else {
+				var dragTarget = goog.dom.createDom('div', { 'style': 'display:none;' });
+				dragger_ = new goog.fx.Dragger(dragTarget);
+				goog.events.listen(dragger_, goog.fx.Dragger.EventType.DRAG, thisWorkAreaEditorView_.draggerDrag);
+				goog.events.listen(dragger_, goog.fx.Dragger.EventType.END, thisWorkAreaEditorView_.draggerEnd);
+				dragger_.startDrag(event);
+				var stroke = new goog.graphics.Stroke(1, 'black');
+				var fill = new goog.graphics.SolidFill('red');
+				startDragPoint_ = { 'x': event.offsetX, y: event.offsetY };
+				currentRect_ = graphics_.drawRect(startDragPoint_.x, startDragPoint_.y, 0, 0, stroke, fill);
+			}
 		},
 
 		doubleClickHandler: function(event) {
@@ -163,16 +175,40 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		draggerDrag: function(event) {
-			currentRect_.setPosition(startDragPoint_.x, startDragPoint_.y);
-			currentRect_.setSize(event.target.deltaX, event.target.deltaY);
+			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_), startDragPoint_.x + event.target.deltaX, startDragPoint_.y + event.target.deltaY)) {
+				// Dont' do anything, the last drag point was inside the facility bounds.
+			} else {
+				currentRect_.setSize(event.target.deltaX, event.target.deltaY);
+			}
 		},
 
 		draggerEnd: function(event) {
+			var tool = toolbarSelectionModel_.getSelectedItem();
+			switch (tool.getId()) {
+				case 'aisle-tool':
+					thisWorkAreaEditorView_.createAisle(currentRect_);
+					break;
+			}
 		},
 
-		resize: function() {
-			graphics_.setSize(mainPane_.clientWidth, mainPane_.clientHeight);
-			thisWorkAreaEditorView_.draw();
+		createAisle: function(rect) {
+			// Raise a dialog to prompt the user for information about this aisle.
+			var dialog = new goog.ui.Dialog(null, true);
+			dialog.setContent('Setup prototype aisle');
+			dialog.setTitle('Create Aisle');
+			var buttonSet = new goog.ui.Dialog.ButtonSet().
+				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE).
+				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
+			dialog.setButtonSet(buttonSet);
+			dialog.setDisposeOnHide(true);
+			dialog.setVisible(true);
+
+			var dialogListener = goog.events.listen(dialog, goog.ui.Dialog.EventType.SELECT, function(event) {
+				alert('You chose: ' + event.key);
+				dialog.setVisible(false);
+				goog.events.unlistenByKey(dialogListener);
+			});
+
 		},
 
 		computeDistanceMeters: function(latArg1, lonArg1, latArg2, lonArg2) {

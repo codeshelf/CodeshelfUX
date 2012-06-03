@@ -44,6 +44,7 @@
 			<arg value="--root_with_prefix=../lib/Arrowlets ../../../Arrowlets" />
 			<arg value="--root_with_prefix=../lib/JQuery ../../../JQuery" />
 			<arg value="--root_with_prefix=../lib/SlickGrid ../../../SlickGrid" />
+			<arg value="--root_with_prefix=../lib/Raphael ../../../Raphael" />
 			<arg value="--root_with_prefix=../src/js_uncompiled ../../../../src/js_uncompiled" />
 			<arg value="--output_file=../src/js_compiled/deps.js" />
 		</py-run>

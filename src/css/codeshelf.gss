@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: codeshelf.gss,v 1.22 2012/05/28 08:34:37 jeffw Exp $
+ *  $Id: codeshelf.gss,v 1.23 2012/06/03 03:23:31 jeffw Exp $
  *******************************************************************************/
 
 /* Defines and mixins ----------------------------------------------------------- */
@@ -412,6 +412,7 @@
 	color: #000;
 	padding: 4px;
 	position: absolute;
+	z-index: 2;
 }
 
 .modal-dialog a,
@@ -426,6 +427,7 @@
 	left: 0;
 	position: absolute;
 	top: 0;
+	z-index: 2;
 }
 
 .modal-dialog-title {

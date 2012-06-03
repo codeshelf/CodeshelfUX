@@ -11,6 +11,7 @@
             <path value="file://$PROJECT_DIR$/lib/GoogleClosureLibrary" />
             <path value="file://$PROJECT_DIR$/lib/JQuery" />
             <path value="file://$PROJECT_DIR$/lib/Arrowlets" />
+            <path value="file://$PROJECT_DIR$/lib/Raphael" />
           </resourceRoots>
         </entryData>
       </entry>
