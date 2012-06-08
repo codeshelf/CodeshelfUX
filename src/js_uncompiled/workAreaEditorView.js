@@ -1,12 +1,13 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.15 2012/06/03 03:42:27 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.16 2012/06/08 07:12:23 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
 goog.require('codeshelf.templates');
 goog.require('goog.dom');
+goog.require('goog.dom.query');
 goog.require('goog.graphics');
 goog.require('goog.graphics.paths');
 goog.require('goog.math');
@@ -15,7 +16,10 @@ goog.require('goog.events.EventType');
 goog.require('goog.fx.Dragger');
 goog.require('goog.object');
 goog.require('goog.style');
+goog.require('goog.ui.Checkbox');
+goog.require('goog.ui.Checkbox.State');
 goog.require('goog.ui.Dialog');
+goog.require('goog.ui.LabelInput');
 goog.require('goog.ui.Toolbar');
 goog.require('goog.ui.ToolbarRenderer');
 goog.require('goog.ui.ToolbarButton');
@@ -24,6 +28,10 @@ goog.require('goog.ui.ToolbarSelect');
 goog.require('goog.ui.ToolbarSeparator');
 goog.require('goog.ui.ToolbarToggleButton');
 goog.require('raphael');
+
+goog.require('goog.debug.DivConsole');
+goog.require('goog.debug.LogManager');
+goog.require('goog.debug.Logger');
 
 codeshelf.workareaeditorview = function(websession, facility) {
 
@@ -43,6 +51,9 @@ codeshelf.workareaeditorview = function(websession, facility) {
 	var rotateFacilityByDeg_ = 0;
 	var facilityPath_;
 	var currentRect_;
+
+	var dialog;
+	var field;
 
 	thisWorkAreaEditorView_ = {
 
@@ -193,25 +204,75 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 		createAisle: function(rect) {
 			// Raise a dialog to prompt the user for information about this aisle.
-			var dialog = new goog.ui.Dialog(null, true);
-			dialog.setContent('Setup prototype aisle');
+			dialog = new goog.ui.Dialog();//null, false);
 			dialog.setTitle('Create Aisle');
 			var buttonSet = new goog.ui.Dialog.ButtonSet().
 				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE).
 				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
 			dialog.setButtonSet(buttonSet);
+
+			var dialogContentElement = soy.renderAsElement(codeshelf.templates.createAisleDialog);
+			thisWorkAreaEditorView_.createField(dialogContentElement, 'bayHeight', 'text');
+			thisWorkAreaEditorView_.createField(dialogContentElement, 'bayWidth', 'text');
+			thisWorkAreaEditorView_.createField(dialogContentElement, 'bayDepth', 'text');
+			thisWorkAreaEditorView_.createField(dialogContentElement, 'baysHigh', 'text');
+			thisWorkAreaEditorView_.createField(dialogContentElement, 'baysLong', 'text');
+			field = thisWorkAreaEditorView_.createField(dialogContentElement, 'backToBack', 'checkbox');
+
 			dialog.setDisposeOnHide(true);
 			dialog.setVisible(true);
 
+			dialog.setContent(dialogContentElement.innerHTML);
+
+//			goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
+//			var logger = goog.debug.Logger.getLogger('demo');
+//			var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
+//			logconsole.setCapturing(true);
+//			var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
+//			logger.fine('Listening for: ' + EVENTS.join(', ') + '.');
+//			function logEvent(name, e) {
+//				logger.info('"' + name + '" dispatched: ' + e.type);
+//			}
+//			goog.events.listen(field, EVENTS, goog.partial(logEvent, 'root'));
+//			goog.events.listen(field, goog.events.EventType.MOUSEOVER, goog.partial(logEvent, 'root'));
+
 			var dialogListener = goog.events.listen(dialog, goog.ui.Dialog.EventType.SELECT, function(event) {
-				//alert('You chose: ' + event.key);
 				dialog.setVisible(false);
 				goog.events.unlistenByKey(dialogListener);
 				if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL.key) {
 					graphics_.removeElement(rect);
 				}
 			});
+		},
 
+		createField: function(dialogContentElement, fieldId, fieldType) {
+
+			var field;
+			var editFields = goog.dom.query('.aisleEditFields', dialogContentElement)[0];
+			var fieldElement = goog.dom.query('.' + fieldId, editFields)[0];
+			if (fieldElement !== undefined) {
+				switch (fieldType) {
+					case 'text':
+						field = new goog.ui.LabelInput(fieldElement.innerHTML);
+						field.decorate(fieldElement);
+						break;
+					case 'checkbox':
+						field = new goog.ui.Checkbox();
+						field.setLabel(fieldElement.parentNode);
+						field.decorate(fieldElement);
+						field.setEnabled(true);
+						goog.events.listen(field, goog.ui.Component.EventType.CHANGE,
+							function() {
+								field.setChecked(!field.getChecked())
+							});
+						goog.events.listen(field, goog.ui.Component.EventType.SELECT,
+							function() {
+								field.setChecked(!field.getChecked())
+							});
+						break;
+				}
+			}
+			return field;
 		},
 
 		computeDistanceMeters: function(latArg1, lonArg1, latArg2, lonArg2) {
@@ -278,7 +339,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			var points = [];
 			// Compute all of the points for the facility relative to the anchor lat/long.
 			// (possibly negative if the anchor lat/long is east or south of other facility lat/longs.)
-			for (var i = 0; i < vertices_.length; i++) {
+			for (var i = 0; i < Object.size(vertices_); i++) {
 				var vertex = vertices_[i];
 				if (i === 0) {
 					points[0] = {};
@@ -319,7 +380,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		rotatePoints: function(points, mostNegPoint) {
-			for (var i = 0; i < points.length; i++) {
+			for (var i = 0; i < Object.size(points); i++) {
 				var point = points[i];
 				if (i > 0) {
 					thisWorkAreaEditorView_.rotatePoint(points[0], point, rotateFacilityByDeg_);
@@ -334,7 +395,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		translatePoints: function(points, mostNegPoint, mostPosPoint) {
-			for (var i = 0; i < points.length; i++) {
+			for (var i = 0; i < Object.size(points); i++) {
 				var point = points[i];
 				point.x += Math.abs(mostNegPoint.x);
 				point.y += Math.abs(mostNegPoint.y);
@@ -349,7 +410,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		scalePoints: function(points, mostPosPoint, bufferPoint) {
-			for (var i = 0; i < points.length; i++) {
+			for (var i = 0; i < Object.size(points); i++) {
 				var point = points[i];
 				// Scale it to 80% of the draw area.
 				var drawRatio = Math.min((graphics_.getPixelSize().width - bufferPoint.x * 2) / mostPosPoint.x, (graphics_.getPixelSize().height - bufferPoint.y) / mostPosPoint.y);
@@ -362,7 +423,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		mirrorYPoints: function(points, mostPosPoint, bufferPoint) {
-			for (var i = 0; i < points.length; i++) {
+			for (var i = 0; i < Object.size(points); i++) {
 				var point = points[i];
 				// Mirror Y since the zero scale is upside down in DOM.
 				point.y = graphics_.getPixelSize().height - point.y - (graphics_.getPixelSize().height - mostPosPoint.y);
@@ -379,14 +440,14 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			var mostNegPoint = { x: 0, y: 0 };
 			var mostPosPoint = { x: 0, y: 0 };
 			var bufferPoint = { x: 10, y: 10 };
-			if ((Object.size(vertices_) === vertices_.length) && (Object.size(vertices_) > 1)) {
+			if ((Object.size(vertices_) === Object.size(vertices_)) && (Object.size(vertices_) > 1)) {
 				mostNegPoint = { x: 0, y: 0};
 				var points = thisWorkAreaEditorView_.convertGpsToPoints();
 				thisWorkAreaEditorView_.rotatePoints(points, mostNegPoint);
 				thisWorkAreaEditorView_.translatePoints(points, mostNegPoint, mostPosPoint);
 				thisWorkAreaEditorView_.scalePoints(points, mostPosPoint, bufferPoint);
 				thisWorkAreaEditorView_.mirrorYPoints(points, mostPosPoint, bufferPoint);
-				for (var i = 0; i < points.length; i++) {
+				for (var i = 0; i < Object.size(points); i++) {
 					var point = points[i];
 					if (i === 0) {
 						path.moveTo(point.x, point.y);
@@ -422,7 +483,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 //			var fill = new goog.graphics.SolidFill('black');
 //			path.forEachSegment(function(segment, args) {
 //				if (segment === goog.graphics.Path.Segment.LINETO) {
-//					for (var argNum = 0; argNum < args.length; argNum += 4) {
+//					for (var argNum = 0; argNum < Object.size(args); argNum += 4) {
 //						var pointA = { x: args[argNum], y: args[argNum + 1]}
 //						var pointB = { x: args[argNum + 2], y: args[argNum + 3]}
 //						var arrowPath = goog.graphics.paths.createArrow(pointA, pointB, 10, 10);

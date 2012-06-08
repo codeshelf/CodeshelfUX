@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.9 2012/05/31 04:58:31 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.10 2012/06/08 07:12:23 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -265,7 +265,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		getNextVertexNum: function() {
 			// The vertex number if the count of the valid vertices so far.
 			var vertexNum = 0;
-			for (var i = 0; i < facilityOutlineVertices_.length; i++) {
+			for (var i = 0; i < Object.size(facilityOutlineVertices_); i++) {
 				if ((facilityOutlineVertices_[i] !== null ) && (facilityOutlineVertices_[i] !== undefined )) {
 					vertexNum++;
 				}
@@ -382,7 +382,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			// If we've deleted all of the vertices then we need to re-init the outline structures.
 			// (Seems like an error in GMaps)
 			var shouldInit = true;
-			for (var i = 0; i < facilityOutlinePath_.length; i++) {
+			for (var i = 0; i < Object.size(facilityOutlinePath_); i++) {
 				if (facilityOutlinePath_.getAt(i) !== undefined) {
 					shouldInit = false;
 				}
@@ -396,7 +396,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 		deleteFacilityOutline: function() {
 			// Clear all of the markers from the map.
-			for (var i = 0; i < facilityOutlineVertices_.length; ++i) {
+			for (var i = 0; i < Object.size(facilityOutlineVertices_); ++i) {
 
 				var data = {
 					'className':    codeshelf.domainobjects.vertex['classname'],
@@ -450,7 +450,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 //			)
 //
 //			// Setup green rotate marker #2.
-//			var marker2 = facilityOutlineVertices_[facilityOutlineVertices_.length - 1].marker;
+//			var marker2 = facilityOutlineVertices_[Object.size(facilityOutlineVertices_) - 1].marker;
 //			var bearing2 = 90 - google.maps.geometry.spherical.computeHeading(facilityAnchorMarker_.getPosition(), marker2.getPosition());
 //			//var bearing2 = thisFacilityView_.bearing(facilityAnchorMarker_.getPosition(), marker2.getPosition()) / 2;
 //			marker2.setIcon(markerImage);
@@ -498,8 +498,8 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 			// Save that next geocode won't overwrite.
 			overlay.setIndex = setIndex;
-			if (results.length > 1) {
-				for (var i = 0; i < results.length; i++) {
+			if (Object.size(results) > 1) {
+				for (var i = 0; i < Object.size(results); i++) {
 					results[i].id = 'addr' + i;
 				}
 				var mapSearchItems = soy.renderAsElement((function() {
@@ -509,11 +509,11 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 					}
 				})());
 
-				for (var i = 0; i < results.length; i++) {
+				for (var i = 0; i < Object.size(results); i++) {
 
 					var selectorId = '> #' + results[i].id;
 					var addrElement = goog.dom.query(selectorId, mapSearchItems);
-					if (addrElement.length > 0) {
+					if (Object.size(addrElement) > 0) {
 						addrElement[0].onclick = (function() {
 							var thisOverlay_ = overlay;
 							var index_ = i;

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.28 2012/05/13 03:03:54 jeffw Exp $
+ *  $Id: mainPage.js,v 1.29 2012/06/08 07:12:23 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.domainobjects');
@@ -122,7 +122,7 @@ codeshelf.mainpage = function() {
 									try {
 										// Load the GMaps API and init() when done.
 										if (typeof google !== "undefined") {
-											google.load('maps', '3', {'other_params': 'sensor=false', 'callback': function() {
+											google.load('maps', '3.8', {'other_params': 'sensor=false', 'callback': function() {
 												var facilityEditorView = codeshelf.facilityeditorview(websession_, application_.getOrganization(), facility);
 												var facilityEditorWindow = codeshelf.window('Facility Editor', facilityEditorView, frame_, undefined);
 												facilityEditorWindow.open();

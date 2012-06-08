@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c319b0c7-b9cf-46f5-90a5-b0a625c84957" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/webResources.xml" afterPath="$PROJECT_DIR$/.idea/webResources.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/html/codeshelf.dev.html" afterPath="$PROJECT_DIR$/src/html/codeshelf.dev.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/html/codeshelf.html" afterPath="$PROJECT_DIR$/src/html/codeshelf.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/templates/codeshelf.soy" afterPath="$PROJECT_DIR$/src/templates/codeshelf.soy" />
     </list>
     <ignored path="CodeShelfUX.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,10 +33,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="workAreaEditorView.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="workAreaEditorView.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="195" column="43" selection-start="6974" selection-end="6980" vertical-scroll-proportion="0.0">
+            <state line="226" column="0" selection-start="8252" selection-end="8252" vertical-scroll-proportion="0.46242774">
               <folding />
             </state>
           </provider>
@@ -41,25 +45,7 @@
       <file leaf-file-name="dialog.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/dialog.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="81" column="31" selection-start="3288" selection-end="3288" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="modalpopup.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/modalpopup.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="504" column="36" selection-start="14639" selection-end="14645" vertical-scroll-proportion="0.8867925">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="events.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/events.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="353" column="25" selection-start="11703" selection-end="11728" vertical-scroll-proportion="-2.7454545">
+            <state line="60" column="63" selection-start="2255" selection-end="2273" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -68,16 +54,16 @@
       <file leaf-file-name="dialog.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/dialog.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="136" column="11" selection-start="4367" selection-end="4374" vertical-scroll-proportion="-1.8947369">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="64.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="window.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/window.js">
+      <file leaf-file-name="dataObjectField.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="23" selection-start="1764" selection-end="1764" vertical-scroll-proportion="0.0">
+            <state line="24" column="25" selection-start="1266" selection-end="1281" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -86,7 +72,16 @@
       <file leaf-file-name="facilityEditorView.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="306" column="55" selection-start="11234" selection-end="11238" vertical-scroll-proportion="0.0">
+            <state line="591" column="66" selection-start="21535" selection-end="21542" vertical-scroll-proportion="-5.090909">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="checkbox.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/checkbox.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="68" column="0" selection-start="2298" selection-end="2367" vertical-scroll-proportion="-3.7894738">
               <folding />
             </state>
           </provider>
@@ -105,7 +100,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/graphics/modifyelements.html" />
         <option value="$PROJECT_DIR$/lib/Arrowlet/arrowlet.js" />
         <option value="$PROJECT_DIR$/src/html/dndArrowlet.xhtml.html" />
         <option value="$PROJECT_DIR$/src/html/dndArrowlet.xhtml" />
@@ -114,12 +108,13 @@
         <option value="$PROJECT_DIR$/src/js_uncompiled/application.js" />
         <option value="$PROJECT_DIR$/lib/Arrowlets/arrowlets.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/launch.js" />
-        <option value="$PROJECT_DIR$/src/html/codeshelf.dev.html" />
-        <option value="$PROJECT_DIR$/src/html/codeshelf.html" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/window.js" />
         <option value="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/eventtype.js" />
         <option value="$PROJECT_DIR$/lib/Raphael/raphael.js" />
+        <option value="$PROJECT_DIR$/src/html/codeshelf.html" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" />
+        <option value="$PROJECT_DIR$/src/html/codeshelf.dev.html" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
       </list>
     </option>
@@ -184,6 +179,56 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js_uncompiled" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="html" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -311,7 +356,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ui" />
+              <option name="myItemId" value="demos" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -342,6 +387,10 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="demos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -380,12 +429,12 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="Errors" />
+    <property name="recentsLimit" value="5" />
     <property name="DefaultHtmlFileTemplate" value="Xhtml" />
-    <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2547847" />
     <property name="GoToClass.includeJavaFiles" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2547847" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -479,8 +528,8 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972324" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3273165" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18819444" sideWeight="0.34055355" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18819444" sideWeight="0.3237064" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18819444" sideWeight="0.3188929" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18819444" sideWeight="0.345367" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
@@ -555,116 +604,114 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/graphics/path.js">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="476" column="7" selection-start="14908" selection-end="14908" vertical-scroll-proportion="0.0">
+        <state line="591" column="66" selection-start="21535" selection-end="21542" vertical-scroll-proportion="-5.090909">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/Raphael/raphael.js">
+    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/css/demo.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="0" selection-start="25" selection-end="25" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/graphics/svggraphics.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="642" column="36" selection-start="20966" selection-end="21002" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/prompt.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="8" selection-start="2374" selection-end="2374" vertical-scroll-proportion="-2.6138108">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/prompt.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="85" column="35" selection-start="1747" selection-end="1753" vertical-scroll-proportion="0.7950066">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/graphics/pathelement.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="25" selection-start="1448" selection-end="1459" vertical-scroll-proportion="0.41791046">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/editor/helloworlddialogplugin.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="53" selection-start="2401" selection-end="2417" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/editor/helloworlddialog.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="80" column="48" selection-start="2745" selection-end="2751" vertical-scroll-proportion="0.0">
+        <state line="3" column="52" selection-start="123" selection-end="126" vertical-scroll-proportion="0.048064087">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/component.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="27" selection-start="1392" selection-end="1399" vertical-scroll-proportion="0.33186814">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/window.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="23" selection-start="1764" selection-end="1764" vertical-scroll-proportion="0.0">
+        <state line="112" column="8" selection-start="3451" selection-end="3457" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/events.js">
+    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/checkbox_test.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="353" column="25" selection-start="11703" selection-end="11728" vertical-scroll-proportion="-2.7454545">
+        <state line="64" column="27" selection-start="2015" selection-end="2015" vertical-scroll-proportion="0.34637964">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/checkboxrenderer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="38" selection-start="1269" selection-end="1285" vertical-scroll-proportion="0.12156863">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/control.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1367" column="65" selection-start="47956" selection-end="47956" vertical-scroll-proportion="0.7744361">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/css/checkbox.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="1" selection-start="516" selection-end="516" vertical-scroll-proportion="0.49624062">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/deps.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="191" column="27" selection-start="32532" selection-end="32532" vertical-scroll-proportion="0.44894028">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/html/codeshelf.dev.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="91" selection-start="644" selection-end="644" vertical-scroll-proportion="0.23483366">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/checkbox.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="68" column="0" selection-start="2298" selection-end="2367" vertical-scroll-proportion="-3.7894738">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/checkbox.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="0" selection-start="714" selection-end="714" vertical-scroll-proportion="-0.40601504">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/dialog.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="136" column="11" selection-start="4367" selection-end="4374" vertical-scroll-proportion="-1.8947369">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="64.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
+    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/dialog_test.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="195" column="43" selection-start="6974" selection-end="6980" vertical-scroll-proportion="0.0">
+        <state line="647" column="13" selection-start="23251" selection-end="23251" vertical-scroll-proportion="0.36594912">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/base.js">
+    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/prompt.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1451" column="5" selection-start="46691" selection-end="46691" vertical-scroll-proportion="0.33270678">
+        <state line="40" column="3" selection-start="803" selection-end="803" vertical-scroll-proportion="0.369863">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/dialog.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="81" column="31" selection-start="3288" selection-end="3288" vertical-scroll-proportion="0.0">
+        <state line="60" column="63" selection-start="2255" selection-end="2273" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/modalpopup.js">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="504" column="36" selection-start="14639" selection-end="14645" vertical-scroll-proportion="0.8867925">
+        <state line="226" column="0" selection-start="8252" selection-end="8252" vertical-scroll-proportion="0.46242774">
           <folding />
         </state>
       </provider>

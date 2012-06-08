@@ -51,7 +51,7 @@
  */
 {template .dataObjectField}
 <div>
-<input id='{$id}' class='{$class}' label='{$label}' style='margin-left: 6px; width: 50%;'>
+	<input id='{$id}' class='{$class}' label='{$label}' style='margin-left: 6px; width: 50%;'>
 </div>
 {/template}
 
@@ -150,3 +150,44 @@
 	{/foreach}
 </div>
 {/template}
+
+/**
+ * Dialog edit field
+ */
+{template .dialogEditField}
+<div class='dialogEditField'>
+</div>
+{/template}
+
+/**
+ * Create aisle dialog.
+ */
+{template .createAisleDialog}
+<div class='createAisleDialog'>
+	<div id='instructions'>
+		Describe the bays on this aisle.  (You can adjust the oddballs later.)
+	</div>
+	<br>
+	<div class='aisleEditFields modal-dialog-content'>
+		Bay Height: <input id='bayHeight' class='bayHeight' label='Feet'>
+		<br>
+		Bay Width: <input id='bayWidth' class='bayWidth' label='Feet' >
+		<br>
+		Bay Depth: <input id='bayDepth' class='bayDepth' label='Feet' >
+		<br>
+		Bays High: <input id='baysHigh' class='baysHigh' label='Feet' >
+		<br>
+		Bays Long: <input id='baysLong' class='baysLong' label='Feet' >
+		<br>
+		<br>
+		<div>Back to Back Bays: <span id="backToBack" class="backToBack goog-checkbox goog-checkbox-checked"></span></div>
+		<br>
+	</div>
+	<!--fieldset class="goog-debug-panel">
+		<legend>Event Log</legend>
+		<div id="log" style="height: 250px"></div>
+	</fieldset-->
+</div>
+{/template}
+
+
