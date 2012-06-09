@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.16 2012/06/08 07:12:23 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.17 2012/06/09 01:07:51 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -51,9 +51,6 @@ codeshelf.workareaeditorview = function(websession, facility) {
 	var rotateFacilityByDeg_ = 0;
 	var facilityPath_;
 	var currentRect_;
-
-	var dialog;
-	var field;
 
 	thisWorkAreaEditorView_ = {
 
@@ -204,41 +201,36 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 		createAisle: function(rect) {
 			// Raise a dialog to prompt the user for information about this aisle.
-			dialog = new goog.ui.Dialog();//null, false);
+			var dialog = new goog.ui.Dialog();//null, false);
 			dialog.setTitle('Create Aisle');
 			var buttonSet = new goog.ui.Dialog.ButtonSet().
 				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE).
 				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
 			dialog.setButtonSet(buttonSet);
 
-			var dialogContentElement = soy.renderAsElement(codeshelf.templates.createAisleDialog);
-			thisWorkAreaEditorView_.createField(dialogContentElement, 'bayHeight', 'text');
-			thisWorkAreaEditorView_.createField(dialogContentElement, 'bayWidth', 'text');
-			thisWorkAreaEditorView_.createField(dialogContentElement, 'bayDepth', 'text');
-			thisWorkAreaEditorView_.createField(dialogContentElement, 'baysHigh', 'text');
-			thisWorkAreaEditorView_.createField(dialogContentElement, 'baysLong', 'text');
-			field = thisWorkAreaEditorView_.createField(dialogContentElement, 'backToBack', 'checkbox');
+			var dialogContentElement = soy.renderAsElement(codeshelf.templates.createAisleDialogContent);
 
+
+			dialog.setContent(dialogContentElement.innerHTML);
 			dialog.setDisposeOnHide(true);
 			dialog.setVisible(true);
 
-			dialog.setContent(dialogContentElement.innerHTML);
-
-//			goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
-//			var logger = goog.debug.Logger.getLogger('demo');
-//			var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
-//			logconsole.setCapturing(true);
-//			var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
-//			logger.fine('Listening for: ' + EVENTS.join(', ') + '.');
-//			function logEvent(name, e) {
-//				logger.info('"' + name + '" dispatched: ' + e.type);
-//			}
-//			goog.events.listen(field, EVENTS, goog.partial(logEvent, 'root'));
-//			goog.events.listen(field, goog.events.EventType.MOUSEOVER, goog.partial(logEvent, 'root'));
+			dialogContentElement = dialog.getContentElement();
+			var fields = [];
+			fields[0] = thisWorkAreaEditorView_.createField(dialogContentElement, 'bayHeight', 'text');
+			fields[1] = thisWorkAreaEditorView_.createField(dialogContentElement, 'bayWidth', 'text');
+			fields[2] = thisWorkAreaEditorView_.createField(dialogContentElement, 'bayDepth', 'text');
+			fields[3] = thisWorkAreaEditorView_.createField(dialogContentElement, 'baysHigh', 'text');
+			fields[4] = thisWorkAreaEditorView_.createField(dialogContentElement, 'baysLong', 'text');
+			fields[5] = thisWorkAreaEditorView_.createField(dialogContentElement, 'backToBack', 'checkbox');
 
 			var dialogListener = goog.events.listen(dialog, goog.ui.Dialog.EventType.SELECT, function(event) {
 				dialog.setVisible(false);
 				goog.events.unlistenByKey(dialogListener);
+				for (var i = 0; i < Object.size(fields); i++ ) {
+					var field = fields[i];
+					goog.events.removeAll(field);
+				}
 				if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL.key) {
 					graphics_.removeElement(rect);
 				}
@@ -261,11 +253,11 @@ codeshelf.workareaeditorview = function(websession, facility) {
 						field.setLabel(fieldElement.parentNode);
 						field.decorate(fieldElement);
 						field.setEnabled(true);
-						goog.events.listen(field, goog.ui.Component.EventType.CHANGE,
+						goog.events.listen(fieldElement, goog.ui.Component.EventType.CHANGE,
 							function() {
 								field.setChecked(!field.getChecked())
 							});
-						goog.events.listen(field, goog.ui.Component.EventType.SELECT,
+						goog.events.listen(fieldElement, goog.ui.Component.EventType.SELECT,
 							function() {
 								field.setChecked(!field.getChecked())
 							});
