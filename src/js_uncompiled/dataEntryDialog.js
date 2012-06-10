@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataEntryDialog.js,v 1.1 2012/06/10 03:13:31 jeffw Exp $
+ *  $Id: dataEntryDialog.js,v 1.2 2012/06/10 06:47:32 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataentrydialog');
@@ -20,7 +20,7 @@ codeshelf.dataentrydialog = function() {
 	var thisDataEntryDialog_;
 	var dialog_;
 	var dialogContentElement_;
-	var dialogComponents_ = [];
+	var dialogFields_ = [];
 
 	thisDataEntryDialog_ = {
 
@@ -37,14 +37,6 @@ codeshelf.dataentrydialog = function() {
 			dialog_.setDisposeOnHide(true);
 			// Content area is not quite handled by dialogs, so we need to re-get the content area after rendering the dialog.
 			dialogContentElement_ = dialog_.getContentElement();
-
-//			thisDataEntryDialog_.createField(dialogContentElement, 'bayHeight', 'text');
-//			thisDataEntryDialog_.createField(dialogContentElement, 'bayWidth', 'text');
-//			thisDataEntryDialog_.createField(dialogContentElement, 'bayDepth', 'text');
-//			thisDataEntryDialog_.createField(dialogContentElement, 'baysHigh', 'text');
-//			thisDataEntryDialog_.createField(dialogContentElement, 'baysLong', 'text');
-//			thisDataEntryDialog_.createField(dialogContentElement, 'backToBack', 'checkbox');
-
 		},
 
 		open: function(dialogCompleteHandler) {
@@ -55,9 +47,9 @@ codeshelf.dataentrydialog = function() {
 				dialog_.setVisible(false);
 				dialogCompleteHandler(event, thisDataEntryDialog_);
 
-				for (var id in dialogComponents_) {
-					if (dialogComponents_.hasOwnProperty(id)) {
-						var component = dialogComponents_[id];
+				for (var id in dialogFields_) {
+					if (dialogFields_.hasOwnProperty(id)) {
+						var component = dialogFields_[id].field;
 						component.dispose();
 					}
 				}
@@ -95,14 +87,20 @@ codeshelf.dataentrydialog = function() {
 						break;
 				}
 			}
-			dialogComponents_[fieldId] = field;
+			dialogFields_[fieldId] = { fieldType: fieldType, field: field };
 			return field;
 		},
 
 		getFieldValue: function(fieldId) {
-
+			var component = dialogFields_[fieldId];
+			if (component.fieldType === 'text') {
+				return component.field.getValue();
+			} else if (component.fieldType = 'checkbox') {
+				return component.field.getChecked();
+			} else {
+				return '';
+			}
 		}
-
 	}
 
 	return thisDataEntryDialog_;

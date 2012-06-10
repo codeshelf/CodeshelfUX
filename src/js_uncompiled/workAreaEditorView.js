@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.18 2012/06/10 03:13:31 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.19 2012/06/10 06:47:32 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -217,6 +217,13 @@ codeshelf.workareaeditorview = function(websession, facility) {
 				if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL.key) {
 					graphics_.removeElement(rect);
 					currentRect_.dispose();
+				} else {
+					var bayHeight = dialog.getFieldValue('bayHeight');
+					var bayWidth = dialog.getFieldValue('bayWidth');
+					var bayDepth = dialog.getFieldValue('bayDepth');
+					var baysHigh = dialog.getFieldValue('baysHigh');
+					var baysLong = dialog.getFieldValue('baysLong');
+					var backToBack = dialog.getFieldValue('backToBack');
 				}
 			});
 		},
