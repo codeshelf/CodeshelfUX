@@ -1,11 +1,13 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.17 2012/06/09 01:07:51 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.18 2012/06/10 03:13:31 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
 goog.require('codeshelf.templates');
+goog.require('codeshelf.dataentrydialog');
+goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.graphics');
@@ -16,10 +18,6 @@ goog.require('goog.events.EventType');
 goog.require('goog.fx.Dragger');
 goog.require('goog.object');
 goog.require('goog.style');
-goog.require('goog.ui.Checkbox');
-goog.require('goog.ui.Checkbox.State');
-goog.require('goog.ui.Dialog');
-goog.require('goog.ui.LabelInput');
 goog.require('goog.ui.Toolbar');
 goog.require('goog.ui.ToolbarRenderer');
 goog.require('goog.ui.ToolbarButton');
@@ -28,10 +26,6 @@ goog.require('goog.ui.ToolbarSelect');
 goog.require('goog.ui.ToolbarSeparator');
 goog.require('goog.ui.ToolbarToggleButton');
 goog.require('raphael');
-
-goog.require('goog.debug.DivConsole');
-goog.require('goog.debug.LogManager');
-goog.require('goog.debug.Logger');
 
 codeshelf.workareaeditorview = function(websession, facility) {
 
@@ -109,8 +103,9 @@ codeshelf.workareaeditorview = function(websession, facility) {
 					button.setAutoStates(goog.ui.Component.State.CHECKED, false);
 					toolbarSelectionModel_.addItem(button);
 					goog.events.listen(button, goog.ui.Component.EventType.ACTION,
-						function(e) {
-							toolbarSelectionModel_.setSelectedItem(e.target);
+						function(event) {
+							toolbarSelectionModel_.setSelectedItem(event.target);
+							event.dispose();
 						});
 				});
 			//toolbar_.getChildAt(0).setChecked(true);
@@ -164,7 +159,9 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			} else {
 				var dragTarget = goog.dom.createDom('div', { 'style': 'display:none;' });
 				dragger_ = new goog.fx.Dragger(dragTarget);
+				goog.events.listen(dragger_, goog.fx.Dragger.EventType.START, thisWorkAreaEditorView_.draggerStart);
 				goog.events.listen(dragger_, goog.fx.Dragger.EventType.DRAG, thisWorkAreaEditorView_.draggerDrag);
+				goog.events.listen(dragger_, goog.fx.Dragger.EventType.BEFOREDRAG, thisWorkAreaEditorView_.draggerBefore);
 				goog.events.listen(dragger_, goog.fx.Dragger.EventType.END, thisWorkAreaEditorView_.draggerEnd);
 				dragger_.startDrag(event);
 				var stroke = new goog.graphics.Stroke(1, 'black');
@@ -179,7 +176,11 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		draggerStart: function(event) {
+			event.dispose();
+		},
 
+		draggerBefore: function(event) {
+			event.dispose();
 		},
 
 		draggerDrag: function(event) {
@@ -188,6 +189,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			} else {
 				currentRect_.setSize(event.target.deltaX, event.target.deltaY);
 			}
+			event.dispose();
 		},
 
 		draggerEnd: function(event) {
@@ -197,74 +199,26 @@ codeshelf.workareaeditorview = function(websession, facility) {
 					thisWorkAreaEditorView_.createAisle(currentRect_);
 					break;
 			}
+			event.dispose();
+			dragger_.dispose();
 		},
 
 		createAisle: function(rect) {
-			// Raise a dialog to prompt the user for information about this aisle.
-			var dialog = new goog.ui.Dialog();//null, false);
-			dialog.setTitle('Create Aisle');
-			var buttonSet = new goog.ui.Dialog.ButtonSet().
-				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE).
-				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
-			dialog.setButtonSet(buttonSet);
-
+			var dataEntryDialog = codeshelf.dataentrydialog();
 			var dialogContentElement = soy.renderAsElement(codeshelf.templates.createAisleDialogContent);
-
-
-			dialog.setContent(dialogContentElement.innerHTML);
-			dialog.setDisposeOnHide(true);
-			dialog.setVisible(true);
-
-			dialogContentElement = dialog.getContentElement();
-			var fields = [];
-			fields[0] = thisWorkAreaEditorView_.createField(dialogContentElement, 'bayHeight', 'text');
-			fields[1] = thisWorkAreaEditorView_.createField(dialogContentElement, 'bayWidth', 'text');
-			fields[2] = thisWorkAreaEditorView_.createField(dialogContentElement, 'bayDepth', 'text');
-			fields[3] = thisWorkAreaEditorView_.createField(dialogContentElement, 'baysHigh', 'text');
-			fields[4] = thisWorkAreaEditorView_.createField(dialogContentElement, 'baysLong', 'text');
-			fields[5] = thisWorkAreaEditorView_.createField(dialogContentElement, 'backToBack', 'checkbox');
-
-			var dialogListener = goog.events.listen(dialog, goog.ui.Dialog.EventType.SELECT, function(event) {
-				dialog.setVisible(false);
-				goog.events.unlistenByKey(dialogListener);
-				for (var i = 0; i < Object.size(fields); i++ ) {
-					var field = fields[i];
-					goog.events.removeAll(field);
-				}
+			dataEntryDialog.setupDialog(dialogContentElement);
+			dataEntryDialog.createField('bayHeight', 'text');
+			dataEntryDialog.createField('bayWidth', 'text');
+			dataEntryDialog.createField('bayDepth', 'text');
+			dataEntryDialog.createField('baysHigh', 'text');
+			dataEntryDialog.createField('baysLong', 'text');
+			dataEntryDialog.createField('backToBack', 'checkbox');
+			dataEntryDialog.open(function(event, dialog) {
 				if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL.key) {
 					graphics_.removeElement(rect);
+					currentRect_.dispose();
 				}
 			});
-		},
-
-		createField: function(dialogContentElement, fieldId, fieldType) {
-
-			var field;
-			var editFields = goog.dom.query('.aisleEditFields', dialogContentElement)[0];
-			var fieldElement = goog.dom.query('.' + fieldId, editFields)[0];
-			if (fieldElement !== undefined) {
-				switch (fieldType) {
-					case 'text':
-						field = new goog.ui.LabelInput(fieldElement.innerHTML);
-						field.decorate(fieldElement);
-						break;
-					case 'checkbox':
-						field = new goog.ui.Checkbox();
-						field.setLabel(fieldElement.parentNode);
-						field.decorate(fieldElement);
-						field.setEnabled(true);
-						goog.events.listen(fieldElement, goog.ui.Component.EventType.CHANGE,
-							function() {
-								field.setChecked(!field.getChecked())
-							});
-						goog.events.listen(fieldElement, goog.ui.Component.EventType.SELECT,
-							function() {
-								field.setChecked(!field.getChecked())
-							});
-						break;
-				}
-			}
-			return field;
 		},
 
 		computeDistanceMeters: function(latArg1, lonArg1, latArg2, lonArg2) {

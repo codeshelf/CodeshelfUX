@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: application.js,v 1.12 2012/05/26 03:48:26 jeffw Exp $
+ *  $Id: application.js,v 1.13 2012/06/10 03:13:31 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.application');
 goog.require('codeshelf.launch');
@@ -70,6 +70,16 @@ Object.size = function(obj) {
 	}
 	return size;
 };
+
+codeshelf.debug = true;
+
+if (codeshelf.debug) {
+
+	var debugWindow = new goog.debug.FancyWindow('main');
+	debugWindow.setEnabled(true);
+	debugWindow.init();
+	goog.Disposable.ENABLE_MONITORING = true;
+}
 
 // Launch the application.
 var application = codeshelf.application();

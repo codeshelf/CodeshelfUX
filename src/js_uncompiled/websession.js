@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.20 2012/05/26 03:48:26 jeffw Exp $
+ *  $Id: websession.js,v 1.21 2012/06/10 03:13:32 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.events');
@@ -179,6 +179,8 @@ codeshelf.websession = function() {
 					thisWebsession_.cancelCommand(command);
 				}
 			}
+
+			messageEvent.dispose();
 		}
 	};
 

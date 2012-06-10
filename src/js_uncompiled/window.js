@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: window.js,v 1.10 2012/05/31 04:58:31 jeffw Exp $
+ *  $Id: window.js,v 1.11 2012/06/10 03:13:31 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.window');
 goog.require('goog.style');
@@ -64,7 +64,14 @@ codeshelf.window = function(title, view, parent, limits) {
 			goog.events.listen(resizer_, goog.fx.Dragger.EventType.START, thisWindow_.moverStart(windowElement_));
 			goog.events.listen(resizer_, goog.fx.Dragger.EventType.END, thisWindow_.moverEnd(windowElement_));
 
-			goog.events.listen(windowElement_, goog.events.EventType.UNLOAD, function(e) {
+			goog.events.listen(dragger_, goog.fx.Dragger.EventType.DRAG, function(event) {
+				event.dispose();
+			});
+			goog.events.listen(dragger_, goog.fx.Dragger.EventType.BEFOREDRAG, function(event) {
+				event.dispose();
+			});
+
+			goog.events.listen(windowElement_, goog.events.EventType.UNLOAD, function(event) {
 				dragger_.dispose();
 				resizer_.dispose();
 			});
@@ -101,10 +108,11 @@ codeshelf.window = function(title, view, parent, limits) {
 			windowElement_.style.zIndex = z;
 		},
 
-		focusWindowEventHandler: function(aWindow) {
-			var focusWindow_ = aWindow;
+		focusWindowEventHandler: function(window) {
+			var focusWindow_ = window;
 			var focusFuction = function(event) {
 				thisWindow_.focusWindow();
+				event.dispose();
 			}
 			return focusFuction;
 		},
@@ -129,6 +137,7 @@ codeshelf.window = function(title, view, parent, limits) {
 
 			var moverFunction = function moveWindowStart(event) {
 				goog.style.setOpacity(mover_, 0.50);
+				event.dispose();
 			};
 			return moverFunction;
 		},
@@ -138,6 +147,7 @@ codeshelf.window = function(title, view, parent, limits) {
 
 			var moverFunction = function moveWindowEnd(event) {
 				goog.style.setOpacity(mover_, 1);
+				event.dispose();
 			}
 			return moverFunction;
 		}

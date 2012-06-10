@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.29 2012/06/08 07:12:23 jeffw Exp $
+ *  $Id: mainPage.js,v 1.30 2012/06/10 03:13:31 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.domainobjects');
@@ -12,12 +12,17 @@ goog.require('codeshelf.listdemo');
 goog.require('codeshelf.listview');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.window');
+goog.require('goog.debug');
+goog.require('goog.debug.FancyWindow');
+goog.require('goog.debug.Logger');
+goog.require('goog.Disposable');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.dom.ViewportSizeMonitor');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
+
 
 codeshelf.mainpage = function() {
 
