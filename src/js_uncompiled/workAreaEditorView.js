@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.19 2012/06/10 06:47:32 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.20 2012/06/27 05:07:56 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -459,7 +459,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		handleDeleteVertexCmd: function(lat, lon, object) {
-			vertices_[object.DrawOrder] = null;
+			vertices_.splice(object.DrawOrder, 1);
 			thisWorkAreaEditorView_.draw();
 		},
 

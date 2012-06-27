@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.10 2012/06/08 07:12:23 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.11 2012/06/27 05:07:56 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -382,8 +382,8 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			// If we've deleted all of the vertices then we need to re-init the outline structures.
 			// (Seems like an error in GMaps)
 			var shouldInit = true;
-			for (var i = 0; i < Object.size(facilityOutlinePath_); i++) {
-				if (facilityOutlinePath_.getAt(i) !== undefined) {
+			for (var i = 0; i < facilityOutlineVertices_.length; i++) {
+				if (facilityOutlineVertices_[i] !== undefined) {
 					shouldInit = false;
 				}
 			}
@@ -391,12 +391,15 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				facilityOutlinePath_ = undefined;
 				//localUserCreatedMarker_ = false;
 				thisFacilityView_.ensureOutlineStructures();
+				facilityOutlineVertices_ = [];
+				facilityOutline_.setPath(null);
+				facilityOutlinePath_ = undefined;
 			}
 		},
 
 		deleteFacilityOutline: function() {
 			// Clear all of the markers from the map.
-			for (var i = 0; i < Object.size(facilityOutlineVertices_); ++i) {
+			for (var i = Object.size(facilityOutlineVertices_) - 1; i >= 0 ; i--) {
 
 				var data = {
 					'className':    codeshelf.domainobjects.vertex['classname'],
@@ -406,8 +409,6 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_DELETE_REQ, data);
 				websession_.sendCommand(newVertexCmd, thisFacilityView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_DELETE_RESP), false);
 			}
-			facilityOutline_.setPath(null);
-			facilityOutlinePath_ = undefined;
 		},
 
 		completePolygon: function() {
