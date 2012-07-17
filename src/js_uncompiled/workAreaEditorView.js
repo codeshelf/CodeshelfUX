@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.20 2012/06/27 05:07:56 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.21 2012/07/17 00:31:45 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -214,18 +214,41 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			dataEntryDialog.createField('baysLong', 'text');
 			dataEntryDialog.createField('backToBack', 'checkbox');
 			dataEntryDialog.open(function(event, dialog) {
-				if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL.key) {
-					graphics_.removeElement(rect);
-					currentRect_.dispose();
-				} else {
-					var bayHeight = dialog.getFieldValue('bayHeight');
-					var bayWidth = dialog.getFieldValue('bayWidth');
-					var bayDepth = dialog.getFieldValue('bayDepth');
-					var baysHigh = dialog.getFieldValue('baysHigh');
-					var baysLong = dialog.getFieldValue('baysLong');
-					var backToBack = dialog.getFieldValue('backToBack');
+					if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL.key) {
+						graphics_.removeElement(rect);
+						currentRect_.dispose();
+					} else {
+						var bayHeight = dialog.getFieldValue('bayHeight');
+						var bayWidth = dialog.getFieldValue('bayWidth');
+						var bayDepth = dialog.getFieldValue('bayDepth');
+						var baysHigh = dialog.getFieldValue('baysHigh');
+						var baysLong = dialog.getFieldValue('baysLong');
+						var backToBack = dialog.getFieldValue('backToBack');
+
+						// Call Facility.createAisle();
+						//public final void createAisle(Double inPosX, Double inPosY, Double inProtoBayHeight, Double inProtoBayWidth, Double inProtoBayDepth, int inBaysHigh, int inBaysLong, Boolean inCreateBackToBack) {
+						var data = {
+							'className':       codeshelf.domainobjects.facility.classname,
+							'persistentId':    facility_['persistentId'],
+							'methodName':      'createAisle',
+							'methodArgs': [
+								{ 'name': 'inPosX', 'value': startDragPoint_.x, 'classType': 'java.lang.Double'},
+								{ 'name': 'inPosY', 'value': startDragPoint_.y, 'classType': 'java.lang.Double'},
+								{ 'name': 'inProtoBayHeight', 'value': bayHeight, 'classType': 'java.lang.Double'},
+								{ 'name': 'inProtoBayWidth', 'value': bayHeight, 'classType': 'java.lang.Double'},
+								{ 'name': 'inProtoBayDepth', 'value': bayWidth, 'classType': 'java.lang.Double'},
+								{ 'name': 'inProtoBaysHigh', 'value': baysHigh, 'classType': 'java.lang.Integer'},
+								{ 'name': 'inProtoBaysLong', 'value': baysLong, 'classType': 'java.lang.Integer'},
+								{ 'name': 'inCreateBackToBack', 'value': backToBack, 'classType': 'java.lang.Boolean'}
+							]
+						}
+
+						var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+						websession_.sendCommand(setListViewFilterCmd, thisWorkAreaEditorView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_METHOD_REQ), true);
+					}
 				}
-			});
+			)
+			;
 		},
 
 		computeDistanceMeters: function(latArg1, lonArg1, latArg2, lonArg2) {

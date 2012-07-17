@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.21 2012/06/10 03:13:32 jeffw Exp $
+ *  $Id: websession.js,v 1.22 2012/07/17 00:31:45 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.events');
@@ -28,7 +28,9 @@ var kWebSessionCommandType = {
 	OBJECT_LISTENER_REQ:  'OBJ_LSN_RQ',
 	OBJECT_LISTENER_RESP: 'OBJ_LSN_RS',
 	OBJECT_FILTER_REQ:    'OBJ_FLT_RQ',
-	OBJECT_FILTER_RESP:   'OBJ_FLT_RS'
+	OBJECT_FILTER_RESP:   'OBJ_FLT_RS',
+	OBJECT_METHOD_REQ:    'OBJ_METH_RQ',
+	OBJECT_METHOD_RESP:   'OBJ_METH_RS'
 };
 
 var kWebsessionState = {
@@ -90,9 +92,9 @@ codeshelf.websession = function() {
 
 		createCommand: function(commandType, data) {
 			var command = {
-				'id':   goog.events.getUniqueId('cid'),
-				't': commandType,
-				'd': data
+				'id': goog.events.getUniqueId('cid'),
+				't':  commandType,
+				'd':  data
 			}
 			return command;
 		},
