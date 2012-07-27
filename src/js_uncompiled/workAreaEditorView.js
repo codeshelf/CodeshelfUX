@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.21 2012/07/17 00:31:45 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.22 2012/07/27 01:47:52 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -45,6 +45,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 	var rotateFacilityByDeg_ = 0;
 	var facilityPath_;
 	var currentRect_;
+	var currentDrawRect_;
 
 	thisWorkAreaEditorView_ = {
 
@@ -124,7 +125,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			// Create the filter to listen to all vertex updates for this facility.
 			var data = {
 				'className':     codeshelf.domainobjects.vertex.classname,
-				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
+				'propertyNames': ['ParentLocation', 'DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
 				'filterClause':  'parentLocation.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': facility_['persistentId']}
@@ -167,7 +168,8 @@ codeshelf.workareaeditorview = function(websession, facility) {
 				var stroke = new goog.graphics.Stroke(1, 'black');
 				var fill = new goog.graphics.SolidFill('red');
 				startDragPoint_ = { 'x': event.offsetX, y: event.offsetY };
-				currentRect_ = graphics_.drawRect(startDragPoint_.x, startDragPoint_.y, 0, 0, stroke, fill);
+				currentRect_ = new goog.math.Rect(startDragPoint_.x, startDragPoint_.y, 0, 0);
+				currentDrawRect_ = graphics_.drawRect(startDragPoint_.x, startDragPoint_.y, 0, 0, stroke, fill);
 			}
 		},
 
@@ -187,7 +189,9 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_), startDragPoint_.x + event.target.deltaX, startDragPoint_.y + event.target.deltaY)) {
 				// Dont' do anything, the last drag point was inside the facility bounds.
 			} else {
-				currentRect_.setSize(event.target.deltaX, event.target.deltaY);
+				currentRect_.width = event.target.deltaX;
+				currentRect_.height = event.target.deltaY;
+				currentDrawRect_.setSize(event.target.deltaX, event.target.deltaY);
 			}
 			event.dispose();
 		},
@@ -196,14 +200,14 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			var tool = toolbarSelectionModel_.getSelectedItem();
 			switch (tool.getId()) {
 				case 'aisle-tool':
-					thisWorkAreaEditorView_.createAisle(currentRect_);
+					thisWorkAreaEditorView_.createAisle();
 					break;
 			}
 			event.dispose();
 			dragger_.dispose();
 		},
 
-		createAisle: function(rect) {
+		createAisle: function() {
 			var dataEntryDialog = codeshelf.dataentrydialog();
 			var dialogContentElement = soy.renderAsElement(codeshelf.templates.createAisleDialogContent);
 			dataEntryDialog.setupDialog(dialogContentElement);
@@ -216,7 +220,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			dataEntryDialog.open(function(event, dialog) {
 					if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL.key) {
 						graphics_.removeElement(rect);
-						currentRect_.dispose();
+						currentDrawRect_.dispose();
 					} else {
 						var bayHeight = dialog.getFieldValue('bayHeight');
 						var bayWidth = dialog.getFieldValue('bayWidth');
@@ -224,6 +228,12 @@ codeshelf.workareaeditorview = function(websession, facility) {
 						var baysHigh = dialog.getFieldValue('baysHigh');
 						var baysLong = dialog.getFieldValue('baysLong');
 						var backToBack = dialog.getFieldValue('backToBack');
+
+
+						var runInXDim = true;
+						if (currentRect_.width < currentRect_.height) {
+							runInXDim = false;
+						}
 
 						// Call Facility.createAisle();
 						//public final void createAisle(Double inPosX, Double inPosY, Double inProtoBayHeight, Double inProtoBayWidth, Double inProtoBayDepth, int inBaysHigh, int inBaysLong, Boolean inCreateBackToBack) {
@@ -234,11 +244,12 @@ codeshelf.workareaeditorview = function(websession, facility) {
 							'methodArgs': [
 								{ 'name': 'inPosX', 'value': startDragPoint_.x, 'classType': 'java.lang.Double'},
 								{ 'name': 'inPosY', 'value': startDragPoint_.y, 'classType': 'java.lang.Double'},
-								{ 'name': 'inProtoBayHeight', 'value': bayHeight, 'classType': 'java.lang.Double'},
-								{ 'name': 'inProtoBayWidth', 'value': bayHeight, 'classType': 'java.lang.Double'},
-								{ 'name': 'inProtoBayDepth', 'value': bayWidth, 'classType': 'java.lang.Double'},
+								{ 'name': 'inProtoBayXDim', 'value': bayHeight, 'classType': 'java.lang.Double'},
+								{ 'name': 'inProtoBayYDim', 'value': bayWidth, 'classType': 'java.lang.Double'},
+								{ 'name': 'inProtoBayZDim', 'value': bayHeight, 'classType': 'java.lang.Double'},
 								{ 'name': 'inProtoBaysHigh', 'value': baysHigh, 'classType': 'java.lang.Integer'},
 								{ 'name': 'inProtoBaysLong', 'value': baysLong, 'classType': 'java.lang.Integer'},
+								{ 'name': 'inRunInXDir', 'value': runInXDim, 'classType': 'java.lang.Boolean'},
 								{ 'name': 'inCreateBackToBack', 'value': backToBack, 'classType': 'java.lang.Boolean'}
 							]
 						}
