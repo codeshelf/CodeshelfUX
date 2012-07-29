@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.22 2012/07/27 01:47:52 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.23 2012/07/29 03:27:06 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -123,17 +123,30 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 		open: function() {
 			// Create the filter to listen to all vertex updates for this facility.
-			var data = {
+			var vertexFilterData = {
 				'className':     codeshelf.domainobjects.vertex.classname,
-				'propertyNames': ['ParentLocation', 'DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
+				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
 				'filterClause':  'parentLocation.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': facility_['persistentId']}
 				]
 			}
 
-			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-			websession_.sendCommand(setListViewFilterCmd, thisWorkAreaEditorView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+			var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
+			websession_.sendCommand(vertexFilterCmd, thisWorkAreaEditorView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+
+			// Create the filter to listen to all aisle updates for this facility.
+			var aisleFilterData = {
+				'className':     codeshelf.domainobjects.aisle.classname,
+				'propertyNames': ['DomainId'],
+				'filterClause':  'parentLocation.persistentId = :theId',
+				'filterParams':  [
+					{ 'name': "theId", 'value': facility_['persistentId']}
+				]
+			}
+
+			var aisleFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, aisleFilterData);
+			websession_.sendCommand(aisleFilterCmd, thisWorkAreaEditorView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 		},
 
 		close: function() {
@@ -497,6 +510,18 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			thisWorkAreaEditorView_.draw();
 		},
 
+		handleCreateAisleCmd: function(object) {
+
+		},
+
+		handleUpdateAisleCmd: function(object) {
+
+		},
+
+		handleDeleteAisleCmd: function(object) {
+
+		},
+
 		websocketCmdCallback: function(expectedResponseType) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
@@ -508,8 +533,8 @@ codeshelf.workareaeditorview = function(websession, facility) {
 							for (var i = 0; i < command.d.r.length; i++) {
 								var object = command.d.r[i];
 
-								// Make sure the class name matches.
 								if (object['className'] === codeshelf.domainobjects.vertex.classname) {
+									// Vertex updates.
 									if (object['op'] === 'cr') {
 										thisWorkAreaEditorView_.handleCreateVertexCmd(object['PosY'], object['PosX'], object);
 									} else if (object['op'] === 'up') {
@@ -517,7 +542,17 @@ codeshelf.workareaeditorview = function(websession, facility) {
 									} else if (object['op'] === 'dl') {
 										thisWorkAreaEditorView_.handleDeleteVertexCmd(object['PosY'], object['PosX'], object);
 									}
+								} else if (object['className'] === codeshelf.domainobjects.aisle.classname) {
+									// Aisle updates
+									if (object['op'] === 'cr') {
+										thisWorkAreaEditorView_.handleCreateAisleCmd(object);
+									} else if (object['op'] === 'up') {
+										thisWorkAreaEditorView_.handleUpdateAisleCmd(object);
+									} else if (object['op'] === 'dl') {
+										thisWorkAreaEditorView_.handleDeleteAisleCmd(object);
+									}
 								}
+
 							}
 						} else if (command.t == kWebSessionCommandType.OBJECT_CREATE_RESP) {
 						} else if (command.t == kWebSessionCommandType.OBJECT_UPDATE_RESP) {

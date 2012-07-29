@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: domainObjects.js,v 1.10 2012/05/07 06:34:27 jeffw Exp $
+ *  $Id: domainObjects.js,v 1.11 2012/07/29 03:27:06 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.domainobjects');
@@ -53,6 +53,17 @@ codeshelf.domainobjects = {
 
 	vertex: {
 		classname:  'Vertex',
+		properties: {
+			domainId: {
+				id:    'DomainId',
+				title: 'ID',
+				width: 25
+			}
+		}
+	},
+
+	aisle: {
+		classname:  'Aisle',
 		properties: {
 			domainId: {
 				id:    'DomainId',
