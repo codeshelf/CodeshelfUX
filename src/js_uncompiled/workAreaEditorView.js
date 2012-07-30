@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.24 2012/07/30 01:06:47 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.25 2012/07/30 17:44:28 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -48,7 +48,6 @@ codeshelf.workareaeditorview = function(websession, facility) {
 	var currentRect_;
 	var currentDrawRect_;
 	var aisles_ = [];
-	var aisleViews_ = [];
 
 	thisWorkAreaEditorView_ = {
 
@@ -437,7 +436,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			}
 		},
 
-		computeFacilityPath: function(stroke) {
+		computeFacilityPath: function() {
 			var path = new goog.graphics.Path();
 
 			var mostNegPoint = { x: 0, y: 0 };
@@ -463,6 +462,27 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			return path;
 		},
 
+		computeAislePath: function(aisle) {
+			var path = new goog.graphics.Path();
+
+			for (var i = 0; i < Object.size(aisle.vertices); i++) {
+				var vertex = aisle.vertices[i];
+				var point = thisWorkAreaEditorView_.convertVertexToPoint(vertex);
+				if (i === 0) {
+					path.moveTo(vertex.x, point.y);
+				} else {
+					path.lineTo(point.x, point.y);
+				}
+			}
+			path.lineTo(points[0].x, points[0].y);
+
+			return path;
+		},
+
+		convertVertexToPoint: function(vertex) {
+
+		},
+
 		drawPath: function(path, stroke, fill) {
 			graphics_.drawPath(path, stroke, fill);
 		},
@@ -476,11 +496,24 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		draw: function() {
+
 			thisWorkAreaEditorView_.startDraw();
+
+			// Draw the facility path.
 			facilityPath_ = thisWorkAreaEditorView_.computeFacilityPath();
 			var stroke = new goog.graphics.Stroke(1.5, 'grey');
 			var fill = new goog.graphics.SolidFill('white');
 			thisWorkAreaEditorView_.drawPath(facilityPath_, stroke, fill);
+
+			// Draw the aisles
+			for (var i = 0; i < Object.size(aisles_); i++) {
+				var aisleData = aisles_[i];
+
+				var aislePath = thisWorkAreaEditorView_.computeAislePath(aisleData['aisle']);
+				var stroke = new goog.graphics.Stroke(1.5, 'grey');
+				var fill = new goog.graphics.SolidFill('green');
+				thisWorkAreaEditorView_.drawPath(facilityPath_, stroke, fill);
+			}
 
 //			stroke = new goog.graphics.Stroke(4, 'black');
 //			var fill = new goog.graphics.SolidFill('black');
@@ -499,7 +532,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		handleUpdateFacilityVertexCmd: function(lat, lon, facilityVertex) {
-			vertices_[facilityVertex['DrawOrder'] = facilityVertex];
+			vertices_[facilityVertex['DrawOrder']] = facilityVertex;
 			thisWorkAreaEditorView_.draw();
 		},
 
@@ -510,8 +543,10 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 		handleUpdateAisleCmd: function(aisle) {
 			if (aisles_[aisle['persistentId']] === undefined) {
-				aisles_[aisle['persistentId']] = aisle;
-				aisleViews_[aisle['persistentId']] = codeshelf.aisleview(websession_, aisle);
+				aisleData = {};
+				aisleData['aisle'] = aisle;
+				aisleData['aisleView'] = codeshelf.aisleview(websession_, aisle);
+				aisles_[aisle['persistentId']] = aisleData;
 
 				// Create the filter to listen to all vertex updates for this facility.
 				var vertexFilterData = {
