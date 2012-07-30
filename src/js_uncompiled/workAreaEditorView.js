@@ -1,12 +1,13 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.23 2012/07/29 03:27:06 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.24 2012/07/30 01:06:47 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.dataentrydialog');
+goog.require('codeshelf.aisleview');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
@@ -46,6 +47,8 @@ codeshelf.workareaeditorview = function(websession, facility) {
 	var facilityPath_;
 	var currentRect_;
 	var currentDrawRect_;
+	var aisles_ = [];
+	var aisleViews_ = [];
 
 	thisWorkAreaEditorView_ = {
 
@@ -133,7 +136,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			}
 
 			var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
-			websession_.sendCommand(vertexFilterCmd, thisWorkAreaEditorView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+			websession_.sendCommand(vertexFilterCmd, thisWorkAreaEditorView_.websocketCmdCallbackFacility(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 
 			// Create the filter to listen to all aisle updates for this facility.
 			var aisleFilterData = {
@@ -146,7 +149,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			}
 
 			var aisleFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, aisleFilterData);
-			websession_.sendCommand(aisleFilterCmd, thisWorkAreaEditorView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+			websession_.sendCommand(aisleFilterCmd, thisWorkAreaEditorView_.websocketCmdCallbackAisle(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 		},
 
 		close: function() {
@@ -232,7 +235,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			dataEntryDialog.createField('backToBack', 'checkbox');
 			dataEntryDialog.open(function(event, dialog) {
 					if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL.key) {
-						graphics_.removeElement(rect);
+						graphics_.removeElement(currentRect_);
 						currentDrawRect_.dispose();
 					} else {
 						var bayHeight = dialog.getFieldValue('bayHeight');
@@ -251,10 +254,10 @@ codeshelf.workareaeditorview = function(websession, facility) {
 						// Call Facility.createAisle();
 						//public final void createAisle(Double inPosX, Double inPosY, Double inProtoBayHeight, Double inProtoBayWidth, Double inProtoBayDepth, int inBaysHigh, int inBaysLong, Boolean inCreateBackToBack) {
 						var data = {
-							'className':       codeshelf.domainobjects.facility.classname,
-							'persistentId':    facility_['persistentId'],
-							'methodName':      'createAisle',
-							'methodArgs': [
+							'className':    codeshelf.domainobjects.facility.classname,
+							'persistentId': facility_['persistentId'],
+							'methodName':   'createAisle',
+							'methodArgs':   [
 								{ 'name': 'inPosX', 'value': startDragPoint_.x, 'classType': 'java.lang.Double'},
 								{ 'name': 'inPosY', 'value': startDragPoint_.y, 'classType': 'java.lang.Double'},
 								{ 'name': 'inProtoBayXDim', 'value': bayHeight, 'classType': 'java.lang.Double'},
@@ -267,8 +270,8 @@ codeshelf.workareaeditorview = function(websession, facility) {
 							]
 						}
 
-						var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
-						websession_.sendCommand(setListViewFilterCmd, thisWorkAreaEditorView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_METHOD_REQ), true);
+						var createAisleCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+						websession_.sendCommand(createAisleCmd, thisWorkAreaEditorView_.websocketCmdCallbackFacility(kWebSessionCommandType.OBJECT_METHOD_REQ), true);
 					}
 				}
 			)
@@ -495,34 +498,51 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			thisWorkAreaEditorView_.endDraw();
 		},
 
-		handleCreateVertexCmd: function(lat, lon, object) {
-			vertices_[object.DrawOrder] = object;
+		handleUpdateFacilityVertexCmd: function(lat, lon, facilityVertex) {
+			vertices_[facilityVertex['DrawOrder'] = facilityVertex];
 			thisWorkAreaEditorView_.draw();
 		},
 
-		handleUpdateVertexCmd: function(lat, lon, object) {
-			vertices_[object.DrawOrder] = object;
+		handleDeleteFacilityVertexCmd: function(lat, lon, facilityVertex) {
+			vertices_.splice(facilityVertex['DrawOrder'], 1);
 			thisWorkAreaEditorView_.draw();
 		},
 
-		handleDeleteVertexCmd: function(lat, lon, object) {
-			vertices_.splice(object.DrawOrder, 1);
-			thisWorkAreaEditorView_.draw();
+		handleUpdateAisleCmd: function(aisle) {
+			if (aisles_[aisle['persistentId']] === undefined) {
+				aisles_[aisle['persistentId']] = aisle;
+				aisleViews_[aisle['persistentId']] = codeshelf.aisleview(websession_, aisle);
+
+				// Create the filter to listen to all vertex updates for this facility.
+				var vertexFilterData = {
+					'className':     codeshelf.domainobjects.vertex.classname,
+					'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder', 'ParentPersistentId'],
+					'filterClause':  'parentLocation.persistentId = :theId',
+					'filterParams':  [
+						{ 'name': "theId", 'value': aisle['persistentId']}
+					]
+				}
+
+				var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
+				websession_.sendCommand(vertexFilterCmd, thisWorkAreaEditorView_.websocketCmdCallbackAisle(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+			}
 		},
 
-		handleCreateAisleCmd: function(object) {
+		handleDeleteAisleCmd: function(aisle) {
+			if (aisles_[aisle['persistentId']] !== undefined) {
+				aisles_.splice(aisle['persistentId'], 1);
+			}
+		},
+
+		handleUpdateAisleVertexCmd: function(lat, lon, aisleVertex) {
 
 		},
 
-		handleUpdateAisleCmd: function(object) {
+		handleDeleteAisleVertexCmd: function(lat, lon, aisleVertex) {
 
 		},
 
-		handleDeleteAisleCmd: function(object) {
-
-		},
-
-		websocketCmdCallback: function(expectedResponseType) {
+		websocketCmdCallbackFacility: function(expectedResponseType) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
@@ -536,20 +556,56 @@ codeshelf.workareaeditorview = function(websession, facility) {
 								if (object['className'] === codeshelf.domainobjects.vertex.classname) {
 									// Vertex updates.
 									if (object['op'] === 'cr') {
-										thisWorkAreaEditorView_.handleCreateVertexCmd(object['PosY'], object['PosX'], object);
+										thisWorkAreaEditorView_.handleUpdateFacilityVertexCmd(object['PosY'], object['PosX'], object);
 									} else if (object['op'] === 'up') {
-										thisWorkAreaEditorView_.handleUpdateVertexCmd(object['PosY'], object['PosX'], object);
+										thisWorkAreaEditorView_.handleUpdateFacilityVertexCmd(object['PosY'], object['PosX'], object);
 									} else if (object['op'] === 'dl') {
-										thisWorkAreaEditorView_.handleDeleteVertexCmd(object['PosY'], object['PosX'], object);
+										thisWorkAreaEditorView_.handleDeleteFacilityVertexCmd(object['PosY'], object['PosX'], object);
 									}
-								} else if (object['className'] === codeshelf.domainobjects.aisle.classname) {
+								}
+							}
+						} else if (command.t == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+						} else if (command.t == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+						} else if (command.t == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+						}
+					}
+				},
+				getExpectedResponseType: function() {
+					return expectedResponseType_;
+				}
+			}
+
+			return callback;
+		},
+
+		websocketCmdCallbackAisle: function(expectedResponseType) {
+			var expectedResponseType_ = expectedResponseType;
+			var callback = {
+				exec:                    function(command) {
+					if (!command.d.hasOwnProperty('r')) {
+						alert('response has no result');
+					} else {
+						if (command.t == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+							for (var i = 0; i < command.d.r.length; i++) {
+								var object = command.d.r[i];
+
+								if (object['className'] === codeshelf.domainobjects.aisle.classname) {
 									// Aisle updates
 									if (object['op'] === 'cr') {
-										thisWorkAreaEditorView_.handleCreateAisleCmd(object);
+										thisWorkAreaEditorView_.handleUpdateAisleCmd(object);
 									} else if (object['op'] === 'up') {
 										thisWorkAreaEditorView_.handleUpdateAisleCmd(object);
 									} else if (object['op'] === 'dl') {
 										thisWorkAreaEditorView_.handleDeleteAisleCmd(object);
+									}
+								} else if (object['className'] === codeshelf.domainobjects.vertex.classname) {
+									// VAisle ertex updates.
+									if (object['op'] === 'cr') {
+										thisWorkAreaEditorView_.handleUpdateAisleVertexCmd(object['PosY'], object['PosX'], object);
+									} else if (object['op'] === 'up') {
+										thisWorkAreaEditorView_.handleUpdateAisleVertexCmd(object['PosY'], object['PosX'], object);
+									} else if (object['op'] === 'dl') {
+										thisWorkAreaEditorView_.handleDeleteAisleVertexCmd(object['PosY'], object['PosX'], object);
 									}
 								}
 

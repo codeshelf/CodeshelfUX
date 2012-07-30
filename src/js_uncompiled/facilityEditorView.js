@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.11 2012/06/27 05:07:56 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.12 2012/07/30 01:06:47 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -273,7 +273,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			return vertexNum;
 		},
 
-		handleCreateVertexCmd: function(latLng, vertex) {
+		handleCreateFacilityVertexCmd: function(latLng, vertex) {
 
 			thisFacilityView_.ensureOutlineStructures();
 			facilityOutlinePath_.setAt(vertex['DrawOrder'], latLng);
@@ -353,10 +353,10 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 //						}
 		},
 
-		handleUpdateVertexCmd: function(latLng, vertex) {
+		handleUpdateFacilityVertexCmd: function(latLng, vertex) {
 			if ((facilityOutlinePath_ === undefined) || (facilityOutlinePath_.getAt(vertex['DrawOrder']) === undefined)) {
 				// If the outline or marker don't exist then create them.
-				thisFacilityView_.handleCreateVertexCmd(latLng, vertex);
+				thisFacilityView_.handleCreateFacilityVertexCmd(latLng, vertex);
 			} else {
 				// The outline and marker exist, so update the  marker.
 				facilityOutlinePath_.setAt(vertex['DrawOrder'], latLng);
@@ -366,7 +366,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			thisFacilityView_.setBounds();
 		},
 
-		handleDeleteVertexCmd: function(latLng, vertex) {
+		handleDeleteFacilityVertexCmd: function(latLng, vertex) {
 			var vertexData = facilityOutlineVertices_[vertex['DrawOrder']];
 			facilityOutlineVertices_[vertex['DrawOrder']] = undefined;
 
@@ -598,11 +598,11 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 									var latLng = new google.maps.LatLng(object['PosY'], object['PosX']);
 
 									if (object['op'] === 'cr') {
-										thisFacilityView_.handleCreateVertexCmd(latLng, object);
+										thisFacilityView_.handleCreateFacilityVertexCmd(latLng, object);
 									} else if (object['op'] === 'up') {
-										thisFacilityView_.handleUpdateVertexCmd(latLng, object);
+										thisFacilityView_.handleUpdateFacilityVertexCmd(latLng, object);
 									} else if (object['op'] === 'dl') {
-										thisFacilityView_.handleDeleteVertexCmd(latLng, object);
+										thisFacilityView_.handleDeleteFacilityVertexCmd(latLng, object);
 									}
 								}
 							}

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.1 2012/07/29 03:27:06 jeffw Exp $
+ *  $Id: aisleView.js,v 1.2 2012/07/30 01:06:47 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -216,17 +216,17 @@ codeshelf.aisleview = function(websession, aisle) {
 			thisAisleView_.endDraw();
 		},
 
-		handleCreateVertexCmd: function(lat, lon, object) {
+		handleCreateFacilityVertexCmd: function(lat, lon, object) {
 			vertices_[object.DrawOrder] = object;
 			thisAisleView_.draw();
 		},
 
-		handleUpdateVertexCmd: function(lat, lon, object) {
+		handleUpdateFacilityVertexCmd: function(lat, lon, object) {
 			vertices_[object.DrawOrder] = object;
 			thisAisleView_.draw();
 		},
 
-		handleDeleteVertexCmd: function(lat, lon, object) {
+		handleDeleteFacilityVertexCmd: function(lat, lon, object) {
 			vertices_.splice(object.DrawOrder, 1);
 			thisAisleView_.draw();
 		},
@@ -245,11 +245,11 @@ codeshelf.aisleview = function(websession, aisle) {
 								// Make sure the class name matches.
 								if (object['className'] === codeshelf.domainobjects.vertex.classname) {
 									if (object['op'] === 'cr') {
-										thisAisleView_.handleCreateVertexCmd(object['PosY'], object['PosX'], object);
+										thisAisleView_.handleCreateFacilityVertexCmd(object['PosY'], object['PosX'], object);
 									} else if (object['op'] === 'up') {
-										thisAisleView_.handleUpdateVertexCmd(object['PosY'], object['PosX'], object);
+										thisAisleView_.handleUpdateFacilityVertexCmd(object['PosY'], object['PosX'], object);
 									} else if (object['op'] === 'dl') {
-										thisAisleView_.handleDeleteVertexCmd(object['PosY'], object['PosX'], object);
+										thisAisleView_.handleDeleteFacilityVertexCmd(object['PosY'], object['PosX'], object);
 									}
 								}
 							}
