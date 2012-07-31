@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.25 2012/07/30 17:44:28 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.26 2012/07/31 05:53:34 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -45,6 +45,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 	var vertices_ = [];
 	var rotateFacilityByDeg_ = 0;
 	var facilityPath_;
+	var pixelsPerMeter_ = {};
 	var currentRect_;
 	var currentDrawRect_;
 	var aisles_ = [];
@@ -140,7 +141,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			// Create the filter to listen to all aisle updates for this facility.
 			var aisleFilterData = {
 				'className':     codeshelf.domainobjects.aisle.classname,
-				'propertyNames': ['DomainId'],
+				'propertyNames': ['DomainId', 'PosX', 'PosY'],
 				'filterClause':  'parentLocation.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': facility_['persistentId']}
@@ -237,9 +238,12 @@ codeshelf.workareaeditorview = function(websession, facility) {
 						graphics_.removeElement(currentRect_);
 						currentDrawRect_.dispose();
 					} else {
-						var bayHeight = dialog.getFieldValue('bayHeight');
-						var bayWidth = dialog.getFieldValue('bayWidth');
-						var bayDepth = dialog.getFieldValue('bayDepth');
+						var xOriginMeters = startDragPoint_.x / pixelsPerMeter_.x;
+						var yOriginMeters = startDragPoint_.y / pixelsPerMeter_.y;
+
+						var bayHeight = dialog.getFieldValue('bayHeight') * 0.3048;
+						var bayWidth = dialog.getFieldValue('bayWidth') * 0.3048;
+						var bayDepth = dialog.getFieldValue('bayDepth') * 0.3048;
 						var baysHigh = dialog.getFieldValue('baysHigh');
 						var baysLong = dialog.getFieldValue('baysLong');
 						var backToBack = dialog.getFieldValue('backToBack');
@@ -257,11 +261,11 @@ codeshelf.workareaeditorview = function(websession, facility) {
 							'persistentId': facility_['persistentId'],
 							'methodName':   'createAisle',
 							'methodArgs':   [
-								{ 'name': 'inPosX', 'value': startDragPoint_.x, 'classType': 'java.lang.Double'},
-								{ 'name': 'inPosY', 'value': startDragPoint_.y, 'classType': 'java.lang.Double'},
-								{ 'name': 'inProtoBayXDim', 'value': bayHeight, 'classType': 'java.lang.Double'},
-								{ 'name': 'inProtoBayYDim', 'value': bayWidth, 'classType': 'java.lang.Double'},
-								{ 'name': 'inProtoBayZDim', 'value': bayHeight, 'classType': 'java.lang.Double'},
+								{ 'name': 'inPosXMeters', 'value': xOriginMeters, 'classType': 'java.lang.Double'},
+								{ 'name': 'inPosYMeters', 'value': yOriginMeters, 'classType': 'java.lang.Double'},
+								{ 'name': 'inProtoBayXDimMeters', 'value': bayHeight, 'classType': 'java.lang.Double'},
+								{ 'name': 'inProtoBayYDimMeters', 'value': bayWidth, 'classType': 'java.lang.Double'},
+								{ 'name': 'inProtoBayZDimMeters', 'value': bayHeight, 'classType': 'java.lang.Double'},
 								{ 'name': 'inProtoBaysHigh', 'value': baysHigh, 'classType': 'java.lang.Integer'},
 								{ 'name': 'inProtoBaysLong', 'value': baysLong, 'classType': 'java.lang.Integer'},
 								{ 'name': 'inRunInXDir', 'value': runInXDim, 'classType': 'java.lang.Boolean'},
@@ -447,6 +451,12 @@ codeshelf.workareaeditorview = function(websession, facility) {
 				var points = thisWorkAreaEditorView_.convertGpsToPoints();
 				thisWorkAreaEditorView_.rotatePoints(points, mostNegPoint);
 				thisWorkAreaEditorView_.translatePoints(points, mostNegPoint, mostPosPoint);
+
+				// At this point we have the facility footprint in meters and translated into (NW-relative) positive cartesian space.
+				// For this reason can can figure out how many pixels per meter we have.
+				pixelsPerMeter_.x = graphics_.getPixelSize().width / mostPosPoint.x;
+				pixelsPerMeter_.y = graphics_.getPixelSize().height / mostPosPoint.y;
+
 				thisWorkAreaEditorView_.scalePoints(points, mostPosPoint, bufferPoint);
 				thisWorkAreaEditorView_.mirrorYPoints(points, mostPosPoint, bufferPoint);
 				for (var i = 0; i < Object.size(points); i++) {
@@ -462,25 +472,28 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			return path;
 		},
 
-		computeAislePath: function(aisle) {
+		computeAislePath: function(aisleData) {
 			var path = new goog.graphics.Path();
 
-			for (var i = 0; i < Object.size(aisle.vertices); i++) {
-				var vertex = aisle.vertices[i];
-				var point = thisWorkAreaEditorView_.convertVertexToPoint(vertex);
+			for (var i = 0; i < Object.size(aisleData.vertices); i++) {
+				var vertex = aisleData.vertices[i];
+				var point = thisWorkAreaEditorView_.convertAisleVertexToPoint(aisleData.aisle, vertex);
 				if (i === 0) {
-					path.moveTo(vertex.x, point.y);
+					path.moveTo(point.x, point.y);
 				} else {
 					path.lineTo(point.x, point.y);
 				}
 			}
-			path.lineTo(points[0].x, points[0].y);
+			//path.lineTo(points[0].x, points[0].y);
 
 			return path;
 		},
 
-		convertVertexToPoint: function(vertex) {
-
+		convertAisleVertexToPoint: function(aisle, vertex) {
+			var point = {};
+			point.x = (vertex.PosX + aisle.PosX) * pixelsPerMeter_.x;
+			point.y = (vertex.PosY + aisle.PosY) * pixelsPerMeter_.y;
+			return point;
 		},
 
 		drawPath: function(path, stroke, fill) {
@@ -506,13 +519,15 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			thisWorkAreaEditorView_.drawPath(facilityPath_, stroke, fill);
 
 			// Draw the aisles
-			for (var i = 0; i < Object.size(aisles_); i++) {
-				var aisleData = aisles_[i];
+			for (var aisleKey in aisles_) {
+				if (aisles_.hasOwnProperty(aisleKey)) {
+					var aisleData = aisles_[aisleKey];
 
-				var aislePath = thisWorkAreaEditorView_.computeAislePath(aisleData['aisle']);
-				var stroke = new goog.graphics.Stroke(1.5, 'grey');
-				var fill = new goog.graphics.SolidFill('green');
-				thisWorkAreaEditorView_.drawPath(facilityPath_, stroke, fill);
+					var aislePath = thisWorkAreaEditorView_.computeAislePath(aisleData);
+					var stroke = new goog.graphics.Stroke(1.5, 'grey');
+					var fill = new goog.graphics.SolidFill('green');
+					thisWorkAreaEditorView_.drawPath(aislePath, stroke, fill);
+				}
 			}
 
 //			stroke = new goog.graphics.Stroke(4, 'black');
@@ -570,6 +585,14 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		handleUpdateAisleVertexCmd: function(lat, lon, aisleVertex) {
+			var aislePersistentId = aisleVertex.ParentPersistentId;
+			if (aisles_[aislePersistentId] !== undefined ) {
+				aisleData = aisles_[aislePersistentId];
+				if (aisleData.vertices === undefined) {
+					aisleData.vertices = [];
+				}
+				aisleData.vertices[aisleVertex.DrawOrder] = aisleVertex;
+			}
 
 		},
 
