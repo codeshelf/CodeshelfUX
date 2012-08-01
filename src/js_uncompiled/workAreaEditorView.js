@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.26 2012/07/31 05:53:34 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.27 2012/08/01 00:46:39 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -45,7 +45,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 	var vertices_ = [];
 	var rotateFacilityByDeg_ = 0;
 	var facilityPath_;
-	var pixelsPerMeter_ = {};
+	var drawRatio_;
 	var currentRect_;
 	var currentDrawRect_;
 	var aisles_ = [];
@@ -182,7 +182,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 				goog.events.listen(dragger_, goog.fx.Dragger.EventType.END, thisWorkAreaEditorView_.draggerEnd);
 				dragger_.startDrag(event);
 				var stroke = new goog.graphics.Stroke(1, 'black');
-				var fill = new goog.graphics.SolidFill('red');
+				var fill = new goog.graphics.SolidFill('red', 0.2);
 				startDragPoint_ = { 'x': event.offsetX, y: event.offsetY };
 				currentRect_ = new goog.math.Rect(startDragPoint_.x, startDragPoint_.y, 0, 0);
 				currentDrawRect_ = graphics_.drawRect(startDragPoint_.x, startDragPoint_.y, 0, 0, stroke, fill);
@@ -238,8 +238,8 @@ codeshelf.workareaeditorview = function(websession, facility) {
 						graphics_.removeElement(currentRect_);
 						currentDrawRect_.dispose();
 					} else {
-						var xOriginMeters = startDragPoint_.x / pixelsPerMeter_.x;
-						var yOriginMeters = startDragPoint_.y / pixelsPerMeter_.y;
+						var xOriginMeters = startDragPoint_.x / drawRatio_;
+						var yOriginMeters = startDragPoint_.y / drawRatio_;
 
 						var bayHeight = dialog.getFieldValue('bayHeight') * 0.3048;
 						var bayWidth = dialog.getFieldValue('bayWidth') * 0.3048;
@@ -419,13 +419,13 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			for (var i = 0; i < Object.size(points); i++) {
 				var point = points[i];
 				// Scale it to 80% of the draw area.
-				var drawRatio = Math.min((graphics_.getPixelSize().width - bufferPoint.x * 2) / mostPosPoint.x, (graphics_.getPixelSize().height - bufferPoint.y) / mostPosPoint.y);
+				drawRatio_ = Math.min((graphics_.getPixelSize().width - bufferPoint.x * 2) / mostPosPoint.x, (graphics_.getPixelSize().height - bufferPoint.y) / mostPosPoint.y);
 
-				point.x *= drawRatio;
-				point.y *= drawRatio;
+				point.x *= drawRatio_;
+				point.y *= drawRatio_;
 			}
-			mostPosPoint.x *= drawRatio;
-			mostPosPoint.y *= drawRatio;
+			mostPosPoint.x *= drawRatio_;
+			mostPosPoint.y *= drawRatio_;
 		},
 
 		mirrorYPoints: function(points, mostPosPoint, bufferPoint) {
@@ -451,12 +451,6 @@ codeshelf.workareaeditorview = function(websession, facility) {
 				var points = thisWorkAreaEditorView_.convertGpsToPoints();
 				thisWorkAreaEditorView_.rotatePoints(points, mostNegPoint);
 				thisWorkAreaEditorView_.translatePoints(points, mostNegPoint, mostPosPoint);
-
-				// At this point we have the facility footprint in meters and translated into (NW-relative) positive cartesian space.
-				// For this reason can can figure out how many pixels per meter we have.
-				pixelsPerMeter_.x = graphics_.getPixelSize().width / mostPosPoint.x;
-				pixelsPerMeter_.y = graphics_.getPixelSize().height / mostPosPoint.y;
-
 				thisWorkAreaEditorView_.scalePoints(points, mostPosPoint, bufferPoint);
 				thisWorkAreaEditorView_.mirrorYPoints(points, mostPosPoint, bufferPoint);
 				for (var i = 0; i < Object.size(points); i++) {
@@ -475,24 +469,29 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		computeAislePath: function(aisleData) {
 			var path = new goog.graphics.Path();
 
-			for (var i = 0; i < Object.size(aisleData.vertices); i++) {
-				var vertex = aisleData.vertices[i];
-				var point = thisWorkAreaEditorView_.convertAisleVertexToPoint(aisleData.aisle, vertex);
-				if (i === 0) {
-					path.moveTo(point.x, point.y);
-				} else {
-					path.lineTo(point.x, point.y);
+			if (Object.size(aisleData.vertices) > 0) {
+				var start = {};
+				for (var i = 0; i < Object.size(aisleData.vertices); i++) {
+					var vertex = aisleData.vertices[i];
+					var point = thisWorkAreaEditorView_.convertAisleVertexToPoint(aisleData.aisle, vertex);
+					if (i === 0) {
+						path.moveTo(point.x, point.y);
+						start.x = point.x;
+						start.y = point.y;
+					} else {
+						path.lineTo(point.x, point.y);
+					}
 				}
+				path.lineTo(start.x, start.y);
 			}
-			//path.lineTo(points[0].x, points[0].y);
 
 			return path;
 		},
 
 		convertAisleVertexToPoint: function(aisle, vertex) {
 			var point = {};
-			point.x = (vertex.PosX + aisle.PosX) * pixelsPerMeter_.x;
-			point.y = (vertex.PosY + aisle.PosY) * pixelsPerMeter_.y;
+			point.x = (vertex.PosX + aisle.PosX) * drawRatio_;
+			point.y = (vertex.PosY + aisle.PosY) * drawRatio_;
 			return point;
 		},
 
@@ -524,8 +523,8 @@ codeshelf.workareaeditorview = function(websession, facility) {
 					var aisleData = aisles_[aisleKey];
 
 					var aislePath = thisWorkAreaEditorView_.computeAislePath(aisleData);
-					var stroke = new goog.graphics.Stroke(1.5, 'grey');
-					var fill = new goog.graphics.SolidFill('green');
+					var stroke = new goog.graphics.Stroke(1, 'black');
+					var fill = new goog.graphics.SolidFill('green', 0.4);
 					thisWorkAreaEditorView_.drawPath(aislePath, stroke, fill);
 				}
 			}
@@ -576,27 +575,29 @@ codeshelf.workareaeditorview = function(websession, facility) {
 				var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
 				websession_.sendCommand(vertexFilterCmd, thisWorkAreaEditorView_.websocketCmdCallbackAisle(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 			}
+			thisWorkAreaEditorView_.draw();
 		},
 
 		handleDeleteAisleCmd: function(aisle) {
 			if (aisles_[aisle['persistentId']] !== undefined) {
 				aisles_.splice(aisle['persistentId'], 1);
 			}
+			thisWorkAreaEditorView_.draw();
 		},
 
-		handleUpdateAisleVertexCmd: function(lat, lon, aisleVertex) {
+		handleUpdateAisleVertexCmd: function(aisleVertex) {
 			var aislePersistentId = aisleVertex.ParentPersistentId;
-			if (aisles_[aislePersistentId] !== undefined ) {
+			if (aisles_[aislePersistentId] !== undefined) {
 				aisleData = aisles_[aislePersistentId];
 				if (aisleData.vertices === undefined) {
 					aisleData.vertices = [];
 				}
 				aisleData.vertices[aisleVertex.DrawOrder] = aisleVertex;
 			}
-
+			thisWorkAreaEditorView_.draw();
 		},
 
-		handleDeleteAisleVertexCmd: function(lat, lon, aisleVertex) {
+		handleDeleteAisleVertexCmd: function(aisleVertex) {
 
 		},
 
@@ -659,11 +660,11 @@ codeshelf.workareaeditorview = function(websession, facility) {
 								} else if (object['className'] === codeshelf.domainobjects.vertex.classname) {
 									// VAisle ertex updates.
 									if (object['op'] === 'cr') {
-										thisWorkAreaEditorView_.handleUpdateAisleVertexCmd(object['PosY'], object['PosX'], object);
+										thisWorkAreaEditorView_.handleUpdateAisleVertexCmd(object);
 									} else if (object['op'] === 'up') {
-										thisWorkAreaEditorView_.handleUpdateAisleVertexCmd(object['PosY'], object['PosX'], object);
+										thisWorkAreaEditorView_.handleUpdateAisleVertexCmd(object);
 									} else if (object['op'] === 'dl') {
-										thisWorkAreaEditorView_.handleDeleteAisleVertexCmd(object['PosY'], object['PosX'], object);
+										thisWorkAreaEditorView_.handleDeleteAisleVertexCmd(object);
 									}
 								}
 
