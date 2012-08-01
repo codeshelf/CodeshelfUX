@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: domainObjects.js,v 1.11 2012/07/29 03:27:06 jeffw Exp $
+ *  $Id: domainObjects.js,v 1.12 2012/08/01 08:49:24 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.domainobjects');
@@ -64,6 +64,17 @@ codeshelf.domainobjects = {
 
 	aisle: {
 		classname:  'Aisle',
+		properties: {
+			domainId: {
+				id:    'DomainId',
+				title: 'ID',
+				width: 25
+			}
+		}
+	},
+
+	bay: {
+		classname:  'Bay',
 		properties: {
 			domainId: {
 				id:    'DomainId',

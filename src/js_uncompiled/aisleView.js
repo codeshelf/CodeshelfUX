@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.2 2012/07/30 01:06:47 jeffw Exp $
+ *  $Id: aisleView.js,v 1.3 2012/08/01 08:49:24 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -20,74 +20,50 @@ goog.require('goog.object');
 goog.require('goog.style');
 goog.require('raphael');
 
-codeshelf.aisleview = function(websession, aisle) {
+codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 
 	var thisAisleView_;
 	var websession_ = websession;
+	var drawRatio_ = drawRatio;
 	var aisle_ = aisle;
-	var mouseDownHandler_;
 	var clickHandler_;
 	var doubleClickHandler_;
-	var dragger_;
-	var startDragPoint_;
 	var mainPane_;
-	var graphics_;
-	var vertices_ = [];
-	var facilityPath_;
-	var currentRect_;
-	var currentDrawRect_;
+	var graphics_ = graphics;
+	var bays_ = [];
 
 	thisAisleView_ = {
 
 		setupView: function(contentElement) {
 
-			var aidleEditor = soy.renderAsElement(codeshelf.templates.aisleEditor);
-			goog.dom.appendChild(contentElement, aidleEditor);
-
-			mainPane_ = aidleEditor.getElementsByClassName('aisleEditorPane')[0];
-
-			clickHandler_ = goog.events.listen(mainPane_, goog.events.EventType.CLICK, thisAisleView_.clickHandler);
-			mouseDownHandler_ = goog.events.listen(mainPane_, goog.events.EventType.MOUSEDOWN, thisAisleView_.mouseDownHandler);
-			doublClickHandler_ = goog.events.listen(mainPane_, goog.events.EventType.DBLCLICK, thisAisleView_.doubleClickHandler);
-
-			goog.events.listen(mainPane_, goog.events.EventType.MOUSEOVER,
-				function(e) {
-					mainPane_.onselectstart = function() {
-						return false;
-					};
-					mainPane_.onsmousedown = function() {
-						return false;
-					};
-				});
-
-			goog.events.listen(mainPane_, goog.events.EventType.MOUSEOUT,
-				function(event) {
-					mainPane_.onselectstart = null;
-					mainPane_.onmousedown = null;
-				});
+			mainPane_ = soy.renderAsElement(codeshelf.templates.aisleView);
+			goog.dom.appendChild(contentElement, mainPane_);
+			mainPane_.style.left = contentElement.style.left;
+			mainPane_.style.top = contentElement.style.top;
 
 			// Compute the dimensions of the aisle outline, and create a bounding rectangle for it.
 			// Create a draw canvas for the bounding rect.
 			// Compute the path for the aisle outline and put it into the draw canavs.
 
-			graphics_ = goog.graphics.createGraphics(mainPane_.clientWidth, mainPane_.clientHeight);
-			graphics_.render(mainPane_);
+			//graphics_ = goog.graphics.createGraphics(mainPane_.clientWidth, mainPane_.clientHeight);
+//			graphics_.render(mainPane_);
 
-		},
 
-		open: function() {
-			// Create the filter to listen to all vertex updates for this aisle.
+			// Create the filter to listen to all bay updates for this aisle.
 			var data = {
-				'className':     codeshelf.domainobjects.vertex.classname,
-				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
+				'className':     codeshelf.domainobjects.bay.classname,
+				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'PosZ'],
 				'filterClause':  'parentLocation.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': aisle_['persistentId']}
 				]
 			}
 
-			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-			websession_.sendCommand(setListViewFilterCmd, thisAisleView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+			var bayFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
+			websession_.sendCommand(bayFilterCmd, thisAisleView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+		},
+
+		open: function() {
 		},
 
 		close: function() {
@@ -104,83 +80,6 @@ codeshelf.aisleview = function(websession, aisle) {
 			thisAisleView_.draw();
 		},
 
-		clickHandler: function(event) {
-
-		},
-
-		mouseDownHandler: function(event) {
-			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_), event.offsetX, event.offsetY)) {
-				alert("Select a starting point inside the aisle bounds.");
-			} else {
-				var dragTarget = goog.dom.createDom('div', { 'style': 'display:none;' });
-				dragger_ = new goog.fx.Dragger(dragTarget);
-				goog.events.listen(dragger_, goog.fx.Dragger.EventType.START, thisAisleView_.draggerStart);
-				goog.events.listen(dragger_, goog.fx.Dragger.EventType.DRAG, thisAisleView_.draggerDrag);
-				goog.events.listen(dragger_, goog.fx.Dragger.EventType.BEFOREDRAG, thisAisleView_.draggerBefore);
-				goog.events.listen(dragger_, goog.fx.Dragger.EventType.END, thisAisleView_.draggerEnd);
-				dragger_.startDrag(event);
-				var stroke = new goog.graphics.Stroke(1, 'black');
-				var fill = new goog.graphics.SolidFill('red');
-				startDragPoint_ = { 'x': event.offsetX, y: event.offsetY };
-				currentRect_ = new goog.math.Rect(startDragPoint_.x, startDragPoint_.y, 0, 0);
-				currentDrawRect_ = graphics_.drawRect(startDragPoint_.x, startDragPoint_.y, 0, 0, stroke, fill);
-			}
-		},
-
-		doubleClickHandler: function(event) {
-
-		},
-
-		draggerStart: function(event) {
-			event.dispose();
-		},
-
-		draggerBefore: function(event) {
-			event.dispose();
-		},
-
-		draggerDrag: function(event) {
-			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_), startDragPoint_.x + event.target.deltaX, startDragPoint_.y + event.target.deltaY)) {
-				// Dont' do anything, the last drag point was inside the aisle bounds.
-			} else {
-				currentRect_.width = event.target.deltaX;
-				currentRect_.height = event.target.deltaY;
-				currentDrawRect_.setSize(event.target.deltaX, event.target.deltaY);
-			}
-			event.dispose();
-		},
-
-		draggerEnd: function(event) {
-			event.dispose();
-			dragger_.dispose();
-		},
-
-		computeFacilityPath: function(stroke) {
-			var path = new goog.graphics.Path();
-
-			var mostNegPoint = { x: 0, y: 0 };
-			var mostPosPoint = { x: 0, y: 0 };
-			var bufferPoint = { x: 10, y: 10 };
-			if ((Object.size(vertices_) === Object.size(vertices_)) && (Object.size(vertices_) > 1)) {
-				mostNegPoint = { x: 0, y: 0};
-				var points = thisAisleView_.convertGpsToPoints();
-				thisAisleView_.rotatePoints(points, mostNegPoint);
-				thisAisleView_.translatePoints(points, mostNegPoint, mostPosPoint);
-				thisAisleView_.scalePoints(points, mostPosPoint, bufferPoint);
-				thisAisleView_.mirrorYPoints(points, mostPosPoint, bufferPoint);
-				for (var i = 0; i < Object.size(points); i++) {
-					var point = points[i];
-					if (i === 0) {
-						path.moveTo(point.x, point.y);
-					} else {
-						path.lineTo(point.x, point.y);
-					}
-				}
-				path.lineTo(points[0].x, points[0].y);
-			}
-			return path;
-		},
-
 		drawPath: function(path, stroke, fill) {
 			graphics_.drawPath(path, stroke, fill);
 		},
@@ -194,41 +93,105 @@ codeshelf.aisleview = function(websession, aisle) {
 		},
 
 		draw: function() {
-			thisAisleView_.startDraw();
-			facilityPath_ = thisAisleView_.computeFacilityPath();
-			var stroke = new goog.graphics.Stroke(1.5, 'grey');
-			var fill = new goog.graphics.SolidFill('white');
-			thisAisleView_.drawPath(facilityPath_, stroke, fill);
+//			thisAisleView_.startDraw();
 
-//			stroke = new goog.graphics.Stroke(4, 'black');
-//			var fill = new goog.graphics.SolidFill('black');
-//			path.forEachSegment(function(segment, args) {
-//				if (segment === goog.graphics.Path.Segment.LINETO) {
-//					for (var argNum = 0; argNum < Object.size(args); argNum += 4) {
-//						var pointA = { x: args[argNum], y: args[argNum + 1]}
-//						var pointB = { x: args[argNum + 2], y: args[argNum + 3]}
-//						var arrowPath = goog.graphics.paths.createArrow(pointA, pointB, 10, 10);
-//						thisAisleView_.drawPath(arrowPath, stroke, fill);
-//					}
-//				}
-//			});
+			// Draw the bays
+			for (var bayKey in bays_) {
+				if (bays_.hasOwnProperty(bayKey)) {
+					var bayData = bays_[bayKey];
 
-			thisAisleView_.endDraw();
+					// If this is the lowest bay, and there are at least four vertices then draw the bay.
+					if ((bayData['bay'].PosZ === 0) && (Object.size(bayData.vertices) >= 4)) {
+						var bayPath = thisAisleView_.computeBayPath(bayData);
+						var stroke = new goog.graphics.Stroke(0.5, 'grey');
+						var fill = new goog.graphics.SolidFill('white', 0.1);
+						thisAisleView_.drawPath(bayPath, stroke, fill);
+					}
+				}
+			}
+
+//			thisAisleView_.endDraw();
 		},
 
-		handleCreateFacilityVertexCmd: function(lat, lon, object) {
-			vertices_[object.DrawOrder] = object;
+		computeBayPath: function(bayData) {
+			var path = new goog.graphics.Path();
+
+			if (Object.size(bayData.vertices) > 0) {
+				var start = {};
+				for (var i = 0; i < Object.size(bayData.vertices); i++) {
+					var vertex = bayData.vertices[i];
+					var point = thisAisleView_.convertBayVertexToPoint(bayData.bay, bayData['bayElement'], vertex);
+					if (i === 0) {
+						path.moveTo(point.x, point.y);
+						start.x = point.x;
+						start.y = point.y;
+					} else {
+						path.lineTo(point.x, point.y);
+					}
+				}
+				path.lineTo(start.x, start.y);
+			}
+
+			return path;
+		},
+
+		convertBayVertexToPoint: function(bay, bayElement, vertex) {
+			var point = {};
+			point.x = parseInt(bayElement.style.left) + (vertex.PosX * drawRatio_);
+			point.y = parseInt(bayElement.style.top) + (vertex.PosY * drawRatio_);
+			return point;
+		},
+
+		handleUpdateBayCmd: function(bay) {
+			if (bays_[bay['persistentId']] === undefined) {
+				// Create and populate the bay's data record.
+				bayData = {};
+				bayData['bay'] = bay;
+
+				bayData['bayElement'] = soy.renderAsElement(codeshelf.templates.bayView);
+				goog.dom.appendChild(mainPane_, bayData['bayElement']);
+				bayData['bayElement'].style.left = (parseInt(mainPane_.style.left) + (bay.PosX * drawRatio_)) + 'px';
+				bayData['bayElement'].style.top = (parseInt(mainPane_.style.top) + (bay.PosY * drawRatio_)) + 'px';
+
+				bays_[bay['persistentId']] = bayData;
+
+				// Create the filter to listen to all vertex updates for this facility.
+				var vertexFilterData = {
+					'className':     codeshelf.domainobjects.vertex.classname,
+					'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder', 'ParentPersistentId'],
+					'filterClause':  'parentLocation.persistentId = :theId',
+					'filterParams':  [
+						{ 'name': "theId", 'value': bay['persistentId']}
+					]
+				}
+
+				var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
+				websession_.sendCommand(vertexFilterCmd, thisAisleView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+			}
 			thisAisleView_.draw();
 		},
 
-		handleUpdateFacilityVertexCmd: function(lat, lon, object) {
-			vertices_[object.DrawOrder] = object;
+		handleDeleteBayCmd: function(bay) {
+			if (bays_[bay['persistentId']] !== undefined) {
+				bays_.splice(bay['persistentId'], 1);
+			}
 			thisAisleView_.draw();
 		},
 
-		handleDeleteFacilityVertexCmd: function(lat, lon, object) {
-			vertices_.splice(object.DrawOrder, 1);
+		handleUpdateBayVertexCmd: function(bayVertex) {
+			var bayPersistentId = bayVertex.ParentPersistentId;
+			if (bays_[bayPersistentId] !== undefined) {
+				bayData = bays_[bayPersistentId];
+				if (bayData.vertices === undefined) {
+					bayData.vertices = [];
+				}
+				bayData.vertices[bayVertex.DrawOrder] = bayVertex;
+			}
 			thisAisleView_.draw();
+		},
+
+		handleDeleteBayVertexCmd: function(bayVertex) {
+
 		},
 
 		websocketCmdCallback: function(expectedResponseType) {
@@ -242,16 +205,26 @@ codeshelf.aisleview = function(websession, aisle) {
 							for (var i = 0; i < command.d.r.length; i++) {
 								var object = command.d.r[i];
 
-								// Make sure the class name matches.
-								if (object['className'] === codeshelf.domainobjects.vertex.classname) {
+								if (object['className'] === codeshelf.domainobjects.bay.classname) {
+									// Bay updates
 									if (object['op'] === 'cr') {
-										thisAisleView_.handleCreateFacilityVertexCmd(object['PosY'], object['PosX'], object);
+										thisAisleView_.handleUpdateBayCmd(object);
 									} else if (object['op'] === 'up') {
-										thisAisleView_.handleUpdateFacilityVertexCmd(object['PosY'], object['PosX'], object);
+										thisAisleView_.handleUpdateBayCmd(object);
 									} else if (object['op'] === 'dl') {
-										thisAisleView_.handleDeleteFacilityVertexCmd(object['PosY'], object['PosX'], object);
+										thisAisleView_.handleDeleteBayCmd(object);
+									}
+								} else if (object['className'] === codeshelf.domainobjects.vertex.classname) {
+									// Vertex updates.
+									if (object['op'] === 'cr') {
+										thisAisleView_.handleUpdateBayVertexCmd(object);
+									} else if (object['op'] === 'up') {
+										thisAisleView_.handleUpdateBayVertexCmd(object);
+									} else if (object['op'] === 'dl') {
+										thisAisleView_.handleDeleteBayVertexCmd(object);
 									}
 								}
+
 							}
 						} else if (command.t == kWebSessionCommandType.OBJECT_CREATE_RESP) {
 						} else if (command.t == kWebSessionCommandType.OBJECT_UPDATE_RESP) {

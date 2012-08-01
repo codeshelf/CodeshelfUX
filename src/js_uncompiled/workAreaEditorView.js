@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.27 2012/08/01 00:46:39 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.28 2012/08/01 08:49:24 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -58,7 +58,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 		setupView: function(contentElement) {
 
-			// Add the toolbar
+			// Setup the work area view elements.
 			var workAreaEditor = soy.renderAsElement(codeshelf.templates.workAreaEditor);
 			goog.dom.appendChild(contentElement, workAreaEditor);
 
@@ -478,8 +478,16 @@ codeshelf.workareaeditorview = function(websession, facility) {
 						path.moveTo(point.x, point.y);
 						start.x = point.x;
 						start.y = point.y;
+						aisleData['aisleElement'].style.left = point.x;
+						aisleData['aisleElement'].style.top = point.y;
 					} else {
 						path.lineTo(point.x, point.y);
+						if (aisleData['aisleElement'].style.width < (Math.abs(start.x - point.x))) {
+							aisleData['aisleElement'].style.width = (Math.abs(start.x - point.x));
+						}
+						if (aisleData['aisleElement'].style.height < (Math.abs(start.y - point.y))) {
+							aisleData['aisleElement'].style.height = (Math.abs(start.y - point.y));
+						}
 					}
 				}
 				path.lineTo(start.x, start.y);
@@ -508,7 +516,6 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		draw: function() {
-
 			thisWorkAreaEditorView_.startDraw();
 
 			// Draw the facility path.
@@ -524,24 +531,13 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 					var aislePath = thisWorkAreaEditorView_.computeAislePath(aisleData);
 					var stroke = new goog.graphics.Stroke(1, 'black');
-					var fill = new goog.graphics.SolidFill('green', 0.4);
+					var fill = new goog.graphics.SolidFill('green', 0.75);
 					thisWorkAreaEditorView_.drawPath(aislePath, stroke, fill);
+
+					// Now draw the aisle view that goes inside the aisle.
+					aisleData['aisleView'].draw();
 				}
 			}
-
-//			stroke = new goog.graphics.Stroke(4, 'black');
-//			var fill = new goog.graphics.SolidFill('black');
-//			path.forEachSegment(function(segment, args) {
-//				if (segment === goog.graphics.Path.Segment.LINETO) {
-//					for (var argNum = 0; argNum < Object.size(args); argNum += 4) {
-//						var pointA = { x: args[argNum], y: args[argNum + 1]}
-//						var pointB = { x: args[argNum + 2], y: args[argNum + 3]}
-//						var arrowPath = goog.graphics.paths.createArrow(pointA, pointB, 10, 10);
-//						thisWorkAreaEditorView_.drawPath(arrowPath, stroke, fill);
-//					}
-//				}
-//			});
-
 			thisWorkAreaEditorView_.endDraw();
 		},
 
@@ -557,9 +553,19 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 		handleUpdateAisleCmd: function(aisle) {
 			if (aisles_[aisle['persistentId']] === undefined) {
+
 				aisleData = {};
+
+				// Create and populate the aisle's data record.
+				aisleData['aisleElement'] = soy.renderAsElement(codeshelf.templates.aisleView);
+				aisleData['aisleElement'].style.left = Math.round(aisle['PosX'] * drawRatio_) + 'px';
+				aisleData['aisleElement'].style.top = Math.round(aisle['PosY'] * drawRatio_) + 'px';
+				goog.dom.appendChild(mainPane_, aisleData['aisleElement']);
+
 				aisleData['aisle'] = aisle;
-				aisleData['aisleView'] = codeshelf.aisleview(websession_, aisle);
+				aisleData['aisleView'] = codeshelf.aisleview(websession_, aisle, drawRatio_, graphics_);
+				aisleData['aisleView'].setupView(aisleData['aisleElement']);
+
 				aisles_[aisle['persistentId']] = aisleData;
 
 				// Create the filter to listen to all vertex updates for this facility.
