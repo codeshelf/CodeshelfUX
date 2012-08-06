@@ -22,12 +22,12 @@
 		<java jar="./lib/GoogleClosureTemplates/SoyToJsSrcCompiler.jar" fork="true" failonerror="true" maxmemory="128m">
 			<arg value="--shouldProvideRequireSoyNamespaces" />
 			<arg value="--outputPathFormat" />
-			<arg value="./src/js_uncompiled/{INPUT_FILE_NAME_NO_EXT}_generated.js" />
-			<arg value="./src/templates/codeshelf.soy" />
+			<arg value="./src/js_uncompiled/{INPUT_FILE_NAME_NO_EXT}_gen.js" />
+			<arg value="./src/templates/codeshelf_templates.soy" />
 		</java>
 	</target>
 
-	<target name="generate.css">
+	<target name="process.css">
 		<echo>${user.dir}</echo>
 		<java jar="./lib/GoogleClosureStylesheets/closure-stylesheets-20111230.jar" fork="true" failonerror="true" maxmemory="128m">
 			<arg value="--pretty-print" />
@@ -52,7 +52,8 @@
 	</target>
 
 	<target name="compile">
-		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/closurebuilder.py" optimize="0">
+		<echo>${basedir}</echo>
+		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/closurebuilder.py" dir="${basedir}" optimize="0">
 			<arg value="--root=./lib/GoogleClosureLibrary/closure/" />
 			<arg value="--root=./lib/GoogleClosureLibrary/third_party/" />
 			<arg value="--root=./lib/GoogleClosureTemplates/" />
@@ -67,6 +68,7 @@
 			<arg value="--compiler_flags=--create_source_map=./src/js_compiled/codeshelf.map" />
 			<arg value="--compiler_flags=--output_manifest=./src/js_compiled/codeshelf.manifest" />
 			<arg value="--compiler_flags=--create_name_map_files" />
+			<arg value="--compiler_flags=--externs=./src/js_externs/codeshelf_externs.js" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/google_maps_api_v3_8.js" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-1.7.js" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-ui.gw.js" />
@@ -82,6 +84,10 @@
 			<arg value="--compiler_flags=--summary_detail_level=3" />
 			<arg value="--output_file=./src/js_compiled/codeshelf.js" />
 		</py-run>
+		<replace file="./src/js_compiled/codeshelf.map" token="src/js_uncompiled" value="../js_uncompiled"/>
+		<replace file="./src/js_compiled/codeshelf.map" token="lib/GoogleClosureLibrary" value="../../lib/GoogleClosureLibrary"/>
+		<echo file="./src/js_compiled/codeshelf.js" append="true">
+//@ sourceMappingURL=codeshelf.map</echo>
 	</target>
 
 	<target name="plovr.build">
