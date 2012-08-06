@@ -90,6 +90,11 @@
 //@ sourceMappingURL=codeshelf.map</echo>
 	</target>
 
+	
+	<!--	This almost works, except source maps do not have the right paths.
+			The compiler option above works for now, but when we need modules it will be a lot easier to use Plovr.
+			This patch can make this work right: http://codereview.appspot.com/6346071/
+			but we don't need modules yet.  When we need modules revisit this to see if Plovr updated to include the listed patch. -->
 	<target name="plovr.build">
 		<echo>${basedir}</echo>
 		<java jar="./build/plovr-4b3caf2b7d84.jar" fork="true" failonerror="true" maxmemory="128m">

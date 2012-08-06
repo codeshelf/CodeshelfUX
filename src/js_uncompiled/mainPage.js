@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.30 2012/06/10 03:13:31 jeffw Exp $
+ *  $Id: mainPage.js,v 1.31 2012/08/06 16:43:52 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.domainobjects');
@@ -114,16 +114,16 @@ codeshelf.mainpage = function() {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
-					if (!command.d.hasOwnProperty('r')) {
+					if (!command['d'].hasOwnProperty('r')) {
 						alert('response has no result');
 					} else {
-						if (command.t == kWebSessionCommandType.OBJECT_GETTER_RESP) {
-							if (command.d.r.length === 0) {
+						if (command['t'] == kWebSessionCommandType.OBJECT_GETTER_RESP) {
+							if (command['d']['r'].length === 0) {
 								var clientInitializer = codeshelf.initializenewclient();
 								clientInitializer.start(websession_, application_.getOrganization(), frame_);
 							} else {
-								for (var i = 0; i < command.d.r.length; i++) {
-									var facility = command.d.r[i];
+								for (var i = 0; i < command['d']['r'].length; i++) {
+									var facility = command['d']['r'][i];
 									try {
 										// Load the GMaps API and init() when done.
 										if (typeof google !== "undefined") {

@@ -234,11 +234,11 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
-					if (!command.d.hasOwnProperty('r')) {
+					if (!command['d'].hasOwnProperty('r')) {
 						alert('response has no result');
-					} else if (command.t == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command.d.r.length; i++) {
-							var object = command.d.r[i];
+					} else if (command['t'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+						for (var i = 0; i < command['d']['r'].length; i++) {
+							var object = command['d']['r'][i];
 							if (object['op'] === "cr") {
 								dataView_.addItem(object);
 							} else if (object['op'] === "up") {

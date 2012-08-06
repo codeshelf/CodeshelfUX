@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.4 2012/08/06 00:50:48 jeffw Exp $
+ *  $Id: aisleView.js,v 1.5 2012/08/06 16:43:53 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -196,12 +196,12 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
-					if (!command.d.hasOwnProperty('r')) {
+					if (!command['d'].hasOwnProperty('r')) {
 						alert('response has no result');
 					} else {
-						if (command.t == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-							for (var i = 0; i < command.d.r.length; i++) {
-								var object = command.d.r[i];
+						if (command['t'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+							for (var i = 0; i < command['d']['r'].length; i++) {
+								var object = command['d']['r'][i];
 
 								if (object['className'] === codeshelf.domainobjects.bay.classname) {
 									// Bay updates
@@ -224,9 +224,9 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 								}
 
 							}
-						} else if (command.t == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-						} else if (command.t == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-						} else if (command.t == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+						} else if (command['t'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+						} else if (command['t'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+						} else if (command['t'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 						}
 					}
 				},

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.13 2012/08/06 00:50:48 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.14 2012/08/06 16:43:52 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -586,12 +586,12 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
-					if (!command.d.hasOwnProperty('r')) {
+					if (!command['d'].hasOwnProperty('r')) {
 						alert('response has no result');
 					} else {
-						if (command.t == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-							for (var i = 0; i < command.d.r.length; i++) {
-								var object = command.d.r[i];
+						if (command['t'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+							for (var i = 0; i < command['d']['r'].length; i++) {
+								var object = command['d']['r'][i];
 
 								// Make sure the class name matches.
 								if (object['className'] === codeshelf.domainobjects.vertex.classname) {
@@ -606,9 +606,9 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 									}
 								}
 							}
-						} else if (command.t == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-						} else if (command.t == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-						} else if (command.t == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+						} else if (command['t'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+						} else if (command['t'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+						} else if (command['t'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 						}
 					}
 				},

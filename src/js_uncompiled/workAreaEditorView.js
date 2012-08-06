@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.28 2012/08/01 08:49:24 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.29 2012/08/06 16:43:52 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -611,12 +611,12 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
-					if (!command.d.hasOwnProperty('r')) {
+					if (!command['d'].hasOwnProperty('r')) {
 						alert('response has no result');
 					} else {
-						if (command.t == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-							for (var i = 0; i < command.d.r.length; i++) {
-								var object = command.d.r[i];
+						if (command['t'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+							for (var i = 0; i < command['d']['r'].length; i++) {
+								var object = command['d']['r'][i];
 
 								if (object['className'] === codeshelf.domainobjects.vertex.classname) {
 									// Vertex updates.
@@ -629,9 +629,9 @@ codeshelf.workareaeditorview = function(websession, facility) {
 									}
 								}
 							}
-						} else if (command.t == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-						} else if (command.t == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-						} else if (command.t == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+						} else if (command['t'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+						} else if (command['t'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+						} else if (command['t'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 						}
 					}
 				},
@@ -647,12 +647,12 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
-					if (!command.d.hasOwnProperty('r')) {
+					if (!command['d'].hasOwnProperty('r')) {
 						alert('response has no result');
 					} else {
-						if (command.t == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-							for (var i = 0; i < command.d.r.length; i++) {
-								var object = command.d.r[i];
+						if (command['t'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+							for (var i = 0; i < command['d']['r'].length; i++) {
+								var object = command['d']['r'][i];
 
 								if (object['className'] === codeshelf.domainobjects.aisle.classname) {
 									// Aisle updates
@@ -675,9 +675,9 @@ codeshelf.workareaeditorview = function(websession, facility) {
 								}
 
 							}
-						} else if (command.t == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-						} else if (command.t == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-						} else if (command.t == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+						} else if (command['t'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+						} else if (command['t'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+						} else if (command['t'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 						}
 					}
 				},
