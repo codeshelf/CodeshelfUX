@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.12 2012/07/30 01:06:47 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.13 2012/08/06 00:50:48 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -76,7 +76,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			geocoder_.responseSet = [];
 
 			var fieldId = goog.events.getUniqueId('search');
-			var fieldElement = soy.renderAsElement(codeshelf.templates.dataObjectField, {id: fieldId, class: 'windowField', label: 'Search for address'});
+			var fieldElement = soy.renderAsElement(codeshelf.templates.dataObjectField, {id: fieldId, cssClass: 'windowField', label: 'Search for address'});
 			goog.dom.appendChild(contentElement, fieldElement);
 			var inputElement = goog.dom.getElement(fieldId);
 			googleField_ = new goog.ui.LabelInput('Search for address');

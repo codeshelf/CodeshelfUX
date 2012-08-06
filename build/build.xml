@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="CodeShelfUX" default="" basedir="..">
+<project name="CodeShelfUX" default="" basedir="../">
 
 	<taskdef resource="pyAntTasks.properties">
 		<classpath>
@@ -38,6 +38,7 @@
 	</target>
 
 	<target name="deps.writer">
+		<echo>${basedir}</echo>
 		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/depswriter.py" pythonpath="${basedir}" optimize="0">
 			<arg value="--root_with_prefix=../lib/GoogleClosureLibrary ../../" />
 			<arg value="--root_with_prefix=../lib/GoogleClosureTemplates ../../../GoogleClosureTemplates" />
@@ -51,35 +52,47 @@
 	</target>
 
 	<target name="compile">
-		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/closurebuilder.py" pythonpath="${basedir}" optimize="0">
-			<arg value="--root=../lib/GoogleClosureLibrary/closure/" />
-			<arg value="--root=../lib/GoogleClosureLibrary/third_party/" />
-			<arg value="--root=../lib/GoogleClosureTemplates/" />
-			<arg value="--root=../lib/JQuery/" />
-			<arg value="--root=../lib/SlickGrid/" />
-			<arg value="--root=../src/js_uncompiled" />
+		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/closurebuilder.py" optimize="0">
+			<arg value="--root=./lib/GoogleClosureLibrary/closure/" />
+			<arg value="--root=./lib/GoogleClosureLibrary/third_party/" />
+			<arg value="--root=./lib/GoogleClosureTemplates/" />
+			<arg value="--root=./lib/JQuery/" />
+			<arg value="--root=./lib/SlickGrid/" />
+			<arg value="--root=./lib/Raphael/" />
+			<arg value="--root=./src/js_uncompiled" />
 			<arg value="--namespace=codeshelf.application" />
 			<arg value="--output_mode=compiled" />
-			<arg value="--compiler_jar=../lib/GoogleClosureLibrary/compiler.jar" />
+			<arg value="--compiler_jar=./lib/GoogleClosureLibrary/compiler.jar" />
 			<arg value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
-			<arg value="--compiler_flags=--create_source_map=../src/js_compiled/codeshelf.map" />
-			<arg value="--compiler_flags=--output_manifest=../src/js_compiled/codeshelf.manifest" />
+			<arg value="--compiler_flags=--create_source_map=./src/js_compiled/codeshelf.map" />
+			<arg value="--compiler_flags=--output_manifest=./src/js_compiled/codeshelf.manifest" />
 			<arg value="--compiler_flags=--create_name_map_files" />
-			<arg value="--compiler_flags=--externs=../src/js_externs/google_maps_api_v3_8.js" />
-			<arg value="--compiler_flags=--externs=../src/js_externs/jquery-1.7.js" />
-			<arg value="--compiler_flags=--externs=../src/js_externs/jquery-ui.gw.js" />
-			<arg value="--compiler_flags=--formatting=PRETTY_PRINT" />
+			<arg value="--compiler_flags=--externs=./src/js_externs/google_maps_api_v3_8.js" />
+			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-1.7.js" />
+			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-ui.gw.js" />
+			<!--arg value="- -compiler_flags=- -formatting=PRETTY_PRINT" /-->
 			<arg value="--compiler_flags=--debug" />
 			<!--arg value="- -compiler_flags=- -warning_level=VERBOSE" /-->
-			<arg value="--compiler_flags=--output_wrapper &quot;(function(){%output%})();&quot;" />
+			<!--arg value="- -compiler_flags=- -output_wrapper &quot;(function(){%output%})();&quot;" /-->
 			<arg value="--compiler_flags=--manage_closure_dependencies" />
 			<arg value="--compiler_flags=--closure_entry_point=codeshelf.application" />
 			<arg value="--compiler_flags=--jscomp_warning=missingProperties" />
 			<arg value="--compiler_flags=--jscomp_warning=checkTypes" />
 			<arg value="--compiler_flags=--logging_level=FINEST" />
 			<arg value="--compiler_flags=--summary_detail_level=3" />
-			<arg value="--output_file=../src/js_compiled/codeshelf.js" />
+			<arg value="--output_file=./src/js_compiled/codeshelf.js" />
 		</py-run>
 	</target>
 
+	<target name="plovr.build">
+		<echo>${basedir}</echo>
+		<java jar="./build/plovr-4b3caf2b7d84.jar" fork="true" failonerror="true" maxmemory="128m">
+			<arg value="build" />
+			<arg value="./build/codeshelf.plovr.config" />
+			<arg value="--create_source_map" />
+			<arg value="./src/js_compiled/codeshelf.map" />
+		</java>
+		<echo file="./src/js_compiled/codeshelf.js" append="true">
+//@ sourceMappingURL=codeshelf.map</echo>
+	</target>
 </project>

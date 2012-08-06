@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.3 2012/08/01 08:49:24 jeffw Exp $
+ *  $Id: aisleView.js,v 1.4 2012/08/06 00:50:48 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -22,17 +22,14 @@ goog.require('raphael');
 
 codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 
-	var thisAisleView_;
 	var websession_ = websession;
 	var drawRatio_ = drawRatio;
 	var aisle_ = aisle;
-	var clickHandler_;
-	var doubleClickHandler_;
 	var mainPane_;
 	var graphics_ = graphics;
 	var bays_ = [];
 
-	thisAisleView_ = {
+	var thisAisleView_ = {
 
 		setupView: function(contentElement) {
 
@@ -57,7 +54,7 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 				'filterParams':  [
 					{ 'name': "theId", 'value': aisle_['persistentId']}
 				]
-			}
+			};
 
 			var bayFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			websession_.sendCommand(bayFilterCmd, thisAisleView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
@@ -71,8 +68,7 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 		},
 
 		exit: function() {
-			google.maps.event.removeListener(clickHandler_);
-			google.maps.event.removeListener(doubleClickHandler_);
+
 		},
 
 		resize: function() {
@@ -92,19 +88,21 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 
 		},
 
-		draw: function() {
+		draw: function(bay) {
 //			thisAisleView_.startDraw();
 
 			// Draw the bays
-			for (var bayKey in bays_) {
+//			for (var bayKey in bays_) {
+			if (bay !== undefined) {
+				bayKey = bay['persistentId'];
 				if (bays_.hasOwnProperty(bayKey)) {
 					var bayData = bays_[bayKey];
 
 					// If this is the lowest bay, and there are at least four vertices then draw the bay.
 					if ((bayData['bay'].PosZ === 0) && (Object.size(bayData.vertices) >= 4)) {
 						var bayPath = thisAisleView_.computeBayPath(bayData);
-						var stroke = new goog.graphics.Stroke(0.5, 'grey');
-						var fill = new goog.graphics.SolidFill('white', 0.1);
+						var stroke = new goog.graphics.Stroke(0.5, 'black');
+						var fill = new goog.graphics.SolidFill('white', 0.2);
 						thisAisleView_.drawPath(bayPath, stroke, fill);
 					}
 				}
@@ -168,14 +166,14 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 				var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
 				websession_.sendCommand(vertexFilterCmd, thisAisleView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 			}
-			thisAisleView_.draw();
+			thisAisleView_.draw(bay);
 		},
 
 		handleDeleteBayCmd: function(bay) {
 			if (bays_[bay['persistentId']] !== undefined) {
 				bays_.splice(bay['persistentId'], 1);
 			}
-			thisAisleView_.draw();
+			thisAisleView_.draw(bay);
 		},
 
 		handleUpdateBayVertexCmd: function(bayVertex) {
@@ -186,8 +184,8 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 					bayData.vertices = [];
 				}
 				bayData.vertices[bayVertex.DrawOrder] = bayVertex;
+				thisAisleView_.draw(bayData['bay']);
 			}
-			thisAisleView_.draw();
 		},
 
 		handleDeleteBayVertexCmd: function(bayVertex) {

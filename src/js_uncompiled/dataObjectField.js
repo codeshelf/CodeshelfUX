@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataObjectField.js,v 1.13 2012/05/07 06:34:27 jeffw Exp $
+ *  $Id: dataObjectField.js,v 1.14 2012/08/06 00:50:48 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
@@ -50,7 +50,7 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 
 			// Put the HTML markup in the parent element.
 			var fieldId = goog.events.getUniqueId('field');
-			var fieldElement = soy.renderAsElement(codeshelf.templates.dataObjectField, {id: fieldId, class: cssClass_, label: titleLabel_});
+			var fieldElement = soy.renderAsElement(codeshelf.templates.dataObjectField, {id: fieldId, cssClass: cssClass_, label: titleLabel_});
 			goog.dom.appendChild(parentElement_, fieldElement);
 			inputElement_ = goog.dom.getElement(fieldId);
 			googleField_ = new goog.ui.LabelInput(titleLabel_);
