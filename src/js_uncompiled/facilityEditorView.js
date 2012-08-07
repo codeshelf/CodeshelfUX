@@ -1,14 +1,15 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.14 2012/08/06 16:43:52 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.15 2012/08/07 07:51:44 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
+goog.require('codeshelf.domainobjects');
 //goog.require('codeshelf.facilityeditorviewgmapsoverlay');
 goog.require('codeshelf.templates');
-goog.require('codeshelf.websession');
 goog.require('codeshelf.workareaeditorview');
+goog.require('codeshelf.websession');
 goog.require('extern.jquery.css.rotate');
 goog.require('extern.jquery.css.transform');
 goog.require('goog.dom.query');
@@ -140,9 +141,9 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 					// then extend or shorten this segment to make it exactly 90deg.
 
 					var data = {
-						'parentClassName':    codeshelf.domainobjects.facility['classname'],
+						'parentClassName':    codeshelf.domainobjects.facility.classname,
 						'parentPersistentId': facility_['persistentId'],
-						'className':          codeshelf.domainobjects.vertex['classname'],
+						'className':          codeshelf.domainobjects.vertex.classname,
 						'properties':         [
 							{name: 'DomainId', value: 'V' + vertexNum},
 							//{name:'Description', 'value':'First Facility'},
@@ -402,7 +403,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			for (var i = Object.size(facilityOutlineVertices_) - 1; i >= 0 ; i--) {
 
 				var data = {
-					'className':    codeshelf.domainobjects.vertex['classname'],
+					'className':    codeshelf.domainobjects.vertex.classname,
 					'persistentId': facilityOutlineVertices_[i].vertex['persistentId']
 				}
 

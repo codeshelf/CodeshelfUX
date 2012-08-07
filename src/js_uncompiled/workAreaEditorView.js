@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.29 2012/08/06 16:43:52 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.30 2012/08/07 07:51:44 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -353,14 +353,14 @@ codeshelf.workareaeditorview = function(websession, facility) {
 					points[0].y = 0;
 				} else if (points[i - 1] !== undefined) {
 					var lastVertex = vertices_[i - 1];
-					var coord = thisWorkAreaEditorView_.convertLatLongToXY(lastVertex.PosY, lastVertex.PosX, vertex.PosY, vertex.PosX);
+					var coord = thisWorkAreaEditorView_.convertLatLongToXY(lastVertex['PosY'], lastVertex['PosX'], vertex['PosY'], vertex['PosX']);
 					points[i] = {};
 					points[i].x = points[i - 1].x + coord.x;
 					points[i].y = points[i - 1].y + coord.y;
 
 					// Figure out the angle between point 1 and 2.
 					var polar = thisWorkAreaEditorView_.convertCartesianToPolar(points[0], points[1]);
-					rotateFacilityByDeg_ = 0 - polar.angle;
+					rotateFacilityByDeg_ = 0 - polar['angle'];
 				}
 
 			}
@@ -498,8 +498,8 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 		convertAisleVertexToPoint: function(aisle, vertex) {
 			var point = {};
-			point.x = (vertex.PosX + aisle.PosX) * drawRatio_;
-			point.y = (vertex.PosY + aisle.PosY) * drawRatio_;
+			point.x = (vertex['PosX'] + aisle['PosX']) * drawRatio_;
+			point.y = (vertex['PosY'] + aisle['PosY']) * drawRatio_;
 			return point;
 		},
 
@@ -592,13 +592,13 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		handleUpdateAisleVertexCmd: function(aisleVertex) {
-			var aislePersistentId = aisleVertex.ParentPersistentId;
+			var aislePersistentId = aisleVertex['ParentPersistentId'];
 			if (aisles_[aislePersistentId] !== undefined) {
 				aisleData = aisles_[aislePersistentId];
 				if (aisleData.vertices === undefined) {
 					aisleData.vertices = [];
 				}
-				aisleData.vertices[aisleVertex.DrawOrder] = aisleVertex;
+				aisleData.vertices[aisleVertex['DrawOrder']] = aisleVertex;
 			}
 			thisWorkAreaEditorView_.draw();
 		},

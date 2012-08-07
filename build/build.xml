@@ -73,7 +73,7 @@
 			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-1.7.js" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-ui.gw.js" />
 			<!--arg value="- -compiler_flags=- -formatting=PRETTY_PRINT" /-->
-			<arg value="--compiler_flags=--debug" />
+			<!--arg value="- -compiler_flags=- -debug" /-->
 			<!--arg value="- -compiler_flags=- -warning_level=VERBOSE" /-->
 			<!--arg value="- -compiler_flags=- -output_wrapper &quot;(function(){%output%})();&quot;" /-->
 			<arg value="--compiler_flags=--manage_closure_dependencies" />

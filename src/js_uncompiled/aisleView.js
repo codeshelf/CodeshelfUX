@@ -1,12 +1,13 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.5 2012/08/06 16:43:53 jeffw Exp $
+ *  $Id: aisleView.js,v 1.6 2012/08/07 07:51:44 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
-goog.require('codeshelf.templates');
 goog.require('codeshelf.dataentrydialog');
+goog.require('codeshelf.domainobjects');
+goog.require('codeshelf.templates');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
