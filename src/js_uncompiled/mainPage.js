@@ -1,10 +1,10 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.31 2012/08/06 16:43:52 jeffw Exp $
+ *  $Id: mainPage.js,v 1.32 2012/08/10 11:25:43 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
-goog.require('codeshelf.domainobjects');
+goog.require('domainobjects');
 goog.require('codeshelf.facilityeditorview');
 goog.require('codeshelf.workareaeditorview');
 goog.require('codeshelf.initializenewclient');
@@ -85,7 +85,7 @@ codeshelf.mainpage = function() {
 			var filterParams = [
 				{ 'name': "theId", 'value': organization['persistentId']}
 			]
-			var listView = codeshelf.listview(websession_, codeshelf.domainobjects.facility, filter, filterParams);
+			var listView = codeshelf.listview(websession_, domainobjects.facility, filter, filterParams);
 			var listWindow = codeshelf.window('Facilities List', listView, frame_, undefined);
 			listWindow.open();
 

@@ -18,7 +18,7 @@
 		</exec>
 	</target>
 
-	<target name="process.templates">
+	<target name="generate.templates">
 		<java jar="./lib/GoogleClosureTemplates/SoyToJsSrcCompiler.jar" fork="true" failonerror="true" maxmemory="128m">
 			<arg value="--shouldProvideRequireSoyNamespaces" />
 			<arg value="--outputPathFormat" />
@@ -27,7 +27,7 @@
 		</java>
 	</target>
 
-	<target name="process.css">
+	<target name="generate.css">
 		<echo>${user.dir}</echo>
 		<java jar="./lib/GoogleClosureStylesheets/closure-stylesheets-20111230.jar" fork="true" failonerror="true" maxmemory="128m">
 			<arg value="--pretty-print" />
@@ -37,7 +37,7 @@
 		</java>
 	</target>
 
-	<target name="deps.writer">
+	<target name="generate.deps">
 		<echo>${basedir}</echo>
 		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/depswriter.py" pythonpath="${basedir}" optimize="0">
 			<arg value="--root_with_prefix=../lib/GoogleClosureLibrary ../../" />
@@ -67,13 +67,15 @@
 			<arg value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
 			<arg value="--compiler_flags=--create_source_map=./src/js_compiled/codeshelf.map" />
 			<arg value="--compiler_flags=--output_manifest=./src/js_compiled/codeshelf.manifest" />
-			<arg value="--compiler_flags=--create_name_map_files" />
-			<arg value="--compiler_flags=--externs=./src/js_externs/codeshelf_externs.js" />
+			<arg value="--compiler_flags=--property_map_output_file=./src/js_compiled/property.map" />
+			<arg value="--compiler_flags=--variable_map_output_file=./src/js_compiled/variable.map" />
+			<!--arg value="- -compiler_flags=- -create_name_map_files" /-->
+			<!--arg value="- -compiler_flags=- -externs=./src/js_externs/codeshelf_externs.js" /-->
 			<arg value="--compiler_flags=--externs=./src/js_externs/google_maps_api_v3_8.js" />
-			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-1.7.js" />
-			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-ui.gw.js" />
-			<!--arg value="- -compiler_flags=- -formatting=PRETTY_PRINT" /-->
-			<!--arg value="- -compiler_flags=- -debug" /-->
+			<!--arg value="- -compiler_flags=- -externs=./src/js_externs/jquery-1.7.js" /-->
+			<!--arg value="- -compiler_flags=- -externs=./src/js_externs/jquery-ui.gw.js" /-->
+			<arg value="--compiler_flags=--formatting=PRETTY_PRINT" />
+			<arg value="--compiler_flags=--debug" />
 			<!--arg value="- -compiler_flags=- -warning_level=VERBOSE" /-->
 			<!--arg value="- -compiler_flags=- -output_wrapper &quot;(function(){%output%})();&quot;" /-->
 			<arg value="--compiler_flags=--manage_closure_dependencies" />
@@ -86,8 +88,10 @@
 		</py-run>
 		<replace file="./src/js_compiled/codeshelf.map" token="src/js_uncompiled" value="../js_uncompiled"/>
 		<replace file="./src/js_compiled/codeshelf.map" token="lib/GoogleClosureLibrary" value="../../lib/GoogleClosureLibrary"/>
+		<replace file="./src/js_compiled/codeshelf.map" token="lib/SlickGrid" value="../../lib/SlickGrid"/>
+		<replace file="./src/js_compiled/codeshelf.map" token="lib/JQuery" value="../../lib/JQuery"/>
 		<echo file="./src/js_compiled/codeshelf.js" append="true">
-//@ sourceMappingURL=codeshelf.map</echo>
+//@ sourceMappingURL=codeshelf.ma p</echo>
 	</target>
 
 	

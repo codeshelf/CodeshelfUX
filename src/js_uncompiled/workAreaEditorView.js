@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.30 2012/08/07 07:51:44 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.31 2012/08/10 11:25:43 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -127,7 +127,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		open: function() {
 			// Create the filter to listen to all vertex updates for this facility.
 			var vertexFilterData = {
-				'className':     codeshelf.domainobjects.vertex.classname,
+				'className':     domainobjects.vertex.classname,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
 				'filterClause':  'parentLocation.persistentId = :theId',
 				'filterParams':  [
@@ -140,7 +140,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 			// Create the filter to listen to all aisle updates for this facility.
 			var aisleFilterData = {
-				'className':     codeshelf.domainobjects.aisle.classname,
+				'className':     domainobjects.aisle.classname,
 				'propertyNames': ['DomainId', 'PosX', 'PosY'],
 				'filterClause':  'parentLocation.persistentId = :theId',
 				'filterParams':  [
@@ -257,7 +257,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 						// Call Facility.createAisle();
 						//public final void createAisle(Double inPosX, Double inPosY, Double inProtoBayHeight, Double inProtoBayWidth, Double inProtoBayDepth, int inBaysHigh, int inBaysLong, Boolean inCreateBackToBack) {
 						var data = {
-							'className':    codeshelf.domainobjects.facility.classname,
+							'className':    domainobjects.facility.classname,
 							'persistentId': facility_['persistentId'],
 							'methodName':   'createAisle',
 							'methodArgs':   [
@@ -478,15 +478,15 @@ codeshelf.workareaeditorview = function(websession, facility) {
 						path.moveTo(point.x, point.y);
 						start.x = point.x;
 						start.y = point.y;
-						aisleData['aisleElement'].style.left = point.x;
-						aisleData['aisleElement'].style.top = point.y;
+						aisleData.aisleElement.style.left = point.x;
+						aisleData.aisleElement.style.top = point.y;
 					} else {
 						path.lineTo(point.x, point.y);
-						if (aisleData['aisleElement'].style.width < (Math.abs(start.x - point.x))) {
-							aisleData['aisleElement'].style.width = (Math.abs(start.x - point.x));
+						if (aisleData.aisleElement.style.width < (Math.abs(start.x - point.x))) {
+							aisleData.aisleElement.style.width = (Math.abs(start.x - point.x));
 						}
-						if (aisleData['aisleElement'].style.height < (Math.abs(start.y - point.y))) {
-							aisleData['aisleElement'].style.height = (Math.abs(start.y - point.y));
+						if (aisleData.aisleElement.style.height < (Math.abs(start.y - point.y))) {
+							aisleData.aisleElement.style.height = (Math.abs(start.y - point.y));
 						}
 					}
 				}
@@ -535,7 +535,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 					thisWorkAreaEditorView_.drawPath(aislePath, stroke, fill);
 
 					// Now draw the aisle view that goes inside the aisle.
-					aisleData['aisleView'].draw();
+					aisleData.aisleView.draw();
 				}
 			}
 			thisWorkAreaEditorView_.endDraw();
@@ -557,20 +557,20 @@ codeshelf.workareaeditorview = function(websession, facility) {
 				aisleData = {};
 
 				// Create and populate the aisle's data record.
-				aisleData['aisleElement'] = soy.renderAsElement(codeshelf.templates.aisleView);
-				aisleData['aisleElement'].style.left = Math.round(aisle['PosX'] * drawRatio_) + 'px';
-				aisleData['aisleElement'].style.top = Math.round(aisle['PosY'] * drawRatio_) + 'px';
-				goog.dom.appendChild(mainPane_, aisleData['aisleElement']);
+				aisleData.aisleElement = soy.renderAsElement(codeshelf.templates.aisleView);
+				aisleData.aisleElement.style.left = Math.round(aisle['PosX'] * drawRatio_) + 'px';
+				aisleData.aisleElement.style.top = Math.round(aisle['PosY'] * drawRatio_) + 'px';
+				goog.dom.appendChild(mainPane_, aisleData.aisleElement);
 
-				aisleData['aisle'] = aisle;
-				aisleData['aisleView'] = codeshelf.aisleview(websession_, aisle, drawRatio_, graphics_);
-				aisleData['aisleView'].setupView(aisleData['aisleElement']);
+				aisleData.aisle = aisle;
+				aisleData.aisleView = codeshelf.aisleview(websession_, aisle, drawRatio_, graphics_);
+				aisleData.aisleView.setupView(aisleData.aisleElement);
 
 				aisles_[aisle['persistentId']] = aisleData;
 
 				// Create the filter to listen to all vertex updates for this facility.
 				var vertexFilterData = {
-					'className':     codeshelf.domainobjects.vertex.classname,
+					'className':     domainobjects.vertex.classname,
 					'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder', 'ParentPersistentId'],
 					'filterClause':  'parentLocation.persistentId = :theId',
 					'filterParams':  [
@@ -618,7 +618,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 							for (var i = 0; i < command['d']['r'].length; i++) {
 								var object = command['d']['r'][i];
 
-								if (object['className'] === codeshelf.domainobjects.vertex.classname) {
+								if (object['className'] === domainobjects.vertex.classname) {
 									// Vertex updates.
 									if (object['op'] === 'cr') {
 										thisWorkAreaEditorView_.handleUpdateFacilityVertexCmd(object['PosY'], object['PosX'], object);
@@ -654,7 +654,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 							for (var i = 0; i < command['d']['r'].length; i++) {
 								var object = command['d']['r'][i];
 
-								if (object['className'] === codeshelf.domainobjects.aisle.classname) {
+								if (object['className'] === domainobjects.aisle.classname) {
 									// Aisle updates
 									if (object['op'] === 'cr') {
 										thisWorkAreaEditorView_.handleUpdateAisleCmd(object);
@@ -663,7 +663,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 									} else if (object['op'] === 'dl') {
 										thisWorkAreaEditorView_.handleDeleteAisleCmd(object);
 									}
-								} else if (object['className'] === codeshelf.domainobjects.vertex.classname) {
+								} else if (object['className'] === domainobjects.vertex.classname) {
 									// VAisle ertex updates.
 									if (object['op'] === 'cr') {
 										thisWorkAreaEditorView_.handleUpdateAisleVertexCmd(object);

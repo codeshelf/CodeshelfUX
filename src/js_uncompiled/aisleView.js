@@ -1,12 +1,12 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.6 2012/08/07 07:51:44 jeffw Exp $
+ *  $Id: aisleView.js,v 1.7 2012/08/10 11:25:43 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
 goog.require('codeshelf.dataentrydialog');
-goog.require('codeshelf.domainobjects');
+goog.require('domainobjects');
 goog.require('codeshelf.templates');
 goog.require('goog.array');
 goog.require('goog.dom');
@@ -49,7 +49,7 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 
 			// Create the filter to listen to all bay updates for this aisle.
 			var data = {
-				'className':     codeshelf.domainobjects.bay.classname,
+				'className':     domainobjects.bay.classname,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'PosZ'],
 				'filterClause':  'parentLocation.persistentId = :theId',
 				'filterParams':  [
@@ -156,7 +156,7 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 
 				// Create the filter to listen to all vertex updates for this facility.
 				var vertexFilterData = {
-					'className':     codeshelf.domainobjects.vertex.classname,
+					'className':     domainobjects.vertex.classname,
 					'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder', 'ParentPersistentId'],
 					'filterClause':  'parentLocation.persistentId = :theId',
 					'filterParams':  [
@@ -204,7 +204,7 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 							for (var i = 0; i < command['d']['r'].length; i++) {
 								var object = command['d']['r'][i];
 
-								if (object['className'] === codeshelf.domainobjects.bay.classname) {
+								if (object['className'] === domainobjects.bay.classname) {
 									// Bay updates
 									if (object['op'] === 'cr') {
 										thisAisleView_.handleUpdateBayCmd(object);
@@ -213,7 +213,7 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 									} else if (object['op'] === 'dl') {
 										thisAisleView_.handleDeleteBayCmd(object);
 									}
-								} else if (object['className'] === codeshelf.domainobjects.vertex.classname) {
+								} else if (object['className'] === domainobjects.vertex.classname) {
 									// Vertex updates.
 									if (object['op'] === 'cr') {
 										thisAisleView_.handleUpdateBayVertexCmd(object);

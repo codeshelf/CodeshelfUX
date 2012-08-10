@@ -1,11 +1,11 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.15 2012/08/07 07:51:44 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.16 2012/08/10 11:25:43 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
-goog.require('codeshelf.domainobjects');
+goog.require('domainobjects');
 //goog.require('codeshelf.facilityeditorviewgmapsoverlay');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.workareaeditorview');
@@ -68,7 +68,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			totalBounds_ = new google.maps.LatLngBounds();
 
 			// Add the facility descriptor field.
-			var facilityDescField = codeshelf.dataobjectfield(websession_, contentElement, codeshelf.domainobjects.facility.classname, codeshelf.domainobjects.facility.properties.desc.id, facility_['persistentId'], 'windowField', 'Facility name');
+			var facilityDescField = codeshelf.dataobjectfield(websession_, contentElement, domainobjects.facility.classname, domainobjects.facility.properties.desc.id, facility_['persistentId'], 'windowField', 'Facility name');
 			facilityDescField.start();
 
 			// Setup GMaps geocoding to locate places for the user (if needed).
@@ -104,7 +104,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		open: function() {
 			// Create the filter to listen to all vertex updates for this facility.
 			var data = {
-				'className':     codeshelf.domainobjects.vertex.classname,
+				'className':     domainobjects.vertex.classname,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
 				'filterClause':  'parentLocation.persistentId = :theId',
 				'filterParams':  [
@@ -141,9 +141,9 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 					// then extend or shorten this segment to make it exactly 90deg.
 
 					var data = {
-						'parentClassName':    codeshelf.domainobjects.facility.classname,
+						'parentClassName':    domainobjects.facility.classname,
 						'parentPersistentId': facility_['persistentId'],
-						'className':          codeshelf.domainobjects.vertex.classname,
+						'className':          domainobjects.vertex.classname,
 						'properties':         [
 							{name: 'DomainId', value: 'V' + vertexNum},
 							//{name:'Description', 'value':'First Facility'},
@@ -159,7 +159,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 					// If this was the anchor vertex then set the location of the facility as well.
 					var data = {
-						'className':    codeshelf.domainobjects.facility.classname,
+						'className':    domainobjects.facility.classname,
 						'persistentId': facility_['persistentId'],
 						'properties':   [
 							{'name': 'PosTypeByStr', 'value': 'GPS'},
@@ -311,7 +311,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 						if (canEditOutline_) {
 							var data = {
-								'className':    codeshelf.domainobjects.vertex.classname,
+								'className':    domainobjects.vertex.classname,
 								'persistentId': vertex['persistentId'],
 								'properties':   [
 									{'name': 'PosX', 'value': marker.getPosition().lng()},
@@ -400,10 +400,10 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 		deleteFacilityOutline: function() {
 			// Clear all of the markers from the map.
-			for (var i = Object.size(facilityOutlineVertices_) - 1; i >= 0 ; i--) {
+			for (var i = Object.size(facilityOutlineVertices_) - 1; i >= 0; i--) {
 
 				var data = {
-					'className':    codeshelf.domainobjects.vertex.classname,
+					'className':    domainobjects.vertex.classname,
 					'persistentId': facilityOutlineVertices_[i].vertex['persistentId']
 				}
 
@@ -595,7 +595,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 								var object = command['d']['r'][i];
 
 								// Make sure the class name matches.
-								if (object['className'] === codeshelf.domainobjects.vertex.classname) {
+								if (object['className'] === domainobjects.vertex.classname) {
 									var latLng = new google.maps.LatLng(object['PosY'], object['PosX']);
 
 									if (object['op'] === 'cr') {

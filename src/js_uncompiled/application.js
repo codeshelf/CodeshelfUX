@@ -1,10 +1,10 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: application.js,v 1.15 2012/08/07 07:51:44 jeffw Exp $
+ *  $Id: application.js,v 1.16 2012/08/10 11:25:42 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.application');
-goog.require('codeshelf.domainobjects');
+goog.require('domainobjects');
 goog.require('codeshelf.launch');
 goog.require('codeshelf.mainpage');
 goog.require('codeshelf.websession');

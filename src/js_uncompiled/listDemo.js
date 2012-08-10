@@ -9,10 +9,10 @@ goog.require('slickgrid.pager');
 goog.require('slickgrid.columnpicker');
 goog.require('extern.jquery');
 
-$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all").mouseover(
+$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all")['mouseover'](
 	function(e) {
 		$(e.target).addClass("ui-state-hover")
-	}).mouseout(function(e) {
+	})['mouseout'](function(e) {
 		$(e.target).removeClass("ui-state-hover")
 	});
 
@@ -287,7 +287,7 @@ codeshelf.listdemo = function() {
 			var h_runfilters = null;
 
 			// wire up the slider to apply the filter to the model
-			$("#pcSlider,#pcSlider2").slider({
+			$("#pcSlider,#pcSlider2")['slider']({
 				"range": "min",
 				"slide": function(event, ui) {
 					$.Slick.GlobalEditorLock.cancelCurrentEdit();
@@ -301,7 +301,7 @@ codeshelf.listdemo = function() {
 			});
 
 			// wire up the search textbox to apply the filter to the model
-			$("#txtSearch,#txtSearch2").keyup(function(e) {
+			$("#txtSearch,#txtSearch2")['keyup'](function(e) {
 				$.Slick.GlobalEditorLock.cancelCurrentEdit();
 
 				// clear on Esc
@@ -320,7 +320,7 @@ codeshelf.listdemo = function() {
 				dataView.refresh();
 			}
 
-			$("#btnSelectRows").click(function() {
+			$("#btnSelectRows")['click'](function() {
 				if (!$.Slick.GlobalEditorLock.commitCurrentEdit()) {
 					return;
 				}
@@ -349,7 +349,7 @@ codeshelf.listdemo = function() {
 			//dataView.setFilter(thisListDemo_.myFilter);
 			dataView.endUpdate();
 
-			$("#gridContainer").resizable();
+			$("#gridContainer")['resizable']();
 		},
 
 		close: function() {

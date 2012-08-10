@@ -11,10 +11,10 @@ goog.require('extern.jquery');
 
 codeshelf.listview = function(websession, domainObject, filterClause, filterParams) {
 
-	$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all").mouseover(
+	$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all")['mouseover'](
 		function(e) {
 			$(e.target).addClass("ui-state-hover")
-		}).mouseout(function(e) {
+		})['mouseout'](function(e) {
 			$(e.target).removeClass("ui-state-hover")
 		});
 
@@ -180,7 +180,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 			//dataView_.setFilter(thisListview_.myFilter);
 			dataView_.endUpdate();
 
-			$("#gridContainer").resizable();
+			$("#gridContainer")['resizable']();
 		},
 
 		close: function() {
