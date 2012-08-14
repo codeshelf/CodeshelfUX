@@ -156,7 +156,7 @@ input.editor-percentcomplete {
     display: inline-block;
     width: 16px;
     height: 100%;
-    background: url("../lib/SlickGrid/images/pencil.gif") no-repeat center center;	
+    background: url("../../lib/SlickGrid/images/pencil.gif") no-repeat center center;
 	overflow: visible;
 	z-index: 1000;
 	float: right;
@@ -167,7 +167,7 @@ input.editor-percentcomplete {
     position: absolute;
     top: -2px;
     left: -9px;
-    background: url("../lib/SlickGrid/images/editor-helper-bg.gif") no-repeat top left;
+    background: url("../../lib/SlickGrid/images/editor-helper-bg.gif") no-repeat top left;
     padding-left: 9px;
 
     width: 120px;

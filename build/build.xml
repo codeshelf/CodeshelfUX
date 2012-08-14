@@ -72,8 +72,8 @@
 			<!--arg value="- -compiler_flags=- -create_name_map_files" /-->
 			<!--arg value="- -compiler_flags=- -externs=./src/js_externs/codeshelf_externs.js" /-->
 			<arg value="--compiler_flags=--externs=./src/js_externs/google_maps_api_v3_8.js" />
-			<!--arg value="- -compiler_flags=- -externs=./src/js_externs/jquery-1.7.js" /-->
-			<!--arg value="- -compiler_flags=- -externs=./src/js_externs/jquery-ui.gw.js" /-->
+			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-1.7.js" />
+			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-ui.1.8.19.js" />
 			<arg value="--compiler_flags=--formatting=PRETTY_PRINT" />
 			<arg value="--compiler_flags=--debug" />
 			<!--arg value="- -compiler_flags=- -warning_level=VERBOSE" /-->
@@ -91,7 +91,7 @@
 		<replace file="./src/js_compiled/codeshelf.map" token="lib/SlickGrid" value="../../lib/SlickGrid"/>
 		<replace file="./src/js_compiled/codeshelf.map" token="lib/JQuery" value="../../lib/JQuery"/>
 		<echo file="./src/js_compiled/codeshelf.js" append="true">
-//@ sourceMappingURL=codeshelf.ma p</echo>
+//@ sourceMappingURL=codeshelf.map</echo>
 	</target>
 
 	
