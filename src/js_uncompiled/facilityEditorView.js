@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.16 2012/08/10 11:25:43 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.17 2012/08/24 22:55:47 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -10,6 +10,7 @@ goog.require('domainobjects');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.workareaeditorview');
 goog.require('codeshelf.websession');
+goog.require('extern.jquery');
 goog.require('extern.jquery.css.rotate');
 goog.require('extern.jquery.css.transform');
 goog.require('goog.dom.query');
@@ -96,7 +97,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			map_ = new google.maps.Map(mapPane_, myOptions);
 //			facilityEditorOverlay_ = codeshelf.facilityeditorviewgmapsoverlay(map_);
 //			facilityEditorOverlay_.init();
-
+			
 			clickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.CLICK, thisFacilityView_.clickHandler);
 			doubleClickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.DBLCLICK, thisFacilityView_.doubleClickHandler);
 		},
@@ -621,6 +622,8 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			return callback;
 		}
 	}
+
+	jQuery.extend(thisFacilityView_, codeshelf.view());
 
 	return thisFacilityView_;
 }

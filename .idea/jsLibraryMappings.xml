@@ -2,8 +2,6 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <excludedPredefinedLibrary name="AJAX" />
-    <excludedPredefinedLibrary name="Node.js Embedded Symbols" />
-    <excludedPredefinedLibrary name="WebGL" />
   </component>
 </project>
 

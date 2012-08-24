@@ -1,13 +1,14 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.31 2012/08/10 11:25:43 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.32 2012/08/24 22:55:47 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
-goog.require('codeshelf.templates');
-goog.require('codeshelf.dataentrydialog');
 goog.require('codeshelf.aisleview');
+goog.require('codeshelf.dataentrydialog');
+goog.require('codeshelf.templates');
+goog.require('codeshelf.view');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
@@ -26,6 +27,8 @@ goog.require('goog.ui.ToolbarMenuButton');
 goog.require('goog.ui.ToolbarSelect');
 goog.require('goog.ui.ToolbarSeparator');
 goog.require('goog.ui.ToolbarToggleButton');
+goog.require('extern.jquery');
+goog.require('extern.jquery.dragToSelect');
 goog.require('raphael');
 
 codeshelf.workareaeditorview = function(websession, facility) {
@@ -65,6 +68,13 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			mainPane_ = workAreaEditor.getElementsByClassName('workAreaEditorPane')[0];
 			var toolbarPane = workAreaEditor.getElementsByClassName('workAreaEditorToolbarPane')[0];
 
+			$('.workAreaEditorPane').dragToSelect({
+				selectables: 'path', 
+				onHide: function () {
+					alert($('.workAreaEditorPane path.selected').length + ' selected');
+				}
+			});
+
 			var workAreaEditorToolbarDom = soy.renderAsElement(codeshelf.templates.workAreaEditorToolbar);
 			goog.dom.appendChild(toolbarPane, workAreaEditorToolbarDom);
 			toolbar_ = new goog.ui.Toolbar();
@@ -73,7 +83,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			goog.events.listen(toolbar_, goog.object.getValues(goog.ui.Component.EventType), thisWorkAreaEditorView_.handleToolbarEvent);
 
 			clickHandler_ = goog.events.listen(mainPane_, goog.events.EventType.CLICK, thisWorkAreaEditorView_.clickHandler);
-			mouseDownHandler_ = goog.events.listen(mainPane_, goog.events.EventType.MOUSEDOWN, thisWorkAreaEditorView_.mouseDownHandler);
+//			mouseDownHandler_ = goog.events.listen(mainPane_, goog.events.EventType.MOUSEDOWN, thisWorkAreaEditorView_.mouseDownHandler);
 			doublClickHandler_ = goog.events.listen(mainPane_, goog.events.EventType.DBLCLICK, thisWorkAreaEditorView_.doubleClickHandler);
 
 			goog.events.listen(mainPane_, goog.events.EventType.MOUSEOVER,
@@ -483,10 +493,10 @@ codeshelf.workareaeditorview = function(websession, facility) {
 					} else {
 						path.lineTo(point.x, point.y);
 						if (aisleData.aisleElement.style.width < (Math.abs(start.x - point.x))) {
-							aisleData.aisleElement.style.width = (Math.abs(start.x - point.x));
+							aisleData.aisleElement.style.width = (Math.abs(start.x - point.x)) + 'px';
 						}
 						if (aisleData.aisleElement.style.height < (Math.abs(start.y - point.y))) {
-							aisleData.aisleElement.style.height = (Math.abs(start.y - point.y));
+							aisleData.aisleElement.style.height = (Math.abs(start.y - point.y)) + 'px';
 						}
 					}
 				}
@@ -689,6 +699,8 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			return callback;
 		}
 	}
+
+	jQuery.extend(thisWorkAreaEditorView_, codeshelf.view());
 
 	return thisWorkAreaEditorView_;
 }

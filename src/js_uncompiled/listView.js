@@ -264,5 +264,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 		}
 	}
 
+	jQuery.extend(thisListview_, codeshelf.view());
+
 	return thisListview_;
 }

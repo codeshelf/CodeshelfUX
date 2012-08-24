@@ -358,5 +358,7 @@ codeshelf.listdemo = function() {
 		}
 	}
 
+	jQuery.extend(thisListDemo_, codeshelf.view());
+
 	return thisListDemo_;
 }

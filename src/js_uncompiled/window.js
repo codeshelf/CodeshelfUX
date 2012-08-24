@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: window.js,v 1.11 2012/06/10 03:13:31 jeffw Exp $
+ *  $Id: window.js,v 1.12 2012/08/24 22:55:47 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.window');
 goog.require('goog.style');
@@ -86,6 +86,7 @@ codeshelf.window = function(title, view, parent, limits) {
 				view_.resize();
 			};
 
+			view_.initView();
 			view_.setupView(thisWindow_.getContentElement());
 			view_.open();
 			thisWindow_.focusWindow();
