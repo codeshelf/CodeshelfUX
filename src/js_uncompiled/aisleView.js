@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.7 2012/08/10 11:25:43 jeffw Exp $
+ *  $Id: aisleView.js,v 1.8 2012/08/29 06:23:58 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -21,10 +21,9 @@ goog.require('goog.object');
 goog.require('goog.style');
 goog.require('raphael');
 
-codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
+codeshelf.aisleview = function(websession, aisle, graphics) {
 
 	var websession_ = websession;
-	var drawRatio_ = drawRatio;
 	var aisle_ = aisle;
 	var mainPane_;
 	var graphics_ = graphics;
@@ -74,7 +73,11 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 
 		resize: function() {
 			graphics_.setSize(mainPane_.clientWidth, mainPane_.clientHeight);
-			thisAisleView_.draw();
+			thisAisleView_.invalidate();
+		},
+
+		setDrawRatio: function(drawRatio) {
+			drawRatio_ = drawRatio;
 		},
 
 		drawPath: function(path, stroke, fill) {
@@ -89,13 +92,13 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 
 		},
 
-		draw: function(bay) {
+		doDraw: function(bay) {
 //			thisAisleView_.startDraw();
 
 			// Draw the bays
-//			for (var bayKey in bays_) {
-			if (bay !== undefined) {
-				bayKey = bay['persistentId'];
+			for (var bayKey in bays_) {
+//			if (bay !== undefined) {
+//				bayKey = bay['persistentId'];
 				if (bays_.hasOwnProperty(bayKey)) {
 					var bayData = bays_[bayKey];
 
@@ -167,14 +170,14 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 				var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
 				websession_.sendCommand(vertexFilterCmd, thisAisleView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 			}
-			thisAisleView_.draw(bay);
+			thisAisleView_.invalidate(bay);
 		},
 
 		handleDeleteBayCmd: function(bay) {
 			if (bays_[bay['persistentId']] !== undefined) {
 				bays_.splice(bay['persistentId'], 1);
 			}
-			thisAisleView_.draw(bay);
+			thisAisleView_.invalidate(bay);
 		},
 
 		handleUpdateBayVertexCmd: function(bayVertex) {
@@ -185,7 +188,7 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 					bayData.vertices = [];
 				}
 				bayData.vertices[bayVertex.DrawOrder] = bayVertex;
-				thisAisleView_.draw(bayData['bay']);
+				thisAisleView_.invalidate(bayData['bay']);
 			}
 		},
 
@@ -239,6 +242,11 @@ codeshelf.aisleview = function(websession, aisle, drawRatio, graphics) {
 			return callback;
 		}
 	}
+
+	// We want this view to extend the root/parent view, but we want to return this view.
+	var view = codeshelf.view();
+	jQuery.extend(view, thisAisleView_);
+	thisAisleView_ = view;
 
 	return thisAisleView_;
 }

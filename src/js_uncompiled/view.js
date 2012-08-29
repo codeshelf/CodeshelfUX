@@ -1,36 +1,11 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: view.js,v 1.1 2012/08/24 22:55:47 jeffw Exp $
+ *  $Id: view.js,v 1.2 2012/08/29 06:23:58 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.view');
 goog.require('codeshelf.window');
-
-/**
- * Object representing a new incoming message event.
- *
- * @param {string} message The raw message coming from the view.
- * @extends {goog.events.Event}
- * @constructor
- */
-codeshelf.view.InvalidateEvent = function(event) {
-	goog.base(this, codeshelf.view.EventType.INVALIDATE);
-};
-goog.inherits(codeshelf.view.InvalidateEvent, goog.events.Event);
-
-
-/**
- * The events fired by the view.
- * @enum {string} The event types for the view.
- */
-codeshelf.view.EventType = {
-
-	/**
-	 * Fired after an invalidate function call..
-	 */
-	INVALIDATE: goog.events.getUniqueId('opened')
-};
-
+goog.require('goog.async.Delay');
 
 codeshelf.view = function() {
 
@@ -47,9 +22,6 @@ codeshelf.view = function() {
 
 		initView: function() {
 			viewId_ = goog.events.getUniqueId('view');
-
-			var viewEventHandler = new goog.events.EventHandler();
-			viewEventHandler.listen(thisView_, codeshelf.view.EventType.INVALIDATE, thisView_.postInvalidateEvent);
 		},
 
 		getViewId: function() {
@@ -58,7 +30,7 @@ codeshelf.view = function() {
 
 		drawView: function() {
 			if (isInvalidated_) {
-				view_.doDraw();
+				thisView_.doDraw();
 				for (var i = 0; i < subViews_.length; i++) {
 					var subView = subViews_[i];
 					subView.drawView();
@@ -68,7 +40,11 @@ codeshelf.view = function() {
 		},
 
 		invalidate: function() {
-			isInvalidated_ = true;
+			if (!isInvalidated_) {
+				isInvalidated_ = true;
+				var delay = new goog.async.Delay(thisView_.drawView, 0);
+				delay.start();
+			}
 		},
 
 		addSubview: function(view) {
@@ -84,14 +60,8 @@ codeshelf.view = function() {
 		clearSubviews: function() {
 			subViews_ = {};
 			thisView_.drawView();
-		},
-
-		postInvalidateEvent: function() {
-
 		}
 	}
-
-	goog.inherits(thisView_, goog.events.EventTarget);
 
 	return thisView_;
 }

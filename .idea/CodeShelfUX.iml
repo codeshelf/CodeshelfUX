@@ -4,7 +4,6 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src-test" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
-      <excludeFolder url="file://$MODULE_DIR$/src/js" />
       <excludeFolder url="file://$MODULE_DIR$/src/js_compiled" />
     </content>
     <orderEntry type="inheritedJdk" />

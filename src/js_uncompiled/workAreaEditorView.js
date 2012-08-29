@@ -1,8 +1,13 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.32 2012/08/24 22:55:47 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.33 2012/08/29 06:23:58 jeffw Exp $
  *******************************************************************************/
+
+/**
+ * @fileoverview Work area editor.
+ *
+ */
 
 goog.provide('codeshelf.workareaeditorview');
 goog.require('codeshelf.aisleview');
@@ -173,7 +178,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 		resize: function() {
 			graphics_.setSize(mainPane_.clientWidth, mainPane_.clientHeight);
-			thisWorkAreaEditorView_.draw();
+			thisWorkAreaEditorView_.invalidate();
 		},
 
 		clickHandler: function(event) {
@@ -525,7 +530,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 		},
 
-		draw: function() {
+		doDraw: function() {
 			thisWorkAreaEditorView_.startDraw();
 
 			// Draw the facility path.
@@ -539,13 +544,14 @@ codeshelf.workareaeditorview = function(websession, facility) {
 				if (aisles_.hasOwnProperty(aisleKey)) {
 					var aisleData = aisles_[aisleKey];
 
+					aisleData.aisleView.setDrawRatio(drawRatio_);
 					var aislePath = thisWorkAreaEditorView_.computeAislePath(aisleData);
 					var stroke = new goog.graphics.Stroke(1, 'black');
 					var fill = new goog.graphics.SolidFill('green', 0.75);
 					thisWorkAreaEditorView_.drawPath(aislePath, stroke, fill);
 
 					// Now draw the aisle view that goes inside the aisle.
-					aisleData.aisleView.draw();
+					aisleData.aisleView.invalidate();
 				}
 			}
 			thisWorkAreaEditorView_.endDraw();
@@ -553,18 +559,18 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 		handleUpdateFacilityVertexCmd: function(lat, lon, facilityVertex) {
 			vertices_[facilityVertex['DrawOrder']] = facilityVertex;
-			thisWorkAreaEditorView_.draw();
+			thisWorkAreaEditorView_.invalidate();
 		},
 
 		handleDeleteFacilityVertexCmd: function(lat, lon, facilityVertex) {
 			vertices_.splice(facilityVertex['DrawOrder'], 1);
-			thisWorkAreaEditorView_.draw();
+			thisWorkAreaEditorView_.invalidate();
 		},
 
 		handleUpdateAisleCmd: function(aisle) {
 			if (aisles_[aisle['persistentId']] === undefined) {
 
-				aisleData = {};
+				var aisleData = {};
 
 				// Create and populate the aisle's data record.
 				aisleData.aisleElement = soy.renderAsElement(codeshelf.templates.aisleView);
@@ -573,7 +579,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 				goog.dom.appendChild(mainPane_, aisleData.aisleElement);
 
 				aisleData.aisle = aisle;
-				aisleData.aisleView = codeshelf.aisleview(websession_, aisle, drawRatio_, graphics_);
+				aisleData.aisleView = codeshelf.aisleview(websession_, aisle, graphics_);
 				aisleData.aisleView.setupView(aisleData.aisleElement);
 
 				aisles_[aisle['persistentId']] = aisleData;
@@ -591,26 +597,26 @@ codeshelf.workareaeditorview = function(websession, facility) {
 				var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
 				websession_.sendCommand(vertexFilterCmd, thisWorkAreaEditorView_.websocketCmdCallbackAisle(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 			}
-			thisWorkAreaEditorView_.draw();
+			thisWorkAreaEditorView_.invalidate();
 		},
 
 		handleDeleteAisleCmd: function(aisle) {
 			if (aisles_[aisle['persistentId']] !== undefined) {
 				aisles_.splice(aisle['persistentId'], 1);
 			}
-			thisWorkAreaEditorView_.draw();
+			thisWorkAreaEditorView_.invalidate();
 		},
 
 		handleUpdateAisleVertexCmd: function(aisleVertex) {
 			var aislePersistentId = aisleVertex['ParentPersistentId'];
 			if (aisles_[aislePersistentId] !== undefined) {
-				aisleData = aisles_[aislePersistentId];
+				var aisleData = aisles_[aislePersistentId];
 				if (aisleData.vertices === undefined) {
 					aisleData.vertices = [];
 				}
 				aisleData.vertices[aisleVertex['DrawOrder']] = aisleVertex;
 			}
-			thisWorkAreaEditorView_.draw();
+			thisWorkAreaEditorView_.invalidate();
 		},
 
 		handleDeleteAisleVertexCmd: function(aisleVertex) {
@@ -700,7 +706,10 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		}
 	}
 
-	jQuery.extend(thisWorkAreaEditorView_, codeshelf.view());
+	// We want this view to extend the root/parent view, but we want to return this view.
+	var view = codeshelf.view();
+	jQuery.extend(view, thisWorkAreaEditorView_);
+	thisWorkAreaEditorView_ = view;
 
 	return thisWorkAreaEditorView_;
 }
