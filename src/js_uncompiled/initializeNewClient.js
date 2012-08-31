@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: initializeNewClient.js,v 1.10 2012/08/10 11:25:43 jeffw Exp $
+ *  $Id: initializeNewClient.js,v 1.11 2012/08/31 00:48:34 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.initializenewclient');
 goog.require('codeshelf.templates');
@@ -70,7 +70,6 @@ codeshelf.initializenewclient = function() {
 		},
 
 		websocketCmdCallback: function(expectedResponseType) {
-			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
 					if (!command['d'].hasOwnProperty('r')) {
@@ -80,9 +79,6 @@ codeshelf.initializenewclient = function() {
 						var facilityEditor = codeshelf.facilityeditorview();
 						facilityEditor.start(websession_, organization_, frame_, facility);
 					}
-				},
-				getExpectedResponseType: function() {
-					return expectedResponseType_;
 				}
 			}
 

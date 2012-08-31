@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.33 2012/08/29 06:23:58 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.34 2012/08/31 00:48:34 jeffw Exp $
  *******************************************************************************/
 
 /**
@@ -53,7 +53,6 @@ codeshelf.workareaeditorview = function(websession, facility) {
 	var vertices_ = [];
 	var rotateFacilityByDeg_ = 0;
 	var facilityPath_;
-	var drawRatio_;
 	var currentRect_;
 	var currentDrawRect_;
 	var aisles_ = [];
@@ -253,8 +252,8 @@ codeshelf.workareaeditorview = function(websession, facility) {
 						graphics_.removeElement(currentRect_);
 						currentDrawRect_.dispose();
 					} else {
-						var xOriginMeters = startDragPoint_.x / drawRatio_;
-						var yOriginMeters = startDragPoint_.y / drawRatio_;
+						var xOriginMeters = startDragPoint_.x / thisWorkAreaEditorView_.getPixelsPerMeter();
+						var yOriginMeters = startDragPoint_.y / thisWorkAreaEditorView_.getPixelsPerMeter();
 
 						var bayHeight = dialog.getFieldValue('bayHeight') * 0.3048;
 						var bayWidth = dialog.getFieldValue('bayWidth') * 0.3048;
@@ -434,13 +433,13 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			for (var i = 0; i < Object.size(points); i++) {
 				var point = points[i];
 				// Scale it to 80% of the draw area.
-				drawRatio_ = Math.min((graphics_.getPixelSize().width - bufferPoint.x * 2) / mostPosPoint.x, (graphics_.getPixelSize().height - bufferPoint.y) / mostPosPoint.y);
+				thisWorkAreaEditorView_.setPixelsPerMeter(Math.min((graphics_.getPixelSize().width - bufferPoint.x * 2) / mostPosPoint.x, (graphics_.getPixelSize().height - bufferPoint.y) / mostPosPoint.y));
 
-				point.x *= drawRatio_;
-				point.y *= drawRatio_;
+				point.x *= thisWorkAreaEditorView_.getPixelsPerMeter();
+				point.y *= thisWorkAreaEditorView_.getPixelsPerMeter();
 			}
-			mostPosPoint.x *= drawRatio_;
-			mostPosPoint.y *= drawRatio_;
+			mostPosPoint.x *= thisWorkAreaEditorView_.getPixelsPerMeter();
+			mostPosPoint.y *= thisWorkAreaEditorView_.getPixelsPerMeter();
 		},
 
 		mirrorYPoints: function(points, mostPosPoint, bufferPoint) {
@@ -513,8 +512,8 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 		convertAisleVertexToPoint: function(aisle, vertex) {
 			var point = {};
-			point.x = (vertex['PosX'] + aisle['PosX']) * drawRatio_;
-			point.y = (vertex['PosY'] + aisle['PosY']) * drawRatio_;
+			point.x = (vertex['PosX'] + aisle['PosX']) * thisWorkAreaEditorView_.getPixelsPerMeter();
+			point.y = (vertex['PosY'] + aisle['PosY']) * thisWorkAreaEditorView_.getPixelsPerMeter();
 			return point;
 		},
 
@@ -544,14 +543,13 @@ codeshelf.workareaeditorview = function(websession, facility) {
 				if (aisles_.hasOwnProperty(aisleKey)) {
 					var aisleData = aisles_[aisleKey];
 
-					aisleData.aisleView.setDrawRatio(drawRatio_);
 					var aislePath = thisWorkAreaEditorView_.computeAislePath(aisleData);
 					var stroke = new goog.graphics.Stroke(1, 'black');
 					var fill = new goog.graphics.SolidFill('green', 0.75);
 					thisWorkAreaEditorView_.drawPath(aislePath, stroke, fill);
 
-					// Now draw the aisle view that goes inside the aisle.
-					aisleData.aisleView.invalidate();
+					aisleData.aisleElement.style.left = Math.round(aisleData['aisle']['PosX'] * thisWorkAreaEditorView_.getPixelsPerMeter()) + 'px';
+					aisleData.aisleElement.style.top = Math.round(aisleData['aisle']['PosY'] * thisWorkAreaEditorView_.getPixelsPerMeter()) + 'px';
 				}
 			}
 			thisWorkAreaEditorView_.endDraw();
@@ -574,17 +572,18 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 				// Create and populate the aisle's data record.
 				aisleData.aisleElement = soy.renderAsElement(codeshelf.templates.aisleView);
-				aisleData.aisleElement.style.left = Math.round(aisle['PosX'] * drawRatio_) + 'px';
-				aisleData.aisleElement.style.top = Math.round(aisle['PosY'] * drawRatio_) + 'px';
+				aisleData.aisleElement.style.left = Math.round(aisle['PosX'] * thisWorkAreaEditorView_.getPixelsPerMeter()) + 'px';
+				aisleData.aisleElement.style.top = Math.round(aisle['PosY'] * thisWorkAreaEditorView_.getPixelsPerMeter()) + 'px';
 				goog.dom.appendChild(mainPane_, aisleData.aisleElement);
 
 				aisleData.aisle = aisle;
 				aisleData.aisleView = codeshelf.aisleview(websession_, aisle, graphics_);
 				aisleData.aisleView.setupView(aisleData.aisleElement);
+				thisWorkAreaEditorView_.addSubview(aisleData.aisleView);
 
 				aisles_[aisle['persistentId']] = aisleData;
 
-				// Create the filter to listen to all vertex updates for this facility.
+				// Create the filter to listen to all vertex updates for this aisle.
 				var vertexFilterData = {
 					'className':     domainobjects.vertex.classname,
 					'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder', 'ParentPersistentId'],
@@ -602,9 +601,10 @@ codeshelf.workareaeditorview = function(websession, facility) {
 
 		handleDeleteAisleCmd: function(aisle) {
 			if (aisles_[aisle['persistentId']] !== undefined) {
+				thisWorkAreaEditorView_.removeSubview(aisles_[aisle['persistentId']['aisleView']]);
 				aisles_.splice(aisle['persistentId'], 1);
+				thisWorkAreaEditorView_.invalidate();
 			}
-			thisWorkAreaEditorView_.invalidate();
 		},
 
 		handleUpdateAisleVertexCmd: function(aisleVertex) {
@@ -624,7 +624,6 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		websocketCmdCallbackFacility: function(expectedResponseType) {
-			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
 					if (!command['d'].hasOwnProperty('r')) {
@@ -650,9 +649,6 @@ codeshelf.workareaeditorview = function(websession, facility) {
 						} else if (command['t'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 						}
 					}
-				},
-				getExpectedResponseType: function() {
-					return expectedResponseType_;
 				}
 			}
 
@@ -660,7 +656,6 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		},
 
 		websocketCmdCallbackAisle: function(expectedResponseType) {
-			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
 					if (!command['d'].hasOwnProperty('r')) {
@@ -696,9 +691,6 @@ codeshelf.workareaeditorview = function(websession, facility) {
 						} else if (command['t'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 						}
 					}
-				},
-				getExpectedResponseType: function() {
-					return expectedResponseType_;
 				}
 			}
 

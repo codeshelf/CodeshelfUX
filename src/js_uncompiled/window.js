@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: window.js,v 1.12 2012/08/24 22:55:47 jeffw Exp $
+ *  $Id: window.js,v 1.13 2012/08/31 00:48:34 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.window');
 goog.require('goog.style');
@@ -86,7 +86,6 @@ codeshelf.window = function(title, view, parent, limits) {
 				view_.resize();
 			};
 
-			view_.initView();
 			view_.setupView(thisWindow_.getContentElement());
 			view_.open();
 			thisWindow_.focusWindow();
@@ -121,14 +120,17 @@ codeshelf.window = function(title, view, parent, limits) {
 		focusWindow: function() {
 			// Loop through all of the windows, and set their Z to 0, but set this window's Z to 1.
 			for (var i in windowList) {
-				var aWindow = windowList[i];
-				var windowBar = aWindow.getWindowBar();
-				if (aWindow === thisWindow_) {
-					aWindow.setZ(1);
-					windowBar.className = 'windowBar-selected';
-				} else {
-					aWindow.setZ(0);
-					windowBar.className = 'windowBar';
+				if (windowList.hasOwnProperty(i)) {
+					var aWindow = windowList[i];
+
+					var windowBar = aWindow.getWindowBar();
+					if (aWindow === thisWindow_) {
+						aWindow.setZ(1);
+						windowBar.className = 'windowBar-selected';
+					} else {
+						aWindow.setZ(0);
+						windowBar.className = 'windowBar';
+					}
 				}
 			}
 		},

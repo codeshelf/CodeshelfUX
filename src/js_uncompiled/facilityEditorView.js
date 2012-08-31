@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.17 2012/08/24 22:55:47 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.18 2012/08/31 00:48:34 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -585,7 +585,6 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		},
 
 		websocketCmdCallback: function(expectedResponseType) {
-			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
 					if (!command['d'].hasOwnProperty('r')) {
@@ -613,9 +612,6 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 						} else if (command['t'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 						}
 					}
-				},
-				getExpectedResponseType: function() {
-					return expectedResponseType_;
 				}
 			}
 

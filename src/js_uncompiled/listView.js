@@ -231,7 +231,6 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 		},
 
 		websocketCmdCallback: function(expectedResponseType) {
-			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
 					if (!command['d'].hasOwnProperty('r')) {
@@ -254,9 +253,6 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 						}
 						dataView_.sort(thisListview_.comparer, sortdir_);
 					}
-				},
-				getExpectedResponseType: function() {
-					return expectedResponseType_;
 				}
 			}
 

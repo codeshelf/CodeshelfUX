@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: launch.js,v 1.27 2012/08/06 00:50:48 jeffw Exp $
+ *  $Id: launch.js,v 1.28 2012/08/31 00:48:34 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.launch');
 goog.require('codeshelf.templates');
@@ -73,7 +73,6 @@ codeshelf.launchWindow = function() {
 		},
 
 		websocketCmdCallback: function(expectedResponseType) {
-			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
 					if (!command['d'].hasOwnProperty(kWebSessionCommandType.LAUNCH_CODE_RESP)) {
@@ -89,9 +88,6 @@ codeshelf.launchWindow = function() {
 							alert('Lauch code invalid');
 						}
 					}
-				},
-				getExpectedResponseType: function() {
-					return expectedResponseType_;
 				}
 			};
 

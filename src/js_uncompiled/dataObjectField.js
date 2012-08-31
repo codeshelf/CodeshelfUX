@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataObjectField.js,v 1.15 2012/08/06 16:43:53 jeffw Exp $
+ *  $Id: dataObjectField.js,v 1.16 2012/08/31 00:48:34 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
@@ -60,7 +60,6 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 		},
 
 		websocketCmdCallback: function(expectedResponseType) {
-			var expectedResponseType_ = expectedResponseType;
 			var callback = {
 				exec:                    function(command) {
 					if (!command['d'].hasOwnProperty('r')) {
@@ -80,9 +79,6 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 							}
 						}
 					}
-				},
-				getExpectedResponseType: function() {
-					return expectedResponseType_;
 				}
 			};
 
