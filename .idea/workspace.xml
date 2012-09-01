@@ -5,17 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c319b0c7-b9cf-46f5-90a5-b0a625c84957" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.cellcopymanager.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.cellcopymanager.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/aisleView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/aisleView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/application.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/application.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/listDemo.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/listDemo.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/launch.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/launch.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/listView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/listView.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/view.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/view.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/window.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/window.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/templates/codeshelf_templates.soy" afterPath="$PROJECT_DIR$/src/templates/codeshelf_templates.soy" />
     </list>
     <ignored path="CodeShelfUX.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -41,43 +38,61 @@
       <file leaf-file-name="view.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/view.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="58" column="11" selection-start="1315" selection-end="1315" vertical-scroll-proportion="0.0">
+            <state line="153" column="1" selection-start="3589" selection-end="3589" vertical-scroll-proportion="-32.381817">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="window.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/window.js">
+      <file leaf-file-name="mainPage.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/mainPage.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="0" selection-start="503" selection-end="503" vertical-scroll-proportion="0.0">
+            <state line="126" column="15" selection-start="4091" selection-end="4091" vertical-scroll-proportion="-4.0545454">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="launch.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/launch.js">
+      <file leaf-file-name="listDemoView.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/listDemoView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="22" selection-start="635" selection-end="657" vertical-scroll-proportion="0.0">
+            <state line="19" column="0" selection-start="617" selection-end="617" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="workAreaEditorView.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="workAreaEditorView.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="717" column="0" selection-start="26614" selection-end="26812" vertical-scroll-proportion="-10.363636">
+            <state line="591" column="2" selection-start="20443" selection-end="20443" vertical-scroll-proportion="0.35328186">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="aisleView.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="facilityEditorView.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="560" column="80" selection-start="18939" selection-end="18944" vertical-scroll-proportion="-2.0363636">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="jquery.dragToSelect.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/JQuery/jquery.dragToSelect.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="307" column="18" selection-start="7668" selection-end="7668" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="aisleView.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/aisleView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="139" column="0" selection-start="4074" selection-end="4074" vertical-scroll-proportion="0.6185567">
+            <state line="34" column="0" selection-start="1205" selection-end="1205" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -93,22 +108,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/css/listview.css" />
         <option value="$PROJECT_DIR$/lib/JQuery/jquery-ui-1.8.19.js" />
         <option value="$PROJECT_DIR$/lib/SlickGrid/slick.editors.js" />
         <option value="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/base.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/initializeNewClient.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/launch.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/window.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/view.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/listDemo.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/listView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/application.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/launch.js" />
+        <option value="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.cellcopymanager.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/aisleView.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/listView.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/listDemo.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/view.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
       </list>
     </option>
   </component>
@@ -304,22 +319,8 @@
               <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-          </PATH>
-          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="CodeShelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeShelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JQuery" />
+              <option name="myItemId" value="SlickGrid" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -334,32 +335,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleClosureLibrary" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeShelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeShelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleClosureLibrary" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="closure" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -477,9 +452,10 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972324" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32714412" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18802084" sideWeight="0.43854997" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18802084" sideWeight="0.2281167" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32714412" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18802084" sideWeight="0.65340406" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3280283" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18802084" sideWeight="0.34040672" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32979664" sideWeight="0.5" order="13" side_tool="true" content_ui="tabs" />
@@ -491,7 +467,6 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972324" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32851985" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="JsTestDriver Server" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32980132" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
@@ -556,7 +531,7 @@
           <option name="timeStamp" value="1" />
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="263" />
+      <option name="time" value="352" />
     </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
@@ -586,79 +561,6 @@
     </PATH>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="0" selection-start="2747" selection-end="2747" vertical-scroll-proportion="0.14986376">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/initializeNewClient.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="72" column="0" selection-start="2442" selection-end="2442" vertical-scroll-proportion="0.59128064" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/JQuery/jquery.css-rotate.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/base.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="0" selection-start="1282" selection-end="1350" vertical-scroll-proportion="0.010869565">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/view.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="11" selection-start="1315" selection-end="1315" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/listDemo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="11" selection-start="1517" selection-end="1517" vertical-scroll-proportion="0.33242506">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/listView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="227" column="11" selection-start="6311" selection-end="6311" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/graphics/abstractgraphics.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="159" column="0" selection-start="4407" selection-end="4407" vertical-scroll-proportion="0.33333334">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/graphics/svgelement.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="158" column="39" selection-start="5320" selection-end="5320" vertical-scroll-proportion="0.33333334">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/mainPage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="113" column="0" selection-start="3746" selection-end="3746" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/launch.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="22" selection-start="635" selection-end="657" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/application.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="55" column="28" selection-start="1458" selection-end="1458" vertical-scroll-proportion="0.33242506">
@@ -673,23 +575,111 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/launch.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="717" column="0" selection-start="26614" selection-end="26812" vertical-scroll-proportion="-10.363636">
+        <state line="45" column="29" selection-start="1823" selection-end="1828" vertical-scroll-proportion="-7.2">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/select.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="357" column="25" selection-start="11168" selection-end="11168" vertical-scroll-proportion="5.640327">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/SlickGrid/plugins/slick.cellselectionmodel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="82" column="61" selection-start="2555" selection-end="2572" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/SlickGrid/plugins/slick.rowselectionmodel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="39" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/SlickGrid/plugins/slick.cellcopymanager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="39" selection-start="39" selection-end="39" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/SlickGrid/slick.grid.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="311" column="34" selection-start="11839" selection-end="11856" vertical-scroll-proportion="0.0">
+          <folding>
+            <marker date="1344845014000" expanded="false" signature="7336:7370" placeholder="..." />
+            <marker date="1344845014000" expanded="false" signature="7466:7493" placeholder="..." />
+            <marker date="1344845014000" expanded="false" signature="7617:7651" placeholder="..." />
+            <marker date="1344845014000" expanded="false" signature="7878:7912" placeholder="..." />
+            <marker date="1344845014000" expanded="false" signature="8004:8017" placeholder="..." />
+            <marker date="1344845014000" expanded="false" signature="8343:8414" placeholder="..." />
+            <marker date="1344845014000" expanded="false" signature="12330:12421" placeholder="..." />
+            <marker date="1344845014000" expanded="false" signature="13878:13890" placeholder="..." />
+            <marker date="1344845014000" expanded="false" signature="29185:29202" placeholder="..." />
+            <marker date="1344845014000" expanded="false" signature="29650:29667" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/aisleView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="0" selection-start="1205" selection-end="1205" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/listView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="81" column="62" selection-start="2397" selection-end="2397" vertical-scroll-proportion="1.0694823">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/mainPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="126" column="15" selection-start="4091" selection-end="4091" vertical-scroll-proportion="-4.0545454">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/view.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="153" column="1" selection-start="3589" selection-end="3589" vertical-scroll-proportion="-32.381817">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="624" column="21" selection-start="22648" selection-end="22648" vertical-scroll-proportion="0.9001387">
+        <state line="560" column="80" selection-start="18939" selection-end="18944" vertical-scroll-proportion="-2.0363636">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/aisleView.js">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/listDemoView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="139" column="0" selection-start="4074" selection-end="4074" vertical-scroll-proportion="0.6185567">
+        <state line="19" column="0" selection-start="617" selection-end="617" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/JQuery/jquery.dragToSelect.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="307" column="18" selection-start="7668" selection-end="7668" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="591" column="2" selection-start="20443" selection-end="20443" vertical-scroll-proportion="0.35328186">
           <folding />
         </state>
       </provider>

@@ -1,4 +1,4 @@
-goog.provide('codeshelf.listdemo');
+goog.provide('codeshelf.listdemoview');
 goog.require('slickgrid.core');
 goog.require('slickgrid.firebugx');
 goog.require('slickgrid.editors');
@@ -7,29 +7,30 @@ goog.require('slickgrid.grid');
 goog.require('slickgrid.dataview');
 goog.require('slickgrid.pager');
 goog.require('slickgrid.columnpicker');
+goog.require('slickgrid.cellcopymanager');
 goog.require('extern.jquery');
 
 $(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all")['mouseover'](
 	function(e) {
 		$(e.target).addClass("ui-state-hover")
 	})['mouseout'](function(e) {
-		$(e.target).removeClass("ui-state-hover")
-	});
+	$(e.target).removeClass("ui-state-hover")
+});
 
-codeshelf.listdemo = function() {
+codeshelf.listdemoview = function() {
 
 	var dataView;
 	var grid;
 	var data = [];
 	var selectedRowIds = [];
-	var thisListDemo_;
+	var self;
 
 	var sortcol = "title";
 	var sortdir = 1;
 	var percentCompleteThreshold = 0;
 	var searchString = "";
 
-	thisListDemo_ = {
+	self = {
 		requiredFieldValidator: function(value) {
 			if (value == null || value == undefined || !value.length)
 				return {
@@ -69,7 +70,7 @@ codeshelf.listdemo = function() {
 			grid.autosizeColumns();
 		},
 
-		setupView: function(contentElement) {
+		doSetupView: function() {
 			var columns = [
 				{
 					'id':                  "sel",
@@ -91,7 +92,7 @@ codeshelf.listdemo = function() {
 					'minWidth':  120,
 					'cssClass':  "cell-title",
 					'editor':    TextCellEditor,
-					'validator': thisListDemo_.requiredFieldValidator,
+					'validator': self.requiredFieldValidator,
 					'sortable':  true
 				},
 				{
@@ -165,10 +166,26 @@ codeshelf.listdemo = function() {
 				d["effortDriven"] = (i % 5 == 0);
 			}
 
-			contentElement.innerHTML = '<div id="listViewGrid" class="windowContent"></div>';
+			self.getMainPaneElement().innerHTML = '<div id="listViewGrid" class="windowContent"></div>';
 			dataView = new $.Slick.Data.DataView();
 			grid = new $.Slick.Grid('#listViewGrid', dataView, columns, options);
 			grid.setSelectionModel(new $.Slick.RowSelectionModel());
+
+			var copyManager = new $.Slick.CellCopyManager();
+			grid.registerPlugin(copyManager);
+			copyManager.onCopyCells.subscribe(function(e, args) {
+				if (args.from.length !== 1 || args.to.length !== 1) {
+					throw "This implementation only supports single range copy and paste operations";
+				}
+
+				var range = args.from[0];
+				var val;
+				for (var i = 0; i <= from.toRow - from.fromRow; i++) {
+					for (var j = 0; j <= from.toCell - from.fromCell; j++) {
+						val = data[from.fromRow + i][columns[from.fromCell + j].field];
+					}
+				}
+			});
 
 			//var pager = new $.Slick.Controls.Pager(dataView, grid, $("#myPager"));
 			var columnpicker = new $.Slick.Controls.ColumnPicker(columns, grid, options);
@@ -246,7 +263,7 @@ codeshelf.listdemo = function() {
 				} else {
 					// using native sort with comparer
 					// preferred method but can be very slow in IE with huge datasets
-					dataView.sort(thisListDemo_.comparer, args.sortAsc);
+					dataView.sort(self.comparer, args.sortAsc);
 				}
 			});
 
@@ -307,9 +324,9 @@ codeshelf.listdemo = function() {
 
 				// clear on Esc
 				if (e.which == 27)
-					thisListDemo_.value = "";
+					self.value = "";
 
-				searchString = thisListDemo_.value;
+				searchString = self.value;
 				updateFilter();
 			});
 
@@ -347,7 +364,7 @@ codeshelf.listdemo = function() {
 				percentCompleteThreshold: percentCompleteThreshold,
 				searchString:             searchString
 			});
-			//dataView.setFilter(thisListDemo_.myFilter);
+			//dataView.setFilter(self.myFilter);
 			dataView.endUpdate();
 
 			$("#gridContainer")['resizable']();
@@ -358,7 +375,10 @@ codeshelf.listdemo = function() {
 		}
 	}
 
-	jQuery.extend(thisListDemo_, codeshelf.view());
+	// We want this view to extend the root/parent view, but we want to return this view.
+	var view = codeshelf.view();
+	jQuery.extend(view, self);
+	self = view;
 
-	return thisListDemo_;
+	return self;
 }

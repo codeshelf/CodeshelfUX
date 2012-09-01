@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.10 2012/09/01 18:49:56 jeffw Exp $
+ *  $Id: aisleView.js,v 1.11 2012/09/01 23:56:32 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -32,31 +32,209 @@ codeshelf.aisleview = function(websession, aisle) {
 
 	var websession_ = websession;
 	var aisle_ = aisle;
-	var mainPane_;
 	var graphics_;
 	var bays_ = [];
 
 	/**
-	 * The private AisleView object.
+	 * The private AisleView functions.
 	 * @type {Object}
 	 * @private
 	 */
-	var thisAisleView_ = {
+
+	function drawPath(path, stroke, fill) {
+		graphics_.drawPath(path, stroke, fill);
+	}
+
+	function startDraw() {
+		graphics_.clear();
+	}
+
+	function endDraw() {
+
+	}
+
+	/**
+	 * Compute the path for a bay.
+	 * @param {Object} bayData The bay for which we need the path.
+	 * @return {goog.graphics.Path}
+	 */
+	function computeBayPath(bayData) {
+		var path = new goog.graphics.Path();
+
+		if (Object.size(bayData.vertices) > 0) {
+			var start = {};
+			for (var i = 0; i < Object.size(bayData.vertices); i++) {
+				var vertex = bayData.vertices[i];
+				var point = convertBayVertexToPoint(bayData['bayElement'], vertex);
+				if (i === 0) {
+					path.moveTo(point.x, point.y);
+					start.x = point.x;
+					start.y = point.y;
+				} else {
+					path.lineTo(point.x, point.y);
+					var width = parseInt(bayData['bayElement'].style.width);
+					if ((isNaN(width)) || (width < (Math.abs(start.x - point.x)))) {
+						bayData['bayElement'].style.width = (Math.abs(start.x - point.x)) + 'px';
+					}
+					var height = parseInt(bayData['bayElement'].style.height);
+					if ((isNaN(height)) || (height < (Math.abs(start.y - point.y)))) {
+						bayData['bayElement'].style.height = (Math.abs(start.y - point.y)) + 'px';
+					}
+				}
+			}
+			path.lineTo(start.x, start.y);
+		}
+
+		return path;
+	}
+
+	/**
+	 * Convert a Bay's vertex into a point in graphics space (pixels).
+	 * @param {Element} bayElement The HTML element to which the point will be relative.
+	 * @param {Object} vertex The vertex for which we need a point.
+	 * @return {Object}
+	 */
+	function convertBayVertexToPoint(bayElement, vertex) {
+		var point = {};
+		point.x = parseInt(bayElement.style.left) + (vertex.PosX * self.getPixelsPerMeter());
+		point.y = parseInt(bayElement.style.top) + (vertex.PosY * self.getPixelsPerMeter());
+		return point;
+	}
+
+	/**
+	 * Handle any bay update commands that arrive over the websocket for this aisle.
+	 * @param {Object} bay The updated bay.
+	 */
+	function handleUpdateBayCmd(bay) {
+		if (bays_[bay['persistentId']] === undefined) {
+			// Create and populate the bay's data record.
+			var bayData = {};
+			bayData['bay'] = bay;
+
+			bayData['bayElement'] = soy.renderAsElement(codeshelf.templates.bayView, {id: bay['DomainId']});
+			goog.dom.appendChild(self.getMainPaneElement(), bayData['bayElement']);
+			bayData['bayElement'].style.left = (parseInt(self.getMainPaneElement().style.left) + (bay['PosX'] * self.getPixelsPerMeter())) + 'px';
+			bayData['bayElement'].style.top = (parseInt(self.getMainPaneElement().style.top) + (bay['PosY'] * self.getPixelsPerMeter())) + 'px';
+
+			bays_[bay['persistentId']] = bayData;
+
+			// Create the filter to listen to all vertex updates for this facility.
+			var vertexFilterData = {
+				'className':     domainobjects.vertex.classname,
+				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder', 'ParentPersistentId'],
+				'filterClause':  'parentLocation.persistentId = :theId',
+				'filterParams':  [
+					{ 'name': "theId", 'value': bay['persistentId']}
+				]
+			}
+
+			var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
+			websession_.sendCommand(vertexFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+		}
+		self.invalidate(bay);
+	}
+
+	/**
+	 * Handle any bay delete commands that arrive over the websocket for this aisle.
+	 * @param {Object} bay The deleted bay.
+	 */
+	function handleDeleteBayCmd(bay) {
+		if (bays_[bay['persistentId']] !== undefined) {
+			bays_.splice(bay['persistentId'], 1);
+		}
+		self.invalidate(bay);
+	}
+
+	/**
+	 * Handle any bay vertex update commands that arrive over the websocket for this aisle.
+	 * @param {Object} bayvertex The updated bay vertex.
+	 */
+	function handleUpdateBayVertexCmd(bayVertex) {
+		var bayPersistentId = bayVertex.ParentPersistentId;
+		if (bays_[bayPersistentId] !== undefined) {
+			bayData = bays_[bayPersistentId];
+			if (bayData.vertices === undefined) {
+				bayData.vertices = [];
+			}
+			bayData.vertices[bayVertex.DrawOrder] = bayVertex;
+			self.invalidate(bayData['bay']);
+		}
+	}
+
+	/**
+	 * Handle any bay vertex delete commands that arrive over the websocket for this aisle.
+	 * @param {Object} bayvertex The deleted bay vertex.
+	 */
+	function handleDeleteBayVertexCmd(bayVertex) {
+
+	}
+
+	/**
+	 * The callback to use for any commands we send to the remote server.
+	 * @return {Object}
+	 */
+	function websocketCmdCallback(expectedResponseType) {
+		var callback = {
+			exec: function(command) {
+				if (!command['d'].hasOwnProperty('r')) {
+					alert('response has no result');
+				} else {
+					if (command['t'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+						for (var i = 0; i < command['d']['r'].length; i++) {
+							var object = command['d']['r'][i];
+
+							if (object['className'] === domainobjects.bay.classname) {
+								// Bay updates
+								if (object['op'] === 'cr') {
+									handleUpdateBayCmd(object);
+								} else if (object['op'] === 'up') {
+									handleUpdateBayCmd(object);
+								} else if (object['op'] === 'dl') {
+									handleDeleteBayCmd(object);
+								}
+							} else if (object['className'] === domainobjects.vertex.classname) {
+								// Vertex updates.
+								if (object['op'] === 'cr') {
+									handleUpdateBayVertexCmd(object);
+								} else if (object['op'] === 'up') {
+									handleUpdateBayVertexCmd(object);
+								} else if (object['op'] === 'dl') {
+									handleDeleteBayVertexCmd(object);
+								}
+							}
+
+						}
+					} else if (command['t'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+					} else if (command['t'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+					} else if (command['t'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+					}
+				}
+			}
+		}
+
+		return callback;
+	}
+
+
+	/**
+	 * The public AisleView functions.
+	 * @type {Object}
+	 * @private
+	 */
+	var self = {
 
 		/**
 		 * Setup the view
 		 * @param {Element} contentElement The element where we can place all of the view content.
 		 */
-		setupView: function(contentElement) {
-
-			mainPane_ = contentElement;
+		doSetupView: function() {
 
 			// Compute the dimensions of the aisle outline, and create a bounding rectangle for it.
 			// Create a draw canvas for the bounding rect.
 			// Compute the path for the aisle outline and put it into the draw canavs.
 
-			graphics_ = goog.graphics.createGraphics(mainPane_.clientWidth, mainPane_.clientHeight);
-			graphics_.render(mainPane_);
+			graphics_ = goog.graphics.createGraphics(self.getMainPaneElement().clientWidth, self.getMainPaneElement().clientHeight);
+			graphics_.render(self.getMainPaneElement());
 
 
 			// Create the filter to listen to all bay updates for this aisle.
@@ -70,7 +248,7 @@ codeshelf.aisleview = function(websession, aisle) {
 			};
 
 			var bayFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-			websession_.sendCommand(bayFilterCmd, thisAisleView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+			websession_.sendCommand(bayFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 		},
 
 
@@ -99,215 +277,41 @@ codeshelf.aisleview = function(websession, aisle) {
 		 * Call after we've resized the underlying parent view or window.
 		 */
 		doResize: function() {
-			graphics_.setSize(mainPane_.clientWidth, mainPane_.clientHeight);
-			thisAisleView_.invalidate();
-		},
-
-		drawPath: function(path, stroke, fill) {
-			graphics_.drawPath(path, stroke, fill);
-		},
-
-		startDraw: function() {
-			graphics_.clear();
-		},
-
-		endDraw: function() {
-
+			graphics_.setSize(self.getMainPaneElement().clientWidth, self.getMainPaneElement().clientHeight);
+			self.invalidate();
 		},
 
 		doDraw: function(bay) {
-			thisAisleView_.startDraw();
+			startDraw();
 
 			// Draw the bays
 			for (var bayKey in bays_) {
 				if (bays_.hasOwnProperty(bayKey)) {
 					var bayData = bays_[bayKey];
 
-					bayData['bayElement'].style.left = (/* parseInt(mainPane_.style.left) + */ (bayData['bay']['PosX'] * thisAisleView_.getPixelsPerMeter())) + 'px';
-					bayData['bayElement'].style.top = (/* parseInt(mainPane_.style.top) + */ (bayData['bay']['PosY'] * thisAisleView_.getPixelsPerMeter())) + 'px';
+					bayData['bayElement'].style.left = (/* parseInt(self.getMainPaneElement().style.left) + */ (bayData['bay']['PosX'] * self.getPixelsPerMeter())) + 'px';
+					bayData['bayElement'].style.top = (/* parseInt(self.getMainPaneElement().style.top) + */ (bayData['bay']['PosY'] * self.getPixelsPerMeter())) + 'px';
 
 					// If this is the lowest bay, and there are at least four vertices then draw the bay.
 					if ((bayData['bay'].PosZ === 0) && (Object.size(bayData.vertices) >= 4)) {
-						var bayPath = thisAisleView_.computeBayPath(bayData);
+						var bayPath = computeBayPath(bayData);
 						var stroke = new goog.graphics.Stroke(0.5, 'black');
 						var fill = new goog.graphics.SolidFill('white', 0.2);
-						thisAisleView_.drawPath(bayPath, stroke, fill);
+						drawPath(bayPath, stroke, fill);
 					}
 				}
 			}
 
-			graphics_.setSize(mainPane_.clientWidth, mainPane_.clientHeight);
+			graphics_.setSize(self.getMainPaneElement().clientWidth, self.getMainPaneElement().clientHeight);
 
-			thisAisleView_.endDraw();
-		},
-
-		/**
-		 * Compute the path for a bay.
-		 * @param {Object} bayData The bay for which we need the path.
-		 * @return {goog.graphics.Path}
-		 */
-		computeBayPath: function(bayData) {
-			var path = new goog.graphics.Path();
-
-			if (Object.size(bayData.vertices) > 0) {
-				var start = {};
-				for (var i = 0; i < Object.size(bayData.vertices); i++) {
-					var vertex = bayData.vertices[i];
-					var point = thisAisleView_.convertBayVertexToPoint(bayData['bayElement'], vertex);
-					if (i === 0) {
-						path.moveTo(point.x, point.y);
-						start.x = point.x;
-						start.y = point.y;
-					} else {
-						path.lineTo(point.x, point.y);
-						var width = parseInt(bayData['bayElement'].style.width);
-						if ((isNaN(width)) || (width < (Math.abs(start.x - point.x)))) {
-							bayData['bayElement'].style.width = (Math.abs(start.x - point.x)) + 'px';
-						}
-						var height = parseInt(bayData['bayElement'].style.height);
-						if ((isNaN(height)) || (height < (Math.abs(start.y - point.y)))) {
-							bayData['bayElement'].style.height = (Math.abs(start.y - point.y)) + 'px';
-						}
-					}
-				}
-				path.lineTo(start.x, start.y);
-			}
-
-			return path;
-		},
-
-		/**
-		 * Convert a Bay's vertex into a point in graphics space (pixels).
-		 * @param {Element} bayElement The HTML element to which the point will be relative.
-		 * @param {Object} vertex The vertex for which we need a point.
-		 * @return {Object}
-		 */
-		convertBayVertexToPoint: function(bayElement, vertex) {
-			var point = {};
-			point.x = parseInt(bayElement.style.left) + (vertex.PosX * thisAisleView_.getPixelsPerMeter());
-			point.y = parseInt(bayElement.style.top) + (vertex.PosY * thisAisleView_.getPixelsPerMeter());
-			return point;
-		},
-
-		/**
-		 * Handle any bay update commands that arrive over the websocket for this aisle.
-		 * @param {Object} bay The updated bay.
-		 */
-		handleUpdateBayCmd: function(bay) {
-			if (bays_[bay['persistentId']] === undefined) {
-				// Create and populate the bay's data record.
-				var bayData = {};
-				bayData['bay'] = bay;
-
-				bayData['bayElement'] = soy.renderAsElement(codeshelf.templates.bayView, {id: bay['DomainId']});
-				goog.dom.appendChild(mainPane_, bayData['bayElement']);
-				bayData['bayElement'].style.left = (parseInt(mainPane_.style.left) + (bay['PosX'] * thisAisleView_.getPixelsPerMeter())) + 'px';
-				bayData['bayElement'].style.top = (parseInt(mainPane_.style.top) + (bay['PosY'] * thisAisleView_.getPixelsPerMeter())) + 'px';
-
-				bays_[bay['persistentId']] = bayData;
-
-				// Create the filter to listen to all vertex updates for this facility.
-				var vertexFilterData = {
-					'className':     domainobjects.vertex.classname,
-					'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder', 'ParentPersistentId'],
-					'filterClause':  'parentLocation.persistentId = :theId',
-					'filterParams':  [
-						{ 'name': "theId", 'value': bay['persistentId']}
-					]
-				}
-
-				var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
-				websession_.sendCommand(vertexFilterCmd, thisAisleView_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
-			}
-			thisAisleView_.invalidate(bay);
-		},
-
-		/**
-		 * Handle any bay delete commands that arrive over the websocket for this aisle.
-		 * @param {Object} bay The deleted bay.
-		 */
-		handleDeleteBayCmd: function(bay) {
-			if (bays_[bay['persistentId']] !== undefined) {
-				bays_.splice(bay['persistentId'], 1);
-			}
-			thisAisleView_.invalidate(bay);
-		},
-
-		/**
-		 * Handle any bay vertex update commands that arrive over the websocket for this aisle.
-		 * @param {Object} bayvertex The updated bay vertex.
-		 */
-		handleUpdateBayVertexCmd: function(bayVertex) {
-			var bayPersistentId = bayVertex.ParentPersistentId;
-			if (bays_[bayPersistentId] !== undefined) {
-				bayData = bays_[bayPersistentId];
-				if (bayData.vertices === undefined) {
-					bayData.vertices = [];
-				}
-				bayData.vertices[bayVertex.DrawOrder] = bayVertex;
-				thisAisleView_.invalidate(bayData['bay']);
-			}
-		},
-
-		/**
-		 * Handle any bay vertex delete commands that arrive over the websocket for this aisle.
-		 * @param {Object} bayvertex The deleted bay vertex.
-		 */
-		handleDeleteBayVertexCmd: function(bayVertex) {
-
-		},
-
-		/**
-		 * The callback to use for any commands we send to the remote server.
-		 * @return {Object}
-		 */
-		websocketCmdCallback: function(expectedResponseType) {
-			var callback = {
-				exec:                    function(command) {
-					if (!command['d'].hasOwnProperty('r')) {
-						alert('response has no result');
-					} else {
-						if (command['t'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-							for (var i = 0; i < command['d']['r'].length; i++) {
-								var object = command['d']['r'][i];
-
-								if (object['className'] === domainobjects.bay.classname) {
-									// Bay updates
-									if (object['op'] === 'cr') {
-										thisAisleView_.handleUpdateBayCmd(object);
-									} else if (object['op'] === 'up') {
-										thisAisleView_.handleUpdateBayCmd(object);
-									} else if (object['op'] === 'dl') {
-										thisAisleView_.handleDeleteBayCmd(object);
-									}
-								} else if (object['className'] === domainobjects.vertex.classname) {
-									// Vertex updates.
-									if (object['op'] === 'cr') {
-										thisAisleView_.handleUpdateBayVertexCmd(object);
-									} else if (object['op'] === 'up') {
-										thisAisleView_.handleUpdateBayVertexCmd(object);
-									} else if (object['op'] === 'dl') {
-										thisAisleView_.handleDeleteBayVertexCmd(object);
-									}
-								}
-
-							}
-						} else if (command['t'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-						} else if (command['t'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-						} else if (command['t'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
-						}
-					}
-				}
-			}
-
-			return callback;
+			endDraw();
 		}
 	}
 
 	// We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.view();
-	jQuery.extend(view, thisAisleView_);
-	thisAisleView_ = view;
+	jQuery.extend(view, self);
+	self = view;
 
-	return thisAisleView_;
+	return self;
 }

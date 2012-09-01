@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: view.js,v 1.4 2012/09/01 18:49:56 jeffw Exp $
+ *  $Id: view.js,v 1.5 2012/09/01 23:56:32 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.view');
 goog.require('codeshelf.window');
@@ -13,15 +13,13 @@ goog.require('goog.async.Delay');
  */
 codeshelf.view = function() {
 
-	var thisView_;
+	var self;
 
 	var viewId_;
-	var viewDiv_;
 	var subViews_ = {};
-	var anchorPoint_;
 	var pixelsPerMeter_;
-	var graphic_;
 	var isInvalidated_ = false;
+	var mainPaneElement_;
 
 	/**
 	 * Initialize the view.
@@ -30,7 +28,20 @@ codeshelf.view = function() {
 		viewId_ = goog.events.getUniqueId('view');
 	})();
 
-	thisView_ = {
+	self = {
+
+		setupView: function(mainPaneElement) {
+			mainPaneElement_ = mainPaneElement;
+			self.doSetupView();
+		},
+
+		setMainPaneElement: function(mainPaneElement) {
+			mainPaneElement_ = mainPaneElement;
+		},
+
+		getMainPaneElement: function(){
+			return mainPaneElement_
+		},
 
 		/**
 		 * Get the view's unique ID.
@@ -45,7 +56,7 @@ codeshelf.view = function() {
 		 */
 		drawView: function() {
 			if (isInvalidated_) {
-				thisView_.doDraw();
+				self.doDraw();
 				for (var i in subViews_) {
 					if (subViews_.hasOwnProperty(i)) {
 						var subView = subViews_[i];
@@ -61,13 +72,13 @@ codeshelf.view = function() {
 		 * (A fast operation where all acumulated invalidates result in a single draw evenet at the end.)
 		 */
 		resize: function() {
-				thisView_.doResize();
-				for (var i in subViews_) {
-					if (subViews_.hasOwnProperty(i)) {
-						var subView = subViews_[i];
-						subView.doResize();
-					}
+			self.doResize();
+			for (var i in subViews_) {
+				if (subViews_.hasOwnProperty(i)) {
+					var subView = subViews_[i];
+					subView.doResize();
 				}
+			}
 		},
 
 		/**
@@ -77,7 +88,7 @@ codeshelf.view = function() {
 		invalidate: function() {
 			if (!isInvalidated_) {
 				isInvalidated_ = true;
-				var delay = new goog.async.Delay(thisView_.drawView, 0);
+				var delay = new goog.async.Delay(self.drawView, 0);
 				delay.start();
 				for (var i in subViews_) {
 					if (subViews_.hasOwnProperty(i)) {
@@ -94,7 +105,7 @@ codeshelf.view = function() {
 		 */
 		addSubview: function(view) {
 			subViews_[view.getViewId()] = view;
-			thisView_.invalidate();
+			self.invalidate();
 		},
 
 		/**
@@ -103,7 +114,7 @@ codeshelf.view = function() {
 		 */
 		removeSubview: function(view) {
 			delete subViews_[view.getViewId()];
-			thisView_.invalidate();
+			self.invalidate();
 		},
 
 		/**
@@ -111,7 +122,7 @@ codeshelf.view = function() {
 		 */
 		clearSubviews: function() {
 			subViews_ = {};
-			thisView_.invalidate();
+			self.invalidate();
 		},
 
 		/**
@@ -139,5 +150,5 @@ codeshelf.view = function() {
 		}
 	}
 
-	return thisView_;
+	return self;
 }

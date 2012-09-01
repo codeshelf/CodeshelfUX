@@ -36,8 +36,8 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 	var percentCompleteThreshold_;
 	var searchString_;
 
-	var thisListview_ = {
-		setupView: function(contentElement) {
+	var self = {
+		doSetupView: function() {
 
 			// Compute the columns we need for this domain object.
 			properties = domainObject_.properties;
@@ -76,10 +76,10 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 			percentCompleteThreshold_ = 0;
 			searchString_ = "";
 
-			goog.dom.appendChild(contentElement, soy.renderAsElement(codeshelf.templates.listviewContentPane));
+			goog.dom.appendChild(self.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
 			dataView_ = new $.Slick.Data.DataView();
-			grid_ = new $.Slick.Grid(contentElement, dataView_, columns_, options_);
+			grid_ = new $.Slick.Grid(self.getMainPaneElement(), dataView_, columns_, options_);
 			grid_.setSelectionModel(new $.Slick.RowSelectionModel());
 
 			var columnpicker = new $.Slick.Controls.ColumnPicker(columns_, grid_, options_);
@@ -92,7 +92,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 			}
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-			websession_.sendCommand(setListViewFilterCmd, thisListview_.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+			websession_.sendCommand(setListViewFilterCmd, self.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 
 			grid_.onKeyDown.subscribe(function(e) {
 				// select all rows on ctrl-a
@@ -112,7 +112,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 			});
 
 			grid_.onColumnsReordered.subscribe(function(e) {
-				dataView_.sort(thisListview_.comparer, sortdir_);
+				dataView_.sort(self.comparer, sortdir_);
 			});
 
 			grid_.onSelectedRowsChanged.subscribe(function(e) {
@@ -128,7 +128,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 			grid_.onSort.subscribe(function(e, args) {
 				sortdir_ = args.sortAsc ? 1 : -1;
 				sortcol_ = args.sortCol.field;
-				dataView_.sort(thisListview_.comparer, args.sortAsc);
+				dataView_.sort(self.comparer, args.sortAsc);
 			});
 
 			// wire up model events to drive the grid
@@ -177,7 +177,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 				percentCompleteThreshold: percentCompleteThreshold_,
 				searchString:             searchString_
 			});
-			//dataView_.setFilter(thisListview_.myFilter);
+			//dataView_.setFilter(self.myFilter);
 			dataView_.endUpdate();
 
 			$("#gridContainer")['resizable']();
@@ -251,7 +251,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 								dataView_.deleteItem(object['persistentId']);
 							}
 						}
-						dataView_.sort(thisListview_.comparer, sortdir_);
+						dataView_.sort(self.comparer, sortdir_);
 					}
 				}
 			}
@@ -260,7 +260,10 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 		}
 	}
 
-	jQuery.extend(thisListview_, codeshelf.view());
+	// We want this view to extend the root/parent view, but we want to return this view.
+	var view = codeshelf.view();
+	jQuery.extend(view, self);
+	self = view;
 
-	return thisListview_;
+	return self;
 }
