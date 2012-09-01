@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.18 2012/08/31 00:48:34 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.19 2012/09/01 18:49:56 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -573,7 +573,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			}
 		},
 
-		resize: function() {
+		doResize: function() {
 			facilityBounds_ = undefined;
 			google.maps.event.trigger(mapPane_, 'resize');
 			thisFacilityView_.setBounds();
@@ -619,7 +619,11 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		}
 	}
 
-	jQuery.extend(thisFacilityView_, codeshelf.view());
+	// We want this view to extend the root/parent view, but we want to return this view.
+	var view = codeshelf.view();
+	jQuery.extend(view, thisFacilityView_);
+	thisFacilityView_ = view;
+
 
 	return thisFacilityView_;
 }

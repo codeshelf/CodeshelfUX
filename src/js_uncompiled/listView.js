@@ -225,7 +225,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 				grid_.showTopPanel();
 		},
 
-		resize: function() {
+		doResize: function() {
 			grid_.resizeCanvas();
 			grid_.autosizeColumns();
 		},

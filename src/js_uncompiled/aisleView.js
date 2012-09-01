@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.9 2012/08/31 00:48:34 jeffw Exp $
+ *  $Id: aisleView.js,v 1.10 2012/09/01 18:49:56 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -28,12 +28,12 @@ goog.require('raphael');
  * @param {goog.graphics.AbstractGraphics} graphics The graphics context where we can draw.
  * @return {Object}
  */
-codeshelf.aisleview = function(websession, aisle, graphics) {
+codeshelf.aisleview = function(websession, aisle) {
 
 	var websession_ = websession;
 	var aisle_ = aisle;
 	var mainPane_;
-	var graphics_ = graphics;
+	var graphics_;
 	var bays_ = [];
 
 	/**
@@ -55,15 +55,15 @@ codeshelf.aisleview = function(websession, aisle, graphics) {
 			// Create a draw canvas for the bounding rect.
 			// Compute the path for the aisle outline and put it into the draw canavs.
 
-			//graphics_ = goog.graphics.createGraphics(mainPane_.clientWidth, mainPane_.clientHeight);
-//			graphics_.render(mainPane_);
+			graphics_ = goog.graphics.createGraphics(mainPane_.clientWidth, mainPane_.clientHeight);
+			graphics_.render(mainPane_);
 
 
 			// Create the filter to listen to all bay updates for this aisle.
 			var data = {
 				'className':     domainobjects.bay.classname,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'PosZ'],
-				'filterClause':  'parentLocation.persistentId = :theId',
+				'filterClause':  'parentLocation.persistentId = :theId AND posZ = 0',
 				'filterParams':  [
 					{ 'name': "theId", 'value': aisle_['persistentId']}
 				]
@@ -98,7 +98,7 @@ codeshelf.aisleview = function(websession, aisle, graphics) {
 		/**
 		 * Call after we've resized the underlying parent view or window.
 		 */
-		resize: function() {
+		doResize: function() {
 			graphics_.setSize(mainPane_.clientWidth, mainPane_.clientHeight);
 			thisAisleView_.invalidate();
 		},
@@ -116,15 +116,15 @@ codeshelf.aisleview = function(websession, aisle, graphics) {
 		},
 
 		doDraw: function(bay) {
-//			thisAisleView_.startDraw();
+			thisAisleView_.startDraw();
 
 			// Draw the bays
 			for (var bayKey in bays_) {
 				if (bays_.hasOwnProperty(bayKey)) {
 					var bayData = bays_[bayKey];
 
-					bayData['bayElement'].style.left = (parseInt(mainPane_.style.left) + (bayData['bay']['PosX'] * thisAisleView_.getPixelsPerMeter())) + 'px';
-					bayData['bayElement'].style.top = (parseInt(mainPane_.style.top) + (bayData['bay']['PosY'] * thisAisleView_.getPixelsPerMeter())) + 'px';
+					bayData['bayElement'].style.left = (/* parseInt(mainPane_.style.left) + */ (bayData['bay']['PosX'] * thisAisleView_.getPixelsPerMeter())) + 'px';
+					bayData['bayElement'].style.top = (/* parseInt(mainPane_.style.top) + */ (bayData['bay']['PosY'] * thisAisleView_.getPixelsPerMeter())) + 'px';
 
 					// If this is the lowest bay, and there are at least four vertices then draw the bay.
 					if ((bayData['bay'].PosZ === 0) && (Object.size(bayData.vertices) >= 4)) {
@@ -136,7 +136,9 @@ codeshelf.aisleview = function(websession, aisle, graphics) {
 				}
 			}
 
-//			thisAisleView_.endDraw();
+			graphics_.setSize(mainPane_.clientWidth, mainPane_.clientHeight);
+
+			thisAisleView_.endDraw();
 		},
 
 		/**
@@ -158,6 +160,14 @@ codeshelf.aisleview = function(websession, aisle, graphics) {
 						start.y = point.y;
 					} else {
 						path.lineTo(point.x, point.y);
+						var width = parseInt(bayData['bayElement'].style.width);
+						if ((isNaN(width)) || (width < (Math.abs(start.x - point.x)))) {
+							bayData['bayElement'].style.width = (Math.abs(start.x - point.x)) + 'px';
+						}
+						var height = parseInt(bayData['bayElement'].style.height);
+						if ((isNaN(height)) || (height < (Math.abs(start.y - point.y)))) {
+							bayData['bayElement'].style.height = (Math.abs(start.y - point.y)) + 'px';
+						}
 					}
 				}
 				path.lineTo(start.x, start.y);
@@ -189,7 +199,7 @@ codeshelf.aisleview = function(websession, aisle, graphics) {
 				var bayData = {};
 				bayData['bay'] = bay;
 
-				bayData['bayElement'] = soy.renderAsElement(codeshelf.templates.bayView);
+				bayData['bayElement'] = soy.renderAsElement(codeshelf.templates.bayView, {id: bay['DomainId']});
 				goog.dom.appendChild(mainPane_, bayData['bayElement']);
 				bayData['bayElement'].style.left = (parseInt(mainPane_.style.left) + (bay['PosX'] * thisAisleView_.getPixelsPerMeter())) + 'px';
 				bayData['bayElement'].style.top = (parseInt(mainPane_.style.top) + (bay['PosY'] * thisAisleView_.getPixelsPerMeter())) + 'px';

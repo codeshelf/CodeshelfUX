@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: window.js,v 1.13 2012/08/31 00:48:34 jeffw Exp $
+ *  $Id: window.js,v 1.14 2012/09/01 18:49:56 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.window');
 goog.require('goog.style');
@@ -9,11 +9,6 @@ goog.require('goog.dom.query');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.fx.Dragger');
-
-var windowList = [];
-var xPosOffset = 0;
-var yPosOffset = 0;
-var focusedWindow = 0;
 
 codeshelf.window = function(title, view, parent, limits) {
 
@@ -34,17 +29,17 @@ codeshelf.window = function(title, view, parent, limits) {
 
 		open: function() {
 
-			windowList[windowList.length] = thisWindow_;
+			gWindowList[gWindowList.length] = thisWindow_;
 			windowElement_ = soy.renderAsElement(codeshelf.templates.window);
 			goog.dom.appendChild(parent_, windowElement_);
 
 			// Set the window to the next stagger position.
 			var curTop = parseInt(goog.style.getComputedStyle(windowElement_, 'top'), 10);
-			windowElement_.style.top = curTop + xPosOffset + 'px';
-			xPosOffset += 25;
+			windowElement_.style.top = curTop + gXPosOffset + 'px';
+			gXPosOffset += 25;
 			var curLeft = parseInt(goog.style.getComputedStyle(windowElement_, 'left'), 10);
-			windowElement_.style.left = curLeft + yPosOffset + 'px';
-			yPosOffset += 25;
+			windowElement_.style.left = curLeft + gYPosOffset + 'px';
+			gYPosOffset += 25;
 
 
 			var label = goog.dom.query('.windowTitle', windowElement_)[0];
@@ -79,8 +74,8 @@ codeshelf.window = function(title, view, parent, limits) {
 			resizer_.defaultAction = function(x, y) {
 				var leftDim = parseInt(windowElement_.style.left, 10);
 				var topDim = parseInt(windowElement_.style.top, 10);
-				var width = resizer_.clientX - leftDim;
-				var height = y + topDim - 10;
+				var width = resizer_.clientX - leftDim - 5;
+				var height = resizer_.clientY - topDim - 10;
 				windowElement_.style.width = width + 'px';
 				windowElement_.style.height = height + 'px';
 				view_.resize();
@@ -119,9 +114,9 @@ codeshelf.window = function(title, view, parent, limits) {
 
 		focusWindow: function() {
 			// Loop through all of the windows, and set their Z to 0, but set this window's Z to 1.
-			for (var i in windowList) {
-				if (windowList.hasOwnProperty(i)) {
-					var aWindow = windowList[i];
+			for (var i in gWindowList) {
+				if (gWindowList.hasOwnProperty(i)) {
+					var aWindow = gWindowList[i];
 
 					var windowBar = aWindow.getWindowBar();
 					if (aWindow === thisWindow_) {

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: view.js,v 1.3 2012/08/31 00:48:34 jeffw Exp $
+ *  $Id: view.js,v 1.4 2012/09/01 18:49:56 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.view');
 goog.require('codeshelf.window');
@@ -9,7 +9,7 @@ goog.require('goog.async.Delay');
 
 /**
  * The parent behavior for all views.  (The views extend this object in order to play with the view system.)
- * @return {Object}
+ * @return {Object} The view.
  */
 codeshelf.view = function() {
 
@@ -54,6 +54,20 @@ codeshelf.view = function() {
 				}
 				isInvalidated_ = false;
 			}
+		},
+
+		/**
+		 * Invalidate the view.
+		 * (A fast operation where all acumulated invalidates result in a single draw evenet at the end.)
+		 */
+		resize: function() {
+				thisView_.doResize();
+				for (var i in subViews_) {
+					if (subViews_.hasOwnProperty(i)) {
+						var subView = subViews_[i];
+						subView.doResize();
+					}
+				}
 		},
 
 		/**

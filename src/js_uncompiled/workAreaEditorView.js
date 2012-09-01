@@ -1,13 +1,8 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.34 2012/08/31 00:48:34 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.35 2012/09/01 18:49:56 jeffw Exp $
  *******************************************************************************/
-
-/**
- * @fileoverview Work area editor.
- *
- */
 
 goog.provide('codeshelf.workareaeditorview');
 goog.require('codeshelf.aisleview');
@@ -36,6 +31,12 @@ goog.require('extern.jquery');
 goog.require('extern.jquery.dragToSelect');
 goog.require('raphael');
 
+/**
+ * The facility in pixel space (instead of GPS space) where the user can work on it in a normal size/orientation.
+ * @param websession The websession used for updates.
+ * @param facility The facility we're editing.
+ * @return {Object} The work area editor.
+ */
 codeshelf.workareaeditorview = function(websession, facility) {
 
 	var thisWorkAreaEditorView_;
@@ -57,8 +58,17 @@ codeshelf.workareaeditorview = function(websession, facility) {
 	var currentDrawRect_;
 	var aisles_ = [];
 
+	/**
+	 * The work area editor object we'll return.
+	 * @type {Object}
+	 * @private
+	 */
 	thisWorkAreaEditorView_ = {
 
+		/**
+		 * Handle the user's click on the toolbar.
+		 * @param e
+		 */
 		handleToolbarEvent: function(e) {
 			var a = 2;
 		},
@@ -87,7 +97,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			goog.events.listen(toolbar_, goog.object.getValues(goog.ui.Component.EventType), thisWorkAreaEditorView_.handleToolbarEvent);
 
 			clickHandler_ = goog.events.listen(mainPane_, goog.events.EventType.CLICK, thisWorkAreaEditorView_.clickHandler);
-//			mouseDownHandler_ = goog.events.listen(mainPane_, goog.events.EventType.MOUSEDOWN, thisWorkAreaEditorView_.mouseDownHandler);
+			mouseDownHandler_ = goog.events.listen(mainPane_, goog.events.EventType.MOUSEDOWN, thisWorkAreaEditorView_.mouseDownHandler);
 			doublClickHandler_ = goog.events.listen(mainPane_, goog.events.EventType.DBLCLICK, thisWorkAreaEditorView_.doubleClickHandler);
 
 			goog.events.listen(mainPane_, goog.events.EventType.MOUSEOVER,
@@ -175,7 +185,7 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			google.maps.event.removeListener(doubleClickHandler_);
 		},
 
-		resize: function() {
+		doResize: function() {
 			graphics_.setSize(mainPane_.clientWidth, mainPane_.clientHeight);
 			thisWorkAreaEditorView_.invalidate();
 		},
@@ -496,10 +506,12 @@ codeshelf.workareaeditorview = function(websession, facility) {
 						aisleData.aisleElement.style.top = point.y;
 					} else {
 						path.lineTo(point.x, point.y);
-						if (aisleData.aisleElement.style.width < (Math.abs(start.x - point.x))) {
+						var width = parseInt(aisleData.aisleElement.style.width);
+						if ((isNaN(width)) || (width < (Math.abs(start.x - point.x)))) {
 							aisleData.aisleElement.style.width = (Math.abs(start.x - point.x)) + 'px';
 						}
-						if (aisleData.aisleElement.style.height < (Math.abs(start.y - point.y))) {
+						var height = parseInt(aisleData.aisleElement.style.width);
+						if ((isNaN(height)) || (height < (Math.abs(start.y - point.y)))) {
 							aisleData.aisleElement.style.height = (Math.abs(start.y - point.y)) + 'px';
 						}
 					}
@@ -571,13 +583,13 @@ codeshelf.workareaeditorview = function(websession, facility) {
 				var aisleData = {};
 
 				// Create and populate the aisle's data record.
-				aisleData.aisleElement = soy.renderAsElement(codeshelf.templates.aisleView);
+				aisleData.aisleElement = soy.renderAsElement(codeshelf.templates.aisleView, {id: aisle['DomainId']});
 				aisleData.aisleElement.style.left = Math.round(aisle['PosX'] * thisWorkAreaEditorView_.getPixelsPerMeter()) + 'px';
 				aisleData.aisleElement.style.top = Math.round(aisle['PosY'] * thisWorkAreaEditorView_.getPixelsPerMeter()) + 'px';
 				goog.dom.appendChild(mainPane_, aisleData.aisleElement);
 
 				aisleData.aisle = aisle;
-				aisleData.aisleView = codeshelf.aisleview(websession_, aisle, graphics_);
+				aisleData.aisleView = codeshelf.aisleview(websession_, aisle);
 				aisleData.aisleView.setupView(aisleData.aisleElement);
 				thisWorkAreaEditorView_.addSubview(aisleData.aisleView);
 

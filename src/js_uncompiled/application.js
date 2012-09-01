@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: application.js,v 1.17 2012/08/29 06:23:58 jeffw Exp $
+ *  $Id: application.js,v 1.18 2012/09/01 18:49:56 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.application');
 goog.require('domainobjects');
@@ -51,6 +51,11 @@ codeshelf.application = function() {
 		},
 
 		initApplication_: function() {
+			gWindowList = [];
+			gXPosOffset = 0;
+			gYPosOffset = 0;
+			gFocusedWindow = 0;
+
 			// Remove all markup from the URL - we'll build it from the app itself.
 			goog.dom.removeChildren(goog.dom.getDocument().body);
 			launchWindow_ = codeshelf.launchWindow();
@@ -82,6 +87,11 @@ if (codeshelf.debug) {
 	debugWindow.init();
 //	goog.Disposable.ENABLE_MONITORING = true;
 }
+
+var gWindowList = [];
+var gXPosOffset = 0;
+var gYPosOffset = 0;
+var gFocusedWindow = 0;
 
 // Launch the application.
 var application = codeshelf.application();

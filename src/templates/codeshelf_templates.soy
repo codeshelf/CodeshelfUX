@@ -131,17 +131,19 @@
 
 /**
  * The template for the aisle view.
+ * @param id The aisle' ID.'
  */
 {template .aisleView}
-<div class='aisleView' style="position:absolute">
+<div id='{$id}' class='aisleView' style='position:absolute'>
 </div>
 {/template}
 
 /**
  * The template for the bay view.
+ * @param id The bay's ID'
  */
 {template .bayView}
-<div class='bayView'>
+<div id='{$id}' class='bayView' style='position:absolute'>
 </div>
 {/template}
 
@@ -149,7 +151,7 @@
  * Listview content pane
  */
 {template .listviewContentPane}
-<div id="listViewGrid" class="windowContent">
+<div id='listViewGrid' class='windowContent'>
 </div>
 {/template}
 

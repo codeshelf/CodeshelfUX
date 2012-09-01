@@ -64,7 +64,7 @@ codeshelf.listdemo = function() {
 				grid.showTopPanel();
 		},
 
-		resize: function() {
+		doResize: function() {
 			grid.resizeCanvas();
 			grid.autosizeColumns();
 		},

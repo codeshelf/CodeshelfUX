@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.33 2012/08/31 00:48:34 jeffw Exp $
+ *  $Id: mainPage.js,v 1.34 2012/09/01 18:49:56 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('domainobjects');
@@ -67,12 +67,12 @@ codeshelf.mainpage = function() {
 
 			goog.events.listen(document, goog.events.EventType.KEYPRESS, function(e) {
 				if (e.keyCode === goog.events.KeyCodes.NUM_ZERO) {
-					if (focusedWindow < windowList.length - 1) {
-						focusedWindow++
+					if (gFocusedWindow < gWindowList.length - 1) {
+						gFocusedWindow++
 					} else {
-						focusedWindow = 0;
+						gFocusedWindow = 0;
 					}
-					var window = windowList[focusedWindow];
+					var window = gWindowList[gFocusedWindow];
 					window.focusWindow();
 				}
 			});
