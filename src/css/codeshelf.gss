@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: codeshelf.gss,v 1.24 2012/08/24 22:55:52 jeffw Exp $
+ *  $Id: codeshelf.gss,v 1.25 2012/09/02 23:57:04 jeffw Exp $
  *******************************************************************************/
 
 /* Defines and mixins ----------------------------------------------------------- */
@@ -283,6 +283,13 @@
 	background-color:	#99F;
 }
 
+/* Toolbar classes --------------------------------------------------------------- */
+
+	position:			relative;
+	@mixin				FLEX_BOX(1);
+	@mixin				DISPLAY_BOX(horizontal); 
+}
+
 /* Drag-select classes --------------------------------------------------------------- */
 
 div.jquery-drag-to-select {
@@ -303,7 +310,7 @@ div.jquery-drag-to-select.active {
 
 .selected {
 	border-color: #f90;
-	border-width: 2px;
+	border-width: 1px;
 	border-style: solid;
 }
 
@@ -402,12 +409,6 @@ div.jquery-drag-to-select.active {
 
 /* Workarea editor classes --------------------------------------------------------------- */
 
-.workAreaEditorDialog {
-	position:			relative;
-	@mixin				FLEX_BOX(1);
-	@mixin				DISPLAY_BOX(vertical);
-}
-
 .workAreaEditor {
 	position:			relative;
 	@mixin				FLEX_BOX(1);
@@ -419,12 +420,6 @@ div.jquery-drag-to-select.active {
 	cursor:				crosshair;
 	@mixin				FLEX_BOX(2);
 	@mixin				DISPLAY_BOX(vertical);
-}
-
-.workAreaEditorToolbar {
-	position:			relative;
-	@mixin				FLEX_BOX(1);
-	@mixin				DISPLAY_BOX(horizontal); 
 }
 
 /* Modal dialog classes --------------------------------------------------------------- */
