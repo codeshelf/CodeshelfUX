@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: codeshelf.gss,v 1.25 2012/09/02 23:57:04 jeffw Exp $
+ *  $Id: codeshelf.gss,v 1.26 2012/09/02 23:58:54 jeffw Exp $
  *******************************************************************************/
 
 /* Defines and mixins ----------------------------------------------------------- */
@@ -285,6 +285,7 @@
 
 /* Toolbar classes --------------------------------------------------------------- */
 
+.toolbar {
 	position:			relative;
 	@mixin				FLEX_BOX(1);
 	@mixin				DISPLAY_BOX(horizontal); 

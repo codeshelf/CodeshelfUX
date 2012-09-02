@@ -2,6 +2,7 @@ goog.provide('codeshelf.listdemoview');
 goog.require('slickgrid.core');
 goog.require('slickgrid.firebugx');
 goog.require('slickgrid.editors');
+goog.require('slickgrid.cellselection');
 goog.require('slickgrid.rowselection');
 goog.require('slickgrid.grid');
 goog.require('slickgrid.dataview');
@@ -169,20 +170,19 @@ codeshelf.listdemoview = function() {
 			self.getMainPaneElement().innerHTML = '<div id="listViewGrid" class="windowContent"></div>';
 			dataView = new $.Slick.Data.DataView();
 			grid = new $.Slick.Grid('#listViewGrid', dataView, columns, options);
-			grid.setSelectionModel(new $.Slick.RowSelectionModel());
+			grid.setSelectionModel(new $.Slick.CellSelectionModel());
 
 			var copyManager = new $.Slick.CellCopyManager();
 			grid.registerPlugin(copyManager);
 			copyManager.onCopyCells.subscribe(function(e, args) {
-				if (args.from.length !== 1 || args.to.length !== 1) {
-					throw "This implementation only supports single range copy and paste operations";
-				}
-
-				var range = args.from[0];
-				var val;
-				for (var i = 0; i <= from.toRow - from.fromRow; i++) {
-					for (var j = 0; j <= from.toCell - from.fromCell; j++) {
-						val = data[from.fromRow + i][columns[from.fromCell + j].field];
+				for (var obj in args.ranges) {
+					if (args.ranges.hasOwnProperty(obj)) {
+						var range = args.ranges[obj];
+						for (var i = 0; i <= range.toRow - range.fromRow; i++) {
+							for (var j = 0; j <= range.toCell - range.fromCell; j++) {
+								var val = data[range.fromRow + i][columns[range.fromCell + j].field];
+							}
+						}
 					}
 				}
 			});

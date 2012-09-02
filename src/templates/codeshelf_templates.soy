@@ -99,11 +99,11 @@
 {/template}
 
 /**
- * The template for the work area editor.
+ * The template for a toolbar.
  */
-{template .workAreaEditorToolbar}
-<div class='workAreaEditorToolbar goog-toolbar goog-toolbar-enabled'>
-	<div id='aisle-tool' title='Aisle Tool' class='goog-toolbar-toggle-button'>
+{template .toolbar}
+<div class='toolbar goog-toolbar goog-toolbar-enabled'>
+	<!--div id='aisle-tool' title='Aisle Tool' class='goog-toolbar-toggle-button'>
 		<img id='rackIcon' class='workAreaEditorToolIcon' src='../../src/images/rack-icon.png' alt='' height='32' width='32'>
 	</div>
 	<hr>
@@ -113,7 +113,19 @@
 	<hr>
 	<div id='door-tool' title='Door Tool' class='goog-toolbar-toggle-button'>
 		<img id='doorIcon' class='workAreaEditorToolIcon' src='../../src/images/door-icon.png' alt='' height='32' width='32'>
-	</div>
+	</div-->
+</div>
+{/template}
+
+/**
+ * The template for a toolbar tool
+ * @param id The tool's id
+ * @param title The tool's description
+ * @param icon The tool's icon name
+ */
+{template .toolbarTool}
+<div id='{$id}' title='{$title}' class='goog-toolbar-toggle-button'>
+	<img id='rackIcon' class='workAreaEditorToolIcon' src='../../src/images/{$icon}' alt='' height='32' width='32'>
 </div>
 {/template}
 
@@ -121,11 +133,9 @@
  * The template for the work area editor.
  */
 {template .workAreaEditor}
-<div class='workAreaEditorDialog'>
-	<div class='workAreaEditor'>
-		<div class='workAreaEditorToolbarPane'></div>
-		<div class='workAreaEditorPane'></div>
-	</div>
+<div class='workAreaEditor'>
+	<div class='toolbarPane'></div>
+	<div class='workAreaEditorPane'></div>
 </div>
 {/template}
 
@@ -143,7 +153,7 @@
  * @param id The bay's ID'
  */
 {template .bayView}
-<div id='{$id}' class='bayView' style='position:absolute'>
+<div id='{$id}' class='bayView selectable' style='position:absolute'>
 </div>
 {/template}
 

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.36 2012/09/01 23:56:32 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.37 2012/09/02 23:57:04 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -20,13 +20,6 @@ goog.require('goog.events.EventType');
 goog.require('goog.fx.Dragger');
 goog.require('goog.object');
 goog.require('goog.style');
-goog.require('goog.ui.Toolbar');
-goog.require('goog.ui.ToolbarRenderer');
-goog.require('goog.ui.ToolbarButton');
-goog.require('goog.ui.ToolbarMenuButton');
-goog.require('goog.ui.ToolbarSelect');
-goog.require('goog.ui.ToolbarSeparator');
-goog.require('goog.ui.ToolbarToggleButton');
 goog.require('extern.jquery');
 goog.require('extern.jquery.dragToSelect');
 goog.require('raphael');
@@ -37,7 +30,7 @@ goog.require('raphael');
  * @param facility The facility we're editing.
  * @return {Object} The work area editor.
  */
-codeshelf.workareaeditorview = function(websession, facility) {
+codeshelf.workareaeditorview = function(websession, facility, options) {
 
 	var websession_ = websession;
 	var facility_ = facility;
@@ -47,8 +40,6 @@ codeshelf.workareaeditorview = function(websession, facility) {
 	var dragger_;
 	var startDragPoint_;
 	var mainPane_;
-	var toolbar_;
-	var toolbarSelectionModel_;
 	var graphics_;
 	var vertices_ = [];
 	var rotateFacilityByDeg_ = 0;
@@ -56,14 +47,6 @@ codeshelf.workareaeditorview = function(websession, facility) {
 	var currentRect_;
 	var currentDrawRect_;
 	var aisles_ = [];
-
-	/**
-	 * Handle the user's click on the toolbar.
-	 * @param e
-	 */
-	function handleToolbarEvent(e) {
-		var a = 2;
-	}
 
 	function clickHandler(event) {
 
@@ -572,21 +555,6 @@ codeshelf.workareaeditorview = function(websession, facility) {
 			goog.dom.appendChild(self.getMainPaneElement(), workAreaEditor);
 
 			mainPane_ = workAreaEditor.getElementsByClassName('workAreaEditorPane')[0];
-			var toolbarPane = workAreaEditor.getElementsByClassName('workAreaEditorToolbarPane')[0];
-
-			$('.workAreaEditorPane').dragToSelect({
-				selectables: 'path',
-				onHide:      function() {
-					alert($('.workAreaEditorPane path.selected').length + ' selected');
-				}
-			});
-
-			var workAreaEditorToolbarDom = soy.renderAsElement(codeshelf.templates.workAreaEditorToolbar);
-			goog.dom.appendChild(toolbarPane, workAreaEditorToolbarDom);
-			toolbar_ = new goog.ui.Toolbar();
-			toolbar_.decorate(workAreaEditorToolbarDom);
-			toolbar_.setEnabled(true);
-			goog.events.listen(toolbar_, goog.object.getValues(goog.ui.Component.EventType), handleToolbarEvent);
 
 			clickHandler_ = goog.events.listen(mainPane_, goog.events.EventType.CLICK, clickHandler);
 //			mouseDownHandler_ = goog.events.listen(mainPane_, goog.events.EventType.MOUSEDOWN, mouseDownHandler);
@@ -607,29 +575,6 @@ codeshelf.workareaeditorview = function(websession, facility) {
 					mainPane_.onselectstart = null;
 					mainPane_.onmousedown = null;
 				});
-
-			// Have the alignment buttons be controlled by a selection model.
-			toolbarSelectionModel_ = new goog.ui.SelectionModel();
-			toolbarSelectionModel_.setSelectionHandler(function(button, select) {
-				if (button) {
-					button.setChecked(select);
-				}
-			});
-
-			goog.array.forEach(['aisle-tool', 'staging-tool', 'door-tool'],
-				function(id) {
-					var button = toolbar_.getChild(id);
-					// Let the selection model control the button's checked state.
-					button.setAutoStates(goog.ui.Component.State.CHECKED, false);
-					toolbarSelectionModel_.addItem(button);
-					goog.events.listen(button, goog.ui.Component.EventType.ACTION,
-						function(event) {
-							toolbarSelectionModel_.setSelectedItem(event.target);
-							event.dispose();
-						});
-				});
-			//toolbar_.getChildAt(0).setChecked(true);
-			toolbarSelectionModel_.setSelectedIndex(0);
 
 			// Compute the dimensions of the facility outline, and create a bounding rectangle for it.
 			// Create a draw canvas for the bounding rect.
@@ -709,8 +654,14 @@ codeshelf.workareaeditorview = function(websession, facility) {
 		}
 	}
 
+	var tools = [
+		{id: 'aisle-tool', title: 'Aisle Tool', icon: 'rack-icon.png'},
+		{id: 'staging-tool', title: 'Staging Tool', icon: 'staging-icon.png'},
+		{id: 'door-tool', title: 'Door Tool', icon: 'door-icon.png'}
+	]
+
 	// We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.view();
+	var view = codeshelf.view({handleSelection: true, toolbarTools: tools});
 	jQuery.extend(view, self);
 	self = view;
 
