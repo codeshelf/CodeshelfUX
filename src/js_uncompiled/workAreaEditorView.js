@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.37 2012/09/02 23:57:04 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.38 2012/09/03 06:57:21 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -17,11 +17,9 @@ goog.require('goog.graphics.paths');
 goog.require('goog.math');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
-goog.require('goog.fx.Dragger');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('extern.jquery');
-goog.require('extern.jquery.dragToSelect');
 goog.require('raphael');
 
 /**
@@ -34,12 +32,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 	var websession_ = websession;
 	var facility_ = facility;
-	var mouseDownHandler_;
-	var clickHandler_;
-	var doubleClickHandler_;
-	var dragger_;
-	var startDragPoint_;
-	var mainPane_;
+	var workAreaEditorPane_;
 	var graphics_;
 	var vertices_ = [];
 	var rotateFacilityByDeg_ = 0;
@@ -47,63 +40,6 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	var currentRect_;
 	var currentDrawRect_;
 	var aisles_ = [];
-
-	function clickHandler(event) {
-
-	}
-
-	function mouseDownHandler(event) {
-		if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_), event.offsetX, event.offsetY)) {
-			alert("Select a starting point inside the facility bounds.");
-		} else {
-			var dragTarget = goog.dom.createDom('div', { 'style': 'display:none;' });
-			dragger_ = new goog.fx.Dragger(dragTarget);
-			goog.events.listen(dragger_, goog.fx.Dragger.EventType.START, draggerStart);
-			goog.events.listen(dragger_, goog.fx.Dragger.EventType.DRAG, draggerDrag);
-			goog.events.listen(dragger_, goog.fx.Dragger.EventType.BEFOREDRAG, draggerBefore);
-			goog.events.listen(dragger_, goog.fx.Dragger.EventType.END, draggerEnd);
-			dragger_.startDrag(event);
-			var stroke = new goog.graphics.Stroke(1, 'black');
-			var fill = new goog.graphics.SolidFill('red', 0.2);
-			startDragPoint_ = { 'x': event.offsetX, y: event.offsetY };
-			currentRect_ = new goog.math.Rect(startDragPoint_.x, startDragPoint_.y, 0, 0);
-			currentDrawRect_ = graphics_.drawRect(startDragPoint_.x, startDragPoint_.y, 0, 0, stroke, fill);
-		}
-	}
-
-	function doubleClickHandler(event) {
-
-	}
-
-	function draggerStart(event) {
-		event.dispose();
-	}
-
-	function draggerBefore(event) {
-		event.dispose();
-	}
-
-	function draggerDrag(event) {
-		if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_), startDragPoint_.x + event.target.deltaX, startDragPoint_.y + event.target.deltaY)) {
-			// Dont' do anything, the last drag point was inside the facility bounds.
-		} else {
-			currentRect_.width = event.target.deltaX;
-			currentRect_.height = event.target.deltaY;
-			currentDrawRect_.setSize(event.target.deltaX, event.target.deltaY);
-		}
-		event.dispose();
-	}
-
-	function draggerEnd(event) {
-		var tool = toolbarSelectionModel_.getSelectedItem();
-		switch (tool.getId()) {
-			case 'aisle-tool':
-				createAisle();
-				break;
-		}
-		event.dispose();
-		dragger_.dispose();
-	}
 
 	function createAisle() {
 		var dataEntryDialog = codeshelf.dataentrydialog();
@@ -160,7 +96,6 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 				}
 			}
 		)
-		;
 	}
 
 	function computeDistanceMeters(latArg1, lonArg1, latArg2, lonArg2) {
@@ -418,7 +353,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			aisleData.aisleElement = soy.renderAsElement(codeshelf.templates.aisleView, {id: aisle['DomainId']});
 			aisleData.aisleElement.style.left = Math.round(aisle['PosX'] * self.getPixelsPerMeter()) + 'px';
 			aisleData.aisleElement.style.top = Math.round(aisle['PosY'] * self.getPixelsPerMeter()) + 'px';
-			goog.dom.appendChild(mainPane_, aisleData.aisleElement);
+			goog.dom.appendChild(workAreaEditorPane_, aisleData.aisleElement);
 
 			aisleData.aisle = aisle;
 			aisleData.aisleView = codeshelf.aisleview(websession_, aisle);
@@ -554,34 +489,14 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			var workAreaEditor = soy.renderAsElement(codeshelf.templates.workAreaEditor);
 			goog.dom.appendChild(self.getMainPaneElement(), workAreaEditor);
 
-			mainPane_ = workAreaEditor.getElementsByClassName('workAreaEditorPane')[0];
-
-			clickHandler_ = goog.events.listen(mainPane_, goog.events.EventType.CLICK, clickHandler);
-//			mouseDownHandler_ = goog.events.listen(mainPane_, goog.events.EventType.MOUSEDOWN, mouseDownHandler);
-			doublClickHandler_ = goog.events.listen(mainPane_, goog.events.EventType.DBLCLICK, doubleClickHandler);
-
-			goog.events.listen(mainPane_, goog.events.EventType.MOUSEOVER,
-				function(e) {
-					mainPane_.onselectstart = function() {
-						return false;
-					};
-					mainPane_.onsmousedown = function() {
-						return false;
-					};
-				});
-
-			goog.events.listen(mainPane_, goog.events.EventType.MOUSEOUT,
-				function(event) {
-					mainPane_.onselectstart = null;
-					mainPane_.onmousedown = null;
-				});
+			workAreaEditorPane_ = workAreaEditor.getElementsByClassName('workAreaEditorPane')[0];
 
 			// Compute the dimensions of the facility outline, and create a bounding rectangle for it.
 			// Create a draw canvas for the bounding rect.
 			// Compute the path for the facility outline and put it into the draw canavs.
 
-			graphics_ = goog.graphics.createGraphics(mainPane_.clientWidth, mainPane_.clientHeight);
-			graphics_.render(mainPane_);
+			graphics_ = goog.graphics.createGraphics(workAreaEditorPane_.clientWidth, workAreaEditorPane_.clientHeight);
+			graphics_.render(workAreaEditorPane_);
 
 		},
 
@@ -618,12 +533,51 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		},
 
 		exit: function() {
-			google.maps.event.removeListener(clickHandler_);
-			google.maps.event.removeListener(doubleClickHandler_);
+
+		},
+
+		doMouseDownHandler: function(event) {
+			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_), event.offsetX, event.offsetY)) {
+				alert("Select a starting point inside the facility bounds.");
+				return false;
+			} else {
+				return true;
+			}
+		},
+
+		doDraggerBefore: function(event) {
+
+		},
+
+		doDraggerStart: function(event) {
+			var stroke = new goog.graphics.Stroke(1, 'black');
+			var fill = new goog.graphics.SolidFill('red', 0.2);
+			startDragPoint_ = { 'x': event.offsetX, y: event.offsetY };
+			currentRect_ = new goog.math.Rect(startDragPoint_.x, startDragPoint_.y, 0, 0);
+			currentDrawRect_ = graphics_.drawRect(startDragPoint_.x, startDragPoint_.y, 0, 0, stroke, fill);
+		},
+
+		doDraggerDrag: function(event) {
+			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_), startDragPoint_.x + event.target.deltaX, startDragPoint_.y + event.target.deltaY)) {
+				// Dont' do anything, the last drag point was inside the facility bounds.
+			} else {
+				currentRect_.width = event.target.deltaX;
+				currentRect_.height = event.target.deltaY;
+				currentDrawRect_.setSize(event.target.deltaX, event.target.deltaY);
+			}
+		},
+
+		doDraggerEnd: function(event) {
+			var tool = self.getToolbarTool();
+			switch (tool.getId()) {
+				case 'aisle-tool':
+					createAisle();
+					break;
+			}
 		},
 
 		doResize: function() {
-			graphics_.setSize(mainPane_.clientWidth, mainPane_.clientHeight);
+			graphics_.setSize(workAreaEditorPane_.clientWidth, workAreaEditorPane_.clientHeight);
 			self.invalidate();
 		},
 

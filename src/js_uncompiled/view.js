@@ -1,12 +1,14 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: view.js,v 1.6 2012/09/02 23:57:04 jeffw Exp $
+ *  $Id: view.js,v 1.7 2012/09/03 06:57:21 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.view');
 goog.require('codeshelf.window');
+goog.require('extern.jquery.dragToSelect');
 goog.require('goog.async.Delay');
 goog.require('goog.dom');
+goog.require('goog.fx.Dragger');
 goog.require('goog.ui.Toolbar');
 goog.require('goog.ui.ToolbarRenderer');
 goog.require('goog.ui.ToolbarButton');
@@ -37,6 +39,12 @@ codeshelf.view = function(options) {
 
 	var mouseClickHandler_;
 	var mouseMoveHandler_;
+
+	var mouseDownHandler_;
+	var clickHandler_;
+	var doubleClickHandler_;
+	var dragger_;
+	var startDragPoint_;
 
 	var options_ = {
 		handleSelection: false,
@@ -112,6 +120,56 @@ codeshelf.view = function(options) {
 	}
 
 
+	function clickHandler(event) {
+		event.dispose();
+	}
+
+	function doubleClickHandler(event) {
+		event.dispose();
+	}
+
+	function mouseDownHandler(event) {
+		if (self.doMouseDownHandler(event)) {
+			var dragTarget = goog.dom.createDom('div', { 'style': 'display:none;' });
+			dragger_ = new goog.fx.Dragger(dragTarget);
+			goog.events.listen(dragger_, goog.fx.Dragger.EventType.START, draggerStart);
+			goog.events.listen(dragger_, goog.fx.Dragger.EventType.DRAG, draggerDrag);
+			goog.events.listen(dragger_, goog.fx.Dragger.EventType.BEFOREDRAG, draggerBefore);
+			goog.events.listen(dragger_, goog.fx.Dragger.EventType.END, draggerEnd);
+			dragger_.startDrag(event);
+		}
+	}
+
+	function draggerStart(event) {
+		if (self.doDraggerStart !== undefined) {
+			self.doDraggerStart(event);
+		}
+		event.dispose();
+	}
+
+	function draggerBefore(event) {
+		if (self.doDraggerBefore !== undefined) {
+			self.doDraggerBefore(event);
+		}
+		event.dispose();
+	}
+
+	function draggerDrag(event) {
+		if (self.doDraggerDrag !== undefined) {
+			self.doDraggerDrag(event);
+		}
+		event.dispose();
+	}
+
+	function draggerEnd(event) {
+		if (self.doDraggerEnd !== undefined) {
+			self.doDraggerEnd(event);
+		}
+		event.dispose();
+		dragger_.dispose();
+	}
+
+
 	/**
 	 * The view parent object.
 	 * @type {Object}
@@ -136,6 +194,27 @@ codeshelf.view = function(options) {
 			if (options_.toolbarTools !== undefined) {
 				setupToolbar(options.toolbarTools);
 			}
+
+			clickHandler_ = goog.events.listen(mainPaneElement_, goog.events.EventType.CLICK, clickHandler);
+			mouseDownHandler_ = goog.events.listen(mainPaneElement_, goog.events.EventType.MOUSEDOWN, mouseDownHandler);
+			doublClickHandler_ = goog.events.listen(mainPaneElement_, goog.events.EventType.DBLCLICK, doubleClickHandler);
+
+			goog.events.listen(mainPaneElement_, goog.events.EventType.MOUSEOVER,
+				function(e) {
+					mainPaneElement_.onselectstart = function() {
+						return false;
+					};
+					mainPaneElement_.onsmousedown = function() {
+						return false;
+					};
+				});
+
+			goog.events.listen(mainPaneElement_, goog.events.EventType.MOUSEOUT,
+				function(event) {
+					mainPaneElement_.onselectstart = null;
+					mainPaneElement_.onmousedown = null;
+				});
+
 		},
 
 		setParentView: function(parentView) {
@@ -265,6 +344,12 @@ codeshelf.view = function(options) {
 		 */
 		getPixelsPerMeter: function() {
 			return pixelsPerMeter_;
+		},
+
+		getToolbarTool: function() {
+			if (toolbarSelectionModel_ !== undefined) {
+				return toolbarSelectionModel_.getSelectedItem();
+			}
 		}
 	}
 
