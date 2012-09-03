@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: view.js,v 1.7 2012/09/03 06:57:21 jeffw Exp $
+ *  $Id: view.js,v 1.8 2012/09/03 21:48:33 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.view');
 goog.require('codeshelf.window');
@@ -32,23 +32,19 @@ codeshelf.view = function(options) {
 	var isInvalidated_ = false;
 
 	var mainPaneElement_;
-	var contentPaneElement_;
 
 	var toolbar_;
 	var toolbarSelectionModel_;
 
-	var mouseClickHandler_;
-	var mouseMoveHandler_;
-
 	var mouseDownHandler_;
-	var clickHandler_;
-	var doubleClickHandler_;
+	var mouseClickHandler_;
+	var mouseDoubleClickHandler_;
 	var dragger_;
-	var startDragPoint_;
 
 	var options_ = {
-		handleSelection: false,
-		toolbarTools:    undefined
+		doHandleSelection: false,
+		doDragSelect:      false,
+		toolbarTools:      undefined
 	}
 
 	/**
@@ -120,16 +116,18 @@ codeshelf.view = function(options) {
 	}
 
 
-	function clickHandler(event) {
+	function mouseClickHandler(event) {
 		event.dispose();
 	}
 
-	function doubleClickHandler(event) {
+	function mouseDoubleClickHandler(event) {
 		event.dispose();
 	}
 
 	function mouseDownHandler(event) {
-		if (self.doMouseDownHandler(event)) {
+
+		// Check if we should AND can drag a selection rectangle.
+		if ((options_.doDragSelect) && (self.canDragSelect) && (self.canDragSelect(event))) {
 			var dragTarget = goog.dom.createDom('div', { 'style': 'display:none;' });
 			dragger_ = new goog.fx.Dragger(dragTarget);
 			goog.events.listen(dragger_, goog.fx.Dragger.EventType.START, draggerStart);
@@ -182,22 +180,22 @@ codeshelf.view = function(options) {
 
 			self.doSetupView();
 
-			if (options_.handleSelection) {
-				$(mainPaneElement).dragToSelect({
-					selectables: 'div.selectable',
-					onHide:      function() {
-						//alert($('.workAreaEditorPane path.selected').length + ' selected');
-					}
-				});
+			if (options_.doHandleSelection) {
+//				$(mainPaneElement).dragToSelect({
+//					selectables: 'div.selectable',
+//					onHide:      function() {
+//						//alert($('.workAreaEditorPane path.selected').length + ' selected');
+//					}
+//				});
 			}
 
 			if (options_.toolbarTools !== undefined) {
 				setupToolbar(options.toolbarTools);
 			}
 
-			clickHandler_ = goog.events.listen(mainPaneElement_, goog.events.EventType.CLICK, clickHandler);
-			mouseDownHandler_ = goog.events.listen(mainPaneElement_, goog.events.EventType.MOUSEDOWN, mouseDownHandler);
-			doublClickHandler_ = goog.events.listen(mainPaneElement_, goog.events.EventType.DBLCLICK, doubleClickHandler);
+			mouseClickHandler_ = goog.events.listen(self.getContentElement(), goog.events.EventType.CLICK, mouseClickHandler);
+			mouseDownHandler_ = goog.events.listen(self.getContentElement(), goog.events.EventType.MOUSEDOWN, mouseDownHandler);
+			mousedoublClickHandler_ = goog.events.listen(self.getContentElement(), goog.events.EventType.DBLCLICK, mouseDoubleClickHandler);
 
 			goog.events.listen(mainPaneElement_, goog.events.EventType.MOUSEOVER,
 				function(e) {
@@ -231,6 +229,10 @@ codeshelf.view = function(options) {
 
 		getMainPaneElement: function() {
 			return mainPaneElement_
+		},
+
+		getContentElement: function() {
+			return (self.doGetContentElement !== undefined) ? self.doGetContentElement() : mainPaneElement_;
 		},
 
 		/**

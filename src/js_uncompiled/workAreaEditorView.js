@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.38 2012/09/03 06:57:21 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.39 2012/09/03 21:48:33 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -37,6 +37,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	var vertices_ = [];
 	var rotateFacilityByDeg_ = 0;
 	var facilityPath_;
+	var startDragPoint_;
 	var currentRect_;
 	var currentDrawRect_;
 	var aisles_ = [];
@@ -52,10 +53,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		dataEntryDialog.createField('baysLong', 'text');
 		dataEntryDialog.createField('backToBack', 'checkbox');
 		dataEntryDialog.open(function(event, dialog) {
-				if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL.key) {
-					graphics_.removeElement(currentRect_);
-					currentDrawRect_.dispose();
-				} else {
+				if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE.key) {
 					var xOriginMeters = startDragPoint_.x / self.getPixelsPerMeter();
 					var yOriginMeters = startDragPoint_.y / self.getPixelsPerMeter();
 
@@ -477,6 +475,87 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	}
 
 	/**
+	 * Select all of the bays in the given rectangle and deselect the ones not in it.
+	 * @param {rect} The selection rectangle.
+	 */
+	function selectBays(rect) {
+		var selectedBays = goog.dom.findNodes(workAreaEditorPane_, function(node) {
+			if (goog.dom.classes.has(node, 'bayView')) {
+
+				var element = $(node);
+				var offset = element.offset();
+				var dim = {
+					left:   offset.left,
+					top:    offset.top,
+					width:  element.width(),
+					height: element.height()
+				};
+
+				var offsetRect = $(workAreaEditorPane_).offset();
+				offsetRect.top += rect.top;
+				offsetRect.left += rect.left;
+				offsetRect.width = rect.width;
+				offsetRect.height = rect.height;
+
+				if (percentCovered(offsetRect, dim) > 25) {
+					element.addClass('selected');
+				} else {
+					element.removeClass('selected');
+				}
+			}
+		})
+	}
+
+	/**
+	 * Deselect all bays.
+	 */
+	function deselectBays() {
+		var selectedBays = goog.dom.findNodes(workAreaEditorPane_, function(node) {
+			if (goog.dom.classes.has(node, 'bayView')) {
+				var element = $(node);
+				element.removeClass('selected');
+			}
+		})
+	}
+
+	/**
+	 * Returns the amount (in %) that dim1 covers dim2
+	 * @param dim1
+	 * @param dim2
+	 * @return {Number} Percentaage of area cover.
+	 */
+	function percentCovered(dim1, dim2) {
+		if (
+		// The whole thing is covering the whole other thing
+			(dim1.left <= dim2.left) &&
+				(dim1.top <= dim2.top) &&
+				((dim1.left + dim1.width) >= (dim2.left + dim2.width)) &&
+				((dim1.top + dim1.height) > (dim2.top + dim2.height))
+			) {
+			return 100;
+		} else {
+			// Only parts may be covered, calculate percentage
+			dim1.right = dim1.left + dim1.width;
+			dim1.bottom = dim1.top + dim1.height;
+			dim2.right = dim2.left + dim2.width;
+			dim2.bottom = dim2.top + dim2.height;
+
+			var l = Math.max(dim1.left, dim2.left);
+			var r = Math.min(dim1.right, dim2.right);
+			var t = Math.max(dim1.top, dim2.top);
+			var b = Math.min(dim1.bottom, dim2.bottom);
+
+			if (b >= t && r >= l) {
+				var percent = (((r - l) * (b - t)) / (dim2.width * dim2.height)) * 100;
+				return percent;
+			}
+		}
+		// Nothing covered, return 0
+		return 0;
+	}
+
+
+	/**
 	 * The work area editor object we'll return.
 	 * @type {Object}
 	 * @private
@@ -537,6 +616,14 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		},
 
 		doMouseDownHandler: function(event) {
+
+		},
+
+		doGetContentElement: function() {
+			return workAreaEditorPane_;
+		},
+
+		canDragSelect: function(event) {
 			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_), event.offsetX, event.offsetY)) {
 				alert("Select a starting point inside the facility bounds.");
 				return false;
@@ -550,9 +637,11 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		},
 
 		doDraggerStart: function(event) {
+			deselectBays();
+
 			var stroke = new goog.graphics.Stroke(1, 'black');
-			var fill = new goog.graphics.SolidFill('red', 0.2);
-			startDragPoint_ = { 'x': event.offsetX, y: event.offsetY };
+			var fill = new goog.graphics.SolidFill('blue', 0.2);
+			startDragPoint_ = { 'x': event.browserEvent.offsetX, y: event.browserEvent.offsetY };
 			currentRect_ = new goog.math.Rect(startDragPoint_.x, startDragPoint_.y, 0, 0);
 			currentDrawRect_ = graphics_.drawRect(startDragPoint_.x, startDragPoint_.y, 0, 0, stroke, fill);
 		},
@@ -564,6 +653,9 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 				currentRect_.width = event.target.deltaX;
 				currentRect_.height = event.target.deltaY;
 				currentDrawRect_.setSize(event.target.deltaX, event.target.deltaY);
+				if (self.getToolbarTool().getId() === 'select-tool') {
+					selectBays(currentRect_);
+				}
 			}
 		},
 
@@ -573,7 +665,11 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 				case 'aisle-tool':
 					createAisle();
 					break;
+				default:
+					break;
 			}
+			graphics_.removeElement(currentDrawRect_);
+			currentDrawRect_.dispose();
 		},
 
 		doResize: function() {
@@ -609,13 +705,14 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	}
 
 	var tools = [
+		{id: 'select-tool', title: 'Select Tool', icon: 'select-icon.png'},
 		{id: 'aisle-tool', title: 'Aisle Tool', icon: 'rack-icon.png'},
 		{id: 'staging-tool', title: 'Staging Tool', icon: 'staging-icon.png'},
 		{id: 'door-tool', title: 'Door Tool', icon: 'door-icon.png'}
 	]
 
 	// We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.view({handleSelection: true, toolbarTools: tools});
+	var view = codeshelf.view({doHandleSelection: true, doDragSelect: true, toolbarTools: tools});
 	jQuery.extend(view, self);
 	self = view;
 
