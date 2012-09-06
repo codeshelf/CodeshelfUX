@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: codeshelf.gss,v 1.26 2012/09/02 23:58:54 jeffw Exp $
+ *  $Id: codeshelf.gss,v 1.27 2012/09/06 06:43:38 jeffw Exp $
  *******************************************************************************/
 
 /* Defines and mixins ----------------------------------------------------------- */
@@ -421,6 +421,15 @@ div.jquery-drag-to-select.active {
 	cursor:				crosshair;
 	@mixin				FLEX_BOX(2);
 	@mixin				DISPLAY_BOX(vertical);
+}
+
+/* Dropbox --------------------------------------------------------------- */
+
+.dropboxView {
+	position:			relative;
+	@mixin				FLEX_BOX(1);
+	@mixin				DISPLAY_BOX(vertical);
+	background-color:	WINDOW_FOREGROUND_LIGHT_COLOR;
 }
 
 /* Modal dialog classes --------------------------------------------------------------- */

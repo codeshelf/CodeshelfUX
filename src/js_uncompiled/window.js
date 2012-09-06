@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: window.js,v 1.14 2012/09/01 18:49:56 jeffw Exp $
+ *  $Id: window.js,v 1.15 2012/09/06 06:43:38 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.window');
 goog.require('goog.style');
@@ -134,7 +134,7 @@ codeshelf.window = function(title, view, parent, limits) {
 			var mover_ = mover;
 
 			var moverFunction = function moveWindowStart(event) {
-				goog.style.setOpacity(mover_, 0.50);
+				goog.style.setOpacity(mover_, 0.85);
 				event.dispose();
 			};
 			return moverFunction;

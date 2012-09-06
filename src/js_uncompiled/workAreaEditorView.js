@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.39 2012/09/03 21:48:33 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.40 2012/09/06 06:43:38 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -9,6 +9,7 @@ goog.require('codeshelf.aisleview');
 goog.require('codeshelf.dataentrydialog');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
+goog.require('extern.jquery');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
@@ -19,7 +20,6 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.object');
 goog.require('goog.style');
-goog.require('extern.jquery');
 goog.require('raphael');
 
 /**
