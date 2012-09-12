@@ -1,11 +1,11 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.36 2012/09/06 06:43:38 jeffw Exp $
+ *  $Id: mainPage.js,v 1.37 2012/09/12 23:30:35 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('domainobjects');
-goog.require('codeshelf.dropboxview');
+goog.require('codeshelf.ediservicesview');
 goog.require('codeshelf.facilityeditorview');
 goog.require('codeshelf.workareaeditorview');
 goog.require('codeshelf.initializenewclient');
@@ -67,9 +67,9 @@ codeshelf.mainpage = function() {
 									var workAreaEditorWindow = codeshelf.window('Workarea Editor', workAreaEditorView, frame_, undefined);
 									workAreaEditorWindow.open();
 
-									var dropboxView = codeshelf.dropboxview(websession_, facility);
-									var dropboxWindow = codeshelf.window('Dropbox', dropboxView, frame_, undefined);
-									dropboxWindow.open();
+									var ediServicesView = codeshelf.ediservicesview(websession_, facility);
+									var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView, frame_, undefined);
+									ediServicesWindow.open();
 								}
 								catch (err) {
 									alert(err);

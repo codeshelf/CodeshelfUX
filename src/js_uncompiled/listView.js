@@ -36,6 +36,49 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 	var percentCompleteThreshold_;
 	var searchString_;
 
+	function comparer(a, b) {
+		var columnIndex = grid_.getColumnIndexArray();
+		for (var columnId in columnIndex) {
+			if (columnIndex.hasOwnProperty(columnId)) {
+				if (a[columnId] !== b[columnId]) {
+					var x = a[columnId];
+					var y = b[columnId];
+					return (x == y ? 0 : (x > y ? 1 : -1));
+				}
+			}
+		}
+		return 0;
+	}
+
+	function websocketCmdCallback() {
+		var callback = {
+			exec:                    function(command) {
+				if (!command['d'].hasOwnProperty('r')) {
+					alert('response has no result');
+				} else if (command['t'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+					for (var i = 0; i < command['d']['r'].length; i++) {
+						var object = command['d']['r'][i];
+						if (object['op'] === "cr") {
+							dataView_.addItem(object);
+						} else if (object['op'] === "up") {
+							var item = dataView_.getItemById(object['persistentId']);
+							if (item === undefined) {
+								dataView_.addItem(object);
+							} else {
+								dataView_.updateItem(object['persistentId'], object);
+							}
+						} else if (object['op'] === "de") {
+							dataView_.deleteItem(object['persistentId']);
+						}
+					}
+					dataView_.sort(comparer, sortdir_);
+				}
+			}
+		}
+
+		return callback;
+	}
+
 	var self = {
 		doSetupView: function() {
 
@@ -51,7 +94,6 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 						'name':                property.title,
 						'field':               property.id,
 						'behavior':            "select",
-//				'cssClass':           "cell-selection",
 						'headerCssClass':      " ",
 						'width':               property.width,
 						'cannotTriggerInsert': true,
@@ -92,7 +134,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 			}
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-			websession_.sendCommand(setListViewFilterCmd, self.websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 
 			grid_.onKeyDown.subscribe(function(e) {
 				// select all rows on ctrl-a
@@ -128,7 +170,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 			grid_.onSort.subscribe(function(e, args) {
 				sortdir_ = args.sortAsc ? 1 : -1;
 				sortcol_ = args.sortCol.field;
-				dataView_.sort(self.comparer, args.sortAsc);
+				dataView_.sort(comparer, args.sortAsc);
 			});
 
 			// wire up model events to drive the grid
@@ -177,7 +219,6 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 				percentCompleteThreshold: percentCompleteThreshold_,
 				searchString:             searchString_
 			});
-			//dataView_.setFilter(self.myFilter);
 			dataView_.endUpdate();
 
 			$("#gridContainer")['resizable']();
@@ -187,76 +228,9 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 
 		},
 
-		requiredFieldValidator: function(value) {
-			if (value == null || value == undefined || !value.length)
-				return {
-					valid: false,
-					msg:   "This is a required field"
-				};
-			else
-				return {
-					valid: true,
-					msg:   null
-				};
-		},
-
-		myFilter: function(item, args) {
-			if (item)
-				return ('tru' === 'tru');
-		},
-
-		comparer: function(a, b) {
-			var columnIndex = grid_.getColumnIndexArray();
-			for (var columnId in columnIndex) {
-				if (columnIndex.hasOwnProperty(columnId)) {
-					if (a[columnId] !== b[columnId]) {
-						var x = a[columnId];
-						var y = b[columnId];
-						return (x == y ? 0 : (x > y ? 1 : -1));
-					}
-				}
-			}
-		},
-
-		toggleFilterRow: function() {
-			if ($(grid_.getTopPanel()).is(":visible"))
-				grid_.hideTopPanel();
-			else
-				grid_.showTopPanel();
-		},
-
 		doResize: function() {
 			grid_.resizeCanvas();
 			grid_.autosizeColumns();
-		},
-
-		websocketCmdCallback: function(expectedResponseType) {
-			var callback = {
-				exec:                    function(command) {
-					if (!command['d'].hasOwnProperty('r')) {
-						alert('response has no result');
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command['d']['r'].length; i++) {
-							var object = command['d']['r'][i];
-							if (object['op'] === "cr") {
-								dataView_.addItem(object);
-							} else if (object['op'] === "up") {
-								var item = dataView_.getItemById(object['persistentId']);
-								if (item === undefined) {
-									dataView_.addItem(object);
-								} else {
-									dataView_.updateItem(object['persistentId'], object);
-								}
-							} else if (object['op'] === "de") {
-								dataView_.deleteItem(object['persistentId']);
-							}
-						}
-						dataView_.sort(self.comparer, sortdir_);
-					}
-				}
-			}
-
-			return callback;
 		}
 	}
 
