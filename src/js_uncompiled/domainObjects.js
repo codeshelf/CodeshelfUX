@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.16 2012/09/16 00:12:47 jeffw Exp $
+ * $Id: domainObjects.js,v 1.17 2012/09/16 07:22:15 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -34,6 +34,16 @@ domainobjects = {
 			desc:     {
 				id:    'Description',
 				title: 'Facility Name',
+				width: 100
+			},
+			provider:     {
+				id:    'ProviderEnum',
+				title: 'Provider',
+				width: 100
+			},
+			documentId:     {
+				id:    'DocumentId',
+				title: 'DocumentId',
 				width: 100
 			}
 		}

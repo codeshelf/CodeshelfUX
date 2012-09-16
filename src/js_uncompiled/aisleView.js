@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.12 2012/09/16 00:12:47 jeffw Exp $
+ *  $Id: aisleView.js,v 1.13 2012/09/16 07:22:15 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -122,7 +122,7 @@ codeshelf.aisleview = function(websession, aisle) {
 			var vertexFilterData = {
 				'className':     domainobjects.vertex.className,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder', 'ParentPersistentId'],
-				'filterClause':  'parentLocation.persistentId = :theId',
+				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': bay['persistentId']}
 				]
@@ -241,7 +241,7 @@ codeshelf.aisleview = function(websession, aisle) {
 			var data = {
 				'className':     domainobjects.bay.className,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'PosZ'],
-				'filterClause':  'parentLocation.persistentId = :theId AND posZ = 0',
+				'filterClause':  'parent.persistentId = :theId AND posZ = 0',
 				'filterParams':  [
 					{ 'name': "theId", 'value': aisle_['persistentId']}
 				]

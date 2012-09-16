@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.41 2012/09/16 00:12:47 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.42 2012/09/16 07:22:15 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -364,7 +364,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			var vertexFilterData = {
 				'className':     domainobjects.vertex.className,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder', 'ParentPersistentId'],
-				'filterClause':  'parentLocation.persistentId = :theId',
+				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': aisle['persistentId']}
 				]
@@ -584,7 +584,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			var vertexFilterData = {
 				'className':     domainobjects.vertex.className,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
-				'filterClause':  'parentLocation.persistentId = :theId',
+				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': facility_['persistentId']}
 				]
@@ -597,7 +597,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			var aisleFilterData = {
 				'className':     domainobjects.aisle.className,
 				'propertyNames': ['DomainId', 'PosX', 'PosY'],
-				'filterClause':  'parentLocation.persistentId = :theId',
+				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': facility_['persistentId']}
 				]

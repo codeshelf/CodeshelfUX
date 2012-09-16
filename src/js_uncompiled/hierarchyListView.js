@@ -48,13 +48,13 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 		// First figure out if they are at the same level.
 
 		levelKeyA = itemA['DomainId'];
-		while (itemA.parent !== undefine) {
+		while (itemA.parent !== undefined) {
 			levelKey += item['parent']['DomainId'];
 			itemA = itemA['parent']
 		}
 
 		levelKeyB = itemB['DomainId'];
-		while (itemB.parent !== undefine) {
+		while (itemB.parent !== undefined) {
 			levelKey += item['parent']['DomainId'];
 			itemB = itemB['parent']
 		}
@@ -95,10 +95,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 										]
 
 										var data = {
-											'className':     object.className,
+											'className':     hierarchyMap_[j+1],
 											'propertyNames': properties_,
-											'filterClause':  filterClause_,
-											'filterParams':  filterParams_
+											'filterClause':  filter,
+											'filterParams':  filterParams
 										}
 
 										var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);

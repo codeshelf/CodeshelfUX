@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ediServicesView.js,v 1.2 2012/09/16 00:12:47 jeffw Exp $
+ *  $Id: ediServicesView.js,v 1.3 2012/09/16 07:22:15 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ediservicesview');
@@ -34,7 +34,7 @@ codeshelf.ediservicesview = function(websession, facility) {
 	var facility_ = facility;
 	var domainObject_ = domainobjects.dropboxservice;
 
-	var filterClause_ = 'parentFacility.persistentId = :theId';
+	var filterClause_ = 'parent.persistentId = :theId';
 	var filterParams_ = [
 		{ 'name': "theId", 'value': facility_['persistentId']}
 	]

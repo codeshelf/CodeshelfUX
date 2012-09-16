@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.38 2012/09/16 00:12:47 jeffw Exp $
+ *  $Id: mainPage.js,v 1.39 2012/09/16 07:22:15 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('domainobjects');
@@ -74,7 +74,7 @@ codeshelf.mainpage = function() {
 //									ediServicesWindow.open();
 
 									var hierarchyMap = [];
-									hierarchyMap[0] =domainobjects.facility.className;
+									hierarchyMap[0] = domainobjects.facility.className;
 									hierarchyMap[1] = domainobjects.dropboxservice.className;
 									hierarchyMap[2] = domainobjects.edidocumentlocator.className;
 

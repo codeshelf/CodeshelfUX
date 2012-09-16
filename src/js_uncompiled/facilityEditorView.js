@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.21 2012/09/16 00:12:47 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.22 2012/09/16 07:22:15 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -596,7 +596,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			var data = {
 				'className':     domainobjects.vertex.className,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
-				'filterClause':  'parentLocation.persistentId = :theId',
+				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': facility_['persistentId']}
 				]
