@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: initializeNewClient.js,v 1.11 2012/08/31 00:48:34 jeffw Exp $
+ *  $Id: initializeNewClient.js,v 1.12 2012/09/16 00:12:47 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.initializenewclient');
 goog.require('codeshelf.templates');
@@ -53,9 +53,9 @@ codeshelf.initializenewclient = function() {
 
 		createFacility: function(longitude, latitude) {
 			var data = {
-				'parentClassName':    domainobjects.organization.classname,
+				'parentClassName':    domainobjects.organization.className,
 				'parentPersistentId': organization_.persistentId,
-				'className':          domainobjects.facility.classname,
+				'className':          domainobjects.facility.className,
 				'properties':         [
 					{'name': 'DomainId', 'value': 'F1'},
 					{'name': 'Description', 'value': 'First Facility'},
@@ -72,10 +72,10 @@ codeshelf.initializenewclient = function() {
 		websocketCmdCallback: function(expectedResponseType) {
 			var callback = {
 				exec:                    function(command) {
-					if (!command['d'].hasOwnProperty('r')) {
+					if (!command['data'].hasOwnProperty('results')) {
 						alert('response has no result');
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-						var facility = command['d']['r'];
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+						var facility = command['data']['results'];
 						var facilityEditor = codeshelf.facilityeditorview();
 						facilityEditor.start(websession_, organization_, frame_, facility);
 					}

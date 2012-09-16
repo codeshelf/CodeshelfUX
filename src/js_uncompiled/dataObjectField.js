@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataObjectField.js,v 1.16 2012/08/31 00:48:34 jeffw Exp $
+ *  $Id: dataObjectField.js,v 1.17 2012/09/16 00:12:47 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
@@ -62,11 +62,11 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 		websocketCmdCallback: function(expectedResponseType) {
 			var callback = {
 				exec:                    function(command) {
-					if (!command['d'].hasOwnProperty('r')) {
+					if (!command['data'].hasOwnProperty('results')) {
 						alert('response has no result');
-					} else if (command['t'] === kWebSessionCommandType.OBJECT_LISTENER_RESP) {
-						for (var i = 0; i < command['d']['r'].length; i++) {
-							var object = command['d']['r'][i];
+					} else if (command['type'] === kWebSessionCommandType.OBJECT_LISTENER_RESP) {
+						for (var i = 0; i < command['data']['results'].length; i++) {
+							var object = command['data']['results'][i];
 
 							// Make sure the class name and persistent ID match.
 							if ((object['className'] === className_) && (object['persistentId'] == classPersistenceId_)) {

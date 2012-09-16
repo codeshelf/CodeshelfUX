@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ediServicesView.js,v 1.1 2012/09/12 23:30:35 jeffw Exp $
+ *  $Id: ediServicesView.js,v 1.2 2012/09/16 00:12:47 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ediservicesview');
@@ -15,14 +15,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all")['mouseover'](
-	function(e) {
-		$(e.target).addClass("ui-state-hover")
-	})['mouseout'](function(e) {
-	$(e.target).removeClass("ui-state-hover")
-});
-
-
 /**
  * The current state of edi files for this facility.
  * @param websession The websession used for updates.
@@ -31,225 +23,104 @@ $(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all")['mouseover
  */
 codeshelf.ediservicesview = function(websession, facility) {
 
+	$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all")['mouseover'](
+		function(e) {
+			$(e.target).addClass("ui-state-hover")
+		})['mouseout'](function(e) {
+		$(e.target).removeClass("ui-state-hover")
+	});
+
 	var websession_ = websession;
 	var facility_ = facility;
-	var ediPane_;
+	var domainObject_ = domainobjects.dropboxservice;
 
-	var dataView;
-	var grid;
-	var data = [];
-	var selectedRowIds = [];
-	var self;
+	var filterClause_ = 'parentFacility.persistentId = :theId';
+	var filterParams_ = [
+		{ 'name': "theId", 'value': facility_['persistentId']}
+	]
 
-	var sortcol = "title";
-	var sortdir = 1;
-	var percentCompleteThreshold = 0;
-	var searchString = "";
+	var dataView_;
+	var grid_;
+	var selectedRowIds_ = [];
+	var properties_ = [];
 
-	function createTreeFromTestData(node, data) {
-		node.setHtml(data[0]);
-		if (data.length > 1) {
-			var children = data[1];
-			var childNotCollapsible = 3; // Hard coded to reduce randomness.
-			for (var i = 0; i < children.length; i++) {
-				var child = children[i];
-				var childNode = node.getTree().createNode('');
-
-				node.add(childNode);
-				createTreeFromTestData(childNode, child);
-
-				if (i == childNotCollapsible && child.length > 1) {
-					childNode.setIsUserCollapsible(false);
-					childNode.setExpanded(true);
-					nonCollapseNode = childNode;
-				}
-
-			}
-		}
-	}
-
-	function websocketCmdCallbackEdiServices() {
-		var callback = {
-			exec: function(command) {
-				if (!command['d'].hasOwnProperty('r')) {
-					alert('response has no result');
-				} else {
-					if (command['t'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command['d']['r'].length; i++) {
-							var object = command['d']['r'][i];
-
-							if (object['className'] === domainobjects.dropboxservice.classname) {
-
-								// Create the filter to listen to all EDI documents updates for this service.
-								var aisleFilterData = {
-									'className':     domainobjects.edidocumentlocator.classname,
-									'propertyNames': ['DomainId', 'DocumentId', 'DocumentName', 'Received', 'Processed'],
-									'filterClause':  'parentEdiService.persistentId = :theId',
-									'filterParams':  [
-										{ 'name': "theId", 'value': object['persistentId']}
-									]
-								}
-
-								var aisleFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, aisleFilterData);
-								websession_.sendCommand(aisleFilterCmd, websocketCmdCallbackEdiDocuments(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
-
-								if (object['op'] === 'cr') {
-
-								} else if (object['op'] === 'up') {
-
-								} else if (object['op'] === 'dl') {
-
-								}
-							}
-						}
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
-					}
-				}
-			}
-		}
-
-		return callback;
-	}
-
-	function websocketCmdCallbackEdiDocuments() {
-		var callback = {
-			exec: function(command) {
-				if (!command['d'].hasOwnProperty('r')) {
-					alert('response has no result');
-				} else {
-					if (command['t'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command['d']['r'].length; i++) {
-							var object = command['d']['r'][i];
-
-							if (object['className'] === domainobjects.edidocumentlocator.classname) {
-								// Vertex updates.
-								if (object['op'] === 'cr') {
-
-								} else if (object['op'] === 'up') {
-
-								} else if (object['op'] === 'dl') {
-
-								}
-							}
-						}
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
-					}
-				}
-			}
-		}
-
-		return callback;
-	}
-
-	function requiredFieldValidator(value) {
-		if (value == null || value == undefined || !value.length)
-			return {
-				valid: false,
-				msg:   "This is a required field"
-			};
-		else
-			return {
-				valid: true,
-				msg:   null
-			};
-	}
+	// Compute the columns we need for this domain object.
+	var columns_ = [];
+	var options_;
+	var sortcol_;
+	var sortdir_;
+	var percentCompleteThreshold_;
+	var searchString_;
 
 	function comparer(a, b) {
-		var x = a[sortcol], y = b[sortcol];
-		return (x == y ? 0 : (x > y ? 1 : -1));
-	}
-
-	function myFilter(item) {
-//		if (item["percentComplete"] < 70) {
-//			return false;
-//		}
-		return true;
-	}
-
-	/**
-	 * The work area editor object we'll return.
-	 * @type {Object}
-	 * @private
-	 */
-	var self = {
-
-		doSetupView: function() {
-			var columns = [
-				{
-					'id':                  "sel",
-					'name':                "#",
-					'field':               "num",
-					'behavior':            "select",
-					'cssClass':            "cell-selection",
-					'width':               40,
-					'cannotTriggerInsert': true,
-					'resizable':           true,
-					'selectable':          false,
-					'sortable':            true
-				},
-				{
-					'id':        "title",
-					'name':      "Title",
-					'field':     "title",
-					'width':     120,
-					'minWidth':  120,
-					'cssClass':  "cell-title",
-					'editor':    TextCellEditor,
-					'validator': self.requiredFieldValidator,
-					'sortable':  true
-				},
-				{
-					'id':       "duration",
-					'name':     "Duration",
-					'field':    "duration",
-					'editor':   TextCellEditor,
-					'sortable': true
-				},
-				{
-					'id':        "%",
-					'name':      "% Complete",
-					'field':     "percentComplete",
-					'minWidth':  80,
-					'resizable': true,
-					'formatter': GraphicalPercentCompleteCellFormatter,
-					'editor':    PercentCompleteCellEditor,
-					'sortable':  true
-				},
-				{
-					'id':       "start",
-					'name':     "Start",
-					'field':    "start",
-					'minWidth': 60,
-					'editor':   DateCellEditor,
-					'sortable': true
-				},
-				{
-					'id':       "finish",
-					'name':     "Finish",
-					'field':    "finish",
-					'minWidth': 60,
-					'editor':   DateCellEditor,
-					'sortable': true
-				},
-				{
-					'id':                  "effort-driven",
-					'name':                "Effort Driven",
-					'width':               80,
-					'minWidth':            20,
-					'cssClass':            "cell-effort-driven",
-					'field':               "effortDriven",
-					'formatter':           BoolCellFormatter,
-					'editor':              YesNoCheckboxCellEditor,
-					'cannotTriggerInsert': true,
-					'sortable':            true
+		var columnIndex = grid_.getColumnIndexArray();
+		for (var columnId in columnIndex) {
+			if (columnIndex.hasOwnProperty(columnId)) {
+				if (a[columnId] !== b[columnId]) {
+					var x = a[columnId];
+					var y = b[columnId];
+					return (x == y ? 0 : (x > y ? 1 : -1));
 				}
-			];
+			}
+		}
+		return 0;
+	}
 
-			var options = {
+	function websocketCmdCallback() {
+		var callback = {
+			exec: function(command) {
+				if (!command['data'].hasOwnProperty('results')) {
+					alert('response has no result');
+				} else if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+					for (var i = 0; i < command['data']['results'].length; i++) {
+						var object = command['data']['results'][i];
+						if (object['op'] === 'cr') {
+							dataView_.addItem(object);
+						} else if (object['op'] === 'up') {
+							var item = dataView_.getItemById(object['persistentId']);
+							if (item === undefined) {
+								dataView_.addItem(object);
+							} else {
+								dataView_.updateItem(object['persistentId'], object);
+							}
+						} else if (object['op'] === 'de') {
+							dataView_.deleteItem(object['persistentId']);
+						}
+					}
+					dataView_.sort(comparer, sortdir_);
+				}
+			}
+		}
+
+		return callback;
+	}
+
+	var self = {
+		doSetupView: function() {
+
+			// Compute the columns we need for this domain object.
+			properties = domainObject_.properties;
+			var count = 0;
+			for (property in properties) {
+				if (properties.hasOwnProperty(property)) {
+					var property = properties[property];
+					properties_[count] = property.id;
+					columns_[count++] = {
+						'id':                  property.id,
+						'name':                property.title,
+						'field':               property.id,
+						'behavior':            "select",
+						'headerCssClass':      " ",
+						'width':               property.width,
+						'cannotTriggerInsert': true,
+						'resizable':           true,
+						'selectable':          false,
+						'sortable':            true
+					}
+				}
+			}
+
+			options_ = {
 				'editable':             true,
 				'enableAddRow':         true,
 				'enableCellNavigation': true,
@@ -258,234 +129,126 @@ codeshelf.ediservicesview = function(websession, facility) {
 				'topPanelHeight':       25
 			};
 
-			// prepare the data
-//			for (var i = 0; i < 50000; i++) {
-//				var d = (data[i] = {});
-//
-//				d["id"] = "id_" + i;
-//				d["persistentId"] = "id_" + i;
-//				d["num"] = i;
-//				d["title"] = "Task " + i;
-//				d["duration"] = "5 days";
-//				d["percentComplete"] = Math.round(Math.random() * 100);
-//				d["start"] = "01/01/2009";
-//				d["finish"] = "01/05/2009";
-//				d["effortDriven"] = (i % 5 == 0);
-//			}
+			sortcol_ = "Description";
+			sortdir_ = 1;
+			percentCompleteThreshold_ = 0;
+			searchString_ = "";
 
-			// Setup the work area view elements.
-			var ediServicesView = soy.renderAsElement(codeshelf.templates.ediServicesView);
-			goog.dom.appendChild(self.getMainPaneElement(), ediServicesView);
+			goog.dom.appendChild(self.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
-			ediPane_ = ediServicesView.getElementsByClassName('ediServicesPane')[0];
-			ediPane_.innerHTML = '<div id="ediGrid" class="windowContent"></div>';
+			dataView_ = new $.Slick.Data.DataView();
+			grid_ = new $.Slick.Grid(self.getMainPaneElement(), dataView_, columns_, options_);
+			grid_.setSelectionModel(new $.Slick.RowSelectionModel());
 
-			dataView = new $.Slick.Data.DataView();
-			grid = new $.Slick.Grid('#ediGrid', dataView, columns, options);
-			grid.setSelectionModel(new $.Slick.CellSelectionModel());
+			var columnpicker = new $.Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
-			var copyManager = new $.Slick.CellCopyManager();
-			grid.registerPlugin(copyManager);
-			copyManager.onCopyCells.subscribe(function(e, args) {
-				for (var obj in args.ranges) {
-					if (args.ranges.hasOwnProperty(obj)) {
-						var range = args.ranges[obj];
-						for (var i = 0; i <= range.toRow - range.fromRow; i++) {
-							for (var j = 0; j <= range.toCell - range.fromCell; j++) {
-								var val = data[range.fromRow + i][columns[range.fromCell + j].field];
-							}
-						}
-					}
-				}
-			});
+			var data = {
+				'className':     domainObject_.className,
+				'propertyNames': properties_,
+				'filterClause':  filterClause_,
+				'filterParams':  filterParams_
+			}
 
-			//var pager = new $.Slick.Controls.Pager(dataView, grid, $("#myPager"));
-			var columnpicker = new $.Slick.Controls.ColumnPicker(columns, grid, options);
+			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
+			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 
-			grid.onCellChange.subscribe(function(e, args) {
-				dataView.updateItem(args.item.id, args.item);
-			});
-
-			grid.onAddNewRow.subscribe(function(e, args) {
-				var item = {
-					"num":             data.length,
-					"id":              "new_" + (Math.round(Math.random() * 10000)),
-					"title":           "New task",
-					"duration":        "1 day",
-					"percentComplete": 0,
-					"start":           "01/01/2009",
-					"finish":          "01/01/2009",
-					"effortDriven":    false
-				};
-				$.extend(item, args.item);
-				dataView.addItem(item);
-			});
-
-			grid.onKeyDown.subscribe(function(e) {
+			grid_.onKeyDown.subscribe(function(e) {
 				// select all rows on ctrl-a
 				if (e.which != 65 || !e.ctrlKey)
 					return false;
 
 				var rows = [];
-				selectedRowIds = [];
+				selectedRowIds_ = [];
 
-				for (var i = 0; i < dataView.getLength(); i++) {
+				for (var i = 0; i < dataView_.getLength(); i++) {
 					rows.push(i);
-					selectedRowIds.push(dataView.getItem(i).id);
+					selectedRowIds_.push(dataView_.getItem(i).id);
 				}
 
-				grid.setSelectedRows(rows);
+				grid_.setSelectedRows(rows);
 				e.preventDefault();
 			});
 
-			grid.onSelectedRowsChanged.subscribe(function(e) {
-				selectedRowIds = [];
-				var rows = grid.getSelectedRows();
+			grid_.onColumnsReordered.subscribe(function(e) {
+				dataView_.sort(self.comparer, sortdir_);
+			});
+
+			grid_.onSelectedRowsChanged.subscribe(function(e) {
+				selectedRowIds_ = [];
+				var rows = grid_.getSelectedRows();
 				for (var i = 0, l = rows.length; i < l; i++) {
-					var item = dataView.getItem(rows[i]);
+					var item = dataView_.getItem(rows[i]);
 					if (item)
-						selectedRowIds.push(item.id);
+						selectedRowIds_.push(item.id);
 				}
 			});
 
-			grid.onSort.subscribe(function(e, args) {
-				sortdir = args.sortAsc ? 1 : -1;
-				sortcol = args.sortCol.field;
-
-				if ($.browser.msie && $.browser.version <= 8) {
-					// using temporary Object.prototype.toString override
-					// more limited and does lexicographic sort only by default, but can
-					// be much faster
-
-					var percentCompleteValueFn = function() {
-						var val = this["percentComplete"];
-						if (val < 10)
-							return "00" + val;
-						else if (val < 100)
-							return "0" + val;
-						else
-							return val;
-					};
-
-					// use numeric sort of % and lexicographic for everything else
-					dataView.fastSort((sortcol == "percentComplete") ? percentCompleteValueFn : sortcol, args.sortAsc);
-				} else {
-					// using native sort with comparer
-					// preferred method but can be very slow in IE with huge datasets
-					dataView.sort(self.comparer, args.sortAsc);
-				}
+			grid_.onSort.subscribe(function(e, args) {
+				sortdir_ = args.sortAsc ? 1 : -1;
+				sortcol_ = args.sortCol.field;
+				dataView_.sort(comparer, args.sortAsc);
 			});
 
 			// wire up model events to drive the grid
-			dataView.onRowCountChanged.subscribe(function(e, args) {
-				grid.updateRowCount();
-				grid.render();
+			dataView_.onRowCountChanged.subscribe(function(e, args) {
+				grid_.updateRowCount();
+				grid_.render();
 			});
 
-			dataView.onRowsChanged.subscribe(function(e, args) {
-				grid.invalidateRows(args.rows);
-				grid.render();
+			dataView_.onRowsChanged.subscribe(function(e, args) {
+				grid_.invalidateRows(args.rows);
+				grid_.render();
 
-				if (selectedRowIds.length > 0) {
+				if (selectedRowIds_.length > 0) {
 					// since how the original data maps onto rows has changed,
 					// the selected rows in the grid need to be updated
 					var selRows = [];
-					for (var i = 0; i < selectedRowIds.length; i++) {
-						var idx = dataView.getRowById(selectedRowIds[i]);
+					for (var i = 0; i < selectedRowIds_.length; i++) {
+						var idx = dataView_.getRowById(selectedRowIds_[i]);
 						if (idx != undefined)
 							selRows.push(idx);
 					}
 
-					grid.setSelectedRows(selRows);
+					grid_.setSelectedRows(selRows);
 				}
 			});
 
-			dataView.onPagingInfoChanged.subscribe(function(e, pagingInfo) {
+			dataView_.onPagingInfoChanged.subscribe(function(e, pagingInfo) {
 				var isLastPage = pagingInfo.pageSize * (pagingInfo.pageNum + 1) - 1 >= pagingInfo.totalRows;
 				var enableAddRow = isLastPage || pagingInfo.pageSize == 0;
-				var options = grid.getOptions();
+				var options = grid_.getOptions();
 
 				if (options['enableAddRow'] != enableAddRow)
-					grid.setOptions({
+					grid_.setOptions({
 						enableAddRow: enableAddRow
 					});
 			});
 		},
 
-		open:  function() {
+		open: function() {
+			var h_runfilters = null;
+
 			// initialize the model after all the events have been hooked up
-			dataView.beginUpdate();
-			dataView.setItems(data);
-			dataView.setFilterArgs({
-//				percentCompleteThreshold: percentCompleteThreshold,
-//				searchString:             searchString
+			dataView_.beginUpdate();
+			//dataView_.setItems(data_);
+			dataView_.setFilterArgs({
+				percentCompleteThreshold: percentCompleteThreshold_,
+				searchString:             searchString_
 			});
-			dataView.setFilter(myFilter);
-			dataView.endUpdate();
+			dataView_.endUpdate();
 
 			$("#gridContainer")['resizable']();
-
-			// Create the filter to listen to all EDI service updates for this facility.
-			var vertexFilterData = {
-				'className':     domainobjects.dropboxservice.classname,
-				'propertyNames': ['ProvderEnum', 'ServiceStateEnum'],
-				'filterClause':  'parentFacility.persistentId = :theId',
-				'filterParams':  [
-					{ 'name': "theId", 'value': facility_['persistentId']}
-				]
-			}
-
-			var serviceFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
-			websession_.sendCommand(serviceFilterCmd, websocketCmdCallbackEdiServices(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
-
 		},
 
 		close: function() {
 
 		},
 
-		exit: function() {
-
-		},
-
-		doMouseDownHandler: function(event) {
-
-		},
-
-		doGetContentElement: function() {
-			return ediPane_;
-		},
-
-		canDragSelect: function(event) {
-			return true;
-		},
-
-		doDraggerBefore: function(event) {
-
-		},
-
-		doDraggerStart: function(event) {
-
-		},
-
-		doDraggerDrag: function(event) {
-
-		},
-
-		doDraggerEnd: function(event) {
-
-		},
-
 		doResize: function() {
-			grid.resizeCanvas();
-			grid.autosizeColumns();
-		},
-
-		doDraw: function() {
-
+			grid_.resizeCanvas();
+			grid_.autosizeColumns();
 		}
 	}
-
 	var tools = [
 		{id: 'select-tool', title: 'Select', icon: 'select-icon.png'},
 		{id: 'delete-tool', title: 'Delete', icon: 'delete-icon.png'}

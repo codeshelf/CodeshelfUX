@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.15 2012/09/12 23:30:35 jeffw Exp $
+ * $Id: domainObjects.js,v 1.16 2012/09/16 00:12:47 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -8,7 +8,7 @@ goog.provide('domainobjects');
 domainobjects = {
 
 	organization: {
-		classname:  'Organization',
+		className:  'Organization',
 		properties: {
 			domainId: {
 				id:    'DomainId',
@@ -24,7 +24,7 @@ domainobjects = {
 	},
 
 	facility: {
-		classname:  'Facility',
+		className:  'Facility',
 		properties: {
 			domainId: {
 				id:    'DomainId',
@@ -40,7 +40,7 @@ domainobjects = {
 	},
 
 	location: {
-		classname:  'Location',
+		className:  'Location',
 		properties: {
 			domainId: {
 				id:    'DomainId',
@@ -51,7 +51,7 @@ domainobjects = {
 	},
 
 	vertex: {
-		classname:  'Vertex',
+		className:  'Vertex',
 		properties: {
 			domainId: {
 				id:    'DomainId',
@@ -62,7 +62,7 @@ domainobjects = {
 	},
 
 	aisle: {
-		classname:  'Aisle',
+		className:  'Aisle',
 		properties: {
 			domainId: {
 				id:    'DomainId',
@@ -73,7 +73,7 @@ domainobjects = {
 	},
 
 	bay: {
-		classname:  'Bay',
+		className:  'Bay',
 		properties: {
 			domainId: {
 				id:    'DomainId',
@@ -84,32 +84,42 @@ domainobjects = {
 	},
 
 	dropboxservice: {
-		classname:  'DropboxService',
+		className:  'DropboxService',
 		properties: {
 			domainId: {
 				id:    'DomainId',
 				title: 'ID',
 				width: 25
 			},
-			desc:     {
-				id:    'Description',
-				title: 'Service Name',
+			provider:     {
+				id:    'ProviderEnum',
+				title: 'Provider',
+				width: 100
+			},
+			servicestate:     {
+				id:    'ServiceStateEnum',
+				title: 'State',
 				width: 100
 			}
 		}
 	},
 
 	edidocumentlocator: {
-		classname:  'EdiDocumentLocator',
+		className:  'EdiDocumentLocator',
 		properties: {
 			domainId: {
 				id:    'DomainId',
 				title: 'ID',
 				width: 25
 			},
-			desc:     {
-				id:    'Description',
-				title: 'Service Name',
+			provider:     {
+				id:    'ProviderEnum',
+				title: 'Provider',
+				width: 100
+			},
+			servicestate:     {
+				id:    'ServiceStateEnum',
+				title: 'State',
 				width: 100
 			}
 		}

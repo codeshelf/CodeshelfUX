@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.40 2012/09/06 06:43:38 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.41 2012/09/16 00:12:47 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -73,7 +73,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 					// Call Facility.createAisle();
 					//public final void createAisle(Double inPosX, Double inPosY, Double inProtoBayHeight, Double inProtoBayWidth, Double inProtoBayDepth, int inBaysHigh, int inBaysLong, Boolean inCreateBackToBack) {
 					var data = {
-						'className':    domainobjects.facility.classname,
+						'className':    domainobjects.facility.className,
 						'persistentId': facility_['persistentId'],
 						'methodName':   'createAisle',
 						'methodArgs':   [
@@ -362,7 +362,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 			// Create the filter to listen to all vertex updates for this aisle.
 			var vertexFilterData = {
-				'className':     domainobjects.vertex.classname,
+				'className':     domainobjects.vertex.className,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder', 'ParentPersistentId'],
 				'filterClause':  'parentLocation.persistentId = :theId',
 				'filterParams':  [
@@ -403,14 +403,14 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	function websocketCmdCallbackFacility(expectedResponseType) {
 		var callback = {
 			exec: function(command) {
-				if (!command['d'].hasOwnProperty('r')) {
+				if (!command['data'].hasOwnProperty('results')) {
 					alert('response has no result');
 				} else {
-					if (command['t'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command['d']['r'].length; i++) {
-							var object = command['d']['r'][i];
+					if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+						for (var i = 0; i < command['data']['results'].length; i++) {
+							var object = command['data']['results'][i];
 
-							if (object['className'] === domainobjects.vertex.classname) {
+							if (object['className'] === domainobjects.vertex.className) {
 								// Vertex updates.
 								if (object['op'] === 'cr') {
 									handleUpdateFacilityVertexCmd(object['PosY'], object['PosX'], object);
@@ -421,9 +421,9 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 								}
 							}
 						}
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 					}
 				}
 			}
@@ -435,14 +435,14 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	function websocketCmdCallbackAisle(expectedResponseType) {
 		var callback = {
 			exec: function(command) {
-				if (!command['d'].hasOwnProperty('r')) {
+				if (!command['data'].hasOwnProperty('results')) {
 					alert('response has no result');
 				} else {
-					if (command['t'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command['d']['r'].length; i++) {
-							var object = command['d']['r'][i];
+					if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+						for (var i = 0; i < command['data']['results'].length; i++) {
+							var object = command['data']['results'][i];
 
-							if (object['className'] === domainobjects.aisle.classname) {
+							if (object['className'] === domainobjects.aisle.className) {
 								// Aisle updates
 								if (object['op'] === 'cr') {
 									handleUpdateAisleCmd(object);
@@ -451,7 +451,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 								} else if (object['op'] === 'dl') {
 									handleDeleteAisleCmd(object);
 								}
-							} else if (object['className'] === domainobjects.vertex.classname) {
+							} else if (object['className'] === domainobjects.vertex.className) {
 								// VAisle ertex updates.
 								if (object['op'] === 'cr') {
 									handleUpdateAisleVertexCmd(object);
@@ -463,9 +463,9 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 							}
 
 						}
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 					}
 				}
 			}
@@ -582,7 +582,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		open: function() {
 			// Create the filter to listen to all vertex updates for this facility.
 			var vertexFilterData = {
-				'className':     domainobjects.vertex.classname,
+				'className':     domainobjects.vertex.className,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
 				'filterClause':  'parentLocation.persistentId = :theId',
 				'filterParams':  [
@@ -595,7 +595,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 			// Create the filter to listen to all aisle updates for this facility.
 			var aisleFilterData = {
-				'className':     domainobjects.aisle.classname,
+				'className':     domainobjects.aisle.className,
 				'propertyNames': ['DomainId', 'PosX', 'PosY'],
 				'filterClause':  'parentLocation.persistentId = :theId',
 				'filterParams':  [

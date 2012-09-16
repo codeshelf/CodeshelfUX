@@ -39,6 +39,10 @@ codeshelf.listdemoview = function() {
 		return true;
 	}
 
+	function percentCompleteSort(a, b) {
+		return a["percentComplete"] - b["percentComplete"];
+	}
+
 	self = {
 		requiredFieldValidator: function(value) {
 			if (value == null || value == undefined || !value.length)
@@ -51,15 +55,6 @@ codeshelf.listdemoview = function() {
 					valid: true,
 					msg:   null
 				};
-		},
-
-		myFilter: function(item, args) {
-			if (item)
-				return ('tru' === 'tru');
-		},
-
-		percentCompleteSort: function(a, b) {
-			return a["percentComplete"] - b["percentComplete"];
 		},
 
 		comparer: function(a, b) {
@@ -310,8 +305,6 @@ codeshelf.listdemoview = function() {
 					});
 			});
 
-			dataView.setFilter(myFilter);
-
 		},
 
 		open: function() {
@@ -322,7 +315,7 @@ codeshelf.listdemoview = function() {
 				percentCompleteThreshold: percentCompleteThreshold,
 				searchString:             searchString
 			});
-			//dataView.setFilter(self.myFilter);
+			dataView.setFilter(myFilter);
 			dataView.endUpdate();
 
 			$("#gridContainer")['resizable']();

@@ -1,4 +1,4 @@
-goog.provide('codeshelf.listview');
+goog.provide('codeshelf.hierarchylistview');
 goog.require('slickgrid.core');
 goog.require('slickgrid.firebugx');
 goog.require('slickgrid.editors');
@@ -9,19 +9,20 @@ goog.require('slickgrid.pager');
 goog.require('slickgrid.columnpicker');
 goog.require('extern.jquery');
 
-codeshelf.listview = function(websession, domainObject, filterClause, filterParams) {
+codeshelf.hierarchylistview = function(websession, domainObject, filterClause, filterParams, hierarchyMap) {
 
 	$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all")['mouseover'](
 		function(e) {
 			$(e.target).addClass("ui-state-hover")
 		})['mouseout'](function(e) {
-			$(e.target).removeClass("ui-state-hover")
-		});
+		$(e.target).removeClass("ui-state-hover")
+	});
 
 	var websession_ = websession;
 	var domainObject_ = domainObject;
 	var filterClause_ = filterClause;
 	var filterParams_ = filterParams;
+	var hierarchyMap_ = hierarchyMap;
 
 	var dataView_;
 	var grid_;
@@ -36,13 +37,34 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 	var percentCompleteThreshold_;
 	var searchString_;
 
-	function comparer(a, b) {
+	/**
+	 * Compare the colums from left-to-right (so that they sort left-to-right).
+	 * @param itemA
+	 * @param itemB
+	 * @return {Number}
+	 */
+	function comparer(itemA, itemB) {
+
+		// First figure out if they are at the same level.
+
+		levelKeyA = itemA['DomainId'];
+		while (itemA.parent !== undefine) {
+			levelKey += item['parent']['DomainId'];
+			itemA = itemA['parent']
+		}
+
+		levelKeyB = itemB['DomainId'];
+		while (itemB.parent !== undefine) {
+			levelKey += item['parent']['DomainId'];
+			itemB = itemB['parent']
+		}
+
 		var columnIndex = grid_.getColumnIndexArray();
 		for (var columnId in columnIndex) {
 			if (columnIndex.hasOwnProperty(columnId)) {
-				if (a[columnId] !== b[columnId]) {
-					var x = a[columnId];
-					var y = b[columnId];
+				if (itemA[columnId] !== itemB[columnId]) {
+					var x = itemA[columnId];
+					var y = itemB[columnId];
 					return (x == y ? 0 : (x > y ? 1 : -1));
 				}
 			}
@@ -50,6 +72,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 		return 0;
 	}
 
+	// When we get an object, check to see if we have it's child objects too.
 	function websocketCmdCallback() {
 		var callback = {
 			exec:                    function(command) {
@@ -58,17 +81,44 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 				} else if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
 					for (var i = 0; i < command['data']['results'].length; i++) {
 						var object = command['data']['results'][i];
+
+						// If this is an object create or update then we need to check if it's already added to the view.
+						// If it's not already added to the view, then send a filter request to get all of the child objects that goes with it.
+						if ((object['op'] === 'cr') || (object['op'] === 'up')) {
+							for (var j = 0; j < (hierarchyMap_.length - 1); j++) {
+								if (hierarchyMap_[j] === object['className']) {
+									item = dataView_.getItemById(object['DomainId'])
+									if (item === undefined) {
+										var filter = 'parent.persistentId = :theId';
+										var filterParams = [
+											{ 'name': "theId", 'value': object['persistentId']}
+										]
+
+										var data = {
+											'className':     object.className,
+											'propertyNames': properties_,
+											'filterClause':  filterClause_,
+											'filterParams':  filterParams_
+										}
+
+										var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
+										websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+									}
+								}
+							}
+						}
+
 						if (object['op'] === 'cr') {
 							dataView_.addItem(object);
 						} else if (object['op'] === 'up') {
-							var item = dataView_.getItemById(object['persistentId']);
+							var item = dataView_.getItemById(object['DomainId']);
 							if (item === undefined) {
 								dataView_.addItem(object);
 							} else {
-								dataView_.updateItem(object['persistentId'], object);
+								dataView_.updateItem(object['DomainId'], object);
 							}
 						} else if (object['op'] === 'de') {
-							dataView_.deleteItem(object['persistentId']);
+							dataView_.deleteItem(object['DomainId']);
 						}
 					}
 					dataView_.sort(comparer, sortdir_);
@@ -154,7 +204,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 			});
 
 			grid_.onColumnsReordered.subscribe(function(e) {
-				dataView_.sort(self.comparer, sortdir_);
+				dataView_.sort(comparer, sortdir_);
 			});
 
 			grid_.onSelectedRowsChanged.subscribe(function(e) {
@@ -214,7 +264,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 
 			// initialize the model after all the events have been hooked up
 			dataView_.beginUpdate();
-			//dataView_.setItems(data_);
+			dataView_.setItems([], 'DomainId');
 			dataView_.setFilterArgs({
 				percentCompleteThreshold: percentCompleteThreshold_,
 				searchString:             searchString_

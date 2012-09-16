@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.11 2012/09/01 23:56:32 jeffw Exp $
+ *  $Id: aisleView.js,v 1.12 2012/09/16 00:12:47 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -120,7 +120,7 @@ codeshelf.aisleview = function(websession, aisle) {
 
 			// Create the filter to listen to all vertex updates for this facility.
 			var vertexFilterData = {
-				'className':     domainobjects.vertex.classname,
+				'className':     domainobjects.vertex.className,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder', 'ParentPersistentId'],
 				'filterClause':  'parentLocation.persistentId = :theId',
 				'filterParams':  [
@@ -176,14 +176,14 @@ codeshelf.aisleview = function(websession, aisle) {
 	function websocketCmdCallback(expectedResponseType) {
 		var callback = {
 			exec: function(command) {
-				if (!command['d'].hasOwnProperty('r')) {
+				if (!command['data'].hasOwnProperty('results')) {
 					alert('response has no result');
 				} else {
-					if (command['t'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command['d']['r'].length; i++) {
-							var object = command['d']['r'][i];
+					if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+						for (var i = 0; i < command['data']['results'].length; i++) {
+							var object = command['data']['results'][i];
 
-							if (object['className'] === domainobjects.bay.classname) {
+							if (object['className'] === domainobjects.bay.className) {
 								// Bay updates
 								if (object['op'] === 'cr') {
 									handleUpdateBayCmd(object);
@@ -192,7 +192,7 @@ codeshelf.aisleview = function(websession, aisle) {
 								} else if (object['op'] === 'dl') {
 									handleDeleteBayCmd(object);
 								}
-							} else if (object['className'] === domainobjects.vertex.classname) {
+							} else if (object['className'] === domainobjects.vertex.className) {
 								// Vertex updates.
 								if (object['op'] === 'cr') {
 									handleUpdateBayVertexCmd(object);
@@ -204,9 +204,9 @@ codeshelf.aisleview = function(websession, aisle) {
 							}
 
 						}
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 					}
 				}
 			}
@@ -239,7 +239,7 @@ codeshelf.aisleview = function(websession, aisle) {
 
 			// Create the filter to listen to all bay updates for this aisle.
 			var data = {
-				'className':     domainobjects.bay.classname,
+				'className':     domainobjects.bay.className,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'PosZ'],
 				'filterClause':  'parentLocation.persistentId = :theId AND posZ = 0',
 				'filterParams':  [

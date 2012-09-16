@@ -1,11 +1,12 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.37 2012/09/12 23:30:35 jeffw Exp $
+ *  $Id: mainPage.js,v 1.38 2012/09/16 00:12:47 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('domainobjects');
 goog.require('codeshelf.ediservicesview');
+goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.facilityeditorview');
 goog.require('codeshelf.workareaeditorview');
 goog.require('codeshelf.initializenewclient');
@@ -28,6 +29,7 @@ goog.require('goog.math.Size');
 codeshelf.mainpage = function() {
 
 	var application_;
+	var organization_;
 	var websession_;
 	var frame_;
 	var frameTop_ = 5;
@@ -43,16 +45,16 @@ codeshelf.mainpage = function() {
 	function websocketCmdCallback(expectedResponseType) {
 		var callback = {
 			exec: function(command) {
-				if (!command['d'].hasOwnProperty('r')) {
+				if (!command['data'].hasOwnProperty('results')) {
 					alert('response has no result');
 				} else {
-					if (command['t'] == kWebSessionCommandType.OBJECT_GETTER_RESP) {
-						if (command['d']['r'].length === 0) {
+					if (command['type'] == kWebSessionCommandType.OBJECT_GETTER_RESP) {
+						if (command['data']['results'].length === 0) {
 							var clientInitializer = codeshelf.initializenewclient();
 							clientInitializer.start(websession_, application_.getOrganization(), frame_);
 						} else {
-							for (var i = 0; i < command['d']['r'].length; i++) {
-								var facility = command['d']['r'][i];
+							for (var i = 0; i < command['data']['results'].length; i++) {
+								var facility = command['data']['results'][i];
 								try {
 									// Load the GMaps API and init() when done.
 									if (typeof google !== "undefined") {
@@ -67,11 +69,26 @@ codeshelf.mainpage = function() {
 									var workAreaEditorWindow = codeshelf.window('Workarea Editor', workAreaEditorView, frame_, undefined);
 									workAreaEditorWindow.open();
 
-									var ediServicesView = codeshelf.ediservicesview(websession_, facility);
+//									var ediServicesView = codeshelf.ediservicesview(websession_, facility);
+//									var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView, frame_, undefined);
+//									ediServicesWindow.open();
+
+									var hierarchyMap = [];
+									hierarchyMap[0] =domainobjects.facility.className;
+									hierarchyMap[1] = domainobjects.dropboxservice.className;
+									hierarchyMap[2] = domainobjects.edidocumentlocator.className;
+
+									var filter = 'parentOrganization.persistentId = :theId';
+									var filterParams = [
+										{ 'name': "theId", 'value': organization_['persistentId']}
+									]
+
+									var ediServicesView = codeshelf.hierarchylistview(websession_, domainobjects.facility, filter, filterParams, hierarchyMap);
 									var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView, frame_, undefined);
 									ediServicesWindow.open();
 								}
-								catch (err) {
+								catch
+									(err) {
 									alert(err);
 								}
 
@@ -81,6 +98,7 @@ codeshelf.mainpage = function() {
 				}
 			}
 		}
+
 		return callback;
 	}
 
@@ -95,8 +113,7 @@ codeshelf.mainpage = function() {
 
 			application_ = application;
 			websession_ = websession;
-
-			var organization = application_.getOrganization();
+			organization_ = application_.getOrganization();
 
 			websession_.setCurrentPage(this);
 
@@ -137,15 +154,15 @@ codeshelf.mainpage = function() {
 
 			var filter = 'parentOrganization.persistentId = :theId';
 			var filterParams = [
-				{ 'name': "theId", 'value': organization['persistentId']}
+				{ 'name': "theId", 'value': organization_['persistentId']}
 			]
 			var listView = codeshelf.listview(websession_, domainobjects.facility, filter, filterParams);
 			var listWindow = codeshelf.window('Facilities List', listView, frame_, undefined);
 			listWindow.open();
 
 			var data = {
-				'className':    organization['className'],
-				'persistentId': organization['persistentId'],
+				'className':    organization_['className'],
+				'persistentId': organization_['persistentId'],
 				'getterMethod': 'getFacilities'
 			}
 

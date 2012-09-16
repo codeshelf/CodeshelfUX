@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.23 2012/08/10 11:25:43 jeffw Exp $
+ *  $Id: websession.js,v 1.24 2012/09/16 00:12:47 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.events');
@@ -93,8 +93,8 @@ codeshelf.websession = function() {
 		createCommand: function(commandType, data) {
 			var command = {
 				'id': goog.events.getUniqueId('cid'),
-				't':  commandType,
-				'd':  data
+				'type':  commandType,
+				'data':  data
 			}
 			return command;
 		},
@@ -166,10 +166,10 @@ codeshelf.websession = function() {
 			if (callback == null) {
 				alert('callback for cmd was null');
 			} else {
-				if (!command.hasOwnProperty('t')) {
+				if (!command.hasOwnProperty('type')) {
 					alert('response has no type');
 				} else {
-					if (!command.hasOwnProperty('d')) {
+					if (!command.hasOwnProperty('data')) {
 						alert('reponse has no data');
 					} else {
 						callback.exec(command);

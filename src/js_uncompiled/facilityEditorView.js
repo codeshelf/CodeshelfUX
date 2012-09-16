@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.20 2012/09/01 23:56:32 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.21 2012/09/16 00:12:47 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -65,9 +65,9 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				// then extend or shorten this segment to make it exactly 90deg.
 
 				var data = {
-					'parentClassName':    domainobjects.facility.classname,
+					'parentClassName':    domainobjects.facility.className,
 					'parentPersistentId': facility_['persistentId'],
-					'className':          domainobjects.vertex.classname,
+					'className':          domainobjects.vertex.className,
 					'properties':         [
 						{name: 'DomainId', value: 'V' + vertexNum},
 						//{name:'Description', 'value':'First Facility'},
@@ -83,7 +83,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 				// If this was the anchor vertex then set the location of the facility as well.
 				var data = {
-					'className':    domainobjects.facility.classname,
+					'className':    domainobjects.facility.className,
 					'persistentId': facility_['persistentId'],
 					'properties':   [
 						{'name': 'PosTypeByStr', 'value': 'GPS'},
@@ -235,7 +235,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 					if (canEditOutline_) {
 						var data = {
-							'className':    domainobjects.vertex.classname,
+							'className':    domainobjects.vertex.className,
 							'persistentId': vertex['persistentId'],
 							'properties':   [
 								{'name': 'PosX', 'value': marker.getPosition().lng()},
@@ -327,7 +327,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		for (var i = Object.size(facilityOutlineVertices_) - 1; i >= 0; i--) {
 
 			var data = {
-				'className':    domainobjects.vertex.classname,
+				'className':    domainobjects.vertex.className,
 				'persistentId': facilityOutlineVertices_[i].vertex['persistentId']
 			}
 
@@ -499,15 +499,15 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 	function websocketCmdCallback(expectedResponseType) {
 		var callback = {
 			exec: function(command) {
-				if (!command['d'].hasOwnProperty('r')) {
+				if (!command['data'].hasOwnProperty('results')) {
 					alert('response has no result');
 				} else {
-					if (command['t'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command['d']['r'].length; i++) {
-							var object = command['d']['r'][i];
+					if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+						for (var i = 0; i < command['data']['results'].length; i++) {
+							var object = command['data']['results'][i];
 
 							// Make sure the class name matches.
-							if (object['className'] === domainobjects.vertex.classname) {
+							if (object['className'] === domainobjects.vertex.className) {
 								var latLng = new google.maps.LatLng(object['PosY'], object['PosX']);
 
 								if (object['op'] === 'cr') {
@@ -519,9 +519,9 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 								}
 							}
 						}
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-					} else if (command['t'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 					}
 				}
 			}
@@ -558,7 +558,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			totalBounds_ = new google.maps.LatLngBounds();
 
 			// Add the facility descriptor field.
-			var facilityDescField = codeshelf.dataobjectfield(websession_, self.getMainPaneElement(), domainobjects.facility.classname, domainobjects.facility.properties.desc.id, facility_['persistentId'], 'windowField', 'Facility name');
+			var facilityDescField = codeshelf.dataobjectfield(websession_, self.getMainPaneElement(), domainobjects.facility.className, domainobjects.facility.properties.desc.id, facility_['persistentId'], 'windowField', 'Facility name');
 			facilityDescField.start();
 
 			// Setup GMaps geocoding to locate places for the user (if needed).
@@ -594,7 +594,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		open: function() {
 			// Create the filter to listen to all vertex updates for this facility.
 			var data = {
-				'className':     domainobjects.vertex.classname,
+				'className':     domainobjects.vertex.className,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
 				'filterClause':  'parentLocation.persistentId = :theId',
 				'filterParams':  [
