@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ediServicesView.js,v 1.3 2012/09/16 07:22:15 jeffw Exp $
+ *  $Id: ediServicesView.js,v 1.4 2012/09/17 04:20:08 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ediservicesview');
@@ -74,16 +74,16 @@ codeshelf.ediservicesview = function(websession, facility) {
 				} else if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
 					for (var i = 0; i < command['data']['results'].length; i++) {
 						var object = command['data']['results'][i];
-						if (object['op'] === 'cr') {
+						if (object['op'] === 'cre') {
 							dataView_.addItem(object);
-						} else if (object['op'] === 'up') {
+						} else if (object['op'] === 'upd') {
 							var item = dataView_.getItemById(object['persistentId']);
 							if (item === undefined) {
 								dataView_.addItem(object);
 							} else {
 								dataView_.updateItem(object['persistentId'], object);
 							}
-						} else if (object['op'] === 'de') {
+						} else if (object['op'] === 'del') {
 							dataView_.deleteItem(object['persistentId']);
 						}
 					}

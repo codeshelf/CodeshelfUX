@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.42 2012/09/16 07:22:15 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.43 2012/09/17 04:20:08 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -412,9 +412,9 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 							if (object['className'] === domainobjects.vertex.className) {
 								// Vertex updates.
-								if (object['op'] === 'cr') {
+								if (object['op'] === 'cre') {
 									handleUpdateFacilityVertexCmd(object['PosY'], object['PosX'], object);
-								} else if (object['op'] === 'up') {
+								} else if (object['op'] === 'upd') {
 									handleUpdateFacilityVertexCmd(object['PosY'], object['PosX'], object);
 								} else if (object['op'] === 'dl') {
 									handleDeleteFacilityVertexCmd(object['PosY'], object['PosX'], object);
@@ -444,18 +444,18 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 							if (object['className'] === domainobjects.aisle.className) {
 								// Aisle updates
-								if (object['op'] === 'cr') {
+								if (object['op'] === 'cre') {
 									handleUpdateAisleCmd(object);
-								} else if (object['op'] === 'up') {
+								} else if (object['op'] === 'upd') {
 									handleUpdateAisleCmd(object);
 								} else if (object['op'] === 'dl') {
 									handleDeleteAisleCmd(object);
 								}
 							} else if (object['className'] === domainobjects.vertex.className) {
 								// VAisle ertex updates.
-								if (object['op'] === 'cr') {
+								if (object['op'] === 'cre') {
 									handleUpdateAisleVertexCmd(object);
-								} else if (object['op'] === 'up') {
+								} else if (object['op'] === 'upd') {
 									handleUpdateAisleVertexCmd(object);
 								} else if (object['op'] === 'dl') {
 									handleDeleteAisleVertexCmd(object);

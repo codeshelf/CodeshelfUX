@@ -47,29 +47,22 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 		// First figure out if they are at the same level.
 
-		levelKeyA = itemA['DomainId'];
-		while (itemA.parent !== undefined) {
-			levelKey += item['parent']['DomainId'];
-			itemA = itemA['parent']
-		}
+		var levelKeyA = itemA['FullDomainId'];
+		var levelKeyB = itemB['FullDomainId'];
 
-		levelKeyB = itemB['DomainId'];
-		while (itemB.parent !== undefined) {
-			levelKey += item['parent']['DomainId'];
-			itemB = itemB['parent']
-		}
+		return (levelKeyA == levelKeyB ? 0 : (levelKeyA > levelKeyB ? 1 : -1));
 
-		var columnIndex = grid_.getColumnIndexArray();
-		for (var columnId in columnIndex) {
-			if (columnIndex.hasOwnProperty(columnId)) {
-				if (itemA[columnId] !== itemB[columnId]) {
-					var x = itemA[columnId];
-					var y = itemB[columnId];
-					return (x == y ? 0 : (x > y ? 1 : -1));
-				}
-			}
-		}
-		return 0;
+//		var columnIndex = grid_.getColumnIndexArray();
+//		for (var columnId in columnIndex) {
+//			if (columnIndex.hasOwnProperty(columnId)) {
+//				if (itemA[columnId] !== itemB[columnId]) {
+//					var x = itemA[columnId];
+//					var y = itemB[columnId];
+//					return (x == y ? 0 : (x > y ? 1 : -1));
+//				}
+//			}
+//		}
+//		return 0;
 	}
 
 	// When we get an object, check to see if we have it's child objects too.
@@ -84,7 +77,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 						// If this is an object create or update then we need to check if it's already added to the view.
 						// If it's not already added to the view, then send a filter request to get all of the child objects that goes with it.
-						if ((object['op'] === 'cr') || (object['op'] === 'up')) {
+						if ((object['op'] === 'cre') || (object['op'] === 'upd')) {
 							for (var j = 0; j < (hierarchyMap_.length - 1); j++) {
 								if (hierarchyMap_[j] === object['className']) {
 									item = dataView_.getItemById(object['DomainId'])
@@ -108,16 +101,16 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 							}
 						}
 
-						if (object['op'] === 'cr') {
+						if (object['op'] === 'cre') {
 							dataView_.addItem(object);
-						} else if (object['op'] === 'up') {
+						} else if (object['op'] === 'upd') {
 							var item = dataView_.getItemById(object['DomainId']);
 							if (item === undefined) {
 								dataView_.addItem(object);
 							} else {
 								dataView_.updateItem(object['DomainId'], object);
 							}
-						} else if (object['op'] === 'de') {
+						} else if (object['op'] === 'del') {
 							dataView_.deleteItem(object['DomainId']);
 						}
 					}

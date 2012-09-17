@@ -58,16 +58,16 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 				} else if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
 					for (var i = 0; i < command['data']['results'].length; i++) {
 						var object = command['data']['results'][i];
-						if (object['op'] === 'cr') {
+						if (object['op'] === 'cre') {
 							dataView_.addItem(object);
-						} else if (object['op'] === 'up') {
+						} else if (object['op'] === 'upd') {
 							var item = dataView_.getItemById(object['persistentId']);
 							if (item === undefined) {
 								dataView_.addItem(object);
 							} else {
 								dataView_.updateItem(object['persistentId'], object);
 							}
-						} else if (object['op'] === 'de') {
+						} else if (object['op'] === 'del') {
 							dataView_.deleteItem(object['persistentId']);
 						}
 					}

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.13 2012/09/16 07:22:15 jeffw Exp $
+ *  $Id: aisleView.js,v 1.14 2012/09/17 04:20:08 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -185,18 +185,18 @@ codeshelf.aisleview = function(websession, aisle) {
 
 							if (object['className'] === domainobjects.bay.className) {
 								// Bay updates
-								if (object['op'] === 'cr') {
+								if (object['op'] === 'cre') {
 									handleUpdateBayCmd(object);
-								} else if (object['op'] === 'up') {
+								} else if (object['op'] === 'upd') {
 									handleUpdateBayCmd(object);
 								} else if (object['op'] === 'dl') {
 									handleDeleteBayCmd(object);
 								}
 							} else if (object['className'] === domainobjects.vertex.className) {
 								// Vertex updates.
-								if (object['op'] === 'cr') {
+								if (object['op'] === 'cre') {
 									handleUpdateBayVertexCmd(object);
-								} else if (object['op'] === 'up') {
+								} else if (object['op'] === 'upd') {
 									handleUpdateBayVertexCmd(object);
 								} else if (object['op'] === 'dl') {
 									handleDeleteBayVertexCmd(object);

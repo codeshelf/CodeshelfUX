@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.22 2012/09/16 07:22:15 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.23 2012/09/17 04:20:08 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -510,9 +510,9 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 							if (object['className'] === domainobjects.vertex.className) {
 								var latLng = new google.maps.LatLng(object['PosY'], object['PosX']);
 
-								if (object['op'] === 'cr') {
+								if (object['op'] === 'cre') {
 									handleCreateFacilityVertexCmd(latLng, object);
-								} else if (object['op'] === 'up') {
+								} else if (object['op'] === 'upd') {
 									handleUpdateFacilityVertexCmd(latLng, object);
 								} else if (object['op'] === 'dl') {
 									handleDeleteFacilityVertexCmd(latLng, object);
