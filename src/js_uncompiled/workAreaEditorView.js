@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.44 2012/09/18 06:25:00 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.45 2012/09/18 14:47:57 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -20,6 +20,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.object');
 goog.require('goog.style');
+goog.require('goog.ui.Dialog');
 goog.require('raphael');
 
 /**
@@ -43,7 +44,11 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	var aisles_ = [];
 
 	function createAisle() {
-		var dataEntryDialog = codeshelf.dataentrydialog();
+		var buttonSet = new goog.ui.Dialog.ButtonSet().
+			addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE).
+			addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
+
+		var dataEntryDialog = codeshelf.dataentrydialog("Create Aisle", buttonSet);
 		var dialogContentElement = soy.renderAsElement(codeshelf.templates.createAisleDialogContent);
 		dataEntryDialog.setupDialog(dialogContentElement);
 		dataEntryDialog.createField('bayHeight', 'text');
@@ -400,7 +405,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 	}
 
-	function websocketCmdCallbackFacility(expectedResponseType) {
+	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function(command) {
 				if (!command['data'].hasOwnProperty('results')) {
@@ -432,7 +437,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		return callback;
 	}
 
-	function websocketCmdCallbackAisle(expectedResponseType) {
+	function websocketCmdCallbackAisle() {
 		var callback = {
 			exec: function(command) {
 				if (!command['data'].hasOwnProperty('results')) {

@@ -1,4 +1,5 @@
 goog.provide('codeshelf.hierarchylistview');
+goog.require('goog.ui.Dialog');
 goog.require('slickgrid.core');
 goog.require('slickgrid.firebugx');
 goog.require('slickgrid.editors');
@@ -125,6 +126,38 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 		return callback;
 	}
 
+	function websocketCmdCallbackFacility() {
+		var callback = {
+			exec: function(command) {
+				if (!command['data'].hasOwnProperty('results')) {
+					alert('response has no result');
+				} else {
+					if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+						for (var i = 0; i < command['data']['results'].length; i++) {
+							var object = command['data']['results'][i];
+
+							if (object['className'] === domainobjects.Vertex.className) {
+								// Vertex updates.
+								if (object['op'] === 'cre') {
+									handleUpdateFacilityVertexCmd(object['PosY'], object['PosX'], object);
+								} else if (object['op'] === 'upd') {
+									handleUpdateFacilityVertexCmd(object['PosY'], object['PosX'], object);
+								} else if (object['op'] === 'dl') {
+									handleDeleteFacilityVertexCmd(object['PosY'], object['PosX'], object);
+								}
+							}
+						}
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+					}
+				}
+			}
+		}
+
+		return callback;
+	}
+
 	var self = {
 		doSetupView: function() {
 
@@ -192,6 +225,42 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+
+			grid_.onClick.subscribe(function (e) {
+				var cell = grid_.getCellFromEvent(e);
+//				if (grid.getColumns()[cell.cell].id == "priority") {
+//					var states = { "Low": "Medium", "Medium": "High", "High": "Low" };
+//					data[cell.row].priority = states[data[cell.row].priority];
+//					grid.updateRow(cell.row);
+//					e.stopPropagation();
+//				}
+
+				var buttonSet = new goog.ui.Dialog.ButtonSet().
+					addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.OK).
+					addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
+
+				var dataEntryDialog = codeshelf.dataentrydialog("Link Dropbox", buttonSet);
+				var dialogContentElement = soy.renderAsElement(codeshelf.templates.linkDropboxDialog);
+				dataEntryDialog.setupDialog(dialogContentElement);
+				dataEntryDialog.open(function(event, dialog) {
+						if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.OK.key) {
+
+							// Call Facility.createAisle();
+							var data = {
+								'className':    domainobjects.Facility.className,
+								'persistentId': facility_['persistentId'],
+								'methodName':   'linkDropbox',
+								'methodArgs':   [
+								]
+							}
+
+							var linkDropboxCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+							websession_.sendCommand(linkDropboxCmd, websocketCmdCallbackFacility(kWebSessionCommandType.OBJECT_METHOD_REQ), true);
+						}
+					}
+				)
+
+			});
 
 			grid_.onKeyDown.subscribe(function(e) {
 				// select all rows on ctrl-a

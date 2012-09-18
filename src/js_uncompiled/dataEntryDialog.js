@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataEntryDialog.js,v 1.2 2012/06/10 06:47:32 jeffw Exp $
+ *  $Id: dataEntryDialog.js,v 1.3 2012/09/18 14:47:57 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataentrydialog');
@@ -15,8 +15,10 @@ goog.require('goog.ui.Dialog');
 goog.require('goog.ui.LabelInput');
 
 
-codeshelf.dataentrydialog = function() {
+codeshelf.dataentrydialog = function(title, buttonSet) {
 
+	var title_ = title;
+	var buttonSet_ = buttonSet;
 	var thisDataEntryDialog_;
 	var dialog_;
 	var dialogContentElement_;
@@ -27,11 +29,8 @@ codeshelf.dataentrydialog = function() {
 		setupDialog: function(dialogContentElement) {
 			// Raise a dialog to prompt the user for information about this aisle.
 			dialog_ = new goog.ui.Dialog();//null, false);
-			dialog_.setTitle('Create Aisle');
-			var buttonSet = new goog.ui.Dialog.ButtonSet().
-				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE).
-				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
-			dialog_.setButtonSet(buttonSet);
+			dialog_.setTitle(title_);
+			dialog_.setButtonSet(buttonSet_);
 
 			dialog_.setContent(dialogContentElement.innerHTML);
 			dialog_.setDisposeOnHide(true);
