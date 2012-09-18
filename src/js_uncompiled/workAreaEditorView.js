@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.43 2012/09/17 04:20:08 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.44 2012/09/18 06:25:00 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -73,7 +73,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 					// Call Facility.createAisle();
 					//public final void createAisle(Double inPosX, Double inPosY, Double inProtoBayHeight, Double inProtoBayWidth, Double inProtoBayDepth, int inBaysHigh, int inBaysLong, Boolean inCreateBackToBack) {
 					var data = {
-						'className':    domainobjects.facility.className,
+						'className':    domainobjects.Facility.className,
 						'persistentId': facility_['persistentId'],
 						'methodName':   'createAisle',
 						'methodArgs':   [
@@ -362,7 +362,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 			// Create the filter to listen to all vertex updates for this aisle.
 			var vertexFilterData = {
-				'className':     domainobjects.vertex.className,
+				'className':     domainobjects.Vertex.className,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder', 'ParentPersistentId'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
@@ -410,7 +410,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 						for (var i = 0; i < command['data']['results'].length; i++) {
 							var object = command['data']['results'][i];
 
-							if (object['className'] === domainobjects.vertex.className) {
+							if (object['className'] === domainobjects.Vertex.className) {
 								// Vertex updates.
 								if (object['op'] === 'cre') {
 									handleUpdateFacilityVertexCmd(object['PosY'], object['PosX'], object);
@@ -442,7 +442,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 						for (var i = 0; i < command['data']['results'].length; i++) {
 							var object = command['data']['results'][i];
 
-							if (object['className'] === domainobjects.aisle.className) {
+							if (object['className'] === domainobjects.Aisle.className) {
 								// Aisle updates
 								if (object['op'] === 'cre') {
 									handleUpdateAisleCmd(object);
@@ -451,7 +451,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 								} else if (object['op'] === 'dl') {
 									handleDeleteAisleCmd(object);
 								}
-							} else if (object['className'] === domainobjects.vertex.className) {
+							} else if (object['className'] === domainobjects.Vertex.className) {
 								// VAisle ertex updates.
 								if (object['op'] === 'cre') {
 									handleUpdateAisleVertexCmd(object);
@@ -582,7 +582,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		open: function() {
 			// Create the filter to listen to all vertex updates for this facility.
 			var vertexFilterData = {
-				'className':     domainobjects.vertex.className,
+				'className':     domainobjects.Vertex.className,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
@@ -595,7 +595,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 			// Create the filter to listen to all aisle updates for this facility.
 			var aisleFilterData = {
-				'className':     domainobjects.aisle.className,
+				'className':     domainobjects.Aisle.className,
 				'propertyNames': ['DomainId', 'PosX', 'PosY'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [

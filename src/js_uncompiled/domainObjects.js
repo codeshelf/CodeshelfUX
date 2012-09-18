@@ -1,13 +1,13 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.18 2012/09/17 04:20:08 jeffw Exp $
+ * $Id: domainObjects.js,v 1.19 2012/09/18 06:25:00 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
 
 domainobjects = {
 
-	organization: {
+	Organization: {
 		className:  'Organization',
 		properties: {
 			domainId: {
@@ -23,7 +23,7 @@ domainobjects = {
 		}
 	},
 
-	facility: {
+	Facility: {
 		className:  'Facility',
 		properties: {
 			domainId: {
@@ -31,26 +31,36 @@ domainobjects = {
 				title: 'ID',
 				width: 25
 			},
-			fullDomainId: {
-				id:    'FullDomainId',
-				title: 'ID',
-				width: 25
+			parentFullDomainId: {
+				id:    'ParentFullDomainId',
+				title: 'Parent ID',
+				width: 50
 			},
 			desc:     {
 				id:    'Description',
 				title: 'Facility Name',
-				width: 100
-			},
-			provider:     {
-				id:    'ProviderEnum',
-				title: 'Provider',
-				width: 100
-			},
-			documentId:     {
-				id:    'DocumentId',
-				title: 'DocumentId',
-				width: 100
+				width: 50
 			}
+//			provider:     {
+//				id:    'ProviderEnum',
+//				title: 'Provider',
+//				width: 100
+//			},
+//			serviceState:     {
+//				id:    'ServiceStateEnum',
+//				title: 'State',
+//				width: 100
+//			},
+//			documentId:     {
+//				id:    'DocumentId',
+//				title: 'DocumentId',
+//				width: 100
+//			},
+//			documentState:     {
+//				id:    'DocumentStateEnum',
+//				title: 'State',
+//				width: 100
+//			}
 		}
 	},
 
@@ -65,7 +75,7 @@ domainobjects = {
 		}
 	},
 
-	vertex: {
+	Vertex: {
 		className:  'Vertex',
 		properties: {
 			domainId: {
@@ -76,7 +86,7 @@ domainobjects = {
 		}
 	},
 
-	aisle: {
+	Aisle: {
 		className:  'Aisle',
 		properties: {
 			domainId: {
@@ -87,7 +97,7 @@ domainobjects = {
 		}
 	},
 
-	bay: {
+	Bay: {
 		className:  'Bay',
 		properties: {
 			domainId: {
@@ -98,53 +108,53 @@ domainobjects = {
 		}
 	},
 
-	dropboxservice: {
+	DropboxService: {
 		className:  'DropboxService',
 		properties: {
 			domainId: {
 				id:    'DomainId',
-				title: 'ID',
+				title: 'Parent ID',
 				width: 25
 			},
-			fullDomainId: {
-				id:    'FullDomainId',
-				title: 'ID',
-				width: 25
+			parentFullDomainId: {
+				id:    'ParentFullDomainId',
+				title: 'Parent ID',
+				width: 50
 			},
 			provider:     {
 				id:    'ProviderEnum',
 				title: 'Provider',
-				width: 100
+				width: 40
 			},
-			servicestate:     {
+			serviceState:     {
 				id:    'ServiceStateEnum',
-				title: 'State',
-				width: 100
+				title: 'Service State',
+				width: 40
 			}
 		}
 	},
 
-	edidocumentlocator: {
+	EdiDocumentLocator: {
 		className:  'EdiDocumentLocator',
 		properties: {
 			domainId: {
 				id:    'DomainId',
-				title: 'ID',
+				title: 'Parent ID',
 				width: 25
 			},
-			fullDomainId: {
-				id:    'FullDomainId',
+			parentFullDomainId: {
+				id:    'ParentFullDomainId',
 				title: 'ID',
-				width: 25
+				width: 50
 			},
-			provider:     {
-				id:    'ProviderEnum',
-				title: 'Provider',
-				width: 100
+			documentState:     {
+				id:    'DocumentStateEnum',
+				title: 'Doc State',
+				width: 40
 			},
-			servicestate:     {
-				id:    'ServiceStateEnum',
-				title: 'State',
+			documentName:     {
+				id:    'DocumentName',
+				title: 'Document Name',
 				width: 100
 			}
 		}

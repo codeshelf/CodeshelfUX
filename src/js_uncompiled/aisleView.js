@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.14 2012/09/17 04:20:08 jeffw Exp $
+ *  $Id: aisleView.js,v 1.15 2012/09/18 06:25:00 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -120,7 +120,7 @@ codeshelf.aisleview = function(websession, aisle) {
 
 			// Create the filter to listen to all vertex updates for this facility.
 			var vertexFilterData = {
-				'className':     domainobjects.vertex.className,
+				'className':     domainobjects.Vertex.className,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder', 'ParentPersistentId'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
@@ -183,7 +183,7 @@ codeshelf.aisleview = function(websession, aisle) {
 						for (var i = 0; i < command['data']['results'].length; i++) {
 							var object = command['data']['results'][i];
 
-							if (object['className'] === domainobjects.bay.className) {
+							if (object['className'] === domainobjects.Bay.className) {
 								// Bay updates
 								if (object['op'] === 'cre') {
 									handleUpdateBayCmd(object);
@@ -192,7 +192,7 @@ codeshelf.aisleview = function(websession, aisle) {
 								} else if (object['op'] === 'dl') {
 									handleDeleteBayCmd(object);
 								}
-							} else if (object['className'] === domainobjects.vertex.className) {
+							} else if (object['className'] === domainobjects.Vertex.className) {
 								// Vertex updates.
 								if (object['op'] === 'cre') {
 									handleUpdateBayVertexCmd(object);
@@ -239,7 +239,7 @@ codeshelf.aisleview = function(websession, aisle) {
 
 			// Create the filter to listen to all bay updates for this aisle.
 			var data = {
-				'className':     domainobjects.bay.className,
+				'className':     domainobjects.Bay.className,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'PosZ'],
 				'filterClause':  'parent.persistentId = :theId AND posZ = 0',
 				'filterParams':  [

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.23 2012/09/17 04:20:08 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.24 2012/09/18 06:25:00 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -65,9 +65,9 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				// then extend or shorten this segment to make it exactly 90deg.
 
 				var data = {
-					'parentClassName':    domainobjects.facility.className,
+					'parentClassName':    domainobjects.Facility.className,
 					'parentPersistentId': facility_['persistentId'],
-					'className':          domainobjects.vertex.className,
+					'className':          domainobjects.Vertex.className,
 					'properties':         [
 						{name: 'DomainId', value: 'V' + vertexNum},
 						//{name:'Description', 'value':'First Facility'},
@@ -83,7 +83,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 				// If this was the anchor vertex then set the location of the facility as well.
 				var data = {
-					'className':    domainobjects.facility.className,
+					'className':    domainobjects.Facility.className,
 					'persistentId': facility_['persistentId'],
 					'properties':   [
 						{'name': 'PosTypeByStr', 'value': 'GPS'},
@@ -224,7 +224,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			'icon':      markerImage
 		});
 
-		var vertexData = {marker: marker, vertex: vertex};
+		var vertexData = {marker: marker, Vertex: vertex};
 		facilityOutlineVertices_[vertex['DrawOrder']] = vertexData;
 		marker.setTitle(vertex['DomainId']);
 
@@ -235,7 +235,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 					if (canEditOutline_) {
 						var data = {
-							'className':    domainobjects.vertex.className,
+							'className':    domainobjects.Vertex.className,
 							'persistentId': vertex['persistentId'],
 							'properties':   [
 								{'name': 'PosX', 'value': marker.getPosition().lng()},
@@ -327,7 +327,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		for (var i = Object.size(facilityOutlineVertices_) - 1; i >= 0; i--) {
 
 			var data = {
-				'className':    domainobjects.vertex.className,
+				'className':    domainobjects.Vertex.className,
 				'persistentId': facilityOutlineVertices_[i].vertex['persistentId']
 			}
 
@@ -507,7 +507,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 							var object = command['data']['results'][i];
 
 							// Make sure the class name matches.
-							if (object['className'] === domainobjects.vertex.className) {
+							if (object['className'] === domainobjects.Vertex.className) {
 								var latLng = new google.maps.LatLng(object['PosY'], object['PosX']);
 
 								if (object['op'] === 'cre') {
@@ -558,7 +558,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			totalBounds_ = new google.maps.LatLngBounds();
 
 			// Add the facility descriptor field.
-			var facilityDescField = codeshelf.dataobjectfield(websession_, self.getMainPaneElement(), domainobjects.facility.className, domainobjects.facility.properties.desc.id, facility_['persistentId'], 'windowField', 'Facility name');
+			var facilityDescField = codeshelf.dataobjectfield(websession_, self.getMainPaneElement(), domainobjects.Facility.className, domainobjects.Facility.properties.desc.id, facility_['persistentId'], 'windowField', 'Facility name');
 			facilityDescField.start();
 
 			// Setup GMaps geocoding to locate places for the user (if needed).
@@ -594,7 +594,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		open: function() {
 			// Create the filter to listen to all vertex updates for this facility.
 			var data = {
-				'className':     domainobjects.vertex.className,
+				'className':     domainobjects.Vertex.className,
 				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [

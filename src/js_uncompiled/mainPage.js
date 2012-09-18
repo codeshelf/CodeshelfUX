@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.39 2012/09/16 07:22:15 jeffw Exp $
+ *  $Id: mainPage.js,v 1.40 2012/09/18 06:25:00 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('domainobjects');
@@ -74,16 +74,16 @@ codeshelf.mainpage = function() {
 //									ediServicesWindow.open();
 
 									var hierarchyMap = [];
-									hierarchyMap[0] = domainobjects.facility.className;
-									hierarchyMap[1] = domainobjects.dropboxservice.className;
-									hierarchyMap[2] = domainobjects.edidocumentlocator.className;
+									hierarchyMap[0] = domainobjects.Facility.className;
+									hierarchyMap[1] = domainobjects.DropboxService.className;
+									hierarchyMap[2] = domainobjects.EdiDocumentLocator.className;
 
 									var filter = 'parentOrganization.persistentId = :theId';
 									var filterParams = [
 										{ 'name': "theId", 'value': organization_['persistentId']}
 									]
 
-									var ediServicesView = codeshelf.hierarchylistview(websession_, domainobjects.facility, filter, filterParams, hierarchyMap);
+									var ediServicesView = codeshelf.hierarchylistview(websession_, domainobjects.Facility, filter, filterParams, hierarchyMap);
 									var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView, frame_, undefined);
 									ediServicesWindow.open();
 								}
@@ -156,7 +156,7 @@ codeshelf.mainpage = function() {
 			var filterParams = [
 				{ 'name': "theId", 'value': organization_['persistentId']}
 			]
-			var listView = codeshelf.listview(websession_, domainobjects.facility, filter, filterParams);
+			var listView = codeshelf.listview(websession_, domainobjects.Facility, filter, filterParams);
 			var listWindow = codeshelf.window('Facilities List', listView, frame_, undefined);
 			listWindow.open();
 

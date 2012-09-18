@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: initializeNewClient.js,v 1.12 2012/09/16 00:12:47 jeffw Exp $
+ *  $Id: initializeNewClient.js,v 1.13 2012/09/18 06:25:00 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.initializenewclient');
 goog.require('codeshelf.templates');
@@ -53,9 +53,9 @@ codeshelf.initializenewclient = function() {
 
 		createFacility: function(longitude, latitude) {
 			var data = {
-				'parentClassName':    domainobjects.organization.className,
+				'parentClassName':    domainobjects.Organization.className,
 				'parentPersistentId': organization_.persistentId,
-				'className':          domainobjects.facility.className,
+				'className':          domainobjects.Facility.className,
 				'properties':         [
 					{'name': 'DomainId', 'value': 'F1'},
 					{'name': 'Description', 'value': 'First Facility'},

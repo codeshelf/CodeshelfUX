@@ -47,28 +47,31 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 		// First figure out if they are at the same level.
 
-		var levelKeyA = itemA['FullDomainId'];
-		var levelKeyB = itemB['FullDomainId'];
+		var levelKeyA = itemA['ParentFullDomainId'];
+		var levelKeyB = itemB['ParentFullDomainId'];
 
-		return (levelKeyA == levelKeyB ? 0 : (levelKeyA > levelKeyB ? 1 : -1));
+		if (levelKeyA == levelKeyB) {
+			var columnIndex = grid_.getColumnIndexArray();
+			for (var columnId in columnIndex) {
+				if (columnIndex.hasOwnProperty(columnId)) {
+					if (itemA[columnId] !== itemB[columnId]) {
+						var x = itemA[columnId];
+						var y = itemB[columnId];
+						return (x == y ? 0 : (x > y ? 1 : -1));
+					}
+				}
+			}
+		} else {
+			return (levelKeyA.length > levelKeyB.length ? 1 : -1);
+		}
 
-//		var columnIndex = grid_.getColumnIndexArray();
-//		for (var columnId in columnIndex) {
-//			if (columnIndex.hasOwnProperty(columnId)) {
-//				if (itemA[columnId] !== itemB[columnId]) {
-//					var x = itemA[columnId];
-//					var y = itemB[columnId];
-//					return (x == y ? 0 : (x > y ? 1 : -1));
-//				}
-//			}
-//		}
-//		return 0;
+		return 0;
 	}
 
 	// When we get an object, check to see if we have it's child objects too.
 	function websocketCmdCallback() {
 		var callback = {
-			exec:                    function(command) {
+			exec: function(command) {
 				if (!command['data'].hasOwnProperty('results')) {
 					alert('response has no result');
 				} else if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
@@ -88,7 +91,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 										]
 
 										var data = {
-											'className':     hierarchyMap_[j+1],
+											'className':     hierarchyMap_[j + 1],
 											'propertyNames': properties_,
 											'filterClause':  filter,
 											'filterParams':  filterParams
@@ -126,23 +129,34 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 		doSetupView: function() {
 
 			// Compute the columns we need for this domain object.
-			properties = domainObject_.properties;
 			var count = 0;
-			for (property in properties) {
-				if (properties.hasOwnProperty(property)) {
-					var property = properties[property];
-					properties_[count] = property.id;
-					columns_[count++] = {
-						'id':                  property.id,
-						'name':                property.title,
-						'field':               property.id,
-						'behavior':            "select",
-						'headerCssClass':      " ",
-						'width':               property.width,
-						'cannotTriggerInsert': true,
-						'resizable':           true,
-						'selectable':          false,
-						'sortable':            true
+			for (var i = 0; i < hierarchyMap_.length; i++) {
+				var className = hierarchyMap_[i];
+				properties = domainobjects[className].properties;
+				for (property in properties) {
+					if (properties.hasOwnProperty(property)) {
+						var property = properties[property];
+
+						// Check if the property already exists in the columns.
+						var foundEntry = goog.array.find(columns_, function(entry) {
+							return entry.id === property.id;
+						});
+
+						if (foundEntry === null) {
+							properties_[count] = property.id;
+							columns_[count++] = {
+								'id':                  property.id,
+								'name':                property.title,
+								'field':               property.id,
+								'behavior':            "select",
+								'headerCssClass':      " ",
+								'width':               property.width,
+								'cannotTriggerInsert': true,
+								'resizable':           true,
+								'selectable':          false,
+								'sortable':            true
+							}
+						}
 					}
 				}
 			}
@@ -255,6 +269,27 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 		open: function() {
 			var h_runfilters = null;
 
+			var data = [];
+			data.getItemMetadata = function (row) {
+				if (row % 2 === 1) {
+					return {
+						"columns": {
+							"duration": {
+								"colspan": 3
+							}
+						}
+					};
+				} else {
+					return {
+						"columns": {
+							0: {
+								"colspan": "*"
+							}
+						}
+					};
+				}
+			};
+
 			// initialize the model after all the events have been hooked up
 			dataView_.beginUpdate();
 			dataView_.setItems([], 'DomainId');
@@ -277,7 +312,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 		}
 	}
 
-	// We want this view to extend the root/parent view, but we want to return this view.
+// We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.view();
 	jQuery.extend(view, self);
 	self = view;
