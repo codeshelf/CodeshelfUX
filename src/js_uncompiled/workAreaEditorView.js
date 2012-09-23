@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.45 2012/09/18 14:47:57 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.46 2012/09/23 03:05:40 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -173,7 +173,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 				points[0].y = 0;
 			} else if (points[i - 1] !== undefined) {
 				var lastVertex = vertices_[i - 1];
-				var coord = convertLatLongToXY(lastVertex['PosY'], lastVertex['PosX'], vertex['PosY'], vertex['PosX']);
+				var coord = convertLatLongToXY(lastVertex['posY'], lastVertex['posX'], vertex['posY'], vertex['posX']);
 				points[i] = {};
 				points[i].x = points[i - 1].x + coord.x;
 				points[i].y = points[i - 1].y + coord.y;
@@ -320,8 +320,8 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 	function convertAisleVertexToPoint(aisle, vertex) {
 		var point = {};
-		point.x = (vertex['PosX'] + aisle['PosX']) * self.getPixelsPerMeter();
-		point.y = (vertex['PosY'] + aisle['PosY']) * self.getPixelsPerMeter();
+		point.x = (vertex['posX'] + aisle['posX']) * self.getPixelsPerMeter();
+		point.y = (vertex['posY'] + aisle['posY']) * self.getPixelsPerMeter();
 		return point;
 	}
 
@@ -338,12 +338,12 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	}
 
 	function handleUpdateFacilityVertexCmd(lat, lon, facilityVertex) {
-		vertices_[facilityVertex['DrawOrder']] = facilityVertex;
+		vertices_[facilityVertex['drawOrder']] = facilityVertex;
 		self.invalidate();
 	}
 
 	function handleDeleteFacilityVertexCmd(lat, lon, facilityVertex) {
-		vertices_.splice(facilityVertex['DrawOrder'], 1);
+		vertices_.splice(facilityVertex['drawOrder'], 1);
 		self.invalidate();
 	}
 
@@ -353,9 +353,9 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			var aisleData = {};
 
 			// Create and populate the aisle's data record.
-			aisleData.aisleElement = soy.renderAsElement(codeshelf.templates.aisleView, {id: aisle['DomainId']});
-			aisleData.aisleElement.style.left = Math.round(aisle['PosX'] * self.getPixelsPerMeter()) + 'px';
-			aisleData.aisleElement.style.top = Math.round(aisle['PosY'] * self.getPixelsPerMeter()) + 'px';
+			aisleData.aisleElement = soy.renderAsElement(codeshelf.templates.aisleView, {id: aisle['domainId']});
+			aisleData.aisleElement.style.left = Math.round(aisle['posX'] * self.getPixelsPerMeter()) + 'px';
+			aisleData.aisleElement.style.top = Math.round(aisle['posY'] * self.getPixelsPerMeter()) + 'px';
 			goog.dom.appendChild(workAreaEditorPane_, aisleData.aisleElement);
 
 			aisleData.aisle = aisle;
@@ -368,7 +368,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			// Create the filter to listen to all vertex updates for this aisle.
 			var vertexFilterData = {
 				'className':     domainobjects.Vertex.className,
-				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder', 'ParentPersistentId'],
+				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': aisle['persistentId']}
@@ -390,13 +390,13 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	}
 
 	function handleUpdateAisleVertexCmd(aisleVertex) {
-		var aislePersistentId = aisleVertex['ParentPersistentId'];
+		var aislePersistentId = aisleVertex['parentPersistentId'];
 		if (aisles_[aislePersistentId] !== undefined) {
 			var aisleData = aisles_[aislePersistentId];
 			if (aisleData.vertices === undefined) {
 				aisleData.vertices = [];
 			}
-			aisleData.vertices[aisleVertex['DrawOrder']] = aisleVertex;
+			aisleData.vertices[aisleVertex['drawOrder']] = aisleVertex;
 		}
 		self.invalidate();
 	}
@@ -418,11 +418,11 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 							if (object['className'] === domainobjects.Vertex.className) {
 								// Vertex updates.
 								if (object['op'] === 'cre') {
-									handleUpdateFacilityVertexCmd(object['PosY'], object['PosX'], object);
+									handleUpdateFacilityVertexCmd(object['posY'], object['posX'], object);
 								} else if (object['op'] === 'upd') {
-									handleUpdateFacilityVertexCmd(object['PosY'], object['PosX'], object);
+									handleUpdateFacilityVertexCmd(object['posY'], object['posX'], object);
 								} else if (object['op'] === 'dl') {
-									handleDeleteFacilityVertexCmd(object['PosY'], object['PosX'], object);
+									handleDeleteFacilityVertexCmd(object['posY'], object['posX'], object);
 								}
 							}
 						}
@@ -588,7 +588,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			// Create the filter to listen to all vertex updates for this facility.
 			var vertexFilterData = {
 				'className':     domainobjects.Vertex.className,
-				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
+				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': facility_['persistentId']}
@@ -601,7 +601,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			// Create the filter to listen to all aisle updates for this facility.
 			var aisleFilterData = {
 				'className':     domainobjects.Aisle.className,
-				'propertyNames': ['DomainId', 'PosX', 'PosY'],
+				'propertyNames': ['domainId', 'posX', 'posY'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': facility_['persistentId']}
@@ -701,8 +701,8 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 					var fill = new goog.graphics.SolidFill('green', 0.75);
 					drawPath(aislePath, stroke, fill);
 
-					aisleData.aisleElement.style.left = Math.round(aisleData['aisle']['PosX'] * self.getPixelsPerMeter()) + 'px';
-					aisleData.aisleElement.style.top = Math.round(aisleData['aisle']['PosY'] * self.getPixelsPerMeter()) + 'px';
+					aisleData.aisleElement.style.left = Math.round(aisleData['aisle']['posX'] * self.getPixelsPerMeter()) + 'px';
+					aisleData.aisleElement.style.top = Math.round(aisleData['aisle']['posY'] * self.getPixelsPerMeter()) + 'px';
 				}
 			}
 			endDraw();

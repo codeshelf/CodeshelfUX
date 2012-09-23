@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.24 2012/09/18 06:25:00 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.25 2012/09/23 03:05:40 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -69,12 +69,12 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 					'parentPersistentId': facility_['persistentId'],
 					'className':          domainobjects.Vertex.className,
 					'properties':         [
-						{name: 'DomainId', value: 'V' + vertexNum},
-						//{name:'Description', 'value':'First Facility'},
+						{name: 'domainId', value: 'V' + vertexNum},
+						//{name:'description', 'value':'First Facility'},
 						{name: 'PosTypeByStr', 'value': 'GPS'},
-						{name: 'PosX', 'value': event.latLng.lng()},
-						{name: 'PosY', 'value': event.latLng.lat()},
-						{name: 'DrawOrder', 'value': vertexNum}
+						{name: 'posX', 'value': event.latLng.lng()},
+						{name: 'posY', 'value': event.latLng.lat()},
+						{name: 'drawOrder', 'value': vertexNum}
 					]
 				}
 
@@ -87,8 +87,8 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 					'persistentId': facility_['persistentId'],
 					'properties':   [
 						{'name': 'PosTypeByStr', 'value': 'GPS'},
-						{'name': 'PosX', 'value': event.latLng.lng()},
-						{'name': 'PosY', 'value': event.latLng.lat()}
+						{'name': 'posX', 'value': event.latLng.lng()},
+						{'name': 'posY', 'value': event.latLng.lat()}
 					]
 				}
 				var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
@@ -201,12 +201,12 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 	function handleCreateFacilityVertexCmd(latLng, vertex) {
 
 		ensureOutlineStructures();
-		facilityOutlinePath_.setAt(vertex['DrawOrder'], latLng);
+		facilityOutlinePath_.setAt(vertex['drawOrder'], latLng);
 		facilityOutline_.setVisible(true);
 
 		// The case where we're adding a new marker (maybe even the anchor marker) that we must show.
 		var iconUrl = '../icons/marker_20_blue.png';
-		if (vertex['DrawOrder'] === 0) {
+		if (vertex['drawOrder'] === 0) {
 			iconUrl = '../icons/marker_20_red.png';
 		}
 
@@ -225,21 +225,21 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		});
 
 		var vertexData = {marker: marker, Vertex: vertex};
-		facilityOutlineVertices_[vertex['DrawOrder']] = vertexData;
-		marker.setTitle(vertex['DomainId']);
+		facilityOutlineVertices_[vertex['drawOrder']] = vertexData;
+		marker.setTitle(vertex['domainId']);
 
 		// Add a drag handler to the marker.
 		google.maps.event.addListener(marker, 'dragend', function() {
 				if (canEditOutline_) {
-					facilityOutlinePath_.setAt(vertexData.vertex['DrawOrder'], marker.getPosition());
+					facilityOutlinePath_.setAt(vertexData.Vertex['drawOrder'], marker.getPosition());
 
 					if (canEditOutline_) {
 						var data = {
 							'className':    domainobjects.Vertex.className,
 							'persistentId': vertex['persistentId'],
 							'properties':   [
-								{'name': 'PosX', 'value': marker.getPosition().lng()},
-								{'name': 'PosY', 'value': marker.getPosition().lat()}
+								{'name': 'posX', 'value': marker.getPosition().lng()},
+								{'name': 'posY', 'value': marker.getPosition().lat()}
 							]
 						}
 						var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
@@ -251,7 +251,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 //			}
 
 		//  The vertex at DrawPos 0 goes to the anchor marker.
-		if (vertex['DrawOrder'] === 0) {
+		if (vertex['drawOrder'] === 0) {
 			facilityAnchorMarker_ = marker;
 			// If the user clicks on the anchor marker then create a final marker on top of the anchor, and prevent further markers.
 			// When the update returns this will close the polyline into a polygon.
@@ -279,27 +279,27 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 	}
 
 	function handleUpdateFacilityVertexCmd(latLng, vertex) {
-		if ((facilityOutlinePath_ === undefined) || (facilityOutlinePath_.getAt(vertex['DrawOrder']) === undefined)) {
+		if ((facilityOutlinePath_ === undefined) || (facilityOutlinePath_.getAt(vertex['drawOrder']) === undefined)) {
 			// If the outline or marker don't exist then create them.
 			handleCreateFacilityVertexCmd(latLng, vertex);
 		} else {
 			// The outline and marker exist, so update the  marker.
-			facilityOutlinePath_.setAt(vertex['DrawOrder'], latLng);
-			var vertexData = facilityOutlineVertices_[vertex['DrawOrder']];
+			facilityOutlinePath_.setAt(vertex['drawOrder'], latLng);
+			var vertexData = facilityOutlineVertices_[vertex['drawOrder']];
 			vertexData.marker.setPosition(latLng);
 		}
 		setBounds();
 	}
 
 	function handleDeleteFacilityVertexCmd(latLng, vertex) {
-		var vertexData = facilityOutlineVertices_[vertex['DrawOrder']];
-		facilityOutlineVertices_[vertex['DrawOrder']] = undefined;
+		var vertexData = facilityOutlineVertices_[vertex['drawOrder']];
+		facilityOutlineVertices_[vertex['drawOrder']] = undefined;
 
 		if (vertexData !== undefined) {
 			vertexData.marker.setMap(null);
-			facilityOutlinePath_.setAt(vertex['DrawOrder'], undefined);
+			facilityOutlinePath_.setAt(vertex['drawOrder'], undefined);
 
-			if (vertex['DrawOrder'] === 0) {
+			if (vertex['drawOrder'] === 0) {
 				facilityAnchorMarker_ = undefined;
 			}
 		}
@@ -508,7 +508,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 							// Make sure the class name matches.
 							if (object['className'] === domainobjects.Vertex.className) {
-								var latLng = new google.maps.LatLng(object['PosY'], object['PosX']);
+								var latLng = new google.maps.LatLng(object['posY'], object['posX']);
 
 								if (object['op'] === 'cre') {
 									handleCreateFacilityVertexCmd(latLng, object);
@@ -595,7 +595,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			// Create the filter to listen to all vertex updates for this facility.
 			var data = {
 				'className':     domainobjects.Vertex.className,
-				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder'],
+				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': facility_['persistentId']}

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataObjectField.js,v 1.17 2012/09/16 00:12:47 jeffw Exp $
+ *  $Id: dataObjectField.js,v 1.18 2012/09/23 03:05:40 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
@@ -93,7 +93,7 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 					'className':    className_,
 					'persistentId': classPersistenceId_,
 					'properties':   [
-						{'name': 'Description', 'value': text}
+						{'name': 'description', 'value': text}
 					]
 				};
 

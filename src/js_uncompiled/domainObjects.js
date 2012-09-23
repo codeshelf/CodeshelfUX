@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.19 2012/09/18 06:25:00 jeffw Exp $
+ * $Id: domainObjects.js,v 1.20 2012/09/23 03:05:40 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -11,12 +11,12 @@ domainobjects = {
 		className:  'Organization',
 		properties: {
 			domainId: {
-				id:    'DomainId',
+				id:    'domainId',
 				title: 'ID',
 				width: 25
 			},
 			desc:     {
-				id:    'Description',
+				id:    'description',
 				title: 'Organization Name',
 				width: 100
 			}
@@ -27,27 +27,27 @@ domainobjects = {
 		className:  'Facility',
 		properties: {
 			domainId: {
-				id:    'DomainId',
+				id:    'domainId',
 				title: 'ID',
 				width: 25
 			},
 			parentFullDomainId: {
-				id:    'ParentFullDomainId',
+				id:    'parentFullDomainId',
 				title: 'Parent ID',
 				width: 50
 			},
 			desc:     {
-				id:    'Description',
+				id:    'description',
 				title: 'Facility Name',
 				width: 50
 			}
 //			provider:     {
-//				id:    'ProviderEnum',
+//				id:    'providerEnum',
 //				title: 'Provider',
 //				width: 100
 //			},
 //			serviceState:     {
-//				id:    'ServiceStateEnum',
+//				id:    'serviceStateEnum',
 //				title: 'State',
 //				width: 100
 //			},
@@ -57,7 +57,7 @@ domainobjects = {
 //				width: 100
 //			},
 //			documentState:     {
-//				id:    'DocumentStateEnum',
+//				id:    'documentStateEnum',
 //				title: 'State',
 //				width: 100
 //			}
@@ -68,7 +68,7 @@ domainobjects = {
 		className:  'Location',
 		properties: {
 			domainId: {
-				id:    'DomainId',
+				id:    'domainId',
 				title: 'ID',
 				width: 25
 			}
@@ -79,7 +79,7 @@ domainobjects = {
 		className:  'Vertex',
 		properties: {
 			domainId: {
-				id:    'DomainId',
+				id:    'domainId',
 				title: 'ID',
 				width: 25
 			}
@@ -90,7 +90,7 @@ domainobjects = {
 		className:  'Aisle',
 		properties: {
 			domainId: {
-				id:    'DomainId',
+				id:    'domainId',
 				title: 'ID',
 				width: 25
 			}
@@ -101,7 +101,7 @@ domainobjects = {
 		className:  'Bay',
 		properties: {
 			domainId: {
-				id:    'DomainId',
+				id:    'domainId',
 				title: 'ID',
 				width: 25
 			}
@@ -112,22 +112,22 @@ domainobjects = {
 		className:  'DropboxService',
 		properties: {
 			domainId: {
-				id:    'DomainId',
+				id:    'domainId',
 				title: 'Parent ID',
 				width: 25
 			},
 			parentFullDomainId: {
-				id:    'ParentFullDomainId',
+				id:    'parentFullDomainId',
 				title: 'Parent ID',
 				width: 50
 			},
 			provider:     {
-				id:    'ProviderEnum',
+				id:    'providerEnum',
 				title: 'Provider',
 				width: 40
 			},
 			serviceState:     {
-				id:    'ServiceStateEnum',
+				id:    'serviceStateEnum',
 				title: 'Service State',
 				width: 40
 			}
@@ -138,22 +138,22 @@ domainobjects = {
 		className:  'EdiDocumentLocator',
 		properties: {
 			domainId: {
-				id:    'DomainId',
+				id:    'domainId',
 				title: 'Parent ID',
 				width: 25
 			},
 			parentFullDomainId: {
-				id:    'ParentFullDomainId',
+				id:    'parentFullDomainId',
 				title: 'ID',
 				width: 50
 			},
 			documentState:     {
-				id:    'DocumentStateEnum',
+				id:    'documentStateEnum',
 				title: 'Doc State',
 				width: 40
 			},
 			documentName:     {
-				id:    'DocumentName',
+				id:    'documentName',
 				title: 'Document Name',
 				width: 100
 			}

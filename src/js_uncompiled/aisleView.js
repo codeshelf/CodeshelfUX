@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.15 2012/09/18 06:25:00 jeffw Exp $
+ *  $Id: aisleView.js,v 1.16 2012/09/23 03:05:40 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -111,17 +111,17 @@ codeshelf.aisleview = function(websession, aisle) {
 			var bayData = {};
 			bayData['bay'] = bay;
 
-			bayData['bayElement'] = soy.renderAsElement(codeshelf.templates.bayView, {id: bay['DomainId']});
+			bayData['bayElement'] = soy.renderAsElement(codeshelf.templates.bayView, {id: bay['domainId']});
 			goog.dom.appendChild(self.getMainPaneElement(), bayData['bayElement']);
-			bayData['bayElement'].style.left = (parseInt(self.getMainPaneElement().style.left) + (bay['PosX'] * self.getPixelsPerMeter())) + 'px';
-			bayData['bayElement'].style.top = (parseInt(self.getMainPaneElement().style.top) + (bay['PosY'] * self.getPixelsPerMeter())) + 'px';
+			bayData['bayElement'].style.left = (parseInt(self.getMainPaneElement().style.left) + (bay['posX'] * self.getPixelsPerMeter())) + 'px';
+			bayData['bayElement'].style.top = (parseInt(self.getMainPaneElement().style.top) + (bay['posY'] * self.getPixelsPerMeter())) + 'px';
 
 			bays_[bay['persistentId']] = bayData;
 
 			// Create the filter to listen to all vertex updates for this facility.
 			var vertexFilterData = {
 				'className':     domainobjects.Vertex.className,
-				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'DrawOrder', 'ParentPersistentId'],
+				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': bay['persistentId']}
@@ -240,7 +240,7 @@ codeshelf.aisleview = function(websession, aisle) {
 			// Create the filter to listen to all bay updates for this aisle.
 			var data = {
 				'className':     domainobjects.Bay.className,
-				'propertyNames': ['DomainId', 'PosType', 'PosX', 'PosY', 'PosZ'],
+				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'posZ'],
 				'filterClause':  'parent.persistentId = :theId AND posZ = 0',
 				'filterParams':  [
 					{ 'name': "theId", 'value': aisle_['persistentId']}
@@ -289,8 +289,8 @@ codeshelf.aisleview = function(websession, aisle) {
 				if (bays_.hasOwnProperty(bayKey)) {
 					var bayData = bays_[bayKey];
 
-					bayData['bayElement'].style.left = (/* parseInt(self.getMainPaneElement().style.left) + */ (bayData['bay']['PosX'] * self.getPixelsPerMeter())) + 'px';
-					bayData['bayElement'].style.top = (/* parseInt(self.getMainPaneElement().style.top) + */ (bayData['bay']['PosY'] * self.getPixelsPerMeter())) + 'px';
+					bayData['bayElement'].style.left = (/* parseInt(self.getMainPaneElement().style.left) + */ (bayData['bay']['posX'] * self.getPixelsPerMeter())) + 'px';
+					bayData['bayElement'].style.top = (/* parseInt(self.getMainPaneElement().style.top) + */ (bayData['bay']['posY'] * self.getPixelsPerMeter())) + 'px';
 
 					// If this is the lowest bay, and there are at least four vertices then draw the bay.
 					if ((bayData['bay'].PosZ === 0) && (Object.size(bayData.vertices) >= 4)) {

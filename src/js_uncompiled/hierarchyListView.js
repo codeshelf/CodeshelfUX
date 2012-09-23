@@ -48,8 +48,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 		// First figure out if they are at the same level.
 
-		var levelKeyA = itemA['ParentFullDomainId'];
-		var levelKeyB = itemB['ParentFullDomainId'];
+		var levelKeyA = itemA['parentFullDomainId'];
+		var levelKeyB = itemB['parentFullDomainId'];
 
 		if (levelKeyA == levelKeyB) {
 			var columnIndex = grid_.getColumnIndexArray();
@@ -84,7 +84,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 						if ((object['op'] === 'cre') || (object['op'] === 'upd')) {
 							for (var j = 0; j < (hierarchyMap_.length - 1); j++) {
 								if (hierarchyMap_[j] === object['className']) {
-									item = dataView_.getItemById(object['DomainId'])
+									item = dataView_.getItemById(object['domainId'])
 									if (item === undefined) {
 										var filter = 'parent.persistentId = :theId';
 										var filterParams = [
@@ -108,14 +108,14 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 						if (object['op'] === 'cre') {
 							dataView_.addItem(object);
 						} else if (object['op'] === 'upd') {
-							var item = dataView_.getItemById(object['DomainId']);
+							var item = dataView_.getItemById(object['domainId']);
 							if (item === undefined) {
 								dataView_.addItem(object);
 							} else {
-								dataView_.updateItem(object['DomainId'], object);
+								dataView_.updateItem(object['domainId'], object);
 							}
 						} else if (object['op'] === 'del') {
-							dataView_.deleteItem(object['DomainId']);
+							dataView_.deleteItem(object['domainId']);
 						}
 					}
 					dataView_.sort(comparer, sortdir_);
@@ -132,24 +132,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 				if (!command['data'].hasOwnProperty('results')) {
 					alert('response has no result');
 				} else {
-					if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command['data']['results'].length; i++) {
-							var object = command['data']['results'][i];
-
-							if (object['className'] === domainobjects.Vertex.className) {
-								// Vertex updates.
-								if (object['op'] === 'cre') {
-									handleUpdateFacilityVertexCmd(object['PosY'], object['PosX'], object);
-								} else if (object['op'] === 'upd') {
-									handleUpdateFacilityVertexCmd(object['PosY'], object['PosX'], object);
-								} else if (object['op'] === 'dl') {
-									handleDeleteFacilityVertexCmd(object['PosY'], object['PosX'], object);
-								}
-							}
-						}
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+					if (command['type'] == kWebSessionCommandType.OBJECT_METHOD_RESP) {
+						var url = command['data']['results'];
+						window.open(url, '_blank');
+						window.focus();
 					}
 				}
 			}
@@ -226,7 +212,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 
-			grid_.onClick.subscribe(function (e) {
+			grid_.onClick.subscribe(function(e) {
 				var cell = grid_.getCellFromEvent(e);
 //				if (grid.getColumns()[cell.cell].id == "priority") {
 //					var states = { "Low": "Medium", "Medium": "High", "High": "Low" };
@@ -248,7 +234,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 							// Call Facility.createAisle();
 							var data = {
 								'className':    domainobjects.Facility.className,
-								'persistentId': facility_['persistentId'],
+								'persistentId': 1,
 								'methodName':   'linkDropbox',
 								'methodArgs':   [
 								]
@@ -339,7 +325,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 			var h_runfilters = null;
 
 			var data = [];
-			data.getItemMetadata = function (row) {
+			data.getItemMetadata = function(row) {
 				if (row % 2 === 1) {
 					return {
 						"columns": {
@@ -361,7 +347,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 			// initialize the model after all the events have been hooked up
 			dataView_.beginUpdate();
-			dataView_.setItems([], 'DomainId');
+			dataView_.setItems([], 'domainId');
 			dataView_.setFilterArgs({
 				percentCompleteThreshold: percentCompleteThreshold_,
 				searchString:             searchString_

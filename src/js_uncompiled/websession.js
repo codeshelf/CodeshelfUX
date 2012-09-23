@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.24 2012/09/16 00:12:47 jeffw Exp $
+ *  $Id: websession.js,v 1.25 2012/09/23 03:05:40 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.events');
@@ -71,7 +71,10 @@ codeshelf.websession = function() {
 			 */
 
 			function linearBackOff() {
-				return (connectAttempts_++ * 1000) + 1000;
+				if (connectAttempts_ < 10) {
+					connectAttempts_++;
+				}
+				return (connectAttempts_ * 1000);
 			}
 
 			websocket_ = new goog.net.WebSocket(true, linearBackOff);
