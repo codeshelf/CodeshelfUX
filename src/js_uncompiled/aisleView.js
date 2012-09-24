@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.16 2012/09/23 03:05:40 jeffw Exp $
+ *  $Id: aisleView.js,v 1.17 2012/09/24 17:07:42 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -96,8 +96,8 @@ codeshelf.aisleview = function(websession, aisle) {
 	 */
 	function convertBayVertexToPoint(bayElement, vertex) {
 		var point = {};
-		point.x = parseInt(bayElement.style.left) + (vertex.PosX * self.getPixelsPerMeter());
-		point.y = parseInt(bayElement.style.top) + (vertex.PosY * self.getPixelsPerMeter());
+		point.x = parseInt(bayElement.style.left) + (vertex['posX'] * self.getPixelsPerMeter());
+		point.y = parseInt(bayElement.style.top) + (vertex['posY'] * self.getPixelsPerMeter());
 		return point;
 	}
 
@@ -150,13 +150,13 @@ codeshelf.aisleview = function(websession, aisle) {
 	 * @param {Object} bayvertex The updated bay vertex.
 	 */
 	function handleUpdateBayVertexCmd(bayVertex) {
-		var bayPersistentId = bayVertex.ParentPersistentId;
+		var bayPersistentId = bayVertex['parentPersistentId'];
 		if (bays_[bayPersistentId] !== undefined) {
 			bayData = bays_[bayPersistentId];
 			if (bayData.vertices === undefined) {
 				bayData.vertices = [];
 			}
-			bayData.vertices[bayVertex.DrawOrder] = bayVertex;
+			bayData.vertices[bayVertex['drawOrder']] = bayVertex;
 			self.invalidate(bayData['bay']);
 		}
 	}
@@ -293,7 +293,7 @@ codeshelf.aisleview = function(websession, aisle) {
 					bayData['bayElement'].style.top = (/* parseInt(self.getMainPaneElement().style.top) + */ (bayData['bay']['posY'] * self.getPixelsPerMeter())) + 'px';
 
 					// If this is the lowest bay, and there are at least four vertices then draw the bay.
-					if ((bayData['bay'].PosZ === 0) && (Object.size(bayData.vertices) >= 4)) {
+					if ((bayData['bay']['posZ'] === 0) && (Object.size(bayData.vertices) >= 4)) {
 						var bayPath = computeBayPath(bayData);
 						var stroke = new goog.graphics.Stroke(0.5, 'black');
 						var fill = new goog.graphics.SolidFill('white', 0.2);
