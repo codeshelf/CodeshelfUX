@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.20 2012/09/23 03:05:40 jeffw Exp $
+ * $Id: domainObjects.js,v 1.21 2012/09/24 16:10:02 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -103,6 +103,53 @@ domainobjects = {
 			domainId: {
 				id:    'domainId',
 				title: 'ID',
+				width: 25
+			}
+		}
+	},
+
+	OrderHeader: {
+		className:  'OrderHeader',
+		properties: {
+			domainId: {
+				id:    'domainId',
+				title: 'ID',
+				width: 25
+			},
+			orderId: {
+				id:    'orderId',
+				title: 'Order ID',
+				width: 25
+			}
+		}
+	},
+
+	OrderDetail: {
+		className:  'OrderDetail',
+		properties: {
+			domainId: {
+				id:    'domainId',
+				title: 'ID',
+				width: 25
+			},
+			detailId: {
+				id:    'detailId',
+				title: 'Detail ID',
+				width: 25
+			},
+			sku: {
+				id:    'sku',
+				title: 'SKU',
+				width: 25
+			},
+			description: {
+				id:    'description',
+				title: 'Description',
+				width: 25
+			},
+			quantity: {
+				id:    'quantity',
+				title: 'Qty',
 				width: 25
 			}
 		}

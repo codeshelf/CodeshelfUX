@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.40 2012/09/18 06:25:00 jeffw Exp $
+ *  $Id: mainPage.js,v 1.41 2012/09/24 16:10:02 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('domainobjects');
@@ -86,6 +86,19 @@ codeshelf.mainpage = function() {
 									var ediServicesView = codeshelf.hierarchylistview(websession_, domainobjects.Facility, filter, filterParams, hierarchyMap);
 									var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView, frame_, undefined);
 									ediServicesWindow.open();
+
+									var hierarchyMap = [];
+									hierarchyMap[0] = domainobjects.OrderHeader.className;
+									hierarchyMap[1] = domainobjects.OrderDetail.className;
+
+									var filter = 'parent.persistentId = :theId';
+									var filterParams = [
+										{ 'name': "theId", 'value': facility['persistentId']}
+									]
+
+									var ordersView = codeshelf.hierarchylistview(websession_, domainobjects.OrderHeader, filter, filterParams, hierarchyMap);
+									var ordersWindow = codeshelf.window('Orders', ordersView, frame_, undefined);
+									ordersWindow.open();
 								}
 								catch
 									(err) {
