@@ -234,7 +234,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 							// Call Facility.createAisle();
 							var data = {
 								'className':    domainobjects.Facility.className,
-								'persistentId': 1,
+								'persistentId': 2,
 								'methodName':   'linkDropbox',
 								'methodArgs':   [
 								]
