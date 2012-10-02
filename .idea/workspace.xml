@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c319b0c7-b9cf-46f5-90a5-b0a625c84957" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/aisleView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/aisleView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" />
     </list>
     <ignored path="CodeShelfUX.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,25 +41,25 @@
       <file leaf-file-name="workAreaEditorView.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="392" column="63" selection-start="14013" selection-end="14031" vertical-scroll-proportion="-11.072727">
+            <state line="392" column="63" selection-start="14013" selection-end="14031" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="aisleView.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="aisleView.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/aisleView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="99" column="66" selection-start="3069" selection-end="3069" vertical-scroll-proportion="0.1877979">
+            <state line="99" column="66" selection-start="3069" selection-end="3069" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="hierarchyListView.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="hierarchyListView.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="236" column="49" selection-start="7710" selection-end="7710" vertical-scroll-proportion="0.0">
+            <state line="233" column="56" selection-start="7603" selection-end="7603" vertical-scroll-proportion="0.4003623">
               <folding />
             </state>
           </provider>
@@ -95,10 +96,10 @@
         <option value="$PROJECT_DIR$/src/js_uncompiled/websession.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/domainObjects.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/aisleView.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" />
       </list>
     </option>
   </component>
@@ -115,19 +116,19 @@
             <id />
           </State>
           <State>
+            <id>Assignment issuesJavaScript</id>
+          </State>
+          <State>
             <id>Bitwise operation issuesJavaScript</id>
           </State>
           <State>
-            <id>Code style issuesJavaScript</id>
+            <id>CSS</id>
           </State>
           <State>
             <id>Control flow issuesJavaScript</id>
           </State>
           <State>
             <id>DOM issuesJavaScript</id>
-          </State>
-          <State>
-            <id>Data flow issuesJavaScript</id>
           </State>
           <State>
             <id>Error handlingJavaScript</id>
@@ -142,10 +143,7 @@
             <id>JavaScript</id>
           </State>
           <State>
-            <id>JavaScript function metricsJavaScript</id>
-          </State>
-          <State>
-            <id>JsTestDriverJavaScript</id>
+            <id>Naming conventionsJavaScript</id>
           </State>
           <State>
             <id>Node.jsJavaScript</id>
@@ -160,20 +158,12 @@
             <id>RELAX NG</id>
           </State>
           <State>
-            <id>XML</id>
-          </State>
-          <State>
             <id>XPath</id>
           </State>
           <State>
             <id>XSLT</id>
           </State>
         </expanded-state>
-        <selected-state>
-          <State>
-            <id>CSS</id>
-          </State>
-        </selected-state>
       </profile-state>
     </entry>
   </component>
@@ -300,18 +290,18 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="options.splitter.main.proportions" value="0.3" />
     <property name="JavaScriptWeakerCompletionTypeGuess" value="false" />
+    <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="options.lastSelected" value="reference.settingsdialog.IDE.editor.colors.Font" />
     <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="Errors" />
     <property name="JavaScriptLanguageLevel" value="ES5" />
     <property name="FullScreen" value="false" />
     <property name="DefaultHtmlFileTemplate" value="Xhtml" />
     <property name="JavaScriptPreferStrict" value="false" />
-    <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2547847" />
     <property name="GoToClass.includeJavaFiles" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2547847" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -409,8 +399,8 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972324" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18802084" sideWeight="0.43678162" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18802084" sideWeight="0.5570292" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18802084" sideWeight="0.44031832" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18802084" sideWeight="0.5534925" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32979664" sideWeight="0.5" order="13" side_tool="true" content_ui="tabs" />
@@ -575,9 +565,23 @@
         <state line="34" column="22" selection-start="1676" selection-end="1676" vertical-scroll-proportion="0.11275416" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/domainObjects.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="236" column="49" selection-start="7710" selection-end="7710" vertical-scroll-proportion="0.0">
+        <state line="153" column="13" selection-start="2544" selection-end="2544" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="392" column="63" selection-start="14013" selection-end="14031" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/aisleView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="99" column="66" selection-start="3069" selection-end="3069" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -589,23 +593,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/domainObjects.js">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="153" column="13" selection-start="2544" selection-end="2544" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="392" column="63" selection-start="14013" selection-end="14031" vertical-scroll-proportion="-11.072727">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/aisleView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="99" column="66" selection-start="3069" selection-end="3069" vertical-scroll-proportion="0.1877979">
+        <state line="233" column="56" selection-start="7603" selection-end="7603" vertical-scroll-proportion="0.4003623">
           <folding />
         </state>
       </provider>

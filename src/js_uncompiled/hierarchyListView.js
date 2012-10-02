@@ -231,10 +231,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 				dataEntryDialog.open(function(event, dialog) {
 						if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.OK.key) {
 
-							// Call Facility.createAisle();
+							// Call Facility.linkDropbox();
 							var data = {
 								'className':    domainobjects.Facility.className,
-								'persistentId': 2,
+								'persistentId': 1,
 								'methodName':   'linkDropbox',
 								'methodArgs':   [
 								]
