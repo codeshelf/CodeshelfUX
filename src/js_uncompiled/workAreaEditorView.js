@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.46 2012/09/23 03:05:40 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.47 2012/10/05 21:01:39 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -353,7 +353,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			var aisleData = {};
 
 			// Create and populate the aisle's data record.
-			aisleData.aisleElement = soy.renderAsElement(codeshelf.templates.aisleView, {id: aisle['domainId']});
+			aisleData.aisleElement = soy.renderAsElement(codeshelf.templates.aisleView, {id: aisle['shortDomainId']});
 			aisleData.aisleElement.style.left = Math.round(aisle['posX'] * self.getPixelsPerMeter()) + 'px';
 			aisleData.aisleElement.style.top = Math.round(aisle['posY'] * self.getPixelsPerMeter()) + 'px';
 			goog.dom.appendChild(workAreaEditorPane_, aisleData.aisleElement);
@@ -368,7 +368,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			// Create the filter to listen to all vertex updates for this aisle.
 			var vertexFilterData = {
 				'className':     domainobjects.Vertex.className,
-				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
+				'propertyNames': ['shortDomainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': aisle['persistentId']}
@@ -588,7 +588,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			// Create the filter to listen to all vertex updates for this facility.
 			var vertexFilterData = {
 				'className':     domainobjects.Vertex.className,
-				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder'],
+				'propertyNames': ['shortDomainId', 'posType', 'posX', 'posY', 'drawOrder'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': facility_['persistentId']}
@@ -601,7 +601,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			// Create the filter to listen to all aisle updates for this facility.
 			var aisleFilterData = {
 				'className':     domainobjects.Aisle.className,
-				'propertyNames': ['domainId', 'posX', 'posY'],
+				'propertyNames': ['shortDomainId', 'posX', 'posY'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': facility_['persistentId']}

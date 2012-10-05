@@ -84,7 +84,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 						if ((object['op'] === 'cre') || (object['op'] === 'upd')) {
 							for (var j = 0; j < (hierarchyMap_.length - 1); j++) {
 								if (hierarchyMap_[j] === object['className']) {
-									item = dataView_.getItemById(object['domainId'])
+									item = dataView_.getItemById(object['shortDomainId'])
 									if (item === undefined) {
 										var filter = 'parent.persistentId = :theId';
 										var filterParams = [
@@ -108,14 +108,14 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 						if (object['op'] === 'cre') {
 							dataView_.addItem(object);
 						} else if (object['op'] === 'upd') {
-							var item = dataView_.getItemById(object['domainId']);
+							var item = dataView_.getItemById(object['shortDomainId']);
 							if (item === undefined) {
 								dataView_.addItem(object);
 							} else {
-								dataView_.updateItem(object['domainId'], object);
+								dataView_.updateItem(object['shortDomainId'], object);
 							}
 						} else if (object['op'] === 'del') {
-							dataView_.deleteItem(object['domainId']);
+							dataView_.deleteItem(object['shortDomainId']);
 						}
 					}
 					dataView_.sort(comparer, sortdir_);
@@ -347,7 +347,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 			// initialize the model after all the events have been hooked up
 			dataView_.beginUpdate();
-			dataView_.setItems([], 'domainId');
+			dataView_.setItems([], 'shortDomainId');
 			dataView_.setFilterArgs({
 				percentCompleteThreshold: percentCompleteThreshold_,
 				searchString:             searchString_

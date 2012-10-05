@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: initializeNewClient.js,v 1.14 2012/09/23 03:05:40 jeffw Exp $
+ *  $Id: initializeNewClient.js,v 1.15 2012/10/05 21:01:39 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.initializenewclient');
 goog.require('codeshelf.templates');
@@ -57,7 +57,7 @@ codeshelf.initializenewclient = function() {
 				'parentPersistentId': organization_.persistentId,
 				'className':          domainobjects.Facility.className,
 				'properties':         [
-					{'name': 'domainId', 'value': 'F1'},
+					{'name': 'shortDomainId', 'value': 'F1'},
 					{'name': 'description', 'value': 'First Facility'},
 					{'name': 'PosTypeByStr', 'value': 'GPS'},
 					{'name': 'posX', 'value': longitude},

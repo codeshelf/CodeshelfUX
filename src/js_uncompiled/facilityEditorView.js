@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.25 2012/09/23 03:05:40 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.26 2012/10/05 21:01:38 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -69,7 +69,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 					'parentPersistentId': facility_['persistentId'],
 					'className':          domainobjects.Vertex.className,
 					'properties':         [
-						{name: 'domainId', value: 'V' + vertexNum},
+						{name: 'shortDomainId', value: 'V' + vertexNum},
 						//{name:'description', 'value':'First Facility'},
 						{name: 'PosTypeByStr', 'value': 'GPS'},
 						{name: 'posX', 'value': event.latLng.lng()},
@@ -226,7 +226,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 		var vertexData = {marker: marker, Vertex: vertex};
 		facilityOutlineVertices_[vertex['drawOrder']] = vertexData;
-		marker.setTitle(vertex['domainId']);
+		marker.setTitle(vertex['shortDomainId']);
 
 		// Add a drag handler to the marker.
 		google.maps.event.addListener(marker, 'dragend', function() {
@@ -595,7 +595,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			// Create the filter to listen to all vertex updates for this facility.
 			var data = {
 				'className':     domainobjects.Vertex.className,
-				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder'],
+				'propertyNames': ['shortDomainId', 'posType', 'posX', 'posY', 'drawOrder'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': facility_['persistentId']}

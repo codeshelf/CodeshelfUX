@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.21 2012/09/24 16:10:02 jeffw Exp $
+ * $Id: domainObjects.js,v 1.22 2012/10/05 21:01:38 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -11,7 +11,7 @@ domainobjects = {
 		className:  'Organization',
 		properties: {
 			domainId: {
-				id:    'domainId',
+				id:    'shortDomainId',
 				title: 'ID',
 				width: 25
 			},
@@ -27,7 +27,7 @@ domainobjects = {
 		className:  'Facility',
 		properties: {
 			domainId: {
-				id:    'domainId',
+				id:    'shortDomainId',
 				title: 'ID',
 				width: 25
 			},
@@ -68,7 +68,7 @@ domainobjects = {
 		className:  'Location',
 		properties: {
 			domainId: {
-				id:    'domainId',
+				id:    'shortDomainId',
 				title: 'ID',
 				width: 25
 			}
@@ -79,7 +79,7 @@ domainobjects = {
 		className:  'Vertex',
 		properties: {
 			domainId: {
-				id:    'domainId',
+				id:    'shortDomainId',
 				title: 'ID',
 				width: 25
 			}
@@ -90,7 +90,7 @@ domainobjects = {
 		className:  'Aisle',
 		properties: {
 			domainId: {
-				id:    'domainId',
+				id:    'shortDomainId',
 				title: 'ID',
 				width: 25
 			}
@@ -101,7 +101,7 @@ domainobjects = {
 		className:  'Bay',
 		properties: {
 			domainId: {
-				id:    'domainId',
+				id:    'shortDomainId',
 				title: 'ID',
 				width: 25
 			}
@@ -112,7 +112,7 @@ domainobjects = {
 		className:  'OrderHeader',
 		properties: {
 			domainId: {
-				id:    'domainId',
+				id:    'shortDomainId',
 				title: 'ID',
 				width: 25
 			},
@@ -128,7 +128,7 @@ domainobjects = {
 		className:  'OrderDetail',
 		properties: {
 			domainId: {
-				id:    'domainId',
+				id:    'shortDomainId',
 				title: 'ID',
 				width: 25
 			},
@@ -159,7 +159,7 @@ domainobjects = {
 		className:  'DropboxService',
 		properties: {
 			domainId: {
-				id:    'domainId',
+				id:    'shortDomainId',
 				title: 'Parent ID',
 				width: 25
 			},
@@ -185,7 +185,7 @@ domainobjects = {
 		className:  'EdiDocumentLocator',
 		properties: {
 			domainId: {
-				id:    'domainId',
+				id:    'shortDomainId',
 				title: 'Parent ID',
 				width: 25
 			},

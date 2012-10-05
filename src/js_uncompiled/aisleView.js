@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.17 2012/09/24 17:07:42 jeffw Exp $
+ *  $Id: aisleView.js,v 1.18 2012/10/05 21:01:39 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -111,7 +111,7 @@ codeshelf.aisleview = function(websession, aisle) {
 			var bayData = {};
 			bayData['bay'] = bay;
 
-			bayData['bayElement'] = soy.renderAsElement(codeshelf.templates.bayView, {id: bay['domainId']});
+			bayData['bayElement'] = soy.renderAsElement(codeshelf.templates.bayView, {id: bay['shortDomainId']});
 			goog.dom.appendChild(self.getMainPaneElement(), bayData['bayElement']);
 			bayData['bayElement'].style.left = (parseInt(self.getMainPaneElement().style.left) + (bay['posX'] * self.getPixelsPerMeter())) + 'px';
 			bayData['bayElement'].style.top = (parseInt(self.getMainPaneElement().style.top) + (bay['posY'] * self.getPixelsPerMeter())) + 'px';
@@ -121,7 +121,7 @@ codeshelf.aisleview = function(websession, aisle) {
 			// Create the filter to listen to all vertex updates for this facility.
 			var vertexFilterData = {
 				'className':     domainobjects.Vertex.className,
-				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
+				'propertyNames': ['shortDomainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': bay['persistentId']}
@@ -240,7 +240,7 @@ codeshelf.aisleview = function(websession, aisle) {
 			// Create the filter to listen to all bay updates for this aisle.
 			var data = {
 				'className':     domainobjects.Bay.className,
-				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'posZ'],
+				'propertyNames': ['shortDomainId', 'posType', 'posX', 'posY', 'posZ'],
 				'filterClause':  'parent.persistentId = :theId AND posZ = 0',
 				'filterParams':  [
 					{ 'name': "theId", 'value': aisle_['persistentId']}
