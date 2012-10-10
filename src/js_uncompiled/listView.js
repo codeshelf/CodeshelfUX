@@ -36,6 +36,8 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 	var percentCompleteThreshold_;
 	var searchString_;
 
+	var menu_;
+
 	function comparer(a, b) {
 		var columnIndex = grid_.getColumnIndexArray();
 		for (var columnId in columnIndex) {
@@ -124,6 +126,8 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 			grid_ = new $.Slick.Grid(self.getMainPaneElement(), dataView_, columns_, options_);
 			grid_.setSelectionModel(new $.Slick.RowSelectionModel());
 
+			goog.dom.appendChild(self.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listViewContextMenu));
+
 			var columnpicker = new $.Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
 			var data = {
@@ -135,6 +139,12 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+
+			menu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document.body);
+
+			menu_.bind("mouseleave", function(e) { $(this).fadeOut(5)});//options['fadeSpeed']) });
+//			menu_.bind("click", updateColumn);
+
 
 			grid_.onKeyDown.subscribe(function(e) {
 				// select all rows on ctrl-a
@@ -151,6 +161,49 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 
 				grid_.setSelectedRows(rows);
 				e.preventDefault();
+			});
+
+			grid_.onContextMenu.subscribe(function (e) {
+				if (e && e.stopPropagation)
+					e.stopPropagation();
+//				e.preventDefault();
+//				var cell = grid_.getCellFromEvent(e);
+//				$("#contextMenu")
+//					.data("row", cell.row)
+//					.css("top", e.offsetY)
+//					.css("left", e.offsetX)
+//					.show();
+//
+//				$("body").one("click", function () {
+//					$("#contextMenu").hide();
+//				});
+
+				e.preventDefault();
+				menu_.empty();
+
+				var $li, $input;
+				for (var i=0; i<columns_.length; i++) {
+					$li = $("<li />").appendTo(menu_);
+
+					$input = $("<input type='checkbox' />")
+						.attr("id", "columnpicker_" + i)
+						.data("id", columns_[i].id)
+						.appendTo($li);
+
+					if (grid_.getColumnIndex(columns_[i].id) != null)
+						$input.attr("checked","checked");
+
+					$("<label for='columnpicker_" + i + "' />")
+						.text(columns_[i].name)
+						.appendTo($li);
+				}
+
+
+				menu_
+					.css("top", e.pageY - 10)
+					.css("left", e.pageX - 10)
+					.fadeIn(5);//options['fadeSpeed']);
+
 			});
 
 			grid_.onColumnsReordered.subscribe(function(e) {
