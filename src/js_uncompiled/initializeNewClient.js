@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: initializeNewClient.js,v 1.15 2012/10/05 21:01:39 jeffw Exp $
+ *  $Id: initializeNewClient.js,v 1.16 2012/10/16 06:23:22 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.initializenewclient');
 goog.require('codeshelf.templates');
@@ -53,20 +53,20 @@ codeshelf.initializenewclient = function() {
 
 		createFacility: function(longitude, latitude) {
 			var data = {
-				'parentClassName':    domainobjects.Organization.className,
-				'parentPersistentId': organization_.persistentId,
-				'className':          domainobjects.Facility.className,
-				'properties':         [
-					{'name': 'shortDomainId', 'value': 'F1'},
-					{'name': 'description', 'value': 'First Facility'},
-					{'name': 'PosTypeByStr', 'value': 'GPS'},
-					{'name': 'posX', 'value': longitude},
-					{'name': 'posY', 'value': latitude}
+				'className':    domainobjects.Organization.className,
+				'persistentId': organization_.persistentId,
+				'methodName':   'createFacility',
+				'methodArgs':         [
+					{'name': 'shortDomainId', 'value': 'F1', 'classType' : 'java.lang.String'},
+					{'name': 'description', 'value': 'First Facility', 'classType' : 'java.lang.String'},
+					{'name': 'posTypeByStr', 'value': 'GPS', 'classType' : 'java.lang.String'},
+					{'name': 'posX', 'value': longitude, 'classType' : 'java.lang.Double'},
+					{'name': 'posY', 'value': latitude, 'classType' : 'java.lang.Double'}
 				]
 			}
 
-			var newFacilityCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_CREATE_REQ, data);
-			websession_.sendCommand(newFacilityCmd, thisInitializeNewClient_.websocketCmdCallback(kWebSessionCommandType.OBJECT_CREATE_RESP), false);
+			var newFacilityCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+			websession_.sendCommand(newFacilityCmd, thisInitializeNewClient_.websocketCmdCallback(kWebSessionCommandType.OBJECT_METHOD_RESP), false);
 		},
 
 		websocketCmdCallback: function(expectedResponseType) {

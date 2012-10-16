@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.25 2012/09/23 03:05:40 jeffw Exp $
+ *  $Id: websession.js,v 1.26 2012/10/16 06:23:22 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.events');
@@ -19,8 +19,6 @@ var kWebSessionCommandType = {
 	LAUNCH_CODE_RESP:     'LAUNCH_CODE_RS',
 	OBJECT_GETTER_REQ:    'OBJ_GET_RQ',
 	OBJECT_GETTER_RESP:   'OBJ_GET_RS',
-	OBJECT_CREATE_REQ:    'OBJ_CRE_RQ',
-	OBJECT_CREATE_RESP:   'OBJ_CRE_RS',
 	OBJECT_UPDATE_REQ:    'OBJ_UPD_RQ',
 	OBJECT_UPDATE_RESP:   'OBJ_UPD_RS',
 	OBJECT_DELETE_REQ:    'OBJ_DEL_RQ',

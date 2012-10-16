@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.26 2012/10/05 21:01:38 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.27 2012/10/16 06:23:22 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -65,21 +65,20 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				// then extend or shorten this segment to make it exactly 90deg.
 
 				var data = {
-					'parentClassName':    domainobjects.Facility.className,
-					'parentPersistentId': facility_['persistentId'],
-					'className':          domainobjects.Vertex.className,
-					'properties':         [
-						{name: 'shortDomainId', value: 'V' + vertexNum},
-						//{name:'description', 'value':'First Facility'},
-						{name: 'PosTypeByStr', 'value': 'GPS'},
-						{name: 'posX', 'value': event.latLng.lng()},
-						{name: 'posY', 'value': event.latLng.lat()},
-						{name: 'drawOrder', 'value': vertexNum}
+					'className':    domainobjects.Facility.className,
+					'persistentId': facility_['persistentId'],
+					'methodName':   'createVertex',
+					'methodArgs':         [
+						{name: 'shortDomainId', value: 'V' + vertexNum, 'classType': 'java.lang.String'},
+						{name: 'PosTypeByStr', 'value': 'GPS', 'classType': 'java.lang.String'},
+						{name: 'posX', 'value': event.latLng.lng(), 'classType': 'java.lang.Double'},
+						{name: 'posY', 'value': event.latLng.lat(), 'classType': 'java.lang.Double'},
+						{name: 'drawOrder', 'value': vertexNum, 'classType': 'java.lang.Integer'}
 					]
 				}
 
-				var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_CREATE_REQ, data);
-				websession_.sendCommand(newVertexCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_CREATE_RESP), false);
+				var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+				websession_.sendCommand(newVertexCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_METHOD_RESP), false);
 
 				// If this was the anchor vertex then set the location of the facility as well.
 				var data = {

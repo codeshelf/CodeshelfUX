@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.41 2012/09/24 16:10:02 jeffw Exp $
+ *  $Id: mainPage.js,v 1.42 2012/10/16 06:23:22 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('domainobjects');
@@ -52,6 +52,18 @@ codeshelf.mainpage = function() {
 						if (command['data']['results'].length === 0) {
 							var clientInitializer = codeshelf.initializenewclient();
 							clientInitializer.start(websession_, application_.getOrganization(), frame_);
+
+							var data = {
+								'className':    organization_['className'],
+								'persistentId': organization_['persistentId'],
+								'getterMethod': 'getFacilities'
+							}
+
+							// Attempt to reload this new facility.
+							var websession = application_.getWebsession();
+							var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
+							websession.sendCommand(getFacilitiesCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
+
 						} else {
 							for (var i = 0; i < command['data']['results'].length; i++) {
 								var facility = command['data']['results'][i];
@@ -104,7 +116,6 @@ codeshelf.mainpage = function() {
 									(err) {
 									alert(err);
 								}
-
 							}
 						}
 					}
