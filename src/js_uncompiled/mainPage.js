@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.42 2012/10/16 06:23:22 jeffw Exp $
+ *  $Id: mainPage.js,v 1.43 2012/10/24 01:01:55 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('domainobjects');
@@ -42,7 +42,7 @@ codeshelf.mainpage = function() {
 		frame_.style.height = size.height - 5 + 'px';
 	}
 
-	function websocketCmdCallback(expectedResponseType) {
+	function websocketCmdCallback() {
 		var callback = {
 			exec: function(command) {
 				if (!command['data'].hasOwnProperty('results')) {

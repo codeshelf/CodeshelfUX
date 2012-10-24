@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.22 2012/10/05 21:01:38 jeffw Exp $
+ * $Id: domainObjects.js,v 1.23 2012/10/24 01:01:55 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -27,7 +27,7 @@ domainobjects = {
 		className:  'Facility',
 		properties: {
 			domainId: {
-				id:    'shortDomainId',
+				id:    'fullDomainId',
 				title: 'ID',
 				width: 25
 			},
@@ -112,14 +112,14 @@ domainobjects = {
 		className:  'OrderHeader',
 		properties: {
 			domainId: {
-				id:    'shortDomainId',
+				id:    'fullDomainId',
 				title: 'ID',
 				width: 25
 			},
 			orderId: {
 				id:    'orderId',
 				title: 'Order ID',
-				width: 25
+				width: 15
 			}
 		}
 	},
@@ -128,29 +128,39 @@ domainobjects = {
 		className:  'OrderDetail',
 		properties: {
 			domainId: {
-				id:    'shortDomainId',
+				id:    'fullDomainId',
 				title: 'ID',
 				width: 25
 			},
 			detailId: {
-				id:    'detailId',
+				id:    'shortDomainId',
 				title: 'Detail ID',
+				width: 15
+			},
+			status: {
+				id:    'statusEnum',
+				title: 'Status',
 				width: 25
 			},
 			sku: {
-				id:    'sku',
+				id:    'itemMasterId',
 				title: 'SKU',
-				width: 25
+				width: 20
 			},
 			description: {
 				id:    'description',
 				title: 'Description',
-				width: 25
+				width: 50
 			},
 			quantity: {
 				id:    'quantity',
 				title: 'Qty',
-				width: 25
+				width: 10
+			},
+			uom: {
+				id:    'uomMasterId',
+				title: 'UOM',
+				width: 10
 			}
 		}
 	},

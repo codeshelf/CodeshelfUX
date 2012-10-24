@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.27 2012/10/16 06:23:22 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.28 2012/10/24 01:01:55 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -477,6 +477,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 	}
 
 	function setBounds() {
+//		map_.setCenter(facilityAnchorMarker_.getPosition());
 		var len = Object.size(facilityOutlineVertices_);
 		if (len > 2) {
 			// Figure out a new bounds for the facility outline.
@@ -491,7 +492,6 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				}
 			}
 			map_.fitBounds(facilityBounds_);
-			//map_.setCenter(facilityAnchorMarker_.getPosition());
 		}
 	}
 

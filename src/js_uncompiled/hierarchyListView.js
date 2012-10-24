@@ -84,7 +84,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 						if ((object['op'] === 'cre') || (object['op'] === 'upd')) {
 							for (var j = 0; j < (hierarchyMap_.length - 1); j++) {
 								if (hierarchyMap_[j] === object['className']) {
-									item = dataView_.getItemById(object['shortDomainId'])
+									item = dataView_.getItemById(object['fullDomainId'])
 									if (item === undefined) {
 										var filter = 'parent.persistentId = :theId';
 										var filterParams = [
@@ -108,14 +108,14 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 						if (object['op'] === 'cre') {
 							dataView_.addItem(object);
 						} else if (object['op'] === 'upd') {
-							var item = dataView_.getItemById(object['shortDomainId']);
+							var item = dataView_.getItemById(object['fullDomainId']);
 							if (item === undefined) {
 								dataView_.addItem(object);
 							} else {
-								dataView_.updateItem(object['shortDomainId'], object);
+								dataView_.updateItem(object['fullDomainId'], object);
 							}
 						} else if (object['op'] === 'del') {
-							dataView_.deleteItem(object['shortDomainId']);
+							dataView_.deleteItem(object['fullDomainId']);
 						}
 					}
 					dataView_.sort(comparer, sortdir_);
