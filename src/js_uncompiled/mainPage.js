@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.43 2012/10/24 01:01:55 jeffw Exp $
+ *  $Id: mainPage.js,v 1.44 2012/10/25 08:32:37 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('domainobjects');
@@ -51,71 +51,11 @@ codeshelf.mainpage = function() {
 					if (command['type'] == kWebSessionCommandType.OBJECT_GETTER_RESP) {
 						if (command['data']['results'].length === 0) {
 							var clientInitializer = codeshelf.initializenewclient();
-							clientInitializer.start(websession_, application_.getOrganization(), frame_);
-
-							var data = {
-								'className':    organization_['className'],
-								'persistentId': organization_['persistentId'],
-								'getterMethod': 'getFacilities'
-							}
-
-							// Attempt to reload this new facility.
-							var websession = application_.getWebsession();
-							var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
-							websession.sendCommand(getFacilitiesCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
-
+							clientInitializer.start(websession_, application_.getOrganization(), frame_, loadFacilityWindows);
 						} else {
 							for (var i = 0; i < command['data']['results'].length; i++) {
 								var facility = command['data']['results'][i];
-								try {
-									// Load the GMaps API and init() when done.
-									if (typeof google !== "undefined") {
-										google.load('maps', '3.8', {'other_params': 'sensor=false', 'callback': function() {
-											var facilityEditorView = codeshelf.facilityeditorview(websession_, application_.getOrganization(), facility);
-											var facilityEditorWindow = codeshelf.window('Facility Editor', facilityEditorView, frame_, undefined);
-											facilityEditorWindow.open();
-										}});
-									}
-
-									var workAreaEditorView = codeshelf.workareaeditorview(websession_, facility);
-									var workAreaEditorWindow = codeshelf.window('Workarea Editor', workAreaEditorView, frame_, undefined);
-									workAreaEditorWindow.open();
-
-//									var ediServicesView = codeshelf.ediservicesview(websession_, facility);
-//									var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView, frame_, undefined);
-//									ediServicesWindow.open();
-
-									var hierarchyMap = [];
-									hierarchyMap[0] = domainobjects.Facility.className;
-									hierarchyMap[1] = domainobjects.DropboxService.className;
-									hierarchyMap[2] = domainobjects.EdiDocumentLocator.className;
-
-									var filter = 'parentOrganization.persistentId = :theId';
-									var filterParams = [
-										{ 'name': "theId", 'value': organization_['persistentId']}
-									]
-
-									var ediServicesView = codeshelf.hierarchylistview(websession_, domainobjects.Facility, filter, filterParams, hierarchyMap);
-									var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView, frame_, undefined);
-									ediServicesWindow.open();
-
-									var hierarchyMap = [];
-									hierarchyMap[0] = domainobjects.OrderHeader.className;
-									hierarchyMap[1] = domainobjects.OrderDetail.className;
-
-									var filter = 'parent.persistentId = :theId';
-									var filterParams = [
-										{ 'name': "theId", 'value': facility['persistentId']}
-									]
-
-									var ordersView = codeshelf.hierarchylistview(websession_, domainobjects.OrderHeader, filter, filterParams, hierarchyMap);
-									var ordersWindow = codeshelf.window('Orders', ordersView, frame_, undefined);
-									ordersWindow.open();
-								}
-								catch
-									(err) {
-									alert(err);
-								}
+								loadFacilityWindows(facility);
 							}
 						}
 					}
@@ -124,6 +64,58 @@ codeshelf.mainpage = function() {
 		}
 
 		return callback;
+	}
+
+	function loadFacilityWindows(facility) {
+		try {
+			// Load the GMaps API and init() when done.
+			if (typeof google !== "undefined") {
+				google.load('maps', '3.8', {'other_params': 'sensor=false', 'callback': function() {
+					var facilityEditorView = codeshelf.facilityeditorview(websession_, application_.getOrganization(), facility);
+					var facilityEditorWindow = codeshelf.window('Facility Editor', facilityEditorView, frame_, undefined);
+					facilityEditorWindow.open();
+				}});
+			}
+
+			var workAreaEditorView = codeshelf.workareaeditorview(websession_, facility);
+			var workAreaEditorWindow = codeshelf.window('Workarea Editor', workAreaEditorView, frame_, undefined);
+			workAreaEditorWindow.open();
+
+//									var ediServicesView = codeshelf.ediservicesview(websession_, facility);
+//									var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView, frame_, undefined);
+//									ediServicesWindow.open();
+
+			var hierarchyMap = [];
+			hierarchyMap[0] = domainobjects.Facility.className;
+			hierarchyMap[1] = domainobjects.DropboxService.className;
+			hierarchyMap[2] = domainobjects.EdiDocumentLocator.className;
+
+			var filter = 'parentOrganization.persistentId = :theId';
+			var filterParams = [
+				{ 'name': "theId", 'value': organization_['persistentId']}
+			]
+
+			var ediServicesView = codeshelf.hierarchylistview(websession_, domainobjects.Facility, filter, filterParams, hierarchyMap);
+			var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView, frame_, undefined);
+			ediServicesWindow.open();
+
+			var hierarchyMap = [];
+			hierarchyMap[0] = domainobjects.OrderHeader.className;
+			hierarchyMap[1] = domainobjects.OrderDetail.className;
+
+			var filter = 'parent.persistentId = :theId';
+			var filterParams = [
+				{ 'name': "theId", 'value': facility['persistentId']}
+			]
+
+			var ordersView = codeshelf.hierarchylistview(websession_, domainobjects.OrderHeader, filter, filterParams, hierarchyMap);
+			var ordersWindow = codeshelf.window('Orders', ordersView, frame_, undefined);
+			ordersWindow.open();
+		}
+		catch
+			(err) {
+			alert(err);
+		}
 	}
 
 
