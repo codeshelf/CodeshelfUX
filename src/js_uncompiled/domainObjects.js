@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.23 2012/10/24 01:01:55 jeffw Exp $
+ * $Id: domainObjects.js,v 1.24 2012/10/30 15:21:33 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -11,7 +11,7 @@ domainobjects = {
 		className:  'Organization',
 		properties: {
 			domainId: {
-				id:    'shortDomainId',
+				id:    'domainId',
 				title: 'ID',
 				width: 25
 			},
@@ -68,7 +68,7 @@ domainobjects = {
 		className:  'Location',
 		properties: {
 			domainId: {
-				id:    'shortDomainId',
+				id:    'domainId',
 				title: 'ID',
 				width: 25
 			}
@@ -79,7 +79,7 @@ domainobjects = {
 		className:  'Vertex',
 		properties: {
 			domainId: {
-				id:    'shortDomainId',
+				id:    'domainId',
 				title: 'ID',
 				width: 25
 			}
@@ -90,7 +90,7 @@ domainobjects = {
 		className:  'Aisle',
 		properties: {
 			domainId: {
-				id:    'shortDomainId',
+				id:    'domainId',
 				title: 'ID',
 				width: 25
 			}
@@ -101,7 +101,7 @@ domainobjects = {
 		className:  'Bay',
 		properties: {
 			domainId: {
-				id:    'shortDomainId',
+				id:    'domainId',
 				title: 'ID',
 				width: 25
 			}
@@ -133,7 +133,7 @@ domainobjects = {
 				width: 25
 			},
 			detailId: {
-				id:    'shortDomainId',
+				id:    'domainId',
 				title: 'Detail ID',
 				width: 15
 			},
@@ -169,7 +169,7 @@ domainobjects = {
 		className:  'DropboxService',
 		properties: {
 			domainId: {
-				id:    'shortDomainId',
+				id:    'domainId',
 				title: 'Parent ID',
 				width: 25
 			},
@@ -195,7 +195,7 @@ domainobjects = {
 		className:  'EdiDocumentLocator',
 		properties: {
 			domainId: {
-				id:    'shortDomainId',
+				id:    'domainId',
 				title: 'Parent ID',
 				width: 25
 			},

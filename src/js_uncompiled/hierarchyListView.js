@@ -347,7 +347,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 			// initialize the model after all the events have been hooked up
 			dataView_.beginUpdate();
-			dataView_.setItems([], 'shortDomainId');
+			dataView_.setItems([], 'domainId');
 			dataView_.setFilterArgs({
 				percentCompleteThreshold: percentCompleteThreshold_,
 				searchString:             searchString_

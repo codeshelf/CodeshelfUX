@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.28 2012/10/24 01:01:55 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.29 2012/10/30 15:21:33 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -69,7 +69,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 					'persistentId': facility_['persistentId'],
 					'methodName':   'createVertex',
 					'methodArgs':         [
-						{name: 'shortDomainId', value: 'V' + vertexNum, 'classType': 'java.lang.String'},
+						{name: 'domainId', value: 'V' + vertexNum, 'classType': 'java.lang.String'},
 						{name: 'PosTypeByStr', 'value': 'GPS', 'classType': 'java.lang.String'},
 						{name: 'posX', 'value': event.latLng.lng(), 'classType': 'java.lang.Double'},
 						{name: 'posY', 'value': event.latLng.lat(), 'classType': 'java.lang.Double'},
@@ -225,7 +225,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 		var vertexData = {marker: marker, Vertex: vertex};
 		facilityOutlineVertices_[vertex['drawOrder']] = vertexData;
-		marker.setTitle(vertex['shortDomainId']);
+		marker.setTitle(vertex['domainId']);
 
 		// Add a drag handler to the marker.
 		google.maps.event.addListener(marker, 'dragend', function() {
@@ -594,7 +594,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			// Create the filter to listen to all vertex updates for this facility.
 			var data = {
 				'className':     domainobjects.Vertex.className,
-				'propertyNames': ['shortDomainId', 'posType', 'posX', 'posY', 'drawOrder'],
+				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': facility_['persistentId']}

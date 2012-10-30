@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: initializeNewClient.js,v 1.17 2012/10/25 08:32:37 jeffw Exp $
+ *  $Id: initializeNewClient.js,v 1.18 2012/10/30 15:21:33 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.initializenewclient');
 goog.require('codeshelf.templates');
@@ -68,7 +68,7 @@ codeshelf.initializenewclient = function() {
 			'persistentId': organization_.persistentId,
 			'methodName':   'createFacility',
 			'methodArgs':   [
-				{'name': 'shortDomainId', 'value': 'F1', 'classType': 'java.lang.String'},
+				{'name': 'domainId', 'value': 'F1', 'classType': 'java.lang.String'},
 				{'name': 'description', 'value': 'First Facility', 'classType': 'java.lang.String'},
 				{'name': 'posTypeByStr', 'value': 'GPS', 'classType': 'java.lang.String'},
 				{'name': 'posX', 'value': longitude, 'classType': 'java.lang.Double'},
