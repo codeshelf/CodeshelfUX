@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.29 2012/10/30 15:21:33 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.30 2012/11/02 20:57:14 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -594,7 +594,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			// Create the filter to listen to all vertex updates for this facility.
 			var data = {
 				'className':     domainobjects.Vertex.className,
-				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder'],
+				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': facility_['persistentId']}

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.19 2012/10/30 15:21:33 jeffw Exp $
+ *  $Id: aisleView.js,v 1.20 2012/11/02 20:57:14 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -121,7 +121,7 @@ codeshelf.aisleview = function(websession, aisle) {
 			// Create the filter to listen to all vertex updates for this facility.
 			var vertexFilterData = {
 				'className':     domainobjects.Vertex.className,
-				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
+				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': bay['persistentId']}
@@ -240,7 +240,7 @@ codeshelf.aisleview = function(websession, aisle) {
 			// Create the filter to listen to all bay updates for this aisle.
 			var data = {
 				'className':     domainobjects.Bay.className,
-				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'posZ'],
+				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'posZ'],
 				'filterClause':  'parent.persistentId = :theId AND posZ = 0',
 				'filterParams':  [
 					{ 'name': "theId", 'value': aisle_['persistentId']}

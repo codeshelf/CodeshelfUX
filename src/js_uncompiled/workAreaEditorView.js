@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.48 2012/10/30 15:21:33 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.49 2012/11/02 20:57:14 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -368,7 +368,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			// Create the filter to listen to all vertex updates for this aisle.
 			var vertexFilterData = {
 				'className':     domainobjects.Vertex.className,
-				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
+				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': aisle['persistentId']}
@@ -588,7 +588,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			// Create the filter to listen to all vertex updates for this facility.
 			var vertexFilterData = {
 				'className':     domainobjects.Vertex.className,
-				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder'],
+				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': facility_['persistentId']}
