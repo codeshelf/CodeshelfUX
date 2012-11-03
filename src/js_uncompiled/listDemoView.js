@@ -173,7 +173,7 @@ codeshelf.listdemoview = function() {
 			self.getMainPaneElement().innerHTML = '<div id="listViewGrid" class="windowContent"></div>';
 			dataView = new $.Slick.Data.DataView();
 			grid = new $.Slick.Grid('#listViewGrid', dataView, columns, options);
-			grid.setSelectionModel(new $.Slick.CellSelectionModel());
+			grid.setSelectionModel(new $['Slick']['CellSelectionModel']());
 
 			var copyManager = new $.Slick.CellCopyManager();
 			grid.registerPlugin(copyManager);

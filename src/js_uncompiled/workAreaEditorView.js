@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.51 2012/11/03 07:21:34 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.52 2012/11/03 23:57:01 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -429,7 +429,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			// Create the filter to listen to all vertex updates for this aisle.
 			var pathSegmentFilterData = {
 				'className':     domainobjects.PathSegment.className,
-				'propertyNames': ['domainId', 'headPosTypeEnum', 'headPosX', 'headPosY', 'tailPosTypeEnum', 'tailPosX', 'tailPosY', 'parentPersistentId'],
+				'propertyNames': ['domainId', 'directionEnum', 'headPosTypeEnum', 'headPosX', 'headPosY', 'tailPosTypeEnum', 'tailPosX', 'tailPosY', 'parentPersistentId'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': "theId", 'value': path['persistentId']}
@@ -836,7 +836,18 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 							tail.x = /*facilityPoints_[0]['x'] + */(pathSegmentData['tailPosX'] * self.getPixelsPerMeter());
 							tail.y = /*facilityPoints_[0]['y'] + */(pathSegmentData['tailPosY'] * self.getPixelsPerMeter());
 
-							var pathSegmentPath = goog.graphics.paths.createArrow(head, tail, 0.3 * self.getPixelsPerMeter(), 0.3 * self.getPixelsPerMeter());
+							var headArrow = 0.0;
+							var tailArrow = 0.0;
+
+							if ((pathSegmentData['directionEnum'] === 'BOTH') || (pathSegmentData['directionEnum'] === 'HEAD')) {
+								headArrow = 0.3 * self.getPixelsPerMeter();
+							}
+
+							if ((pathSegmentData['directionEnum'] === 'BOTH') || (pathSegmentData['directionEnum'] === 'TAIL')) {
+								tailArrow = 0.3 * self.getPixelsPerMeter();
+							}
+
+							var pathSegmentPath = goog.graphics.paths.createArrow(head, tail, headArrow, tailArrow);
 							var stroke = new goog.graphics.Stroke(2, 'black');
 							var fill = new goog.graphics.SolidFill('black', 0.8);
 							drawPath(pathSegmentPath, stroke, fill);

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.31 2012/11/03 03:24:32 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.32 2012/11/03 23:57:00 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -68,7 +68,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 					'className':    domainobjects.Facility.className,
 					'persistentId': facility_['persistentId'],
 					'methodName':   'createVertex',
-					'methodArgs':         [
+					'methodArgs':   [
 						{name: 'domainId', value: 'V' + vertexNum, 'classType': 'java.lang.String'},
 						{name: 'PosTypeByStr', 'value': 'GPS', 'classType': 'java.lang.String'},
 						{name: 'posX', 'value': event.latLng.lng(), 'classType': 'java.lang.Double'},
@@ -124,29 +124,36 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		// Now check to see if we're close to 90deg of the anchor marker.
 		var anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
 		diff = Math.abs(heading2 - anchorHeading);
-		if (diff > 180) {
-			diff -= 180;
-		}
 		if ((diff > 80) && (diff < 100)) {
 			if (diff < 90) {
 				while (diff < 90) {
-					dist *= 1.001;
-					event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2 + adjust);
-					anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
-					diff = Math.abs(heading2 - anchorHeading);
-					if (diff > 180) {
-						diff -= 180;
-					}
-				}
-			} else {
-				while (diff > 90) {
 					dist *= 0.999;
 					event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2 + adjust);
 					anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
 					diff = Math.abs(heading2 - anchorHeading);
-					if (diff > 180) {
-						diff -= 180;
-					}
+				}
+			} else {
+				while (diff > 90) {
+					dist *= 1.001;
+					event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2 + adjust);
+					anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
+					diff = Math.abs(heading2 - anchorHeading);
+				}
+			}
+		} else if ((diff > 260) && (diff < 280)) {
+			if (diff > 270) {
+				while (diff > 270) {
+					dist *= 1.001;
+					event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2 + adjust);
+					anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
+					diff = Math.abs(heading2 - anchorHeading);
+				}
+			} else {
+				while (diff < 270) {
+					dist *= 0.999;
+					event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2 + adjust);
+					anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
+					diff = Math.abs(heading2 - anchorHeading);
 				}
 			}
 		}
@@ -620,7 +627,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		}
 	}
 
-	// We want this view to extend the root/parent view, but we want to return this view.
+// We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.view();
 	jQuery.extend(view, self);
 	self = view;

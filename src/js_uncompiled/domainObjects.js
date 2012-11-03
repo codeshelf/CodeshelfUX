@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.26 2012/11/03 03:24:32 jeffw Exp $
+ * $Id: domainObjects.js,v 1.27 2012/11/03 23:57:01 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -237,7 +237,5 @@ domainobjects = {
 				width: 25
 			}
 		}
-	},
-
-
+	}
 };

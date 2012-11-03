@@ -124,7 +124,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 
 			dataView_ = new $.Slick.Data.DataView();
 			grid_ = new $.Slick.Grid(self.getMainPaneElement(), dataView_, columns_, options_);
-			grid_.setSelectionModel(new $.Slick.RowSelectionModel());
+			grid_.setSelectionModel(new $['Slick'].RowSelectionModel());
 
 			goog.dom.appendChild(self.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listViewContextMenu));
 
