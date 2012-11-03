@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.50 2012/11/03 03:24:32 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.51 2012/11/03 07:21:34 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -829,16 +829,16 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 							var pathSegmentData = pathData['segments'][pathSegmentKey];
 
 							var head = {};
-							head.x = facilityPoints_[0]['x'] + (pathSegmentData['headPosY']) * self.getPixelsPerMeter() - 5;
-							head.y = facilityPoints_[0]['y'] + (pathSegmentData['headPosX']) * self.getPixelsPerMeter();
+							head.x = /*facilityPoints_[0]['x'] + */(pathSegmentData['headPosX'] * self.getPixelsPerMeter());
+							head.y = /*facilityPoints_[0]['y'] + */(pathSegmentData['headPosY'] * self.getPixelsPerMeter());
 
 							var tail = {};
-							tail.x = facilityPoints_[0]['x'] + (pathSegmentData['tailPosY']) * self.getPixelsPerMeter() - 5;
-							tail.y = facilityPoints_[0]['y'] + (pathSegmentData['tailPosX']) * self.getPixelsPerMeter();
+							tail.x = /*facilityPoints_[0]['x'] + */(pathSegmentData['tailPosX'] * self.getPixelsPerMeter());
+							tail.y = /*facilityPoints_[0]['y'] + */(pathSegmentData['tailPosY'] * self.getPixelsPerMeter());
 
-							var pathSegmentPath = goog.graphics.paths.createArrow(head, tail, 0.2 * self.getPixelsPerMeter(), 0.2 * self.getPixelsPerMeter());
+							var pathSegmentPath = goog.graphics.paths.createArrow(head, tail, 0.3 * self.getPixelsPerMeter(), 0.3 * self.getPixelsPerMeter());
 							var stroke = new goog.graphics.Stroke(2, 'black');
-							var fill = new goog.graphics.SolidFill('black', 1.0);
+							var fill = new goog.graphics.SolidFill('black', 0.8);
 							drawPath(pathSegmentPath, stroke, fill);
 						}
 					}
