@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.49 2012/11/02 20:57:14 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.50 2012/11/03 03:24:32 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -33,6 +33,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 	var websession_ = websession;
 	var facility_ = facility;
+	var facilityPoints_ = {};
 	var workAreaEditorPane_;
 	var graphics_;
 	var vertices_ = [];
@@ -42,8 +43,16 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	var currentRect_;
 	var currentDrawRect_;
 	var aisles_ = [];
+	var paths_ = [];
+	var consts = {};
 
 	function createAisle() {
+
+		Object.defineProperty(consts, "feetInMeters", {value: 0.3048,
+			writable:                                         false,
+			enumerable:                                       true,
+			configurable:                                     true});
+
 		var buttonSet = new goog.ui.Dialog.ButtonSet().
 			addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE).
 			addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
@@ -51,6 +60,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		var dataEntryDialog = codeshelf.dataentrydialog("Create Aisle", buttonSet);
 		var dialogContentElement = soy.renderAsElement(codeshelf.templates.createAisleDialogContent);
 		dataEntryDialog.setupDialog(dialogContentElement);
+		dataEntryDialog.createField('aisleId', 'text');
 		dataEntryDialog.createField('bayHeight', 'text');
 		dataEntryDialog.createField('bayWidth', 'text');
 		dataEntryDialog.createField('bayDepth', 'text');
@@ -62,9 +72,10 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 					var xOriginMeters = startDragPoint_.x / self.getPixelsPerMeter();
 					var yOriginMeters = startDragPoint_.y / self.getPixelsPerMeter();
 
-					var bayHeight = dialog.getFieldValue('bayHeight') * 0.3048;
-					var bayWidth = dialog.getFieldValue('bayWidth') * 0.3048;
-					var bayDepth = dialog.getFieldValue('bayDepth') * 0.3048;
+					var aisleId = dialog.getFieldValue('aisleId');
+					var bayHeight = dialog.getFieldValue('bayHeight') * consts["feetInMeters"];
+					var bayWidth = dialog.getFieldValue('bayWidth') * consts["feetInMeters"];
+					var bayDepth = dialog.getFieldValue('bayDepth') * consts["feetInMeters"];
 					var baysHigh = dialog.getFieldValue('baysHigh');
 					var baysLong = dialog.getFieldValue('baysLong');
 					var backToBack = dialog.getFieldValue('backToBack');
@@ -82,6 +93,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 						'persistentId': facility_['persistentId'],
 						'methodName':   'createAisle',
 						'methodArgs':   [
+							{ 'name': 'inAIsleId', 'value': aisleId, 'classType': 'java.lang.String'},
 							{ 'name': 'inPosXMeters', 'value': xOriginMeters, 'classType': 'java.lang.Double'},
 							{ 'name': 'inPosYMeters', 'value': yOriginMeters, 'classType': 'java.lang.Double'},
 							{ 'name': 'inProtoBayXDimMeters', 'value': bayHeight, 'classType': 'java.lang.Double'},
@@ -268,20 +280,20 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		var bufferPoint = { x: 10, y: 10 };
 		if ((Object.size(vertices_) === Object.size(vertices_)) && (Object.size(vertices_) > 1)) {
 			mostNegPoint = { x: 0, y: 0};
-			var points = convertGpsToPoints();
-			rotatePoints(points, mostNegPoint);
-			translatePoints(points, mostNegPoint, mostPosPoint);
-			scalePoints(points, mostPosPoint, bufferPoint);
-			mirrorYPoints(points, mostPosPoint, bufferPoint);
-			for (var i = 0; i < Object.size(points); i++) {
-				var point = points[i];
+			facilityPoints_ = convertGpsToPoints();
+			rotatePoints(facilityPoints_, mostNegPoint);
+			translatePoints(facilityPoints_, mostNegPoint, mostPosPoint);
+			scalePoints(facilityPoints_, mostPosPoint, bufferPoint);
+			mirrorYPoints(facilityPoints_, mostPosPoint, bufferPoint);
+			for (var i = 0; i < Object.size(facilityPoints_); i++) {
+				var point = facilityPoints_[i];
 				if (i === 0) {
 					path.moveTo(point.x, point.y);
 				} else {
 					path.lineTo(point.x, point.y);
 				}
 			}
-			path.lineTo(points[0].x, points[0].y);
+			path.lineTo(facilityPoints_[0].x, facilityPoints_[0].y);
 		}
 		return path;
 	}
@@ -405,6 +417,55 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 	}
 
+	function handleUpdatePathCmd(path) {
+		if (paths_[path['persistentId']] === undefined) {
+
+			var pathData = {};
+
+			pathData.path = path;
+
+			paths_[path['persistentId']] = pathData;
+
+			// Create the filter to listen to all vertex updates for this aisle.
+			var pathSegmentFilterData = {
+				'className':     domainobjects.PathSegment.className,
+				'propertyNames': ['domainId', 'headPosTypeEnum', 'headPosX', 'headPosY', 'tailPosTypeEnum', 'tailPosX', 'tailPosY', 'parentPersistentId'],
+				'filterClause':  'parent.persistentId = :theId',
+				'filterParams':  [
+					{ 'name': "theId", 'value': path['persistentId']}
+				]
+			}
+
+			var pathSegmentFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, pathSegmentFilterData);
+			websession_.sendCommand(pathSegmentFilterCmd, websocketCmdCallbackPath(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+		}
+		self.invalidate();
+	}
+
+	function handleDeletePathCmd(path) {
+		if (paths_[path['persistentId']] !== undefined) {
+			self.removeSubview(paths_[path['persistentId']['pathView']]);
+			paths_.splice(path['persistentId'], 1);
+			self.invalidate();
+		}
+	}
+
+	function handleUpdatePathSegmentCmd(pathSegment) {
+		var pathSegmentPersistentId = pathSegment['parentPersistentId'];
+		if (paths_[pathSegmentPersistentId] !== undefined) {
+			var pathData = paths_[pathSegmentPersistentId];
+			if (pathData['segments'] === undefined) {
+				pathData['segments'] = [];
+			}
+			pathData['segments'][pathSegment['domainId']] = pathSegment;
+		}
+		self.invalidate();
+	}
+
+	function handleDeletePathSegmentCmd(pathSegment) {
+
+	}
+
 	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function(command) {
@@ -426,7 +487,6 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 								}
 							}
 						}
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
 					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
 					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 					}
@@ -468,7 +528,47 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 							}
 
 						}
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+					}
+				}
+			}
+		}
+
+		return callback;
+	}
+
+	function websocketCmdCallbackPath() {
+		var callback = {
+			exec: function(command) {
+				if (!command['data'].hasOwnProperty('results')) {
+					alert('response has no result');
+				} else {
+					if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+						for (var i = 0; i < command['data']['results'].length; i++) {
+							var object = command['data']['results'][i];
+
+							if (object['className'] === domainobjects.Path.className) {
+								// Aisle updates
+								if (object['op'] === 'cre') {
+									handleUpdatePathCmd(object);
+								} else if (object['op'] === 'upd') {
+									handleUpdatePathCmd(object);
+								} else if (object['op'] === 'dl') {
+									handleDeletePathCmd(object);
+								}
+							} else if (object['className'] === domainobjects.PathSegment.className) {
+								// VAisle ertex updates.
+								if (object['op'] === 'cre') {
+									handleUpdatePathSegmentCmd(object);
+								} else if (object['op'] === 'upd') {
+									handleUpdatePathSegmentCmd(object);
+								} else if (object['op'] === 'dl') {
+									handleDeletePathSegmentCmd(object);
+								}
+							}
+
+						}
 					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
 					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 					}
@@ -610,6 +710,19 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 			var aisleFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, aisleFilterData);
 			websession_.sendCommand(aisleFilterCmd, websocketCmdCallbackAisle(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+
+			// Create the filter to listen to all path updates for this facility.
+			var pathFilterData = {
+				'className':     domainobjects.Path.className,
+				'propertyNames': ['domainId'],
+				'filterClause':  'parent.persistentId = :theId',
+				'filterParams':  [
+					{ 'name': "theId", 'value': facility_['persistentId']}
+				]
+			}
+
+			var pathFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, pathFilterData);
+			websession_.sendCommand(pathFilterCmd, websocketCmdCallbackPath(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 		},
 
 		close: function() {
@@ -703,6 +816,32 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 					aisleData.aisleElement.style.left = Math.round(aisleData['aisle']['posX'] * self.getPixelsPerMeter()) + 'px';
 					aisleData.aisleElement.style.top = Math.round(aisleData['aisle']['posY'] * self.getPixelsPerMeter()) + 'px';
+				}
+			}
+
+			// Draw the paths
+			for (var pathKey in paths_) {
+				if (paths_.hasOwnProperty(pathKey)) {
+					var pathData = paths_[pathKey];
+
+					for (var pathSegmentKey in pathData['segments']) {
+						if (pathData['segments'].hasOwnProperty(pathSegmentKey)) {
+							var pathSegmentData = pathData['segments'][pathSegmentKey];
+
+							var head = {};
+							head.x = facilityPoints_[0]['x'] + (pathSegmentData['headPosY']) * self.getPixelsPerMeter() - 5;
+							head.y = facilityPoints_[0]['y'] + (pathSegmentData['headPosX']) * self.getPixelsPerMeter();
+
+							var tail = {};
+							tail.x = facilityPoints_[0]['x'] + (pathSegmentData['tailPosY']) * self.getPixelsPerMeter() - 5;
+							tail.y = facilityPoints_[0]['y'] + (pathSegmentData['tailPosX']) * self.getPixelsPerMeter();
+
+							var pathSegmentPath = goog.graphics.paths.createArrow(head, tail, 0.2 * self.getPixelsPerMeter(), 0.2 * self.getPixelsPerMeter());
+							var stroke = new goog.graphics.Stroke(2, 'black');
+							var fill = new goog.graphics.SolidFill('black', 1.0);
+							drawPath(pathSegmentPath, stroke, fill);
+						}
+					}
 				}
 			}
 			endDraw();

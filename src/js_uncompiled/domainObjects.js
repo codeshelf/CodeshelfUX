@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.25 2012/10/31 16:55:07 jeffw Exp $
+ * $Id: domainObjects.js,v 1.26 2012/11/03 03:24:32 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -202,6 +202,28 @@ domainobjects = {
 				id:    'description',
 				title: 'Organization Name',
 				width: 100
+			}
+		}
+	},
+
+	Path: {
+		className:  'Path',
+		properties: {
+			domainId: {
+				id:    'domainId',
+				title: 'ID',
+				width: 25
+			}
+		}
+	},
+
+	PathSegment: {
+		className:  'PathSegment',
+		properties: {
+			domainId: {
+				id:    'domainId',
+				title: 'ID',
+				width: 25
 			}
 		}
 	},

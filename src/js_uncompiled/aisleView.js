@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.20 2012/11/02 20:57:14 jeffw Exp $
+ *  $Id: aisleView.js,v 1.21 2012/11/03 03:24:32 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -204,7 +204,6 @@ codeshelf.aisleview = function(websession, aisle) {
 							}
 
 						}
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_CREATE_RESP) {
 					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
 					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 					}
