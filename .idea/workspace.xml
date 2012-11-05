@@ -4,13 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/base.js" line="559" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c319b0c7-b9cf-46f5-90a5-b0a625c84957" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/domainObjects.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/domainObjects.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/listDemoView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/listDemoView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/listView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/listView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
-    </list>
+    <list default="true" id="c319b0c7-b9cf-46f5-90a5-b0a625c84957" name="Default" comment="" />
     <ignored path="CodeShelfUX.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
