@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.52 2012/11/03 23:57:01 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.53 2012/11/07 08:54:50 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -840,16 +840,16 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 							var tailArrow = 0.0;
 
 							if ((pathSegmentData['directionEnum'] === 'BOTH') || (pathSegmentData['directionEnum'] === 'HEAD')) {
-								headArrow = 0.3 * self.getPixelsPerMeter();
+								headArrow = 0.75 * self.getPixelsPerMeter();
 							}
 
 							if ((pathSegmentData['directionEnum'] === 'BOTH') || (pathSegmentData['directionEnum'] === 'TAIL')) {
-								tailArrow = 0.3 * self.getPixelsPerMeter();
+								tailArrow = 0.75 * self.getPixelsPerMeter();
 							}
 
 							var pathSegmentPath = goog.graphics.paths.createArrow(head, tail, headArrow, tailArrow);
-							var stroke = new goog.graphics.Stroke(2, 'black');
-							var fill = new goog.graphics.SolidFill('black', 0.8);
+							var stroke = new goog.graphics.Stroke(0.5, 'black');
+							var fill = new goog.graphics.SolidFill('black', 0.6);
 							drawPath(pathSegmentPath, stroke, fill);
 						}
 					}

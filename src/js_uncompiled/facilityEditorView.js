@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.32 2012/11/03 23:57:00 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.33 2012/11/07 08:54:50 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -123,37 +123,30 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 		// Now check to see if we're close to 90deg of the anchor marker.
 		var anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
-		diff = Math.abs(heading2 - anchorHeading);
+		diff = Math.abs(anchorHeading - (heading2  + adjust));
+		if (diff > 180) {
+			diff -= 180;
+		}
 		if ((diff > 80) && (diff < 100)) {
 			if (diff < 90) {
 				while (diff < 90) {
-					dist *= 0.999;
+					dist *= 1.001;
 					event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2 + adjust);
 					anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
-					diff = Math.abs(heading2 - anchorHeading);
+					diff = Math.abs(anchorHeading - (heading2  + adjust));
+					if (diff > 180) {
+						diff -= 180;
+					}
 				}
 			} else {
 				while (diff > 90) {
-					dist *= 1.001;
-					event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2 + adjust);
-					anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
-					diff = Math.abs(heading2 - anchorHeading);
-				}
-			}
-		} else if ((diff > 260) && (diff < 280)) {
-			if (diff > 270) {
-				while (diff > 270) {
-					dist *= 1.001;
-					event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2 + adjust);
-					anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
-					diff = Math.abs(heading2 - anchorHeading);
-				}
-			} else {
-				while (diff < 270) {
 					dist *= 0.999;
 					event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2 + adjust);
 					anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
-					diff = Math.abs(heading2 - anchorHeading);
+					diff = Math.abs(anchorHeading - (heading2  + adjust));
+					if (diff > 180) {
+						diff -= 180;
+					}
 				}
 			}
 		}
@@ -334,7 +327,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 			var data = {
 				'className':    domainobjects.Vertex.className,
-				'persistentId': facilityOutlineVertices_[i].vertex['persistentId']
+				'persistentId': facilityOutlineVertices_[i].Vertex['persistentId']
 			}
 
 			var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_DELETE_REQ, data);

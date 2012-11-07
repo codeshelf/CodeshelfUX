@@ -18,6 +18,14 @@
 		</exec>
 	</target>
 
+	<target name="fix.style">
+		<exec command="/usr/local/bin/fixjsstyle">
+			<arg value="-r" />
+			<arg value="src/js_uncompiled" />
+			<arg value="--nojsdoc" />
+		</exec>
+	</target>
+
 	<target name="generate.templates">
 		<java jar="./lib/GoogleClosureTemplates/SoyToJsSrcCompiler.jar" fork="true" failonerror="true" maxmemory="128m">
 			<arg value="--shouldProvideRequireSoyNamespaces" />

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: application.js,v 1.18 2012/09/01 18:49:56 jeffw Exp $
+ *  $Id: application.js,v 1.19 2012/11/07 08:54:50 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.application');
 goog.require('domainobjects');
@@ -85,7 +85,7 @@ if (codeshelf.debug) {
 	var debugWindow = new goog.debug.FancyWindow('main');
 	debugWindow.setEnabled(true);
 	debugWindow.init();
-//	goog.Disposable.ENABLE_MONITORING = true;
+//	Set this to TRUE in goog.Disposable:  goog.Disposable.ENABLE_MONITORING = true;
 }
 
 var gWindowList = [];
