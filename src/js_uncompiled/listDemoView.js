@@ -1,21 +1,21 @@
 goog.provide('codeshelf.listdemoview');
-goog.require('slickgrid.core');
-goog.require('slickgrid.firebugx');
-goog.require('slickgrid.editors');
-goog.require('slickgrid.cellselection');
-goog.require('slickgrid.rowselection');
-goog.require('slickgrid.grid');
-goog.require('slickgrid.dataview');
-goog.require('slickgrid.pager');
-goog.require('slickgrid.columnpicker');
-goog.require('slickgrid.cellcopymanager');
 goog.require('extern.jquery');
+goog.require('slickgrid.cellcopymanager');
+goog.require('slickgrid.cellselection');
+goog.require('slickgrid.columnpicker');
+goog.require('slickgrid.core');
+goog.require('slickgrid.dataview');
+goog.require('slickgrid.editors');
+goog.require('slickgrid.firebugx');
+goog.require('slickgrid.grid');
+goog.require('slickgrid.pager');
+goog.require('slickgrid.rowselection');
 
-$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all")['mouseover'](
+$('.grid-header .ui-icon').addClass('ui-state-default ui-corner-all')['mouseover'](
 	function(e) {
-		$(e.target).addClass("ui-state-hover")
+		$(e.target).addClass('ui-state-hover');
 	})['mouseout'](function(e) {
-	$(e.target).removeClass("ui-state-hover")
+	$(e.target).removeClass('ui-state-hover');
 });
 
 codeshelf.listdemoview = function() {
@@ -26,13 +26,13 @@ codeshelf.listdemoview = function() {
 	var selectedRowIds = [];
 	var self;
 
-	var sortcol = "title";
+	var sortcol = 'title';
 	var sortdir = 1;
 	var percentCompleteThreshold = 0;
-	var searchString = "";
+	var searchString = '';
 
 	function myFilter(item) {
-		if (item["percentComplete"] < 70) {
+		if (item['percentComplete'] < 70) {
 			return false;
 		}
 
@@ -40,7 +40,7 @@ codeshelf.listdemoview = function() {
 	}
 
 	function percentCompleteSort(a, b) {
-		return a["percentComplete"] - b["percentComplete"];
+		return a['percentComplete'] - b['percentComplete'];
 	}
 
 	self = {
@@ -48,7 +48,7 @@ codeshelf.listdemoview = function() {
 			if (value == null || value == undefined || !value.length)
 				return {
 					valid: false,
-					msg:   "This is a required field"
+					msg:   'This is a required field'
 				};
 			else
 				return {
@@ -63,7 +63,7 @@ codeshelf.listdemoview = function() {
 		},
 
 		toggleFilterRow: function() {
-			if ($(grid.getTopPanel()).is(":visible"))
+			if ($(grid.getTopPanel()).is(':visible'))
 				grid.hideTopPanel();
 			else
 				grid.showTopPanel();
@@ -77,11 +77,11 @@ codeshelf.listdemoview = function() {
 		doSetupView: function() {
 			var columns = [
 				{
-					'id':                  "sel",
-					'name':                "#",
-					'field':               "num",
-					'behavior':            "select",
-					'cssClass':            "cell-selection",
+					'id':                  'sel',
+					'name':                '#',
+					'field':               'num',
+					'behavior':            'select',
+					'cssClass':            'cell-selection',
 					'width':               40,
 					'cannotTriggerInsert': true,
 					'resizable':           true,
@@ -89,27 +89,27 @@ codeshelf.listdemoview = function() {
 					'sortable':            true
 				},
 				{
-					'id':        "title",
-					'name':      "Title",
-					'field':     "title",
+					'id':        'title',
+					'name':      'Title',
+					'field':     'title',
 					'width':     120,
 					'minWidth':  120,
-					'cssClass':  "cell-title",
+					'cssClass':  'cell-title',
 					'editor':    TextCellEditor,
 					'validator': self.requiredFieldValidator,
 					'sortable':  true
 				},
 				{
-					'id':       "duration",
-					'name':     "Duration",
-					'field':    "duration",
+					'id':       'duration',
+					'name':     'Duration',
+					'field':    'duration',
 					'editor':   TextCellEditor,
 					'sortable': true
 				},
 				{
-					'id':        "%",
-					'name':      "% Complete",
-					'field':     "percentComplete",
+					'id':        '%',
+					'name':      '% Complete',
+					'field':     'percentComplete',
 					'minWidth':  80,
 					'resizable': true,
 					'formatter': GraphicalPercentCompleteCellFormatter,
@@ -117,28 +117,28 @@ codeshelf.listdemoview = function() {
 					'sortable':  true
 				},
 				{
-					'id':       "start",
-					'name':     "Start",
-					'field':    "start",
+					'id':       'start',
+					'name':     'Start',
+					'field':    'start',
 					'minWidth': 60,
 					'editor':   DateCellEditor,
 					'sortable': true
 				},
 				{
-					'id':       "finish",
-					'name':     "Finish",
-					'field':    "finish",
+					'id':       'finish',
+					'name':     'Finish',
+					'field':    'finish',
 					'minWidth': 60,
 					'editor':   DateCellEditor,
 					'sortable': true
 				},
 				{
-					'id':                  "effort-driven",
-					'name':                "Effort Driven",
+					'id':                  'effort-driven',
+					'name':                'Effort Driven',
 					'width':               80,
 					'minWidth':            20,
-					'cssClass':            "cell-effort-driven",
-					'field':               "effortDriven",
+					'cssClass':            'cell-effort-driven',
+					'field':               'effortDriven',
 					'formatter':           BoolCellFormatter,
 					'editor':              YesNoCheckboxCellEditor,
 					'cannotTriggerInsert': true,
@@ -159,15 +159,15 @@ codeshelf.listdemoview = function() {
 			for (var i = 0; i < 50000; i++) {
 				var d = (data[i] = {});
 
-				d["id"] = "id_" + i;
-				d["persistentId"] = "id_" + i;
-				d["num"] = i;
-				d["title"] = "Task " + i;
-				d["duration"] = "5 days";
-				d["percentComplete"] = Math.round(Math.random() * 100);
-				d["start"] = "01/01/2009";
-				d["finish"] = "01/05/2009";
-				d["effortDriven"] = (i % 5 == 0);
+				d['id'] = 'id_' + i;
+				d['persistentId'] = 'id_' + i;
+				d['num'] = i;
+				d['title'] = 'Task ' + i;
+				d['duration'] = '5 days';
+				d['percentComplete'] = Math.round(Math.random() * 100);
+				d['start'] = '01/01/2009';
+				d['finish'] = '01/05/2009';
+				d['effortDriven'] = (i % 5 == 0);
 			}
 
 			self.getMainPaneElement().innerHTML = '<div id="listViewGrid" class="windowContent"></div>';
@@ -194,7 +194,7 @@ codeshelf.listdemoview = function() {
 			var columnpicker = new $.Slick.Controls.ColumnPicker(columns, grid, options);
 
 			// move the filter panel defined in a hidden div into grid top panel
-			$("#inlineFilterPanel").appendTo(grid.getTopPanel()).show();
+			$('#inlineFilterPanel').appendTo(grid.getTopPanel()).show();
 
 			grid.onCellChange.subscribe(function(e, args) {
 				dataView.updateItem(args.item.id, args.item);
@@ -202,14 +202,14 @@ codeshelf.listdemoview = function() {
 
 			grid.onAddNewRow.subscribe(function(e, args) {
 				var item = {
-					"num":             data.length,
-					"id":              "new_" + (Math.round(Math.random() * 10000)),
-					"title":           "New task",
-					"duration":        "1 day",
-					"percentComplete": 0,
-					"start":           "01/01/2009",
-					"finish":          "01/01/2009",
-					"effortDriven":    false
+					'num':             data.length,
+					'id':              'new_' + (Math.round(Math.random() * 10000)),
+					'title':           'New task',
+					'duration':        '1 day',
+					'percentComplete': 0,
+					'start':           '01/01/2009',
+					'finish':          '01/01/2009',
+					'effortDriven':    false
 				};
 				$.extend(item, args.item);
 				dataView.addItem(item);
@@ -252,17 +252,17 @@ codeshelf.listdemoview = function() {
 					// be much faster
 
 					var percentCompleteValueFn = function() {
-						var val = this["percentComplete"];
+						var val = this['percentComplete'];
 						if (val < 10)
-							return "00" + val;
+							return '00' + val;
 						else if (val < 100)
-							return "0" + val;
+							return '0' + val;
 						else
 							return val;
 					};
 
 					// use numeric sort of % and lexicographic for everything else
-					dataView.fastSort((sortcol == "percentComplete") ? percentCompleteValueFn : sortcol, args.sortAsc);
+					dataView.fastSort((sortcol == 'percentComplete') ? percentCompleteValueFn : sortcol, args.sortAsc);
 				} else {
 					// using native sort with comparer
 					// preferred method but can be very slow in IE with huge datasets
@@ -318,13 +318,13 @@ codeshelf.listdemoview = function() {
 			dataView.setFilter(myFilter);
 			dataView.endUpdate();
 
-			$("#gridContainer")['resizable']();
+			$('#gridContainer')['resizable']();
 		},
 
 		close: function() {
 
 		}
-	}
+	};
 
 	// We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.view();
@@ -332,4 +332,4 @@ codeshelf.listdemoview = function() {
 	self = view;
 
 	return self;
-}
+};

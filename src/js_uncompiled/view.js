@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: view.js,v 1.8 2012/09/03 21:48:33 jeffw Exp $
+ *  $Id: view.js,v 1.9 2012/11/08 03:35:11 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.view');
 goog.require('codeshelf.window');
@@ -10,9 +10,9 @@ goog.require('goog.async.Delay');
 goog.require('goog.dom');
 goog.require('goog.fx.Dragger');
 goog.require('goog.ui.Toolbar');
-goog.require('goog.ui.ToolbarRenderer');
 goog.require('goog.ui.ToolbarButton');
 goog.require('goog.ui.ToolbarMenuButton');
+goog.require('goog.ui.ToolbarRenderer');
 goog.require('goog.ui.ToolbarSelect');
 goog.require('goog.ui.ToolbarSeparator');
 goog.require('goog.ui.ToolbarToggleButton');
@@ -45,7 +45,7 @@ codeshelf.view = function(options) {
 		doHandleSelection: false,
 		doDragSelect:      false,
 		toolbarTools:      undefined
-	}
+	};
 
 	/**
 	 * Initialize the view.
@@ -220,7 +220,7 @@ codeshelf.view = function(options) {
 		},
 
 		getParentView: function() {
-			return parentView_
+			return parentView_;
 		},
 
 		setMainPaneElement: function(mainPaneElement) {
@@ -228,7 +228,7 @@ codeshelf.view = function(options) {
 		},
 
 		getMainPaneElement: function() {
-			return mainPaneElement_
+			return mainPaneElement_;
 		},
 
 		getContentElement: function() {
@@ -353,7 +353,7 @@ codeshelf.view = function(options) {
 				return toolbarSelectionModel_.getSelectedItem();
 			}
 		}
-	}
+	};
 
 	return self;
-}
+};

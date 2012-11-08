@@ -1,26 +1,26 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.44 2012/10/25 08:32:37 jeffw Exp $
+ *  $Id: mainPage.js,v 1.45 2012/11/08 03:35:10 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
-goog.require('domainobjects');
 goog.require('codeshelf.ediservicesview');
-goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.facilityeditorview');
-goog.require('codeshelf.workareaeditorview');
+goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.initializenewclient');
 goog.require('codeshelf.listdemoview');
 goog.require('codeshelf.listview');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.window');
+goog.require('codeshelf.workareaeditorview');
+goog.require('domainobjects');
+goog.require('goog.Disposable');
 goog.require('goog.debug');
 goog.require('goog.debug.FancyWindow');
 goog.require('goog.debug.Logger');
-goog.require('goog.Disposable');
 goog.require('goog.dom');
-goog.require('goog.dom.query');
 goog.require('goog.dom.ViewportSizeMonitor');
+goog.require('goog.dom.query');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
@@ -61,7 +61,7 @@ codeshelf.mainpage = function() {
 					}
 				}
 			}
-		}
+		};
 
 		return callback;
 	}
@@ -69,7 +69,7 @@ codeshelf.mainpage = function() {
 	function loadFacilityWindows(facility) {
 		try {
 			// Load the GMaps API and init() when done.
-			if (typeof google !== "undefined") {
+			if (typeof google !== 'undefined') {
 				google.load('maps', '3.8', {'other_params': 'sensor=false', 'callback': function() {
 					var facilityEditorView = codeshelf.facilityeditorview(websession_, application_.getOrganization(), facility);
 					var facilityEditorWindow = codeshelf.window('Facility Editor', facilityEditorView, frame_, undefined);
@@ -92,8 +92,8 @@ codeshelf.mainpage = function() {
 
 			var filter = 'parentOrganization.persistentId = :theId';
 			var filterParams = [
-				{ 'name': "theId", 'value': organization_['persistentId']}
-			]
+				{ 'name': 'theId', 'value': organization_['persistentId']}
+			];
 
 			var ediServicesView = codeshelf.hierarchylistview(websession_, domainobjects.Facility, filter, filterParams, hierarchyMap);
 			var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView, frame_, undefined);
@@ -105,15 +105,14 @@ codeshelf.mainpage = function() {
 
 			var filter = 'parent.persistentId = :theId';
 			var filterParams = [
-				{ 'name': "theId", 'value': facility['persistentId']}
-			]
+				{ 'name': 'theId', 'value': facility['persistentId']}
+			];
 
 			var ordersView = codeshelf.hierarchylistview(websession_, domainobjects.OrderHeader, filter, filterParams, hierarchyMap);
 			var ordersWindow = codeshelf.window('Orders', ordersView, frame_, undefined);
 			ordersWindow.open();
 		}
-		catch
-			(err) {
+		catch (err) {
 			alert(err);
 		}
 	}
@@ -155,7 +154,7 @@ codeshelf.mainpage = function() {
 			goog.events.listen(document, goog.events.EventType.KEYPRESS, function(e) {
 				if (e.keyCode === goog.events.KeyCodes.NUM_ZERO) {
 					if (gFocusedWindow < gWindowList.length - 1) {
-						gFocusedWindow++
+						gFocusedWindow++;
 					} else {
 						gFocusedWindow = 0;
 					}
@@ -170,8 +169,8 @@ codeshelf.mainpage = function() {
 
 			var filter = 'parentOrganization.persistentId = :theId';
 			var filterParams = [
-				{ 'name': "theId", 'value': organization_['persistentId']}
-			]
+				{ 'name': 'theId', 'value': organization_['persistentId']}
+			];
 			var listView = codeshelf.listview(websession_, domainobjects.Facility, filter, filterParams);
 			var listWindow = codeshelf.window('Facilities List', listView, frame_, undefined);
 			listWindow.open();
@@ -180,7 +179,7 @@ codeshelf.mainpage = function() {
 				'className':    organization_['className'],
 				'persistentId': organization_['persistentId'],
 				'getterMethod': 'getFacilities'
-			}
+			};
 
 			var websession = application_.getWebsession();
 			var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
@@ -190,7 +189,7 @@ codeshelf.mainpage = function() {
 		exit: function() {
 			websession_.setCurrentPage(undefined);
 		}
-	}
+	};
 
 	return self;
-}
+};

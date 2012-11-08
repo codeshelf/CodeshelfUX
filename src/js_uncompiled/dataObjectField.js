@@ -1,26 +1,34 @@
 /*******************************************************************************
- *  CodeShelfUX
- *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataObjectField.js,v 1.18 2012/09/23 03:05:40 jeffw Exp $
- *******************************************************************************/
+ * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
+ * $Id: dataObjectField.js,v 1.19 2012/11/08 03:35:10 jeffw Exp $
+ ******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.websession');
-goog.require('goog.events.EventType');
-goog.require('goog.events.EventHandler');
 goog.require('goog.editor.SeamlessField');
+goog.require('goog.events.EventHandler');
+goog.require('goog.events.EventType');
 goog.require('goog.ui.LabelInput');
 
-
 /**
- * Implements an input field backed by a remote data object.
- * It handles getting/setting remote persistence values for the object without any need to manage this by the class user.
- * @param {object} websession  the websession used to communicate with the backend.
- * @param {HTMLBodyElement} parentElement the HTML body element that contains this objectDataField.
- * @param {string} className the name of the remote data class that this field edits.
- * @param {string} classProperty the name of the remote data class property that this field edits.
- * @param {stting} classPersistenceId the GUID of the class object instance that this field edits.
+ * Implements an input field backed by a remote data object. It handles
+ * getting/setting remote persistence values for the object without any need to
+ * manage this by the class user.
+ *
+ * @param {object}
+ *            websession the websession used to communicate with the backend.
+ * @param {HTMLBodyElement}
+ *            parentElement the HTML body element that contains this
+ *            objectDataField.
+ * @param {string}
+ *            className the name of the remote data class that this field edits.
+ * @param {string}
+ *            classProperty the name of the remote data class property that this
+ *            field edits.
+ * @param {stting}
+ *            classPersistenceId the GUID of the class object instance that this
+ *            field edits.
  */
 codeshelf.dataobjectfield = function(websession, parentElement, className, classProperty, classPersistenceId, cssClass, titleLabel) {
 
@@ -45,12 +53,16 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 			};
 
 			var fieldListenerCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_LISTENER_REQ, data);
-			websession_.sendCommand(fieldListenerCmd, thisDataObjectField_.websocketCmdCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP), true);
-
+			websession_.sendCommand(fieldListenerCmd, thisDataObjectField_
+				.websocketCmdCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP), true);
 
 			// Put the HTML markup in the parent element.
 			var fieldId = goog.events.getUniqueId('field');
-			var fieldElement = soy.renderAsElement(codeshelf.templates.dataObjectField, {id: fieldId, cssClass: cssClass_, label: titleLabel_});
+			var fieldElement = soy.renderAsElement(codeshelf.templates.dataObjectField, {
+				id:       fieldId,
+				cssClass: cssClass_,
+				label:    titleLabel_
+			});
 			goog.dom.appendChild(parentElement_, fieldElement);
 			inputElement_ = goog.dom.getElement(fieldId);
 			googleField_ = new goog.ui.LabelInput(titleLabel_);
@@ -61,7 +73,7 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 
 		websocketCmdCallback: function(expectedResponseType) {
 			var callback = {
-				exec:                    function(command) {
+				exec: function(command) {
 					if (!command['data'].hasOwnProperty('results')) {
 						alert('response has no result');
 					} else if (command['type'] === kWebSessionCommandType.OBJECT_LISTENER_RESP) {
@@ -70,10 +82,11 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 
 							// Make sure the class name and persistent ID match.
 							if ((object['className'] === className_) && (object['persistentId'] == classPersistenceId_)) {
-								//var html = googleField_.getCleanContents();
+								// var html = googleField_.getCleanContents();
 								var text = googleField_.getValue();
 								if (text !== object[classProperty_]) {
-									//googleField_.setHtml(false, object[classProperty_], true);
+									// googleField_.setHtml(false,
+									// object[classProperty_], true);
 									googleField_.setValue(object[classProperty_]);
 								}
 							}
@@ -93,12 +106,16 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 					'className':    className_,
 					'persistentId': classPersistenceId_,
 					'properties':   [
-						{'name': 'description', 'value': text}
+						{
+							'name':  'description',
+							'value': text
+						}
 					]
 				};
 
 				var fieldUpdateCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
-				websession_.sendCommand(fieldUpdateCmd, thisDataObjectField_.websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
+				websession_.sendCommand(fieldUpdateCmd, thisDataObjectField_
+					.websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
 			}
 		}
 

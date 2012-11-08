@@ -1,13 +1,13 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: application.js,v 1.19 2012/11/07 08:54:50 jeffw Exp $
+ *  $Id: application.js,v 1.20 2012/11/08 03:35:10 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.application');
-goog.require('domainobjects');
 goog.require('codeshelf.launch');
 goog.require('codeshelf.mainpage');
 goog.require('codeshelf.websession');
+goog.require('domainobjects');
 goog.require('goog.dom');
 
 var codeshelf = codeshelf || {}; // Identifies this file as the codeshelf base.

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.53 2012/11/07 08:54:50 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.54 2012/11/08 03:35:10 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -13,11 +13,11 @@ goog.require('extern.jquery');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
+goog.require('goog.events');
+goog.require('goog.events.EventType');
 goog.require('goog.graphics');
 goog.require('goog.graphics.paths');
 goog.require('goog.math');
-goog.require('goog.events');
-goog.require('goog.events.EventType');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.ui.Dialog');
@@ -48,7 +48,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 	function createAisle() {
 
-		Object.defineProperty(consts, "feetInMeters", {value: 0.3048,
+		Object.defineProperty(consts, 'feetInMeters', {value: 0.3048,
 			writable:                                         false,
 			enumerable:                                       true,
 			configurable:                                     true});
@@ -57,7 +57,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE).
 			addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
 
-		var dataEntryDialog = codeshelf.dataentrydialog("Create Aisle", buttonSet);
+		var dataEntryDialog = codeshelf.dataentrydialog('Create Aisle', buttonSet);
 		var dialogContentElement = soy.renderAsElement(codeshelf.templates.createAisleDialogContent);
 		dataEntryDialog.setupDialog(dialogContentElement);
 		dataEntryDialog.createField('aisleId', 'text');
@@ -68,49 +68,51 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		dataEntryDialog.createField('baysLong', 'text');
 		dataEntryDialog.createField('backToBack', 'checkbox');
 		dataEntryDialog.open(function(event, dialog) {
-				if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE.key) {
-					var xOriginMeters = startDragPoint_.x / self.getPixelsPerMeter();
-					var yOriginMeters = startDragPoint_.y / self.getPixelsPerMeter();
+			                     if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE.key) {
+				                     var xOriginMeters = startDragPoint_.x / self.getPixelsPerMeter();
+				                     var yOriginMeters = startDragPoint_.y / self.getPixelsPerMeter();
 
-					var aisleId = dialog.getFieldValue('aisleId');
-					var bayHeight = dialog.getFieldValue('bayHeight') * consts["feetInMeters"];
-					var bayWidth = dialog.getFieldValue('bayWidth') * consts["feetInMeters"];
-					var bayDepth = dialog.getFieldValue('bayDepth') * consts["feetInMeters"];
-					var baysHigh = dialog.getFieldValue('baysHigh');
-					var baysLong = dialog.getFieldValue('baysLong');
-					var backToBack = dialog.getFieldValue('backToBack');
+				                     var aisleId = dialog.getFieldValue('aisleId');
+				                     var bayHeight = dialog.getFieldValue('bayHeight') * consts['feetInMeters'];
+				                     var bayWidth = dialog.getFieldValue('bayWidth') * consts['feetInMeters'];
+				                     var bayDepth = dialog.getFieldValue('bayDepth') * consts['feetInMeters'];
+				                     var baysHigh = dialog.getFieldValue('baysHigh');
+				                     var baysLong = dialog.getFieldValue('baysLong');
+				                     var backToBack = dialog.getFieldValue('backToBack');
 
 
-					var runInXDim = true;
-					if (currentRect_.width < currentRect_.height) {
-						runInXDim = false;
-					}
+				                     var runInXDim = true;
+				                     if (currentRect_.width < currentRect_.height) {
+					                     runInXDim = false;
+				                     }
 
-					// Call Facility.createAisle();
-					//public final void createAisle(Double inPosX, Double inPosY, Double inProtoBayHeight, Double inProtoBayWidth, Double inProtoBayDepth, int inBaysHigh, int inBaysLong, Boolean inCreateBackToBack) {
-					var data = {
-						'className':    domainobjects.Facility.className,
-						'persistentId': facility_['persistentId'],
-						'methodName':   'createAisle',
-						'methodArgs':   [
-							{ 'name': 'inAIsleId', 'value': aisleId, 'classType': 'java.lang.String'},
-							{ 'name': 'inPosXMeters', 'value': xOriginMeters, 'classType': 'java.lang.Double'},
-							{ 'name': 'inPosYMeters', 'value': yOriginMeters, 'classType': 'java.lang.Double'},
-							{ 'name': 'inProtoBayXDimMeters', 'value': bayHeight, 'classType': 'java.lang.Double'},
-							{ 'name': 'inProtoBayYDimMeters', 'value': bayWidth, 'classType': 'java.lang.Double'},
-							{ 'name': 'inProtoBayZDimMeters', 'value': bayHeight, 'classType': 'java.lang.Double'},
-							{ 'name': 'inProtoBaysHigh', 'value': baysHigh, 'classType': 'java.lang.Integer'},
-							{ 'name': 'inProtoBaysLong', 'value': baysLong, 'classType': 'java.lang.Integer'},
-							{ 'name': 'inRunInXDir', 'value': runInXDim, 'classType': 'java.lang.Boolean'},
-							{ 'name': 'inCreateBackToBack', 'value': backToBack, 'classType': 'java.lang.Boolean'}
-						]
-					}
+				                     // Call Facility.createAisle();
+				                     //public final void createAisle(Double inPosX, Double inPosY, Double inProtoBayHeight, Double inProtoBayWidth, Double inProtoBayDepth, int inBaysHigh, int inBaysLong, Boolean inCreateBackToBack) {
+				                     var data = {
+					                     'className':    domainobjects.Facility.className,
+					                     'persistentId': facility_['persistentId'],
+					                     'methodName':   'createAisle',
+					                     'methodArgs':   [
+						                     { 'name': 'inAIsleId', 'value': aisleId, 'classType': 'java.lang.String'},
+						                     { 'name': 'inPosXMeters', 'value': xOriginMeters, 'classType': 'java.lang.Double'},
+						                     { 'name': 'inPosYMeters', 'value': yOriginMeters, 'classType': 'java.lang.Double'},
+						                     { 'name': 'inProtoBayXDimMeters', 'value': bayHeight, 'classType': 'java.lang.Double'},
+						                     { 'name': 'inProtoBayYDimMeters', 'value': bayWidth, 'classType': 'java.lang.Double'},
+						                     { 'name': 'inProtoBayZDimMeters', 'value': bayHeight, 'classType': 'java.lang.Double'},
+						                     { 'name': 'inProtoBaysHigh', 'value': baysHigh, 'classType': 'java.lang.Integer'},
+						                     { 'name': 'inProtoBaysLong', 'value': baysLong, 'classType': 'java.lang.Integer'},
+						                     { 'name': 'inRunInXDir', 'value': runInXDim, 'classType': 'java.lang.Boolean'},
+						                     { 'name': 'inCreateBackToBack', 'value': backToBack, 'classType': 'java.lang.Boolean'}
+					                     ]
+				                     };
 
-					var createAisleCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
-					websession_.sendCommand(createAisleCmd, websocketCmdCallbackFacility(kWebSessionCommandType.OBJECT_METHOD_REQ), true);
-				}
-			}
-		)
+				                     var createAisleCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+				                     websession_.sendCommand(createAisleCmd,
+				                                             websocketCmdCallbackFacility(kWebSessionCommandType.OBJECT_METHOD_REQ),
+				                                             true);
+			                     }
+		                     }
+		);
 	}
 
 	function computeDistanceMeters(latArg1, lonArg1, latArg2, lonArg2) {
@@ -128,7 +130,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	}
 
 	function computeBearing(latArg1, lonArg1, latArg2, lonArg2) {
-		var lat1 = goog.math.toRadians(latArg1)
+		var lat1 = goog.math.toRadians(latArg1);
 		var lat2 = goog.math.toRadians(latArg2);
 		var dLon = goog.math.toRadians(lonArg2 - lonArg1);
 
@@ -251,7 +253,8 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		for (var i = 0; i < Object.size(points); i++) {
 			var point = points[i];
 			// Scale it to 80% of the draw area.
-			self.setPixelsPerMeter(Math.min((graphics_.getPixelSize().width - bufferPoint.x * 2) / mostPosPoint.x, (graphics_.getPixelSize().height - bufferPoint.y) / mostPosPoint.y));
+			self.setPixelsPerMeter(Math.min((graphics_.getPixelSize().width - bufferPoint.x * 2) / mostPosPoint.x,
+			                                (graphics_.getPixelSize().height - bufferPoint.y) / mostPosPoint.y));
 
 			point.x *= self.getPixelsPerMeter();
 			point.y *= self.getPixelsPerMeter();
@@ -383,9 +386,9 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
-					{ 'name': "theId", 'value': aisle['persistentId']}
+					{ 'name': 'theId', 'value': aisle['persistentId']}
 				]
-			}
+			};
 
 			var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
 			websession_.sendCommand(vertexFilterCmd, websocketCmdCallbackAisle(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
@@ -429,15 +432,17 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			// Create the filter to listen to all vertex updates for this aisle.
 			var pathSegmentFilterData = {
 				'className':     domainobjects.PathSegment.className,
-				'propertyNames': ['domainId', 'directionEnum', 'headPosTypeEnum', 'headPosX', 'headPosY', 'tailPosTypeEnum', 'tailPosX', 'tailPosY', 'parentPersistentId'],
+				'propertyNames': ['domainId', 'directionEnum', 'headPosTypeEnum', 'headPosX', 'headPosY', 'tailPosTypeEnum',
+				                  'tailPosX', 'tailPosY', 'parentPersistentId'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
-					{ 'name': "theId", 'value': path['persistentId']}
+					{ 'name': 'theId', 'value': path['persistentId']}
 				]
-			}
+			};
 
 			var pathSegmentFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, pathSegmentFilterData);
-			websession_.sendCommand(pathSegmentFilterCmd, websocketCmdCallbackPath(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+			websession_.sendCommand(pathSegmentFilterCmd, websocketCmdCallbackPath(kWebSessionCommandType.OBJECT_FILTER_RESP),
+			                        true);
 		}
 		self.invalidate();
 	}
@@ -492,7 +497,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 					}
 				}
 			}
-		}
+		};
 
 		return callback;
 	}
@@ -533,7 +538,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 					}
 				}
 			}
-		}
+		};
 
 		return callback;
 	}
@@ -574,7 +579,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 					}
 				}
 			}
-		}
+		};
 
 		return callback;
 	}
@@ -608,7 +613,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 					element.removeClass('selected');
 				}
 			}
-		})
+		});
 	}
 
 	/**
@@ -620,7 +625,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 				var element = $(node);
 				element.removeClass('selected');
 			}
-		})
+		});
 	}
 
 	/**
@@ -691,9 +696,9 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
-					{ 'name': "theId", 'value': facility_['persistentId']}
+					{ 'name': 'theId', 'value': facility_['persistentId']}
 				]
-			}
+			};
 
 			var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
 			websession_.sendCommand(vertexFilterCmd, websocketCmdCallbackFacility(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
@@ -704,9 +709,9 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 				'propertyNames': ['domainId', 'posX', 'posY'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
-					{ 'name': "theId", 'value': facility_['persistentId']}
+					{ 'name': 'theId', 'value': facility_['persistentId']}
 				]
-			}
+			};
 
 			var aisleFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, aisleFilterData);
 			websession_.sendCommand(aisleFilterCmd, websocketCmdCallbackAisle(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
@@ -717,9 +722,9 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 				'propertyNames': ['domainId'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
-					{ 'name': "theId", 'value': facility_['persistentId']}
+					{ 'name': 'theId', 'value': facility_['persistentId']}
 				]
-			}
+			};
 
 			var pathFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, pathFilterData);
 			websession_.sendCommand(pathFilterCmd, websocketCmdCallbackPath(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
@@ -743,7 +748,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 		canDragSelect: function(event) {
 			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_), event.offsetX, event.offsetY)) {
-				alert("Select a starting point inside the facility bounds.");
+				alert('Select a starting point inside the facility bounds.');
 				return false;
 			} else {
 				return true;
@@ -765,7 +770,8 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		},
 
 		doDraggerDrag: function(event) {
-			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_), startDragPoint_.x + event.target.deltaX, startDragPoint_.y + event.target.deltaY)) {
+			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_),
+			                               startDragPoint_.x + event.target.deltaX, startDragPoint_.y + event.target.deltaY)) {
 				// Dont' do anything, the last drag point was inside the facility bounds.
 			} else {
 				currentRect_.width = event.target.deltaX;
@@ -857,14 +863,14 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			}
 			endDraw();
 		}
-	}
+	};
 
 	var tools = [
 		{id: 'select-tool', title: 'Select Tool', icon: 'select-icon.png'},
 		{id: 'aisle-tool', title: 'Aisle Tool', icon: 'rack-icon.png'},
 		{id: 'staging-tool', title: 'Staging Tool', icon: 'staging-icon.png'},
 		{id: 'door-tool', title: 'Door Tool', icon: 'door-icon.png'}
-	]
+	];
 
 	// We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.view({doHandleSelection: true, doDragSelect: true, toolbarTools: tools});
@@ -872,4 +878,4 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	self = view;
 
 	return self;
-}
+};

@@ -1,21 +1,21 @@
 goog.provide('codeshelf.listview');
-goog.require('slickgrid.core');
-goog.require('slickgrid.firebugx');
-goog.require('slickgrid.editors');
-goog.require('slickgrid.rowselection');
-goog.require('slickgrid.grid');
-goog.require('slickgrid.dataview');
-goog.require('slickgrid.pager');
-goog.require('slickgrid.columnpicker');
 goog.require('extern.jquery');
+goog.require('slickgrid.columnpicker');
+goog.require('slickgrid.core');
+goog.require('slickgrid.dataview');
+goog.require('slickgrid.editors');
+goog.require('slickgrid.firebugx');
+goog.require('slickgrid.grid');
+goog.require('slickgrid.pager');
+goog.require('slickgrid.rowselection');
 
 codeshelf.listview = function(websession, domainObject, filterClause, filterParams) {
 
-	$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all")['mouseover'](
+	$('.grid-header .ui-icon').addClass('ui-state-default ui-corner-all')['mouseover'](
 		function(e) {
-			$(e.target).addClass("ui-state-hover")
+			$(e.target).addClass('ui-state-hover');
 		})['mouseout'](function(e) {
-			$(e.target).removeClass("ui-state-hover")
+			$(e.target).removeClass('ui-state-hover');
 		});
 
 	var websession_ = websession;
@@ -76,7 +76,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 					dataView_.sort(comparer, sortdir_);
 				}
 			}
-		}
+		};
 
 		return callback;
 	}
@@ -95,14 +95,14 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 						'id':                  property.id,
 						'name':                property.title,
 						'field':               property.id,
-						'behavior':            "select",
-						'headerCssClass':      " ",
+						'behavior':            'select',
+						'headerCssClass':      ' ',
 						'width':               property.width,
 						'cannotTriggerInsert': true,
 						'resizable':           true,
 						'selectable':          false,
 						'sortable':            true
-					}
+					};
 				}
 			}
 
@@ -115,10 +115,10 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 				'topPanelHeight':       25
 			};
 
-			sortcol_ = "Description";
+			sortcol_ = 'Description';
 			sortdir_ = 1;
 			percentCompleteThreshold_ = 0;
-			searchString_ = "";
+			searchString_ = '';
 
 			goog.dom.appendChild(self.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
@@ -135,14 +135,14 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 				'propertyNames': properties_,
 				'filterClause':  filterClause_,
 				'filterParams':  filterParams_
-			}
+			};
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 
 			menu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document.body);
 
-			menu_.bind("mouseleave", function(e) { $(this).fadeOut(5)});//options['fadeSpeed']) });
+			menu_.bind('mouseleave', function(e) { $(this).fadeOut(5)});//options['fadeSpeed']) });
 //			menu_.bind("click", updateColumn);
 
 
@@ -163,7 +163,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 				e.preventDefault();
 			});
 
-			grid_.onContextMenu.subscribe(function (e) {
+			grid_.onContextMenu.subscribe(function(e) {
 				if (e && e.stopPropagation)
 					e.stopPropagation();
 //				e.preventDefault();
@@ -182,16 +182,16 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 				menu_.empty();
 
 				var $li, $input;
-				for (var i=0; i<columns_.length; i++) {
-					$li = $("<li />").appendTo(menu_);
+				for (var i = 0; i < columns_.length; i++) {
+					$li = $('<li />').appendTo(menu_);
 
 					$input = $("<input type='checkbox' />")
-						.attr("id", "columnpicker_" + i)
-						.data("id", columns_[i].id)
+						.attr('id', 'columnpicker_' + i)
+						.data('id', columns_[i].id)
 						.appendTo($li);
 
 					if (grid_.getColumnIndex(columns_[i].id) != null)
-						$input.attr("checked","checked");
+						$input.attr('checked', 'checked');
 
 					$("<label for='columnpicker_" + i + "' />")
 						.text(columns_[i].name)
@@ -200,8 +200,8 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 
 
 				menu_
-					.css("top", e.pageY - 10)
-					.css("left", e.pageX - 10)
+					.css('top', e.pageY - 10)
+					.css('left', e.pageX - 10)
 					.fadeIn(5);//options['fadeSpeed']);
 
 			});
@@ -274,7 +274,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 			});
 			dataView_.endUpdate();
 
-			$("#gridContainer")['resizable']();
+			$('#gridContainer')['resizable']();
 		},
 
 		close: function() {
@@ -285,7 +285,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 			grid_.resizeCanvas();
 			grid_.autosizeColumns();
 		}
-	}
+	};
 
 	// We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.view();
@@ -293,4 +293,4 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 	self = view;
 
 	return self;
-}
+};

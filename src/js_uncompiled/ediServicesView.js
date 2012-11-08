@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ediServicesView.js,v 1.5 2012/09/18 06:25:00 jeffw Exp $
+ *  $Id: ediServicesView.js,v 1.6 2012/11/08 03:35:10 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ediservicesview');
@@ -23,11 +23,11 @@ goog.require('goog.ui.tree.TreeControl');
  */
 codeshelf.ediservicesview = function(websession, facility) {
 
-	$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all")['mouseover'](
+	$('.grid-header .ui-icon').addClass('ui-state-default ui-corner-all')['mouseover'](
 		function(e) {
-			$(e.target).addClass("ui-state-hover")
+			$(e.target).addClass('ui-state-hover');
 		})['mouseout'](function(e) {
-		$(e.target).removeClass("ui-state-hover")
+		$(e.target).removeClass('ui-state-hover');
 	});
 
 	var websession_ = websession;
@@ -36,8 +36,8 @@ codeshelf.ediservicesview = function(websession, facility) {
 
 	var filterClause_ = 'parent.persistentId = :theId';
 	var filterParams_ = [
-		{ 'name': "theId", 'value': facility_['persistentId']}
-	]
+		{ 'name': 'theId', 'value': facility_['persistentId']}
+	];
 
 	var dataView_;
 	var grid_;
@@ -90,7 +90,7 @@ codeshelf.ediservicesview = function(websession, facility) {
 					dataView_.sort(comparer, sortdir_);
 				}
 			}
-		}
+		};
 
 		return callback;
 	}
@@ -109,14 +109,14 @@ codeshelf.ediservicesview = function(websession, facility) {
 						'id':                  property.id,
 						'name':                property.title,
 						'field':               property.id,
-						'behavior':            "select",
-						'headerCssClass':      " ",
+						'behavior':            'select',
+						'headerCssClass':      ' ',
 						'width':               property.width,
 						'cannotTriggerInsert': true,
 						'resizable':           true,
 						'selectable':          false,
 						'sortable':            true
-					}
+					};
 				}
 			}
 
@@ -129,10 +129,10 @@ codeshelf.ediservicesview = function(websession, facility) {
 				'topPanelHeight':       25
 			};
 
-			sortcol_ = "Description";
+			sortcol_ = 'Description';
 			sortdir_ = 1;
 			percentCompleteThreshold_ = 0;
-			searchString_ = "";
+			searchString_ = '';
 
 			goog.dom.appendChild(self.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
@@ -147,7 +147,7 @@ codeshelf.ediservicesview = function(websession, facility) {
 				'propertyNames': properties_,
 				'filterClause':  filterClause_,
 				'filterParams':  filterParams_
-			}
+			};
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
@@ -237,7 +237,7 @@ codeshelf.ediservicesview = function(websession, facility) {
 			});
 			dataView_.endUpdate();
 
-			$("#gridContainer")['resizable']();
+			$('#gridContainer')['resizable']();
 		},
 
 		close: function() {
@@ -248,11 +248,11 @@ codeshelf.ediservicesview = function(websession, facility) {
 			grid_.resizeCanvas();
 			grid_.autosizeColumns();
 		}
-	}
+	};
 	var tools = [
 		{id: 'select-tool', title: 'Select', icon: 'select-icon.png'},
 		{id: 'delete-tool', title: 'Delete', icon: 'delete-icon.png'}
-	]
+	];
 
 	// We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.view({doHandleSelection: true, doDragSelect: true, toolbarTools: tools});
@@ -260,4 +260,4 @@ codeshelf.ediservicesview = function(websession, facility) {
 	self = view;
 
 	return view;
-}
+};

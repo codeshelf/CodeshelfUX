@@ -1,13 +1,13 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: initializeNewClient.js,v 1.18 2012/10/30 15:21:33 jeffw Exp $
+ *  $Id: initializeNewClient.js,v 1.19 2012/11/08 03:35:11 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.initializenewclient');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.websession');
-goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
+goog.require('goog.events.EventType');
 
 codeshelf.initializenewclient = function() {
 
@@ -36,7 +36,7 @@ codeshelf.initializenewclient = function() {
 				}
 
 			}
-		}
+		};
 
 		return callback;
 	}
@@ -74,7 +74,7 @@ codeshelf.initializenewclient = function() {
 				{'name': 'posX', 'value': longitude, 'classType': 'java.lang.Double'},
 				{'name': 'posY', 'value': latitude, 'classType': 'java.lang.Double'}
 			]
-		}
+		};
 
 		var newFacilityCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
 		websession_.sendCommand(newFacilityCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_METHOD_RESP), false);
@@ -83,7 +83,7 @@ codeshelf.initializenewclient = function() {
 			'className':    organization_['className'],
 			'persistentId': organization_['persistentId'],
 			'getterMethod': 'getFacilities'
-		}
+		};
 
 		// Attempt to reload this new facility.
 		var getFacilitiesCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
@@ -103,7 +103,7 @@ codeshelf.initializenewclient = function() {
 				posFail();
 			}
 		}
-	}
+	};
 
 	return thisInitializeNewClient_;
-}
+};

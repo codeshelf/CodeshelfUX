@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorGmapsOverlay.js,v 1.4 2012/05/11 07:32:55 jeffw Exp $
+ *  $Id: facilityEditorGmapsOverlay.js,v 1.5 2012/11/08 03:35:10 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorviewgmapsoverlay');
 
@@ -28,14 +28,14 @@ codeshelf.facilityeditorviewgmapsoverlay = function(map) {
 
 			thisOverlay_.draw = function() {
 
-			}
+			};
 
 			thisOverlay_.setMap(map);
 		}
-	}
+	};
 
 	return thisOverlay_;
-}
+};
 
 
 

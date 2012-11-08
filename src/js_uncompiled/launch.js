@@ -1,17 +1,17 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: launch.js,v 1.30 2012/09/16 00:12:47 jeffw Exp $
+ *  $Id: launch.js,v 1.31 2012/11/08 03:35:10 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.launch');
+goog.require('codeshelf.mainpage');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.websession');
-goog.require('codeshelf.mainpage');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
-goog.require('goog.window');
 goog.require('goog.style');
 goog.require('goog.ui.RoundedPanel');
+goog.require('goog.window');
 //goog.require('arrowlets');
 
 codeshelf.launchWindow = function() {
@@ -29,7 +29,7 @@ codeshelf.launchWindow = function() {
 
 		var launchCodeInput = {
 			'launchCode': goog.dom.getElement('launchCodeInput').value
-		}
+		};
 		var launchCommand = websession_.createCommand(kWebSessionCommandType.LAUNCH_CODE_CHECK, launchCodeInput);
 		websession_.sendCommand(launchCommand, websocketCmdCallback(kWebSessionCommandType.LAUNCH_CODE_RESP), false);
 	}
@@ -40,7 +40,7 @@ codeshelf.launchWindow = function() {
 				if (!command['data'].hasOwnProperty(kWebSessionCommandType.LAUNCH_CODE_RESP)) {
 					alert('response has no launch code result');
 				} else {
-					if (command['data']['LAUNCH_CODE_RS'] == "SUCCEED") {
+					if (command['data']['LAUNCH_CODE_RS'] == 'SUCCEED') {
 						websession_.setState(kWebsessionState.VALIDATED);
 						application_.setOrganization(command['data']['organization']);
 						self.exit();
@@ -83,7 +83,7 @@ codeshelf.launchWindow = function() {
 				if (event.keyCode == 13) {
 					launchCodeCheck();
 				}
-			}
+			};
 			launchCodeInput.focus();
 			launchCodeInput.select();
 		},

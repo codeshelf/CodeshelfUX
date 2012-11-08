@@ -1,22 +1,22 @@
 goog.provide('codeshelf.hierarchylistview');
-goog.require('goog.ui.Dialog');
-goog.require('slickgrid.core');
-goog.require('slickgrid.firebugx');
-goog.require('slickgrid.editors');
-goog.require('slickgrid.rowselection');
-goog.require('slickgrid.grid');
-goog.require('slickgrid.dataview');
-goog.require('slickgrid.pager');
-goog.require('slickgrid.columnpicker');
 goog.require('extern.jquery');
+goog.require('goog.ui.Dialog');
+goog.require('slickgrid.columnpicker');
+goog.require('slickgrid.core');
+goog.require('slickgrid.dataview');
+goog.require('slickgrid.editors');
+goog.require('slickgrid.firebugx');
+goog.require('slickgrid.grid');
+goog.require('slickgrid.pager');
+goog.require('slickgrid.rowselection');
 
 codeshelf.hierarchylistview = function(websession, domainObject, filterClause, filterParams, hierarchyMap) {
 
-	$(".grid-header .ui-icon").addClass("ui-state-default ui-corner-all")['mouseover'](
+	$('.grid-header .ui-icon').addClass('ui-state-default ui-corner-all')['mouseover'](
 		function(e) {
-			$(e.target).addClass("ui-state-hover")
+			$(e.target).addClass('ui-state-hover');
 		})['mouseout'](function(e) {
-		$(e.target).removeClass("ui-state-hover")
+		$(e.target).removeClass('ui-state-hover');
 	});
 
 	var websession_ = websession;
@@ -84,19 +84,19 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 						if ((object['op'] === 'cre') || (object['op'] === 'upd')) {
 							for (var j = 0; j < (hierarchyMap_.length - 1); j++) {
 								if (hierarchyMap_[j] === object['className']) {
-									item = dataView_.getItemById(object['fullDomainId'])
+									item = dataView_.getItemById(object['fullDomainId']);
 									if (item === undefined) {
 										var filter = 'parent.persistentId = :theId';
 										var filterParams = [
-											{ 'name': "theId", 'value': object['persistentId']}
-										]
+											{ 'name': 'theId', 'value': object['persistentId']}
+										];
 
 										var data = {
 											'className':     hierarchyMap_[j + 1],
 											'propertyNames': properties_,
 											'filterClause':  filter,
 											'filterParams':  filterParams
-										}
+										};
 
 										var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 										websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
@@ -121,7 +121,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 					dataView_.sort(comparer, sortdir_);
 				}
 			}
-		}
+		};
 
 		return callback;
 	}
@@ -139,7 +139,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 					}
 				}
 			}
-		}
+		};
 
 		return callback;
 	}
@@ -167,14 +167,14 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 								'id':                  property.id,
 								'name':                property.title,
 								'field':               property.id,
-								'behavior':            "select",
-								'headerCssClass':      " ",
+								'behavior':            'select',
+								'headerCssClass':      ' ',
 								'width':               property.width,
 								'cannotTriggerInsert': true,
 								'resizable':           true,
 								'selectable':          false,
 								'sortable':            true
-							}
+							};
 						}
 					}
 				}
@@ -189,10 +189,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 				'topPanelHeight':       25
 			};
 
-			sortcol_ = "Description";
+			sortcol_ = 'Description';
 			sortdir_ = 1;
 			percentCompleteThreshold_ = 0;
-			searchString_ = "";
+			searchString_ = '';
 
 			goog.dom.appendChild(self.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
@@ -207,7 +207,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 				'propertyNames': properties_,
 				'filterClause':  filterClause_,
 				'filterParams':  filterParams_
-			}
+			};
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
@@ -225,7 +225,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 					addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.OK).
 					addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
 
-				var dataEntryDialog = codeshelf.dataentrydialog("Link Dropbox", buttonSet);
+				var dataEntryDialog = codeshelf.dataentrydialog('Link Dropbox', buttonSet);
 				var dialogContentElement = soy.renderAsElement(codeshelf.templates.linkDropboxDialog);
 				dataEntryDialog.setupDialog(dialogContentElement);
 				dataEntryDialog.open(function(event, dialog) {
@@ -238,13 +238,13 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 								'methodName':   'linkDropbox',
 								'methodArgs':   [
 								]
-							}
+							};
 
 							var linkDropboxCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
 							websession_.sendCommand(linkDropboxCmd, websocketCmdCallbackFacility(kWebSessionCommandType.OBJECT_METHOD_REQ), true);
 						}
 					}
-				)
+				);
 
 			});
 
@@ -328,17 +328,17 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 			data.getItemMetadata = function(row) {
 				if (row % 2 === 1) {
 					return {
-						"columns": {
-							"duration": {
-								"colspan": 3
+						'columns': {
+							'duration': {
+								'colspan': 3
 							}
 						}
 					};
 				} else {
 					return {
-						"columns": {
+						'columns': {
 							0: {
-								"colspan": "*"
+								'colspan': '*'
 							}
 						}
 					};
@@ -354,7 +354,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 			});
 			dataView_.endUpdate();
 
-			$("#gridContainer")['resizable']();
+			$('#gridContainer')['resizable']();
 		},
 
 		close: function() {
@@ -365,7 +365,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 			grid_.resizeCanvas();
 			grid_.autosizeColumns();
 		}
-	}
+	};
 
 // We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.view();
@@ -373,4 +373,4 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 	self = view;
 
 	return self;
-}
+};

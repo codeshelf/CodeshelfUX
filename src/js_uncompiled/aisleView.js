@@ -1,31 +1,34 @@
 /*******************************************************************************
- *  CodeShelfUX
- *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: aisleView.js,v 1.21 2012/11/03 03:24:32 jeffw Exp $
- *******************************************************************************/
+ * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
+ * $Id: aisleView.js,v 1.22 2012/11/08 03:35:10 jeffw Exp $
+ ******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
 goog.require('codeshelf.dataentrydialog');
-goog.require('domainobjects');
 goog.require('codeshelf.templates');
+goog.require('domainobjects');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
-goog.require('goog.graphics');
-goog.require('goog.graphics.paths');
-goog.require('goog.math');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.fx.Dragger');
+goog.require('goog.graphics');
+goog.require('goog.graphics.paths');
+goog.require('goog.math');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('raphael');
 
 /**
  * The AisleView object
- * @param {codeshelf.websession} websession The websession for this view.
- * @param {Object} aisle The aisle object for this aisle.
- * @param {goog.graphics.AbstractGraphics} graphics The graphics context where we can draw.
+ *
+ * @param {codeshelf.websession}
+ *            websession The websession for this view.
+ * @param {Object}
+ *            aisle The aisle object for this aisle.
+ * @param {goog.graphics.AbstractGraphics}
+ *            graphics The graphics context where we can draw.
  * @return {Object}
  */
 codeshelf.aisleview = function(websession, aisle) {
@@ -37,6 +40,7 @@ codeshelf.aisleview = function(websession, aisle) {
 
 	/**
 	 * The private AisleView functions.
+	 *
 	 * @type {Object}
 	 * @private
 	 */
@@ -55,7 +59,9 @@ codeshelf.aisleview = function(websession, aisle) {
 
 	/**
 	 * Compute the path for a bay.
-	 * @param {Object} bayData The bay for which we need the path.
+	 *
+	 * @param {Object}
+	 *            bayData The bay for which we need the path.
 	 * @return {goog.graphics.Path}
 	 */
 	function computeBayPath(bayData) {
@@ -90,8 +96,12 @@ codeshelf.aisleview = function(websession, aisle) {
 
 	/**
 	 * Convert a Bay's vertex into a point in graphics space (pixels).
-	 * @param {Element} bayElement The HTML element to which the point will be relative.
-	 * @param {Object} vertex The vertex for which we need a point.
+	 *
+	 * @param {Element}
+	 *            bayElement The HTML element to which the point will be
+	 *            relative.
+	 * @param {Object}
+	 *            vertex The vertex for which we need a point.
 	 * @return {Object}
 	 */
 	function convertBayVertexToPoint(bayElement, vertex) {
@@ -102,8 +112,11 @@ codeshelf.aisleview = function(websession, aisle) {
 	}
 
 	/**
-	 * Handle any bay update commands that arrive over the websocket for this aisle.
-	 * @param {Object} bay The updated bay.
+	 * Handle any bay update commands that arrive over the websocket for this
+	 * aisle.
+	 *
+	 * @param {Object}
+	 *            bay The updated bay.
 	 */
 	function handleUpdateBayCmd(bay) {
 		if (bays_[bay['persistentId']] === undefined) {
@@ -111,22 +124,32 @@ codeshelf.aisleview = function(websession, aisle) {
 			var bayData = {};
 			bayData['bay'] = bay;
 
-			bayData['bayElement'] = soy.renderAsElement(codeshelf.templates.bayView, {id: bay['domainId']});
+			bayData['bayElement'] = soy.renderAsElement(codeshelf.templates.bayView, {
+				id: bay['domainId']
+			});
 			goog.dom.appendChild(self.getMainPaneElement(), bayData['bayElement']);
-			bayData['bayElement'].style.left = (parseInt(self.getMainPaneElement().style.left) + (bay['posX'] * self.getPixelsPerMeter())) + 'px';
-			bayData['bayElement'].style.top = (parseInt(self.getMainPaneElement().style.top) + (bay['posY'] * self.getPixelsPerMeter())) + 'px';
+			bayData['bayElement'].style.left = (parseInt(self.getMainPaneElement().style.left) + (bay['posX'] * self
+				.getPixelsPerMeter()))
+				+ 'px';
+			bayData['bayElement'].style.top = (parseInt(self.getMainPaneElement().style.top) + (bay['posY'] * self
+				.getPixelsPerMeter()))
+				+ 'px';
 
 			bays_[bay['persistentId']] = bayData;
 
-			// Create the filter to listen to all vertex updates for this facility.
+			// Create the filter to listen to all vertex updates for this
+			// facility.
 			var vertexFilterData = {
 				'className':     domainobjects.Vertex.className,
-				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
+				'propertyNames': [ 'domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder', 'parentPersistentId' ],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
-					{ 'name': "theId", 'value': bay['persistentId']}
+					{
+						'name':  'theId',
+						'value': bay['persistentId']
+					}
 				]
-			}
+			};
 
 			var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
 			websession_.sendCommand(vertexFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
@@ -135,8 +158,11 @@ codeshelf.aisleview = function(websession, aisle) {
 	}
 
 	/**
-	 * Handle any bay delete commands that arrive over the websocket for this aisle.
-	 * @param {Object} bay The deleted bay.
+	 * Handle any bay delete commands that arrive over the websocket for this
+	 * aisle.
+	 *
+	 * @param {Object}
+	 *            bay The deleted bay.
 	 */
 	function handleDeleteBayCmd(bay) {
 		if (bays_[bay['persistentId']] !== undefined) {
@@ -146,8 +172,11 @@ codeshelf.aisleview = function(websession, aisle) {
 	}
 
 	/**
-	 * Handle any bay vertex update commands that arrive over the websocket for this aisle.
-	 * @param {Object} bayvertex The updated bay vertex.
+	 * Handle any bay vertex update commands that arrive over the websocket for
+	 * this aisle.
+	 *
+	 * @param {Object}
+	 *            bayvertex The updated bay vertex.
 	 */
 	function handleUpdateBayVertexCmd(bayVertex) {
 		var bayPersistentId = bayVertex['parentPersistentId'];
@@ -162,8 +191,11 @@ codeshelf.aisleview = function(websession, aisle) {
 	}
 
 	/**
-	 * Handle any bay vertex delete commands that arrive over the websocket for this aisle.
-	 * @param {Object} bayvertex The deleted bay vertex.
+	 * Handle any bay vertex delete commands that arrive over the websocket for
+	 * this aisle.
+	 *
+	 * @param {Object}
+	 *            bayvertex The deleted bay vertex.
 	 */
 	function handleDeleteBayVertexCmd(bayVertex) {
 
@@ -171,6 +203,7 @@ codeshelf.aisleview = function(websession, aisle) {
 
 	/**
 	 * The callback to use for any commands we send to the remote server.
+	 *
 	 * @return {Object}
 	 */
 	function websocketCmdCallback(expectedResponseType) {
@@ -209,14 +242,14 @@ codeshelf.aisleview = function(websession, aisle) {
 					}
 				}
 			}
-		}
+		};
 
 		return callback;
 	}
 
-
 	/**
 	 * The public AisleView functions.
+	 *
 	 * @type {Object}
 	 * @private
 	 */
@@ -224,32 +257,38 @@ codeshelf.aisleview = function(websession, aisle) {
 
 		/**
 		 * Setup the view
-		 * @param {Element} contentElement The element where we can place all of the view content.
+		 *
+		 * @param {Element}
+		 *            contentElement The element where we can place all of the
+		 *            view content.
 		 */
 		doSetupView: function() {
 
-			// Compute the dimensions of the aisle outline, and create a bounding rectangle for it.
+			// Compute the dimensions of the aisle outline, and create a
+			// bounding rectangle for it.
 			// Create a draw canvas for the bounding rect.
-			// Compute the path for the aisle outline and put it into the draw canavs.
+			// Compute the path for the aisle outline and put it into the draw
+			// canavs.
 
 			graphics_ = goog.graphics.createGraphics(self.getMainPaneElement().clientWidth, self.getMainPaneElement().clientHeight);
 			graphics_.render(self.getMainPaneElement());
 
-
 			// Create the filter to listen to all bay updates for this aisle.
 			var data = {
 				'className':     domainobjects.Bay.className,
-				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'posZ'],
+				'propertyNames': [ 'domainId', 'posTypeEnum', 'posX', 'posY', 'posZ' ],
 				'filterClause':  'parent.persistentId = :theId AND posZ = 0',
 				'filterParams':  [
-					{ 'name': "theId", 'value': aisle_['persistentId']}
+					{
+						'name':  'theId',
+						'value': aisle_['persistentId']
+					}
 				]
 			};
 
 			var bayFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			websession_.sendCommand(bayFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 		},
-
 
 		/**
 		 * Open the view.
@@ -288,10 +327,15 @@ codeshelf.aisleview = function(websession, aisle) {
 				if (bays_.hasOwnProperty(bayKey)) {
 					var bayData = bays_[bayKey];
 
-					bayData['bayElement'].style.left = (/* parseInt(self.getMainPaneElement().style.left) + */ (bayData['bay']['posX'] * self.getPixelsPerMeter())) + 'px';
-					bayData['bayElement'].style.top = (/* parseInt(self.getMainPaneElement().style.top) + */ (bayData['bay']['posY'] * self.getPixelsPerMeter())) + 'px';
+					bayData['bayElement'].style.left = (/* parseInt(self.getMainPaneElement().style.left) + */(bayData['bay']['posX'] * self
+						.getPixelsPerMeter()))
+						+ 'px';
+					bayData['bayElement'].style.top = (/* parseInt(self.getMainPaneElement().style.top) + */(bayData['bay']['posY'] * self
+						.getPixelsPerMeter()))
+						+ 'px';
 
-					// If this is the lowest bay, and there are at least four vertices then draw the bay.
+					// If this is the lowest bay, and there are at least four
+					// vertices then draw the bay.
 					if ((bayData['bay']['posZ'] === 0) && (Object.size(bayData.vertices) >= 4)) {
 						var bayPath = computeBayPath(bayData);
 						var stroke = new goog.graphics.Stroke(0.5, 'black');
@@ -305,12 +349,13 @@ codeshelf.aisleview = function(websession, aisle) {
 
 			endDraw();
 		}
-	}
+	};
 
-	// We want this view to extend the root/parent view, but we want to return this view.
+	// We want this view to extend the root/parent view, but we want to return
+	// this view.
 	var view = codeshelf.view();
 	jQuery.extend(view, self);
 	self = view;
 
 	return self;
-}
+};

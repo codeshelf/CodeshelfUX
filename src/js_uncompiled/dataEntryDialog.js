@@ -1,14 +1,14 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataEntryDialog.js,v 1.3 2012/09/18 14:47:57 jeffw Exp $
+ *  $Id: dataEntryDialog.js,v 1.4 2012/11/08 03:35:10 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataentrydialog');
+goog.require('goog.Disposable');
 goog.require('goog.array');
 goog.require('goog.debug');
 goog.require('goog.debug.Logger');
-goog.require('goog.Disposable');
 goog.require('goog.ui.Checkbox');
 goog.require('goog.ui.Checkbox.State');
 goog.require('goog.ui.Dialog');
@@ -100,7 +100,7 @@ codeshelf.dataentrydialog = function(title, buttonSet) {
 				return '';
 			}
 		}
-	}
+	};
 
 	return thisDataEntryDialog_;
-}
+};

@@ -1,16 +1,16 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.26 2012/10/16 06:23:22 jeffw Exp $
+ *  $Id: websession.js,v 1.27 2012/11/08 03:35:11 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
+goog.require('goog.array');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
-goog.require('goog.net.WebSocket');
 goog.require('goog.json');
-goog.require('goog.array');
+goog.require('goog.net.WebSocket');
 
-if (typeof MozWebSocket !== "undefined") {
+if (typeof MozWebSocket !== 'undefined') {
 	var WebSocket = MozWebSocket;
 }
 
@@ -96,7 +96,7 @@ codeshelf.websession = function() {
 				'id': goog.events.getUniqueId('cid'),
 				'type':  commandType,
 				'data':  data
-			}
+			};
 			return command;
 		},
 

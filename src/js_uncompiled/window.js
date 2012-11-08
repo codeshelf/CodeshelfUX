@@ -1,14 +1,14 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: window.js,v 1.15 2012/09/06 06:43:38 jeffw Exp $
+ *  $Id: window.js,v 1.16 2012/11/08 03:35:11 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.window');
-goog.require('goog.style');
 goog.require('goog.dom.query');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.fx.Dragger');
+goog.require('goog.style');
 
 codeshelf.window = function(title, view, parent, limits) {
 
@@ -108,7 +108,7 @@ codeshelf.window = function(title, view, parent, limits) {
 			var focusFuction = function(event) {
 				thisWindow_.focusWindow();
 				event.dispose();
-			}
+			};
 			return focusFuction;
 		},
 
@@ -146,10 +146,10 @@ codeshelf.window = function(title, view, parent, limits) {
 			var moverFunction = function moveWindowEnd(event) {
 				goog.style.setOpacity(mover_, 1);
 				event.dispose();
-			}
+			};
 			return moverFunction;
 		}
-	}
+	};
 
 	return thisWindow_;
-}
+};
