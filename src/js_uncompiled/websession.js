@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.27 2012/11/08 03:35:11 jeffw Exp $
+ *  $Id: websession.js,v 1.28 2012/11/10 03:16:49 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.array');
@@ -15,8 +15,8 @@ if (typeof MozWebSocket !== 'undefined') {
 }
 
 var kWebSessionCommandType = {
-	LAUNCH_CODE_CHECK:    'LAUNCH_CODE_RQ',
-	LAUNCH_CODE_RESP:     'LAUNCH_CODE_RS',
+	LOGIN_REQ:            'LOGIN_RQ',
+	LOGIN_RESP:           'LOGIN_RS',
 	OBJECT_GETTER_REQ:    'OBJ_GET_RQ',
 	OBJECT_GETTER_RESP:   'OBJ_GET_RS',
 	OBJECT_UPDATE_REQ:    'OBJ_UPD_RQ',
@@ -93,9 +93,9 @@ codeshelf.websession = function() {
 
 		createCommand: function(commandType, data) {
 			var command = {
-				'id': goog.events.getUniqueId('cid'),
-				'type':  commandType,
-				'data':  data
+				'id':   goog.events.getUniqueId('cid'),
+				'type': commandType,
+				'data': data
 			};
 			return command;
 		},

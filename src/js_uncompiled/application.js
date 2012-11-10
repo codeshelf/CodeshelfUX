@@ -1,10 +1,10 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: application.js,v 1.20 2012/11/08 03:35:10 jeffw Exp $
+ *  $Id: application.js,v 1.21 2012/11/10 03:16:49 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.application');
-goog.require('codeshelf.launch');
+goog.require('codeshelf.login');
 goog.require('codeshelf.mainpage');
 goog.require('codeshelf.websession');
 goog.require('domainobjects');
@@ -15,7 +15,7 @@ var codeshelf = codeshelf || {}; // Identifies this file as the codeshelf base.
 codeshelf.application = function() {
 
 	var webSession_;
-	var launchWindow_;
+	var loginWindow_;
 	var organization_;
 	var thisApplication_;
 
@@ -58,12 +58,12 @@ codeshelf.application = function() {
 
 			// Remove all markup from the URL - we'll build it from the app itself.
 			goog.dom.removeChildren(goog.dom.getDocument().body);
-			launchWindow_ = codeshelf.launchWindow();
-			launchWindow_.enter(thisApplication_, webSession_);
+			loginWindow_ = codeshelf.loginWindow();
+			loginWindow_.enter(thisApplication_, webSession_);
 
 			// Cause automatic login to save on test time.
 			setTimeout(function() {
-//				launchWindow_.launchCodeCheck();
+//				loginWindow_.launchCodeCheck();
 			}, 1250);
 		}
 	};

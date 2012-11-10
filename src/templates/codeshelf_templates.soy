@@ -39,15 +39,22 @@
 {/template}
 
 /**
- * Present the launch code dialog
+ * Present the login dialog
  */
-{template .launchCodeDialog}
+{template .loginDialog}
 <img id="background_image" class="background_image" src="../../src/images/STS-125.jpg" alt="">
-<div id='launchCodePanel' class='goog-roundedpanel'>
+<div id='loginPanel'>
 	<div class='goog-roundedpanel-content'>
-		<div class='dialogLabel' style='margin-top: 15px; margin-left: 15px;'>
-			Launch Code:
-			<input type='text' id='launchCodeInput' class='dialogField' value='O1' style='margin-left: 6px; width: 50%;'>
+		<div class='dialogLabel' style='margin-top: 18px; margin-left: 18px;'>
+		<div>
+			<label class='dialogLabel' style='float:left;'>User Id:</label>
+			<input type='text' id='userIdInput' class='dialogField' value='jeffw@gadgetworks.com' style='margin-right: 10px; width:200px; float:right'>
+		</div>
+			</br>
+		<div>
+			<label class='dialogLabel' style='float:left;'>Password:</label>
+			<input type='password' id='passwordInput' class='dialogField' value='blahdeeblah' style='margin-right: 10px; width:200px; float:right'>
+		</div>
 		</div>
 	</div>
 </div>
