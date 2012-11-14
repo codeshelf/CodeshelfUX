@@ -2,169 +2,50 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c319b0c7-b9cf-46f5-90a5-b0a625c84957" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/js_uncompiled/login.js" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/js_uncompiled/launch.js" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.externalToolBuilders/GoogleClosureStylesheets.launch" afterPath="$PROJECT_DIR$/.externalToolBuilders/GoogleClosureStylesheets.launch" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/base.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/base.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/base_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/base_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/base64.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/base64.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/crypt.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/crypt.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/crypt_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/crypt_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/hash.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/hash.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/hash_test.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/hash_test.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/hmac.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/hmac.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/md5_perf.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/md5_perf.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/sha1_perf.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/crypt/sha1_perf.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/date/relative.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/date/relative.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/date/relative_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/date/relative_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/db/indexeddb.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/db/indexeddb.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/debug/debugwindow.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/debug/debugwindow.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/inputhandler.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/inputhandler.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/deps.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/deps.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/disposable/disposable.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/disposable/disposable.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/disposable/disposable_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/disposable/disposable_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/annotate.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/annotate.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/annotate_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/annotate_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/classes.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/classes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/classes_quirks_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/classes_quirks_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/dom.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/dom.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/dom_quirks_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/dom_quirks_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/browserfeature.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/browserfeature.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/field.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/field.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/field_test.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/field_test.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/link.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/link.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/link_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/link_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/abstractbubbleplugin.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/abstractbubbleplugin.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/abstractbubbleplugin_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/abstractbubbleplugin_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/basictextformatter.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/basictextformatter.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/enterhandler.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/enterhandler.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/enterhandler_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/enterhandler_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/linkbubble.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/linkbubble.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/linkbubble_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/linkbubble_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/linkdialogplugin.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/linkdialogplugin.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/linkdialogplugin_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/linkdialogplugin_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/linkshortcutplugin.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/plugins/linkshortcutplugin.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/seamlessfield_quirks_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/seamlessfield_quirks_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/browserfeature.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/browserfeature.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/eventtarget_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/eventtarget_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/eventtype.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/eventtype.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/inputhandler.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/inputhandler.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/keycodes.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/keycodes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/keyhandler.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/events/keyhandler.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/fs/fs.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/fs/fs.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/functions/functions.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/functions/functions.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/fx/abstractdragdrop.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/fx/abstractdragdrop.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/history/history.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/history/history.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/iter/iter.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/iter/iter.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/json/evaljsonprocessor.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/json/evaljsonprocessor.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/json/json.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/json/json.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/json/json_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/json/json_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/json/processor_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/json/processor_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/labs/net/image.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/labs/net/image.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/labs/net/image_test.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/labs/net/image_test.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/labs/net/xhr.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/labs/net/xhr.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/labs/net/xhr_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/labs/net/xhr_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/labs/testing/stringmatcher.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/labs/testing/stringmatcher.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/labs/testing/stringmatcher_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/labs/testing/stringmatcher_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/locale/countrylanguagenames_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/locale/countrylanguagenames_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/locale/locale.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/locale/locale.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/messaging/respondingchannel.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/messaging/respondingchannel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/module/abstractmoduleloader.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/module/abstractmoduleloader.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/module/moduleloader.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/module/moduleloader.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/module/moduleloader_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/module/moduleloader_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/module/modulemanager.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/module/modulemanager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/browserchannel.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/browserchannel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/browserchannel_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/browserchannel_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/browsertestchannel.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/browsertestchannel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/channeldebug.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/channeldebug.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/channelrequest.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/channelrequest.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/channelrequest_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/channelrequest_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/cookies.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/cookies.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/httpstatus.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/httpstatus.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/iframeio.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/iframeio.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xhrio.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xhrio.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xhrio_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xhrio_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xhrmanager.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xhrmanager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xhrmanager_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xhrmanager_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/crosspagechannel.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/crosspagechannel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/frameelementmethodtransport.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/frameelementmethodtransport.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/iframepollingtransport.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/iframepollingtransport.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/iframerelaytransport.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/iframerelaytransport.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/nativemessagingtransport.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/nativemessagingtransport.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/nativemessagingtransport_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/nativemessagingtransport_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/nixtransport.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/nixtransport.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/xpc.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/xpc/xpc.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/object/object.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/object/object.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/positioning/anchoredviewportposition.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/positioning/anchoredviewportposition.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/positioning/anchoredviewportposition_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/positioning/anchoredviewportposition_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/positioning/positioning_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/positioning/positioning_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/proto2/fielddescriptor.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/proto2/fielddescriptor.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/proto2/fielddescriptor_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/proto2/fielddescriptor_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/proto2/message.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/proto2/message.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/html5localstorage.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/html5localstorage.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/html5localstorage_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/html5localstorage_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/html5sessionstorage.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/html5sessionstorage.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/html5sessionstorage_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/html5sessionstorage_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/html5webstorage.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/html5webstorage.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/ieuserdata.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/ieuserdata.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/ieuserdata_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/ieuserdata_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/iterablemechanism_test.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/iterablemechanism_test.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/mechanism_test.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/mechanism_test.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/mechanismfactory_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/mechanismfactory_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/prefixedmechanism.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/prefixedmechanism.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/prefixedmechanism_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/mechanism/prefixedmechanism_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/richstorage.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/storage/richstorage.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/string/linkify_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/string/linkify_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/string/string.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/string/string.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/string/string_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/string/string_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/structs/prioritypool.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/structs/prioritypool.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/structs/prioritypool_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/structs/prioritypool_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/structs/priorityqueue.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/structs/priorityqueue.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/structs/structs.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/structs/structs.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/style/style_quirks_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/style/style_quirks_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/style/style_test_iframe_quirk.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/style/style_test_iframe_quirk.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/style/transition.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/style/transition.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/asserts.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/asserts.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/dom.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/dom.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/events/events.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/events/events.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/events/events_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/events/events_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/net/xhrio.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/net/xhrio.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/performancetimer.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/performancetimer.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/performancetimer_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/performancetimer_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/testrunner.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/testing/testrunner.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/ac/autocomplete.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/ac/autocomplete.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/ac/autocomplete_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/ac/autocomplete_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/ac/renderer.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/ac/renderer.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/activitymonitor.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/activitymonitor.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/activitymonitor_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/activitymonitor_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/component.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/component.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/container.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/container.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/editor/bubble.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/editor/bubble.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/emoji/emojipicker_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/emoji/emojipicker_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/inputdatepicker.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/inputdatepicker.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/labelinput.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/labelinput.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/labelinput_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/labelinput_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/media/youtube_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/media/youtube_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/menubutton.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/menubutton.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/menubutton_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/menubutton_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/palette.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/palette.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/splitpane.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/splitpane.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/splitpane_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/splitpane_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/textarea.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/ui/textarea.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/uri/uri.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/uri/uri.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/uri/uri_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/uri/uri_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/uri/utils.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/uri/utils.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/useragent/useragent.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/useragent/useragent.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/useragent/useragent_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/useragent/useragent_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/vec/float64array.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/vec/float64array.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/vec/mat4.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/vec/mat4.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/vec/mat4_test.html" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/vec/mat4_test.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/GoogleClosureLibrary/third_party/closure/goog/mochikit/async/deferred.js" afterPath="$PROJECT_DIR$/lib/GoogleClosureLibrary/third_party/closure/goog/mochikit/async/deferred.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.project" afterPath="$PROJECT_DIR$/.project" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/JQuery/jquery-1.7.1.js" afterPath="$PROJECT_DIR$/lib/JQuery/jquery-1.7.1.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/JQuery/jquery-ui.1.8.19.js" afterPath="$PROJECT_DIR$/lib/JQuery/jquery-ui.1.8.19.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/JQuery/jquery.event.drag-2.0.js" afterPath="$PROJECT_DIR$/lib/JQuery/jquery.event.drag-2.0.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/JQuery/jquery.event.drop-2.0.js" afterPath="$PROJECT_DIR$/lib/JQuery/jquery.event.drop-2.0.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/JQuery/jquery.jsonp-2.3.0.js" afterPath="$PROJECT_DIR$/lib/JQuery/jquery.jsonp-2.3.0.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/JQuery/jquery.sparkline.min.js" afterPath="$PROJECT_DIR$/lib/JQuery/jquery.sparkline.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/controls/slick.columnpicker.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/controls/slick.columnpicker.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/controls/slick.pager.css" afterPath="$PROJECT_DIR$/lib/SlickGrid/controls/slick.pager.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/controls/slick.pager.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/controls/slick.pager.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.autotooltips.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.autotooltips.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.cellcopymanager.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.cellcopymanager.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.cellrangedecorator.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.cellrangedecorator.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.cellrangeselector.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.cellrangeselector.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.cellselectionmodel.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.cellselectionmodel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.checkboxselectcolumn.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.checkboxselectcolumn.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.rowmovemanager.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.rowmovemanager.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.rowselectionmodel.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.rowselectionmodel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/slick.core.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/slick.core.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/slick.dataview.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/slick.dataview.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/slick.editors.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/slick.editors.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/slick.grid.css" afterPath="$PROJECT_DIR$/lib/SlickGrid/slick.grid.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/slick.grid.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/slick.grid.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/slick.groupitemmetadataprovider.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/slick.groupitemmetadataprovider.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/SlickGrid/slick.remotemodel.js" afterPath="$PROJECT_DIR$/lib/SlickGrid/slick.remotemodel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/css/.cvsignore" afterPath="$PROJECT_DIR$/src/css/.cvsignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/css/codeshelf.gss" afterPath="$PROJECT_DIR$/src/css/codeshelf.gss" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/css/listview.css" afterPath="$PROJECT_DIR$/src/css/listview.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/css/slick-default-theme.css" afterPath="$PROJECT_DIR$/src/css/slick-default-theme.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/html/codeshelf.dev.html" afterPath="$PROJECT_DIR$/src/html/codeshelf.dev.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/html/codeshelf.html" afterPath="$PROJECT_DIR$/src/html/codeshelf.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/application.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/application.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/websession.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/websession.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/aisleView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/aisleView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/domainObjects.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/domainObjects.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/ediServicesView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/ediServicesView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/initializeNewClient.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/initializeNewClient.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/listDemoView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/listDemoView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/listView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/listView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/listViewDataModel.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/listViewDataModel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/templates/codeshelf_templates.soy" afterPath="$PROJECT_DIR$/src/templates/codeshelf_templates.soy" />
     </list>
     <ignored path="CodeShelfUX.iws" />
@@ -188,20 +69,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="login.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/login.js">
+      <file leaf-file-name="slick.grid.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/SlickGrid/slick.grid.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="16" selection-start="767" selection-end="767" vertical-scroll-proportion="0.3043478">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="roundedpanel.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/roundedpanel.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="92" column="41" selection-start="3141" selection-end="3166" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="1850" column="20" selection-start="54146" selection-end="54146" vertical-scroll-proportion="0.49779087">
+              <folding>
+                <marker date="1352885836000" expanded="true" signature="7046:7101" placeholder="..." />
+                <marker date="1352885836000" expanded="true" signature="7209:7243" placeholder="..." />
+                <marker date="1352885836000" expanded="true" signature="7330:7342" placeholder="..." />
+                <marker date="1352885836000" expanded="true" signature="7495:7529" placeholder="..." />
+                <marker date="1352885836000" expanded="true" signature="7686:7742" placeholder="..." />
+                <marker date="1352885836000" expanded="true" signature="7948:7982" placeholder="..." />
+                <marker date="1352885836000" expanded="true" signature="8065:8078" placeholder="..." />
+                <marker date="1352885836000" expanded="true" signature="8312:8366" placeholder="..." />
+                <marker date="1352885836000" expanded="true" signature="11737:11828" placeholder="..." />
+                <marker date="1352885836000" expanded="true" signature="13675:13687" placeholder="..." />
+                <marker date="1352885836000" expanded="true" signature="27791:27808" placeholder="..." />
+                <marker date="1352885836000" expanded="true" signature="28218:28235" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -216,22 +101,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/initializeNewClient.js" />
+        <option value="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.cellselectionmodel.js" />
+        <option value="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.rowselectionmodel.js" />
+        <option value="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.cellcopymanager.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/domainObjects.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/listView.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/listDemoView.js" />
-        <option value="$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/disposable/disposable.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/aisleView.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/ediServicesView.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/initializeNewClient.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/websession.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/application.js" />
-        <option value="$PROJECT_DIR$/src/html/codeshelf.dev.html" />
-        <option value="$PROJECT_DIR$/src/html/codeshelf.html" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/login.js" />
+        <option value="$PROJECT_DIR$/lib/SlickGrid/controls/slick.pager.css" />
+        <option value="$PROJECT_DIR$/src/css/slick-default-theme.css" />
+        <option value="$PROJECT_DIR$/lib/SlickGrid/slick.dataview.js" />
+        <option value="$PROJECT_DIR$/lib/SlickGrid/slick.grid.js" />
       </list>
     </option>
   </component>
@@ -380,6 +265,60 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SlickGrid" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SlickGrid" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CodeShelfUX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope">
@@ -413,18 +352,19 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="options.splitter.main.proportions" value="0.3" />
     <property name="JavaScriptWeakerCompletionTypeGuess" value="false" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="recentsLimit" value="5" />
+    <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.lastSelected" value="preferences.sourceCode.JavaScript" />
+    <property name="recentsLimit" value="5" />
     <property name="JavaScriptLanguageLevel" value="ES5" />
-    <property name="FullScreen" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../GadgetworksSite" />
     <property name="DefaultHtmlFileTemplate" value="Xhtml" />
     <property name="JavaScriptPreferStrict" value="false" />
-    <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2547847" />
     <property name="GoToClass.includeJavaFiles" value="false" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="FullScreen" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2547847" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -522,8 +462,9 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972324" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18802084" sideWeight="0.6622458" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18802084" sideWeight="0.331565" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32714412" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18802084" sideWeight="0.38549957" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18802084" sideWeight="0.28116712" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32979664" sideWeight="0.5" order="13" side_tool="true" content_ui="tabs" />
@@ -533,7 +474,6 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32714412" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972324" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3280283" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
@@ -631,97 +571,130 @@
     </PATH>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/disposable/disposable.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="40" selection-start="1924" selection-end="1924" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/mainPage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="114" column="14" selection-start="4254" selection-end="4254" vertical-scroll-proportion="-9.145454">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/aisleView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="22" selection-start="977" selection-end="977" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/editor/field.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="235" column="8" selection-start="6735" selection-end="6741" vertical-scroll-proportion="0.4277929" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/websession.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="32" selection-start="681" selection-end="681" vertical-scroll-proportion="0.34332424" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/html/codeshelf.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="95" selection-start="654" selection-end="654" vertical-scroll-proportion="0.20319304" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/html/codeshelf.dev.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="32" selection-start="1976" selection-end="1976" vertical-scroll-proportion="0.51195496" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/application.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="29" selection-start="1807" selection-end="1807" vertical-scroll-proportion="0.7411444">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="581" column="79" selection-start="21824" selection-end="21824" vertical-scroll-proportion="0.33242506" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/graphics/canvasgraphics.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="28" selection-start="836" selection-end="836" vertical-scroll-proportion="-2.1362398" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/listViewDataModel.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/editor/helloworlddialogplugin_test.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="172" column="7" selection-start="5389" selection-end="5389" vertical-scroll-proportion="0.40225035" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/webgl/webgl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="686" column="21" selection-start="24057" selection-end="24066" vertical-scroll-proportion="0.33333334" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/demos/roundedpanel.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="92" column="41" selection-start="3141" selection-end="3166" vertical-scroll-proportion="0.0">
+        <state line="823" column="65" selection-start="28790" selection-end="28800" vertical-scroll-proportion="0.539039">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/login.js">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/aisleView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="16" selection-start="767" selection-end="767" vertical-scroll-proportion="0.3043478">
+        <state line="277" column="66" selection-start="8143" selection-end="8143" vertical-scroll-proportion="0.33242506">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/ediServicesView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="55" selection-start="1257" selection-end="1257" vertical-scroll-proportion="0.33242506">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/initializeNewClient.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="66" column="70" selection-start="2078" selection-end="2078" vertical-scroll-proportion="0.33242506">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/listView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="268" column="24" selection-start="7727" selection-end="7727" vertical-scroll-proportion="0.3705722">
+          <folding>
+            <marker date="1352880017000" expanded="false" signature="4322:4364" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/domainObjects.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="124" column="17" selection-start="2509" selection-end="2509" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/mainPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="97" column="61" selection-start="3531" selection-end="3548" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="152" column="20" selection-start="4648" selection-end="4648" vertical-scroll-proportion="-2.3272727">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="351" column="23" selection-start="13349" selection-end="13349" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/SlickGrid/slick.grid.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="7" selection-start="392" selection-end="392" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/listDemoView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="173" column="33" selection-start="4366" selection-end="4370" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/css/slick-default-theme.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="30" selection-start="633" selection-end="633" vertical-scroll-proportion="0.34332424">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/SlickGrid/slick.dataview.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="567" column="69" selection-start="13998" selection-end="14022" vertical-scroll-proportion="0.28865978">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/SlickGrid/controls/slick.pager.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="21" selection-start="103" selection-end="103" vertical-scroll-proportion="0.09536785">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/SlickGrid/slick.grid.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1850" column="20" selection-start="54146" selection-end="54146" vertical-scroll-proportion="0.49779087">
+          <folding>
+            <marker date="1352885836000" expanded="true" signature="7046:7101" placeholder="..." />
+            <marker date="1352885836000" expanded="true" signature="7209:7243" placeholder="..." />
+            <marker date="1352885836000" expanded="true" signature="7330:7342" placeholder="..." />
+            <marker date="1352885836000" expanded="true" signature="7495:7529" placeholder="..." />
+            <marker date="1352885836000" expanded="true" signature="7686:7742" placeholder="..." />
+            <marker date="1352885836000" expanded="true" signature="7948:7982" placeholder="..." />
+            <marker date="1352885836000" expanded="true" signature="8065:8078" placeholder="..." />
+            <marker date="1352885836000" expanded="true" signature="8312:8366" placeholder="..." />
+            <marker date="1352885836000" expanded="true" signature="11737:11828" placeholder="..." />
+            <marker date="1352885836000" expanded="true" signature="13675:13687" placeholder="..." />
+            <marker date="1352885836000" expanded="true" signature="27791:27808" placeholder="..." />
+            <marker date="1352885836000" expanded="true" signature="28218:28235" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>

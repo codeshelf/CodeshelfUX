@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.45 2012/11/08 03:35:10 jeffw Exp $
+ *  $Id: mainPage.js,v 1.46 2012/11/14 09:50:14 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.ediservicesview');
@@ -86,29 +86,29 @@ codeshelf.mainpage = function() {
 //									ediServicesWindow.open();
 
 			var hierarchyMap = [];
-			hierarchyMap[0] = domainobjects.Facility.className;
-			hierarchyMap[1] = domainobjects.DropboxService.className;
-			hierarchyMap[2] = domainobjects.EdiDocumentLocator.className;
+			hierarchyMap[0] = domainobjects['Facility']['className'];
+			hierarchyMap[1] = domainobjects['DropboxService']['className'];
+			hierarchyMap[2] = domainobjects['EdiDocumentLocator']['className'];
 
 			var filter = 'parentOrganization.persistentId = :theId';
 			var filterParams = [
 				{ 'name': 'theId', 'value': organization_['persistentId']}
 			];
 
-			var ediServicesView = codeshelf.hierarchylistview(websession_, domainobjects.Facility, filter, filterParams, hierarchyMap);
+			var ediServicesView = codeshelf.hierarchylistview(websession_, domainobjects['Facility'], filter, filterParams, hierarchyMap);
 			var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView, frame_, undefined);
 			ediServicesWindow.open();
 
 			var hierarchyMap = [];
-			hierarchyMap[0] = domainobjects.OrderHeader.className;
-			hierarchyMap[1] = domainobjects.OrderDetail.className;
+			hierarchyMap[0] = domainobjects['OrderHeader']['className'];
+			hierarchyMap[1] = domainobjects['OrderDetail']['className'];
 
 			var filter = 'parent.persistentId = :theId';
 			var filterParams = [
 				{ 'name': 'theId', 'value': facility['persistentId']}
 			];
 
-			var ordersView = codeshelf.hierarchylistview(websession_, domainobjects.OrderHeader, filter, filterParams, hierarchyMap);
+			var ordersView = codeshelf.hierarchylistview(websession_, domainobjects['OrderHeader'], filter, filterParams, hierarchyMap);
 			var ordersWindow = codeshelf.window('Orders', ordersView, frame_, undefined);
 			ordersWindow.open();
 		}
@@ -171,7 +171,7 @@ codeshelf.mainpage = function() {
 			var filterParams = [
 				{ 'name': 'theId', 'value': organization_['persistentId']}
 			];
-			var listView = codeshelf.listview(websession_, domainobjects.Facility, filter, filterParams);
+			var listView = codeshelf.listview(websession_, domainobjects['Facility'], filter, filterParams);
 			var listWindow = codeshelf.window('Facilities List', listView, frame_, undefined);
 			listWindow.open();
 

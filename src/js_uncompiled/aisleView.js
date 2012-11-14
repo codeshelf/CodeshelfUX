@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: aisleView.js,v 1.22 2012/11/08 03:35:10 jeffw Exp $
+ * $Id: aisleView.js,v 1.23 2012/11/14 09:50:14 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -140,7 +140,7 @@ codeshelf.aisleview = function(websession, aisle) {
 			// Create the filter to listen to all vertex updates for this
 			// facility.
 			var vertexFilterData = {
-				'className':     domainobjects.Vertex.className,
+				'className':     domainobjects['Vertex']['className'],
 				'propertyNames': [ 'domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder', 'parentPersistentId' ],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
@@ -216,7 +216,7 @@ codeshelf.aisleview = function(websession, aisle) {
 						for (var i = 0; i < command['data']['results'].length; i++) {
 							var object = command['data']['results'][i];
 
-							if (object['className'] === domainobjects.Bay.className) {
+							if (object['className'] === domainobjects['Bay']['className']) {
 								// Bay updates
 								if (object['op'] === 'cre') {
 									handleUpdateBayCmd(object);
@@ -225,7 +225,7 @@ codeshelf.aisleview = function(websession, aisle) {
 								} else if (object['op'] === 'dl') {
 									handleDeleteBayCmd(object);
 								}
-							} else if (object['className'] === domainobjects.Vertex.className) {
+							} else if (object['className'] === domainobjects['Vertex']['className']) {
 								// Vertex updates.
 								if (object['op'] === 'cre') {
 									handleUpdateBayVertexCmd(object);
@@ -275,7 +275,7 @@ codeshelf.aisleview = function(websession, aisle) {
 
 			// Create the filter to listen to all bay updates for this aisle.
 			var data = {
-				'className':     domainobjects.Bay.className,
+				'className':     domainobjects['Bay']['className'],
 				'propertyNames': [ 'domainId', 'posTypeEnum', 'posX', 'posY', 'posZ' ],
 				'filterClause':  'parent.persistentId = :theId AND posZ = 0',
 				'filterParams':  [

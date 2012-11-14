@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.34 2012/11/08 03:35:10 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.35 2012/11/14 09:50:15 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -65,7 +65,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				// then extend or shorten this segment to make it exactly 90deg.
 
 				var data = {
-					'className':    domainobjects.Facility.className,
+					'className':    domainobjects['Facility']['className'],
 					'persistentId': facility_['persistentId'],
 					'methodName':   'createVertex',
 					'methodArgs':   [
@@ -82,7 +82,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 				// If this was the anchor vertex then set the location of the facility as well.
 				var data = {
-					'className':    domainobjects.Facility.className,
+					'className':    domainobjects['Facility']['className'],
 					'persistentId': facility_['persistentId'],
 					'properties':   [
 						{'name': 'PosTypeByStr', 'value': 'GPS'},
@@ -204,9 +204,9 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		facilityOutline_.setVisible(true);
 
 		// The case where we're adding a new marker (maybe even the anchor marker) that we must show.
-		var iconUrl = '../icons/marker_20_blue.png';
+		var iconUrl = 'icons/marker_20_blue.png';
 		if (vertex['drawOrder'] === 0) {
-			iconUrl = '../icons/marker_20_red.png';
+			iconUrl = 'icons/marker_20_red.png';
 		}
 
 		var markerImage = new google.maps.MarkerImage(
@@ -234,7 +234,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 				                              if (canEditOutline_) {
 					                              var data = {
-						                              'className':    domainobjects.Vertex.className,
+						                              'className':    domainobjects['Vertex']['className'],
 						                              'persistentId': vertex['persistentId'],
 						                              'properties':   [
 							                              {'name': 'posX', 'value': marker.getPosition().lng()},
@@ -329,7 +329,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		for (var i = Object.size(facilityOutlineVertices_) - 1; i >= 0; i--) {
 
 			var data = {
-				'className':    domainobjects.Vertex.className,
+				'className':    domainobjects['Vertex']['className'],
 				'persistentId': facilityOutlineVertices_[i].Vertex['persistentId']
 			};
 
@@ -349,7 +349,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		facilityOutline_.setPath(facilityOutlinePath_);
 
 		// Now make the second and last markers green.
-		var iconUrl = '../icons/marker_20_green.png';
+		var iconUrl = 'icons/marker_20_green.png';
 		var markerImage = new google.maps.MarkerImage(
 			iconUrl,
 			new google.maps.Size(12, 20),
@@ -509,7 +509,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 							var object = command['data']['results'][i];
 
 							// Make sure the class name matches.
-							if (object['className'] === domainobjects.Vertex.className) {
+							if (object['className'] === domainobjects['Vertex']['className']) {
 								var latLng = new google.maps.LatLng(object['posY'], object['posX']);
 
 								if (object['op'] === 'cre') {
@@ -560,8 +560,8 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 			// Add the facility descriptor field.
 			var facilityDescField = codeshelf.dataobjectfield(websession_, self.getMainPaneElement(),
-			                                                  domainobjects.Facility.className,
-			                                                  domainobjects.Facility.properties.desc.id, facility_['persistentId'],
+			                                                  domainobjects['Facility']['className'],
+			                                                  domainobjects['Facility']['properties']['desc']['id'], facility_['persistentId'],
 			                                                  'windowField', 'Facility name');
 			facilityDescField.start();
 
@@ -599,7 +599,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		open: function() {
 			// Create the filter to listen to all vertex updates for this facility.
 			var data = {
-				'className':     domainobjects.Vertex.className,
+				'className':     domainobjects['Vertex']['className'],
 				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [

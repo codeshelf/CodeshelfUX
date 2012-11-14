@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ediServicesView.js,v 1.6 2012/11/08 03:35:10 jeffw Exp $
+ *  $Id: ediServicesView.js,v 1.7 2012/11/14 09:50:16 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ediservicesview');
@@ -32,7 +32,7 @@ codeshelf.ediservicesview = function(websession, facility) {
 
 	var websession_ = websession;
 	var facility_ = facility;
-	var domainObject_ = domainobjects.DropboxService;
+	var domainObject_ = domainobjects['DropboxService'];
 
 	var filterClause_ = 'parent.persistentId = :theId';
 	var filterParams_ = [
@@ -136,11 +136,11 @@ codeshelf.ediservicesview = function(websession, facility) {
 
 			goog.dom.appendChild(self.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
-			dataView_ = new $.Slick.Data.DataView();
-			grid_ = new $.Slick.Grid(self.getMainPaneElement(), dataView_, columns_, options_);
-			grid_.setSelectionModel(new $.Slick.RowSelectionModel());
+			dataView_ = new Slick.Data.DataView();
+			grid_ = new Slick.Grid(self.getMainPaneElement(), dataView_, columns_, options_);
+			grid_.setSelectionModel(new Slick.RowSelectionModel());
 
-			var columnpicker = new $.Slick.Controls.ColumnPicker(columns_, grid_, options_);
+			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
 			var data = {
 				'className':     domainObject_.className,

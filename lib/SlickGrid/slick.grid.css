@@ -13,7 +13,6 @@ classes should alter those!
 }
 
 .slick-header-columns, .slick-headerrow-columns {
-	width: 999999px;
 	position: relative;
 	white-space: nowrap;
 	cursor: default;
@@ -80,7 +79,8 @@ classes should alter those!
 }
 
 .slick-row.ui-widget-content, .slick-row.ui-state-active {
-	position: absolute;
+  position: absolute;
+  width: 100%;
 	border: 0px;
 }
 

@@ -2,10 +2,9 @@ goog.provide('codeshelf.hierarchylistview');
 goog.require('extern.jquery');
 goog.require('goog.ui.Dialog');
 goog.require('slickgrid.columnpicker');
-goog.require('slickgrid.core');
 goog.require('slickgrid.dataview');
 goog.require('slickgrid.editors');
-goog.require('slickgrid.firebugx');
+goog.require('slickgrid.formatters');
 goog.require('slickgrid.grid');
 goog.require('slickgrid.pager');
 goog.require('slickgrid.rowselection');
@@ -151,7 +150,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 			var count = 0;
 			for (var i = 0; i < hierarchyMap_.length; i++) {
 				var className = hierarchyMap_[i];
-				properties = domainobjects[className].properties;
+				var properties = domainobjects[className]['properties'];
 				for (property in properties) {
 					if (properties.hasOwnProperty(property)) {
 						var property = properties[property];
@@ -196,14 +195,14 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 			goog.dom.appendChild(self.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
-			dataView_ = new $.Slick.Data.DataView();
-			grid_ = new $.Slick.Grid(self.getMainPaneElement(), dataView_, columns_, options_);
-			grid_.setSelectionModel(new $.Slick.RowSelectionModel());
+			dataView_ = new Slick.Data.DataView();
+			grid_ = new Slick.Grid(self.getMainPaneElement(), dataView_, columns_, options_);
+			grid_.setSelectionModel(new Slick.RowSelectionModel());
 
-			var columnpicker = new $.Slick.Controls.ColumnPicker(columns_, grid_, options_);
+			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
 			var data = {
-				'className':     domainObject_.className,
+				'className':     domainObject_['className'],
 				'propertyNames': properties_,
 				'filterClause':  filterClause_,
 				'filterParams':  filterParams_
@@ -233,7 +232,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 							// Call Facility.linkDropbox();
 							var data = {
-								'className':    domainobjects.Facility.className,
+								'className':    domainobjects['Facility']['className'],
 								'persistentId': 1,
 								'methodName':   'linkDropbox',
 								'methodArgs':   [

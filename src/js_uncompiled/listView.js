@@ -1,10 +1,9 @@
 goog.provide('codeshelf.listview');
 goog.require('extern.jquery');
 goog.require('slickgrid.columnpicker');
-goog.require('slickgrid.core');
 goog.require('slickgrid.dataview');
 goog.require('slickgrid.editors');
-goog.require('slickgrid.firebugx');
+goog.require('slickgrid.formatters');
 goog.require('slickgrid.grid');
 goog.require('slickgrid.pager');
 goog.require('slickgrid.rowselection');
@@ -85,7 +84,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 		doSetupView: function() {
 
 			// Compute the columns we need for this domain object.
-			properties = domainObject_.properties;
+			properties = domainObject_['properties'];
 			var count = 0;
 			for (property in properties) {
 				if (properties.hasOwnProperty(property)) {
@@ -122,16 +121,16 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 
 			goog.dom.appendChild(self.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
-			dataView_ = new $.Slick.Data.DataView();
-			grid_ = new $.Slick.Grid(self.getMainPaneElement(), dataView_, columns_, options_);
-			grid_.setSelectionModel(new $['Slick'].RowSelectionModel());
+			dataView_ = new Slick.Data.DataView();
+			grid_ = new Slick.Grid(self.getMainPaneElement(), dataView_, columns_, options_);
+			grid_.setSelectionModel(new Slick.RowSelectionModel());
 
 			goog.dom.appendChild(self.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listViewContextMenu));
 
-			var columnpicker = new $.Slick.Controls.ColumnPicker(columns_, grid_, options_);
+			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
 			var data = {
-				'className':     domainObject_.className,
+				'className':     domainObject_['className'],
 				'propertyNames': properties_,
 				'filterClause':  filterClause_,
 				'filterParams':  filterParams_

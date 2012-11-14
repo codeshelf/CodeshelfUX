@@ -3,19 +3,18 @@ goog.require('extern.jquery');
 goog.require('slickgrid.cellcopymanager');
 goog.require('slickgrid.cellselection');
 goog.require('slickgrid.columnpicker');
-goog.require('slickgrid.core');
 goog.require('slickgrid.dataview');
 goog.require('slickgrid.editors');
-goog.require('slickgrid.firebugx');
+goog.require('slickgrid.formatters');
 goog.require('slickgrid.grid');
 goog.require('slickgrid.pager');
 goog.require('slickgrid.rowselection');
 
-$('.grid-header .ui-icon').addClass('ui-state-default ui-corner-all')['mouseover'](
+jQuery('.grid-header .ui-icon').addClass('ui-state-default ui-corner-all')['mouseover'](
 	function(e) {
-		$(e.target).addClass('ui-state-hover');
+		jQuery(e.target).addClass('ui-state-hover');
 	})['mouseout'](function(e) {
-	$(e.target).removeClass('ui-state-hover');
+	jQuery(e.target).removeClass('ui-state-hover');
 });
 
 codeshelf.listdemoview = function() {
@@ -95,7 +94,7 @@ codeshelf.listdemoview = function() {
 					'width':     120,
 					'minWidth':  120,
 					'cssClass':  'cell-title',
-					'editor':    TextCellEditor,
+					'editor':    Slick.Editors.Text,
 					'validator': self.requiredFieldValidator,
 					'sortable':  true
 				},
@@ -103,7 +102,7 @@ codeshelf.listdemoview = function() {
 					'id':       'duration',
 					'name':     'Duration',
 					'field':    'duration',
-					'editor':   TextCellEditor,
+					'editor':   Slick.Editors.Text,
 					'sortable': true
 				},
 				{
@@ -112,8 +111,8 @@ codeshelf.listdemoview = function() {
 					'field':     'percentComplete',
 					'minWidth':  80,
 					'resizable': true,
-					'formatter': GraphicalPercentCompleteCellFormatter,
-					'editor':    PercentCompleteCellEditor,
+					'formatter': Slick.Formatters.PercentCompleteBar,
+					'editor':    Slick.Editors.PercentComplete,
 					'sortable':  true
 				},
 				{
@@ -121,7 +120,7 @@ codeshelf.listdemoview = function() {
 					'name':     'Start',
 					'field':    'start',
 					'minWidth': 60,
-					'editor':   DateCellEditor,
+					'editor':   Slick.Editors.Date,
 					'sortable': true
 				},
 				{
@@ -129,7 +128,7 @@ codeshelf.listdemoview = function() {
 					'name':     'Finish',
 					'field':    'finish',
 					'minWidth': 60,
-					'editor':   DateCellEditor,
+					'editor':   Slick.Editors.Date,
 					'sortable': true
 				},
 				{
@@ -139,8 +138,8 @@ codeshelf.listdemoview = function() {
 					'minWidth':            20,
 					'cssClass':            'cell-effort-driven',
 					'field':               'effortDriven',
-					'formatter':           BoolCellFormatter,
-					'editor':              YesNoCheckboxCellEditor,
+					'formatter':           Slick.Formatters.YesNo,
+					'editor':              Slick.Editors.YesNoSelect,
 					'cannotTriggerInsert': true,
 					'sortable':            true
 				}
@@ -171,11 +170,11 @@ codeshelf.listdemoview = function() {
 			}
 
 			self.getMainPaneElement().innerHTML = '<div id="listViewGrid" class="windowContent"></div>';
-			dataView = new $.Slick.Data.DataView();
-			grid = new $.Slick.Grid('#listViewGrid', dataView, columns, options);
-			grid.setSelectionModel(new $['Slick']['CellSelectionModel']());
+			dataView = new Slick.Data.DataView();
+			grid = new Slick.Grid('#listViewGrid', dataView, columns, options);
+			grid.setSelectionModel(new Slick.CellSelectionModel());
 
-			var copyManager = new $.Slick.CellCopyManager();
+			var copyManager = new Slick.CellCopyManager();
 			grid.registerPlugin(copyManager);
 			copyManager.onCopyCells.subscribe(function(e, args) {
 				for (var obj in args.ranges) {
@@ -190,8 +189,8 @@ codeshelf.listdemoview = function() {
 				}
 			});
 
-			//var pager = new $.Slick.Controls.Pager(dataView, grid, $("#myPager"));
-			var columnpicker = new $.Slick.Controls.ColumnPicker(columns, grid, options);
+			//var pager = new Slick.Controls.Pager(dataView, grid, $("#myPager"));
+			var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
 
 			// move the filter panel defined in a hidden div into grid top panel
 			$('#inlineFilterPanel').appendTo(grid.getTopPanel()).show();
@@ -301,8 +300,8 @@ codeshelf.listdemoview = function() {
 
 				if (options['enableAddRow'] != enableAddRow)
 					grid.setOptions({
-						enableAddRow: enableAddRow
-					});
+						                enableAddRow: enableAddRow
+					                });
 			});
 
 		},
@@ -312,9 +311,9 @@ codeshelf.listdemoview = function() {
 			dataView.beginUpdate();
 			dataView.setItems(data);
 			dataView.setFilterArgs({
-				percentCompleteThreshold: percentCompleteThreshold,
-				searchString:             searchString
-			});
+				                       percentCompleteThreshold: percentCompleteThreshold,
+				                       searchString:             searchString
+			                       });
 			dataView.setFilter(myFilter);
 			dataView.endUpdate();
 

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: codeshelf.gss,v 1.30 2012/11/10 03:16:49 jeffw Exp $
+ *  $Id: codeshelf.gss,v 1.31 2012/11/14 09:50:17 jeffw Exp $
  *******************************************************************************/
 
 /* Defines and mixins ----------------------------------------------------------- */
@@ -176,7 +176,7 @@
 }
 
 #loginPanel {
-	width:				300px;
+	width:				325px;
 	height:				75px;
 	position:			absolute;
 	top:				20%;
@@ -421,6 +421,10 @@ div.jquery-drag-to-select.active {
 	cursor:				crosshair;
 	@mixin				FLEX_BOX(2);
 	@mixin				DISPLAY_BOX(vertical);
+}
+
+.bayView {
+/*	border:				1px solid FRAME_BORDER_COLOR;*/
 }
 
 /* EDI Services --------------------------------------------------------------- */

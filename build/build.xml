@@ -2,13 +2,31 @@
 
 <project name="CodeShelfUX" default="" basedir="../">
 
+	<description>
+		CodeShelf build script.
+    </description>
+
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="compiled.js.dir" value="${basedir}/src/js_compiled" />
+	<property name="css.dir" value="${basedir}/src/css" />
+	<property name="html.dir" value="${basedir}/src/html" />
+	<property name="images.dir" value="${basedir}/src/images" />
+	<property name="icons.dir" value="${basedir}/src/icons" />
+	<property name="target.dir" location="${basedir}/target" />
+	<property name="target.web.dir" location="${target.dir}/web" />
+
 	<taskdef resource="pyAntTasks.properties">
 		<classpath>
 			<pathelement location="${basedir}/build/lib/pyAntTasks-1.3.3.jar" />
 		</classpath>
 	</taskdef>
 
-	<property name="src.dir" value="src" />
+	<target name="clean">
+		<!--Delete created directory trees-->
+		<delete includeemptydirs="true" failonerror="false" verbose="true" includes="*.* .*">
+			<fileset dir="${target.dir}" followsymlinks="false" />
+		</delete>
+	</target>
 
 	<target name="lint">
 		<exec command="/usr/local/bin/gjslint">
@@ -40,7 +58,7 @@
 		<java jar="./lib/GoogleClosureStylesheets/closure-stylesheets-20111230.jar" fork="true" failonerror="true" maxmemory="128m">
 			<arg value="--pretty-print" />
 			<arg value="--output-file" />
-			<arg value="./src/css/codeshelf_generated.css" />
+			<arg value="./src/css/codeshelf.css" />
 			<arg value="./src/css/codeshelf.gss" />
 		</java>
 	</target>
@@ -73,10 +91,11 @@
 			<arg value="--output_mode=compiled" />
 			<arg value="--compiler_jar=./lib/GoogleClosureLibrary/compiler.jar" />
 			<arg value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
-			<arg value="--compiler_flags=--create_source_map=./src/js_compiled/codeshelf.map" />
-			<arg value="--compiler_flags=--output_manifest=./src/js_compiled/codeshelf.manifest" />
-			<arg value="--compiler_flags=--property_map_output_file=./src/js_compiled/property.map" />
-			<arg value="--compiler_flags=--variable_map_output_file=./src/js_compiled/variable.map" />
+			<arg value="--compiler_flags=--source_map_format=V3" />
+			<arg value="--compiler_flags=--create_source_map=${compiled.js.dir}/codeshelf.map" />
+			<arg value="--compiler_flags=--output_manifest=${compiled.js.dir}/codeshelf.manifest" />
+			<arg value="--compiler_flags=--property_map_output_file=${compiled.js.dir}/property.map" />
+			<arg value="--compiler_flags=--variable_map_output_file=${compiled.js.dir}/variable.map" />
 			<!--arg value="- -compiler_flags=- -create_name_map_files" /-->
 			<!--arg value="- -compiler_flags=- -externs=./src/js_externs/codeshelf_externs.js" /-->
 			<arg value="--compiler_flags=--externs=./src/js_externs/google_maps_api_v3_8.js" />
@@ -92,17 +111,16 @@
 			<arg value="--compiler_flags=--jscomp_warning=checkTypes" />
 			<arg value="--compiler_flags=--logging_level=FINEST" />
 			<arg value="--compiler_flags=--summary_detail_level=3" />
-			<arg value="--output_file=./src/js_compiled/codeshelf.js" />
+			<arg value="--output_file=${compiled.js.dir}/codeshelf.js" />
 		</py-run>
-		<replace file="./src/js_compiled/codeshelf.map" token="src/js_uncompiled" value="../js_uncompiled"/>
-		<replace file="./src/js_compiled/codeshelf.map" token="lib/GoogleClosureLibrary" value="../../lib/GoogleClosureLibrary"/>
-		<replace file="./src/js_compiled/codeshelf.map" token="lib/SlickGrid" value="../../lib/SlickGrid"/>
-		<replace file="./src/js_compiled/codeshelf.map" token="lib/JQuery" value="../../lib/JQuery"/>
-		<echo file="./src/js_compiled/codeshelf.js" append="true">
+		<replace file="${compiled.js.dir}/codeshelf.map" token="src/js_uncompiled" value="../../../src/js_uncompiled" />
+		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/GoogleClosureLibrary" value="../../../lib/GoogleClosureLibrary" />
+		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/SlickGrid" value="../../../lib/SlickGrid" />
+		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/JQuery" value="../../../lib/JQuery" />
+		<echo file="${compiled.js.dir}/codeshelf.js" append="true">
 //@ sourceMappingURL=codeshelf.map</echo>
 	</target>
 
-	
 	<!--	This almost works, except source maps do not have the right paths.
 			The compiler option above works for now, but when we need modules it will be a lot easier to use Plovr.
 			This patch can make this work right: http://codereview.appspot.com/6346071/
@@ -113,9 +131,54 @@
 			<arg value="build" />
 			<arg value="./build/codeshelf.plovr.config" />
 			<arg value="--create_source_map" />
-			<arg value="./src/js_compiled/codeshelf.map" />
+			<arg value="${compiled.js.dir}/codeshelf.map" />
 		</java>
-		<echo file="./src/js_compiled/codeshelf.js" append="true">
+		<echo file="${compiled.js.dir}/codeshelf.js" append="true">
 //@ sourceMappingURL=codeshelf.map</echo>
 	</target>
+
+	<target name="build.webapp" depends="clean, generate.templates, generate.deps, generate.css, compile">
+		<mkdir dir="${target.web.dir}" />
+		<mkdir dir="${target.web.dir}/js" />
+		<mkdir dir="${target.web.dir}/icons" />
+		<mkdir dir="${target.web.dir}/images" />
+
+		<copy todir="${target.web.dir}/js">
+			<fileset dir="${compiled.js.dir}">
+				<include name="codeshelf.js" />
+				<include name="codeshelf.map" />
+				<include name="deps.js" />
+			</fileset>
+		</copy>
+
+		<copy todir="${target.web.dir}/css">
+			<fileset dir="${css.dir}">
+				<include name="codeshelf.css" />
+				<include name="listview.css" />
+				<include name="slick-default-theme.css" />
+			</fileset>
+		</copy>
+
+		<copy todir="${target.web.dir}">
+			<fileset dir="${html.dir}">
+				<include name="codeshelf.html" />
+				<include name="signup.html" />
+				<include name="signin.html" />
+			</fileset>
+		</copy>
+
+		<copy todir="${target.web.dir}/images">
+			<fileset dir="${images.dir}">
+				<include name="*.**" />
+			</fileset>
+		</copy>
+
+		<copy todir="${target.web.dir}/icons">
+			<fileset dir="${icons.dir}">
+				<include name="*.**" />
+			</fileset>
+		</copy>
+
+	</target>
+
 </project>
