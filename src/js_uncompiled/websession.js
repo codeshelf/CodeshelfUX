@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: websession.js,v 1.28 2012/11/10 03:16:49 jeffw Exp $
+ *  $Id: websession.js,v 1.29 2012/11/15 07:55:33 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 goog.require('goog.array');
@@ -84,7 +84,7 @@ codeshelf.websession = function() {
 
 			try {
 				if (!websocket_.isOpen()) {
-					websocket_.open('ws://127.0.0.1:8080');
+					websocket_.open('wss://localhost:8444');
 				}
 			} catch (e) {
 				//
