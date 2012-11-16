@@ -12,7 +12,7 @@
 	<property name="html.dir" value="${basedir}/src/html" />
 	<property name="images.dir" value="${basedir}/src/images" />
 	<property name="icons.dir" value="${basedir}/src/icons" />
-	<property name="target.dir" location="${basedir}/target" />
+	<property name="target.dir" location="${basedir}" />
 	<property name="target.web.dir" location="${target.dir}/web" />
 
 	<taskdef resource="pyAntTasks.properties">
@@ -24,7 +24,7 @@
 	<target name="clean">
 		<!--Delete created directory trees-->
 		<delete includeemptydirs="true" failonerror="false" verbose="true" includes="*.* .*">
-			<fileset dir="${target.dir}" followsymlinks="false" />
+			<fileset dir="${target.web.dir}" followsymlinks="false" />
 		</delete>
 	</target>
 
