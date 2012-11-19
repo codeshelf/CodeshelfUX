@@ -113,10 +113,10 @@
 			<arg value="--compiler_flags=--summary_detail_level=3" />
 			<arg value="--output_file=${compiled.js.dir}/codeshelf.js" />
 		</py-run>
-		<replace file="${compiled.js.dir}/codeshelf.map" token="src/js_uncompiled" value="../../../src/js_uncompiled" />
-		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/GoogleClosureLibrary" value="../../../lib/GoogleClosureLibrary" />
-		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/SlickGrid" value="../../../lib/SlickGrid" />
-		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/JQuery" value="../../../lib/JQuery" />
+		<replace file="${compiled.js.dir}/codeshelf.map" token="src/js_uncompiled" value="../../src/js_uncompiled" />
+		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/GoogleClosureLibrary" value="../../lib/GoogleClosureLibrary" />
+		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/SlickGrid" value="../../lib/SlickGrid" />
+		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/JQuery" value="../../lib/JQuery" />
 		<echo file="${compiled.js.dir}/codeshelf.js" append="true">
 //@ sourceMappingURL=codeshelf.map</echo>
 	</target>
@@ -147,15 +147,13 @@
 			<fileset dir="${compiled.js.dir}">
 				<include name="codeshelf.js" />
 				<include name="codeshelf.map" />
-				<include name="deps.js" />
 			</fileset>
 		</copy>
 
 		<copy todir="${target.web.dir}/css">
 			<fileset dir="${css.dir}">
-				<include name="codeshelf.css" />
-				<include name="listview.css" />
-				<include name="slick-default-theme.css" />
+				<include name="*.css" />
+				<include name="images/**.*" />
 			</fileset>
 		</copy>
 
@@ -170,6 +168,12 @@
 		<copy todir="${target.web.dir}/images">
 			<fileset dir="${images.dir}">
 				<include name="*.**" />
+			</fileset>
+		</copy>
+
+		<copy todir="${target.web.dir}">
+			<fileset dir="${icons.dir}">
+				<include name="favicon.ico" />
 			</fileset>
 		</copy>
 
