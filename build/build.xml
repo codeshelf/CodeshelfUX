@@ -182,7 +182,20 @@
 				<include name="*.**" />
 			</fileset>
 		</copy>
-
 	</target>
+	
+	<target name="deploy" depends="build.webapp">
+		<input message="SCP password:" addproperty="scp.password">
+			<!--handler classname="org.apache.tools.ant.input.SecureInputHandler" /-->
+		</input>
 
+		<scp todir="codeshelf:${scp.password}@198.101.238.245:/opt/codeshelf/web/app" verbose="true">
+			<fileset dir="${target.web.dir}">
+				<include name="**/*" />
+				<modified>
+					<param name="cache.cachefile" value="${basedir}/build/webapp.scp.cache"/>
+				</modified>
+			</fileset>
+		</scp>
+	</target>
 </project>
