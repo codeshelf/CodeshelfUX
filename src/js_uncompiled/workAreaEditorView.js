@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.55 2012/11/14 09:50:15 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.56 2012/11/21 19:19:49 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -747,7 +747,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		},
 
 		canDragSelect: function(event) {
-			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_), event.offsetX, event.offsetY)) {
+			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_), event['offsetX'], event['offsetY'])) {
 				alert('Select a starting point inside the facility bounds.');
 				return false;
 			} else {
@@ -764,7 +764,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 			var stroke = new goog.graphics.Stroke(1, 'black');
 			var fill = new goog.graphics.SolidFill('blue', 0.2);
-			startDragPoint_ = { 'x': event.browserEvent.offsetX, y: event.browserEvent.offsetY };
+			startDragPoint_ = { 'x': event['browserEvent']['offsetX'], y: event['browserEvent']['offsetY'] };
 			currentRect_ = new goog.math.Rect(startDragPoint_.x, startDragPoint_.y, 0, 0);
 			currentDrawRect_ = graphics_.drawRect(startDragPoint_.x, startDragPoint_.y, 0, 0, stroke, fill);
 		},

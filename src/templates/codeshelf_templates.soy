@@ -48,12 +48,12 @@
 		<div class='dialogLabel' style='margin-top: 18px; margin-left: 30px;'>
 		<div>
 			<label class='dialogLabel' style='margin-top: 8px; float:left;'>User Id:</label>
-			<input type='text' id='userIdInput' class='dialogField' value='jeffw@gadgetworks.com' style='margin-right: 25px; width:200px; float:right'>
+			<input type='text' id='userIdInput' class='dialogField' value='' style='margin-right: 25px; width:200px; float:right'>
 		</div>
 			</br>
 		<div>
 			<label class='dialogLabel' style='margin-top: 8px; float:left;'>Password:</label>
-			<input type='password' id='passwordInput' class='dialogField' value='blahdeeblah' style='margin-right: 25px; width:200px; float:right'>
+			<input type='password' id='passwordInput' class='dialogField' value='' style='margin-right: 25px; width:200px; float:right'>
 		</div>
 		</div>
 	</div>
@@ -82,7 +82,7 @@
 		</div>
 		<!--div class='facilityEditorToolbar'>
 			<div class='facilityEditorTool'>
-				<img id='rackIcon' class='facilityEditorToolIcon' src='../../src/images/rack-icon.png' alt='' height='32' width='32'>
+				<img id='rackIcon' class='facilityEditorToolIcon' src='./images/rack-icon.png' alt='' height='32' width='32'>
 			</div>
 			<div class='facilityEditorTool'>
 			</div>
@@ -111,15 +111,15 @@
 {template .toolbar}
 <div class='toolbar goog-toolbar goog-toolbar-enabled'>
 	<!--div id='aisle-tool' title='Aisle Tool' class='goog-toolbar-toggle-button'>
-		<img id='rackIcon' class='workAreaEditorToolIcon' src='../../src/images/rack-icon.png' alt='' height='32' width='32'>
+		<img id='rackIcon' class='workAreaEditorToolIcon' src='./images/rack-icon.png' alt='' height='32' width='32'>
 	</div>
 	<hr>
 	<div id='staging-tool' title='Staging Tool' class='goog-toolbar-toggle-button'>
-		<img id='stagingIcon' class='workAreaEditorToolIcon' src='../../src/images/staging-icon.png' alt='' height='32' width='32'>
+		<img id='stagingIcon' class='workAreaEditorToolIcon' src='./images/staging-icon.png' alt='' height='32' width='32'>
 	</div>
 	<hr>
 	<div id='door-tool' title='Door Tool' class='goog-toolbar-toggle-button'>
-		<img id='doorIcon' class='workAreaEditorToolIcon' src='../../src/images/door-icon.png' alt='' height='32' width='32'>
+		<img id='doorIcon' class='workAreaEditorToolIcon' src='./images/door-icon.png' alt='' height='32' width='32'>
 	</div-->
 </div>
 {/template}
@@ -132,7 +132,7 @@
  */
 {template .toolbarTool}
 <div id='{$id}' title='{$title}' class='goog-toolbar-toggle-button'>
-	<img id='rackIcon' class='workAreaEditorToolIcon' src='../../src/images/{$icon}' alt='' height='32' width='32'>
+	<img id='rackIcon' class='workAreaEditorToolIcon' src='./images/{$icon}' alt='' height='32' width='32'>
 </div>
 {/template}
 

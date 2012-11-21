@@ -8,10 +8,12 @@
 
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="compiled.js.dir" value="${basedir}/src/js_compiled" />
+	<property name="uncompiled.js.dir" value="${basedir}/src/js_uncompiled" />
 	<property name="css.dir" value="${basedir}/src/css" />
 	<property name="html.dir" value="${basedir}/src/html" />
 	<property name="images.dir" value="${basedir}/src/images" />
 	<property name="icons.dir" value="${basedir}/src/icons" />
+	<property name="libs.dir" value="${basedir}/lib" />
 	<property name="target.dir" location="${basedir}" />
 	<property name="target.web.dir" location="${target.dir}/web" />
 
@@ -22,9 +24,8 @@
 	</taskdef>
 
 	<target name="clean">
-		<!--Delete created directory trees-->
-		<delete includeemptydirs="true" failonerror="false" verbose="true" includes="*.* .*">
-			<fileset dir="${target.web.dir}" followsymlinks="false" />
+		<delete includeemptydirs="true" failonerror="false" verbose="true">
+			<fileset dir="${target.web.dir}" defaultExcludes="false" includes="**/*" />
 		</delete>
 	</target>
 
@@ -78,7 +79,6 @@
 	</target>
 
 	<target name="compile">
-		<echo>${basedir}</echo>
 		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/closurebuilder.py" dir="${basedir}" optimize="0">
 			<arg value="--root=./lib/GoogleClosureLibrary/closure/" />
 			<arg value="--root=./lib/GoogleClosureLibrary/third_party/" />
@@ -113,10 +113,16 @@
 			<arg value="--compiler_flags=--summary_detail_level=3" />
 			<arg value="--output_file=${compiled.js.dir}/codeshelf.js" />
 		</py-run>
-		<replace file="${compiled.js.dir}/codeshelf.map" token="src/js_uncompiled" value="../../src/js_uncompiled" />
-		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/GoogleClosureLibrary" value="../../lib/GoogleClosureLibrary" />
-		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/SlickGrid" value="../../lib/SlickGrid" />
-		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/JQuery" value="../../lib/JQuery" />
+
+		<!-- Prepare the websocket link for the target host. -->
+		<echo>Webapp hostname: ${webapp.hostname}</echo>
+		<replace file="${compiled.js.dir}/codeshelf.js" token="XXXXX" value="${webapp.hostname}:8444" />
+
+		<replace file="${compiled.js.dir}/codeshelf.map" token="js/src/js_uncompiled" value="./js_uncompiled" />
+		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/GoogleClosureLibrary" value="./lib/GoogleClosureLibrary" />
+		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/SlickGrid" value="./lib/SlickGrid" />
+		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/JQuery" value="./lib/JQuery" />
+		<replace file="${compiled.js.dir}/codeshelf.map" token="lib/Raphael" value="./lib/Raphael" />
 		<echo file="${compiled.js.dir}/codeshelf.js" append="true">
 //@ sourceMappingURL=codeshelf.map</echo>
 	</target>
@@ -183,19 +189,43 @@
 			</fileset>
 		</copy>
 	</target>
-	
-	<target name="deploy" depends="build.webapp">
+
+	<target name="deploy-unionrocket" depends="build.webapp">
+
+		<property name="webapp.hostname" value="codeshelf.unionrocket.com" />
+
+		<antcall target="build.webapp">
+		</antcall>
+
 		<input message="SCP password:" addproperty="scp.password">
 			<!--handler classname="org.apache.tools.ant.input.SecureInputHandler" /-->
 		</input>
 
-		<scp todir="codeshelf:${scp.password}@198.101.238.245:/opt/codeshelf/web/app" verbose="true">
+		<scp todir="codeshelf:${scp.password}@codeshelf.unionrocket.com:/opt/codeshelf/web/app" verbose="true">
 			<fileset dir="${target.web.dir}">
 				<include name="**/*" />
+				<exclude name="**/*.map" />
 				<modified>
-					<param name="cache.cachefile" value="${basedir}/build/webapp.scp.cache"/>
+					<param name="cache.cachefile" value="${basedir}/build/webapp.scp.cache" />
 				</modified>
 			</fileset>
 		</scp>
+	</target>
+
+	<target name="deploy-localhost">
+
+		<property name="webapp.hostname" value="localhost" />
+
+		<antcall target="build.webapp">
+		</antcall>
+
+		<copy todir="${target.web.dir}">
+			<fileset dir="${libs.dir}">
+				<include name="*.**" />
+			</fileset>
+			<fileset dir="${src.dir}">
+				<include name="js_uncompiled/*.js" />
+			</fileset>
+		</copy>
 	</target>
 </project>
