@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c319b0c7-b9cf-46f5-90a5-b0a625c84957" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/websession.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/websession.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/Raphael/raphael.js" afterPath="$PROJECT_DIR$/lib/Raphael/raphael.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/templates/codeshelf_templates.soy" afterPath="$PROJECT_DIR$/src/templates/codeshelf_templates.soy" />
     </list>
     <ignored path="CodeShelfUX.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,19 +44,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="workAreaEditorView.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="workAreaEditorView.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="749" column="42" selection-start="26301" selection-end="26318" vertical-scroll-proportion="-4.0363636">
+            <state line="766" column="89" selection-start="26825" selection-end="26825" vertical-scroll-proportion="0.6906907">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="raphael.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="raphael.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/Raphael/raphael.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1012" column="8" selection-start="36369" selection-end="36369" vertical-scroll-proportion="0.48821083">
+            <state line="958" column="30" selection-start="34420" selection-end="34423" vertical-scroll-proportion="-4.0363636">
               <folding />
             </state>
           </provider>
@@ -91,7 +90,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/js_uncompiled/listView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/aisleView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/ediServicesView.js" />
@@ -105,8 +103,9 @@
         <option value="$PROJECT_DIR$/src/templates/codeshelf_templates.soy" />
         <option value="$PROJECT_DIR$/src/html/codeshelf.html" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/initializeNewClient.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/websession.js" />
+        <option value="$PROJECT_DIR$/lib/Raphael/raphael.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
       </list>
     </option>
   </component>
@@ -609,16 +608,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
+    <entry file="file://$PROJECT_DIR$/lib/Raphael/raphael.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="749" column="42" selection-start="26301" selection-end="26318" vertical-scroll-proportion="-4.0363636">
+        <state line="958" column="30" selection-start="34420" selection-end="34423" vertical-scroll-proportion="-4.0363636">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/Raphael/raphael.js">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1012" column="8" selection-start="36369" selection-end="36369" vertical-scroll-proportion="0.48821083">
+        <state line="766" column="89" selection-start="26825" selection-end="26825" vertical-scroll-proportion="0.6906907">
           <folding />
         </state>
       </provider>

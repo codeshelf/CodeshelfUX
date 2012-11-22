@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.56 2012/11/21 19:19:49 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.57 2012/11/22 05:31:19 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -764,7 +764,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 			var stroke = new goog.graphics.Stroke(1, 'black');
 			var fill = new goog.graphics.SolidFill('blue', 0.2);
-			startDragPoint_ = { 'x': event['browserEvent']['offsetX'], y: event['browserEvent']['offsetY'] };
+			startDragPoint_ = { 'x': event.browserEvent['offsetX'], y: event.browserEvent['offsetY'] };
 			currentRect_ = new goog.math.Rect(startDragPoint_.x, startDragPoint_.y, 0, 0);
 			currentDrawRect_ = graphics_.drawRect(startDragPoint_.x, startDragPoint_.y, 0, 0, stroke, fill);
 		},
