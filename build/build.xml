@@ -90,9 +90,6 @@
 			<arg value="--namespace=codeshelf.application" />
 			<arg value="--output_mode=compiled" />
 			<arg value="--compiler_jar=./lib/GoogleClosureLibrary/compiler.jar" />
-			<arg value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
-			<arg value="--compiler_flags=--source_map_format=V3" />
-			<arg value="--compiler_flags=--create_source_map=${compiled.js.dir}/codeshelf.map" />
 			<arg value="--compiler_flags=--output_manifest=${compiled.js.dir}/codeshelf.manifest" />
 			<arg value="--compiler_flags=--property_map_output_file=${compiled.js.dir}/property.map" />
 			<arg value="--compiler_flags=--variable_map_output_file=${compiled.js.dir}/variable.map" />
@@ -101,8 +98,6 @@
 			<arg value="--compiler_flags=--externs=./src/js_externs/google_maps_api_v3_8.js" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-1.7.js" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-ui.1.8.19.js" />
-			<arg value="--compiler_flags=--formatting=PRETTY_PRINT" />
-			<arg value="--compiler_flags=--debug" />
 			<!--arg value="- -compiler_flags=- -warning_level=VERBOSE" /-->
 			<!--arg value="- -compiler_flags=- -output_wrapper &quot;(function(){%output%})();&quot;" /-->
 			<arg value="--compiler_flags=--manage_closure_dependencies" />
@@ -112,6 +107,11 @@
 			<arg value="--compiler_flags=--logging_level=FINEST" />
 			<arg value="--compiler_flags=--summary_detail_level=3" />
 			<arg value="--output_file=${compiled.js.dir}/codeshelf.js" />
+			<arg value="${compiler.options.optimization}" />
+			<arg value="${compiler.options.format}" />
+			<arg value="${compiler.options.map}" />
+			<arg value="${compiler.options.pretty}" />
+			<arg value="${compiler.options.debug}" />
 		</py-run>
 
 		<!-- Prepare the websocket link for the target host. -->
@@ -190,9 +190,14 @@
 		</copy>
 	</target>
 
-	<target name="deploy-unionrocket" depends="build.webapp">
+	<target name="deploy-unionrocket">
 
 		<property name="webapp.hostname" value="codeshelf.unionrocket.com" />
+		<property name="compiler.options.optimization" value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
+		<property name="compiler.options.format" value="--compiler_flags=--source_map_format=V3" />
+		<property name="compiler.options.map" value="--compiler_flags=--source_map_format=V3" />
+		<property name="compiler.options.pretty" value="--compiler_flags=--source_map_format=V3" />
+		<property name="compiler.options.debug" value="--compiler_flags=--source_map_format=V3" />
 
 		<antcall target="build.webapp">
 		</antcall>
@@ -201,7 +206,7 @@
 			<!--handler classname="org.apache.tools.ant.input.SecureInputHandler" /-->
 		</input>
 
-		<scp todir="codeshelf:${scp.password}@codeshelf.unionrocket.com:/opt/codeshelf/web/app" verbose="true">
+		<scp todir="codeshelf:${scp.password}@198.101.238.245:/opt/codeshelf/web/app" verbose="true">
 			<fileset dir="${target.web.dir}">
 				<include name="**/*" />
 				<exclude name="**/*.map" />
@@ -215,6 +220,11 @@
 	<target name="deploy-localhost">
 
 		<property name="webapp.hostname" value="localhost" />
+		<property name="compiler.options.optimization" value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
+		<property name="compiler.options.format" value="--compiler_flags=--source_map_format=V3" />
+		<property name="compiler.options.map" value="--compiler_flags=--create_source_map=${compiled.js.dir}/codeshelf.map" />
+		<property name="compiler.options.pretty" value="--compiler_flags=--formatting=PRETTY_PRINT" />
+		<property name="compiler.options.debug" value="--compiler_flags=--debug" />
 
 		<antcall target="build.webapp">
 		</antcall>
@@ -230,5 +240,5 @@
 				<include name="lib/**" />
 			</fileset>
 		</copy>
-</target>
+	</target>
 </project>
