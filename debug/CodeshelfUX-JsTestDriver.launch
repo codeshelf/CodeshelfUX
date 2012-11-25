@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="com.google.eclipse.javascript.jstestdriver.ui.JstdTestDriverLaunchConfiguration">
+<stringAttribute key="bad_container_name" value="debug/JsTestDriver"/>
+<stringAttribute key="basePath_0" value="/Users/jeffw/Source/eclipse/workspace-escontroller/CodeShelfUX"/>
+<stringAttribute key="com.google.jstestdriver.eclipse.ui.confFileName" value="build/jsTestDriver.conf"/>
+<stringAttribute key="com.google.jstestdriver.eclipse.ui.confFullPath" value="build/jsTestDriver.conf"/>
+<stringAttribute key="com.google.jstestdriver.eclipse.ui.confName" value=""/>
+<stringAttribute key="com.google.jstestdriver.eclipse.ui.projectName" value="CodeShelfUX"/>
+<booleanAttribute key="com.google.jstestdriver.eclipse.ui.runOnEverySave" value="false"/>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+</listAttribute>
+</launchConfiguration>

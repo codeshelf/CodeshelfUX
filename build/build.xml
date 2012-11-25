@@ -190,6 +190,50 @@
 		</copy>
 	</target>
 
+	<target name="test-jstr">
+		<junit printsummary="yes" haltonfailure="no" showoutput="yes">
+			<sysproperty key="org.codehaus.jstestrunner.commandPattern" value="./build/phantomjs '%1$s' %2$s" />
+			<classpath>
+				<pathelement location="./build/lib/junit-4.11.jar" />
+				<pathelement location="./build/lib/jstestrunner-junit-1.0.3.jar" />
+			</classpath>
+			<batchtest fork="yes" todir="./target/coverage">
+				<fileset dir="./test" includes="**/*" />
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="test-jstd-setup">
+		<mkdir dir="target/coverage" />
+		<java jar="build/lib/JsTestDriver-1.3.5.jar" fork="true" failonerror="true" maxmemory="128m">
+			<arg value="--config=build/jsTestDriver.conf" />
+			<arg value="--port=42442" />
+			<arg value="--runnerMode=DEBUG" />
+			<arg value="--browser=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" />
+			<arg value="--testOutput=../target/coverage" />
+			<!--classpath>
+				<pathelement location="lib/JsTestDriver-1.3.5.jar" />
+				<pathelement location="lib/coverage-1.3.5.jar" />
+			</classpath-->
+		</java>
+	</target>
+
+	<target name="test-jstd-run">
+		<mkdir dir="target/coverage" />
+		<java jar="build/lib/JsTestDriver-1.3.5.jar" fork="true" failonerror="true" maxmemory="128m">
+			<arg value="--config=build/jsTestDriver.conf" />
+			<arg value="--reset" />
+			<arg value="--runnerMode=DEBUG" />
+			<arg value="--tests=all" />
+			<arg value="--dryRunFor=all" />
+			<arg value="--testOutput=target/coverage" />
+			<!--classpath>
+				<pathelement location="lib/JsTestDriver-1.3.5.jar" />
+				<pathelement location="lib/coverage-1.3.5.jar" />
+			</classpath-->
+		</java>
+	</target>
+
 	<target name="deploy-unionrocket">
 
 		<property name="webapp.hostname" value="codeshelf.unionrocket.com" />
