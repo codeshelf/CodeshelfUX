@@ -232,7 +232,13 @@
 				<pathelement location="lib/coverage-1.3.5.jar" />
 			</classpath-->
 		</java>
-	</target>
+
+        <exec executable="perl" dir="./build">
+        	<arg value="genhtml" />
+            <arg value="../target/coverage/jsTestDriver.conf-coverage.dat"/>
+            <arg value="--output-directory=../target/coverage"/>
+        </exec>
+</target>
 
 	<target name="deploy-unionrocket">
 
