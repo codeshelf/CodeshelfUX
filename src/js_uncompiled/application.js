@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: application.js,v 1.21 2012/11/10 03:16:49 jeffw Exp $
+ *  $Id: application.js,v 1.22 2012/11/25 21:18:02 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.application');
 goog.require('codeshelf.login');
@@ -17,9 +17,26 @@ codeshelf.application = function() {
 	var webSession_;
 	var loginWindow_;
 	var organization_;
-	var thisApplication_;
+	var self;
 
-	thisApplication_ = {
+	function initApplication() {
+		gWindowList = [];
+		gXPosOffset = 0;
+		gYPosOffset = 0;
+		gFocusedWindow = 0;
+
+		// Remove all markup from the URL - we'll build it from the app itself.
+		goog.dom.removeChildren(goog.dom.getDocument().body);
+		loginWindow_ = codeshelf.loginWindow();
+		loginWindow_.enter(self, webSession_);
+
+		// Cause automatic login to save on test time.
+		setTimeout(function() {
+//			loginWindow_.launchCodeCheck();
+		}, 1250);
+	}
+
+	self = {
 
 		getWebsession: function() {
 			return webSession_;
@@ -39,36 +56,19 @@ codeshelf.application = function() {
 
 		startApplication: function() {
 			webSession_ = codeshelf.websession();
-			webSession_.initWebSocket(thisApplication_);
-			thisApplication_.initApplication_();
+			webSession_.initWebSocket(self);
+			initApplication();
 		},
 
 		restartApplication: function(reason) {
 			if (reason !== undefined) {
 				alert('Application restarted: ' + reason + '.');
 			}
-			thisApplication_.initApplication_();
-		},
-
-		initApplication_: function() {
-			gWindowList = [];
-			gXPosOffset = 0;
-			gYPosOffset = 0;
-			gFocusedWindow = 0;
-
-			// Remove all markup from the URL - we'll build it from the app itself.
-			goog.dom.removeChildren(goog.dom.getDocument().body);
-			loginWindow_ = codeshelf.loginWindow();
-			loginWindow_.enter(thisApplication_, webSession_);
-
-			// Cause automatic login to save on test time.
-			setTimeout(function() {
-//				loginWindow_.launchCodeCheck();
-			}, 1250);
+			self.initApplication_();
 		}
 	};
 
-	return thisApplication_;
+	return self;
 };
 
 Object.size = function(obj) {

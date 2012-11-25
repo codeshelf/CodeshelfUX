@@ -17,6 +17,6 @@
 	<classpathentry kind="lib" path="build/lib/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="build/lib/slf4j-jcl-1.6.1.jar"/>
 	<classpathentry kind="lib" path="build/lib/coverage-1.3.5.jar" sourcepath="/jstestdriver/src"/>
-	<classpathentry kind="lib" path="build/lib/JsTestDriver-1.3.5.jar"/>
+	<classpathentry kind="lib" path="build/lib/JsTestDriver-1.3.5.jar" sourcepath="/jstestdriver/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
