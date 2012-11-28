@@ -22,15 +22,6 @@
 
 	<property name="target.compiled.js.dir" value="${target.dir}/js_compiled" />
 
-	<!-- These are the default compile options if you call build.webapp without deploy. -->
-	<property name="webapp.hostname" value="localhost" />
-	<property name="compiler.options.optimization" value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
-	<property name="compiler.options.format" value="--compiler_flags=--source_map_format=V3" />
-	<property name="compiler.options.map" value="--compiler_flags=--create_source_map=${target.compiled.js.dir}/codeshelf.map" />
-	<property name="compiler.options.wrapper" value="--compiler_flags=--output_wrapper=&quot;(function(){%output%})();&quot;" />
-	<property name="compiler.options.pretty" value="--compiler_flags=--formatting=PRETTY_PRINT" />
-	<property name="compiler.options.debug" value="--compiler_flags=--source_map_format=V3" />
-
 	<taskdef resource="pyAntTasks.properties">
 		<classpath>
 			<pathelement location="${basedir}/build/lib/pyAntTasks-1.3.3.jar" />
@@ -102,8 +93,46 @@
 		</py-run>
 	</target>
 
+	<!-- These are the default compile options if you call compile without deploy. -->
+	<target name="set.defaults">
+		<condition property="webapp.hostname" value="localhost">
+			<not>
+				<isset property="webapp.hostname" />
+			</not>
+		</condition>
+		<condition property="compiler.options.optimization" value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS">
+			<not>
+				<isset property="webapp.hostname" />
+			</not>
+		</condition>
+		<condition property="compiler.options.format" value="--compiler_flags=--source_map_format=V3">
+			<not>
+				<isset property="webapp.hostname" />
+			</not>
+		</condition>
+		<condition property="compiler.options.map" value="--compiler_flags=--create_source_map=${target.compiled.js.dir}/codeshelf.map">
+			<not>
+				<isset property="webapp.hostname" />
+			</not>
+		</condition>
+		<condition property="compiler.options.wrapper" value="--compiler_flags=--output_wrapper=&quot;(function(){%output%})();&quot;">
+			<not>
+				<isset property="webapp.hostname" />
+			</not>
+		</condition>
+		<condition property="compiler.options.pretty" value="--compiler_flags=--formatting=PRETTY_PRINT">
+			<not>
+				<isset property="webapp.hostname" />
+			</not>
+		</condition>
+		<condition property="compiler.options.debug" value="--compiler_flags=--source_map_format=V3">
+			<not>
+				<isset property="webapp.hostname" />
+			</not>
+		</condition>
+	</target>
 
-	<target name="compile" depends="prep.dirs, generate.templates, generate.deps, generate.css">
+	<target name="compile" depends="prep.dirs, generate.templates, generate.deps, generate.css, set.defaults">
 		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/closurebuilder.py" dir="${basedir}" optimize="0">
 			<arg value="--root=./src/js_uncompiled" />
 			<arg value="--root=./lib/GoogleClosureLibrary/closure/" />
@@ -319,12 +348,13 @@
 	<target name="deploy-localhost">
 
 		<property name="webapp.hostname" value="localhost" />
-		<property name="compiler.options.optimization" value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
+		<property name="compiler.options.optimization" value="--compiler_flags=--compilation_level=WHITESPACE_ONLY" />
 		<property name="compiler.options.format" value="--compiler_flags=--source_map_format=V3" />
 		<property name="compiler.options.map" value="--compiler_flags=--create_source_map=${target.compiled.js.dir}/codeshelf.map" />
-		<property name="compiler.options.wrapper" value="--compiler_flags=--output_wrapper=&quot;(function(){%output%})();&quot;" />
+		<property name="compiler.options.wrapper" value="--compiler_flags=--source_map_format=V3" />
+		<!--property name="compiler.options.wrapper" value="- -compiler_flags=- -output_wrapper=&quot;(function(){%output%})();&quot;" /-->
 		<property name="compiler.options.pretty" value="--compiler_flags=--formatting=PRETTY_PRINT" />
-		<property name="compiler.options.debug" value="--compiler_flags=--source_map_format=V3" />
+		<property name="compiler.options.debug" value="--compiler_flags=--debug" />
 
 		<antcall target="build.webapp">
 		</antcall>

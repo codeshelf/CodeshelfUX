@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.35 2012/11/14 09:50:15 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.36 2012/11/28 02:48:51 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -112,44 +112,55 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		}
 		var dist = google.maps.geometry.spherical.computeDistanceBetween(latLngB, event.latLng);
 		if ((diff > 80) && (diff < 100)) {
-			var adjust;
 			if (heading1 < heading2) {
-				adjust = 90 - diff;
+				heading2 += 90 - diff;
 			} else {
-				adjust = diff - 90;
+				heading2 += diff - 90;
 			}
-			event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2 + adjust);
+			event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2);
 		}
 
 		// Now check to see if we're close to 90deg of the anchor marker.
 		var anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
-		diff = Math.abs(anchorHeading - (heading2 + adjust));
-		if (diff > 180) {
-			diff -= 180;
-		}
-		if ((diff > 80) && (diff < 100)) {
-			if (diff < 90) {
-				while (diff < 90) {
-					dist *= 1.001;
-					event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2 + adjust);
-					anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
-					diff = Math.abs(anchorHeading - (heading2 + adjust));
-					if (diff > 180) {
-						diff -= 180;
-					}
-				}
-			} else {
-				while (diff > 90) {
-					dist *= 0.999;
-					event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2 + adjust);
-					anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
-					diff = Math.abs(anchorHeading - (heading2 + adjust));
-					if (diff > 180) {
-						diff -= 180;
-					}
-				}
+		diff = getNormalizedDiff(anchorHeading, heading2);
+		if ((diff > 80) && (diff < 90)) {
+			while (diff < 90) {
+				dist *= 0.999;
+				event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2);
+				anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
+				diff = getNormalizedDiff(anchorHeading, heading2);
+			}
+		} else if ((diff > 90) && (diff < 100)) {
+			while (diff > 90) {
+				dist *= 1.001;
+				event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2);
+				anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
+				diff = getNormalizedDiff(anchorHeading, heading2);
+			}
+		} else if ((diff < -80) && (diff > -90)) {
+			while (diff > -90) {
+				dist *= 1.001;
+				event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2);
+				anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
+				diff = getNormalizedDiff(anchorHeading, heading2);
+			}
+		} else if ((diff < -90) && (diff > -100)) {
+			while (diff < -90) {
+				dist *= 0.999;
+				event.latLng = google.maps.geometry.spherical.computeOffset(latLngB, dist, heading2);
+				anchorHeading = getNormalizedHeading(event.latLng, facilityAnchorMarker_.getPosition());
+				diff = getNormalizedDiff(anchorHeading, heading2);
 			}
 		}
+	}
+
+
+	function getNormalizedDiff(a, b) {
+		var result = b - a;
+		if (result > 180) {
+			result -= 360;
+		}
+		return result;
 	}
 
 	function getNormalizedHeading(latLngA, latLngB) {
@@ -561,7 +572,8 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			// Add the facility descriptor field.
 			var facilityDescField = codeshelf.dataobjectfield(websession_, self.getMainPaneElement(),
 			                                                  domainobjects['Facility']['className'],
-			                                                  domainobjects['Facility']['properties']['desc']['id'], facility_['persistentId'],
+			                                                  domainobjects['Facility']['properties']['desc']['id'],
+			                                                  facility_['persistentId'],
 			                                                  'windowField', 'Facility name');
 			facilityDescField.start();
 
@@ -608,7 +620,8 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			};
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP),
+			                        true);
 		},
 
 		close: function() {
@@ -634,4 +647,5 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 
 	return self;
-};
+}
+;
