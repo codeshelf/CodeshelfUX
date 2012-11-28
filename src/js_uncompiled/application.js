@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: application.js,v 1.22 2012/11/25 21:18:02 jeffw Exp $
+ *  $Id: application.js,v 1.23 2012/11/28 03:31:41 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.application');
 goog.require('codeshelf.login');
@@ -64,7 +64,7 @@ codeshelf.application = function() {
 			if (reason !== undefined) {
 				alert('Application restarted: ' + reason + '.');
 			}
-			self.initApplication_();
+			 initApplication();
 		}
 	};
 
