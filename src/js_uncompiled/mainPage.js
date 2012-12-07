@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.46 2012/11/14 09:50:14 jeffw Exp $
+ *  $Id: mainPage.js,v 1.47 2012/12/07 08:58:02 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.ediservicesview');
@@ -10,6 +10,7 @@ goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.initializenewclient');
 goog.require('codeshelf.listdemoview');
 goog.require('codeshelf.listview');
+goog.require('codeshelf.ordersview');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.window');
 goog.require('codeshelf.workareaeditorview');
@@ -24,7 +25,7 @@ goog.require('goog.dom.query');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
-
+goog.require('goog.ui.Dialog');
 
 codeshelf.mainpage = function() {
 
@@ -35,6 +36,8 @@ codeshelf.mainpage = function() {
 	var frameTop_ = 5;
 	var frameLeft_ = 5;
 	var limits_;
+
+	var ediServicesView_;
 
 	function updateFrameSize(size) {
 		// goog.style.setSize(goog.dom.getElement('frame'), size);
@@ -81,34 +84,15 @@ codeshelf.mainpage = function() {
 			var workAreaEditorWindow = codeshelf.window('Workarea Editor', workAreaEditorView, frame_, undefined);
 			workAreaEditorWindow.open();
 
-//									var ediServicesView = codeshelf.ediservicesview(websession_, facility);
-//									var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView, frame_, undefined);
+//									var ediServicesView_ = codeshelf.ediServicesView_(websession_, facility);
+//									var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView_, frame_, undefined);
 //									ediServicesWindow.open();
 
-			var hierarchyMap = [];
-			hierarchyMap[0] = domainobjects['Facility']['className'];
-			hierarchyMap[1] = domainobjects['DropboxService']['className'];
-			hierarchyMap[2] = domainobjects['EdiDocumentLocator']['className'];
-
-			var filter = 'parentOrganization.persistentId = :theId';
-			var filterParams = [
-				{ 'name': 'theId', 'value': organization_['persistentId']}
-			];
-
-			var ediServicesView = codeshelf.hierarchylistview(websession_, domainobjects['Facility'], filter, filterParams, hierarchyMap);
-			var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView, frame_, undefined);
+			var ediServicesView_ = codeshelf.ediservicesview(websession_, facility);
+			var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView_, frame_, undefined);
 			ediServicesWindow.open();
 
-			var hierarchyMap = [];
-			hierarchyMap[0] = domainobjects['OrderHeader']['className'];
-			hierarchyMap[1] = domainobjects['OrderDetail']['className'];
-
-			var filter = 'parent.persistentId = :theId';
-			var filterParams = [
-				{ 'name': 'theId', 'value': facility['persistentId']}
-			];
-
-			var ordersView = codeshelf.hierarchylistview(websession_, domainobjects['OrderHeader'], filter, filterParams, hierarchyMap);
+			var ordersView = codeshelf.ordersview(websession_, facility);
 			var ordersWindow = codeshelf.window('Orders', ordersView, frame_, undefined);
 			ordersWindow.open();
 		}
@@ -116,7 +100,6 @@ codeshelf.mainpage = function() {
 			alert(err);
 		}
 	}
-
 
 	/**
 	 * The main page view.
@@ -192,4 +175,5 @@ codeshelf.mainpage = function() {
 	};
 
 	return self;
-};
+}
+;

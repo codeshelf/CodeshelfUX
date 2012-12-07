@@ -14,8 +14,8 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 		function(e) {
 			$(e.target).addClass('ui-state-hover');
 		})['mouseout'](function(e) {
-			$(e.target).removeClass('ui-state-hover');
-		});
+		$(e.target).removeClass('ui-state-hover');
+	});
 
 	var websession_ = websession;
 	var domainObject_ = domainObject;
@@ -53,7 +53,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 
 	function websocketCmdCallback() {
 		var callback = {
-			exec:                    function(command) {
+			exec: function(command) {
 				if (!command['data'].hasOwnProperty('results')) {
 					alert('response has no result');
 				} else if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
@@ -140,14 +140,13 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 
 			menu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document.body);
+			menu_.bind('mouseleave', function(e) {
+				$(this).fadeOut(5)
+			});
 
-			menu_.bind('mouseleave', function(e) { $(this).fadeOut(5)});//options['fadeSpeed']) });
-//			menu_.bind("click", updateColumn);
-
-
-			grid_.onKeyDown.subscribe(function(e) {
+			grid_.onKeyDown.subscribe(function(event) {
 				// select all rows on ctrl-a
-				if (e.which != 65 || !e.ctrlKey)
+				if (event.which != 65 || !event.ctrlKey)
 					return false;
 
 				var rows = [];
@@ -159,12 +158,12 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 				}
 
 				grid_.setSelectedRows(rows);
-				e.preventDefault();
+				event.preventDefault();
 			});
 
-			grid_.onContextMenu.subscribe(function(e) {
-				if (e && e.stopPropagation)
-					e.stopPropagation();
+			grid_.onContextMenu.subscribe(function(event) {
+				if (event && event.stopPropagation)
+					event.stopPropagation();
 //				e.preventDefault();
 //				var cell = grid_.getCellFromEvent(e);
 //				$("#contextMenu")
@@ -177,7 +176,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 //					$("#contextMenu").hide();
 //				});
 
-				e.preventDefault();
+				event.preventDefault();
 				menu_.empty();
 
 				var $li, $input;
@@ -199,17 +198,17 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 
 
 				menu_
-					.css('top', e.pageY - 10)
-					.css('left', e.pageX - 10)
+					.css('top', event.pageY - 10)
+					.css('left', event.pageX - 10)
 					.fadeIn(5);//options['fadeSpeed']);
 
 			});
 
-			grid_.onColumnsReordered.subscribe(function(e) {
+			grid_.onColumnsReordered.subscribe(function(event) {
 				dataView_.sort(self.comparer, sortdir_);
 			});
 
-			grid_.onSelectedRowsChanged.subscribe(function(e) {
+			grid_.onSelectedRowsChanged.subscribe(function(event) {
 				selectedRowIds_ = [];
 				var rows = grid_.getSelectedRows();
 				for (var i = 0, l = rows.length; i < l; i++) {
@@ -219,14 +218,14 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 				}
 			});
 
-			grid_.onSort.subscribe(function(e, args) {
+			grid_.onSort.subscribe(function(event, args) {
 				sortdir_ = args.sortAsc ? 1 : -1;
 				sortcol_ = args.sortCol.field;
 				dataView_.sort(comparer, args.sortAsc);
 			});
 
 			// wire up model events to drive the grid
-			dataView_.onRowCountChanged.subscribe(function(e, args) {
+			dataView_.onRowCountChanged.subscribe(function(event, args) {
 				grid_.updateRowCount();
 				grid_.render();
 			});
@@ -249,15 +248,15 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 				}
 			});
 
-			dataView_.onPagingInfoChanged.subscribe(function(e, pagingInfo) {
+			dataView_.onPagingInfoChanged.subscribe(function(event, pagingInfo) {
 				var isLastPage = pagingInfo.pageSize * (pagingInfo.pageNum + 1) - 1 >= pagingInfo.totalRows;
 				var enableAddRow = isLastPage || pagingInfo.pageSize == 0;
 				var options = grid_.getOptions();
 
 				if (options['enableAddRow'] != enableAddRow)
 					grid_.setOptions({
-						enableAddRow: enableAddRow
-					});
+						                 enableAddRow: enableAddRow
+					                 });
 			});
 		},
 
@@ -268,9 +267,9 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 			dataView_.beginUpdate();
 			//dataView_.setItems(data_);
 			dataView_.setFilterArgs({
-				percentCompleteThreshold: percentCompleteThreshold_,
-				searchString:             searchString_
-			});
+				                        percentCompleteThreshold: percentCompleteThreshold_,
+				                        searchString:             searchString_
+			                        });
 			dataView_.endUpdate();
 
 			$('#gridContainer')['resizable']();

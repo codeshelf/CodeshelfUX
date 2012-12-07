@@ -89,7 +89,7 @@
 			<arg value="--root_with_prefix=../lib/SlickGrid ../../../SlickGrid" />
 			<arg value="--root_with_prefix=../lib/Raphael ../../../Raphael" />
 			<arg value="--root_with_prefix=../src/js_uncompiled ../../../../src/js_uncompiled" />
-			<arg value="--output_file=${target.compiled.js.dir}/deps.js" />
+			<arg value="--output_file=../src/js_uncompiled/deps.js" />
 		</py-run>
 	</target>
 
@@ -132,7 +132,7 @@
 		</condition>
 	</target>
 
-	<target name="compile" depends="prep.dirs, generate.templates, generate.deps, generate.css, set.defaults">
+	<target name="compile" depends="prep.dirs, generate.templates, generate.css, set.defaults">
 		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/closurebuilder.py" dir="${basedir}" optimize="0">
 			<arg value="--root=./src/js_uncompiled" />
 			<arg value="--root=./lib/GoogleClosureLibrary/closure/" />
@@ -167,7 +167,7 @@
 
 		<!-- Prepare the websocket link for the target host. -->
 		<echo>Webapp hostname: ${webapp.hostname}</echo>
-		<replace file="${target.compiled.js.dir}/codeshelf.js" token="XXXXX" value="${webapp.hostname}:8444" />
+		<replace file="${target.compiled.js.dir}/codeshelf.js" token="wss\:\/\/localhost\:8444" value="wss\:\/\/${webapp.hostname}\:8444" />
 
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="src/js_uncompiled" value="../js_uncompiled" />
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/GoogleClosureLibrary" value="../lib/GoogleClosureLibrary" />
@@ -196,7 +196,7 @@
 	</target>
 
 	<!-- Build the web app from the compiled pieces. /-->
-	<target name="build.webapp" depends="clean, generate.templates, generate.deps, generate.css, compile">
+	<target name="build.webapp" depends="clean, generate.templates, generate.css, compile">
 
 		<copy todir="${target.web.dir}/js">
 			<fileset dir="${target.compiled.js.dir}">
@@ -348,11 +348,11 @@
 	<target name="deploy-localhost">
 
 		<property name="webapp.hostname" value="localhost" />
-		<property name="compiler.options.optimization" value="--compiler_flags=--compilation_level=WHITESPACE_ONLY" />
+		<property name="compiler.options.optimization" value="--compiler_flags=--compilation_level=SIMPLE_OPTIMIZATIONS" />
 		<property name="compiler.options.format" value="--compiler_flags=--source_map_format=V3" />
 		<property name="compiler.options.map" value="--compiler_flags=--create_source_map=${target.compiled.js.dir}/codeshelf.map" />
-		<property name="compiler.options.wrapper" value="--compiler_flags=--source_map_format=V3" />
 		<!--property name="compiler.options.wrapper" value="- -compiler_flags=- -output_wrapper=&quot;(function(){%output%})();&quot;" /-->
+		<property name="compiler.options.wrapper" value="--compiler_flags=--debug" />
 		<property name="compiler.options.pretty" value="--compiler_flags=--formatting=PRETTY_PRINT" />
 		<property name="compiler.options.debug" value="--compiler_flags=--debug" />
 

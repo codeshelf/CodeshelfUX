@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.29 2012/11/14 09:50:16 jeffw Exp $
+ * $Id: domainObjects.js,v 1.30 2012/12/07 08:58:02 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -141,6 +141,11 @@ domainobjects = {
 				'title': 'ID',
 				'width': 25
 			},
+			'parentDomainId': {
+				'id':    'parentFullDomainId',
+				'title': 'Parent ID',
+				'width': 25
+			},
 			'detailId':    {
 				'id':    'domainId',
 				'title': 'Detail ID',
@@ -180,6 +185,11 @@ domainobjects = {
 			'domainId': {
 				'id':    'fullDomainId',
 				'title': 'ID',
+				'width': 25
+			},
+			'parentDomainId': {
+				'id':    'parentFullDomainId',
+				'title': 'Parent ID',
 				'width': 25
 			},
 			'orderId':  {

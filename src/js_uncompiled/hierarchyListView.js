@@ -1,6 +1,5 @@
 goog.provide('codeshelf.hierarchylistview');
 goog.require('extern.jquery');
-goog.require('goog.ui.Dialog');
 goog.require('slickgrid.columnpicker');
 goog.require('slickgrid.dataview');
 goog.require('slickgrid.editors');
@@ -51,7 +50,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 		var levelKeyB = itemB['parentFullDomainId'];
 
 		if (levelKeyA == levelKeyB) {
-			var columnIndex = grid_.getColumnIndexArray();
+			var columnIndex = grid_.getColumnIndex();
 			for (var columnId in columnIndex) {
 				if (columnIndex.hasOwnProperty(columnId)) {
 					if (itemA[columnId] !== itemB[columnId]) {
@@ -125,22 +124,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 		return callback;
 	}
 
-	function websocketCmdCallbackFacility() {
-		var callback = {
-			exec: function(command) {
-				if (!command['data'].hasOwnProperty('results')) {
-					alert('response has no result');
-				} else {
-					if (command['type'] == kWebSessionCommandType.OBJECT_METHOD_RESP) {
-						var url = command['data']['results'];
-						window.open(url, '_blank');
-						window.focus();
-					}
-				}
-			}
-		};
-
-		return callback;
+	function dispatchContextMenu(event) {
+		var cell = grid_.getCellFromEvent(event);
+		var item = dataView_.getItem(cell.row);
+		self.doContextMenu(event, item, columns_[cell.cell]);
 	}
 
 	var self = {
@@ -195,6 +182,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 			goog.dom.appendChild(self.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
+			self.setupContextMenu();
+
 			dataView_ = new Slick.Data.DataView();
 			grid_ = new Slick.Grid(self.getMainPaneElement(), dataView_, columns_, options_);
 			grid_.setSelectionModel(new Slick.RowSelectionModel());
@@ -211,40 +200,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 
-			grid_.onClick.subscribe(function(e) {
-				var cell = grid_.getCellFromEvent(e);
-//				if (grid.getColumns()[cell.cell].id == "priority") {
-//					var states = { "Low": "Medium", "Medium": "High", "High": "Low" };
-//					data[cell.row].priority = states[data[cell.row].priority];
-//					grid.updateRow(cell.row);
-//					e.stopPropagation();
-//				}
-
-				var buttonSet = new goog.ui.Dialog.ButtonSet().
-					addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.OK).
-					addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
-
-				var dataEntryDialog = codeshelf.dataentrydialog('Link Dropbox', buttonSet);
-				var dialogContentElement = soy.renderAsElement(codeshelf.templates.linkDropboxDialog);
-				dataEntryDialog.setupDialog(dialogContentElement);
-				dataEntryDialog.open(function(event, dialog) {
-						if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.OK.key) {
-
-							// Call Facility.linkDropbox();
-							var data = {
-								'className':    domainobjects['Facility']['className'],
-								'persistentId': 1,
-								'methodName':   'linkDropbox',
-								'methodArgs':   [
-								]
-							};
-
-							var linkDropboxCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
-							websession_.sendCommand(linkDropboxCmd, websocketCmdCallbackFacility(kWebSessionCommandType.OBJECT_METHOD_REQ), true);
-						}
-					}
-				);
-
+			grid_.onClick.subscribe(function(event) {
+				var cell = grid_.getCellFromEvent(event);
 			});
 
 			grid_.onKeyDown.subscribe(function(e) {
@@ -315,9 +272,11 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 				if (options['enableAddRow'] != enableAddRow)
 					grid_.setOptions({
-						enableAddRow: enableAddRow
-					});
+						                 enableAddRow: enableAddRow
+					                 });
 			});
+
+			grid_.onContextMenu.subscribe(dispatchContextMenu);
 		},
 
 		open: function() {
@@ -346,11 +305,11 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 			// initialize the model after all the events have been hooked up
 			dataView_.beginUpdate();
-			dataView_.setItems([], 'domainId');
+			dataView_.setItems([], 'fullDomainId');
 			dataView_.setFilterArgs({
-				percentCompleteThreshold: percentCompleteThreshold_,
-				searchString:             searchString_
-			});
+				                        percentCompleteThreshold: percentCompleteThreshold_,
+				                        searchString:             searchString_
+			                        });
 			dataView_.endUpdate();
 
 			$('#gridContainer')['resizable']();
