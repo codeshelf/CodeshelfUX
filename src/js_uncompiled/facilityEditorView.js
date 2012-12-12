@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.37 2012/11/28 03:31:41 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.38 2012/12/12 00:52:03 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -215,9 +215,9 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		facilityOutline_.setVisible(true);
 
 		// The case where we're adding a new marker (maybe even the anchor marker) that we must show.
-		var iconUrl = 'icons/marker_20_blue.png';
+		var iconUrl = '../icons/marker_20_blue.png';
 		if (vertex['drawOrder'] === 0) {
-			iconUrl = 'icons/marker_20_red.png';
+			iconUrl = '../icons/marker_20_red.png';
 		}
 
 		var markerImage = new google.maps.MarkerImage(
@@ -360,7 +360,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		facilityOutline_.setPath(facilityOutlinePath_);
 
 		// Now make the second and last markers green.
-		var iconUrl = 'icons/marker_20_green.png';
+		var iconUrl = '../icons/marker_20_green.png';
 		var markerImage = new google.maps.MarkerImage(
 			iconUrl,
 			new google.maps.Size(12, 20),

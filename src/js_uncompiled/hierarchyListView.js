@@ -1,5 +1,7 @@
 goog.provide('codeshelf.hierarchylistview');
 goog.require('extern.jquery');
+goog.require('slickgrid.cellcopymanager');
+goog.require('slickgrid.cellselection');
 goog.require('slickgrid.columnpicker');
 goog.require('slickgrid.dataview');
 goog.require('slickgrid.editors');
@@ -31,39 +33,96 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 	// Compute the columns we need for this domain object.
 	var columns_ = [];
 	var options_;
-	var sortcol_;
-	var sortdir_;
+	var sortdir_ = 1;
 	var percentCompleteThreshold_;
 	var searchString_;
 
 	/**
+	 * Get the root item in the hierarchy for this item.
+	 * @param {Object} item  The item where we want to get the parent.
+	 * @param {Integer} level The level above this item in the hierarchy class.
+	 * @return {Object} the root item (at level 0) for this item.
+	 */
+	function getParentAtLevel(item, level) {
+		var parentItem = undefined;
+		var currentLevel = getLevel(item);
+
+		if (level === currentLevel) {
+			parentItem = item;
+		} else {
+			var dataItems = dataView_.getItems();
+			for (var dataItemPos in dataItems) {
+				if (dataItems.hasOwnProperty(dataItemPos)) {
+					if (dataItems[dataItemPos]['fullDomainId'] === item['parentFullDomainId']) {
+						return getParentAtLevel(dataItems[dataItemPos], level);
+					}
+				}
+			}
+		}
+		return parentItem;
+	}
+
+	/**
+	 * Figure our what level this item is on based on the class hierarchy.
+	 * @param item
+	 * @return {Integer}  the level (0-n)
+	 */
+	function getLevel(item) {
+		for (var hierarcyPos in hierarchyMap_) {
+			if (hierarchyMap_.hasOwnProperty(hierarcyPos)) {
+				if (item['className'] === hierarchyMap_[hierarcyPos]) {
+					return hierarcyPos;
+				}
+			}
+		}
+	}
+
+	/**
 	 * Compare the colums from left-to-right (so that they sort left-to-right).
-	 * @param itemA
-	 * @param itemB
+	 * @param inItemA
+	 * @param inItemB
 	 * @return {Number}
 	 */
 	function comparer(itemA, itemB) {
 
+		var itemALevel = getLevel(itemA);
+		var itemBLevel = getLevel(itemB);
+
 		// First figure out if they are at the same level.
-
-		var levelKeyA = itemA['parentFullDomainId'];
-		var levelKeyB = itemB['parentFullDomainId'];
-
-		if (levelKeyA == levelKeyB) {
-			var columnIndex = grid_.getColumnIndex();
-			for (var columnId in columnIndex) {
-				if (columnIndex.hasOwnProperty(columnId)) {
-					if (itemA[columnId] !== itemB[columnId]) {
-						var x = itemA[columnId];
-						var y = itemB[columnId];
-						return (x == y ? 0 : (x > y ? 1 : -1));
+		if (itemALevel === itemBLevel) {
+			// If the two items are at the same level then compare them by column values from left-to-right.
+			var columns = grid_.getColumns();
+			for (var column in columns) {
+				if (columns.hasOwnProperty(column)) {
+					if (itemA[columns[column]['id']] !== itemB[columns[column]['id']]) {
+						var x = itemA[columns[column]['id']];
+						var y = itemB[columns[column]['id']];
+						if (sortdir_) {
+							return (x === y ? 0 : (x > y ? 1 : -1));
+						} else {
+							return (x === y ? 0 : (x < y ? 1 : -1));
+						}
 					}
 				}
 			}
 		} else {
-			return (levelKeyA.length > levelKeyB.length ? 1 : -1);
+			if (itemALevel < itemBLevel) {
+				itemB = getParentAtLevel(itemB, itemALevel);
+				if ((itemB === undefined) || (itemA['domainId'] === itemB['domainId'])) {
+					return -1;
+				} else {
+					return comparer(itemA, itemB);
+				}
+			}
+			else {
+				itemA = getParentAtLevel(itemA, itemBLevel);
+				if ((itemA === undefined) || (itemA['domainId'] === itemB['domainId'])) {
+					return 1;
+				} else {
+					return comparer(itemA, itemB);
+				}
+			}
 		}
-
 		return 0;
 	}
 
@@ -158,7 +217,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 								'width':               property.width,
 								'cannotTriggerInsert': true,
 								'resizable':           true,
-								'selectable':          false,
+								'selectable':          true,
 								'sortable':            true
 							};
 						}
@@ -172,11 +231,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 				'enableCellNavigation': true,
 				'asyncEditorLoading':   true,
 				'forceFitColumns':      true,
-				'topPanelHeight':       25
+				'topPanelHeight':       25,
+				'autoEdit':             false
 			};
 
-			sortcol_ = 'Description';
-			sortdir_ = 1;
 			percentCompleteThreshold_ = 0;
 			searchString_ = '';
 
@@ -186,7 +244,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 			dataView_ = new Slick.Data.DataView();
 			grid_ = new Slick.Grid(self.getMainPaneElement(), dataView_, columns_, options_);
-			grid_.setSelectionModel(new Slick.RowSelectionModel());
+			grid_.setSelectionModel(new Slick.CellSelectionModel());
+
+			var copyManager = new Slick.CellCopyManager();
+			grid_.registerPlugin(copyManager);
 
 			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
@@ -204,9 +265,9 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 				var cell = grid_.getCellFromEvent(event);
 			});
 
-			grid_.onKeyDown.subscribe(function(e) {
+			grid_.onKeyDown.subscribe(function(event) {
 				// select all rows on ctrl-a
-				if (e.which != 65 || !e.ctrlKey)
+				if (event.which != 65 || !event.ctrlKey)
 					return false;
 
 				var rows = [];
@@ -218,14 +279,14 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 				}
 
 				grid_.setSelectedRows(rows);
-				e.preventDefault();
+				event.preventDefault();
 			});
 
-			grid_.onColumnsReordered.subscribe(function(e) {
+			grid_.onColumnsReordered.subscribe(function(event) {
 				dataView_.sort(comparer, sortdir_);
 			});
 
-			grid_.onSelectedRowsChanged.subscribe(function(e) {
+			grid_.onSelectedRowsChanged.subscribe(function(event) {
 				selectedRowIds_ = [];
 				var rows = grid_.getSelectedRows();
 				for (var i = 0, l = rows.length; i < l; i++) {
@@ -235,19 +296,18 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 				}
 			});
 
-			grid_.onSort.subscribe(function(e, args) {
-				sortdir_ = args.sortAsc ? 1 : -1;
-				sortcol_ = args.sortCol.field;
-				dataView_.sort(comparer, args.sortAsc);
+			grid_.onSort.subscribe(function(event, args) {
+				sortdir_ = args.sortAsc;
+				dataView_.sort(comparer, 1);
 			});
 
 			// wire up model events to drive the grid
-			dataView_.onRowCountChanged.subscribe(function(e, args) {
+			dataView_.onRowCountChanged.subscribe(function(event, args) {
 				grid_.updateRowCount();
 				grid_.render();
 			});
 
-			dataView_.onRowsChanged.subscribe(function(e, args) {
+			dataView_.onRowsChanged.subscribe(function(event, args) {
 				grid_.invalidateRows(args.rows);
 				grid_.render();
 
@@ -265,7 +325,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 				}
 			});
 
-			dataView_.onPagingInfoChanged.subscribe(function(e, pagingInfo) {
+			dataView_.onPagingInfoChanged.subscribe(function(event, pagingInfo) {
 				var isLastPage = pagingInfo.pageSize * (pagingInfo.pageNum + 1) - 1 >= pagingInfo.totalRows;
 				var enableAddRow = isLastPage || pagingInfo.pageSize == 0;
 				var options = grid_.getOptions();
