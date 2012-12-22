@@ -8,7 +8,7 @@ goog.require('slickgrid.grid');
 goog.require('slickgrid.pager');
 goog.require('slickgrid.rowselection');
 
-codeshelf.listview = function(websession, domainObject, filterClause, filterParams) {
+codeshelf.listview = function(viewName, websession, domainObject, filterClause, filterParams) {
 
 	$('.grid-header .ui-icon').addClass('ui-state-default ui-corner-all')['mouseover'](
 		function(e) {
@@ -21,6 +21,7 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 	var domainObject_ = domainObject;
 	var filterClause_ = filterClause;
 	var filterParams_ = filterParams;
+	var viewName_ = viewName;
 
 	var dataView_;
 	var grid_;
@@ -81,6 +82,11 @@ codeshelf.listview = function(websession, domainObject, filterClause, filterPara
 	}
 
 	var self = {
+
+		getViewName: function() {
+			return viewName_;
+		},
+
 		doSetupView: function() {
 
 			// Compute the columns we need for this domain object.

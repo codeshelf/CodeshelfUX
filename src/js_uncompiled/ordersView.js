@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ordersView.js,v 1.1 2012/12/07 08:58:02 jeffw Exp $
+ *  $Id: ordersView.js,v 1.2 2012/12/22 09:36:37 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ordersview');
@@ -77,6 +77,11 @@ codeshelf.ordersview = function(websession, facility) {
 	}
 
 	var self = {
+
+		getViewName: function() {
+			return 'Orders';
+		},
+
 		setupContextMenu: function() {
 			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document.body);
 			contextMenu_.bind('mouseleave', function(event) {

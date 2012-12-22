@@ -43,6 +43,11 @@ codeshelf.listdemoview = function() {
 	}
 
 	self = {
+
+		getViewName: function() {
+			return 'List Demo';
+		},
+
 		requiredFieldValidator: function(value) {
 			if (value == null || value == undefined || !value.length)
 				return {

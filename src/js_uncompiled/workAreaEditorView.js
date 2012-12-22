@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.57 2012/11/22 05:31:19 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.58 2012/12/22 09:36:37 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -672,6 +672,10 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	 */
 	var self = {
 
+		getViewName: function() {
+			return 'Work Area Editor';
+		},
+
 		doSetupView: function() {
 
 			// Setup the work area view elements.
@@ -846,11 +850,11 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 							var tailArrow = 0.0;
 
 							if ((pathSegmentData['directionEnum'] === 'BOTH') || (pathSegmentData['directionEnum'] === 'HEAD')) {
-								headArrow = 0.75 * self.getPixelsPerMeter();
+								headArrow = 7.5;
 							}
 
 							if ((pathSegmentData['directionEnum'] === 'BOTH') || (pathSegmentData['directionEnum'] === 'TAIL')) {
-								tailArrow = 0.75 * self.getPixelsPerMeter();
+								tailArrow = 7.5;
 							}
 
 							var pathSegmentPath = goog.graphics.paths.createArrow(head, tail, headArrow, tailArrow);

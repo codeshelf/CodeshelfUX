@@ -1,11 +1,10 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ediServicesView.js,v 1.10 2012/12/22 09:36:37 jeffw Exp $
+ *  $Id: workAreaView.js,v 1.1 2012/12/22 09:36:37 jeffw Exp $
  *******************************************************************************/
 
-goog.provide('codeshelf.ediservicesview');
-goog.require('codeshelf.aisleview');
+goog.provide('codeshelf.workareaview');
 goog.require('codeshelf.dataentrydialog');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.templates');
@@ -17,12 +16,12 @@ goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
 /**
- * The current state of edi files for this facility.
+ * The work areas for this facility.
  * @param websession The websession used for updates.
  * @param facility The facility to check.
- * @return {Object} The edi view.
+ * @return {Object} The work queue view.
  */
-codeshelf.ediservicesview = function(websession, facility) {
+codeshelf.workareaview = function(websession, facility) {
 
 	var websession_ = websession;
 	var facility_ = facility;
@@ -80,7 +79,7 @@ codeshelf.ediservicesview = function(websession, facility) {
 	var self = {
 
 		getViewName: function() {
-			return 'EDI Services';
+			return 'Work Areas';
 		},
 
 		setupContextMenu: function() {
@@ -109,9 +108,8 @@ codeshelf.ediservicesview = function(websession, facility) {
 	};
 
 	var hierarchyMap = [];
-//	hierarchyMap[0] = domainobjects['Facility']['className'];
-	hierarchyMap[0] = domainobjects['DropboxService']['className'];
-	hierarchyMap[1] = domainobjects['EdiDocumentLocator']['className'];
+	hierarchyMap[0] = domainobjects['WorkArea']['className'];
+	hierarchyMap[1] = domainobjects['OrderHeader']['className'];
 
 	var filter = 'parent.persistentId = :theId';
 	var filterParams = [
@@ -119,7 +117,7 @@ codeshelf.ediservicesview = function(websession, facility) {
 	];
 
 	// We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['DropboxService'], filter, filterParams, hierarchyMap);
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['WorkArea'], filter, filterParams, hierarchyMap);
 	jQuery.extend(view, self);
 	self = view;
 

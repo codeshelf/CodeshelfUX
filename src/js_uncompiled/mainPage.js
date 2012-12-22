@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.48 2012/12/12 00:52:03 jeffw Exp $
+ *  $Id: mainPage.js,v 1.49 2012/12/22 09:36:37 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.ediservicesview');
@@ -14,6 +14,7 @@ goog.require('codeshelf.ordersview');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.window');
 goog.require('codeshelf.workareaeditorview');
+goog.require('codeshelf.workareaview');
 goog.require('domainobjects');
 goog.require('goog.Disposable');
 goog.require('goog.debug');
@@ -75,22 +76,26 @@ codeshelf.mainpage = function() {
 			if (typeof google !== 'undefined') {
 				google.load('maps', '3.8', {'other_params': 'sensor=false', 'callback': function() {
 					var facilityEditorView = codeshelf.facilityeditorview(websession_, application_.getOrganization(), facility);
-					var facilityEditorWindow = codeshelf.window('Facility Editor', facilityEditorView, frame_, undefined);
+					var facilityEditorWindow = codeshelf.window(facilityEditorView, frame_, undefined);
 					facilityEditorWindow.open();
 				}});
 			}
 
 			var workAreaEditorView = codeshelf.workareaeditorview(websession_, facility);
-			var workAreaEditorWindow = codeshelf.window('Workarea Editor', workAreaEditorView, frame_, undefined);
+			var workAreaEditorWindow = codeshelf.window(workAreaEditorView, frame_, undefined);
 			workAreaEditorWindow.open();
 
 			var ediServicesView_ = codeshelf.ediservicesview(websession_, facility);
-			var ediServicesWindow = codeshelf.window('EDI Services', ediServicesView_, frame_, undefined);
+			var ediServicesWindow = codeshelf.window(ediServicesView_, frame_, undefined);
 			ediServicesWindow.open();
 
 			var ordersView = codeshelf.ordersview(websession_, facility);
-			var ordersWindow = codeshelf.window('Orders', ordersView, frame_, undefined);
+			var ordersWindow = codeshelf.window(ordersView, frame_, undefined);
 			ordersWindow.open();
+
+			var workAreaView = codeshelf.workareaview(websession_, facility);
+			var workAreaWindow = codeshelf.window(workAreaView, frame_, undefined);
+			workAreaWindow.open();
 		}
 		catch (err) {
 			alert(err);
@@ -143,15 +148,15 @@ codeshelf.mainpage = function() {
 			});
 
 			var listDemoView = codeshelf.listdemoview();
-			var listDemoWindow = codeshelf.window('Large Demo List', listDemoView, frame_, undefined);
+			var listDemoWindow = codeshelf.window(listDemoView, frame_, undefined);
 			listDemoWindow.open();
 
 			var filter = 'parentOrganization.persistentId = :theId';
 			var filterParams = [
 				{ 'name': 'theId', 'value': organization_['persistentId']}
 			];
-			var listView = codeshelf.listview(websession_, domainobjects['Facility'], filter, filterParams);
-			var listWindow = codeshelf.window('Facilities List', listView, frame_, undefined);
+			var listView = codeshelf.listview('Facilities List', websession_, domainobjects['Facility'], filter, filterParams);
+			var listWindow = codeshelf.window(listView, frame_, undefined);
 			listWindow.open();
 
 			var data = {

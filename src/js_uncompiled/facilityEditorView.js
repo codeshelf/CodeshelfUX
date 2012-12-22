@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.38 2012/12/12 00:52:03 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.39 2012/12/22 09:36:37 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -547,6 +547,10 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 	 * @type {Object}
 	 */
 	var self = {
+
+		getViewName: function() {
+			return 'Facility Editor';
+		},
 
 		doSetupView: function() {
 

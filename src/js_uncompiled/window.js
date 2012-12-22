@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: window.js,v 1.16 2012/11/08 03:35:11 jeffw Exp $
+ *  $Id: window.js,v 1.17 2012/12/22 09:36:37 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.window');
 goog.require('goog.dom.query');
@@ -10,9 +10,8 @@ goog.require('goog.events.EventType');
 goog.require('goog.fx.Dragger');
 goog.require('goog.style');
 
-codeshelf.window = function(title, view, parent, limits) {
+codeshelf.window = function(view, parent, limits) {
 
-	var title_ = title;
 	var view_ = view;
 	var parent_ = parent;
 	var limits_ = limits;
@@ -43,7 +42,7 @@ codeshelf.window = function(title, view, parent, limits) {
 
 
 			var label = goog.dom.query('.windowTitle', windowElement_)[0];
-			label.innerHTML = title;
+			label.innerHTML = view_.getViewName();
 
 			windowBar_ = goog.dom.query('.windowBar', windowElement_)[0];
 			var windowResizer = goog.dom.query('.windowResizer', windowElement_)[0];
