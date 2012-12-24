@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.58 2012/12/22 09:36:37 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.59 2012/12/24 08:17:29 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -60,7 +60,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		var dataEntryDialog = codeshelf.dataentrydialog('Create Aisle', buttonSet);
 		var dialogContentElement = soy.renderAsElement(codeshelf.templates.createAisleDialogContent);
 		dataEntryDialog.setupDialog(dialogContentElement);
-		dataEntryDialog.createField('aisleId', 'text');
+		dataEntryDialog.createField('aisleId', 'text', true);
 		dataEntryDialog.createField('bayHeight', 'text');
 		dataEntryDialog.createField('bayWidth', 'text');
 		dataEntryDialog.createField('bayDepth', 'text');

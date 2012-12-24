@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ordersView.js,v 1.2 2012/12/22 09:36:37 jeffw Exp $
+ *  $Id: ordersView.js,v 1.3 2012/12/24 08:17:29 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ordersview');
@@ -108,8 +108,9 @@ codeshelf.ordersview = function(websession, facility) {
 	};
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = domainobjects['OrderHeader']['className'];
-	hierarchyMap[1] = domainobjects['OrderDetail']['className'];
+	hierarchyMap[0] = { className: domainobjects['OrderGroup']['className'], linkProperty : 'parent' };
+	hierarchyMap[1] = { className: domainobjects['OrderHeader']['className'], linkProperty : 'parent' };
+	hierarchyMap[2] = { className: domainobjects['OrderDetail']['className'], linkProperty : 'parent' };
 
 	var filter = 'parent.persistentId = :theId';
 	var filterParams = [
@@ -117,7 +118,7 @@ codeshelf.ordersview = function(websession, facility) {
 	];
 
 	// We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['OrderHeader'], filter, filterParams, hierarchyMap);
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['OrderGroup'], filter, filterParams, hierarchyMap);
 	jQuery.extend(view, self);
 	self = view;
 

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ediServicesView.js,v 1.10 2012/12/22 09:36:37 jeffw Exp $
+ *  $Id: ediServicesView.js,v 1.11 2012/12/24 08:17:29 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ediservicesview');
@@ -109,9 +109,8 @@ codeshelf.ediservicesview = function(websession, facility) {
 	};
 
 	var hierarchyMap = [];
-//	hierarchyMap[0] = domainobjects['Facility']['className'];
-	hierarchyMap[0] = domainobjects['DropboxService']['className'];
-	hierarchyMap[1] = domainobjects['EdiDocumentLocator']['className'];
+	hierarchyMap[0] = { className: domainobjects['DropboxService']['className'], linkProperty : 'parent'};
+	hierarchyMap[1] = { className: domainobjects['EdiDocumentLocator']['className'], linkProperty : 'parent'};
 
 	var filter = 'parent.persistentId = :theId';
 	var filterParams = [

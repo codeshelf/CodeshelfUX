@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: mainPage.js,v 1.49 2012/12/22 09:36:37 jeffw Exp $
+ *  $Id: mainPage.js,v 1.50 2012/12/24 08:17:29 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.require('codeshelf.ediservicesview');
@@ -151,13 +151,13 @@ codeshelf.mainpage = function() {
 			var listDemoWindow = codeshelf.window(listDemoView, frame_, undefined);
 			listDemoWindow.open();
 
-			var filter = 'parentOrganization.persistentId = :theId';
-			var filterParams = [
-				{ 'name': 'theId', 'value': organization_['persistentId']}
-			];
-			var listView = codeshelf.listview('Facilities List', websession_, domainobjects['Facility'], filter, filterParams);
-			var listWindow = codeshelf.window(listView, frame_, undefined);
-			listWindow.open();
+//			var filter = 'parentOrganization.persistentId = :theId';
+//			var filterParams = [
+//				{ 'name': 'theId', 'value': organization_['persistentId']}
+//			];
+//			var listView = codeshelf.listview('Facilities List', websession_, domainobjects['Facility'], filter, filterParams);
+//			var listWindow = codeshelf.window(listView, frame_, undefined);
+//			listWindow.open();
 
 			var data = {
 				'className':    organization_['className'],

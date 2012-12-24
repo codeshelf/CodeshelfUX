@@ -70,7 +70,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 	function getLevel(item) {
 		for (var hierarcyPos in hierarchyMap_) {
 			if (hierarchyMap_.hasOwnProperty(hierarcyPos)) {
-				if (item['className'] === hierarchyMap_[hierarcyPos]) {
+				if (item['className'] === hierarchyMap_[hierarcyPos].className) {
 					return hierarcyPos;
 				}
 			}
@@ -140,16 +140,16 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 						// If it's not already added to the view, then send a filter request to get all of the child objects that goes with it.
 						if ((object['op'] === 'cre') || (object['op'] === 'upd')) {
 							for (var j = 0; j < (hierarchyMap_.length - 1); j++) {
-								if (hierarchyMap_[j] === object['className']) {
+								if (hierarchyMap_[j].className === object['className']) {
 									item = dataView_.getItemById(object['fullDomainId']);
 									if (item === undefined) {
-										var filter = 'parent.persistentId = :theId';
+										var filter = hierarchyMap_[j + 1].linkProperty + '.persistentId = :theId';
 										var filterParams = [
 											{ 'name': 'theId', 'value': object['persistentId']}
 										];
 
 										var data = {
-											'className':     hierarchyMap_[j + 1],
+											'className':     hierarchyMap_[j + 1].className,
 											'propertyNames': properties_,
 											'filterClause':  filter,
 											'filterParams':  filterParams
@@ -195,7 +195,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 			// Compute the columns we need for this domain object.
 			var count = 0;
 			for (var i = 0; i < hierarchyMap_.length; i++) {
-				var className = hierarchyMap_[i];
+				var className = hierarchyMap_[i].className;
 				var properties = domainobjects[className]['properties'];
 				for (property in properties) {
 					if (properties.hasOwnProperty(property)) {

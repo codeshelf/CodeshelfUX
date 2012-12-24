@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.32 2012/12/22 09:36:37 jeffw Exp $
+ * $Id: domainObjects.js,v 1.33 2012/12/24 08:17:29 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -175,6 +175,37 @@ domainobjects = {
 				'id':    'uomMasterId',
 				'title': 'UOM',
 				'width': 10
+			}
+		}
+	},
+
+	'OrderGroup': {
+		'className':  'OrderGroup',
+		'properties': {
+			'domainId': {
+				'id':    'fullDomainId',
+				'title': 'ID',
+				'width': 25
+			},
+			'parentDomainId': {
+				'id':    'parentFullDomainId',
+				'title': 'Parent ID',
+				'width': 25
+			},
+			'status':  {
+				'id':    'statusEnum',
+				'title': 'Status',
+				'width': 15
+			},
+			'description':  {
+				'id':    'description',
+				'title': 'Description',
+				'width': 15
+			},
+			'workSequence':  {
+				'id':    'workSequence',
+				'title': 'Work Seq',
+				'width': 15
 			}
 		}
 	},

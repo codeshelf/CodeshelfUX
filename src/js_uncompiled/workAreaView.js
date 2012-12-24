@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaView.js,v 1.1 2012/12/22 09:36:37 jeffw Exp $
+ *  $Id: workAreaView.js,v 1.2 2012/12/24 08:17:29 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaview');
@@ -108,8 +108,9 @@ codeshelf.workareaview = function(websession, facility) {
 	};
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = domainobjects['WorkArea']['className'];
-	hierarchyMap[1] = domainobjects['OrderHeader']['className'];
+	hierarchyMap[0] = { className: domainobjects['WorkArea']['className'], linkProperty: 'parent' };
+	hierarchyMap[1] = { className: domainobjects['OrderGroup']['className'], linkProperty: 'parentWorkArea' };
+	hierarchyMap[2] = { className: domainobjects['OrderHeader']['className'], linkProperty: 'parent' };
 
 	var filter = 'parent.persistentId = :theId';
 	var filterParams = [

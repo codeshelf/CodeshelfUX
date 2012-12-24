@@ -46,15 +46,15 @@
 <div id='loginPanel'>
 	<div class='goog-roundedpanel-content'>
 		<div class='dialogLabel' style='margin-top: 18px; margin-left: 30px;'>
-		<div>
-			<label class='dialogLabel' style='margin-top: 8px; float:left;'>User Id:</label>
-			<input type='text' id='userIdInput' class='dialogField' value='jeffw@gadgetworks.com' style='margin-right: 25px; width:200px; float:right'>
-		</div>
-			</br>
-		<div>
-			<label class='dialogLabel' style='margin-top: 8px; float:left;'>Password:</label>
-			<input type='password' id='passwordInput' class='dialogField' value='blahdeeblah' style='margin-right: 25px; width:200px; float:right'>
-		</div>
+			<form action='' autocomplete='on' >
+				<label class='dialogLabel' style='margin-top: 8px; float:left;'>Login:</label>
+				<input type='email' id='userIdInput' class='dialogField' value='' style='margin-right: 25px; width:200px; float:right' autocomplete='on' autofocus />
+				</br>
+				<label class='dialogLabel' style='margin-top: 8px; float:left;'>Password:</label>
+				<input type='password' id='passwordInput' class='dialogField' value='' style='margin-right: 25px; width:200px; float:right' autocomplete='on'/>
+//				<input type="submit" style="visibility: hidden;" onclick='function() &#123; return false; &#124;/>
+//				<input type="submit" style="visibility: hidden;" />
+			</form>
 		</div>
 	</div>
 </div>
@@ -237,12 +237,12 @@
 	<br>
 	<div class='dialogFields modal-dialog-content'>
 		<table>
-			<tr><td>Aisle ID: </td><td><input id='aisleId' class='aisleId' label=''></td></tr>
-			<tr><td>Bay Height: </td><td><input id='bayHeight' class='bayHeight' label='Feet'></td></tr>
-			<tr><td>Bay Width: </td><td><input id='bayWidth' class='bayWidth' label='Feet' ></td></tr>
-			<tr><td>Bay Depth: </td><td><input id='bayDepth' class='bayDepth' label='Feet' ></td></tr>
-			<tr><td>Bays High: </td><td><input id='baysHigh' class='baysHigh' label='Feet' ></td></tr>
-			<tr><td>Bays Long: </td><td><input id='baysLong' class='baysLong' label='Feet' ></td></tr>
+			<tr><td>Aisle ID: </td><td><input id='aisleId' class='aisleId' label='' autofocus /></td></tr>
+			<tr><td>Bay Height: </td><td><input id='bayHeight' class='bayHeight' label='Feet' /></td></tr>
+			<tr><td>Bay Width: </td><td><input id='bayWidth' class='bayWidth' label='Feet' /></td></tr>
+			<tr><td>Bay Depth: </td><td><input id='bayDepth' class='bayDepth' label='Feet' /></td></tr>
+			<tr><td>Bays High: </td><td><input id='baysHigh' class='baysHigh' label='Feet' /></td></tr>
+			<tr><td>Bays Long: </td><td><input id='baysLong' class='baysLong' label='Feet' /></td></tr>
 		</table>
 		<br>
 		<div>Back to Back Bays: <span id="backToBack" class="backToBack goog-checkbox goog-checkbox-checked"></span></div>

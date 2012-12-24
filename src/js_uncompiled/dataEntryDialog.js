@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: dataEntryDialog.js,v 1.4 2012/11/08 03:35:10 jeffw Exp $
+ *  $Id: dataEntryDialog.js,v 1.5 2012/12/24 08:17:29 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.dataentrydialog');
@@ -42,6 +42,15 @@ codeshelf.dataentrydialog = function(title, buttonSet) {
 
 			dialog_.setVisible(true);
 
+			for (var id in dialogFields_) {
+				if (dialogFields_.hasOwnProperty(id)) {
+					var field = dialogFields_[id].field;
+					if ((typeof field.shouldFocus !== undefined) && (field.shouldFocus === true)) {
+						field.getElement().focus();
+					}
+				}
+			}
+
 			var dialogListener = goog.events.listen(dialog_, goog.ui.Dialog.EventType.SELECT, function(event) {
 				dialog_.setVisible(false);
 				dialogCompleteHandler(event, thisDataEntryDialog_);
@@ -67,7 +76,7 @@ codeshelf.dataentrydialog = function(title, buttonSet) {
 
 		},
 
-		createField: function(fieldId, fieldType) {
+		createField: function(fieldId, fieldType, focus) {
 
 			var field;
 			var editFields = goog.dom.query('.dialogFields', dialogContentElement_)[0];
@@ -84,6 +93,9 @@ codeshelf.dataentrydialog = function(title, buttonSet) {
 						field.decorate(fieldElement);
 						field.setEnabled(true);
 						break;
+				}
+				if ((focus !== undefined) && (focus === true)) {
+					field.shouldFocus = true;
 				}
 			}
 			dialogFields_[fieldId] = { fieldType: fieldType, field: field };
