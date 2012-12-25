@@ -2,16 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c319b0c7-b9cf-46f5-90a5-b0a625c84957" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/dataEntryDialog.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/dataEntryDialog.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/domainObjects.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/domainObjects.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/ediServicesView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/ediServicesView.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/ordersView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/ordersView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/workAreaView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/workAreaView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/templates/codeshelf_templates.soy" afterPath="$PROJECT_DIR$/src/templates/codeshelf_templates.soy" />
     </list>
     <ignored path="CodeShelfUX.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -46,18 +41,18 @@
       <file leaf-file-name="hierarchyListView.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="145" column="72" selection-start="4673" selection-end="4673" vertical-scroll-proportion="0.0">
+            <state line="145" column="91" selection-start="4692" selection-end="4692" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ordersView.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ordersView.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/ordersView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="120" column="81" selection-start="4129" selection-end="4129" vertical-scroll-proportion="0.78431374">
+            <state line="111" column="104" selection-start="3730" selection-end="3730" vertical-scroll-proportion="0.0">
               <folding>
-                <marker date="1356336263000" expanded="false" signature="2912:2954" placeholder="..." />
+                <marker date="1356430553000" expanded="false" signature="2912:2954" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -66,21 +61,30 @@
       <file leaf-file-name="ediServicesView.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/ediServicesView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="111" column="106" selection-start="3672" selection-end="3699" vertical-scroll-proportion="0.0">
+            <state line="46" column="84" selection-start="1925" selection-end="1925" vertical-scroll-proportion="0.0">
               <folding>
-                <marker date="1356332152000" expanded="false" signature="2980:3022" placeholder="..." />
+                <marker date="1356428516000" expanded="false" signature="3004:3046" placeholder="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="workAreaView.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="workAreaView.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="111" column="106" selection-start="3739" selection-end="3739" vertical-scroll-proportion="0.0">
+            <state line="112" column="18" selection-start="3745" selection-end="3745" vertical-scroll-proportion="0.627451">
               <folding>
-                <marker date="1356334887000" expanded="false" signature="2922:2964" placeholder="..." />
+                <marker date="1356431095000" expanded="false" signature="2922:2964" placeholder="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="workAreaEditorView.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="62" column="59" selection-start="2305" selection-end="2305" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -88,7 +92,7 @@
       <file leaf-file-name="domainObjects.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/domainObjects.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="208" column="0" selection-start="4009" selection-end="4009" vertical-scroll-proportion="0.0">
+            <state line="314" column="38" selection-start="5689" selection-end="5689" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -115,11 +119,11 @@
         <option value="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/dataEntryDialog.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/domainObjects.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/ediServicesView.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/workAreaView.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/domainObjects.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/ordersView.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/workAreaView.js" />
       </list>
     </option>
   </component>
@@ -535,7 +539,9 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/view.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="245" column="0" selection-start="6651" selection-end="6651" vertical-scroll-proportion="0.39605463" />
+        <state line="245" column="0" selection-start="6651" selection-end="6651" vertical-scroll-proportion="0.39605463">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/window.js">
@@ -595,48 +601,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="59" selection-start="2305" selection-end="2305" vertical-scroll-proportion="0.012832264">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/domainObjects.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="208" column="0" selection-start="4009" selection-end="4009" vertical-scroll-proportion="0.0">
+        <state line="62" column="59" selection-start="2305" selection-end="2305" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/ediServicesView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="111" column="106" selection-start="3672" selection-end="3699" vertical-scroll-proportion="0.0">
+        <state line="46" column="84" selection-start="1925" selection-end="1925" vertical-scroll-proportion="0.0">
           <folding>
-            <marker date="1356332152000" expanded="false" signature="2980:3022" placeholder="..." />
+            <marker date="1356428516000" expanded="false" signature="3004:3046" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaView.js">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/domainObjects.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="111" column="106" selection-start="3739" selection-end="3739" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1356334887000" expanded="false" signature="2922:2964" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="145" column="72" selection-start="4673" selection-end="4673" vertical-scroll-proportion="0.0">
+        <state line="314" column="38" selection-start="5689" selection-end="5689" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/ordersView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="120" column="81" selection-start="4129" selection-end="4129" vertical-scroll-proportion="0.78431374">
+        <state line="111" column="104" selection-start="3730" selection-end="3730" vertical-scroll-proportion="0.0">
           <folding>
-            <marker date="1356336263000" expanded="false" signature="2912:2954" placeholder="..." />
+            <marker date="1356430553000" expanded="false" signature="2912:2954" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="145" column="91" selection-start="4692" selection-end="4692" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="112" column="18" selection-start="3745" selection-end="3745" vertical-scroll-proportion="0.627451">
+          <folding>
+            <marker date="1356431095000" expanded="false" signature="2922:2964" placeholder="..." />
           </folding>
         </state>
       </provider>

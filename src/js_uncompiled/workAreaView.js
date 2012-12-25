@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaView.js,v 1.2 2012/12/24 08:17:29 jeffw Exp $
+ *  $Id: workAreaView.js,v 1.3 2012/12/25 10:48:14 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaview');
@@ -108,9 +108,9 @@ codeshelf.workareaview = function(websession, facility) {
 	};
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { className: domainobjects['WorkArea']['className'], linkProperty: 'parent' };
-	hierarchyMap[1] = { className: domainobjects['OrderGroup']['className'], linkProperty: 'parentWorkArea' };
-	hierarchyMap[2] = { className: domainobjects['OrderHeader']['className'], linkProperty: 'parent' };
+	hierarchyMap[0] = { className: domainobjects['Path']['className'], linkProperty: 'parent' };
+	hierarchyMap[1] = { className: domainobjects['WorkArea']['className'], linkProperty: 'parent' };
+	hierarchyMap[2] = { className: domainobjects['WorkInstruction']['className'], linkProperty: 'parent' };
 
 	var filter = 'parent.persistentId = :theId';
 	var filterParams = [
@@ -118,7 +118,7 @@ codeshelf.workareaview = function(websession, facility) {
 	];
 
 	// We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['WorkArea'], filter, filterParams, hierarchyMap);
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['Path'], filter, filterParams, hierarchyMap);
 	jQuery.extend(view, self);
 	self = view;
 

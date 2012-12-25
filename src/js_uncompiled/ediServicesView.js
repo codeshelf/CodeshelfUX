@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ediServicesView.js,v 1.11 2012/12/24 08:17:29 jeffw Exp $
+ *  $Id: ediServicesView.js,v 1.12 2012/12/25 10:48:14 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ediservicesview');
@@ -44,7 +44,7 @@ codeshelf.ediservicesview = function(websession, facility) {
 					                     // Call Facility.linkDropbox();
 					                     var data = {
 						                     'className':    domainobjects['Facility']['className'],
-						                     'persistentId': 1,
+						                     'persistentId': facility_['persistentId'],
 						                     'methodName':   'linkDropbox',
 						                     'methodArgs':   [
 						                     ]

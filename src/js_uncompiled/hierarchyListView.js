@@ -143,7 +143,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 								if (hierarchyMap_[j].className === object['className']) {
 									item = dataView_.getItemById(object['fullDomainId']);
 									if (item === undefined) {
-										var filter = hierarchyMap_[j + 1].linkProperty + '.persistentId = :theId';
+										var filter = hierarchyMap_[j + 1].linkProperty + '_persistentId = :theId';
 										var filterParams = [
 											{ 'name': 'theId', 'value': object['persistentId']}
 										];

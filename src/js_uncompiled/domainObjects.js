@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.33 2012/12/24 08:17:29 jeffw Exp $
+ * $Id: domainObjects.js,v 1.34 2012/12/25 10:48:14 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -297,6 +297,22 @@ domainobjects = {
 
 	'WorkArea': {
 		'className':  'WorkArea',
+		'properties': {
+			'domainId': {
+				'id':    'domainId',
+				'title': 'ID',
+				'width': 25
+			},
+			'description': {
+				'id':    'description',
+				'title': 'Description',
+				'width': 50
+			}
+		}
+	},
+
+	'WorkInstruction': {
+		'className':  'WorkInstruction',
 		'properties': {
 			'domainId': {
 				'id':    'domainId',
