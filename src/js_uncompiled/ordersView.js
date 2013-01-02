@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ordersView.js,v 1.4 2012/12/25 10:48:14 jeffw Exp $
+ *  $Id: ordersView.js,v 1.5 2013/01/02 08:40:35 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ordersview');
@@ -107,18 +107,22 @@ codeshelf.ordersview = function(websession, facility) {
 		}
 	};
 
-	var hierarchyMap = [];
-	hierarchyMap[0] = { className: domainobjects['OrderGroup']['className'], linkProperty : 'parent' };
-	hierarchyMap[1] = { className: domainobjects['OrderHeader']['className'], linkProperty : 'ordergroup' };
-	hierarchyMap[2] = { className: domainobjects['OrderDetail']['className'], linkProperty : 'parent' };
-
-	var filter = 'parent.persistentId = :theId';
-	var filterParams = [
+	var orderGroupFilter = "parent.persistentId = :theId";
+	var orderGroupFilterParams = [
 		{ 'name': 'theId', 'value': facility_['persistentId']}
 	];
 
+	var orderHeaderFilter = "statusEnum <> 'COMPLETE'";
+
+	var orderDetailFilter = "statusEnum <> 'COMPLETE'";
+
+	var hierarchyMap = [];
+	hierarchyMap[0] = { className: domainobjects['OrderGroup']['className'], linkProperty : 'parent', filter : orderGroupFilter, filterParams : orderGroupFilterParams };
+	hierarchyMap[1] = { className: domainobjects['OrderHeader']['className'], linkProperty : 'ordergroup', filter : orderHeaderFilter, filterParams : undefined };
+	hierarchyMap[2] = { className: domainobjects['OrderDetail']['className'], linkProperty : 'parent', filter : orderDetailFilter, filterParams : undefined };
+
 	// We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['OrderGroup'], filter, filterParams, hierarchyMap);
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['OrderGroup'], hierarchyMap);
 	jQuery.extend(view, self);
 	self = view;
 

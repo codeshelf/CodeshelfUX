@@ -10,7 +10,7 @@ goog.require('slickgrid.grid');
 goog.require('slickgrid.pager');
 goog.require('slickgrid.rowselection');
 
-codeshelf.hierarchylistview = function(websession, domainObject, filterClause, filterParams, hierarchyMap) {
+codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 
 	$('.grid-header .ui-icon').addClass('ui-state-default ui-corner-all')['mouseover'](
 		function(e) {
@@ -21,8 +21,6 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 	var websession_ = websession;
 	var domainObject_ = domainObject;
-	var filterClause_ = filterClause;
-	var filterParams_ = filterParams;
 	var hierarchyMap_ = hierarchyMap;
 
 	var dataView_;
@@ -126,6 +124,19 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 		return 0;
 	}
 
+	function deleteIncludeChildren(object) {
+		dataView_.deleteItem(object['persistentId']);
+		var items = dataView_.getItems();
+		for (var key = items.length - 1; key > 0; key--) {
+			if (items.hasOwnProperty(key)) {
+				item = items[key];
+				if (item['parentFullDomainId'] === object['fullDomainId']) {
+					deleteIncludeChildren(item);
+				}
+			}
+		}
+	}
+
 	// When we get an object, check to see if we have it's child objects too.
 	function websocketCmdCallback() {
 		var callback = {
@@ -141,12 +152,20 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 						if ((object['op'] === 'cre') || (object['op'] === 'upd')) {
 							for (var j = 0; j < (hierarchyMap_.length - 1); j++) {
 								if (hierarchyMap_[j].className === object['className']) {
-									item = dataView_.getItemById(object['fullDomainId']);
+									item = dataView_.getItemById(object['persistentId']);
 									if (item === undefined) {
+
 										var filter = hierarchyMap_[j + 1].linkProperty + '_persistentId = :theId';
+										if (hierarchyMap_[j + 1].filter !== undefined) {
+											filter += ' and ' + hierarchyMap_[j + 1].filter;
+										}
+
 										var filterParams = [
 											{ 'name': 'theId', 'value': object['persistentId']}
 										];
+										if (hierarchyMap_[j + 1].filterParams !== undefined) {
+											filterParams.push(hierarchyMap_[j + 1].filterParams);
+										}
 
 										var data = {
 											'className':     hierarchyMap_[j + 1].className,
@@ -165,14 +184,14 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 						if (object['op'] === 'cre') {
 							dataView_.addItem(object);
 						} else if (object['op'] === 'upd') {
-							var item = dataView_.getItemById(object['fullDomainId']);
+							var item = dataView_.getItemById(object['persistentId']);
 							if (item === undefined) {
 								dataView_.addItem(object);
 							} else {
-								dataView_.updateItem(object['fullDomainId'], object);
+								dataView_.updateItem(object['persistentId'], object);
 							}
 						} else if (object['op'] === 'del') {
-							dataView_.deleteItem(object['fullDomainId']);
+							deleteIncludeChildren(object);
 						}
 					}
 					dataView_.sort(comparer, sortdir_);
@@ -254,8 +273,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 			var data = {
 				'className':     domainObject_['className'],
 				'propertyNames': properties_,
-				'filterClause':  filterClause_,
-				'filterParams':  filterParams_
+				'filterClause':  hierarchyMap_[0].filter,
+				'filterParams':  hierarchyMap_[0].filterParams
 			};
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
@@ -365,7 +384,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, filterClause, f
 
 			// initialize the model after all the events have been hooked up
 			dataView_.beginUpdate();
-			dataView_.setItems([], 'fullDomainId');
+			dataView_.setItems([], 'persistentId');
 			dataView_.setFilterArgs({
 				                        percentCompleteThreshold: percentCompleteThreshold_,
 				                        searchString:             searchString_
