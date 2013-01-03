@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ediServicesView.js,v 1.13 2013/01/02 08:40:35 jeffw Exp $
+ *  $Id: ediServicesView.js,v 1.14 2013/01/03 07:23:12 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ediservicesview');
@@ -114,8 +114,8 @@ codeshelf.ediservicesview = function(websession, facility) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { className: domainobjects['DropboxService']['className'], linkProperty : 'parent', filter : serviceFilter, filterParams : serviceFilterParams };
-	hierarchyMap[1] = { className: domainobjects['EdiDocumentLocator']['className'], linkProperty : 'parent', filter : undefined, filterParams : undefined };
+	hierarchyMap[0] = { className: domainobjects['DropboxService']['className'], linkProperty : 'parent', filter : serviceFilter, filterParams : serviceFilterParams, properties: domainobjects.DropboxService.properties };
+	hierarchyMap[1] = { className: domainobjects['EdiDocumentLocator']['className'], linkProperty : 'parent', filter : undefined, filterParams : undefined, properties: domainobjects.EdiDocumentLocator.properties };
 
 	// We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.hierarchylistview(websession_, domainobjects['DropboxService'], hierarchyMap);

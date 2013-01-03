@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ordersView.js,v 1.5 2013/01/02 08:40:35 jeffw Exp $
+ *  $Id: ordersView.js,v 1.6 2013/01/03 07:23:12 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ordersview');
@@ -117,9 +117,9 @@ codeshelf.ordersview = function(websession, facility) {
 	var orderDetailFilter = "statusEnum <> 'COMPLETE'";
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { className: domainobjects['OrderGroup']['className'], linkProperty : 'parent', filter : orderGroupFilter, filterParams : orderGroupFilterParams };
-	hierarchyMap[1] = { className: domainobjects['OrderHeader']['className'], linkProperty : 'ordergroup', filter : orderHeaderFilter, filterParams : undefined };
-	hierarchyMap[2] = { className: domainobjects['OrderDetail']['className'], linkProperty : 'parent', filter : orderDetailFilter, filterParams : undefined };
+	hierarchyMap[0] = { className: domainobjects['OrderGroup']['className'], linkProperty : 'parent', filter : orderGroupFilter, filterParams : orderGroupFilterParams, properties: domainobjects.OrderGroup.properties };
+	hierarchyMap[1] = { className: domainobjects['OrderHeader']['className'], linkProperty : 'orderGroup', filter : orderHeaderFilter, filterParams : undefined, properties: domainobjects.OrderHeader.properties };
+	hierarchyMap[2] = { className: domainobjects['OrderDetail']['className'], linkProperty : 'parent', filter : orderDetailFilter, filterParams : undefined, properties: domainobjects.OrderDetail.properties };
 
 	// We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.hierarchylistview(websession_, domainobjects['OrderGroup'], hierarchyMap);

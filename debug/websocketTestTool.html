@@ -118,14 +118,14 @@
 	<h3 class='span5'>Websocket Server Tester</h3><br><br><br>
 	<div class='span11'>
 		<span class='nowrap'>
-			<button id='openButton' class='span1 btn btn-large btn-danger' onclick='websocketToggle()'>Open</button>
+			<button id='openButton' class='span1 btn btn-large btn-primary' onclick='websocketToggle()'>Open</button>
 			<input id='websocketUrl' type='text' class='span2 entry-field' placeholder='Websocket Url' list='servers'>
 			<datalist id='servers'>
 			</datalist>
 		</span>
 		<br>
 		<span class='nowrap'>
-			<button id='sendButton' class='span1 btn btn-large btn-primary' disabled='true' onclick='websocketSend()'>Send</button>
+			<button id='sendButton' class='span1 btn btn-large btn-danger' disabled='true' onclick='websocketSend()'>Send</button>
 			<input id='dataToSend' type='text' class='span11 entry-field' placeholder='Message data' list='sentMessages'>
 			<datalist id='sentMessages'>
 			</datalist>
@@ -189,7 +189,6 @@
 			if (websocket !== undefined) {
 				websocket.close();
 				websocket = undefined;
-				sendButton.disabled = true;
 			} else {
 				var urlElement = document.getElementById('websocketUrl');
 				if (urlElement !== null) {
@@ -198,8 +197,8 @@
 					displayMessage('Open', url);
 					persistEntry('servers', url);
 
-					openButton.className = openButton.className.replace('btn\-danger', 'btn\-success');
 					openButton.innerHTML = 'Close';
+					sendButton.className = sendButton.className.replace('btn\-danger', 'btn\-success');
 					sendButton.disabled = false;
 				}
 
@@ -209,8 +208,9 @@
 				};
 
 				websocket.onclose = function() {
-					openButton.className = openButton.className.replace('btn\-success', 'btn\-danger');
 					openButton.innerHTML = 'Open';
+					sendButton.className = sendButton.className.replace('btn\-success', 'btn\-danger');
+					sendButton.disabled = true;
 					websocket = undefined;
 					displayMessage('Close', '');
 				};
@@ -225,6 +225,8 @@
 			var dataField = document.getElementById('dataToSend');
 			if (dataField !== null) {
 				var message = dataField.value;
+				// Blank the field so that the combobox function works as soon as you click into it next.
+				dataField.value = '';
 				websocket.send(message);
 				displayMessage('Sent', message);
 				persistEntry('sentMessages', message);

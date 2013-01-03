@@ -26,7 +26,6 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 	var dataView_;
 	var grid_;
 	var selectedRowIds_ = [];
-	var properties_ = [];
 
 	// Compute the columns we need for this domain object.
 	var columns_ = [];
@@ -39,9 +38,9 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 	 * Get the root item in the hierarchy for this item.
 	 * @param {Object} item  The item where we want to get the parent.
 	 * @param {Integer} level The level above this item in the hierarchy class.
-	 * @return {Object} the root item (at level 0) for this item.
+	 * @return {Object} the root item (at level) for this item.
 	 */
-	function getParentAtLevel(item, level) {
+	function getParentAtLevel(item, level, linkProperty) {
 		var parentItem = undefined;
 		var currentLevel = getLevel(item);
 
@@ -51,8 +50,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 			var dataItems = dataView_.getItems();
 			for (var dataItemPos in dataItems) {
 				if (dataItems.hasOwnProperty(dataItemPos)) {
-					if (dataItems[dataItemPos]['fullDomainId'] === item['parentFullDomainId']) {
-						return getParentAtLevel(dataItems[dataItemPos], level);
+					if (dataItems[dataItemPos]['persistentId'] === item[linkProperty]) {
+						return getParentAtLevel(dataItems[dataItemPos], level, hierarchyMap_[level].linkProperty + 'PersistentId');
 					}
 				}
 			}
@@ -92,9 +91,9 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 			var columns = grid_.getColumns();
 			for (var column in columns) {
 				if (columns.hasOwnProperty(column)) {
-					if (itemA[columns[column]['id']] !== itemB[columns[column]['id']]) {
-						var x = itemA[columns[column]['id']];
-						var y = itemB[columns[column]['id']];
+					if (itemA[columns[column].id] !== itemB[columns[column].id]) {
+						var x = itemA[columns[column].id];
+						var y = itemB[columns[column].id];
 						if (sortdir_) {
 							return (x === y ? 0 : (x > y ? 1 : -1));
 						} else {
@@ -105,16 +104,16 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 			}
 		} else {
 			if (itemALevel < itemBLevel) {
-				itemB = getParentAtLevel(itemB, itemALevel);
-				if ((itemB === undefined) || (itemA['domainId'] === itemB['domainId'])) {
+				itemB = getParentAtLevel(itemB, itemALevel, hierarchyMap_[itemBLevel].linkProperty + 'PersistentId');
+				if ((itemB === undefined) || (itemA['persistentId'] === itemB['persistentId'])) {
 					return -1;
 				} else {
 					return comparer(itemA, itemB);
 				}
 			}
 			else {
-				itemA = getParentAtLevel(itemA, itemBLevel);
-				if ((itemA === undefined) || (itemA['domainId'] === itemB['domainId'])) {
+				itemA = getParentAtLevel(itemA, itemBLevel, hierarchyMap_[itemALevel].linkProperty + 'PersistentId');
+				if ((itemA === undefined) || (itemA['persistentId'] === itemB['persistentId'])) {
 					return 1;
 				} else {
 					return comparer(itemA, itemB);
@@ -127,11 +126,14 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 	function deleteIncludeChildren(object) {
 		dataView_.deleteItem(object['persistentId']);
 		var items = dataView_.getItems();
-		for (var key = items.length - 1; key > 0; key--) {
+		for (var key = 0; key < items.length; key++) {
 			if (items.hasOwnProperty(key)) {
 				item = items[key];
-				if (item['parentFullDomainId'] === object['fullDomainId']) {
+				if (item['parentPersistentId'] === object['persistentId']) {
 					deleteIncludeChildren(item);
+					// We just deleted at least one item and everything has shifted down, so go back a eval the same item again.
+					// This may go below zero, but if it loops then the key will increment it back to zero.
+					key--;
 				}
 			}
 		}
@@ -167,9 +169,17 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 											filterParams.push(hierarchyMap_[j + 1].filterParams);
 										}
 
+										var computedProperties = [];
+										for (property in hierarchyMap_[j + 1].properties) {
+											if (hierarchyMap_[j + 1].properties.hasOwnProperty(property)) {
+												computedProperties.push(hierarchyMap_[j + 1].properties[property].id);
+											}
+										}
+										computedProperties.push(hierarchyMap_[j + 1].linkProperty + 'PersistentId');
+
 										var data = {
 											'className':     hierarchyMap_[j + 1].className,
-											'propertyNames': properties_,
+											'propertyNames': computedProperties,
 											'filterClause':  filter,
 											'filterParams':  filterParams
 										};
@@ -213,9 +223,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 
 			// Compute the columns we need for this domain object.
 			var count = 0;
+			var computedProperties = [];
 			for (var i = 0; i < hierarchyMap_.length; i++) {
 				var className = hierarchyMap_[i].className;
-				var properties = domainobjects[className]['properties'];
+				var properties = hierarchyMap_[i].properties;
 				for (property in properties) {
 					if (properties.hasOwnProperty(property)) {
 						var property = properties[property];
@@ -226,7 +237,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 						});
 
 						if (foundEntry === null) {
-							properties_[count] = property.id;
+							computedProperties.push(property.id);
 							columns_[count++] = {
 								'id':                  property.id,
 								'name':                property.title,
@@ -272,7 +283,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 
 			var data = {
 				'className':     domainObject_['className'],
-				'propertyNames': properties_,
+				'propertyNames': computedProperties,
 				'filterClause':  hierarchyMap_[0].filter,
 				'filterParams':  hierarchyMap_[0].filterParams
 			};

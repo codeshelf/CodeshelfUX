@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.34 2012/12/25 10:48:14 jeffw Exp $
+ * $Id: domainObjects.js,v 1.35 2013/01/03 07:23:12 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -37,11 +37,6 @@ domainobjects = {
 				'title': 'Parent ID',
 				'width': 25
 			},
-			'parentFullDomainId': {
-				'id':    'parentFullDomainId',
-				'title': 'Parent ID',
-				'width': 50
-			},
 			'provider':           {
 				'id':    'providerEnum',
 				'title': 'Provider',
@@ -63,11 +58,6 @@ domainobjects = {
 				'title': 'Parent ID',
 				'width': 25
 			},
-			'parentFullDomainId': {
-				'id':    'parentFullDomainId',
-				'title': 'ID',
-				'width': 50
-			},
 			'documentState':      {
 				'id':    'documentStateEnum',
 				'title': 'Doc State',
@@ -88,11 +78,6 @@ domainobjects = {
 				'id':    'fullDomainId',
 				'title': 'ID',
 				'width': 25
-			},
-			'parentFullDomainId': {
-				'id':    'parentFullDomainId',
-				'title': 'Parent ID',
-				'width': 50
 			},
 			'desc':               {
 				'id':    'description',
@@ -141,11 +126,6 @@ domainobjects = {
 				'title': 'ID',
 				'width': 25
 			},
-			'parentDomainId': {
-				'id':    'parentFullDomainId',
-				'title': 'Parent ID',
-				'width': 25
-			},
 			'detailId':    {
 				'id':    'domainId',
 				'title': 'Detail ID',
@@ -187,11 +167,6 @@ domainobjects = {
 				'title': 'ID',
 				'width': 25
 			},
-			'parentDomainId': {
-				'id':    'parentFullDomainId',
-				'title': 'Parent ID',
-				'width': 25
-			},
 			'status':  {
 				'id':    'statusEnum',
 				'title': 'Status',
@@ -218,15 +193,15 @@ domainobjects = {
 				'title': 'ID',
 				'width': 25
 			},
-			'parentDomainId': {
-				'id':    'parentFullDomainId',
-				'title': 'Parent ID',
-				'width': 25
-			},
 			'orderId':  {
 				'id':    'orderId',
 				'title': 'Order ID',
 				'width': 15
+			},
+			'status':      {
+				'id':    'statusEnum',
+				'title': 'Status',
+				'width': 25
 			},
 			'containerId':  {
 				'id':    'containerId',
