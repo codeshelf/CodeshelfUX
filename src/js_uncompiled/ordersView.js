@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ordersView.js,v 1.6 2013/01/03 07:23:12 jeffw Exp $
+ *  $Id: ordersView.js,v 1.7 2013/02/10 01:03:22 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ordersview');
@@ -76,6 +76,17 @@ codeshelf.ordersview = function(websession, facility) {
 		return callback;
 	}
 
+	function workSequenceComparer(orderHeaderA, orderHeaderB) {
+		if (orderHeaderA.workSequence < orderHeaderB.workSequence) {
+			return -1;
+		} else if (orderHeaderA.workSequence > orderHeaderB.workSequence) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+
 	var self = {
 
 		getViewName: function() {
@@ -117,12 +128,12 @@ codeshelf.ordersview = function(websession, facility) {
 	var orderDetailFilter = "statusEnum <> 'COMPLETE'";
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { className: domainobjects['OrderGroup']['className'], linkProperty : 'parent', filter : orderGroupFilter, filterParams : orderGroupFilterParams, properties: domainobjects.OrderGroup.properties };
-	hierarchyMap[1] = { className: domainobjects['OrderHeader']['className'], linkProperty : 'orderGroup', filter : orderHeaderFilter, filterParams : undefined, properties: domainobjects.OrderHeader.properties };
-	hierarchyMap[2] = { className: domainobjects['OrderDetail']['className'], linkProperty : 'parent', filter : orderDetailFilter, filterParams : undefined, properties: domainobjects.OrderDetail.properties };
+	hierarchyMap[0] = { className: domainobjects['OrderGroup']['className'], linkProperty: 'parent', filter: orderGroupFilter, filterParams: orderGroupFilterParams, properties: domainobjects['OrderGroup']['properties'], comparer: undefined };
+	hierarchyMap[1] = { className: domainobjects['OrderHeader']['className'], linkProperty: 'orderGroup', filter: orderHeaderFilter, filterParams: undefined, properties: domainobjects['OrderHeader']['properties'], comparer: workSequenceComparer };
+	hierarchyMap[2] = { className: domainobjects['OrderDetail']['className'], linkProperty: 'parent', filter: orderDetailFilter, filterParams: undefined, properties: domainobjects['OrderDetail']['properties'], comparer: undefined };
 
 	// We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['OrderGroup'], hierarchyMap);
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['OrderGroup'], hierarchyMap, 1);
 	jQuery.extend(view, self);
 	self = view;
 

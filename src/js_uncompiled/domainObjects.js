@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.35 2013/01/03 07:23:12 jeffw Exp $
+ * $Id: domainObjects.js,v 1.36 2013/02/10 01:03:22 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -54,7 +54,7 @@ domainobjects = {
 		'className':  'EdiDocumentLocator',
 		'properties': {
 			'domainId':           {
-				'id':    'fullDomainId',
+				'id':    'domainId',
 				'title': 'Parent ID',
 				'width': 25
 			},
@@ -75,7 +75,7 @@ domainobjects = {
 		'className':  'Facility',
 		'properties': {
 			'domainId':           {
-				'id':    'fullDomainId',
+				'id':    'domainId',
 				'title': 'ID',
 				'width': 25
 			},
@@ -126,6 +126,11 @@ domainobjects = {
 				'title': 'ID',
 				'width': 25
 			},
+			'orderId':    {
+				'id':    'orderId',
+				'title': 'Order ID',
+				'width': 15
+			},
 			'detailId':    {
 				'id':    'domainId',
 				'title': 'Detail ID',
@@ -139,7 +144,7 @@ domainobjects = {
 			'sku':         {
 				'id':    'itemMasterId',
 				'title': 'SKU',
-				'width': 20
+				'width': 15
 			},
 			'description': {
 				'id':    'description',
@@ -149,12 +154,12 @@ domainobjects = {
 			'quantity':    {
 				'id':    'quantity',
 				'title': 'Qty',
-				'width': 10
+				'width': 5
 			},
 			'uom':         {
 				'id':    'uomMasterId',
 				'title': 'UOM',
-				'width': 10
+				'width': 5
 			}
 		}
 	},
@@ -175,7 +180,7 @@ domainobjects = {
 			'description':  {
 				'id':    'description',
 				'title': 'Description',
-				'width': 15
+				'width': 50
 			},
 			'workSequence':  {
 				'id':    'workSequence',
@@ -201,7 +206,7 @@ domainobjects = {
 			'status':      {
 				'id':    'statusEnum',
 				'title': 'Status',
-				'width': 25
+				'width': 15
 			},
 			'containerId':  {
 				'id':    'containerId',
@@ -216,6 +221,11 @@ domainobjects = {
 			'custoemrId':  {
 				'id':    'customerId',
 				'title': 'Customer ID',
+				'width': 15
+			},
+			'workSequence':  {
+				'id':    'workSequence',
+				'title': 'Work Seq',
 				'width': 15
 			}
 		}

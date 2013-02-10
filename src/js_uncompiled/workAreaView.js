@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaView.js,v 1.5 2013/01/03 07:23:12 jeffw Exp $
+ *  $Id: workAreaView.js,v 1.6 2013/02/10 01:03:22 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaview');
@@ -113,9 +113,9 @@ codeshelf.workareaview = function(websession, facility) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { className: domainobjects['Path']['className'], linkProperty: 'parent', filter : pathFilter, filterParams : pathFilterParams, properties: domainobjects.Path.properties };
-	hierarchyMap[1] = { className: domainobjects['WorkArea']['className'], linkProperty: 'parent', filter : undefined, filterParams : undefined, properties: domainobjects.WorkArea.properties };
-	hierarchyMap[2] = { className: domainobjects['WorkInstruction']['className'], linkProperty: 'parent', filter : undefined, filterParams : undefined, properties: domainobjects.WorkInstruction.properties };
+	hierarchyMap[0] = { className: domainobjects['Path']['className'], linkProperty: 'parent', filter : pathFilter, filterParams : pathFilterParams, properties: domainobjects['Path']['properties'] };
+	hierarchyMap[1] = { className: domainobjects['WorkArea']['className'], linkProperty: 'parent', filter : undefined, filterParams : undefined, properties: domainobjects['WorkArea']['properties'] };
+	hierarchyMap[2] = { className: domainobjects['WorkInstruction']['className'], linkProperty: 'parent', filter : undefined, filterParams : undefined, properties: domainobjects['WorkInstruction']['properties'] };
 
 	// We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.hierarchylistview(websession_, domainobjects['Path'], hierarchyMap);

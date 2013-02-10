@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: codeshelf.gss,v 1.31 2012/11/14 09:50:17 jeffw Exp $
+ *  $Id: codeshelf.gss,v 1.32 2013/02/10 01:03:22 jeffw Exp $
  *******************************************************************************/
 
 /* Defines and mixins ----------------------------------------------------------- */
@@ -647,24 +647,29 @@ div.jquery-drag-to-select.active {
     
  /* Context menu classes --------------------------------------------------------------- */
  
-    .contextMenu {
-      background: #e1efc7;
-      border: 1px solid gray;
-      padding: 2px;
-      display: inline-block;
-      min-width: 100px;
-      -moz-box-shadow: 2px 2px 2px silver;
-      -webkit-box-shadow: 2px 2px 2px silver;
-      z-index: 99999;
-    }
+.contextMenu {
+	background: #e1efc7;
+	border: 1px solid gray;
+	padding: 2px;
+	display: inline-block;
+	min-width: 100px;
+	-moz-box-shadow: 2px 2px 2px silver;
+	-webkit-box-shadow: 2px 2px 2px silver;
+	z-index: 99999;
+}
 
-    .contextMenu li {
-      padding: 4px 4px 4px 14px;
-      list-style: none;
-      cursor: pointer;
-      background: url("../images/arrow_right_peppermint.png") no-repeat center left;
-    }
+.contextMenu li {
+	padding: 4px 4px 4px 14px;
+	list-style: none;
+	cursor: pointer;
+	background: url("../images/arrow_right_peppermint.png") no-repeat center left;
+}
 
-    .contextMenu li:hover {
-      background-color: white;
-    }
+.contextMenu li:hover {
+  background-color: white;
+}
+    
+.cell-reorder {
+	cursor: move;
+	background: url("../images/drag-handle.png") no-repeat center center;
+}

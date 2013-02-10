@@ -8,9 +8,12 @@ goog.require('slickgrid.editors');
 goog.require('slickgrid.formatters');
 goog.require('slickgrid.grid');
 goog.require('slickgrid.pager');
+goog.require('slickgrid.rowmovemanager');
 goog.require('slickgrid.rowselection');
 
-codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
+codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, draggableHierarchyLevel) {
+
+	var logger_ = goog.debug.Logger.getLogger('codeshelf.hierarchylistview');
 
 	$('.grid-header .ui-icon').addClass('ui-state-default ui-corner-all')['mouseover'](
 		function(e) {
@@ -22,6 +25,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 	var websession_ = websession;
 	var domainObject_ = domainObject;
 	var hierarchyMap_ = hierarchyMap;
+	var draggableHierarchyLevel_ = (draggableHierarchyLevel === undefined ? -1 : draggableHierarchyLevel);
 
 	var dataView_;
 	var grid_;
@@ -68,7 +72,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 		for (var hierarcyPos in hierarchyMap_) {
 			if (hierarchyMap_.hasOwnProperty(hierarcyPos)) {
 				if (item['className'] === hierarchyMap_[hierarcyPos].className) {
-					return hierarcyPos;
+					return parseInt(hierarcyPos, 10);
 				}
 			}
 		}
@@ -76,61 +80,83 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 
 	/**
 	 * Compare the colums from left-to-right (so that they sort left-to-right).
-	 * @param inItemA
-	 * @param inItemB
+	 * @param itemA
+	 * @param itemB
 	 * @return {Number}
 	 */
 	function comparer(itemA, itemB) {
 
+		logger_.info('A: ' + itemA.fullDomainId);
+		logger_.info('B: ' + itemB.fullDomainId);
+
+		var result = 0;
 		var itemALevel = getLevel(itemA);
 		var itemBLevel = getLevel(itemB);
 
-		// First figure out if they are at the same level.
 		if (itemALevel === itemBLevel) {
-			// If the two items are at the same level then compare them by column values from left-to-right.
-			var columns = grid_.getColumns();
-			for (var column in columns) {
-				if (columns.hasOwnProperty(column)) {
-					if (itemA[columns[column].id] !== itemB[columns[column].id]) {
-						var x = itemA[columns[column].id];
-						var y = itemB[columns[column].id];
-						if (sortdir_) {
-							return (x === y ? 0 : (x > y ? 1 : -1));
-						} else {
-							return (x === y ? 0 : (x < y ? 1 : -1));
+			// The items are at the same level, so we can attempt to compare them.
+
+			// Direct compare can only happen if the objects share the same parent.
+			if (itemA['parentPersistentId'] !== itemB['parentPersistentId']) {
+				var parentA = getParentAtLevel(itemA, itemALevel - 1, hierarchyMap_[itemALevel].linkProperty + 'PersistentId');
+				var parentB = getParentAtLevel(itemB, itemBLevel - 1, hierarchyMap_[itemBLevel].linkProperty + 'PersistentId');
+				result = comparer(parentA, parentB);
+			} else {
+				if (hierarchyMap_[itemALevel].comparer !== undefined) {
+					// If we've defined a comparer at this level then use it.
+					result = hierarchyMap_[itemALevel].comparer(itemA, itemB);
+				} else {
+					// If the two items are at the same level then compare them by column values from left-to-right.
+					var columns = grid_.getColumns();
+					for (var column in columns) {
+						if (columns.hasOwnProperty(column)) {
+							if (itemA[columns[column].id] !== itemB[columns[column].id]) {
+								var x = itemA[columns[column].id];
+								var y = itemB[columns[column].id];
+
+								if (sortdir_) {
+									result = (x === y ? 0 : (x > y ? 1 : -1));
+									break;
+								} else {
+									result = (x === y ? 0 : (x < y ? 1 : -1));
+									break;
+								}
+							}
 						}
 					}
 				}
 			}
 		} else {
+			// The items are at different levels, so we need to find a common level where we can compare them.
 			if (itemALevel < itemBLevel) {
 				itemB = getParentAtLevel(itemB, itemALevel, hierarchyMap_[itemBLevel].linkProperty + 'PersistentId');
 				if ((itemB === undefined) || (itemA['persistentId'] === itemB['persistentId'])) {
-					return -1;
+					result = -1;
 				} else {
-					return comparer(itemA, itemB);
+					result = comparer(itemA, itemB);
 				}
-			}
-			else {
+			} else {
 				itemA = getParentAtLevel(itemA, itemBLevel, hierarchyMap_[itemALevel].linkProperty + 'PersistentId');
 				if ((itemA === undefined) || (itemA['persistentId'] === itemB['persistentId'])) {
-					return 1;
+					result = 1;
 				} else {
-					return comparer(itemA, itemB);
+					result = comparer(itemA, itemB);
 				}
 			}
 		}
-		return 0;
+
+		logger_.info('R: ' + result);
+		return result;
 	}
 
-	function deleteIncludeChildren(object) {
+	function removeChildren(object) {
 		dataView_.deleteItem(object['persistentId']);
 		var items = dataView_.getItems();
 		for (var key = 0; key < items.length; key++) {
 			if (items.hasOwnProperty(key)) {
 				item = items[key];
 				if (item['parentPersistentId'] === object['persistentId']) {
-					deleteIncludeChildren(item);
+					removeChildren(item);
 					// We just deleted at least one item and everything has shifted down, so go back a eval the same item again.
 					// This may go below zero, but if it loops then the key will increment it back to zero.
 					key--;
@@ -139,7 +165,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 		}
 	}
 
-	// When we get an object, check to see if we have it's child objects too.
+// When we get an object, check to see if we have it's child objects too.
 	function websocketCmdCallback() {
 		var callback = {
 			exec: function(command) {
@@ -201,7 +227,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 								dataView_.updateItem(object['persistentId'], object);
 							}
 						} else if (object['op'] === 'del') {
-							deleteIncludeChildren(object);
+							removeChildren(object);
 						}
 					}
 					dataView_.sort(comparer, sortdir_);
@@ -221,8 +247,26 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 	var self = {
 		doSetupView: function() {
 
-			// Compute the columns we need for this domain object.
 			var count = 0;
+			// If we've specified drag-ordering then present a drag-ordering column.
+			if (draggableHierarchyLevel_ != -1) {
+				// Compute the columns we need for this domain object.
+				count = 1;
+				columns_[0] = {
+					'id':                  'id',
+					'name':                '',
+					'field':               '',
+					'behavior':            'selectAndMove',
+					'headerCssClass':      '',
+					'width':               40,
+					'cannotTriggerInsert': true,
+					'resizable':           false,
+					'selectable':          false,
+					'sortable':            false,
+					'cssClass':            'cell-reorder dnd'
+				};
+			}
+
 			var computedProperties = [];
 			for (var i = 0; i < hierarchyMap_.length; i++) {
 				var className = hierarchyMap_[i].className;
@@ -274,11 +318,23 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 
 			dataView_ = new Slick.Data.DataView();
 			grid_ = new Slick.Grid(self.getMainPaneElement(), dataView_, columns_, options_);
+
+			grid_.onDragInit.subscribe(function(event, args) {
+				var blah = 1;
+			});
+
+			// Setup the selection model.
 			grid_.setSelectionModel(new Slick.CellSelectionModel());
 
+			// Setup the copy manager.
 			var copyManager = new Slick.CellCopyManager();
 			grid_.registerPlugin(copyManager);
 
+			// Setup the row move manager (in case a view can move rows).
+			var rowMoveManager = new Slick.RowMoveManager({cancelEditOnDrag: true});
+			grid_.registerPlugin(rowMoveManager);
+
+			// Setup the column picker, so the user can change the visible columns.
 			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
 			var data = {
@@ -415,7 +471,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap) {
 		}
 	};
 
-// We want this view to extend the root/parent view, but we want to return this view.
+	// We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.view();
 	jQuery.extend(view, self);
 	self = view;

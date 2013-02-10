@@ -5,24 +5,22 @@
  * Licensed under The Hacker Luv License 1.0.1
  *
  * This license covers the attached intellectual property, created by a hacker who has agreed to share it
- * freely with the world in the hope that others too may enjoy it.
+ * freely with the world in the hope that others may use it and develop it further.
+
  * You may use this intellectual property as you wish if you agree to these terms:
  *
- * 1. You embrace the pure joy and wonder of discovery.
- * 2. That a hacker is someone who embraces the joy of discovery – full stop, without exception.
- * 3. That discovery is a messy business of false-starts, mistakes, tears, gentle curses,
- *        and that there is no single, i.e. “right,” way to discovery.
- * 4. Accept this property “as-is,” accept that it probably contains errors, and take
- *        full responsibility for any consequences of its use.
- * 5. Retain this license for any derivative works you create with this property.
+ * 1. Accept this property 'as-is,' accepting that it probably contains errors, and take full responsibility for any consequences of its use.
+ * 2. Retain this license for any derivative works you create with this property.
+ * 3. Entertain the notion that discovery is a messy business of false-starts, mistakes, tears, gentle curses, and sometimes joy and wonder,
+ *        and that there is no single, i.e. 'right,' way to discovery.
  *
  * This license embraces the Second Golden Hacker Era (Woz era 2.0).
  * Dale Dougherty of Make Magazine, Nathan Seidle of SparkFun and many others have ushered in this new era,
- * and patiently helped us find our way in Hacker Luv.  We too support this idea of gentle support.
+ * and patiently helped us find our way in Hacker Luv.  We too embrace the idea of gentle, joyful support.
  * Hackers have no need for elitist personalities who see the world top-down, believe there are lesser hackers
- * and send mean emails to people.
+ * and send mean emails to people!
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
  * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
  * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
  * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
@@ -40,55 +38,42 @@
 	<meta name='author' content=''>
 
 	<!-- Le styles -->
-	<link href='http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css' rel='stylesheet'>
+	<!--link rel='stylesheet' type='text/css' href='http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css'-->
+	<link rel='stylesheet' type='text/css' href='http://twitter.github.com/bootstrap/assets/css/bootstrap.css'>
 	<style type='text/css'>
 		body {
-			padding-top: 40px;
-			padding-bottom: 40px;
 			background-color: #f5f5f5;
 		}
 
-		.form-websocket-data {
-			padding: 19px 29px 29px;
-			margin: 0 auto 20px;
-			background-color: #fff;
-			border: 1px solid #e5e5e5;
-			-webkit-border-radius: 5px;
-			-moz-border-radius: 5px;
-			border-radius: 5px;
-			-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
-			-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
-			box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
-		}
-
-		.form-websocket-data .form-websocket-data-heading {
-			margin-bottom: 10px;
-		}
-
-		.form-websocket-data input[type='text'] {
-			font-size: 14px;
-			height: auto;
-			margin-bottom: 15px;
-			padding: 7px 9px;
-		}
-
-		.input-block-level {
+		.entry-field {
 			margin-top: 10px;
+		}
+
+		.table {
+			margin-right: 20px;
 		}
 
 		.messageTable {
 			height: 600px;
 			overflow: scroll;
+			resize: both;
 		}
 
 		.btn {
-			margin-right: 20px;
+			margin-left: 10px;
+			margin-right: 10px;
 		}
 
 		.nowrap {
 			white-space: nowrap;
 		}
 
+		.footer {
+			position: fixed;
+			bottom: 0;
+			width: 100%;
+			margin-left: 10px;
+		}
 	</style>
 
 	<!-- Fav and touch icons -->
@@ -99,80 +84,150 @@
 	<link rel='shortcut icon' href='../assets/ico/favicon.png'>
 
 	<script type='text/javascript'>
-		var websocket = undefined;
+		var websocket_ = undefined;
 
 		window.onload = function() {
-			recallEntries('servers');
-			recallEntries('sentMessages');
-		}
-
-		function recallEntries(fieldName) {
-			if (hasLocalStorage) {
-				var messageList = document.getElementById(fieldName);
-				for (var key = 0; key <= 19; key++) {
-					if (localStorage[fieldName + key] !== undefined) {
-						var value = localStorage[fieldName + key];
-						var option = document.createElement('option');
-						option.setAttribute('value', value);
-						messageList.appendChild(option);
-					}
-				}
-			}
-		}
-
+			$('.dropdown-toggle').dropdown();
+		};
 	</script>
 
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-37447812-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+
+	</script>
 </head>
 
-<body>
+<body onkeyup='handleEnter()'>
 
-<div class='container row-fluid'>
-	<form class='span12 form-websocket-data' onsubmit='return false'>
-		<h3 class='form-websocket-data-heading'>Websocket Server Tester</h3>
-		<span class='span3 nowrap'>
-			<button id='openButton' class='btn btn-large btn-danger' onclick='websocketToggle()'>Open</button>
-			<input id='websocketUrl' type='text' class='input-block-level' placeholder='Websocket Url' list='servers'>
+<div class='span12 row-fluid'>
+	<h3 class='span5'>Websocket Server Tester</h3><br><br><br>
+
+	<div class='span11'>
+		<span class='nowrap'>
+			<button id='openButton' class='btn btn-large btn-primary' onclick='websocketToggle()'>Open</button>
+		    <div class='btn-group'>
+			    <button class="btn dropdown-toggle" data-toggle="dropdown">Recent <span class="caret"></span></button>
+			    <ul id='recentServers' class='dropdown-menu'>
+				    <li><a>ws://echo.websocket.org</a></li>
+				    <li><a>wss://echo.websocket.org</a></li>
+			    </ul>
+		    </div>
+			<input id='websocketUrl' type='text' class='span3 entry-field' placeholder='Websocket Url (ws:// & wss:// supported)' list='servers'>
 			<datalist id='servers'>
+				<option value='ws://echo.websocket.org'></option>
+				<option value='wss://echo.websocket.org'></option>
 			</datalist>
 		</span>
 		<br>
-		<span class='span11 nowrap'>
-			<button id='sendButton' class='btn btn-large btn-primary' disabled='true' onclick='websocketSend()'>Send</button>
-			<input id='dataToSend' type='text' class='input-block-level' placeholder='Message data' list='sentMessages'>
-			<datalist id='sentMessages'>
-			</datalist>
+		<span class='nowrap'>
+			<button id='sendButton' class='btn btn-large btn-danger' disabled='true' onclick='websocketSend()'>Send</button>
+		    <div class='btn-group'>
+			    <button class="btn dropdown-toggle" data-toggle="dropdown">Recent <span class="caret"></span></button>
+			    <ul id='recentMessages' class='dropdown-menu'>
+			    </ul>
+		    </div>
+			<input id='dataToSend' type='text' class='span9 entry-field' placeholder='Message data' list='sentMessages'>
 		</span>
-	</form>
+	</div>
+
+	<h3 class='span5'>Messages</h3>
+
+	<div id='messageList' class='span11 messageTable'>
+		<table class='table table-striped table-condensed'>
+			<thead>
+			<tr>
+				<th style='width: 80px'>Time</th>
+				<th style='width: 40px'>Dir</th>
+				<th>Data</th>
+			</tr>
+			</thead>
+			<tbody id='messageTable'>
+			</tbody>
+		</table>
+	</div>
 </div>
-
-<h3 class='span5'>Messages</h3>
-
-<div class='row-fluid messageTable'>
-	<table class='table table-striped table-condensed'>
+<div class='footer'>
+	<div class="g-plusone" data-annotation="inline" data-width="300"></div>
+	<table class='span6 table table-striped table-condensed'>
 		<thead>
 		<tr>
-			<th style='width: 20px'>Time</th>
-			<th style='width: 10px'>Dir</th>
-			<th>Data</th>
+			<th style='width: 50px'><a href='http://github.com/jw-gadgetworks/websocket-tester/wiki/WebSocketTester' target='blank'>Documentation</a></th>
+			<th style='width: 100px'>Copyright (c) 2013 <a href='http://plus.google.com/118123969654246129196' target='blank'>Jeff Williams</a></th>
+			<th style='width: 100px'>Released under the <a href='http://github.com/jw-gadgetworks/hackerluv' target='blank'>Hacker Luv License</a></th>
 		</tr>
 		</thead>
-		<tbody id='messageTable'>
-		</tbody>
 	</table>
 </div>
 
+<script src='http://twitter.github.com/bootstrap/assets/js/jquery.js'></script>
+<script src='http://twitter.github.com/bootstrap/assets/js/bootstrap.js'></script>
+<script src='http://twitter.github.com/bootstrap/assets/js/bootstrap-popover.js'></script>
+<script src='http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js'></script>
+
+<script type="text/javascript">
+	(function() {
+		var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+		po.src = 'https://apis.google.com/js/plusone.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+	})();
+</script>
+
 <script type='text/javascript'>
+
 	function hasLocalStorage() {
 		return typeof(Storage) !== 'undefined';
 	}
 
-	function persistEntry(fieldName, entry) {
+	function handleEnter() {
+		if (event.keyCode == 13) {
+			websocketSend();
+		}
+	}
+
+	function recallEntries(storageType, entryFieldName) {
+		if (hasLocalStorage) {
+
+			// Get the list and clear it.
+			var prevItemsList = document.getElementById(storageType);
+			while (prevItemsList.firstChild) {
+				prevItemsList.removeChild(prevItemsList.firstChild);
+			}
+
+			// Add the stored items to the list.
+			for (var key = 0; key <= 19; key++) {
+				if (localStorage[storageType + key] !== undefined) {
+					var value = localStorage[storageType + key];
+					var li = document.createElement('li');
+					var a = document.createElement('a');
+					a.innerHTML = value;
+					li.appendChild(a);
+					prevItemsList.appendChild(li);
+				}
+			}
+
+			$(prevItemsList).find('a').click(function() {
+				var selection = $(this).text();
+				var urlElement = document.getElementById(entryFieldName);
+				urlElement.value = selection;
+			});
+		}
+	}
+
+	function persistEntry(storageType, entry, entryFieldName) {
 		if (hasLocalStorage) {
 
 			// Make sure we haven't already persisted this entry.
 			var foundEntry = false;
 			for (var key = 19; key > 0; key--) {
-				if (localStorage[fieldName + (key - 1)] === entry) {
+				if (localStorage[storageType + (key - 1)] === entry) {
 					foundEntry = true;
 					break;
 				}
@@ -181,11 +236,12 @@
 			// Now shift the existing items down by one.
 			if (foundEntry === false) {
 				for (var key = 19; key > 0; key--) {
-					if (localStorage[fieldName + (key - 1)] !== undefined) {
-						localStorage[fieldName + key] = localStorage[fieldName + (key - 1)];
+					if (localStorage[storageType + (key - 1)] !== undefined) {
+						localStorage[storageType + key] = localStorage[storageType + (key - 1)];
 					}
 				}
-				localStorage[fieldName + 0] = entry;
+				localStorage[storageType + 0] = entry;
+				recallEntries(storageType, entryFieldName);
 			}
 		}
 	}
@@ -194,32 +250,32 @@
 		if ('WebSocket' in window) {
 			var openButton = document.getElementById('openButton');
 			var sendButton = document.getElementById('sendButton');
-			if (websocket !== undefined) {
-				websocket.close();
-				websocket = undefined;
-				sendButton.disabled = true;
+			if (websocket_ !== undefined) {
+				websocket_.close();
+				websocket_ = undefined;
 			} else {
 				var urlElement = document.getElementById('websocketUrl');
 				if (urlElement !== null) {
 					var url = urlElement.value;
-					websocket = new WebSocket(url);
+					websocket_ = new WebSocket(url);
 					displayMessage('Open', url);
-					persistEntry('servers', url);
+					persistEntry('recentServers', url, 'websocketUrl');
 
-					openButton.className = openButton.className.replace('btn\-danger', 'btn\-success');
 					openButton.innerHTML = 'Close';
+					sendButton.className = sendButton.className.replace('btn\-danger', 'btn\-success');
 					sendButton.disabled = false;
 				}
 
-				websocket.onmessage = function(event) {
+				websocket_.onmessage = function(event) {
 					var message = event.data;
 					displayMessage('Recv', message);
 				};
 
-				websocket.onclose = function() {
-					openButton.className = openButton.className.replace('btn\-success', 'btn\-danger');
+				websocket_.onclose = function() {
 					openButton.innerHTML = 'Open';
-					websocket = undefined;
+					sendButton.className = sendButton.className.replace('btn\-success', 'btn\-danger');
+					sendButton.disabled = true;
+					websocket_ = undefined;
 					displayMessage('Close', '');
 				};
 			}
@@ -233,9 +289,9 @@
 			var dataField = document.getElementById('dataToSend');
 			if (dataField !== null) {
 				var message = dataField.value;
-				websocket.send(message);
+				websocket_.send(message);
 				displayMessage('Sent', message);
-				persistEntry('sentMessages', message);
+				persistEntry('recentMessages', message, 'dataToSend');
 			} else {
 				alert('Websocket not supported');
 			}
@@ -250,14 +306,32 @@
 			var timeStr = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds() + '.' + now.getMilliseconds();
 			newRow.innerHTML = '<td>' + timeStr + '</td><td>' + direction + '</td><td>' + message + '</td>';
 			tableElement.appendChild(newRow);
+
+			// When you click on the row it repopulates the data to send input field.
+			$(newRow).click(function() {
+				var urlElement = document.getElementById('dataToSend');
+				urlElement.value = message;
+			});
 		}
 	}
+
+	$(function() {
+		$('#openButton').tooltip({placement: 'top', trigger: 'hover', title: 'Open/close a websocket to the specified URL.'});
+		$('#sendButton').tooltip({placement: 'Bottom', trigger: 'hover', title: 'Send data.  Enabled websocket is open.'});
+		$('#websocketUrl').tooltip({placement: 'right', trigger: 'hover', title: 'URL of a websocket server. Supports ws:// and wss:// (TLS/SSL).'});
+		$('#dataToSend').tooltip({placement: 'bottom', trigger: 'hover', title: 'Enter any data you wish to send to the server.  Will persist the last 20 unique messages in HTML5 local storage.'});
+		$('#messageList').tooltip({placement: 'top', trigger: 'hover', title: 'Resizable list of messages exchanged with the websocket server during this session.  Click on a message to reselect it for send'});
+
+		// Attempt to persist the default entries.
+		persistEntry('recentServers', 'ws://echo.websocket.org', 'websocketUrl');
+		persistEntry('recentServers', 'wss://echo.websocket.org', 'websocketUrl');
+		persistEntry('recentMessages', '{msg: &#39;Hello, world!&#39;}', 'dataToSend');
+
+		recallEntries('recentServers', 'websocketUrl');
+		recallEntries('recentMessages', 'dataToSend');
+	});
+
 </script>
 
-<script src='http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js'></script>
-
 </body>
-<style type='text/css'>
-
-</style>
 </html>
