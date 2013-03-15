@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.39 2012/12/22 09:36:37 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.40 2013/03/15 23:54:29 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -556,7 +556,42 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 			// Starting latlng is either the facility's origin point or the browser's current location (if we can get it).
 			var demoLatLng = new google.maps.LatLng(facility_['posY'], facility_['posX']);
+
+			var codeshelfMapStyle = [
+				{
+					featureType: "administrative",
+					elementType: "labels",
+					stylers:     [
+						{ visibility: "off" }
+					]
+				},
+				{
+					featureType: "poi",
+					elementType: "all",
+					stylers:     [
+						{ visibility: "off" }
+					]
+				},
+				{
+					featureType: "water",
+					elementType: "labels",
+					stylers:     [
+						{ visibility: "off" }
+					]
+				},
+				{
+					featureType: "road",
+					elementType: "labels",
+					stylers:     [
+						{ visibility: "on" }
+					]
+				}
+			];
+
 			var myOptions = {
+				mapTypeControlOptions:    {
+					mapTypeIds: ['codeshelfMapStyle', google.maps.MapTypeId.HYBRID]
+				},
 				'zoom':                   16,
 				'center':                 demoLatLng,
 				'mapTypeId':              google.maps.MapTypeId.HYBRID,
@@ -605,6 +640,10 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			goog.dom.appendChild(self.getMainPaneElement(), editorPane);
 			mapPane_ = goog.dom.query('.facilityMap', editorPane)[0];
 			map_ = new google.maps.Map(mapPane_, myOptions);
+			map_.mapTypes.set('codeshelfMapStyle', new google.maps.StyledMapType(codeshelfMapStyle, { name: 'Codeshelf' }));
+			map_.setMapTypeId('codeshelfMapStyle');
+
+
 //			facilityEditorOverlay_ = codeshelf.facilityeditorviewgmapsoverlay(map_);
 //			facilityEditorOverlay_.init();
 

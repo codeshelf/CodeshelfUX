@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.59 2012/12/24 08:17:29 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.60 2013/03/15 23:54:29 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -66,7 +66,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		dataEntryDialog.createField('bayDepth', 'text');
 		dataEntryDialog.createField('baysHigh', 'text');
 		dataEntryDialog.createField('baysLong', 'text');
-		dataEntryDialog.createField('backToBack', 'checkbox');
+		dataEntryDialog.createField('opensLowSide', 'checkbox');
 		dataEntryDialog.open(function(event, dialog) {
 			                     if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE.key) {
 				                     var xOriginMeters = startDragPoint_.x / self.getPixelsPerMeter();
@@ -78,7 +78,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 				                     var bayDepth = dialog.getFieldValue('bayDepth') * consts['feetInMeters'];
 				                     var baysHigh = dialog.getFieldValue('baysHigh');
 				                     var baysLong = dialog.getFieldValue('baysLong');
-				                     var backToBack = dialog.getFieldValue('backToBack');
+				                     var opensLowSide = dialog.getFieldValue('opensLowSide');
 
 
 				                     var runInXDim = true;
@@ -87,22 +87,21 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 				                     }
 
 				                     // Call Facility.createAisle();
-				                     //public final void createAisle(Double inPosX, Double inPosY, Double inProtoBayHeight, Double inProtoBayWidth, Double inProtoBayDepth, int inBaysHigh, int inBaysLong, Boolean inCreateBackToBack) {
 				                     var data = {
 					                     'className':    domainobjects['Facility']['className'],
 					                     'persistentId': facility_['persistentId'],
 					                     'methodName':   'createAisle',
 					                     'methodArgs':   [
-						                     { 'name': 'inAIsleId', 'value': aisleId, 'classType': 'java.lang.String'},
+						                     { 'name': 'inAisleId', 'value': aisleId, 'classType': 'java.lang.String'},
 						                     { 'name': 'inPosXMeters', 'value': xOriginMeters, 'classType': 'java.lang.Double'},
 						                     { 'name': 'inPosYMeters', 'value': yOriginMeters, 'classType': 'java.lang.Double'},
-						                     { 'name': 'inProtoBayXDimMeters', 'value': bayHeight, 'classType': 'java.lang.Double'},
-						                     { 'name': 'inProtoBayYDimMeters', 'value': bayWidth, 'classType': 'java.lang.Double'},
+						                     { 'name': 'inProtoBayXDimMeters', 'value': bayWidth, 'classType': 'java.lang.Double'},
+						                     { 'name': 'inProtoBayYDimMeters', 'value': bayDepth, 'classType': 'java.lang.Double'},
 						                     { 'name': 'inProtoBayZDimMeters', 'value': bayHeight, 'classType': 'java.lang.Double'},
 						                     { 'name': 'inProtoBaysHigh', 'value': baysHigh, 'classType': 'java.lang.Integer'},
 						                     { 'name': 'inProtoBaysLong', 'value': baysLong, 'classType': 'java.lang.Integer'},
 						                     { 'name': 'inRunInXDir', 'value': runInXDim, 'classType': 'java.lang.Boolean'},
-						                     { 'name': 'inCreateBackToBack', 'value': backToBack, 'classType': 'java.lang.Boolean'}
+						                     { 'name': 'inOpensLowSide', 'value': opensLowSide, 'classType': 'java.lang.Boolean'}
 					                     ]
 				                     };
 
@@ -321,7 +320,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 					if ((isNaN(width)) || (width < (Math.abs(start.x - point.x)))) {
 						aisleData.aisleElement.style.width = (Math.abs(start.x - point.x)) + 'px';
 					}
-					var height = parseInt(aisleData.aisleElement.style.width);
+					var height = parseInt(aisleData.aisleElement.style.height);
 					if ((isNaN(height)) || (height < (Math.abs(start.y - point.y)))) {
 						aisleData.aisleElement.style.height = (Math.abs(start.y - point.y)) + 'px';
 					}
@@ -432,8 +431,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			// Create the filter to listen to all vertex updates for this aisle.
 			var pathSegmentFilterData = {
 				'className':     domainobjects['PathSegment']['className'],
-				'propertyNames': ['domainId', 'directionEnum', 'headPosTypeEnum', 'headPosX', 'headPosY', 'tailPosTypeEnum',
-				                  'tailPosX', 'tailPosY', 'parentPersistentId'],
+				'propertyNames': ['domainId', 'posTypeEnum', 'startPosX', 'startPosY', 'endPosX', 'endPosY', 'parentPersistentId'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': 'theId', 'value': path['persistentId']}
@@ -723,7 +721,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			// Create the filter to listen to all path updates for this facility.
 			var pathFilterData = {
 				'className':     domainobjects['Path']['className'],
-				'propertyNames': ['domainId'],
+				'propertyNames': ['domainId', 'travelDirEnum'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': 'theId', 'value': facility_['persistentId']}
@@ -838,26 +836,26 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 						if (pathData['segments'].hasOwnProperty(pathSegmentKey)) {
 							var pathSegmentData = pathData['segments'][pathSegmentKey];
 
-							var head = {};
-							head.x = /*facilityPoints_[0]['x'] + */(pathSegmentData['headPosX'] * self.getPixelsPerMeter());
-							head.y = /*facilityPoints_[0]['y'] + */(pathSegmentData['headPosY'] * self.getPixelsPerMeter());
+							var start = {};
+							start.x = /*facilityPoints_[0]['x'] + */(pathSegmentData['startPosX'] * self.getPixelsPerMeter());
+							start.y = /*facilityPoints_[0]['y'] + */(pathSegmentData['startPosY'] * self.getPixelsPerMeter());
 
-							var tail = {};
-							tail.x = /*facilityPoints_[0]['x'] + */(pathSegmentData['tailPosX'] * self.getPixelsPerMeter());
-							tail.y = /*facilityPoints_[0]['y'] + */(pathSegmentData['tailPosY'] * self.getPixelsPerMeter());
+							var end = {};
+							end.x = /*facilityPoints_[0]['x'] + */(pathSegmentData['endPosX'] * self.getPixelsPerMeter());
+							end.y = /*facilityPoints_[0]['y'] + */(pathSegmentData['endPosY'] * self.getPixelsPerMeter());
 
-							var headArrow = 0.0;
-							var tailArrow = 0.0;
+							var startArrow = 0.0;
+							var endArrow = 0.0;
 
-							if ((pathSegmentData['directionEnum'] === 'BOTH') || (pathSegmentData['directionEnum'] === 'HEAD')) {
-								headArrow = 7.5;
+							if ((pathData['path']['travelDirEnum'] === 'BOTH') || (pathData['path']['travelDirEnum'] === 'REVERSE')) {
+								startArrow = 7.5;
 							}
 
-							if ((pathSegmentData['directionEnum'] === 'BOTH') || (pathSegmentData['directionEnum'] === 'TAIL')) {
-								tailArrow = 7.5;
+							if ((pathData['path']['travelDirEnum'] === 'BOTH') || (pathData['path']['travelDirEnum'] === 'FORWARD')) {
+								endArrow = 7.5;
 							}
 
-							var pathSegmentPath = goog.graphics.paths.createArrow(head, tail, headArrow, tailArrow);
+							var pathSegmentPath = goog.graphics.paths.createArrow(start, end, startArrow, endArrow);
 							var stroke = new goog.graphics.Stroke(0.5, 'black');
 							var fill = new goog.graphics.SolidFill('black', 0.6);
 							drawPath(pathSegmentPath, stroke, fill);

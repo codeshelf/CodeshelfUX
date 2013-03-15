@@ -48,12 +48,11 @@
 		<div class='dialogLabel' style='margin-top: 18px; margin-left: 30px;'>
 			<form action='' autocomplete='on' >
 				<label class='dialogLabel' style='margin-top: 8px; float:left;'>Login:</label>
-				<input type='email' id='userIdInput' class='dialogField' value='jeffw@gadgetworks.com' style='margin-right: 25px; width:200px; float:right' autocomplete='on' autofocus />
+				<input type='email' required id='userIdInput' class='dialogField' value='jeffw@gadgetworks.com' style='margin-right: 25px; width:200px; float:right' autocomplete='on' autofocus />
 				</br>
 				<label class='dialogLabel' style='margin-top: 8px; float:left;'>Password:</label>
-				<input type='password' id='passwordInput' class='dialogField' value='blahdeeblah' style='margin-right: 25px; width:200px; float:right' autocomplete='on'/>
+				<input type='password' required id='passwordInput' class='dialogField' value='blahdeeblah' style='margin-right: 25px; width:200px; float:right' autocomplete='on'/>
 //				<input type="submit" style="visibility: hidden;" onclick='function() &#123; return false; &#124;/>
-//				<input type="submit" style="visibility: hidden;" />
 			</form>
 		</div>
 	</div>
@@ -241,11 +240,11 @@
 			<tr><td>Bay Height: </td><td><input id='bayHeight' class='bayHeight' label='Feet' /></td></tr>
 			<tr><td>Bay Width: </td><td><input id='bayWidth' class='bayWidth' label='Feet' /></td></tr>
 			<tr><td>Bay Depth: </td><td><input id='bayDepth' class='bayDepth' label='Feet' /></td></tr>
-			<tr><td>Bays High: </td><td><input id='baysHigh' class='baysHigh' label='Feet' /></td></tr>
-			<tr><td>Bays Long: </td><td><input id='baysLong' class='baysLong' label='Feet' /></td></tr>
+			<tr><td>Bays High: </td><td><input id='baysHigh' class='baysHigh' label='Num' /></td></tr>
+			<tr><td>Bays Long: </td><td><input id='baysLong' class='baysLong' label='Num' /></td></tr>
 		</table>
 		<br>
-		<div>Back to Back Bays: <span id="backToBack" class="backToBack goog-checkbox goog-checkbox-checked"></span></div>
+		<div>Opens Top or Left: <span id="opensLowSide" class="opensLowSide goog-checkbox goog-checkbox-checked"></span></div>
 	</div>
 </div>
 {/template}

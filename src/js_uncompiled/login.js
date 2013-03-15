@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: login.js,v 1.1 2012/11/10 03:16:49 jeffw Exp $
+ *  $Id: login.js,v 1.2 2013/03/15 23:54:29 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.login');
 goog.require('codeshelf.mainpage');
@@ -15,6 +15,8 @@ goog.require('goog.window');
 //goog.require('arrowlets');
 
 codeshelf.loginWindow = function() {
+
+	var logger_ = goog.debug.Logger.getLogger('codeshelf.loginWindow');
 
 	var websession_;
 	var application_;
@@ -76,12 +78,14 @@ codeshelf.loginWindow = function() {
 			roundedLoginPanel.decorate(loginPanel);
 
 			userIdInput.onkeydown = function(event) {
-				if (event.keyCode == 13) {
+				//logger_.info('Key ' + event.keyCode);
+				if ((event.keyCode == 13) || (event == 10)) {
 					loginCheck();
 				}
 			};
 			passwordInput.onkeydown = function(event) {
-				if (event.keyCode == 13) {
+				//logger_.info('Key ' + event.keyCode);
+				if ((event.keyCode == 13) || (event == 10)) {
 					loginCheck();
 				}
 			};
