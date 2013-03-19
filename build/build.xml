@@ -254,11 +254,12 @@
 		</junit>
 	</target>
 
-	<!-- This sets up the tests to run with JsTestDriver, captive to the selected browser(s). /-->
+	<!-- This sets up the tests to run with JsTestDriver, captive to the selected browser(s). -->
+	<!-- Run this before any of the other tests. -->
 	<target name="test-jstd-setup">
 		<mkdir dir="${target.coverage.dir}" />
 		<java jar="${build.lib.dir}/JsTestDriver-1.3.5.jar" fork="true" failonerror="true" maxmemory="128m">
-			<arg value="--config=build/jsTestDriver.conf" />
+			<arg value="--config=build/jsTestDriver.uncompiled.conf" />
 			<arg value="--port=42442" />
 			<arg value="--runnerMode=DEBUG" />
 			<arg value="--browser=${build.dir}/open_chrome.sh" />
@@ -270,20 +271,20 @@
 		</java>
 	</target>
 
-	<!-- This runs the actual unit tests with JsTestDriver. /-->
-	<target name="test-jstd-run">
+	<!-- This runs the actual unit tests with JsTestDriver against uncompiled code. -->
+	<!-- This test runs stand-alone and doesn't need any other target. -->
+	<target name="test-jstd-run-uncompiled">
 		<mkdir dir="${target.coverage.dir}" />
 		<java jar="build/lib/JsTestDriver-1.3.5.jar" fork="true" failonerror="true">
-			<arg value="--config=build/jsTestDriver.conf" />
+			<arg value="--config=build/jsTestDriver.uncompiled.conf" />
 			<arg value="--reset" />
 			<arg value="--runnerMode=DEBUG" />
 			<arg value="--tests=all" />
 			<arg value="--dryRunFor=all" />
+			<arg value="--raiseOnFailure=false" />
+			<arg value="--port=42442" />
+			<arg value="--browser=open" />
 			<arg value="--testOutput=${target.coverage.dir}" />
-			<!--classpath>
-				<pathelement location="lib/JsTestDriver-1.3.5.jar" />
-				<pathelement location="lib/coverage-1.3.5.jar" />
-			</classpath-->
 		</java>
 
 		<!-- Generate HTML coverage reports from the raw LCOV output data. -->
@@ -294,7 +295,8 @@
 		</exec>
 	</target>
 
-	<!-- This runs the actual unit tests with JsTestDriver. /-->
+	<!-- This runs the actual unit tests with JsTestDriver against compiled code. /-->
+	<!-- This test runs stand-alone and doesn't need any other target. (Tho' it takes 11 minutes to run!) -->
 	<target name="test-jstd-run-compiled">
 		<mkdir dir="${target.coverage.dir}" />
 		<java jar="build/lib/JsTestDriver-1.3.5.jar" fork="true" failonerror="true">
@@ -303,11 +305,10 @@
 			<arg value="--runnerMode=DEBUG" />
 			<arg value="--tests=all" />
 			<arg value="--dryRunFor=all" />
+			<arg value="--raiseOnFailure=false" />
+			<arg value="--port=42442" />
+			<arg value="--browser=open" />
 			<arg value="--testOutput=${target.coverage.dir}" />
-			<!--classpath>
-				<pathelement location="lib/JsTestDriver-1.3.5.jar" />
-				<pathelement location="lib/coverage-1.3.5.jar" />
-			</classpath-->
 		</java>
 
 		<!-- Generate HTML coverage reports from the raw LCOV output data. -->
