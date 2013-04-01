@@ -2,13 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c319b0c7-b9cf-46f5-90a5-b0a625c84957" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/debug/CodeShelfUX-JUnit.launch" afterPath="$PROJECT_DIR$/debug/CodeShelfUX-JUnit.launch" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/html/codeshelf.dev.html" afterPath="$PROJECT_DIR$/src/html/codeshelf.dev.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/html/codeshelf.html" afterPath="$PROJECT_DIR$/src/html/codeshelf.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/login.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/login.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/login.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/login.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/templates/codeshelf_templates.soy" afterPath="$PROJECT_DIR$/src/templates/codeshelf_templates.soy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/debug/CodeShelfUX-JUnit.launch" afterPath="$PROJECT_DIR$/debug/CodeShelfUX-JUnit.launch" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
     </list>
     <ignored path="CodeShelfUX.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,68 +41,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="facilityEditorView.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js">
+      <file leaf-file-name="codeshelf.dev.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/html/codeshelf.dev.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="631" column="0" selection-start="23243" selection-end="23243" vertical-scroll-proportion="0.0">
+            <state line="42" column="0" selection-start="2256" selection-end="2256" vertical-scroll-proportion="-25.565218">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="domainObjects.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/domainObjects.js">
+      <file leaf-file-name="codeshelf.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/html/codeshelf.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="0" selection-start="308" selection-end="308" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="workAreaEditorView.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="853" column="129" selection-start="29792" selection-end="29792" vertical-scroll-proportion="0.5195424">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="websocket.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/websocket.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="145" column="0" selection-start="4267" selection-end="4267" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ordersView.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/ordersView.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="20" selection-start="858" selection-end="868" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1360458202000" expanded="false" signature="3166:3208" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="workAreaView.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaView.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="117" column="210" selection-start="4277" selection-end="4277" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1360458202000" expanded="false" signature="2922:2964" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="slick.rowmovemanager.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/SlickGrid/plugins/slick.rowmovemanager.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="46" selection-start="586" selection-end="586" vertical-scroll-proportion="0.0">
+            <state line="35" column="0" selection-start="1762" selection-end="1762" vertical-scroll-proportion="0.453284">
               <folding />
             </state>
           </provider>
@@ -117,8 +69,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/js_uncompiled/listDemoView.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/listView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/window.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/dataEntryDialog.js" />
         <option value="$PROJECT_DIR$/lib/SlickGrid/plugins/slick.rowmovemanager.js" />
@@ -133,6 +83,8 @@
         <option value="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js" />
+        <option value="$PROJECT_DIR$/src/html/codeshelf.dev.html" />
+        <option value="$PROJECT_DIR$/src/html/codeshelf.html" />
       </list>
     </option>
   </component>
@@ -178,34 +130,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="CodeShelfUX">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="CodeShelfUX">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="lib">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -252,8 +176,36 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="js_uncompiled" />
+              <option name="myItemId" value="html" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="CodeShelfUX">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="CodeShelfUX">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="lib">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -373,7 +325,7 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972324" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18802084" sideWeight="0.39610964" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18802084" sideWeight="0.6551724" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18802084" sideWeight="0.6551724" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32979664" sideWeight="0.5" order="13" side_tool="true" content_ui="tabs" />
@@ -503,14 +455,33 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="89" column="0" selection-start="2680" selection-end="2724" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="89" column="0" selection-start="2680" selection-end="2724" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/websession.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="27" column="21" selection-start="984" selection-end="1001" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/mainPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="76" column="41" selection-start="2471" selection-end="2471" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="631" column="0" selection-start="23243" selection-end="23243" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/domainObjects.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="0" selection-start="308" selection-end="308" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/net/websocket.js">
@@ -545,40 +516,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/domainObjects.js">
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="308" selection-end="308" vertical-scroll-proportion="0.0">
+        <state line="853" column="129" selection-start="29792" selection-end="29792" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/html/codeshelf.dev.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="0" selection-start="2256" selection-end="2256" vertical-scroll-proportion="-25.565218">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/html/codeshelf.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/html/codeshelf.dev.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/mainPage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="41" selection-start="2471" selection-end="2471" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="631" column="0" selection-start="23243" selection-end="23243" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/workAreaEditorView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="853" column="129" selection-start="29792" selection-end="29792" vertical-scroll-proportion="0.5195424">
+        <state line="35" column="0" selection-start="1762" selection-end="1762" vertical-scroll-proportion="0.453284">
           <folding />
         </state>
       </provider>
