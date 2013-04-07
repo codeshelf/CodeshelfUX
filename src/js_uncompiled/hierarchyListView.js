@@ -281,7 +281,9 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 						});
 
 						if (foundEntry === null) {
-							computedProperties.push(property.id);
+							if (domainObject_['properties'][property.id] !== undefined) {
+								computedProperties.push(property.id);
+							}
 							columns_[count++] = {
 								'id':                  property.id,
 								'name':                property.title,

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.40 2013/03/15 23:54:29 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.41 2013/04/07 07:16:38 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -611,7 +611,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			// Add the facility descriptor field.
 			var facilityDescField = codeshelf.dataobjectfield(websession_, self.getMainPaneElement(),
 			                                                  domainobjects['Facility']['className'],
-			                                                  domainobjects['Facility']['properties']['desc']['id'],
+			                                                  domainobjects['Facility']['properties']['description']['id'],
 			                                                  facility_['persistentId'],
 			                                                  'windowField', 'Facility name');
 			facilityDescField.start();

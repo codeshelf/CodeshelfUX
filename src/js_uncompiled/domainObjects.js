@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.36 2013/02/10 01:03:22 jeffw Exp $
+ * $Id: domainObjects.js,v 1.37 2013/04/07 07:16:38 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -32,17 +32,17 @@ domainobjects = {
 	'DropboxService': {
 		'className':  'DropboxService',
 		'properties': {
-			'domainId':           {
+			'domainId':         {
 				'id':    'domainId',
 				'title': 'Parent ID',
 				'width': 25
 			},
-			'provider':           {
+			'providerEnum':     {
 				'id':    'providerEnum',
 				'title': 'Provider',
 				'width': 40
 			},
-			'serviceState':       {
+			'serviceStateEnum': {
 				'id':    'serviceStateEnum',
 				'title': 'Service State',
 				'width': 40
@@ -53,17 +53,17 @@ domainobjects = {
 	'EdiDocumentLocator': {
 		'className':  'EdiDocumentLocator',
 		'properties': {
-			'domainId':           {
+			'domainId':          {
 				'id':    'domainId',
 				'title': 'Parent ID',
 				'width': 25
 			},
-			'documentState':      {
+			'documentStateEnum': {
 				'id':    'documentStateEnum',
 				'title': 'Doc State',
 				'width': 40
 			},
-			'documentName':       {
+			'documentName':      {
 				'id':    'documentName',
 				'title': 'Document Name',
 				'width': 100
@@ -74,32 +74,32 @@ domainobjects = {
 	'Facility': {
 		'className':  'Facility',
 		'properties': {
-			'domainId':           {
+			'domainId':    {
 				'id':    'domainId',
 				'title': 'ID',
 				'width': 25
 			},
-			'desc':               {
+			'description': {
 				'id':    'description',
 				'title': 'Facility Name',
 				'width': 50
 			}
-//			'provider':     {
+//			'providerEnum':     {
 //				'id':    'providerEnum',
 //				'title': 'Provider',
 //				'width': 100
 //			},
-//			'serviceState':     {
+//			'serviceStateEnum':     {
 //				'id':    'serviceStateEnum',
 //				'title': 'State',
 //				'width': 100
 //			},
 //			'documentId':     {
-//				'id':    'DocumentId',
+//				'id':    'documentId',
 //				'title': 'DocumentId',
 //				'width': 100
 //			},
-//			'documentState':     {
+//			'documentStateEnum':     {
 //				'id':    'documentStateEnum',
 //				'title': 'State',
 //				'width': 100
@@ -122,26 +122,26 @@ domainobjects = {
 		'className':  'OrderDetail',
 		'properties': {
 			'domainId':    {
-				'id':    'fullDomainId',
+				'id':    'domainId',
 				'title': 'ID',
 				'width': 25
 			},
-			'orderId':    {
+			'orderId':     {
 				'id':    'orderId',
 				'title': 'Order ID',
 				'width': 15
 			},
 			'detailId':    {
-				'id':    'domainId',
+				'id':    'detailId',
 				'title': 'Detail ID',
 				'width': 15
 			},
-			'status':      {
+			'statusEnum':      {
 				'id':    'statusEnum',
 				'title': 'Status',
 				'width': 25
 			},
-			'sku':         {
+			'itemMasterId':         {
 				'id':    'itemMasterId',
 				'title': 'SKU',
 				'width': 15
@@ -156,7 +156,7 @@ domainobjects = {
 				'title': 'Qty',
 				'width': 5
 			},
-			'uom':         {
+			'uomMasterId':         {
 				'id':    'uomMasterId',
 				'title': 'UOM',
 				'width': 5
@@ -167,12 +167,12 @@ domainobjects = {
 	'OrderGroup': {
 		'className':  'OrderGroup',
 		'properties': {
-			'domainId': {
+			'domainId':     {
 				'id':    'fullDomainId',
 				'title': 'ID',
 				'width': 25
 			},
-			'status':  {
+			'statusEnum':       {
 				'id':    'statusEnum',
 				'title': 'Status',
 				'width': 15
@@ -182,7 +182,7 @@ domainobjects = {
 				'title': 'Description',
 				'width': 50
 			},
-			'workSequence':  {
+			'workSequence': {
 				'id':    'workSequence',
 				'title': 'Work Seq',
 				'width': 15
@@ -193,17 +193,17 @@ domainobjects = {
 	'OrderHeader': {
 		'className':  'OrderHeader',
 		'properties': {
-			'domainId': {
+			'domainId':     {
 				'id':    'fullDomainId',
 				'title': 'ID',
 				'width': 25
 			},
-			'orderId':  {
+			'orderId':      {
 				'id':    'orderId',
 				'title': 'Order ID',
 				'width': 15
 			},
-			'status':      {
+			'statusEnum':       {
 				'id':    'statusEnum',
 				'title': 'Status',
 				'width': 15
@@ -213,17 +213,17 @@ domainobjects = {
 				'title': 'Container ID',
 				'width': 15
 			},
-			'shipmentId':  {
+			'shipmentId':   {
 				'id':    'shipmentId',
 				'title': 'Shipment ID',
 				'width': 15
 			},
-			'custoemrId':  {
+			'custoemrId':   {
 				'id':    'customerId',
 				'title': 'Customer ID',
 				'width': 15
 			},
-			'workSequence':  {
+			'workSequence': {
 				'id':    'workSequence',
 				'title': 'Work Seq',
 				'width': 15
@@ -283,7 +283,7 @@ domainobjects = {
 	'WorkArea': {
 		'className':  'WorkArea',
 		'properties': {
-			'domainId': {
+			'domainId':    {
 				'id':    'domainId',
 				'title': 'ID',
 				'width': 25
@@ -299,7 +299,7 @@ domainobjects = {
 	'WorkInstruction': {
 		'className':  'WorkInstruction',
 		'properties': {
-			'domainId': {
+			'domainId':    {
 				'id':    'domainId',
 				'title': 'ID',
 				'width': 25
