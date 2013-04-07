@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: aisleView.js,v 1.23 2012/11/14 09:50:14 jeffw Exp $
+ * $Id: aisleView.js,v 1.24 2013/04/07 21:33:00 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -23,12 +23,8 @@ goog.require('raphael');
 /**
  * The AisleView object
  *
- * @param {codeshelf.websession}
- *            websession The websession for this view.
- * @param {Object}
- *            aisle The aisle object for this aisle.
- * @param {goog.graphics.AbstractGraphics}
- *            graphics The graphics context where we can draw.
+ * @param {codeshelf.websession} websession The websession for this view.
+ * @param {Object} aisle The aisle object for this aisle.
  * @return {Object}
  */
 codeshelf.aisleview = function(websession, aisle) {
@@ -60,8 +56,7 @@ codeshelf.aisleview = function(websession, aisle) {
 	/**
 	 * Compute the path for a bay.
 	 *
-	 * @param {Object}
-	 *            bayData The bay for which we need the path.
+	 * @param {Object} bayData The bay for which we need the path.
 	 * @return {goog.graphics.Path}
 	 */
 	function computeBayPath(bayData) {
@@ -69,6 +64,8 @@ codeshelf.aisleview = function(websession, aisle) {
 
 		if (Object.size(bayData.vertices) > 0) {
 			var start = {};
+			var width = 0;
+			var height = 0;
 			for (var i = 0; i < Object.size(bayData.vertices); i++) {
 				var vertex = bayData.vertices[i];
 				var point = convertBayVertexToPoint(bayData['bayElement'], vertex);
@@ -78,17 +75,17 @@ codeshelf.aisleview = function(websession, aisle) {
 					start.y = point.y;
 				} else {
 					path.lineTo(point.x, point.y);
-					var width = parseInt(bayData['bayElement'].style.width);
-					if ((isNaN(width)) || (width < (Math.abs(start.x - point.x)))) {
-						bayData['bayElement'].style.width = (Math.abs(start.x - point.x)) + 'px';
+					if (Math.abs(start.x - point.x) > width) {
+						width = Math.abs(start.x - point.x);
 					}
-					var height = parseInt(bayData['bayElement'].style.height);
-					if ((isNaN(height)) || (height < (Math.abs(start.y - point.y)))) {
-						bayData['bayElement'].style.height = (Math.abs(start.y - point.y)) + 'px';
+					if (Math.abs(start.y - point.y) > height) {
+						height = Math.abs(start.y - point.y);
 					}
 				}
 			}
 			path.lineTo(start.x, start.y);
+			bayData['bayElement'].style.width = width + 'px';
+			bayData['bayElement'].style.height = height + 'px';
 		}
 
 		return path;
@@ -97,11 +94,8 @@ codeshelf.aisleview = function(websession, aisle) {
 	/**
 	 * Convert a Bay's vertex into a point in graphics space (pixels).
 	 *
-	 * @param {Element}
-	 *            bayElement The HTML element to which the point will be
-	 *            relative.
-	 * @param {Object}
-	 *            vertex The vertex for which we need a point.
+	 * @param {Element} bayElement The HTML element to which the point will be relative.
+	 * @param {Object} vertex The vertex for which we need a point.
 	 * @return {Object}
 	 */
 	function convertBayVertexToPoint(bayElement, vertex) {
@@ -112,11 +106,9 @@ codeshelf.aisleview = function(websession, aisle) {
 	}
 
 	/**
-	 * Handle any bay update commands that arrive over the websocket for this
-	 * aisle.
+	 * Handle any bay update commands that arrive over the websocket for this aisle.
 	 *
-	 * @param {Object}
-	 *            bay The updated bay.
+	 * @param {Object} bay The updated bay.
 	 */
 	function handleUpdateBayCmd(bay) {
 		if (bays_[bay['persistentId']] === undefined) {
@@ -158,11 +150,9 @@ codeshelf.aisleview = function(websession, aisle) {
 	}
 
 	/**
-	 * Handle any bay delete commands that arrive over the websocket for this
-	 * aisle.
+	 * Handle any bay delete commands that arrive over the websocket for this aisle.
 	 *
-	 * @param {Object}
-	 *            bay The deleted bay.
+	 * @param {Object} bay The deleted bay.
 	 */
 	function handleDeleteBayCmd(bay) {
 		if (bays_[bay['persistentId']] !== undefined) {
@@ -172,11 +162,9 @@ codeshelf.aisleview = function(websession, aisle) {
 	}
 
 	/**
-	 * Handle any bay vertex update commands that arrive over the websocket for
-	 * this aisle.
+	 * Handle any bay vertex update commands that arrive over the websocket for this aisle.
 	 *
-	 * @param {Object}
-	 *            bayvertex The updated bay vertex.
+	 * @param {Object}  bayVertex   The updated bay vertex.
 	 */
 	function handleUpdateBayVertexCmd(bayVertex) {
 		var bayPersistentId = bayVertex['parentPersistentId'];
@@ -191,11 +179,9 @@ codeshelf.aisleview = function(websession, aisle) {
 	}
 
 	/**
-	 * Handle any bay vertex delete commands that arrive over the websocket for
-	 * this aisle.
+	 * Handle any bay vertex delete commands that arrive over the websocket for this aisle.
 	 *
-	 * @param {Object}
-	 *            bayvertex The deleted bay vertex.
+	 * @param {Object} bayVertex The deleted bay vertex.
 	 */
 	function handleDeleteBayVertexCmd(bayVertex) {
 
@@ -257,10 +243,6 @@ codeshelf.aisleview = function(websession, aisle) {
 
 		/**
 		 * Setup the view
-		 *
-		 * @param {Element}
-		 *            contentElement The element where we can place all of the
-		 *            view content.
 		 */
 		doSetupView: function() {
 
@@ -315,7 +297,7 @@ codeshelf.aisleview = function(websession, aisle) {
 		 * Call after we've resized the underlying parent view or window.
 		 */
 		doResize: function() {
-			graphics_.setSize(self.getMainPaneElement().clientWidth, self.getMainPaneElement().clientHeight);
+			//graphics_.setSize(self.getMainPaneElement().clientWidth, self.getMainPaneElement().clientHeight);
 			self.invalidate();
 		},
 
@@ -345,7 +327,8 @@ codeshelf.aisleview = function(websession, aisle) {
 				}
 			}
 
-			graphics_.setSize(self.getMainPaneElement().clientWidth, self.getMainPaneElement().clientHeight);
+			// If it gets smaller than 13 then SVG has weird orgin problems that cause it to draw in the wrong place.
+			graphics_.setSize(self.getMainPaneElement().clientWidth, 13); //self.getMainPaneElement().clientHeight);
 
 			endDraw();
 		}

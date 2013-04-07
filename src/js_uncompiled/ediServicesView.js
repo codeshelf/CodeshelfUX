@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ediServicesView.js,v 1.15 2013/02/10 01:03:22 jeffw Exp $
+ *  $Id: ediServicesView.js,v 1.16 2013/04/07 21:33:00 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ediservicesview');
@@ -32,8 +32,8 @@ codeshelf.ediservicesview = function(websession, facility) {
 	function updateLink(event) {
 		if ($(event.target).data("option") == "link") {
 			var buttonSet = new goog.ui.Dialog.ButtonSet().
-				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.OK).
-				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
+				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.OK, true, true).
+				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL);
 
 			var dataEntryDialog = codeshelf.dataentrydialog('Link Dropbox', buttonSet);
 			var dialogContentElement = soy.renderAsElement(codeshelf.templates.linkDropboxDialog);

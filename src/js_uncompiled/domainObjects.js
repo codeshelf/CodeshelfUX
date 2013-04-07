@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.37 2013/04/07 07:16:38 jeffw Exp $
+ * $Id: domainObjects.js,v 1.38 2013/04/07 21:33:00 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -121,8 +121,8 @@ domainobjects = {
 	'OrderDetail': {
 		'className':  'OrderDetail',
 		'properties': {
-			'domainId':    {
-				'id':    'domainId',
+			'fullDomainId':    {
+				'id':    'fullDomainId',
 				'title': 'ID',
 				'width': 25
 			},
@@ -131,8 +131,8 @@ domainobjects = {
 				'title': 'Order ID',
 				'width': 15
 			},
-			'detailId':    {
-				'id':    'detailId',
+			'orderDetailId':    {
+				'id':    'orderDetailId',
 				'title': 'Detail ID',
 				'width': 15
 			},
@@ -167,7 +167,7 @@ domainobjects = {
 	'OrderGroup': {
 		'className':  'OrderGroup',
 		'properties': {
-			'domainId':     {
+			'fullDomainId':     {
 				'id':    'fullDomainId',
 				'title': 'ID',
 				'width': 25
@@ -193,7 +193,7 @@ domainobjects = {
 	'OrderHeader': {
 		'className':  'OrderHeader',
 		'properties': {
-			'domainId':     {
+			'fullDomainId':     {
 				'id':    'fullDomainId',
 				'title': 'ID',
 				'width': 25
@@ -201,6 +201,16 @@ domainobjects = {
 			'orderId':      {
 				'id':    'orderId',
 				'title': 'Order ID',
+				'width': 15
+			},
+			'readableOrderDate':      {
+				'id':    'readableOrderDate',
+				'title': 'Order Date',
+				'width': 15
+			},
+			'readableDueDate':      {
+				'id':    'readableDueDate',
+				'title': 'Due Date',
 				'width': 15
 			},
 			'statusEnum':       {

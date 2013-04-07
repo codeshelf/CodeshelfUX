@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ordersView.js,v 1.7 2013/02/10 01:03:22 jeffw Exp $
+ *  $Id: ordersView.js,v 1.8 2013/04/07 21:33:00 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ordersview');
@@ -82,7 +82,30 @@ codeshelf.ordersview = function(websession, facility) {
 		} else if (orderHeaderA.workSequence > orderHeaderB.workSequence) {
 			return 1;
 		} else {
-			return 0;
+			return dueDateComparer(orderHeaderA, orderHeaderB);
+		}
+	}
+
+	function dueDateComparer(orderHeaderA, orderHeaderB) {
+		dateA = new Date(orderHeaderA.dueDate);
+		dateB = new Date(orderHeaderB.dueDate);
+		if (dateA < dateB) {
+			return -1;
+		} else if (dateA > dateB) {
+			return 1;
+		} else {
+			return orderIdComparer(orderHeaderA, orderHeaderB);
+		}
+	}
+
+	function orderIdComparer(orderHeaderA, orderHeaderB) {
+		if (orderHeaderA.orderId < orderHeaderB.orderId) {
+			return -1;
+		} else if (orderHeaderA.orderId > orderHeaderB.orderId) {
+			return 1;
+		} else {
+			// Punt to make the left one randomly lower.
+			return -1;
 		}
 	}
 

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.60 2013/03/15 23:54:29 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.61 2013/04/07 21:33:00 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -305,6 +305,8 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 		if (Object.size(aisleData.vertices) > 0) {
 			var start = {};
+			var width = 0;
+			var height = 0;
 			for (var i = 0; i < Object.size(aisleData.vertices); i++) {
 				var vertex = aisleData.vertices[i];
 				var point = convertAisleVertexToPoint(aisleData.aisle, vertex);
@@ -316,17 +318,17 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 					aisleData.aisleElement.style.top = point.y;
 				} else {
 					path.lineTo(point.x, point.y);
-					var width = parseInt(aisleData.aisleElement.style.width);
-					if ((isNaN(width)) || (width < (Math.abs(start.x - point.x)))) {
-						aisleData.aisleElement.style.width = (Math.abs(start.x - point.x)) + 'px';
+					if (Math.abs(start.x - point.x) > width) {
+						width = Math.abs(start.x - point.x);
 					}
-					var height = parseInt(aisleData.aisleElement.style.height);
-					if ((isNaN(height)) || (height < (Math.abs(start.y - point.y)))) {
-						aisleData.aisleElement.style.height = (Math.abs(start.y - point.y)) + 'px';
+					if (Math.abs(start.y - point.y) > height) {
+						height = Math.abs(start.y - point.y);
 					}
 				}
 			}
 			path.lineTo(start.x, start.y);
+			aisleData.aisleElement.style.width = width + 'px';
+			aisleData.aisleElement.style.height = height + 'px';
 		}
 
 		return path;
