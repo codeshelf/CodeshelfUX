@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: ordersView.js,v 1.8 2013/04/07 21:33:00 jeffw Exp $
+ *  $Id: ordersView.js,v 1.9 2013/05/03 06:06:51 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.ordersview');
@@ -152,7 +152,7 @@ codeshelf.ordersview = function(websession, facility) {
 
 	var hierarchyMap = [];
 	hierarchyMap[0] = { className: domainobjects['OrderGroup']['className'], linkProperty: 'parent', filter: orderGroupFilter, filterParams: orderGroupFilterParams, properties: domainobjects['OrderGroup']['properties'], comparer: undefined };
-	hierarchyMap[1] = { className: domainobjects['OrderHeader']['className'], linkProperty: 'orderGroup', filter: orderHeaderFilter, filterParams: undefined, properties: domainobjects['OrderHeader']['properties'], comparer: workSequenceComparer };
+	hierarchyMap[1] = { className: domainobjects['OrderHeader']['className'], linkProperty: 'order_group', filter: orderHeaderFilter, filterParams: undefined, properties: domainobjects['OrderHeader']['properties'], comparer: workSequenceComparer };
 	hierarchyMap[2] = { className: domainobjects['OrderDetail']['className'], linkProperty: 'parent', filter: orderDetailFilter, filterParams: undefined, properties: domainobjects['OrderDetail']['properties'], comparer: undefined };
 
 	// We want this view to extend the root/parent view, but we want to return this view.

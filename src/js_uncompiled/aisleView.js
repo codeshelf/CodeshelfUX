@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: aisleView.js,v 1.24 2013/04/07 21:33:00 jeffw Exp $
+ * $Id: aisleView.js,v 1.25 2013/05/03 06:06:51 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('codeshelf.aisleview');
@@ -241,104 +241,110 @@ codeshelf.aisleview = function(websession, aisle) {
 	 */
 	var self = {
 
-		/**
-		 * Setup the view
-		 */
-		doSetupView: function() {
+			/**
+			 * Setup the view
+			 */
+			doSetupView: function() {
 
-			// Compute the dimensions of the aisle outline, and create a
-			// bounding rectangle for it.
-			// Create a draw canvas for the bounding rect.
-			// Compute the path for the aisle outline and put it into the draw
-			// canavs.
+				// Compute the dimensions of the aisle outline, and create a
+				// bounding rectangle for it.
+				// Create a draw canvas for the bounding rect.
+				// Compute the path for the aisle outline and put it into the draw
+				// canavs.
 
-			graphics_ = goog.graphics.createGraphics(self.getMainPaneElement().clientWidth, self.getMainPaneElement().clientHeight);
-			graphics_.render(self.getMainPaneElement());
+				graphics_ = goog.graphics.createGraphics(self.getMainPaneElement().clientWidth, self.getMainPaneElement().clientHeight);
+				graphics_.render(self.getMainPaneElement());
 
-			// Create the filter to listen to all bay updates for this aisle.
-			var data = {
-				'className':     domainobjects['Bay']['className'],
-				'propertyNames': [ 'domainId', 'posTypeEnum', 'posX', 'posY', 'posZ' ],
-				'filterClause':  'parent.persistentId = :theId AND posZ = 0',
-				'filterParams':  [
-					{
-						'name':  'theId',
-						'value': aisle_['persistentId']
-					}
-				]
-			};
+				// Create the filter to listen to all bay updates for this aisle.
+				var data = {
+					'className':     domainobjects['Bay']['className'],
+					'propertyNames': [ 'domainId', 'posTypeEnum', 'posX', 'posY', 'posZ' ],
+					'filterClause':  'parent.persistentId = :theId AND posZ = 0',
+					'filterParams':  [
+						{
+							'name':  'theId',
+							'value': aisle_['persistentId']
+						}
+					]
+				};
 
-			var bayFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-			websession_.sendCommand(bayFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
-		},
+				var bayFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
+				websession_.sendCommand(bayFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+			},
 
-		/**
-		 * Open the view.
-		 */
-		open: function() {
+			/**
+			 * Open the view.
+			 */
+			open: function() {
 
-		},
+			},
 
-		/**
-		 * Close the view.
-		 */
-		close: function() {
+			/**
+			 * Close the view.
+			 */
+			close: function() {
 
-		},
+			},
 
-		/**
-		 * Called just before we close the view.
-		 */
-		exit: function() {
+			/**
+			 * Called just before we close the view.
+			 */
+			exit: function() {
 
-		},
+			},
 
-		/**
-		 * Call after we've resized the underlying parent view or window.
-		 */
-		doResize: function() {
-			//graphics_.setSize(self.getMainPaneElement().clientWidth, self.getMainPaneElement().clientHeight);
-			self.invalidate();
-		},
+			/**
+			 * Call after we've resized the underlying parent view or window.
+			 */
+			doResize: function() {
+				//graphics_.setSize(self.getMainPaneElement().clientWidth, self.getMainPaneElement().clientHeight);
+				self.invalidate();
+			},
 
-		doDraw: function(bay) {
-			startDraw();
+			doDraw: function(bay) {
+				startDraw();
 
-			// Draw the bays
-			for (var bayKey in bays_) {
-				if (bays_.hasOwnProperty(bayKey)) {
-					var bayData = bays_[bayKey];
+				// Draw the bays
+				for (var bayKey in bays_) {
+					if (bays_.hasOwnProperty(bayKey)) {
+						var bayData = bays_[bayKey];
 
-					bayData['bayElement'].style.left = (/* parseInt(self.getMainPaneElement().style.left) + */(bayData['bay']['posX'] * self
-						.getPixelsPerMeter()))
-						+ 'px';
-					bayData['bayElement'].style.top = (/* parseInt(self.getMainPaneElement().style.top) + */(bayData['bay']['posY'] * self
-						.getPixelsPerMeter()))
-						+ 'px';
+						bayData['bayElement'].style.left = (/* parseInt(self.getMainPaneElement().style.left) + */(bayData['bay']['posX'] * self
+							.getPixelsPerMeter()))
+							+ 'px';
+						bayData['bayElement'].style.top = (/* parseInt(self.getMainPaneElement().style.top) + */(bayData['bay']['posY'] * self
+							.getPixelsPerMeter()))
+							+ 'px';
 
-					// If this is the lowest bay, and there are at least four
-					// vertices then draw the bay.
-					if ((bayData['bay']['posZ'] === 0) && (Object.size(bayData.vertices) >= 4)) {
-						var bayPath = computeBayPath(bayData);
-						var stroke = new goog.graphics.Stroke(0.5, 'black');
-						var fill = new goog.graphics.SolidFill('white', 0.2);
-						drawPath(bayPath, stroke, fill);
+						// If this is the lowest bay, and there are at least four
+						// vertices then draw the bay.
+						if ((bayData['bay']['posZ'] === 0) && (Object.size(bayData.vertices) >= 4)) {
+							var bayPath = computeBayPath(bayData);
+							var stroke = new goog.graphics.Stroke(0.5, 'black');
+							var fill = new goog.graphics.SolidFill('white', 0.2);
+							drawPath(bayPath, stroke, fill);
+						}
 					}
 				}
+
+				if (self.getMainPaneElement().clientHeight < 13) {
+					// If it gets smaller than 13 then SVG has weird orgin problems that cause it to draw in the wrong place.
+					graphics_.setSize(self.getMainPaneElement().clientWidth, 13);
+				} else {
+					graphics_.setSize(self.getMainPaneElement().clientWidth, self.getMainPaneElement().clientHeight);
+				}
+
+				endDraw();
 			}
-
-			// If it gets smaller than 13 then SVG has weird orgin problems that cause it to draw in the wrong place.
-			graphics_.setSize(self.getMainPaneElement().clientWidth, 13); //self.getMainPaneElement().clientHeight);
-
-			endDraw();
 		}
-	};
+		;
 
-	// We want this view to extend the root/parent view, but we want to return
-	// this view.
+// We want this view to extend the root/parent view, but we want to return
+// this view.
 	var view = codeshelf.view();
 	jQuery.extend(view, self);
 	self = view;
 
 	return self;
-};
+}
+;

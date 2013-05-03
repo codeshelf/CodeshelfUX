@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: workAreaEditorView.js,v 1.61 2013/04/07 21:33:00 jeffw Exp $
+ *  $Id: workAreaEditorView.js,v 1.62 2013/05/03 06:06:51 jeffw Exp $
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
@@ -778,9 +778,27 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			                               startDragPoint_.x + event.target.deltaX, startDragPoint_.y + event.target.deltaY)) {
 				// Dont' do anything, the last drag point was inside the facility bounds.
 			} else {
-				currentRect_.width = event.target.deltaX;
-				currentRect_.height = event.target.deltaY;
-				currentDrawRect_.setSize(event.target.deltaX, event.target.deltaY);
+				var x = event.target.deltaX;
+				if (x < 0) {
+					x *= -1;
+					currentRect_.left = startDragPoint_.x - x;
+				} else {
+					currentRect_.left = startDragPoint_.x;
+				}
+
+				var y = event.target.deltaY;
+				if (y < 0) {
+					y *= -1;
+					currentRect_.top = startDragPoint_.y - y;
+				} else {
+					currentRect_.top = startDragPoint_.y;
+				}
+				currentRect_.width = x;
+				currentRect_.height = y;
+
+				currentDrawRect_.setPosition(currentRect_.left, currentRect_.top);
+				currentDrawRect_.setSize(currentRect_.width, currentRect_.height);
+
 				if (self.getToolbarTool().getId() === 'select-tool') {
 					selectBays(currentRect_);
 				}
