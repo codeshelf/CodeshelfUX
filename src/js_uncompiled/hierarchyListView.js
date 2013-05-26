@@ -1,5 +1,6 @@
 goog.provide('codeshelf.hierarchylistview');
 goog.require('extern.jquery');
+goog.require('goog.async.Delay');
 goog.require('slickgrid.cellcopymanager');
 goog.require('slickgrid.cellselection');
 goog.require('slickgrid.columnpicker');
@@ -37,6 +38,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	var sortdir_ = 1;
 	var percentCompleteThreshold_;
 	var searchString_;
+	var sortDelay_;
 
 	/**
 	 * Get the root item in the hierarchy for this item.
@@ -45,22 +47,29 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	 * @return {Object} the root item (at level) for this item.
 	 */
 	function getParentAtLevel(item, level, linkProperty) {
-		var parentItem = undefined;
 		var currentLevel = getLevel(item);
 
+		if (item['parentAtLevel'] === undefined) {
+			item['parentAtLevel'] = [];
+		}
+
 		if (level === currentLevel) {
-			parentItem = item;
+			item['parentAtLevel'][level] = item;
 		} else {
-			var dataItems = dataView_.getItems();
-			for (var dataItemPos in dataItems) {
-				if (dataItems.hasOwnProperty(dataItemPos)) {
-					if (dataItems[dataItemPos]['persistentId'] === item[linkProperty]) {
-						return getParentAtLevel(dataItems[dataItemPos], level, hierarchyMap_[level].linkProperty + 'PersistentId');
+			if (item['parentAtLevel'][level] === undefined) {
+				var dataItems = dataView_.getItems();
+				for (var dataItemPos in dataItems) {
+					if (dataItems.hasOwnProperty(dataItemPos)) {
+						if (dataItems[dataItemPos]['persistentId'] === item[linkProperty]) {
+							item['parentAtLevel'][level] = getParentAtLevel(dataItems[dataItemPos], level, hierarchyMap_[level].linkProperty + 'PersistentId');
+							break;
+						}
 					}
 				}
 			}
 		}
-		return parentItem;
+
+		return item['parentAtLevel'][level];
 	}
 
 	/**
@@ -69,10 +78,15 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	 * @return {Integer}  the level (0-n)
 	 */
 	function getLevel(item) {
+		if (item['getLevel'] !== undefined) {
+			return item['getLevel'];
+		}
+
 		for (var hierarcyPos in hierarchyMap_) {
 			if (hierarchyMap_.hasOwnProperty(hierarcyPos)) {
 				if (item['className'] === hierarchyMap_[hierarcyPos].className) {
-					return parseInt(hierarcyPos, 10);
+					item['getLevel'] = parseInt(hierarcyPos, 10);
+					return item['getLevel'];
 				}
 			}
 		}
@@ -86,8 +100,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	 */
 	function comparer(itemA, itemB) {
 
-		logger_.info('A: ' + itemA.fullDomainId);
-		logger_.info('B: ' + itemB.fullDomainId);
+//		logger_.info('A: ' + itemA.fullDomainId);
+//		logger_.info('B: ' + itemB.fullDomainId);
 
 		var result = 0;
 		var itemALevel = getLevel(itemA);
@@ -145,7 +159,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			}
 		}
 
-		logger_.info('R: ' + result);
+//		logger_.info('R: ' + result);
 		return result;
 	}
 
@@ -230,7 +244,11 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 							removeChildren(object);
 						}
 					}
-					dataView_.sort(comparer, sortdir_);
+					// We don't want to sort right away, because we might be getting a lot of updates.
+					// The delay timer gets reset each time we call start - only after updates are quite for 500ms do we sort.
+					sortDelay_.start();
+
+					;
 				}
 			}
 		};
@@ -425,6 +443,11 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			});
 
 			grid_.onContextMenu.subscribe(dispatchContextMenu);
+
+			sortDelay_ = new goog.async.Delay(function() {
+				dataView_.sort(comparer, sortdir_)
+			}, 500);
+
 		},
 
 		open: function() {
@@ -473,10 +496,11 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 		}
 	};
 
-	// We want this view to extend the root/parent view, but we want to return this view.
+// We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.view();
 	jQuery.extend(view, self);
 	self = view;
 
 	return self;
-};
+}
+;

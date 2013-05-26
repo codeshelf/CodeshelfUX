@@ -1,6 +1,6 @@
 /*******************************************************************************
  * CodeShelfUX Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- * $Id: domainObjects.js,v 1.38 2013/04/07 21:33:00 jeffw Exp $
+ * $Id: domainObjects.js,v 1.39 2013/05/26 21:52:20 jeffw Exp $
  ******************************************************************************/
 
 goog.provide('domainobjects');
@@ -228,7 +228,7 @@ domainobjects = {
 				'title': 'Shipment ID',
 				'width': 15
 			},
-			'custoemrId':   {
+			'customerId':   {
 				'id':    'customerId',
 				'title': 'Customer ID',
 				'width': 15

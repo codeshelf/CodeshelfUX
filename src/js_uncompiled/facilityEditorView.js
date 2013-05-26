@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: facilityEditorView.js,v 1.41 2013/04/07 07:16:38 jeffw Exp $
+ *  $Id: facilityEditorView.js,v 1.42 2013/05/26 21:52:20 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
@@ -639,6 +639,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			var editorPane = soy.renderAsElement(codeshelf.templates.facilityEditor);
 			goog.dom.appendChild(self.getMainPaneElement(), editorPane);
 			mapPane_ = goog.dom.query('.facilityMap', editorPane)[0];
+			google.maps.visualRefresh = true;
 			map_ = new google.maps.Map(mapPane_, myOptions);
 			map_.mapTypes.set('codeshelfMapStyle', new google.maps.StyledMapType(codeshelfMapStyle, { name: 'Codeshelf' }));
 			map_.setMapTypeId('codeshelfMapStyle');
