@@ -336,7 +336,7 @@
 		</exec>
 	</target>
 
-	<target name="deploy-unionrocket">
+	<target name="deploy-production">
 
 		<property name="webapp.hostname" value="codeshelf.unionrocket.com" />
 		<property name="compiler.options.optimization" value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
