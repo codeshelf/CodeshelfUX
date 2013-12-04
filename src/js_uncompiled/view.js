@@ -30,6 +30,7 @@ codeshelf.view = function(options) {
 	var subViews_ = {};
 	var pixelsPerMeter_;
 	var isInvalidated_ = false;
+	var uniqueIdFunc_ = goog.events.getUniqueId;
 
 	var mainPaneElement_;
 
@@ -50,7 +51,7 @@ codeshelf.view = function(options) {
 	/**
 	 * Initialize the view.
 	 */
-	viewId_ = goog.events.getUniqueId('view');
+	viewId_ = uniqueIdFunc_('view');
 
 	if (typeof options == 'object') {
 		options_ = $.extend(options_, options);

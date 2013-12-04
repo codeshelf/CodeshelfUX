@@ -39,6 +39,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 	var localUserCreatedMarker_ = false;
 	var geocoder_;
 	var googleField_;
+	var uniqueIdFunc_ = goog.events.getUniqueId;
 
 	var infoWindow_;
 	var totalBounds_;
@@ -621,7 +622,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			geocoder_.responseIndex = 0;
 			geocoder_.responseSet = [];
 
-			var fieldId = goog.events.getUniqueId('search');
+			var fieldId = uniqueIdFunc_('search');
 			var fieldElement = soy.renderAsElement(codeshelf.templates.dataObjectField,
 			                                       {id: fieldId, cssClass: 'windowField', label: 'Search for address'});
 			goog.dom.appendChild(self.getMainPaneElement(), fieldElement);
