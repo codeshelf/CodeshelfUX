@@ -46,6 +46,7 @@ codeshelf.websession = function() {
 	var application_;
 	var websocket_;
 	var currentPage_;
+	var uniqueIdFunc_ = goog.events.getUniqueId;
 
 	thisWebsession_ = {
 
@@ -93,7 +94,7 @@ codeshelf.websession = function() {
 
 		createCommand: function(commandType, data) {
 			var command = {
-				'id':   goog.events.getUniqueId('cid'),
+				'id':   uniqueIdFunc_('cid'),
 				'type': commandType,
 				'data': data
 			};

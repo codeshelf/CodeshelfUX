@@ -42,6 +42,7 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 	var titleLabel_ = titleLabel;
 	var inputElement_;
 	var googleField_;
+	var uniqueIdFunc_ = goog.events.getUniqueId;
 
 	thisDataObjectField_ = {
 
@@ -57,7 +58,7 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 				.websocketCmdCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP), true);
 
 			// Put the HTML markup in the parent element.
-			var fieldId = goog.events.getUniqueId('field');
+			var fieldId = uniqueIdFunc_('field');
 			var fieldElement = soy.renderAsElement(codeshelf.templates.dataObjectField, {
 				id:       fieldId,
 				cssClass: cssClass_,
