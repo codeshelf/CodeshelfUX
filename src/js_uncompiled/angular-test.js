@@ -1,14 +1,14 @@
 'use strict';
 
 var codeshelfApp = angular.module('codeshelfApp', [
+    'fundoo.services'
 
 ]);
 
 
 /* Controllers */
 
-    codeshelfApp.controller('WorkAreaCtrl', ['$scope',
-    function($scope) {
+    codeshelfApp.controller('WorkAreaCtrl', ['$scope', 'createDialog', function($scope, createDialogService) {
         $scope.master = {};
         $scope.user = {};
 
@@ -24,7 +24,17 @@ var codeshelfApp = angular.module('codeshelfApp', [
             return angular.equals(user, $scope.master);
         };
 
+        $scope.launchSimpleModal = function() {
+            createDialogService('simpleModal.html', {
+                id: 'simpleDialog',
+                title: 'A Simple Modal Dialog',
+                backdrop: true,
+                success: {label: 'Success', fn: function() {console.log('Simple modal closed');}}
+            });
+        };
+
         $scope.reset();
+
     }]);
 
 /*
