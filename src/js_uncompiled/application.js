@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  CodeShelfUX
  *  Copyright (c) 2005-2012, Jeffrey B. Williams, All rights reserved
- *  $Id: application.js,v 1.24 2012/12/07 08:58:02 jeffw Exp $
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *  $Id: application.js,v 1.24 2012/12/07 08:58:02 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.application');
 goog.require('codeshelf.login');
@@ -9,6 +9,12 @@ goog.require('codeshelf.mainpage');
 goog.require('codeshelf.websession');
 goog.require('domainobjects');
 goog.require('goog.dom');
+
+'use strict';
+
+var codeshelfApp = angular.module('codeshelfApp', [
+    'ui.bootstrap'
+]);
 
 var codeshelf = codeshelf || {}; // Identifies this file as the codeshelf base.
 
@@ -96,4 +102,3 @@ var gFocusedWindow = 0;
 // Launch the application.
 var application = codeshelf.application();
 application.startApplication();
-

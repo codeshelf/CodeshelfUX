@@ -9,7 +9,8 @@ module.exports = function(config){
       'src/js_uncompiled/deps.js',
       'lib/AngularJS/angular.js',
       'lib/AngularJS/angular-*.js',
-      'src/js_uncompiled/angular-test.js',
+      'lib/UIBootstrap/ui-bootstrap-tpls-0.7.0.js',
+      'src/js_uncompiled/codeshelf.controllers.js',
       'test/unit/**/*.js'
     ],
 
@@ -23,12 +24,14 @@ module.exports = function(config){
 
     frameworks: ['jasmine'],
 
-    browsers : ['Chrome'],
+    //browsers : ['Chrome'],
+    browsers : ['PhantomJS'],
 
     plugins : [
             'karma-junit-reporter',
             'karma-chrome-launcher',
             'karma-firefox-launcher',
+            'karma-phantomjs-launcher',
             'karma-script-launcher',
             'karma-jasmine'
             ],

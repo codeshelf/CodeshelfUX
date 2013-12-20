@@ -2,8 +2,9 @@
 
 <head>
   <script src="../../lib/AngularJS/angular.min.js" ></script>
-  <script src="../js_uncompiled/angular-test.js" ></script>
-    <script type="application/javascript" src="../../lib/AngularJSModalService/createDialog.js" ></script>
+    <script src="../../lib/UIBootstrap/ui-bootstrap-tpls-0.7.0.js"></script>
+    <link href="../../lib/TwitterBootstrap/bootstrap-combined.min.css" rel="stylesheet">
+    <script src="../js_uncompiled/angular-test.js" ></script>
     <style type="text/css">
       .css-form input.ng-invalid.ng-dirty {
         background-color: #FA787E;
@@ -18,6 +19,9 @@
 
 <body>
 {{ 1 +3 }}
+
+
+
 
     <div ng-controller="WorkAreaCtrl">
       <form name="form" class="css-form" novalidate>
@@ -41,10 +45,29 @@
         <button ng-click="reset()" ng-disabled="isUnchanged(user)">RESET</button>
         <button ng-click="update(user)"
                 ng-disabled="form.$invalid || isUnchanged(user)">SAVE</button>
-          <button ng-click="launchSimpleModal()" class="btn btn-large btn-danger">Simple Modal</button>
+          <button class="btn" ng-click="open()">Open me!</button>
       </form>
     <pre>form = {{user | json}}</pre>
     <pre>master = {{master | json}}</pre>
     </div>
+
+<script type="text/ng-template" id="workAreaModalContent.html">
+    <div class="modal-header">
+        <h3>I'm a modal!</h3>
+    </div>
+    <div class="modal-body">
+        <ul>
+            <li ng-repeat="item in items">
+                <a ng-click="selected.item = item">{{ item }}</a>
+            </li>
+        </ul>
+        Selected: <b>{{ selected.item }}</b>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancela</button>
+    </div>
+</script>
+
 </body>
 </html>

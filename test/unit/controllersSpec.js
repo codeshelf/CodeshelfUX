@@ -12,59 +12,38 @@ describe('Codeshelf controllers', function() {
   });
 
   beforeEach(module('codeshelfApp'));
-  //beforeEach(module('codeshelfServices'));
 
   describe('WorkAreaCtrl', function(){
-    var scope, ctrl, $httpBackend;
+    var $scope, $modal, $q, createController;
 
-    beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
-      $httpBackend = _$httpBackend_;
-      $httpBackend.expectGET('phones/phones.json').
-          respond([{name: 'Nexus S'}, {name: 'Motorola DROID'}]);
+    beforeEach(function() {
+        $modal = jasmine.createSpyObj('$modal', ['open']);
+        module(function($provide) {
+            $provide.value('$modal', $modal);
+        });
 
-      scope = $rootScope.$new();
-      ctrl = $controller('WorkAreaCtrl', {$scope: scope});
-    }));
+        inject(function(_$q_, $log, $rootScope, $controller) {
+            $q = _$q_;
 
-    it('should create empty master', function() {
-      expect(scope.master).toEqualData({});
+            $scope = $rootScope.$new();
+
+            createController = function() {
+                return $controller('WorkAreaCtrl', {
+                    '$scope': $scope,
+                    '$modal': $modal,
+                    '$log': $log
+                });
+            };
+        })
     });
 
-/*
-    it('should set the default value of orderProp model', function() {
-      expect(scope.orderProp).toBe('age');
+    it('should have a method to open a dialog', function() {
+      var deferred;
+      $modal.open.andCallFake(function () { deferred = $q.defer(); return {result: deferred.promise}; });
+      var controller = createController();
+      $scope.open({}, {}, {});
     });
-    */
+
+
   });
-
-    /*
-
-  describe('PhoneDetailCtrl', function(){
-    var scope, $httpBackend, ctrl,
-        xyzPhoneData = function() {
-          return {
-            name: 'phone xyz',
-                images: ['image/url1.png', 'image/url2.png']
-          }
-        };
-
-
-    beforeEach(inject(function(_$httpBackend_, $rootScope, $routeParams, $controller) {
-      $httpBackend = _$httpBackend_;
-      $httpBackend.expectGET('phones/xyz.json').respond(xyzPhoneData());
-
-      $routeParams.phoneId = 'xyz';
-      scope = $rootScope.$new();
-      ctrl = $controller('PhoneDetailCtrl', {$scope: scope});
-    }));
-
-
-    it('should fetch phone detail', function() {
-      expect(scope.phone).toEqualData({});
-      $httpBackend.flush();
-
-      expect(scope.phone).toEqualData(xyzPhoneData());
-    });
-  });
-  */
 });
