@@ -10,11 +10,12 @@ goog.require('codeshelf.websession');
 goog.require('domainobjects');
 goog.require('goog.dom');
 
-'use strict';
-
-var codeshelfApp = angular.module('codeshelfApp', [
-    'ui.bootstrap'
-]);
+// TODO Insert angular js into the app
+// 'use strict';
+//
+//var codeshelfApp = angular.module('codeshelfApp', [
+//    'ui.bootstrap'
+//]);
 
 var codeshelf = codeshelf || {}; // Identifies this file as the codeshelf base.
 
