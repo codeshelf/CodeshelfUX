@@ -1,27 +1,35 @@
-/**
- * Created by pmonteiro on 12/17/13.
- */
+/*******************************************************************************
+ *  CodeShelfUX
+ *  Copyright (c) 2005-2013, Jeffrey B. Williams, All rights reserved
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *  $Id: application.js,v 1.24 2012/12/07 08:58:02 jeffw Exp $
+ *******************************************************************************/
+goog.provide('codeshelf.controllers');
+goog.require('codeshelf.application');
 
 'use strict';
 
 var codeshelfApp = angular.module('codeshelfApp', [
-    'ui.bootstrap'
+        'ui.bootstrap'
+    ]).factory('$websession', function() {
+        return application.getWebsession();
+    });
 
-]);
-
-var WorkAreaCtrl = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', '$log', function($scope, $modal, $log) {
+var WorkAreaCtrl = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', '$websession', '$log', function($scope, $modal, $websession, $log) {
     var consts = {};
     Object.defineProperty(consts, 'feetInMeters', {value: 0.3048,
         writable:                                         false,
         enumerable:                                       true,
         configurable:                                     true});
 
-    $scope.open = function (facility, startDragPoint, currentRect) {
+    $scope.open = function (facilityContext, pixelsPerMeter, startDragPoint, currentRect, commandCallback) {
         //TODO facility might be able to come from a parent controller
-        $scope.facility_ = facility;
-        $scope.startDragPoint_ = startDragPoint;
+        $scope.facilityContext = facilityContext;
+        $scope.pixelsPerMeter = pixelsPerMeter;
+        $scope.startDragPoint = startDragPoint;
         $scope.currentRect_ = currentRect;
+        $scope.commandCallback = commandCallback;
         $scope.aisleForm = {};
+        $scope.websession = $websession;
         var modalInstance = $modal.open({
             templateUrl: 'createAisleModalContent.html',
             controller: ModalInstanceCtrl,
@@ -33,18 +41,26 @@ var WorkAreaCtrl = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', 
         });
 
         modalInstance.result.then(function (aisleForm) {
-            var aisle  = $scope.convertData(aisleForm);
-            $log.info('aisle obj: ' + angular.toJson(aisle));
-            $scope.sendCreateAisleCommand(aisle);
+            $scope.onSave(aisleForm);
         }, function () {
             $log.info('Modal dismissed at: ' + new Date());
         });
     };
 
+    $scope.pixelsToMeter = function (pixels) {
+        return (pixels / this.pixelsPerMeter);
+    }
+
+    $scope.onSave = function (aisleForm) {
+        var aisle  = $scope.convertData(aisleForm);
+        $log.info('aisle obj: ' + angular.toJson(aisle));
+        $scope.sendCreateAisleCommand(aisle);
+    };
+
     $scope.convertData = function (aisleForm) {
         var aisle = {};
-        aisle.xOriginMeters = $scope.startDragPoint_.x / self.getPixelsPerMeter();
-        aisle.yOriginMeters = $scope.startDragPoint_.y / self.getPixelsPerMeter();
+        aisle.xOriginMeters = $scope.pixelsToMeter(this.startDragPoint.x);
+        aisle.yOriginMeters = $scope.pixelsToMeter(this.startDragPoint.y);
 
         aisle.aisleId = aisleForm['aisleId'];
         aisle.bayHeight = aisleForm['bayHeight'] * consts['feetInMeters'];
@@ -65,8 +81,8 @@ var WorkAreaCtrl = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', 
     $scope.sendCreateAisleCommand = function(aisle) {
         // Call Facility.createAisle();
         var data = {
-            'className':    domainobjects['Facility']['className'],
-            'persistentId': $scope.facility_['persistentId'],
+            'className':    $scope.facilityContext.className,
+            'persistentId': $scope.facilityContext.facility['persistentId'],
             'methodName':   'createAisle',
             'methodArgs':   [
                 { 'name': 'inAisleId', 'value': aisle.aisleId, 'classType': 'java.lang.String'},
@@ -82,10 +98,8 @@ var WorkAreaCtrl = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', 
             ]
         };
 
-        var createAisleCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
-        websession_.sendCommand(createAisleCmd,
-            websocketCmdCallbackFacility(kWebSessionCommandType.OBJECT_METHOD_REQ),
-            true);
+        var createAisleCmd = $scope.websession.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+        $scope.websession.sendCommand(createAisleCmd, $scope.commandCallback, true);
     };
 
 }]);

@@ -10,6 +10,8 @@ module.exports = function(config){
       'lib/AngularJS/angular.js',
       'lib/AngularJS/angular-*.js',
       'lib/UIBootstrap/ui-bootstrap-tpls-0.7.0.js',
+      //'src/js_uncompiled/application.js',
+      'src/js_uncompiled/websession.js',
       'src/js_uncompiled/codeshelf.controllers.js',
       'test/unit/**/*.js'
     ],

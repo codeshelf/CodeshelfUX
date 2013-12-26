@@ -48,7 +48,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 	function createAisle() {
         //TODO utilize angular but not in this hacky way
-        // angular.element($('body')).scope().open(facility, startDragPoint_, currentRect_);
+        // angular.element($('body')).scope().open(facility, startDragPoint_, currentRect_, websocketCmdCallbackFacility(kWebSessionCommandType.OBJECT_METHOD_REQ));
 		Object.defineProperty(consts, 'feetInMeters', {value: 0.3048,
 			writable:                                         false,
 			enumerable:                                       true,
