@@ -43,10 +43,11 @@ describe('Codeshelf controllers', function() {
     });
 
     describe('when the dialog is saved ', function() {
-      var fakeCommand;
-      var facilityContext, commandCallback;
+        var fakeCommand;
+        var facilityContext, commandCallback;
+        var rectangle;
 
-      beforeEach(function(){
+        beforeEach(function(){
           fakeCommand = {"same":"same"};
 
           $websession.createCommand.andCallFake(function() { return fakeCommand});
@@ -56,21 +57,26 @@ describe('Codeshelf controllers', function() {
               className:  "FACILITYCLASS"
           };
           var dragPoint = {
-              x: 23,
-              y: 45
+              x: 48,
+              y: 24
           };
-          var rectangle = {
+          rectangle = {
               width: 10,
               height: 12
           };
 
           commandCallback = function() {};
           var aisleForm = {
+              'aisleId': '1A',
+	      'bayHeight': 3,
               'bayWidth': 2,
-              'bayDepth' : 1
+              'bayDepth' : 1,
+	      'baysHigh' : 4,
+	      'baysLong' : 5,
+	      'opensLowSide' : 'true'
 
           };
-          $scope.open(facilityContext, 3, dragPoint, rectangle, commandCallback);
+          $scope.open(facilityContext, 6, dragPoint, rectangle, commandCallback);
           $scope.onSave(aisleForm);
 
       });
@@ -85,13 +91,50 @@ describe('Codeshelf controllers', function() {
               expect(data.className).toEqual(facilityContext.className);
           });
 
+          it("should convert xOriginMeters from pixels to meters", function(){
+              expect(data.methodArgs[1].value).toEqual(48 / 6);
+          });
+
+          it("should convert yOriginMeters from pixels to meters", function(){
+              expect(data.methodArgs[2].value).toEqual(24 / 6);
+          });
+          
+          
           it("should convert bayWidth to meters", function(){
-              expect(data.methodArgs[3].value).toEqual(0.6096);
+              expect(data.methodArgs[3].value).toEqual(2 * 0.3048);
           });
 
           it("should convert bayDepth to meters", function() {
-              expect(data.methodArgs[4].value).toEqual(0.3048);
+              expect(data.methodArgs[4].value).toEqual(1 * 0.3048);
           });
+
+          it("should convert bayHeight to meters", function() {
+              expect(data.methodArgs[5].value).toEqual(3 * 0.3048);
+          });
+
+          it("should transfer  baysHigh", function() {
+              expect(data.methodArgs[6].value).toEqual(4);
+          });
+
+          it("should transfer baysLong", function() {
+              expect(data.methodArgs[7].value).toEqual(5);
+          });
+
+          it("should transfer opensLowSide", function() {
+              expect(data.methodArgs[9].value).toEqual('true');
+          });
+
+          it("should have an aisle id", function(){
+              expect(data.methodArgs[0].name).toEqual('inAisleId');
+              expect(data.methodArgs[0].value).toEqual('1A');
+          });
+
+          it("should set runInXDim to false if rectangle is higher than width", function() {
+              expect(rectangle.height).toBeGreaterThan(rectangle.width);
+              expect(data.methodArgs[8].value).toEqual(false);
+          });
+
+
       });
 
       it("should call sendCommand with command and callback", function() {

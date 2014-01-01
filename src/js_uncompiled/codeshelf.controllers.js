@@ -3,8 +3,6 @@
  *  Copyright (c) 2005-2013, Jeffrey B. Williams, All rights reserved
  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *  $Id: application.js,v 1.24 2012/12/07 08:58:02 jeffw Exp $
  *******************************************************************************/
-goog.provide('codeshelf.controllers');
-goog.require('codeshelf.application');
 
 'use strict';
 
@@ -12,7 +10,23 @@ var codeshelfApp = angular.module('codeshelfApp', [
         'ui.bootstrap'
     ]).factory('$websession', function() {
         return application.getWebsession();
-    });
+    })
+    /*.config(['$routeProvider',
+        function($routeProvider) {
+            $routeProvider.
+                when('/login', {
+                    templateUrl: 'partials/login.html',
+                    controller: 'LoginCtrl'
+                }).
+                when('/main', {
+                    templateUrl: 'partials/main.html',
+                    controller: 'MainlCtrl'
+                }).
+                otherwise({
+                    redirectTo: '/login'
+                });
+        }])
+        */;
 
 var WorkAreaCtrl = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', '$websession', '$log', function($scope, $modal, $websession, $log) {
     var consts = {};
