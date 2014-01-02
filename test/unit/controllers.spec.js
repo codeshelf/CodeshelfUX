@@ -3,7 +3,9 @@
 /* jasmine specs for controllers go here */
 describe('Codeshelf controllers', function() {
 
+  /* Run before each describe and it function */
   beforeEach(function(){
+      //Include all modules required for controller under test
       module('codeshelfApp');
   });
 
@@ -11,17 +13,24 @@ describe('Codeshelf controllers', function() {
     var $scope, $modal, $websession, $q, createController;
 
     beforeEach(function() {
+        // Create spys for mock objects and list the methods you are going to fake
         $websession = jasmine.createSpyObj('$websession', ['createCommand', 'sendCommand']);
         $modal = jasmine.createSpyObj('$modal', ['open']);
         var deferred;
+
+        // Create fake stubs for the methods
         $modal.open.andCallFake(function () { deferred = $q.defer(); return {result: deferred.promise}; });
 
+        // Set up a module that provides your spy objects to the injector
         module(function($provide) {
             $provide.value('$websession', $websession);
             $provide.value('$modal', $modal);
         });
 
-
+        //Inject will look up your services and mocks and provide them to the function from which you can create
+        // closures to create controllers properly
+        // the underscore variables are a way to keep from colliding with vars in your environment, yet still look up
+        //   service by name
         inject(function(_$q_, $log, $rootScope, $controller, _$modal_, _$websession_) {
             $q = _$q_;
             $scope = $rootScope.$new();
