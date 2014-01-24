@@ -57,73 +57,18 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
           'facility':  facility,
           'className': domainobjects['Facility']['className']
         };
-        angular.element($('body')).scope().open(facilityContext, self.getPixelsPerMeter(), startDragPoint_, currentRect_, websocketCmdCallbackFacility(kWebSessionCommandType.OBJECT_METHOD_REQ));
+		var aisleShape = {
+			pixelsPerMeter: self.getPixelsPerMeter(),
+			dragStartPoint: startDragPoint_,
+			rectangle: currentRect_
+		};
+        angular.element($('body')).scope().open(facilityContext, aisleShape);
          //control is now transferred to Angular
 		Object.defineProperty(consts, 'feetInMeters', {value: 0.3048,
 			writable:                                         false,
 			enumerable:                                       true,
 			configurable:                                     true});
 
-/*  TODO remove after code review
-		var buttonSet = new goog.ui.Dialog.ButtonSet().
-			addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE).
-			addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
-
-		var dataEntryDialog = codeshelf.dataentrydialog('Create Aisle', buttonSet);
-		var dialogContentElement = soy.renderAsElement(codeshelf.templates.createAisleDialogContent);
-		dataEntryDialog.setupDialog(dialogContentElement);
-		dataEntryDialog.createField('aisleId', 'text', true);
-		dataEntryDialog.createField('bayHeight', 'text');
-		dataEntryDialog.createField('bayWidth', 'text');
-		dataEntryDialog.createField('bayDepth', 'text');
-		dataEntryDialog.createField('baysHigh', 'text');
-		dataEntryDialog.createField('baysLong', 'text');
-		dataEntryDialog.createField('opensLowSide', 'checkbox');
-		dataEntryDialog.open(function(event, dialog) {
-			                     if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE.key) {
-				                     var xOriginMeters = startDragPoint_.x / self.getPixelsPerMeter();
-				                     var yOriginMeters = startDragPoint_.y / self.getPixelsPerMeter();
-
-				                     var aisleId = dialog.getFieldValue('aisleId');
-				                     var bayHeight = dialog.getFieldValue('bayHeight') * consts['feetInMeters'];
-				                     var bayWidth = dialog.getFieldValue('bayWidth') * consts['feetInMeters'];
-				                     var bayDepth = dialog.getFieldValue('bayDepth') * consts['feetInMeters'];
-				                     var baysHigh = dialog.getFieldValue('baysHigh');
-				                     var baysLong = dialog.getFieldValue('baysLong');
-				                     var opensLowSide = dialog.getFieldValue('opensLowSide');
-
-
-				                     var runInXDim = true;
-				                     if (currentRect_.width < currentRect_.height) {
-					                     runInXDim = false;
-				                     }
-
-				                     // Call Facility.createAisle();
-				                     var data = {
-					                     'className':    domainobjects['Facility']['className'],
-					                     'persistentId': facility_['persistentId'],
-					                     'methodName':   'createAisle',
-					                     'methodArgs':   [
-						                     { 'name': 'inAisleId', 'value': aisleId, 'classType': 'java.lang.String'},
-						                     { 'name': 'inPosXMeters', 'value': xOriginMeters, 'classType': 'java.lang.Double'},
-						                     { 'name': 'inPosYMeters', 'value': yOriginMeters, 'classType': 'java.lang.Double'},
-						                     { 'name': 'inProtoBayXDimMeters', 'value': bayWidth, 'classType': 'java.lang.Double'},
-						                     { 'name': 'inProtoBayYDimMeters', 'value': bayDepth, 'classType': 'java.lang.Double'},
-						                     { 'name': 'inProtoBayZDimMeters', 'value': bayHeight, 'classType': 'java.lang.Double'},
-						                     { 'name': 'inProtoBaysHigh', 'value': baysHigh, 'classType': 'java.lang.Integer'},
-						                     { 'name': 'inProtoBaysLong', 'value': baysLong, 'classType': 'java.lang.Integer'},
-						                     { 'name': 'inRunInXDir', 'value': runInXDim, 'classType': 'java.lang.Boolean'},
-						                     { 'name': 'inOpensLowSide', 'value': opensLowSide, 'classType': 'java.lang.Boolean'}
-					                     ]
-				                     };
-
-				                     var createAisleCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
-				                     websession_.sendCommand(createAisleCmd,
-				                                             websocketCmdCallbackFacility(kWebSessionCommandType.OBJECT_METHOD_REQ),
-				                                             true);
-			                     }
-		                     }
-		);*/
 	}
 
 	function computeDistanceMeters(latArg1, lonArg1, latArg2, lonArg2) {

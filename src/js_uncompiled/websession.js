@@ -15,6 +15,7 @@ if (typeof MozWebSocket !== 'undefined') {
 }
 
 var kWebSessionCommandType = {
+	INVALID:              'INVALID',
 	LOGIN_REQ:            'LOGIN_RQ',
 	LOGIN_RESP:           'LOGIN_RS',
 	OBJECT_GETTER_REQ:    'OBJ_GET_RQ',
