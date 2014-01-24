@@ -2,3 +2,6 @@ target
 bin
 /bin
 *.pyc
+/node_modules/.bin/karma
+/node_modules
+*.js~
