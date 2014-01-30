@@ -67,7 +67,7 @@
 @def FACILITY_ICON_BACKGROUND				WINDOW_BACKGROUND_DARK_COLOR;
 
 /* 32px + 2px each side for spacing. */
-@def FACILITY_TOOLBAR_WIDTH					36px;  
+@def FACILITY_TOOLBAR_WIDTH					36px;
 @def FACILITY_TOOLBAR_HEIGHT				36px;
 
 @defmixin FLEX_BOX(COUNT) {
@@ -176,11 +176,21 @@
 }
 
 #loginPanel {
-	width:				325px;
-	height:				75px;
 	position:			absolute;
 	top:				20%;
 	left:				10%;
+}
+
+#loginPanel form {
+	margin-top: 25px;
+}
+
+#loginPanel .control-label {
+	width: 100px;
+}
+
+#loginPanel .controls {
+	margin-left: 120px;
 }
 
 #logoBox {
@@ -288,7 +298,7 @@
 .toolbar {
 	position:			relative;
 	@mixin				FLEX_BOX(1);
-	@mixin				DISPLAY_BOX(horizontal); 
+	@mixin				DISPLAY_BOX(horizontal);
 }
 
 /* Drag-select classes --------------------------------------------------------------- */
@@ -644,9 +654,9 @@ div.jquery-drag-to-select.active {
       padding: 0;
       outline: none;
     }
-    
+
  /* Context menu classes --------------------------------------------------------------- */
- 
+
 .contextMenu {
 	background: #e1efc7;
 	border: 1px solid gray;
@@ -668,7 +678,7 @@ div.jquery-drag-to-select.active {
 .contextMenu li:hover {
   background-color: white;
 }
-    
+
 .cell-reorder {
 	cursor: move;
 	background: url("../images/drag-handle.png") no-repeat center center;
