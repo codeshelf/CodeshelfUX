@@ -43,19 +43,21 @@
  */
 {template .loginDialog}
 <img id="background_image" class="background_image" src="../images/STS-125.jpg" alt="">
-<div id='loginPanel'>
-	<div class='goog-roundedpanel-content'>
-		<div class='dialogLabel' style='margin-top: 18px; margin-left: 30px;'>
-			<form action='' autocomplete='on' >
-				<label class='dialogLabel' style='margin-top: 8px; float:left;'>Login:</label>
-				<input type='email' required id='userIdInput' class='dialogField' value='{LOGIN_ID}' style='margin-right: 25px; width:200px; float:right' autocomplete='on' autofocus />
-				</br>
-				<label class='dialogLabel' style='margin-top: 8px; float:left;'>Password:</label>
-				<input type='password' required id='passwordInput' class='dialogField' value='{LOGIN_PW}' style='margin-right: 25px; width:200px; float:right' autocomplete='on'/>
-//				<input type="submit" style="visibility: hidden;" onclick='function() &#123; return false; &#124;/>
-			</form>
-		</div>
-	</div>
+<div id="loginPanel" class="panel panel-default" >
+<form class="form-horizontal" role="form">
+  <div class="control-group">
+  	  <label for="userIdInput" class="control-label">Login:</label>
+    <div class="controls">
+	  <input type='email' required id='userIdInput' class='formControl' value='{LOGIN_ID}' autocomplete='on' placeholder="Email" autofocus />
+    </div>
+  </div>
+  <div class="control-group">
+	  <label class="control-label" for="passwordInput" >Password:</label>
+      <div class="controls">
+	  <input type='password' required id='passwordInput' class="formControl" value='{LOGIN_PW}' autocomplete='on'/>
+    </div>
+  </div>
+</form>
 </div>
 {/template}
 
@@ -262,5 +264,3 @@
 	</div>
 </div>
 {/template}
-
-
