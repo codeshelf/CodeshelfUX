@@ -191,7 +191,7 @@
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/JQuery" value="../lib/JQuery" />
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/Raphael" value="../lib/Raphael" />
 		<echo file="${target.compiled.js.dir}/codeshelf.js" append="true">
-//@ sourceMappingURL=codeshelf.map</echo>
+//# sourceMappingURL=/js/codeshelf.map</echo>
 	</target>
 
 	<!-- Plovr builder. /-->
@@ -208,7 +208,7 @@
 			<arg value="${target.compiled.js.dir}/codeshelf.map" />
 		</java>
 		<echo file="${target.compiled.js.dir}/codeshelf.js" append="true">
-//@ sourceMappingURL=codeshelf.map</echo>
+//# sourceMappingURL=/js/codeshelf.map</echo>
 	</target>
 
 	<!-- Build the web app from the compiled pieces. /-->
@@ -338,7 +338,7 @@
 
 	<target name="deploy-production">
 
-		<property name="webapp.hostname" value="codeshelf.unionrocket.com" />
+		<property name="webapp.hostname" value="login.codeshelf.io" />
 		<property name="compiler.options.optimization" value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
 		<property name="compiler.options.format" value="--compiler_flags=--source_map_format=V3" />
 		<property name="compiler.options.map" value="--compiler_flags=--create_source_map=${target.compiled.js.dir}/codeshelf.map" />
@@ -349,11 +349,7 @@
 		<antcall target="build.webapp">
 		</antcall>
 
-		<input message="SCP password:" addproperty="scp.password">
-			<!--handler classname="org.apache.tools.ant.input.SecureInputHandler" /-->
-		</input>
-
-		<scp todir="codeshelf:${scp.password}@198.101.238.245:/opt/codeshelf/web/app" verbose="true">
+		<scp todir="codeshelf@login.codeshelf.io:/opt/codeshelf/web/app" verbose="true" keyfile="${user.home}/.ssh/codeshelf">
 			<fileset dir="${target.web.dir}">
 				<include name="**/*" />
 				<exclude name="**/*.map" />
@@ -365,8 +361,11 @@
 	</target>
 
 	<target name="deploy-localhost">
+		
+		<hostinfo/>
+		<echo>Host addr: ${ADDR4} </echo>
 
-		<property name="webapp.hostname" value="localhost" />
+		<property name="webapp.hostname" value="${ADDR4}" />
 		<property name="compiler.options.optimization" value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
 		<property name="compiler.options.format" value="--compiler_flags=--source_map_format=V3" />
 		<property name="compiler.options.map" value="--compiler_flags=--create_source_map=${target.compiled.js.dir}/codeshelf.map" />
