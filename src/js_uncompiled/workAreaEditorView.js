@@ -27,6 +27,9 @@ goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.ui.Dialog');
 goog.require('raphael');
+//goog.require('uibootstrap');
+//goog.require('angular');
+//goog.require('angular.route');
 
 /**
  * The facility in pixel space (instead of GPS space) where the user can work on it in a normal size/orientation.
