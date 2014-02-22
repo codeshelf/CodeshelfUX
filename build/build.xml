@@ -373,11 +373,12 @@
 	</target>
 
 	<target name="deploy-localhost">
-		
-		<hostinfo/>
+
+		<hostinfo />
 		<echo>Host addr: ${ADDR4} </echo>
 
-		<property name="webapp.hostname" value="${ADDR4}" />
+		<!--property name="webapp.hostname" value="${ADDR4}" /-->
+		<property name="webapp.hostname" value="localhost" />
 		<property name="compiler.options.optimization" value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
 		<property name="compiler.options.format" value="--compiler_flags=--source_map_format=V3" />
 		<property name="compiler.options.map" value="--compiler_flags=--create_source_map=${target.compiled.js.dir}/codeshelf.map" />

@@ -1,10 +1,11 @@
 /*******************************************************************************
  *	CodeShelfUX
  *	Copyright (c) 2005-2013, Jeffrey B. Williams, All rights reserved
- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ *  $Id: application.js,v 1.24 2012/12/07 08:58:02 jeffw Exp $
+ *  $Id: application.js,v 1.24 2012/12/07 08:58:02 jeffw Exp $
  *******************************************************************************/
 
 'use strict';
+goog.provide('codeshelf.controllers');
 goog.require('codeshelf.websession');
 
 var codeshelfApp = angular.module('codeshelfApp', [
@@ -29,43 +30,13 @@ var codeshelfApp = angular.module('codeshelfApp', [
 		}])
 		*/;
 
-var WorkAreaCtrl = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', '$log', function($scope, $modal, $log) {
-
-	$scope.open = function (facilityContext, aisleShape) {
-		//TODO facility might be able to come from a parent controller
-		var modalInstance = $modal.open({
-			templateUrl: 'createAisleModalContent.html',
-			controller: WorkAreaModalCtrl,
-			resolve: {
-				facilityContext: function() {
-					return facilityContext;
-				},
-				aisleShape: function () {
-					return aisleShape;
-				}
-			}
-		});
-
-		modalInstance.result.then(function (aisleData) {
-			$log.info('Modal saved at: ' + new Date());
-		}, function () {
-			$log.info('Modal dismissed at: ' + new Date());
-		});
-
-	};
-
-}]);
-
-
-
-
-var WorkAreaModalCtrl = function ($scope, $log, $modalInstance, $websession, facilityContext, aisleShape) {
+var temp1 = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', '$log', '$modalInstance', '$websession', 'facilityContext', 'aisleShape', function($scope, $log, $modalInstance, $websession, facilityContext, aisleShape) {
 
 	var consts = {};
-	Object.defineProperty(consts, 'feetInMeters', {value: 0.3048,
-		writable:      false,
-		enumerable:    true,
-		configurable:  true});
+	Object.defineProperty(consts, 'feetInMeters', {'value': 0.3048,
+		'writable':      false,
+		'enumerable':    true,
+		'configurable':  true});
 
 	$scope.aisleForm = {};
 	$scope.aisleForm = {
@@ -159,5 +130,32 @@ var WorkAreaModalCtrl = function ($scope, $log, $modalInstance, $websession, fac
 		};
 		$scope.websession.sendCommand(createAisleCmd, callback, true);
    };
+}]);
 
-};
+var temp2 = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', '$log', function($scope, $modal, $log) {
+
+	$scope.open = function (facilityContext, aisleShape) {
+		//TODO facility might be able to come from a parent controller
+		var modalInstance = $modal.open({
+			'templateUrl': 'createAisleModalContent.html',
+			'controller': temp1.controller,
+			'resolve': {
+				'facilityContext': function() {
+					return facilityContext;
+				},
+				'aisleShape': function () {
+					return aisleShape;
+				}
+			}
+		});
+
+		modalInstance.result.then(function (aisleData) {
+			$log.info('Modal saved at: ' + new Date());
+		}, function () {
+			$log.info('Modal dismissed at: ' + new Date());
+		});
+
+	};
+
+}]);
+

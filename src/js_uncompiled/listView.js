@@ -145,7 +145,7 @@ codeshelf.listview = function(viewName, websession, domainObject, filterClause, 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 
-			menu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document.body);
+			menu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
 			menu_.bind('mouseleave', function(e) {
 				$(this).fadeOut(5)
 			});

@@ -33,7 +33,7 @@ codeshelf.application = function() {
 		gFocusedWindow = 0;
 
 		// Remove all markup from the URL - we'll build it from the app itself.
-		goog.dom.removeChildren(goog.dom.getDocument().body);
+		goog.dom.removeChildren(goog.dom.getDocument()['body']);
 		loginWindow_ = codeshelf.loginWindow();
 		loginWindow_.enter(self, webSession_);
 

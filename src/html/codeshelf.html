@@ -1,44 +1,84 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<title>Codeshelf</title>
-	<meta charset="utf-8">
-	<link rel="stylesheet" href="./css/roundedpanel.css">
-	<link rel="stylesheet" href="./css/menu.css">
-	<link rel="stylesheet" href="./css/menuitem.css">
-	<link rel="stylesheet" href="./css/checkbox.css">
-	<link rel="stylesheet" href="./css/menuseparator.css">
-	<link rel="stylesheet" href="./css/tree.css">
-	<link rel="stylesheet" href="./css/toolbar.css">
-	<link rel="stylesheet" href="./css/slick.grid.css" type="text/css" media="screen"/>
-	<link rel="stylesheet" href="./css/slick.pager.css" type="text/css" media="screen"/>
-	<link rel="stylesheet" href="./css/slick.columnpicker.css" type="text/css" media="screen"/>
-	<link rel="stylesheet" href="./css/jquery-ui-1.8.16.custom.css" type="text/css" media="screen"/>
-	<link rel="stylesheet" href="./css/codeshelf.css" type="text/css" media="screen"/>
-	<link rel="stylesheet" href="./css/listview.css" type="text/css" media="screen"/>
-	<link rel="stylesheet" href="./css/slick-default-theme.css" type="text/css" media="screen"/>
-	<!--script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script-->
-	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-	<link rel="icon" href="./favicon.gif" />
-</head>
-<body id="body" class="login_body">
+<html ng-app="codeshelfApp">
+	<head>
+		<title>Codeshelf</title>
+		<meta charset="utf-8">
+        <link rel="stylesheet" href="./css/bootstrap-combined.min.css">
+		<link rel="stylesheet" href="./css/roundedpanel.css">
+		<link rel="stylesheet" href="./css/menu.css">
+		<link rel="stylesheet" href="./css/menuitem.css">
+		<link rel="stylesheet" href="./css/menuseparator.css">
+		<link rel="stylesheet" href="./css/checkbox.css">
+		<link rel="stylesheet" href="./css/dialog.css">
+		<link rel="stylesheet" href="./css/toolbar.css">
+		<link rel="stylesheet" href="./css/tree.css">
+		<link rel="stylesheet" href="./css/slick.grid.css" type="text/css" media="screen"/>
+		<link rel="stylesheet" href="./css/slick.pager.css" type="text/css" media="screen"/>
+		<link rel="stylesheet" href="./css/jquery-ui-1.8.16.custom.css" type="text/css" media="screen"/>
+		<link rel="stylesheet" href="./css/slick.columnpicker.css" type="text/css" media="screen"/>
+		<link rel="stylesheet" href="./css/codeshelf.css" type="text/css" media="screen"/>
+		<link rel="stylesheet" href="./css/listview.css" type="text/css" media="screen"/>
+		<link rel="stylesheet" href="./css/slick-default-theme.css" type="text/css" media="screen"/>
+		<!--script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script-->
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-<script src="../../lib/AngularJS/angular.min.js" ></script>
-<script src="../../lib/AngularJS/angular-route.min.js"></script>
-<script src="../../lib/UIBootstrap/ui-bootstrap-tpls-0.7.0.js"></script>
+		<script src="./lib/AngularJS/angular.js" ></script>
+		<script src="./lib/AngularJS/i18n/angular-locale_en-us.js"></script>
+		<script src="./lib/AngularJS/angular-route.js"></script>
+		<script src="./lib/UIBootstrap/ui-bootstrap-tpls-0.7.0.js"></script>
 
-<script type="text/javascript" src="./js/codeshelf.js"></script>
+		<link rel="icon" href="./favicon.gif" />
+	</head>
+	<body id="body" class="login_body" ng-controller="WorkAreaCtrl">
+	
+		<!-- Start the codeshelf application -->
+		<script type="text/javascript" src="./js/codeshelf.js"></script>
 
-<script>
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		<!--script type="text/javascript">
+			goog.require('codeshelf.application');
+			goog.require('codeshelf.controllers');
+		</script-->
+		
+		<!--script type="text/javascript" src="../js_uncompiled/codeshelf.controllers.js"></script-->
+		<div ng-view></div>
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+					m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-	ga('create', 'UA-39694820-1', 'codeshelf.io');
-	ga('send', 'pageview');
+			ga('create', 'UA-39694820-1', 'codeshelf.io');
+			ga('send', 'pageview');
 
-</script>
+		</script>
 
-</body>
+		<script type="text/ng-template" id="createAisleModalContent.html">
+			<div class="modal-header">
+				<h3>Create Aisle</h3>
+			</div>
+			<div class="modal-body">
+			  <div class="alert alert-danger" ng-repeat="msg in aisleForm.messages">{{msg}}</div>
+				<div id='instructions'>
+					Describe the bays on this aisle.  (You can adjust the oddballs later.)
+				</div>
+				<br>
+				<div class='dialogFields modal-dialog-content'>
+					<table>
+						<tr><td>Aisle ID: </td><td><input id='aisleId' class='aisleId' label='' autofocus ng-model="aisleForm.aisleId"/></td></tr>
+						<tr><td>Bay Height: </td><td><input id='bayHeight' class='bayHeight' label='Feet' placeholder="Feet" ng-model="aisleForm.bayHeight"/></td></tr>
+						<tr><td>Bay Width: </td><td><input id='bayWidth' class='bayWidth' label='Feet' placeholder="Feet" ng-model="aisleForm.bayWidth"/></td></tr>
+						<tr><td>Bay Depth: </td><td><input id='bayDepth' class='bayDepth' label='Feet' placeholder="Feet" ng-model="aisleForm.bayDepth"/></td></tr>
+						<tr><td>Bays High: </td><td><input id='baysHigh' class='baysHigh' label='Num' placeholder="Num" ng-model="aisleForm.baysHigh"/></td></tr>
+						<tr><td>Bays Long: </td><td><input id='baysLong' class='baysLong' label='Num' placeholder="Num" ng-model="aisleForm.baysLong"/></td></tr>
+					</table>
+					<br>
+					<div>Opens Top or Left: <input id="opensLowSide" type="checkbox" class="opensLowSide" ng-model="aisleForm.opensLowSide" value="true"  ng-true-value="true" ng-false-value="false"></div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" ng-click="ok()">OK</button>
+				<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+			</div>
+		</script>
+	</body>
 </html>

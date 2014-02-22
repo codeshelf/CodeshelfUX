@@ -117,7 +117,7 @@ codeshelf.ordersview = function(websession, facility) {
 		},
 
 		setupContextMenu: function() {
-			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document.body);
+			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
 			contextMenu_.bind('mouseleave', function(event) {
 				$(this).fadeOut(5)
 			});

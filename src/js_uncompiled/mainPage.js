@@ -116,8 +116,8 @@ codeshelf.mainpage = function() {
 
 			websession_.setCurrentPage(this);
 
-			goog.dom.setProperties(goog.dom.getDocument().body, {'class': 'main_body'});
-			goog.dom.appendChild(goog.dom.getDocument().body, soy.renderAsElement(codeshelf.templates.mainPage));
+			goog.dom.setProperties(goog.dom.getDocument()['body'], {'class': 'main_body'});
+			goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.mainPage));
 
 			frame_ = goog.dom.query('.frame')[0];
 			frame_.style.top = frameTop_ + 5 + 'px';

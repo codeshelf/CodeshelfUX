@@ -5,12 +5,8 @@
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
-
-
-//goog.require('codeshelf.controllers');
-
-
 goog.require('codeshelf.aisleview');
+goog.require('codeshelf.controllers');
 goog.require('codeshelf.dataentrydialog');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
@@ -55,23 +51,28 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	var consts = {};
 
 	function createAisle() {
-        //TODO utilize angular but not in this hacky way
-        var facilityContext = {
-          'facility':  facility,
-          'className': domainobjects['Facility']['className']
-        };
+		//TODO utilize angular but not in this hacky way
+		var facilityContext = {
+			'facility':  facility,
+			'className': domainobjects['Facility']['className']
+		};
 		var aisleShape = {
 			pixelsPerMeter: self.getPixelsPerMeter(),
 			dragStartPoint: startDragPoint_,
-			rectangle: currentRect_
+			rectangle:      currentRect_
 		};
-        angular.element($('body')).scope().open(facilityContext, aisleShape);
-         //control is now transferred to Angular
-		Object.defineProperty(consts, 'feetInMeters', {value: 0.3048,
-			writable:                                         false,
-			enumerable:                                       true,
-			configurable:                                     true});
-
+		var element = angular.element($('body'));
+		if (element !== undefined) {
+			var scope = element['scope']();
+			if (scope !== undefined) {
+				scope.open(facilityContext, aisleShape);
+				//control is now transferred to Angular
+				Object.defineProperty(consts, 'feetInMeters', {value: 0.3048,
+					writable:                                         false,
+					enumerable:                                       true,
+					configurable:                                     true});
+			}
+		}
 	}
 
 	function computeDistanceMeters(latArg1, lonArg1, latArg2, lonArg2) {

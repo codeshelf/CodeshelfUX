@@ -63,7 +63,7 @@ codeshelf.loginWindow = function() {
 
 			websession_.setCurrentPage(self);
 
-			goog.dom.appendChild(goog.dom.getDocument().body, soy.renderAsElement(codeshelf.templates.loginDialog));
+			goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.loginDialog));
 			var userIdInput = goog.dom.getElement('userIdInput');
 			var passwordInput = goog.dom.getElement('passwordInput');
 
@@ -95,7 +95,7 @@ codeshelf.loginWindow = function() {
 
 		exit: function() {
 			websession_.setCurrentPage(undefined);
-			goog.dom.removeChildren(goog.dom.getDocument().body);
+			goog.dom.removeChildren(goog.dom.getDocument()['body']);
 		}
 	};
 
