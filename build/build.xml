@@ -157,6 +157,7 @@
 			<arg value="--root=./lib/GoogleClosureLibrary/third_party/" />
 			<arg value="--root=./lib/GoogleClosureTemplates/" />
 			<arg value="--root=./lib/JQuery/" />
+			<arg value="--root=./lib/Bacon/" />
 			<arg value="--root=./lib/SlickGrid/" />
 			<arg value="--root=./lib/Raphael/" />
 			<arg value="--root=./lib/AngularJS/" />
