@@ -10,6 +10,7 @@ goog.require('codeshelf.controllers');
 goog.require('codeshelf.dataentrydialog');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
+goog.require('codeshelf.pathtool');
 goog.require('extern.jquery');
 goog.require('goog.array');
 goog.require('goog.dom');
@@ -305,6 +306,26 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	function drawPath(path, stroke, fill) {
 		graphics_.drawPath(path, stroke, fill);
 	}
+
+	function drawPathSegment(startPoint, endPoint, travelDirEnum) {
+		var startArrow = 0.0;
+		var endArrow = 0.0;
+
+
+		if (travelDirEnum == null || travelDirEnum === 'FORWARD' || travelDirEnum === 'BOTH'){
+			endArrow = 7.5;
+		}
+
+		if (travelDirEnum != null && (travelDirEnum === 'REVERSE' || travelDirEnum === 'BOTH')){
+			endArrow = 7.5;
+		}
+
+		var pathSegmentPath = goog.graphics.paths.createArrow(startPoint, endPoint, startArrow, endArrow);
+		var stroke = new goog.graphics.Stroke(0.5, 'black');
+		var fill = new goog.graphics.SolidFill('black', 0.6);
+		drawPath(pathSegmentPath, stroke, fill);
+	}
+
 
 	function startDraw() {
 		graphics_.clear();
@@ -626,6 +647,13 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	}
 
 
+	function drawPathArrow(graphics, start, end) {
+		var path = new goog.graphics.Path()
+					   .moveTo(start.x, start.y)
+					   .lineTo(end.x, end.y);
+		graphics.drawPath(path, stroke, null);
+	}
+
 	/**
 	 * The work area editor object we'll return.
 	 * @type {Object}
@@ -652,6 +680,15 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			graphics_ = goog.graphics.createGraphics(workAreaEditorPane_.clientWidth, workAreaEditorPane_.clientHeight);
 			graphics_.render(workAreaEditorPane_);
 
+			self.pathTool = new PathTool(self.getContentElement());
+
+			self.pathTool.newSegments.onValue(function(segment) {
+				drawPathSegment(segment.startPoint, segment.endPoint, "FORWARD");
+			});
+
+			self.pathTool.newPaths.onValue(function(v) {
+				console.log(v);
+			});
 		},
 
 		open: function() {
@@ -825,21 +862,8 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 							end.x = /*facilityPoints_[0]['x'] + */(pathSegmentData['endPosX'] * self.getPixelsPerMeter());
 							end.y = /*facilityPoints_[0]['y'] + */(pathSegmentData['endPosY'] * self.getPixelsPerMeter());
 
-							var startArrow = 0.0;
-							var endArrow = 0.0;
 
-							if ((pathData['path']['travelDirEnum'] === 'BOTH') || (pathData['path']['travelDirEnum'] === 'REVERSE')) {
-								startArrow = 7.5;
-							}
-
-							if ((pathData['path']['travelDirEnum'] === 'BOTH') || (pathData['path']['travelDirEnum'] === 'FORWARD')) {
-								endArrow = 7.5;
-							}
-
-							var pathSegmentPath = goog.graphics.paths.createArrow(start, end, startArrow, endArrow);
-							var stroke = new goog.graphics.Stroke(0.5, 'black');
-							var fill = new goog.graphics.SolidFill('black', 0.6);
-							drawPath(pathSegmentPath, stroke, fill);
+							drawPathSegment(start, end, pathData['path']['travelDirEnum']);
 						}
 					}
 				}

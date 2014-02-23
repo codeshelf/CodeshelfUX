@@ -1,54 +1,61 @@
 module.exports = function (config) {
 	config.set({
-		basePath: '../',
+	frameworks: ['jasmine', 'closure'],
+	basePath : '../',
 
-		//Add your new application code file here when you add a new test
-		files: [
-			// closure base
-			{pattern: 'lib/GoogleClosureLibrary/closure/goog/base.js'},
-			// external deps
-			{pattern: 'lib/GoogleClosureLibrary/closure/goog/deps.js', included: false, served: false},
-			'lib/AngularJS/angular.js',
-			'lib/AngularJS/angular-*.js',
-			'lib/UIBootstrap/ui-bootstrap-tpls-0.7.0.js',
+	//Add your new application code file here when you add a new test
+	files : [
 
-			//watch files but do not include them; files using closure require mechanism will get
-			// included during the preprocessor step
-			{pattern: 'lib/GoogleClosureTemplates/*.js', included: false},
-			{pattern: 'lib/JQuery/*.js', included: false},
-			{pattern: 'lib/Raphael/*.js', included: false},
-			{pattern: 'lib/SlickGrid/**/*.js', included: false},
+		// closure base
+		{pattern: 'lib/GoogleClosureLibrary/closure/goog/base.js'},
+		// external deps
+		{pattern: 'lib/GoogleClosureLibrary/closure/goog/deps.js', included: false, served: false},
+//		{pattern: 'lib/JQuery/*.js', included: true},
+//		'lib/Bacon/bacon.js',
+		'lib/AngularJS/angular.js',
+		'lib/AngularJS/angular-*.js',
+		'lib/UIBootstrap/ui-bootstrap-tpls-0.7.0.js',
 
-			{pattern: 'src/js_uncompiled/codeshelf.controllers.js'},
+		{pattern: 'src/js_uncompiled/codeshelf.controllers.js'},
 
-			{pattern: 'src/js_uncompiled/*.js', included: false},
+		//watch files but do not include them; files using closure require mechanism will get
+		// included during the preprocessor step
+		{pattern: 'lib/GoogleClosureTemplates/*.js', included: false},
 
-			//This line will automatically pick up your new file if it is in the test/unit/** directory
-			'test/unit/**/*.js'
-		],
+		{pattern: 'lib/JQuery/*.js', included: false},
+		{pattern: 'lib/Bacon/bacon.js', included: false},
+		{pattern: 'lib/Raphael/*.js', included: false},
+		{pattern: 'lib/SlickGrid/**/*.js', included: false},
 
-		//Shouldn't have to touch this unless you add a new library with different formats of the code like min versions
-		exclude: [
-			'lib/AngularJS/angular-loader.js',
-			'lib/AngularJS/*.min.js',
-			'lib/AngularJS/angular-scenario.js'
-		],
 
-		preprocessors: {
 
-			'lib/JQuery/*.js': ['closure'],
-			'lib/Raphael/*.js': ['closure'],
-			'lib/SlickGrid/**/*.js': ['closure'],
-			'lib/GoogleClosureTemplates/*.js': ['closure'],
+		{pattern: 'src/js_uncompiled/*.js', included: false},
 
-			'lib/GoogleClosureLibrary/closure/goog/deps.js': ['closure-deps'],
-			'src/js_uncompiled/*.js': ['closure'],
-			'test/unit/**/*.js': ['closure', 'closure-iit']
-		},
+		//This line will automatically pick up your new file if it is in the test/unit/** directory
+		'test/unit/**/*.js'
+	],
+
+	//Shouldn't have to touch this unless you add a new library with different formats of the code like min versions
+	exclude: [
+		'lib/AngularJS/angular-loader.js',
+		'lib/AngularJS/*.min.js',
+		'lib/AngularJS/angular-scenario.js'
+	],
+
+	preprocessors: {
+		'lib/JQuery/*.js': ['closure'],
+		'lib/Bacon/bacon.js': ['closure'],
+		'lib/Raphael/*.js': ['closure'],
+		'lib/SlickGrid/**/*.js' : ['closure'],
+		'lib/GoogleClosureTemplates/*.js' : ['closure'],
+
+		'lib/GoogleClosureLibrary/closure/goog/deps.js': ['closure-deps'],
+		'src/js_uncompiled/*.js': ['closure'],
+		'test/unit/**/*.js': ['closure', 'closure-iit']
+
+   },
 
 		autoWatch: true,
-
-		frameworks: ['jasmine', 'closure'],
 
 		//Uncomment to test in other browsers
 		browsers: [
