@@ -5,12 +5,15 @@
  *******************************************************************************/
 
 goog.provide('codeshelf.workareaeditorview');
+
 goog.require('codeshelf.aisleview');
 goog.require('codeshelf.controllers');
 goog.require('codeshelf.dataentrydialog');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
 goog.require('codeshelf.pathtool');
+goog.require('codeshelf.websession');
+goog.require('domainobjects');
 goog.require('extern.jquery');
 goog.require('goog.array');
 goog.require('goog.dom');
@@ -74,6 +77,38 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 					configurable:                                     true});
 			}
 		}
+	}
+
+	function savePath(path) {
+		var data = {
+			'className':    domainobjects['Facility']['className'],
+			'persistentId': facility_['persistentId'],
+			'methodName':   'createPath',
+			'methodArgs':   [
+				{name: 'domainId', value: path.domainId, 'classType': 'java.lang.String'},
+				{name: 'segments', value: path.segments, 'classType': '[Lcom.gadgetworks.codeshelf.model.domain.PathSegment;'}
+			]
+		};
+
+		function callbackForCreatePath() {
+			var callback = {
+				exec: function(command) {
+					if (!command['data'].hasOwnProperty('results')) {
+						alert('response has no result');
+					} else {
+						if (command['type'] == kWebSessionCommandType.OBJECT_METHOD_RESP) {
+							//handle error case
+							console.log(command);
+						}
+					}
+				}
+			};
+
+			return callback;
+		}
+
+		var newPath = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+		websession_.sendCommand(newPath, callbackForCreatePath(), false);
 	}
 
 	function computeDistanceMeters(latArg1, lonArg1, latArg2, lonArg2) {
@@ -680,14 +715,19 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			graphics_ = goog.graphics.createGraphics(workAreaEditorPane_.clientWidth, workAreaEditorPane_.clientHeight);
 			graphics_.render(workAreaEditorPane_);
 
-			self.pathTool = new PathTool(self.getContentElement());
+			pathCounter = 0;
+			self.pathTool = new PathTool(self.getContentElement(),
+				function createPath() {
+					return new Path(facility_['domainId'] + "." + pathCounter++,
+								   function pixelToMeters(pixel) {return pixel / self.getPixelsPerMeter();});
+				});
 
 			self.pathTool.newSegments.onValue(function(segment) {
 				drawPathSegment(segment.startPoint, segment.endPoint, "FORWARD");
 			});
 
-			self.pathTool.newPaths.onValue(function(v) {
-				console.log(v);
+			self.pathTool.newPaths.onValue(function(path) {
+				savePath(path);
 			});
 		},
 

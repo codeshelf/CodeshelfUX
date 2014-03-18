@@ -13,7 +13,11 @@ describe('Codeshelf pathdrawing', function() {
 		pane = jqPane.get(0);
 
 		$(document.body).append(jqPane);
-		pathtool = new PathTool(pane);
+
+		var addSegment  = jasmine.createSpy('addSegment');
+		pathtool = new PathTool(pane,
+			function() { return new Path('testprefix', function(pixel) {return pixel;});}
+		);
 	});
 
 	afterEach(function() {
@@ -32,25 +36,26 @@ describe('Codeshelf pathdrawing', function() {
 		clickAt(pane, 0,10);
 		keyDown(27);
 		expect(newPath.segments.length).toEqual(2);
-		expect(newPath.segments[0].startPoint).toEqual({x:0, y:0});
-		expect(newPath.segments[0].endPoint).toEqual({x:0, y:5});
-
+		expect(newPath.segments[0].startPosX).toEqual(0);
+		expect(newPath.segments[0].startPosY).toEqual(0);
+		expect(newPath.segments[0].endPosX).toEqual(0);
+		expect(newPath.segments[0].endPosY).toEqual(5);
 	});
 
 	it("produces segments on clicks", function() {
-		var lastSegment;
+		var lastLineSegment;
 		pathtool.newSegments.onValue(function(segment) {
-			lastSegment = segment;
+			lastLineSegment = segment;
 		});
 
 		clickAt(pane, 0,0);
 		clickAt(pane, 0,5);
-		expect(lastSegment.startPoint).toEqual({x:0, y:0});
-		expect(lastSegment.endPoint).toEqual({x:0, y:5});
+		expect(lastLineSegment.startPoint).toEqual({x:0, y:0});
+		expect(lastLineSegment.endPoint).toEqual({x:0, y:5});
 
 		clickAt(pane, 0,10);
-		expect(lastSegment.startPoint).toEqual({x:0, y:5});
-		expect(lastSegment.endPoint).toEqual({x:0, y:10});
+		expect(lastLineSegment.startPoint).toEqual({x:0, y:5});
+		expect(lastLineSegment.endPoint).toEqual({x:0, y:10});
 
 	});
 
@@ -96,7 +101,7 @@ function keyDown(keyCode) {
 }
 
 function clickAt(pane, offsetX, offsetY) {
-	$(pane).trigger(createClick(pane,offsetX, offsetY));
+	$(pane).trigger(createClick(pane, offsetX, offsetY));
 //	pane.dispatchEvent(createClick(pane, offsetX, offsetY));
 	//goog.events.dispatchEvent(pane, createClick(offsetX,offsetY));
 }

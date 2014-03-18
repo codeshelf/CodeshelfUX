@@ -3,57 +3,66 @@ goog.provide("codeshelf.pathtool");
 goog.require('extern.jquery');
 goog.require('bacon');
 
-function PathTool (canvas) {
+function Path(pathDomainId, pixelToMeters) {
+	this['direction'] = "FORWARD";
+	this['domainId'] = pathDomainId;
+	this.segments= [];
+	this.segmentIndex = 0;
+	this.addSegment = function(lineSegment) {
+		var segment = {};
+		segment['segmentOrder'] = this.segmentIndex++;
+		segment['domainId'] = pathDomainId + "." + segment['segmentOrder'];
+		segment['posTypeEnum'] = "METERS_FROM_PARENT";
+		segment['startPosX'] = pixelToMeters(lineSegment.startPoint.x);
+		segment['startPosY'] = pixelToMeters(lineSegment.startPoint.y);
+		segment['endPosX'] = pixelToMeters(lineSegment.endPoint.x);
+		segment['endPosY'] = pixelToMeters(lineSegment.endPoint.y);
+		this.segments.push(segment);
+	};
+}
+
+function PathTool (canvas, createPath) {
 	var clicks  = $(canvas).asEventStream("click");
-	var ESCs = $(document).asEventStream('keydown').map(".keyCode").filter(27);
-	var startPaths = Bacon.once(createPath()).merge(ESCs.map(createPath));
+	//ESCs are only captured by documents and  inputs
+	var ESCs = $(document).asEventStream('keydown').map(".keyCode").filter(27).log();
+	var startPaths = Bacon.once({}).merge(ESCs);
 	var endPaths = ESCs;
 
-	var newSegments = startPaths.flatMap(function(newPath) {
+	this.newSegments = startPaths.flatMap(function(newPathEvent) {
 		return captureNewSegments().takeUntil(endPaths);
 	});
-	var newPaths = startPaths.flatMap(function(newPath) {
-		//functional reduce captured segments by adding them to the given initial path
-	    return captureNewSegments().takeUntil(endPaths).fold(newPath, function(path, segment){
-            path.segments.push(segment);
+
+	this.newPaths = startPaths.flatMap(function(newPathEvent) {
+		var newPath = createPath();
+		//fold captured segments into a  path
+	    return captureNewSegments().takeUntil(endPaths).fold(newPath, function(path, lineSegment){
+
+            path.addSegment(lineSegment);
 	        return path;
 	    });
 	});
-	this.newSegments = newSegments;
-	this.newPaths = newPaths;
 
 	function captureNewSegments() {
-		var newSegments = onEvery(2, clicks).map(toASegment);
+		var newSegments = onEvery(2, clicks).map(toALineSegment);
 		return newSegments;
-	}
-
-	function createPath() {
-		return {
-			direction: "FORWARD",
-			segments: []
-		};
 	}
 
 	function onEvery(num, stream) {
 	   return stream.slidingWindow(num).skip(num);
 	}
 
-	function toAPoint(click) {
-		return  {x: click['offsetX'],
-				 y: click['offsetY']};
+	function convertClickToPoint (click){
+		return  {
+			x: click['offsetX'],
+			y: click['offsetY']
+		};
 	}
 
-	function toASegment(clickPair){
-			var start = toAPoint(clickPair[0]);
-			var end = toAPoint(clickPair[1]);
-			var segment =  {
-				startPoint: start,
-				endPoint: end
-			};
-			return segment;
+	function toALineSegment(clickPair){
+		var lineSegment =  {
+			startPoint: convertClickToPoint(clickPair[0]),
+			endPoint: convertClickToPoint(clickPair[1])
+		};
+		return lineSegment;
 	}
-
-
-
-
 }

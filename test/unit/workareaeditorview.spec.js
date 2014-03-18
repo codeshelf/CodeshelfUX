@@ -22,7 +22,7 @@ describe('Codeshelf workareaeditorview', function() {
 		jqPane = null;
 	});
 
-
+	it('can create a path', function() {});
 /*
 	it('can set toolbar tool programmatically', function() {
 		workareaeditorview.setToolbarTool('path-tool');
