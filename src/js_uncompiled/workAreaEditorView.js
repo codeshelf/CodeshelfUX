@@ -297,8 +297,8 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 	function convertAisleVertexToPoint(aisle, vertex) {
 		var point = {};
-		point.x = (vertex['posX'] + aisle['posX']) * self.getPixelsPerMeter();
-		point.y = (vertex['posY'] + aisle['posY']) * self.getPixelsPerMeter();
+		point.x = (vertex['posX'] + aisle['anchorPosX']) * self.getPixelsPerMeter();
+		point.y = (vertex['posY'] + aisle['anchorPosY']) * self.getPixelsPerMeter();
 		return point;
 	}
 
@@ -331,8 +331,8 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 			// Create and populate the aisle's data record.
 			aisleData.aisleElement = soy.renderAsElement(codeshelf.templates.aisleView, {id: aisle['domainId']});
-			aisleData.aisleElement.style.left = Math.round(aisle['posX'] * self.getPixelsPerMeter()) + 'px';
-			aisleData.aisleElement.style.top = Math.round(aisle['posY'] * self.getPixelsPerMeter()) + 'px';
+			aisleData.aisleElement.style.left = Math.round(aisle['anchorPosX'] * self.getPixelsPerMeter()) + 'px';
+			aisleData.aisleElement.style.top = Math.round(aisle['anchorPosY'] * self.getPixelsPerMeter()) + 'px';
 			goog.dom.appendChild(workAreaEditorPane_, aisleData.aisleElement);
 
 			aisleData.aisle = aisle;
@@ -483,7 +483,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 									handleDeleteAisleCmd(object);
 								}
 							} else if (object['className'] === domainobjects['Vertex']['className']) {
-								// VAisle ertex updates.
+								// Vertex updates.
 								if (object['op'] === 'cre') {
 									handleUpdateAisleVertexCmd(object);
 								} else if (object['op'] === 'upd') {
@@ -671,7 +671,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			// Create the filter to listen to all aisle updates for this facility.
 			var aisleFilterData = {
 				'className':     domainobjects['Aisle']['className'],
-				'propertyNames': ['domainId', 'posX', 'posY'],
+				'propertyNames': ['domainId', 'anchorPosX', 'anchorPosY'],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{ 'name': 'theId', 'value': facility_['persistentId']}
@@ -803,8 +803,8 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 					var fill = new goog.graphics.SolidFill('green', 0.75);
 					drawPath(aislePath, stroke, fill);
 
-					aisleData.aisleElement.style.left = Math.round(aisleData.aisle['posX'] * self.getPixelsPerMeter()) + 'px';
-					aisleData.aisleElement.style.top = Math.round(aisleData.aisle['posY'] * self.getPixelsPerMeter()) + 'px';
+					aisleData.aisleElement.style.left = Math.round(aisleData.aisle['anchorPosX'] * self.getPixelsPerMeter()) + 'px';
+					aisleData.aisleElement.style.top = Math.round(aisleData.aisle['anchorPosY'] * self.getPixelsPerMeter()) + 'px';
 				}
 			}
 

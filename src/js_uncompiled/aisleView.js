@@ -120,10 +120,10 @@ codeshelf.aisleview = function(websession, aisle) {
 				id: bay['domainId']
 			});
 			goog.dom.appendChild(self.getMainPaneElement(), bayData['bayElement']);
-			bayData['bayElement'].style.left = (parseInt(self.getMainPaneElement().style.left) + (bay['posX'] * self
+			bayData['bayElement'].style.left = (parseInt(self.getMainPaneElement().style.left) + (bay['anchorPosX'] * self
 				.getPixelsPerMeter()))
 				+ 'px';
-			bayData['bayElement'].style.top = (parseInt(self.getMainPaneElement().style.top) + (bay['posY'] * self
+			bayData['bayElement'].style.top = (parseInt(self.getMainPaneElement().style.top) + (bay['anchorPosY'] * self
 				.getPixelsPerMeter()))
 				+ 'px';
 
@@ -258,8 +258,8 @@ codeshelf.aisleview = function(websession, aisle) {
 				// Create the filter to listen to all bay updates for this aisle.
 				var data = {
 					'className':     domainobjects['Bay']['className'],
-					'propertyNames': [ 'domainId', 'posTypeEnum', 'posX', 'posY', 'posZ' ],
-					'filterClause':  'parent.persistentId = :theId AND posZ = 0',
+					'propertyNames': [ 'domainId', 'anchorPosTypeEnum', 'anchorPosX', 'anchorPosY', 'anchorPosZ' ],
+					'filterClause':  'parent.persistentId = :theId AND anchorPosZ = 0',
 					'filterParams':  [
 						{
 							'name':  'theId',
@@ -309,16 +309,16 @@ codeshelf.aisleview = function(websession, aisle) {
 					if (bays_.hasOwnProperty(bayKey)) {
 						var bayData = bays_[bayKey];
 
-						bayData['bayElement'].style.left = (/* parseInt(self.getMainPaneElement().style.left) + */(bayData['bay']['posX'] * self
+						bayData['bayElement'].style.left = (/* parseInt(self.getMainPaneElement().style.left) + */(bayData['bay']['anchorPosX'] * self
 							.getPixelsPerMeter()))
 							+ 'px';
-						bayData['bayElement'].style.top = (/* parseInt(self.getMainPaneElement().style.top) + */(bayData['bay']['posY'] * self
+						bayData['bayElement'].style.top = (/* parseInt(self.getMainPaneElement().style.top) + */(bayData['bay']['anchorPosY'] * self
 							.getPixelsPerMeter()))
 							+ 'px';
 
 						// If this is the lowest bay, and there are at least four
 						// vertices then draw the bay.
-						if ((bayData['bay']['posZ'] === 0) && (Object.size(bayData.vertices) >= 4)) {
+						if ((bayData['bay']['anchorPosZ'] === 0) && (Object.size(bayData.vertices) >= 4)) {
 							var bayPath = computeBayPath(bayData);
 							var stroke = new goog.graphics.Stroke(0.5, 'black');
 							var fill = new goog.graphics.SolidFill('white', 0.2);

@@ -72,8 +72,8 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 					'methodArgs':   [
 						{name: 'domainId', value: 'V' + vertexNum, 'classType': 'java.lang.String'},
 						{name: 'PosTypeByStr', 'value': 'GPS', 'classType': 'java.lang.String'},
-						{name: 'posX', 'value': event.latLng.lng(), 'classType': 'java.lang.Double'},
-						{name: 'posY', 'value': event.latLng.lat(), 'classType': 'java.lang.Double'},
+						{name: 'anchorPosX', 'value': event.latLng.lng(), 'classType': 'java.lang.Double'},
+						{name: 'anchorPosY', 'value': event.latLng.lat(), 'classType': 'java.lang.Double'},
 						{name: 'drawOrder', 'value': vertexNum, 'classType': 'java.lang.Integer'}
 					]
 				};
@@ -87,8 +87,8 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 					'persistentId': facility_['persistentId'],
 					'properties':   [
 						{'name': 'PosTypeByStr', 'value': 'GPS'},
-						{'name': 'posX', 'value': event.latLng.lng()},
-						{'name': 'posY', 'value': event.latLng.lat()}
+						{'name': 'anchorPosX', 'value': event.latLng.lng()},
+						{'name': 'anchorPosY', 'value': event.latLng.lat()}
 					]
 				};
 				var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
@@ -556,7 +556,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		doSetupView: function() {
 
 			// Starting latlng is either the facility's origin point or the browser's current location (if we can get it).
-			var demoLatLng = new google.maps.LatLng(facility_['posY'], facility_['posX']);
+			var demoLatLng = new google.maps.LatLng(facility_['anchorPosY'], facility_['anchorPosX']);
 
 			var codeshelfMapStyle = [
 				{
