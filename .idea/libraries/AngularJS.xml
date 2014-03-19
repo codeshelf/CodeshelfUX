@@ -1,0 +1,32 @@
+<component name="libraryTable">
+  <library name="AngularJS" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/lib/AngularJS/angular-sanitize.js" />
+        <item url="file://$PROJECT_DIR$/lib/AngularJS/angular-route.js" />
+        <item url="file://$PROJECT_DIR$/lib/AngularJS/angular.js" />
+        <item url="file://$PROJECT_DIR$/lib/AngularJS/angular-loader.js" />
+        <item url="file://$PROJECT_DIR$/lib/AngularJS/angular-cookies.js" />
+        <item url="file://$PROJECT_DIR$/lib/AngularJS/angular-mocks.js" />
+        <item url="file://$PROJECT_DIR$/lib/AngularJS/angular-resource.js" />
+        <item url="file://$PROJECT_DIR$/lib/AngularJS/angular-animate.js" />
+        <item url="file://$PROJECT_DIR$/lib/AngularJS/angular-scenario.js" />
+        <item url="file://$PROJECT_DIR$/lib/AngularJS/angular-touch.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/AngularJS/angular-route.js" />
+      <root url="file://$PROJECT_DIR$/lib/AngularJS/angular-sanitize.js" />
+      <root url="file://$PROJECT_DIR$/lib/AngularJS/angular.js" />
+      <root url="file://$PROJECT_DIR$/lib/AngularJS/angular-cookies.js" />
+      <root url="file://$PROJECT_DIR$/lib/AngularJS/angular-loader.js" />
+      <root url="file://$PROJECT_DIR$/lib/AngularJS/angular-mocks.js" />
+      <root url="file://$PROJECT_DIR$/lib/AngularJS/angular-animate.min.js" />
+      <root url="file://$PROJECT_DIR$/lib/AngularJS/angular-animate.js" />
+      <root url="file://$PROJECT_DIR$/lib/AngularJS/angular-resource.js" />
+      <root url="file://$PROJECT_DIR$/lib/AngularJS/angular-scenario.js" />
+      <root url="file://$PROJECT_DIR$/lib/AngularJS/angular-touch.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

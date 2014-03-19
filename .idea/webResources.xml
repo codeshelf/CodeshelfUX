@@ -12,6 +12,11 @@
             <path value="file://$PROJECT_DIR$/lib/JQuery" />
             <path value="file://$PROJECT_DIR$/lib/Arrowlets" />
             <path value="file://$PROJECT_DIR$/lib/Raphael" />
+            <path value="file://$PROJECT_DIR$/lib/AngularJS" />
+            <path value="file://$PROJECT_DIR$/lib/TwitterBootstrap" />
+            <path value="file://$PROJECT_DIR$/lib/UIBootstrap" />
+            <path value="file://$PROJECT_DIR$/lib/GoogleClosureStylesheets" />
+            <path value="file://$PROJECT_DIR$/lib/GoogleClosureTemplates" />
           </resourceRoots>
         </entryData>
       </entry>

@@ -108,6 +108,7 @@ var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', 
 		aisle.baysHigh = aisleForm['baysHigh'];
 		aisle.baysLong = aisleForm['baysLong'];
 		aisle.opensLowSide = aisleForm['opensLowSide'] == "true";
+		aisle.isLeftHandBay = aisleForm['isLeftHandBay'] == "true";
 
 		aisle.runInXDim = true;
 		if ($scope.aisleShape.rectangle.width < $scope.aisleShape.rectangle.height) {
@@ -136,7 +137,8 @@ var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', 
 				{ 'name': 'inProtoBaysHigh', 'value': aisle.baysHigh, 'classType': 'java.lang.Integer'},
 				{ 'name': 'inProtoBaysLong', 'value': aisle.baysLong, 'classType': 'java.lang.Integer'},
 				{ 'name': 'inRunInXDir', 'value': aisle.runInXDim, 'classType': 'java.lang.Boolean'},
-				{ 'name': 'inOpensLowSide', 'value': aisle.opensLowSide, 'classType': 'java.lang.Boolean'}
+				{ 'name': 'inOpensLowSide', 'value': aisle.opensLowSide, 'classType': 'java.lang.Boolean'},
+				{ 'name': 'inLeftHandBay', 'value': aisle.isLeftHandBay, 'classType': 'java.lang.Boolean'}
 			]
 		};
 

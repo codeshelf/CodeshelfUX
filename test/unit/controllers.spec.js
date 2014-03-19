@@ -76,7 +76,8 @@ describe('Codeshelf controllers', function() {
 					'bayDepth' : 1,
 					'baysHigh' : 4,
 					'baysLong' : 5,
-					'opensLowSide' : 'true'
+					'opensLowSide' : 'true',
+					'isLeftHandBay' : 'true'
 				};
 				var controller = createController(facilityContext, aisleShape);
 				$scope.aisleForm = aisleForm;
@@ -171,6 +172,10 @@ describe('Codeshelf controllers', function() {
 
 				it("should transfer opensLowSide", function() {
 					expect(data.methodArgs[9].value).toEqual(true);
+				});
+
+				it("should transfer isLeftHandBay", function() {
+					expect(data.methodArgs[10].value).toEqual(true);
 				});
 
 				it("should have an aisle id", function(){
