@@ -10,6 +10,13 @@ describe('Codeshelf controllers', function() {
 	});
 
 	describe('WorkAreaModalCtrl', function(){
+		/* BDD Form:
+		 Story: Make aisles
+		 In order to... configure a facility
+		 As a... system installer or tester
+		 I want to... add/change/configure aisles in a facility.
+		 */
+
 		var $scope, $modalInstance, $websession, $q, createController;
 
 		beforeEach(function() {
@@ -44,7 +51,43 @@ describe('Codeshelf controllers', function() {
 			});
 		});
 
-		describe('when the dialog is saved ', function() {
+		/* BDD Scenario 1 (remember, no UI in BDD)
+		 Scenario 1: Make new aisle
+		 Given... facility is there
+		 When... user makes a new aisle
+		 Then... there is one more aisle than before, And the aisle is correctly made
+		 */
+
+		/* BDD Scenario 2: Delete existing aisle
+		 Given... facility is there, and there is at least one aisle
+		 When... user deletes an aisle
+		 Then... there is one fewer aisle than before.
+		 */
+
+		/* BDD Scenario 3: Edit existing aisle
+		 Given... facility is there, and there is at least one aisle
+		 When... user edits an aisle
+		 Then... the aisle changes to match the user's intention.
+		 */
+
+		/* tests below only cover scenario 1: new aisle
+		* UI is user drags a rectangle. This yields a dialog. Upon completion, the aisle is made.
+		* cases: user is entering valid data, and checking both boxes.
+		* check that integer distances in feet gets converted to meters.
+		*
+		* */
+		/*
+		Could add:
+		invalid entry: 0, -5, s, for height,width
+		valid height and width like 2.5
+		user attempt at different units: like 2.5m or 250cm
+		invalid bay/tier counts like 2.5
+
+		And multiple aisles, including a duplicate name that should fail.
+		No name aisle. Start with valid aisle and change to duplicate or no name.
+		 */
+
+ 		describe('when the dialog is saved ', function() {
 			var fakeCommand;
 			var facilityContext;
 			var aisleShape;
