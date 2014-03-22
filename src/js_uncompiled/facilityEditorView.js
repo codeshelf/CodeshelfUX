@@ -17,7 +17,7 @@ goog.require('goog.dom.query');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 
-codeshelf.facilityeditorview = function(websession, organization, facility) {
+codeshelf.facilityeditorview = function (websession, organization, facility) {
 
 	var websession_ = websession;
 	var organization_ = organization;
@@ -46,7 +46,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 	var overlays_ = [];
 
 	function clickHandler(event) {
-		clickTimeout_ = setTimeout(function() {
+		clickTimeout_ = setTimeout(function () {
 
 			if (canEditOutline_) {
 				// We need to make sure the structures get created before we set the user create marker.
@@ -66,15 +66,15 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				// then extend or shorten this segment to make it exactly 90deg.
 
 				var data = {
-					'className':    domainobjects['Facility']['className'],
+					'className': domainobjects['Facility']['className'],
 					'persistentId': facility_['persistentId'],
-					'methodName':   'createVertex',
-					'methodArgs':   [
-						{name: 'domainId', value: 'V' + vertexNum, 'classType': 'java.lang.String'},
-						{name: 'PosTypeByStr', 'value': 'GPS', 'classType': 'java.lang.String'},
-						{name: 'anchorPosX', 'value': event.latLng.lng(), 'classType': 'java.lang.Double'},
-						{name: 'anchorPosY', 'value': event.latLng.lat(), 'classType': 'java.lang.Double'},
-						{name: 'drawOrder', 'value': vertexNum, 'classType': 'java.lang.Integer'}
+					'methodName': 'createVertex',
+					'methodArgs': [
+						{'name': 'domainId', 'value': 'V' + vertexNum, 'classType': 'java.lang.String'},
+						{'name': 'PosTypeByStr', 'value': 'GPS', 'classType': 'java.lang.String'},
+						{'name': 'anchorPosX', 'value': event.latLng.lng(), 'classType': 'java.lang.Double'},
+						{'name': 'anchorPosY', 'value': event.latLng.lat(), 'classType': 'java.lang.Double'},
+						{'name': 'drawOrder', 'value': vertexNum, 'classType': 'java.lang.Integer'}
 					]
 				};
 
@@ -82,13 +82,12 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				websession_.sendCommand(newVertexCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_METHOD_RESP), false);
 
 				// If this was the anchor vertex then set the location of the facility as well.
+				var anchorPoint = {'posTypeEnum': 'GPS', 'x': event.latLng.lng(), 'y': event.latLng.lat(), 'z' : 0.0};
 				var data = {
-					'className':    domainobjects['Facility']['className'],
+					'className': domainobjects['Facility']['className'],
 					'persistentId': facility_['persistentId'],
-					'properties':   [
-						{'name': 'PosTypeByStr', 'value': 'GPS'},
-						{'name': 'anchorPosX', 'value': event.latLng.lng()},
-						{'name': 'anchorPosY', 'value': event.latLng.lat()}
+					'properties': [
+						{'name': 'anchorPoint', 'value': anchorPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'}
 					]
 				};
 				var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
@@ -181,16 +180,16 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			facilityOutlinePath_ = new google.maps.MVCArray;
 			if (localUserCreatedMarker_ === true) {
 				facilityOutline_ = new google.maps.Polyline({
-					                                            'strokeWeight': 3,
-					                                            'strokeColor':  '#ff0000',
-					                                            'fillColor':    '#0000cc'
-				                                            });
+					'strokeWeight': 3,
+					'strokeColor': '#ff0000',
+					'fillColor': '#0000cc'
+				});
 			} else {
 				facilityOutline_ = new google.maps.Polygon({
-					                                           'strokeWeight': 3,
-					                                           'strokeColor':  '#ff0000',
-					                                           'fillColor':    '#0000cc'
-				                                           });
+					'strokeWeight': 3,
+					'strokeColor': '#ff0000',
+					'fillColor': '#0000cc'
+				});
 			}
 
 			facilityOutline_.setMap(map_);
@@ -229,38 +228,38 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		);
 
 		var marker = new google.maps.Marker({
-			                                    'position':  latLng,
-			                                    'map':       map_,
-			                                    'draggable': true,
-			                                    'icon':      markerImage
-		                                    });
+			'position': latLng,
+			'map': map_,
+			'draggable': true,
+			'icon': markerImage
+		});
 
 		var vertexData = {marker: marker, Vertex: vertex};
 		facilityOutlineVertices_[vertex['drawOrder']] = vertexData;
 		marker.setTitle(vertex['domainId']);
 
 		// Add a drag handler to the marker.
-		google.maps.event.addListener(marker, 'dragend', function() {
-			                              if (canEditOutline_) {
-				                              facilityOutlinePath_.setAt(vertexData.Vertex['drawOrder'], marker.getPosition());
+		google.maps.event.addListener(marker, 'dragend', function () {
+				if (canEditOutline_) {
+					facilityOutlinePath_.setAt(vertexData.Vertex['drawOrder'], marker.getPosition());
 
-				                              if (canEditOutline_) {
-					                              var data = {
-						                              'className':    domainobjects['Vertex']['className'],
-						                              'persistentId': vertex['persistentId'],
-						                              'properties':   [
-							                              {'name': 'posX', 'value': marker.getPosition().lng()},
-							                              {'name': 'posY', 'value': marker.getPosition().lat()}
-						                              ]
-					                              };
-					                              var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ,
-					                                                                            data);
-					                              websession_.sendCommand(moveVertexCmd,
-					                                                      websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP),
-					                                                      false);
-				                              }
-			                              }
-		                              }
+					if (canEditOutline_) {
+						var data = {
+							'className': domainobjects['Vertex']['className'],
+							'persistentId': vertex['persistentId'],
+							'properties': [
+								{'name': 'posX', 'value': marker.getPosition().lng()},
+								{'name': 'posY', 'value': marker.getPosition().lat()}
+							]
+						};
+						var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ,
+							data);
+						websession_.sendCommand(moveVertexCmd,
+							websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP),
+							false);
+					}
+				}
+			}
 		);
 //			}
 
@@ -269,12 +268,12 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			facilityAnchorMarker_ = marker;
 			// If the user clicks on the anchor marker then create a final marker on top of the anchor, and prevent further markers.
 			// When the update returns this will close the polyline into a polygon.
-			google.maps.event.addListener(facilityAnchorMarker_, goog.events.EventType.CLICK, function() {
-				                              if (canEditOutline_) {
-					                              facilityOutline_.setMap(null);
-					                              completePolygon();
-				                              }
-			                              }
+			google.maps.event.addListener(facilityAnchorMarker_, goog.events.EventType.CLICK, function () {
+					if (canEditOutline_) {
+						facilityOutline_.setMap(null);
+						completePolygon();
+					}
+				}
 			);
 		}
 
@@ -341,7 +340,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		for (var i = Object.size(facilityOutlineVertices_) - 1; i >= 0; i--) {
 
 			var data = {
-				'className':    domainobjects['Vertex']['className'],
+				'className': domainobjects['Vertex']['className'],
 				'persistentId': facilityOutlineVertices_[i].Vertex['persistentId']
 			};
 
@@ -353,10 +352,10 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 	function completePolygon() {
 		// First make the outline into a polygon.
 		facilityOutline_ = new google.maps.Polygon({
-			                                           'strokeWeight': 3,
-			                                           'strokeColor':  '#ff0000',
-			                                           'fillColor':    '#0000cc'
-		                                           });
+			'strokeWeight': 3,
+			'strokeColor': '#ff0000',
+			'fillColor': '#0000cc'
+		});
 		facilityOutline_.setMap(map_);
 		facilityOutline_.setPath(facilityOutlinePath_);
 
@@ -426,12 +425,12 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			html = results[ind].address_components[0].long_name;
 		}
 		var overlay = new google.maps.Rectangle({
-			                                        'map':         map_,
-			                                        'bounds':      box,
-			                                        'strokeColor': color,
-			                                        'fillColor':   color,
-			                                        'visible':     false
-		                                        });
+			'map': map_,
+			'bounds': box,
+			'strokeColor': color,
+			'fillColor': color,
+			'visible': false
+		});
 		overlays_.push(overlay);
 		map_.fitBounds(box);
 		totalBounds_.union(box);
@@ -442,9 +441,9 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			for (var i = 0; i < Object.size(results); i++) {
 				results[i].id = 'addr' + i;
 			}
-			var mapSearchItems = soy.renderAsElement((function() {
+			var mapSearchItems = soy.renderAsElement((function () {
 				var ind_ = ind;
-				return function() {
+				return function () {
 					return    codeshelf.templates.gmapsAddrSearchInfoPopup({searchAddress: results[ind_].formatted_address, resultAddresses: results});
 				}
 			})());
@@ -454,10 +453,10 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				var selectorId = '> #' + results[i].id;
 				var addrElement = goog.dom.query(selectorId, mapSearchItems);
 				if (Object.size(addrElement) > 0) {
-					addrElement[0].onclick = (function() {
+					addrElement[0].onclick = (function () {
 						var thisOverlay_ = overlay;
 						var index_ = i;
-						return function() {
+						return function () {
 							showGeocodeResult(index_, thisOverlay_.setIndex);
 						}
 					})();
@@ -470,7 +469,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 		//infoWindow_.setContent(overlay.story.join(""));
 		infoWindow_.setContent(mapSearchItems);
 		infoWindow_.open(map_);
-		google.maps.event.addListener(overlay, 'click', function() {
+		google.maps.event.addListener(overlay, 'click', function () {
 			infoWindow_.setPosition(results[ind].geometry.location);
 			infoWindow_.setContent(mapSearchItems);
 			infoWindow_.open(map_);
@@ -512,7 +511,7 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 	function websocketCmdCallback(expectedResponseType) {
 		var callback = {
-			exec: function(command) {
+			exec: function (command) {
 				if (!command['data'].hasOwnProperty('results')) {
 					alert('response has no result');
 				} else {
@@ -549,11 +548,11 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 	 */
 	var self = {
 
-		getViewName: function() {
+		getViewName: function () {
 			return 'Facility Editor';
 		},
 
-		doSetupView: function() {
+		doSetupView: function () {
 
 			// Starting latlng is either the facility's origin point or the browser's current location (if we can get it).
 			var demoLatLng = new google.maps.LatLng(facility_['anchorPosY'], facility_['anchorPosX']);
@@ -562,48 +561,48 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 				{
 					featureType: "administrative",
 					elementType: "labels",
-					stylers:     [
+					stylers: [
 						{ visibility: "off" }
 					]
 				},
 				{
 					featureType: "poi",
 					elementType: "all",
-					stylers:     [
+					stylers: [
 						{ visibility: "off" }
 					]
 				},
 				{
 					featureType: "water",
 					elementType: "labels",
-					stylers:     [
+					stylers: [
 						{ visibility: "off" }
 					]
 				},
 				{
 					featureType: "road",
 					elementType: "labels",
-					stylers:     [
+					stylers: [
 						{ visibility: "on" }
 					]
 				}
 			];
 
 			var myOptions = {
-				mapTypeControlOptions:    {
+				mapTypeControlOptions: {
 					mapTypeIds: ['codeshelfMapStyle', google.maps.MapTypeId.HYBRID]
 				},
-				'zoom':                   16,
-				'center':                 demoLatLng,
-				'mapTypeId':              google.maps.MapTypeId.HYBRID,
+				'zoom': 16,
+				'center': demoLatLng,
+				'mapTypeId': google.maps.MapTypeId.HYBRID,
 				'disableDoubleClickZoom': true,
-				'panControl':             false,
-				'rotateControl':          true,
-				'streetViewControl':      false,
+				'panControl': false,
+				'rotateControl': true,
+				'streetViewControl': false,
 				//'draggableCursor':        'url(../../src/images/push-pin.png), auto',
-				'draggableCursor':        'pointer',
-				'heading':                180,
-				'tilt':                   0
+				'draggableCursor': 'pointer',
+				'heading': 180,
+				'tilt': 0
 			};
 
 			infoWindow_ = new google.maps.InfoWindow();
@@ -611,10 +610,10 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 			// Add the facility descriptor field.
 			var facilityDescField = codeshelf.dataobjectfield(websession_, self.getMainPaneElement(),
-			                                                  domainobjects['Facility']['className'],
-			                                                  domainobjects['Facility']['properties']['description']['id'],
-			                                                  facility_['persistentId'],
-			                                                  'windowField', 'Facility name');
+				domainobjects['Facility']['className'],
+				domainobjects['Facility']['properties']['description']['id'],
+				facility_['persistentId'],
+				'windowField', 'Facility name');
 			facilityDescField.start();
 
 			// Setup GMaps geocoding to locate places for the user (if needed).
@@ -624,14 +623,14 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 
 			var fieldId = uniqueIdFunc_('search');
 			var fieldElement = soy.renderAsElement(codeshelf.templates.dataObjectField,
-			                                       {id: fieldId, cssClass: 'windowField', label: 'Search for address'});
+				{id: fieldId, cssClass: 'windowField', label: 'Search for address'});
 			goog.dom.appendChild(self.getMainPaneElement(), fieldElement);
 			var inputElement = goog.dom.getElement(fieldId);
 			googleField_ = new goog.ui.LabelInput('Search for address');
 			googleField_.decorate(inputElement);
 
 
-			goog.events.listen(inputElement, goog.editor.Field.EventType.CHANGE, function(event) {
+			goog.events.listen(inputElement, goog.editor.Field.EventType.CHANGE, function (event) {
 				var text = googleField_.getValue();
 				geocoder_.geocode({'address': text}, computeGeoCodeResults);
 			});
@@ -653,33 +652,33 @@ codeshelf.facilityeditorview = function(websession, organization, facility) {
 			doubleClickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.DBLCLICK, doubleClickHandler);
 		},
 
-		open: function() {
+		open: function () {
 			// Create the filter to listen to all vertex updates for this facility.
 			var data = {
-				'className':     domainobjects['Vertex']['className'],
+				'className': domainobjects['Vertex']['className'],
 				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder'],
-				'filterClause':  'parent.persistentId = :theId',
-				'filterParams':  [
+				'filterClause': 'parent.persistentId = :theId',
+				'filterParams': [
 					{ 'name': 'theId', 'value': facility_['persistentId']}
 				]
 			};
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP),
-			                        true);
+				true);
 		},
 
-		close: function() {
+		close: function () {
 
 		},
 
-		doResize: function() {
+		doResize: function () {
 			facilityBounds_ = undefined;
 			google.maps.event.trigger(mapPane_, 'resize');
 			setBounds();
 		},
 
-		exit: function() {
+		exit: function () {
 			google.maps.event.removeListener(clickHandler_);
 			google.maps.event.removeListener(doubleClickHandler_);
 		}

@@ -70,7 +70,7 @@ codeshelf.initializenewclient = function() {
 			'methodArgs':   [
 				{'name': 'domainId', 'value': 'F1', 'classType': 'java.lang.String'},
 				{'name': 'description', 'value': 'First Facility', 'classType': 'java.lang.String'},
-				{'name': 'posTypeByStr', 'value': 'GPS', 'classType': 'java.lang.String'},
+				{'name': 'anchorposTypeByStr', 'value': 'GPS', 'classType': 'java.lang.String'},
 				{'name': 'anchorPosX', 'value': longitude, 'classType': 'java.lang.Double'},
 				{'name': 'anchorPosY', 'value': latitude, 'classType': 'java.lang.Double'}
 			]

@@ -902,7 +902,6 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 							end.x = /*facilityPoints_[0]['x'] + */(pathSegmentData['endPosX'] * self.getPixelsPerMeter());
 							end.y = /*facilityPoints_[0]['y'] + */(pathSegmentData['endPosY'] * self.getPixelsPerMeter());
 
-
 							drawPathSegment(start, end, pathData['path']['travelDirEnum']);
 						}
 					}
