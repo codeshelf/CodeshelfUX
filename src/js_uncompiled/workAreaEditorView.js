@@ -37,7 +37,7 @@ goog.require('raphael');
  * @param facility The facility we're editing.
  * @return {Object} The work area editor.
  */
-codeshelf.workareaeditorview = function(websession, facility, options) {
+codeshelf.workareaeditorview = function (websession, facility, options) {
 
 	var websession_ = websession;
 	var facility_ = facility;
@@ -57,13 +57,13 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	function createAisle() {
 		//TODO utilize angular but not in this hacky way
 		var facilityContext = {
-			'facility':  facility,
+			'facility': facility,
 			'className': domainobjects['Facility']['className']
 		};
 		var aisleShape = {
 			pixelsPerMeter: self.getPixelsPerMeter(),
 			dragStartPoint: startDragPoint_,
-			rectangle:      currentRect_
+			rectangle: currentRect_
 		};
 		var element = angular.element($('body'));
 		if (element !== undefined) {
@@ -72,19 +72,19 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 				scope.open(facilityContext, aisleShape);
 				//control is now transferred to Angular
 				Object.defineProperty(consts, 'feetInMeters', {value: 0.3048,
-					writable:                                         false,
-					enumerable:                                       true,
-					configurable:                                     true});
+					writable: false,
+					enumerable: true,
+					configurable: true});
 			}
 		}
 	}
 
 	function savePath(path) {
 		var data = {
-			'className':    domainobjects['Facility']['className'],
+			'className': domainobjects['Facility']['className'],
 			'persistentId': facility_['persistentId'],
-			'methodName':   'createPath',
-			'methodArgs':   [
+			'methodName': 'createPath',
+			'methodArgs': [
 				{name: 'domainId', value: path.domainId, 'classType': 'java.lang.String'},
 				{name: 'segments', value: path.segments, 'classType': '[Lcom.gadgetworks.codeshelf.model.domain.PathSegment;'}
 			]
@@ -92,7 +92,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 		function callbackForCreatePath() {
 			var callback = {
-				exec: function(command) {
+				exec: function (command) {
 					if (!command['data'].hasOwnProperty('results')) {
 						alert('response has no result');
 					} else {
@@ -250,7 +250,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			var point = points[i];
 			// Scale it to 80% of the draw area.
 			self.setPixelsPerMeter(Math.min((graphics_.getPixelSize().width - bufferPoint.x * 2) / mostPosPoint.x,
-			                                (graphics_.getPixelSize().height - bufferPoint.y) / mostPosPoint.y));
+					(graphics_.getPixelSize().height - bufferPoint.y) / mostPosPoint.y));
 
 			point.x *= self.getPixelsPerMeter();
 			point.y *= self.getPixelsPerMeter();
@@ -347,11 +347,11 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		var endArrow = 0.0;
 
 
-		if (travelDirEnum == null || travelDirEnum === 'FORWARD' || travelDirEnum === 'BOTH'){
+		if (travelDirEnum == null || travelDirEnum === 'FORWARD' || travelDirEnum === 'BOTH') {
 			endArrow = 7.5;
 		}
 
-		if (travelDirEnum != null && (travelDirEnum === 'REVERSE' || travelDirEnum === 'BOTH')){
+		if (travelDirEnum != null && (travelDirEnum === 'REVERSE' || travelDirEnum === 'BOTH')) {
 			endArrow = 7.5;
 		}
 
@@ -400,10 +400,10 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 			// Create the filter to listen to all vertex updates for this aisle.
 			var vertexFilterData = {
-				'className':     domainobjects['Vertex']['className'],
+				'className': domainobjects['Vertex']['className'],
 				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
-				'filterClause':  'parent.persistentId = :theId',
-				'filterParams':  [
+				'filterClause': 'parent.persistentId = :theId',
+				'filterParams': [
 					{ 'name': 'theId', 'value': aisle['persistentId']}
 				]
 			};
@@ -449,17 +449,17 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 			// Create the filter to listen to all vertex updates for this aisle.
 			var pathSegmentFilterData = {
-				'className':     domainobjects['PathSegment']['className'],
+				'className': domainobjects['PathSegment']['className'],
 				'propertyNames': ['domainId', 'posTypeEnum', 'startPosX', 'startPosY', 'endPosX', 'endPosY', 'parentPersistentId'],
-				'filterClause':  'parent.persistentId = :theId',
-				'filterParams':  [
+				'filterClause': 'parent.persistentId = :theId',
+				'filterParams': [
 					{ 'name': 'theId', 'value': path['persistentId']}
 				]
 			};
 
 			var pathSegmentFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, pathSegmentFilterData);
 			websession_.sendCommand(pathSegmentFilterCmd, websocketCmdCallbackPath(kWebSessionCommandType.OBJECT_FILTER_RESP),
-			                        true);
+				true);
 		}
 		self.invalidate();
 	}
@@ -490,7 +490,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 	function websocketCmdCallbackFacility() {
 		var callback = {
-			exec: function(command) {
+			exec: function (command) {
 				if (!command['data'].hasOwnProperty('results')) {
 					alert('response has no result');
 				} else {
@@ -521,7 +521,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 	function websocketCmdCallbackAisle() {
 		var callback = {
-			exec: function(command) {
+			exec: function (command) {
 				if (!command['data'].hasOwnProperty('results')) {
 					alert('response has no result');
 				} else {
@@ -562,7 +562,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 	function websocketCmdCallbackPath() {
 		var callback = {
-			exec: function(command) {
+			exec: function (command) {
 				if (!command['data'].hasOwnProperty('results')) {
 					alert('response has no result');
 				} else {
@@ -606,15 +606,15 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	 * @param {rect} The selection rectangle.
 	 */
 	function selectBays(rect) {
-		var selectedBays = goog.dom.findNodes(workAreaEditorPane_, function(node) {
+		var selectedBays = goog.dom.findNodes(workAreaEditorPane_, function (node) {
 			if (goog.dom.classes.has(node, 'bayView')) {
 
 				var element = $(node);
 				var offset = element.offset();
 				var dim = {
-					left:   offset.left,
-					top:    offset.top,
-					width:  element.width(),
+					left: offset.left,
+					top: offset.top,
+					width: element.width(),
 					height: element.height()
 				};
 
@@ -637,7 +637,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	 * Deselect all bays.
 	 */
 	function deselectBays() {
-		var selectedBays = goog.dom.findNodes(workAreaEditorPane_, function(node) {
+		var selectedBays = goog.dom.findNodes(workAreaEditorPane_, function (node) {
 			if (goog.dom.classes.has(node, 'bayView')) {
 				var element = $(node);
 				element.removeClass('selected');
@@ -655,9 +655,9 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 		if (
 		// The whole thing is covering the whole other thing
 			(dim1.left <= dim2.left) &&
-				(dim1.top <= dim2.top) &&
-				((dim1.left + dim1.width) >= (dim2.left + dim2.width)) &&
-				((dim1.top + dim1.height) > (dim2.top + dim2.height))
+			(dim1.top <= dim2.top) &&
+			((dim1.left + dim1.width) >= (dim2.left + dim2.width)) &&
+			((dim1.top + dim1.height) > (dim2.top + dim2.height))
 			) {
 			return 100;
 		} else {
@@ -684,8 +684,8 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 	function drawPathArrow(graphics, start, end) {
 		var path = new goog.graphics.Path()
-					   .moveTo(start.x, start.y)
-					   .lineTo(end.x, end.y);
+			.moveTo(start.x, start.y)
+			.lineTo(end.x, end.y);
 		graphics.drawPath(path, stroke, null);
 	}
 
@@ -696,11 +696,11 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 	 */
 	var self = {
 
-		getViewName: function() {
+		getViewName: function () {
 			return 'Work Area Editor';
 		},
 
-		doSetupView: function() {
+		doSetupView: function () {
 
 			// Setup the work area view elements.
 			var workAreaEditor = soy.renderAsElement(codeshelf.templates.workAreaEditor);
@@ -719,25 +719,29 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			self.pathTool = new PathTool(self.getContentElement(),
 				function createPath() {
 					return new Path(facility_['domainId'] + "." + pathCounter++,
-								   function pixelToMeters(pixel) {return pixel / self.getPixelsPerMeter();});
+						function pixelToMeters(pixel) {
+							return pixel / self.getPixelsPerMeter();
+						});
 				});
 
-			self.pathTool.newSegments.onValue(function(segment) {
+			self.pathTool.newSegments.onValue(function (segment) {
 				drawPathSegment(segment.startPoint, segment.endPoint, "FORWARD");
 			});
 
-			self.pathTool.newPaths.onValue(function(path) {
-				savePath(path);
+			self.pathTool.newPaths.onValue(function (path) {
+				if ((path.segments !== undefined) && (path.segments.length > 0)) {
+					savePath(path);
+				}
 			});
 		},
 
-		open: function() {
+		open: function () {
 			// Create the filter to listen to all vertex updates for this facility.
 			var vertexFilterData = {
-				'className':     domainobjects['Vertex']['className'],
+				'className': domainobjects['Vertex']['className'],
 				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder'],
-				'filterClause':  'parent.persistentId = :theId',
-				'filterParams':  [
+				'filterClause': 'parent.persistentId = :theId',
+				'filterParams': [
 					{ 'name': 'theId', 'value': facility_['persistentId']}
 				]
 			};
@@ -747,10 +751,10 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 			// Create the filter to listen to all aisle updates for this facility.
 			var aisleFilterData = {
-				'className':     domainobjects['Aisle']['className'],
+				'className': domainobjects['Aisle']['className'],
 				'propertyNames': ['domainId', 'anchorPosX', 'anchorPosY'],
-				'filterClause':  'parent.persistentId = :theId',
-				'filterParams':  [
+				'filterClause': 'parent.persistentId = :theId',
+				'filterParams': [
 					{ 'name': 'theId', 'value': facility_['persistentId']}
 				]
 			};
@@ -760,10 +764,10 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 
 			// Create the filter to listen to all path updates for this facility.
 			var pathFilterData = {
-				'className':     domainobjects['Path']['className'],
+				'className': domainobjects['Path']['className'],
 				'propertyNames': ['domainId', 'travelDirEnum'],
-				'filterClause':  'parent.persistentId = :theId',
-				'filterParams':  [
+				'filterClause': 'parent.persistentId = :theId',
+				'filterParams': [
 					{ 'name': 'theId', 'value': facility_['persistentId']}
 				]
 			};
@@ -772,23 +776,23 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			websession_.sendCommand(pathFilterCmd, websocketCmdCallbackPath(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 		},
 
-		close: function() {
+		close: function () {
 
 		},
 
-		exit: function() {
+		exit: function () {
 
 		},
 
-		doMouseDownHandler: function(event) {
+		doMouseDownHandler: function (event) {
 
 		},
 
-		doGetContentElement: function() {
+		doGetContentElement: function () {
 			return workAreaEditorPane_;
 		},
 
-		canDragSelect: function(event) {
+		canDragSelect: function (event) {
 			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_), event['offsetX'], event['offsetY'])) {
 				alert('Select a starting point inside the facility bounds.');
 				return false;
@@ -797,11 +801,11 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			}
 		},
 
-		doDraggerBefore: function(event) {
+		doDraggerBefore: function (event) {
 
 		},
 
-		doDraggerStart: function(event) {
+		doDraggerStart: function (event) {
 			deselectBays();
 
 			var stroke = new goog.graphics.Stroke(1, 'black');
@@ -811,9 +815,9 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			currentDrawRect_ = graphics_.drawRect(startDragPoint_.x, startDragPoint_.y, 0, 0, stroke, fill);
 		},
 
-		doDraggerDrag: function(event) {
+		doDraggerDrag: function (event) {
 			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_),
-			                               startDragPoint_.x + event.target.deltaX, startDragPoint_.y + event.target.deltaY)) {
+					startDragPoint_.x + event.target.deltaX, startDragPoint_.y + event.target.deltaY)) {
 				// Dont' do anything, the last drag point was inside the facility bounds.
 			} else {
 				var x = event.target.deltaX;
@@ -843,7 +847,7 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			}
 		},
 
-		doDraggerEnd: function(event) {
+		doDraggerEnd: function (event) {
 			var tool = self.getToolbarTool();
 			switch (tool.getId()) {
 				case 'aisle-tool':
@@ -856,12 +860,12 @@ codeshelf.workareaeditorview = function(websession, facility, options) {
 			currentDrawRect_.dispose();
 		},
 
-		doResize: function() {
+		doResize: function () {
 			graphics_.setSize(workAreaEditorPane_.clientWidth, workAreaEditorPane_.clientHeight);
 			self.invalidate();
 		},
 
-		doDraw: function() {
+		doDraw: function () {
 			startDraw();
 
 			// Draw the facility path.

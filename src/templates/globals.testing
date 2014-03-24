@@ -1,2 +1,3 @@
-LOGIN_ID = 'jeffw@gadgetworks.com'
-LOGIN_PW = 'blahdeeblah'
+LOGIN_ORG = 'DEMO1'
+LOGIN_ID = 'a@example.com'
+LOGIN_PW = 'testme'

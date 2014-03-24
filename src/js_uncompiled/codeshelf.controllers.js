@@ -1,6 +1,6 @@
 /*******************************************************************************
- *	CodeShelfUX
- *	Copyright (c) 2005-2013, Jeffrey B. Williams, All rights reserved
+ *    CodeShelfUX
+ *    Copyright (c) 2005-2013, Jeffrey B. Williams, All rights reserved
  *  $Id: application.js,v 1.24 2012/12/07 08:58:02 jeffw Exp $
  *******************************************************************************/
 
@@ -10,27 +10,27 @@ goog.require('codeshelf.websession');
 
 var codeshelfApp = angular.module('codeshelfApp', [
 		'ui.bootstrap'
-	]).factory('$websession', function() {
+	]).factory('$websession', function () {
 		return application.getWebsession();
 	})
-	/*.config(['$routeProvider',
-		function($routeProvider) {
-			$routeProvider.
-				when('/login', {
-					templateUrl: 'partials/login.html',
-					controller: 'LoginCtrl'
-				}).
-				when('/main', {
-					templateUrl: 'partials/main.html',
-					controller: 'MainlCtrl'
-				}).
-				otherwise({
-					redirectTo: '/login'
-				});
-		}])
-		*/;
+/*.config(['$routeProvider',
+ function($routeProvider) {
+ $routeProvider.
+ when('/login', {
+ templateUrl: 'partials/login.html',
+ controller: 'LoginCtrl'
+ }).
+ when('/main', {
+ templateUrl: 'partials/main.html',
+ controller: 'MainlCtrl'
+ }).
+ otherwise({
+ redirectTo: '/login'
+ });
+ }])
+ */;
 
-var WorkAreaCtrl = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', '$log', function($scope, $modal, $log) {
+var WorkAreaCtrl = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', '$log', function ($scope, $modal, $log) {
 
 	$scope.open = function (facilityContext, aisleShape) {
 		//TODO facility might be able to come from a parent controller
@@ -38,7 +38,7 @@ var WorkAreaCtrl = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', 
 			'templateUrl': 'createAisleModalContent.html',
 			'controller': 'WorkAreaModalCtrl',
 			'resolve': {
-				'facilityContext': function() {
+				'facilityContext': function () {
 					return facilityContext;
 				},
 				'aisleShape': function () {
@@ -58,13 +58,13 @@ var WorkAreaCtrl = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', 
 }]);
 
 
-var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', '$modalInstance', '$log', '$websession', 'facilityContext', 'aisleShape', function($scope, $modalInstance, $log, $websession, facilityContext, aisleShape) {
+var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', '$modalInstance', '$log', '$websession', 'facilityContext', 'aisleShape', function ($scope, $modalInstance, $log, $websession, facilityContext, aisleShape) {
 
 	var consts = {};
 	Object.defineProperty(consts, 'feetInMeters', {'value': 0.3048,
-		'writable':      false,
-		'enumerable':    true,
-		'configurable':  true});
+		'writable': false,
+		'enumerable': true,
+		'configurable': true});
 
 	$scope.aisleForm = {};
 	$scope.aisleForm = {
@@ -76,7 +76,7 @@ var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', 
 	$scope.aisleShape = aisleShape;
 
 	$scope['ok'] = function () {
-		var aisle  = $scope['convertData'](this['aisleForm']);
+		var aisle = $scope['convertData'](this['aisleForm']);
 		$log.info('aisle obj: ' + angular.toJson(aisle));
 		$scope.sendCreateAisleCommand(aisle,
 			function onSuccess(lastAisleData) {
@@ -107,7 +107,7 @@ var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', 
 		aisle.bayDepth = aisleForm['bayDepth'] * consts['feetInMeters'];
 		aisle.baysHigh = aisleForm['baysHigh'];
 		aisle.baysLong = aisleForm['baysLong'];
-		aisle.opensLowSide = aisleForm['opensLowSide'] == "true";
+		aisle.controllerId = aisleForm['controllerId'];
 		aisle.isLeftHandBay = aisleForm['isLeftHandBay'] == "true";
 
 		aisle.runInXDim = true;
@@ -121,31 +121,30 @@ var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', 
 		return (pixels / $scope.aisleShape.pixelsPerMeter);
 	};
 
-	$scope.sendCreateAisleCommand = function(aisle, onSuccess, onError) {
-		// Call Facility.createAisle();
+	$scope.sendCreateAisleCommand = function (aisle, onSuccess, onError) {
+
+		var anchorPoint = {'posTypeEnum': 'METERS_FROM_PARENT', 'x': aisle.xOriginMeters, 'y': aisle.yOriginMeters, 'z': 0.0};
+		var protoBayPoint = {'posTypeEnum': 'METERS_FROM_PARENT', 'x': aisle.bayWidth, 'y': aisle.bayDepth, 'z': aisle.bayHeight};
 		var data = {
-			'className':	$scope.facilityContext['className'],
+			'className': $scope.facilityContext['className'],
 			'persistentId': $scope.facilityContext['facility']['persistentId'],
-			'methodName':	'createAisle',
-			'methodArgs':	[
-				{ 'name': 'inAisleId', 'value': aisle.aisleId, 'classType': 'java.lang.String'},
-				{ 'name': 'inPosXMeters', 'value': aisle.xOriginMeters, 'classType': 'java.lang.Double'},
-				{ 'name': 'inPosYMeters', 'value': aisle.yOriginMeters, 'classType': 'java.lang.Double'},
-				{ 'name': 'inProtoBayXDimMeters', 'value': aisle.bayWidth, 'classType': 'java.lang.Double'},
-				{ 'name': 'inProtoBayYDimMeters', 'value': aisle.bayDepth, 'classType': 'java.lang.Double'},
-				{ 'name': 'inProtoBayZDimMeters', 'value': aisle.bayHeight, 'classType': 'java.lang.Double'},
+			'methodName': 'createAisle',
+			'methodArgs': [
+				{ 'name': 'inAisleId', 'value': aisle.aisleId.toUpperCase(), 'classType': 'java.lang.String'},
+				{ 'name': 'anchorPoint', 'value': anchorPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'},
+				{ 'name': 'protoBayPoint', 'value': protoBayPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'},
 				{ 'name': 'inProtoBaysHigh', 'value': aisle.baysHigh, 'classType': 'java.lang.Integer'},
 				{ 'name': 'inProtoBaysLong', 'value': aisle.baysLong, 'classType': 'java.lang.Integer'},
+				{ 'name': 'inControllerId', 'value': aisle.controllerId.toLowerCase(), 'classType': 'java.lang.String'},
 				{ 'name': 'inRunInXDir', 'value': aisle.runInXDim, 'classType': 'java.lang.Boolean'},
-				{ 'name': 'inOpensLowSide', 'value': aisle.opensLowSide, 'classType': 'java.lang.Boolean'},
 				{ 'name': 'inLeftHandBay', 'value': aisle.isLeftHandBay, 'classType': 'java.lang.Boolean'}
 			]
 		};
 
 		var createAisleCmd = $scope.websession.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
 		var callback = {
-			'exec': function(response) {
-				$scope.$apply(function() {
+			'exec': function (response) {
+				$scope.$apply(function () {
 					if (response['data']['status'] == "ERROR") {
 						var errorResult = response['data']['results'];
 						onError(errorResult);
@@ -158,5 +157,5 @@ var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', 
 			}
 		};
 		$scope.websession.sendCommand(createAisleCmd, callback, true);
-   };
+	};
 }]);

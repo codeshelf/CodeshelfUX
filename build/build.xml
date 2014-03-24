@@ -62,22 +62,11 @@
 		</exec>
 	</target>
 
-	<target name="generate.templates.local" depends="prep.dirs">
-		<java jar="./lib/GoogleClosureTemplates/SoyToJsSrcCompiler.jar" fork="true" failonerror="true" maxmemory="128m">
-			<arg value="--shouldProvideRequireSoyNamespaces" />
-			<arg value="--compileTimeGlobalsFile" />
-			<arg value="${basedir}/src/templates/globals.testing" />
-			<arg value="--outputPathFormat" />
-			<arg value="./src/js_uncompiled/{INPUT_FILE_NAME_NO_EXT}_gen.js" />
-			<arg value="./src/templates/codeshelf_templates.soy" />
-		</java>
-	</target>
-
 	<target name="generate.templates" depends="prep.dirs">
 		<java jar="./lib/GoogleClosureTemplates/SoyToJsSrcCompiler.jar" fork="true" failonerror="true" maxmemory="128m">
 			<arg value="--shouldProvideRequireSoyNamespaces" />
 			<arg value="--compileTimeGlobalsFile" />
-			<arg value="${basedir}/src/templates/globals.deploy" />
+			<arg value="${deploy.globals}" />
 			<arg value="--outputPathFormat" />
 			<arg value="./src/js_uncompiled/{INPUT_FILE_NAME_NO_EXT}_gen.js" />
 			<arg value="./src/templates/codeshelf_templates.soy" />
@@ -150,7 +139,7 @@
 		</condition>
 	</target>
 
-	<target name="compile" depends="prep.dirs, generate.templates, generate.css, set.defaults">
+	<target name="compile" depends="prep.dirs, generate.templates, generate.css, generate.deps, set.defaults">
 		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/closurebuilder.py" dir="${basedir}" optimize="0">
 			<arg value="--root=./src/js_uncompiled" />
 			<arg value="--root=./lib/GoogleClosureLibrary/closure/" />
@@ -219,7 +208,7 @@
 	</target>
 
 	<!-- Build the web app from the compiled pieces. /-->
-	<target name="build.webapp" depends="clean, generate.templates, generate.css, compile">
+	<target name="build.webapp" depends="clean, generate.templates, generate.css, generate.deps, compile">
 
 		<copy todir="${target.web.dir}/js">
 			<fileset dir="${target.compiled.js.dir}">
@@ -352,6 +341,7 @@
 		<property name="compiler.options.wrapper" value="--compiler_flags=--output_wrapper=&quot;(function(){%output%})();&quot;" />
 		<property name="compiler.options.pretty" value="--compiler_flags=--source_map_format=V3" />
 		<property name="compiler.options.debug" value="--compiler_flags=--source_map_format=V3" />
+		<property name="deploy.globals" value="${basedir}/src/templates/globals.production" />
 
 		<antcall target="build.webapp">
 		</antcall>
@@ -387,7 +377,8 @@
 		<property name="compiler.options.wrapper" value="--compiler_flags=--output_wrapper=&quot;(function(){%output%})();&quot;" />
 		<property name="compiler.options.pretty" value="--compiler_flags=--source_map_format=V3" />
 		<property name="compiler.options.debug" value="--compiler_flags=--source_map_format=V3" />
-
+		<property name="deploy.globals" value="${basedir}/src/templates/globals.testing" />
+		
 		<antcall target="build.webapp">
 		</antcall>
 

@@ -58,11 +58,13 @@ codeshelf.initializenewclient = function() {
 		}
 
 		// Since we don't know the user's location let's default to the Safeway DC Tracy, CA
-		createFacility(-121.517029, 37.717198);
+		//createFacility(-121.517029, 37.717198);
 
 	}
 
 	function createFacility(longitude, latitude) {
+
+		var anchorPoint = {'posTypeEnum': 'GPS', 'x': longitude, 'y': latitude, 'z' : 0.0};
 		var data = {
 			'className':    domainobjects['Organization']['className'],
 			'persistentId': organization_['persistentId'],
@@ -70,9 +72,7 @@ codeshelf.initializenewclient = function() {
 			'methodArgs':   [
 				{'name': 'domainId', 'value': 'F1', 'classType': 'java.lang.String'},
 				{'name': 'description', 'value': 'First Facility', 'classType': 'java.lang.String'},
-				{'name': 'anchorposTypeByStr', 'value': 'GPS', 'classType': 'java.lang.String'},
-				{'name': 'anchorPosX', 'value': longitude, 'classType': 'java.lang.Double'},
-				{'name': 'anchorPosY', 'value': latitude, 'classType': 'java.lang.Double'}
+				{'name': 'anchorPoint', 'value': anchorPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'}
 			]
 		};
 

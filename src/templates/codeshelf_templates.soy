@@ -46,9 +46,15 @@
 <div id="loginPanel" class="panel panel-default" >
 <form class="form-horizontal" role="form">
   <div class="control-group">
+  	  <label for="organizationIdInput" class="control-label">Company:</label>
+    <div class="controls">
+	  <input type='text' required id='organizationIdInput' class='formControl' value='{LOGIN_ORG}' autocomplete='on' autofocus />
+    </div>
+  </div>
+  <div class="control-group">
   	  <label for="userIdInput" class="control-label">Login:</label>
     <div class="controls">
-	  <input type='email' required id='userIdInput' class='formControl' value='{LOGIN_ID}' autocomplete='on' placeholder="Email" autofocus />
+	  <input type='email' required id='userIdInput' class='formControl' value='{LOGIN_ID}' autocomplete='on' placeholder="Email" />
     </div>
   </div>
   <div class="control-group">
@@ -244,9 +250,9 @@
 			<tr><td>Bay Depth: </td><td><input id='bayDepth' class='bayDepth' label='Feet' /></td></tr>
 			<tr><td>Bays High: </td><td><input id='baysHigh' class='baysHigh' label='Num' /></td></tr>
 			<tr><td>Bays Long: </td><td><input id='baysLong' class='baysLong' label='Num' /></td></tr>
+			<tr><td>Controller ID: </td><td><input id='controllerId' class='controllerId' label='ID' /></td></tr>
 		</table>
 		<br>
-		<div>Opens Top or Left: <span id="opensLowSide" class="opensLowSide goog-checkbox goog-checkbox-checked"></span></div>
 		<div>Left Hand Bay: <span id="isLeftHandBay" class="isLeftHandBay goog-checkbox goog-checkbox-checked"></span></div>
 	</div>
 </div>

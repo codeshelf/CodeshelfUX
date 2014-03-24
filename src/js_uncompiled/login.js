@@ -24,7 +24,7 @@ codeshelf.loginWindow = function() {
 	function loginCheck() {
 
 		var credentialData = {
-			'organizationId' : 'O1',
+			'organizationId' : goog.dom.getElement('organizationIdInput').value,
 			'userId': goog.dom.getElement('userIdInput').value,
 			'password': goog.dom.getElement('passwordInput').value
 		};
@@ -64,6 +64,7 @@ codeshelf.loginWindow = function() {
 			websession_.setCurrentPage(self);
 
 			goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.loginDialog));
+			var organizationIdInput = goog.dom.getElement('organizationIdInput');
 			var userIdInput = goog.dom.getElement('userIdInput');
 			var passwordInput = goog.dom.getElement('passwordInput');
 
@@ -77,20 +78,14 @@ codeshelf.loginWindow = function() {
 			var loginPanel = goog.dom.getElement('loginPanel');
 			roundedLoginPanel.decorate(loginPanel);
 
-			userIdInput.onkeydown = function(event) {
-				//logger_.info('Key ' + event.keyCode);
-				if ((event.keyCode == 13) || (event == 10)) {
-					loginCheck();
-				}
-			};
 			passwordInput.onkeydown = function(event) {
 				//logger_.info('Key ' + event.keyCode);
 				if ((event.keyCode == 13) || (event == 10)) {
 					loginCheck();
 				}
 			};
-			userIdInput.focus();
-			userIdInput.select();
+			organizationIdInput.focus();
+			organizationIdInput.select();
 		},
 
 		exit: function() {
