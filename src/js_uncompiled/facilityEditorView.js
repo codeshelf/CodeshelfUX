@@ -244,12 +244,12 @@ codeshelf.facilityeditorview = function (websession, organization, facility) {
 					facilityOutlinePath_.setAt(vertexData.Vertex['drawOrder'], marker.getPosition());
 
 					if (canEditOutline_) {
+						var anchorPoint = {'posTypeEnum': 'GPS', 'x': marker.getPosition().lng(), 'y': marker.getPosition().lat(), 'z' : 0.0};
 						var data = {
 							'className': domainobjects['Vertex']['className'],
 							'persistentId': vertex['persistentId'],
 							'properties': [
-								{'name': 'posX', 'value': marker.getPosition().lng()},
-								{'name': 'posY', 'value': marker.getPosition().lat()}
+								{'name': 'point', 'value': anchorPoint, 'classType' : 'com.gadgetworks.codeshelf.model.domain.Point'}
 							]
 						};
 						var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ,
