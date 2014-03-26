@@ -50,12 +50,12 @@ describe('Codeshelf pathdrawing', function() {
 
 		clickAt(pane, 0,0);
 		clickAt(pane, 0,5);
-		expect(lastLineSegment.startPoint).toEqual({x:0, y:0});
-		expect(lastLineSegment.endPoint).toEqual({x:0, y:5});
+		expect(lastLineSegment.startPoint).toEqual({x:0, y:0, z:0});
+		expect(lastLineSegment.endPoint).toEqual({x:0, y:5, z:0});
 
 		clickAt(pane, 0,10);
-		expect(lastLineSegment.startPoint).toEqual({x:0, y:5});
-		expect(lastLineSegment.endPoint).toEqual({x:0, y:10});
+		expect(lastLineSegment.startPoint).toEqual({x:0, y:5, z:0});
+		expect(lastLineSegment.endPoint).toEqual({x:0, y:10, z:0});
 
 	});
 
