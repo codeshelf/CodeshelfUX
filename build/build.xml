@@ -63,6 +63,13 @@
 	</target>
 
 	<target name="generate.templates" depends="prep.dirs">
+		<!-- if we're calling generate templates directly then create the (safer) production version. -->
+		<condition property="deploy.globals" value="${basedir}/src/templates/globals.testing" >
+		   <not>  
+		      <isset property="deploy.globals"/>
+		   </not>
+		</condition>
+		
 		<java jar="./lib/GoogleClosureTemplates/SoyToJsSrcCompiler.jar" fork="true" failonerror="true" maxmemory="128m">
 			<arg value="--shouldProvideRequireSoyNamespaces" />
 			<arg value="--compileTimeGlobalsFile" />
@@ -341,7 +348,7 @@
 		<property name="compiler.options.wrapper" value="--compiler_flags=--output_wrapper=&quot;(function(){%output%})();&quot;" />
 		<property name="compiler.options.pretty" value="--compiler_flags=--source_map_format=V3" />
 		<property name="compiler.options.debug" value="--compiler_flags=--source_map_format=V3" />
-		<property name="deploy.globals" value="${basedir}/src/templates/globals.production" />
+		<property name="deploy.globals" value="${basedir}/src/templates/globals.deploy" />
 
 		<antcall target="build.webapp">
 		</antcall>

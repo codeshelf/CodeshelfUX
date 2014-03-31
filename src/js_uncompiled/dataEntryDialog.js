@@ -15,7 +15,7 @@ goog.require('goog.ui.Dialog');
 goog.require('goog.ui.LabelInput');
 
 
-codeshelf.dataentrydialog = function(title, buttonSet) {
+codeshelf.dataentrydialog = function (title, buttonSet) {
 
 	var title_ = title;
 	var buttonSet_ = buttonSet;
@@ -26,7 +26,7 @@ codeshelf.dataentrydialog = function(title, buttonSet) {
 
 	thisDataEntryDialog_ = {
 
-		setupDialog: function(dialogContentElement) {
+		setupDialog: function (dialogContentElement) {
 			// Raise a dialog to prompt the user for information about this aisle.
 			dialog_ = new goog.ui.Dialog();//null, false);
 			dialog_.setTitle(title_);
@@ -38,7 +38,7 @@ codeshelf.dataentrydialog = function(title, buttonSet) {
 			dialogContentElement_ = dialog_.getContentElement();
 		},
 
-		open: function(dialogCompleteHandler) {
+		open: function (dialogCompleteHandler) {
 
 			dialog_.setVisible(true);
 
@@ -51,32 +51,38 @@ codeshelf.dataentrydialog = function(title, buttonSet) {
 				}
 			}
 
-			var dialogListener = goog.events.listen(dialog_, goog.ui.Dialog.EventType.SELECT, function(event) {
-				dialog_.setVisible(false);
-				dialogCompleteHandler(event, thisDataEntryDialog_);
-
-				for (var id in dialogFields_) {
-					if (dialogFields_.hasOwnProperty(id)) {
-						var component = dialogFields_[id].field;
-						component.dispose();
+			var dialogListener = goog.events.listen(dialog_, goog.ui.Dialog.EventType.SELECT, function (event) {
+					var didComplete = dialogCompleteHandler(event, thisDataEntryDialog_);
+					if (didComplete) {
+						thisDataEntryDialog_.close();
 					}
+					return didComplete;
 				}
-
-				if (codeshelf.debug) {
-					var theLogger = goog.debug.Logger.getLogger('codeshelf');
-					var objects = goog.Disposable.getUndisposedObjects();
-					goog.array.forEach(objects, function(object) {
-						theLogger.info('undisposed: ' + goog.debug.expose(object));
-					});
-				}
-
-				dialog_.dispose();
-				goog.events.unlistenByKey(dialogListener);
-			});
-
+			)
 		},
 
-		createField: function(fieldId, fieldType, focus) {
+		close: function () {
+			dialog_.setVisible(false);
+			for (var id in dialogFields_) {
+				if (dialogFields_.hasOwnProperty(id)) {
+					var component = dialogFields_[id].field;
+					component.dispose();
+				}
+			}
+
+			if (codeshelf.debug) {
+				var theLogger = goog.debug.Logger.getLogger('codeshelf');
+				var objects = goog.Disposable.getUndisposedObjects();
+				goog.array.forEach(objects, function (object) {
+					theLogger.info('undisposed: ' + goog.debug.expose(object));
+				});
+			}
+
+			dialog_.dispose();
+			goog.events.unlistenByKey(dialogListener);
+		},
+
+		createField: function (fieldId, fieldType, focus) {
 
 			var field;
 			var editFields = goog.dom.query('.dialogFields', dialogContentElement_)[0];
@@ -102,7 +108,7 @@ codeshelf.dataentrydialog = function(title, buttonSet) {
 			return field;
 		},
 
-		getFieldValue: function(fieldId) {
+		getFieldValue: function (fieldId) {
 			var component = dialogFields_[fieldId];
 			if (component.fieldType === 'text') {
 				return component.field.getValue();
@@ -112,7 +118,9 @@ codeshelf.dataentrydialog = function(title, buttonSet) {
 				return '';
 			}
 		}
-	};
+	}
+	;
 
 	return thisDataEntryDialog_;
-};
+}
+;
