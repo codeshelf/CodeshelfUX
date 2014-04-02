@@ -35,7 +35,9 @@ var WorkAreaCtrl = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', 
 	$scope.open = function (facilityContext, aisleShape) {
 		//TODO facility might be able to come from a parent controller
 		var modalInstance = $modal.open({
-			'templateUrl': 'createAisleModalContent.html',
+			/*JR */
+			/*'templateUrl': 'createAisleModalContent.html',*/
+			'templateUrl': 'partials/aisle-editor.html',
 			'controller': 'WorkAreaModalCtrl',
 			'resolve': {
 				'facilityContext': function () {
