@@ -22,6 +22,8 @@
 
 	<property name="target.compiled.js.dir" value="${target.dir}/js_compiled" />
 
+	<property name="pythonexec" value="/usr/bin/python" />
+
 	<taskdef resource="pyAntTasks.properties">
 		<classpath>
 			<pathelement location="${build.dir}/lib/pyAntTasks-1.3.3.jar" />
@@ -65,11 +67,11 @@
 	<target name="generate.templates" depends="prep.dirs">
 		<!-- if we're calling generate templates directly then create the (safer) production version. -->
 		<condition property="deploy.globals" value="${basedir}/src/templates/globals.testing" >
-		   <not>  
+		   <not>
 		      <isset property="deploy.globals"/>
 		   </not>
 		</condition>
-		
+
 		<java jar="./lib/GoogleClosureTemplates/SoyToJsSrcCompiler.jar" fork="true" failonerror="true" maxmemory="128m">
 			<arg value="--shouldProvideRequireSoyNamespaces" />
 			<arg value="--compileTimeGlobalsFile" />
@@ -92,7 +94,7 @@
 
 	<target name="generate.deps" depends="prep.dirs">
 		<echo>${basedir}</echo>
-		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/depswriter.py" pythonpath="${basedir}" optimize="0">
+		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/depswriter.py" pythonpath="${basedir}" optimize="0" python="${pythonexec}">
 			<arg value="--root_with_prefix=../lib/GoogleClosureLibrary ../../" />
 			<arg value="--root_with_prefix=../lib/GoogleClosureTemplates ../../../GoogleClosureTemplates" />
 			<arg value="--root_with_prefix=../lib/Arrowlets ../../../Arrowlets" />
@@ -385,7 +387,7 @@
 		<property name="compiler.options.pretty" value="--compiler_flags=--source_map_format=V3" />
 		<property name="compiler.options.debug" value="--compiler_flags=--source_map_format=V3" />
 		<property name="deploy.globals" value="${basedir}/src/templates/globals.testing" />
-		
+
 		<antcall target="build.webapp">
 		</antcall>
 
