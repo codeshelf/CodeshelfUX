@@ -7,9 +7,11 @@
 'use strict';
 goog.provide('codeshelf.controllers');
 goog.require('codeshelf.websession');
+// goog.require('workAreaModalCtrlFile');
+
 
 var codeshelfApp = angular.module('codeshelfApp', [
-		'ui.bootstrap'
+		'ui.bootstrap', 'ngRoute'
 	]).factory('$websession', function () {
 		return application.getWebsession();
 	})
@@ -161,3 +163,150 @@ var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', 
 		$scope.websession.sendCommand(createAisleCmd, callback, true);
 	};
 }]);
+
+
+
+codeshelfApp.config(['$routeProvider',
+	function($routeProvider) {
+		$routeProvider.
+/*
+			when('/WorkAreaCtrl', {
+				'templateUrl': 'partials/aisle-editor.html',
+				'controller': 'WorkAreaModalCtrl'
+			}).
+*/
+			when('/MissingRouter', {
+				templateUrl: 'partials/missing-router.html',
+				controller: 'MissingRouterCtrl'
+			}).
+			otherwise({
+				redirectTo: '/MissingRouter'
+			});
+	}]);
+
+/* demonstrating
+1) controller default routing
+2) logging to main log window
+3) using the dWahlin dialog service below
+ */
+codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams',
+	function($scope, $routeParams) {
+		var theLogger = goog.debug.Logger.getLogger('Codeshelf router');
+		theLogger.info("routed to  default controller MissingRouterCtrl");
+
+		/* comment out later, but keep the lines to show the pattern */
+
+		// modal using the default text and buttons
+		// Paul: uncomment this line
+		// dialogService.showModalDialog();
+		// Paul: ui.bootstrap should have MessageBoxController, but our does not. Wrong version?
+		// Also, to use, it should need to be like this:
+		// codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams', 'dialogService',
+			// function($scope, $routeParams, dialogService) {
+		// But if you add that, it no longer executes the logger line
+
+		// Wednesday, August 21, 2013 1:38 PM by Mike Erickson
+		// It should be noted, this code will ONLY work Bootstrap 2.3.x as the ui.bootstrap service has not been
+		// updated as of the time of this comment to work with Bootstrap 3.x
+
+
+
+		// simple use with pursposeful text.
+		// dialogService.showMessage('Record not Found!', 'The record you were looking for cannot be found.');
+
+		// modal with injections to significantly modify what the dialog is showing and doing.
+		/*
+		var dialogOptions = {
+			closeButtonText: 'Cancel',
+			actionButtonText: 'Delete Timesheet',
+			headerText: 'Delete Timesheet?',
+			bodyText: 'Are you sure you want to delete this timesheet?',
+			callback: function () {}
+		}
+		dialogService.showModalDialog({}, dialogOptions);
+		*/
+
+
+	}]);
+
+/* From dWahlin  Building an Angular Dialog Service */
+/*
+ This relies on a template built-into Angular UI Bootstrap named template/dialog/message.html
+ and a controller that’s also built-in named MessageBoxController.
+ NOT PRESENT?
+ */
+
+
+angular.module('codeshelfApp').service('dialogService', ['$dialog',
+	function ($dialog) {
+
+		var dialogDefaults = {
+			backdrop: true,
+			keyboard: true,
+			backdropClick: true,
+			dialogFade: true,
+			templateUrl: 'partials/dialog.html'
+		};
+
+		var dialogOptions = {
+			closeButtonText: 'Close',
+			actionButtonText: 'OK',
+			headerText: 'Proceed?',
+			bodyText: 'Perform this action?'
+		};
+
+		this.showDialog = function (customDialogDefaults, customDialogOptions) {
+			//Create temp objects to work with since we're in a singleton service
+			var tempDialogDefaults = {};
+			var tempDialogOptions = {};
+
+			//Map angular-ui dialog custom defaults to dialog defaults defined in this service
+			angular.extend(tempDialogDefaults, dialogDefaults, customDialogDefaults);
+
+			//Map dialog.html $scope custom properties to defaults defined in this service
+			angular.extend(tempDialogOptions, dialogOptions, customDialogOptions);
+
+			if (!tempDialogDefaults.controller) {
+				tempDialogDefaults.controller = function ($scope, dialog) {
+					$scope.dialogOptions = tempDialogOptions;
+					$scope.dialogOptions.close = function (result) {
+						dialog.close(result);
+					};
+					$scope.dialogOptions.callback = function () {
+						dialog.close();
+						customDialogOptions.callback();
+					};
+				}
+			}
+
+			var d = $dialog.dialog(tempDialogDefaults);
+			d.open();
+		};
+
+		this.showModalDialog = function (customDialogDefaults, customDialogOptions) {
+			if (!customDialogDefaults) customDialogDefaults = {};
+			customDialogDefaults.backdropClick = false;
+			this.showDialog(customDialogDefaults, customDialogOptions);
+		};
+
+		this.showMessage = function (title, message, buttons) {
+			var defaultButtons = [{result:'ok', label: 'OK', cssClass: 'btn-primary'}];
+			var msgBox = new $dialog.dialog({
+				dialogFade: true,
+				templateUrl: 'template/dialog/message.html',
+				controller: 'MessageBoxController',
+				resolve:
+				{
+					model: function () {
+						return {
+							title: title,
+							message: message,
+							buttons: buttons == null ? defaultButtons : buttons
+						};
+					}
+				}
+			});
+			return msgBox.open();
+		};
+
+	}]);
