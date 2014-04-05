@@ -189,16 +189,18 @@ codeshelfApp.config(['$routeProvider',
 2) logging to main log window
 3) using the dWahlin dialog service below
  */
-codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams',
-	function($scope, $routeParams) {
+//codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams', /* 'dialogService',*/
+//	function($scope, $routeParams/*, dialogService*/) {
+codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams', 'dialogService',
+	function($scope, $routeParams, dialogService) {
 		var theLogger = goog.debug.Logger.getLogger('Codeshelf router');
 		theLogger.info("routed to  default controller MissingRouterCtrl");
 
-		/* comment out later, but keep the lines to show the pattern */
+			/* comment out later, but keep the lines to show the pattern */
 
 		// modal using the default text and buttons
 		// Paul: uncomment this line
-		// dialogService.showModalDialog();
+//		dialogService.showModalDialog();
 		// Paul: ui.bootstrap should have MessageBoxController, but our does not. Wrong version?
 		// Also, to use, it should need to be like this:
 		// codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams', 'dialogService',
@@ -215,7 +217,7 @@ codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams',
 		// dialogService.showMessage('Record not Found!', 'The record you were looking for cannot be found.');
 
 		// modal with injections to significantly modify what the dialog is showing and doing.
-		/*
+
 		var dialogOptions = {
 			closeButtonText: 'Cancel',
 			actionButtonText: 'Delete Timesheet',
@@ -224,9 +226,6 @@ codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams',
 			callback: function () {}
 		}
 		dialogService.showModalDialog({}, dialogOptions);
-		*/
-
-
 	}]);
 
 /* From dWahlin  Building an Angular Dialog Service */
@@ -237,9 +236,8 @@ codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams',
  */
 
 
-angular.module('codeshelfApp').service('dialogService', ['$dialog',
-	function ($dialog) {
-
+angular.module('codeshelfApp').service('dialogService', ['$modal',
+	function ($modal) {
 		var dialogDefaults = {
 			backdrop: true,
 			keyboard: true,
@@ -267,20 +265,26 @@ angular.module('codeshelfApp').service('dialogService', ['$dialog',
 			angular.extend(tempDialogOptions, dialogOptions, customDialogOptions);
 
 			if (!tempDialogDefaults.controller) {
-				tempDialogDefaults.controller = function ($scope, dialog) {
+				tempDialogDefaults.controller = function ($scope, $modalInstance) {
 					$scope.dialogOptions = tempDialogOptions;
-					$scope.dialogOptions.close = function (result) {
-						dialog.close(result);
+					$scope.ok = function () {
+						$modalInstance.close(/*results*/);
 					};
-					$scope.dialogOptions.callback = function () {
-						dialog.close();
-						customDialogOptions.callback();
+
+					$scope.cancel = function () {
+						$modalInstance.dismiss('cancel');
 					};
-				}
+				};
 			}
 
-			var d = $dialog.dialog(tempDialogDefaults);
-			d.open();
+			var modalInstance = $modal.open(tempDialogDefaults);
+
+			modalInstance.result.then(function (selectedItem) {
+//				$scope.selected = selectedItem;
+			}, function () {
+//				$log.info('Modal dismissed at: ' + new Date());
+			});
+
 		};
 
 		this.showModalDialog = function (customDialogDefaults, customDialogOptions) {
@@ -291,9 +295,9 @@ angular.module('codeshelfApp').service('dialogService', ['$dialog',
 
 		this.showMessage = function (title, message, buttons) {
 			var defaultButtons = [{result:'ok', label: 'OK', cssClass: 'btn-primary'}];
-			var msgBox = new $dialog.dialog({
+			var msgBox = new $modal.open({
 				dialogFade: true,
-				templateUrl: 'template/dialog/message.html',
+				templateUrl: 'template/modal/message.html',
 				controller: 'MessageBoxController',
 				resolve:
 				{
@@ -310,3 +314,46 @@ angular.module('codeshelfApp').service('dialogService', ['$dialog',
 		};
 
 	}]);
+
+var ModalDemoCtrl = function ($scope, $modal, $log) {
+
+  $scope.items = ['item1', 'item2', 'item3'];
+
+  $scope.open = function () {
+
+    var modalInstance = $modal.open({
+      templateUrl: 'partials/dialog.html',
+      controller: ModalInstanceCtrl,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+};
+
+// Please note that $modalInstance represents a modal window (instance) dependency.
+// It is not the same as the $modal service used above.
+
+var ModalInstanceCtrl = function ($scope, $modalInstance, items) {
+
+  $scope.items = items;
+  $scope.selected = {
+    item: $scope.items[0]
+  };
+
+  $scope.ok = function () {
+    $modalInstance.close($scope.selected.item);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+};
