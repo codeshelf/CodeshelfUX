@@ -184,57 +184,31 @@ codeshelfApp.config(['$routeProvider',
 			});
 	}]);
 
-/* demonstrating
-1) controller default routing
-2) logging to main log window
-3) using the dWahlin dialog service below
- */
-//codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams', /* 'dialogService',*/
-//	function($scope, $routeParams/*, dialogService*/) {
 codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams', 'dialogService',
 	function($scope, $routeParams, dialogService) {
-		var theLogger = goog.debug.Logger.getLogger('Codeshelf router');
-		theLogger.info("routed to  default controller MissingRouterCtrl");
 
-			/* comment out later, but keep the lines to show the pattern */
-
-		// modal using the default text and buttons
-		// Paul: uncomment this line
-//		dialogService.showModalDialog();
-		// Paul: ui.bootstrap should have MessageBoxController, but our does not. Wrong version?
-		// Also, to use, it should need to be like this:
-		// codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams', 'dialogService',
-			// function($scope, $routeParams, dialogService) {
-		// But if you add that, it no longer executes the logger line
-
-		// Wednesday, August 21, 2013 1:38 PM by Mike Erickson
-		// It should be noted, this code will ONLY work Bootstrap 2.3.x as the ui.bootstrap service has not been
-		// updated as of the time of this comment to work with Bootstrap 3.x
-
-
-
-		// simple use with pursposeful text.
-		// dialogService.showMessage('Record not Found!', 'The record you were looking for cannot be found.');
-
+		// Demonstration of use of dialog service
 		// modal with injections to significantly modify what the dialog is showing and doing.
+		// But this dialog is coming
 
 		var dialogOptions = {
 			closeButtonText: 'Cancel',
-			actionButtonText: 'Delete Timesheet',
-			headerText: 'Delete Timesheet?',
-			bodyText: 'Are you sure you want to delete this timesheet?',
-			callback: function () {}
+			actionButtonText: 'OK',
+			headerText: 'Default Router',
+			bodyText: 'Default router was called',
+			callback: function () {
+				var theLogger = goog.debug.Logger.getLogger('Codeshelf router');
+				theLogger.info("Clicked the ok button");
+			}
 		}
 		dialogService.showModalDialog({}, dialogOptions);
 	}]);
 
 /* From dWahlin  Building an Angular Dialog Service */
-/*
- This relies on a template built-into Angular UI Bootstrap named template/dialog/message.html
- and a controller that’s also built-in named MessageBoxController.
- NOT PRESENT?
- */
-
+/* modified to use ModalInstanceCtrl
+* Gives easy to inject header, body, cancel, ok buttons. And easy callback for what happens from ok.
+* Needed improvement:  optionally hide the cancel button.
+*/
 
 angular.module('codeshelfApp').service('dialogService', ['$modal',
 	function ($modal) {
@@ -264,11 +238,16 @@ angular.module('codeshelfApp').service('dialogService', ['$modal',
 			//Map dialog.html $scope custom properties to defaults defined in this service
 			angular.extend(tempDialogOptions, dialogOptions, customDialogOptions);
 
+			// If the customDialogOptions.closeButtonText is empty string, then find and hide the cancel button.
+			// in the html     <button type="button" class="btn" id="thecancelbutton"
+			// Not done yet.
+
 			if (!tempDialogDefaults.controller) {
 				tempDialogDefaults.controller = function ($scope, $modalInstance) {
 					$scope.dialogOptions = tempDialogOptions;
 					$scope.ok = function () {
 						$modalInstance.close(/*results*/);
+						customDialogOptions.callback();
 					};
 
 					$scope.cancel = function () {
@@ -293,26 +272,6 @@ angular.module('codeshelfApp').service('dialogService', ['$modal',
 			this.showDialog(customDialogDefaults, customDialogOptions);
 		};
 
-		this.showMessage = function (title, message, buttons) {
-			var defaultButtons = [{result:'ok', label: 'OK', cssClass: 'btn-primary'}];
-			var msgBox = new $modal.open({
-				dialogFade: true,
-				templateUrl: 'template/modal/message.html',
-				controller: 'MessageBoxController',
-				resolve:
-				{
-					model: function () {
-						return {
-							title: title,
-							message: message,
-							buttons: buttons == null ? defaultButtons : buttons
-						};
-					}
-				}
-			});
-			return msgBox.open();
-		};
-
 	}]);
 
 var ModalDemoCtrl = function ($scope, $modal, $log) {
@@ -322,7 +281,8 @@ var ModalDemoCtrl = function ($scope, $modal, $log) {
   $scope.open = function () {
 
     var modalInstance = $modal.open({
-      templateUrl: 'partials/dialog.html',
+	  // url is passed in by the service
+      // templateUrl: 'partials/dialog.html',
       controller: ModalInstanceCtrl,
       resolve: {
         items: function () {

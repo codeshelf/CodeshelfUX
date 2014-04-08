@@ -1,6 +1,6 @@
 <!-- dialog.html file -->
         <!-- From dWahlin  Building an Angular Dialog Service-->
-
+<!-- This supports gives fast two-button dialog with optional callback on clicking ok-->
 <div class="modal-header">
     <h3>{{dialogOptions.headerText}}</h3>
 </div>
@@ -8,7 +8,7 @@
     <p>{{dialogOptions.bodyText}}</p>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn"
+    <button type="button" class="btn" id="thecancelbutton"
             ng-click="cancel()">{{dialogOptions.closeButtonText}}</button>
     <button class="btn btn-primary"
             ng-click="ok()">{{dialogOptions.actionButtonText}}</button>

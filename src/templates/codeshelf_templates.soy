@@ -4,6 +4,40 @@
  * The template for the main page.
  */
 {template .mainPage}
+   <div class="navbar navbar-inverse navbar-fixed-top”> id=“MainMenuController”>
+	<div class="navbar-inner">
+    <div class="container">
+        <ul class="nav">
+            <li class="active">
+                <a class="brand" href="#">Codeshelf</a>
+            </li>';
+
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			</a>
+
+           <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Views <b class="caret"></b></a>
+                <ul class="dropdown-menu dropdown-toggle">
+                   <li><a href="#">Orders</a></li>
+                   <li><a href="#">Facility</a></li>
+                   <li><a href="#">Work Area</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Help <b class="caret"></b></a>
+                <ul class="dropdown-menu dropdown-toggle">
+                   <li><a href="#">Contact Codeshelf</a></li>
+                </ul>
+            </li>
+
+        </ul>
+
+    </div></div></div>
+
 <div class='frame'>
 	<div id='logoBox' class='rotate'>
 		<h1 class='codeshelfLogo'>codeshelf</h1>
@@ -27,6 +61,10 @@
 {template .window}
 <div class='window'>
 	<div class='windowBar'>
+	/* funky! If label is first, the 'x' button does not show except in facility window.
+	class=btn has an outline, but does not go right. Class=close goes right with no outline.
+	this appears to be from "bootstrap" library*/
+        <button id = "closeme" class="close">x</button>
 		<label class='windowTitle'>Window</label>
 	</div>
 	<div class='windowContent'>
