@@ -201,7 +201,10 @@ codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams', 'dialogS
 				theLogger.info("Clicked the ok button");
 			}
 		}
-		dialogService.showModalDialog({}, dialogOptions);
+		// If you uncomment this line, you will see that MissingRouterCtrl is called when application starts
+		// And, only if you click the ok button, it logs, showing the callback works
+
+		// dialogService.showModalDialog({}, dialogOptions);
 	}]);
 
 /* From dWahlin  Building an Angular Dialog Service */
