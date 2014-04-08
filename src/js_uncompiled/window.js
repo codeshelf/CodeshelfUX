@@ -52,6 +52,11 @@ codeshelf.window = function(view, parent, limits) {
 
 			goog.events.listen(windowBar_, goog.events.EventType.MOUSEDOWN, thisWindow_.focusWindowEventHandler(thisWindow_));
 
+			// Paul: how does this not work if the line above works? Or maybe line above does nothing for us.
+			var theCloseButton = goog.dom.getElementsByTagNameAndClass(undefined,"close")[0];
+			goog.events.listen(theCloseButton, goog.events.EventType.CLICK, thisWindow_.logSomethingToTest());
+			// end.  Want to change to ...thisWindow_.close()
+
 			goog.events.listen(dragger_, goog.fx.Dragger.EventType.START, thisWindow_.moverStart(windowElement_));
 			goog.events.listen(dragger_, goog.fx.Dragger.EventType.END, thisWindow_.moverEnd(windowElement_));
 
@@ -86,8 +91,21 @@ codeshelf.window = function(view, parent, limits) {
 		},
 
 		close: function() {
-			view_.close();
+			var closeFunction = function(event) {
+				view_.close();
+			}
+			return closeFunction;
 		},
+
+		logSomethingToTest: function() {
+			var logFunction = function(event) {
+				var theLogger = goog.debug.Logger.getLogger('Codeshelf router');
+				theLogger.info("Clicked the window close button");
+				event.dispose();
+			};
+			return logFunction;
+		},
+
 
 		getContentElement: function() {
 			contentPane_ = goog.dom.query('.windowContent', windowElement_)[0];
