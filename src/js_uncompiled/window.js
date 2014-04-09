@@ -52,9 +52,12 @@ codeshelf.window = function(view, parent, limits) {
 
 			goog.events.listen(windowBar_, goog.events.EventType.MOUSEDOWN, thisWindow_.focusWindowEventHandler(thisWindow_));
 
-			// Paul: how does this not work if the line above works? Or maybe line above does nothing for us.
+			// Paul: these two lines work only in the list demo window, which is opened an unusual way. Why not from the other
+			// windows? Also, there is a scope/inheritance problem. Click in the list demo window leads to 6 click events
+			// being processed. We want the click only going to the window that was clicked. (There are 6 windows up total.)
 			var theCloseButton = goog.dom.getElementsByTagNameAndClass(undefined,"close")[0];
-			goog.events.listen(theCloseButton, goog.events.EventType.CLICK, thisWindow_.logSomethingToTest());
+			// goog.events.listen(theCloseButton, goog.events.EventType.CLICK, thisWindow_.logSomethingToTest());
+			goog.events.listen(theCloseButton, goog.events.EventType.CLICK, thisWindow_.close());
 			// end.  Want to change to ...thisWindow_.close()
 
 			goog.events.listen(dragger_, goog.fx.Dragger.EventType.START, thisWindow_.moverStart(windowElement_));
@@ -92,6 +95,11 @@ codeshelf.window = function(view, parent, limits) {
 
 		close: function() {
 			var closeFunction = function(event) {
+
+				var theLogger = goog.debug.Logger.getLogger('Window');
+				theLogger.info("About to call view.close");
+				event.dispose();
+
 				view_.close();
 			}
 			return closeFunction;

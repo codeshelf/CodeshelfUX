@@ -124,6 +124,12 @@ codeshelf.ediservicesview = function (websession, facility) {
 			contextMenu_.bind("click", linkAccount);
 		},
 
+		// This is mainly demonstration/experiment. Ancestor hierarchyListView has a close(). Which is called?
+		close: function() {
+			var theLogger = goog.debug.Logger.getLogger('EDI Services view');
+			theLogger.info("Called this close");
+		},
+
 		doContextMenu: function (event, item, column) {
 			if (event && event.stopPropagation)
 				event.stopPropagation();

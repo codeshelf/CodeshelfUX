@@ -38,6 +38,8 @@ codeshelf.listdemoview = function() {
 		return true;
 	}
 
+
+
 	function percentCompleteSort(a, b) {
 		return a['percentComplete'] - b['percentComplete'];
 	}
@@ -326,7 +328,8 @@ codeshelf.listdemoview = function() {
 		},
 
 		close: function() {
-
+			var theLogger = goog.debug.Logger.getLogger('ListDemoView');
+			theLogger.info("call this close");
 		}
 	};
 

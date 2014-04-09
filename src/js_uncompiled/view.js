@@ -216,6 +216,15 @@ codeshelf.view = function(options) {
 
 		},
 
+		/*
+		Do not implement close(), as this will break our psuedo-inheritance pattern.
+		close: function() {
+			var theLogger = goog.debug.Logger.getLogger('view.js');
+			theLogger.info("Called this close");
+		},
+		*/
+
+
 		setParentView: function(parentView) {
 			parentView_ = parentView;
 		},

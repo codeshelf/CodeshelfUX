@@ -487,7 +487,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 		},
 
 		close: function() {
-
+			var theLogger = goog.debug.Logger.getLogger('hierarch list view');
+			theLogger.info("Called this close");
 		},
 
 		doResize: function() {
