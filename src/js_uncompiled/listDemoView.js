@@ -328,8 +328,25 @@ codeshelf.listdemoview = function() {
 		},
 
 		close: function() {
+			// Demonstration of our dialog/alert service
+			/*
+			var dialogOptions = {
+				closeButtonText: 'Cancel',
+				actionButtonText: 'OK',
+				headerText: 'Close the list view',
+				bodyText: 'Just at test of the dialog',
+				callback: function () {
+					var theLogger = goog.debug.Logger.getLogger('ListDemoView');
+					theLogger.info("In the alert, clicked the ok button");
+				}
+			}
+
+			/ Paul: how do you get hold of the service to call it?
+			angular.module('codeshelfApp').service("dialogService").showModalDialog({}, dialogOptions);
+			*/
+
 			var theLogger = goog.debug.Logger.getLogger('ListDemoView');
-			theLogger.info("call this close");
+			theLogger.info("called this close()");
 		}
 	};
 
