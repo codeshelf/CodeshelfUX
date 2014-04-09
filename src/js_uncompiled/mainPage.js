@@ -34,7 +34,7 @@ codeshelf.mainpage = function() {
 	var organization_;
 	var websession_;
 	var frame_;
-	var frameTop_ = 5;
+	var frameTop_ = 35; // allow 30 for the navbar
 	var frameLeft_ = 5;
 	var limits_;
 
@@ -155,7 +155,7 @@ codeshelf.mainpage = function() {
 
 			var listDemoView = codeshelf.listdemoview();
 			// note, clone dragRectLimit line from above, since this window launches from wrong place.
-			var dragRectLimit = new goog.math.Rect(0,0,10000,10000);		
+			var dragRectLimit = new goog.math.Rect(0,0,10000,10000);
 			var listDemoWindow = codeshelf.window(listDemoView, frame_, dragRectLimit);
 			listDemoWindow.open();
 
