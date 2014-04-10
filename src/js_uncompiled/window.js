@@ -91,25 +91,25 @@ codeshelf.window = function(view, parent, limits) {
 
 		close: function() {
 			var closeFunction = function(event) {
-
-				var theLogger = goog.debug.Logger.getLogger('Window');
-				theLogger.info("About to call view.close");
-				event.dispose();
-
+				// let the view dispose of anything special
 				view_.close();
+
+				// find and close the DOM window corresponding to this close button click
+				var closeButtonElement = event.currentTarget;
+				thisWindow_.disposeDOMWindowOwningThisElement(closeButtonElement);
+
+				event.dispose();
 			}
 			return closeFunction;
 		},
 
-		logSomethingToTest: function() {
-			var logFunction = function(event) {
-				var theLogger = goog.debug.Logger.getLogger('Codeshelf router');
-				theLogger.info("Clicked the window close button");
-				event.dispose();
-			};
-			return logFunction;
-		},
+		disposeDOMWindowOwningThisElement: function(inElement){
 
+			var theOwnerWindow = goog.dom.getAncestorByClass(inElement, "window");
+			goog.dom.removeChildren(theOwnerWindow);
+			goog.dom.removeNode(theOwnerWindow);
+
+		},
 
 		getContentElement: function() {
 			contentPane_ = goog.dom.query('.windowContent', windowElement_)[0];

@@ -669,7 +669,7 @@ codeshelf.facilityeditorview = function (websession, organization, facility) {
 		},
 
 		close: function () {
-
+			this.exit(); // disconnect the google maps APIs. Maybe exit is not a good name.
 		},
 
 		doResize: function () {
