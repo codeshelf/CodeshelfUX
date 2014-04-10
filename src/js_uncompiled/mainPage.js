@@ -70,41 +70,101 @@ codeshelf.mainpage = function() {
 		return callback;
 	}
 
-	function loadFacilityWindows(facility) {
-		// Instead of undefined rect, let's constrain the drag on left and top.
-		var dragRectLimit = new goog.math.Rect(0,0,10000,10000);
+	function getWindowDragLimit() {
 		// we want the right and bottom limits large as the GCT window knows to scroll there.
 		// As for left and top, zeros are ok. See below it comes from "frame_ = goog.dom.query('.frame')[0];"
 		// which will have zeros for top and left
-		
+		var theRectLimit = new goog.math.Rect(0,0,10000,10000);
+		return theRectLimit;
+	}
+
+
+	function loadFacilityWindows(facility) {
+		// keep old behavior of launching all for now.
+		// Later, if no facility exists yet, launch the facility editor.
+		// If one does exist, launch orders
+
+		loadListDemoView();
+
+		loadFacilityEditor(facility);
+
+		loadWorkAreaEditorView(facility);
+
+		loadEdiServicesView(facility);
+
+		loadOrdersView(facility);
+
+		loadWorkAreaView(facility);
+	}
+
+	function loadListDemoView() {
+		try {
+			var listDemoView = codeshelf.listdemoview();
+			var listDemoWindow = codeshelf.window(listDemoView, frame_, getWindowDragLimit());
+			listDemoWindow.open();
+		}
+		catch (err) {
+			alert(err);
+		}
+	}
+
+	function loadFacilityEditor(facility) {
 		try {
 			// Load the GMaps API and init() when done.
 			if (typeof google !== 'undefined') {
 				google.load('maps', '3', {'other_params': 'sensor=false', 'callback': function() {
 					var facilityEditorView = codeshelf.facilityeditorview(websession_, application_.getOrganization(), facility);
-					var facilityEditorWindow = codeshelf.window(facilityEditorView, frame_, dragRectLimit);
+					var facilityEditorWindow = codeshelf.window(facilityEditorView, frame_, getWindowDragLimit());
 					facilityEditorWindow.open();
 				}});
 			}
-
-			var workAreaEditorView = codeshelf.workareaeditorview(websession_, facility);
-			var workAreaEditorWindow = codeshelf.window(workAreaEditorView, frame_, dragRectLimit);
-			workAreaEditorWindow.open();
-
-			var ediServicesView_ = codeshelf.ediservicesview(websession_, facility);
-			var ediServicesWindow = codeshelf.window(ediServicesView_, frame_, dragRectLimit);
-			ediServicesWindow.open();
-
-			var ordersView = codeshelf.ordersview(websession_, facility);
-			var ordersWindow = codeshelf.window(ordersView, frame_, dragRectLimit);
-			ordersWindow.open();
-
-			var workAreaView = codeshelf.workareaview(websession_, facility);
-			var workAreaWindow = codeshelf.window(workAreaView, frame_, dragRectLimit);
-			workAreaWindow.open();
 		}
 		catch (err) {
 			alert(err);
+		}
+	}
+
+	function loadWorkAreaEditorView(facility) {
+		try {
+			var workAreaEditorView = codeshelf.workareaeditorview(websession_, facility);
+			var workAreaEditorWindow = codeshelf.window(workAreaEditorView, frame_, getWindowDragLimit());
+			workAreaEditorWindow.open();
+		}
+		catch (err) {
+			alert(err);
+		}
+	}
+
+	function loadEdiServicesView(facility) {
+		try {
+			var ediServicesView_ = codeshelf.ediservicesview(websession_, facility);
+			var ediServicesWindow = codeshelf.window(ediServicesView_, frame_, getWindowDragLimit());
+			ediServicesWindow.open();
+		}
+		catch (err) {
+			alert(err);
+		}
+	}
+
+	function loadWorkAreaView(facility) {
+		try {
+			var workAreaView = codeshelf.workareaview(websession_, facility);
+			var workAreaWindow = codeshelf.window(workAreaView, frame_, getWindowDragLimit());
+			workAreaWindow.open();
+		}
+		catch (err) {
+				alert(err);
+		}
+	}
+
+	function loadOrdersView(facility) {
+		try {
+			var ordersView = codeshelf.ordersview(websession_, facility);
+			var ordersWindow = codeshelf.window(ordersView, frame_, getWindowDragLimit());
+			ordersWindow.open();
+		}
+		catch (err) {
+				alert(err);
 		}
 	}
 
@@ -152,12 +212,6 @@ codeshelf.mainpage = function() {
 					window.focusWindow();
 				}
 			});
-
-			var listDemoView = codeshelf.listdemoview();
-			// note, clone dragRectLimit line from above, since this window launches from wrong place.
-			var dragRectLimit = new goog.math.Rect(0,0,10000,10000);
-			var listDemoWindow = codeshelf.window(listDemoView, frame_, dragRectLimit);
-			listDemoWindow.open();
 
 //			var filter = 'parentOrganization.persistentId = :theId';
 //			var filterParams = [
