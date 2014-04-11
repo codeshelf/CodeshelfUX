@@ -109,6 +109,10 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 		var newPath = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
 		websession_.sendCommand(newPath, callbackForCreatePath(), false);
+
+		var theLogger = goog.debug.Logger.getLogger('Work Area Editor');
+		theLogger.info("saved a new path");
+
 	}
 
 	function computeDistanceMeters(latArg1, lonArg1, latArg2, lonArg2) {
@@ -469,6 +473,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			self.removeSubview(paths_[path['persistentId']['pathView']]);
 			paths_.splice(path['persistentId'], 1);
 			self.invalidate();
+
 		}
 	}
 

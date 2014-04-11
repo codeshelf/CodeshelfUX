@@ -4,6 +4,7 @@
  *  $Id: mainPage.js,v 1.52 2013/05/26 21:52:20 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
+goog.require('codeshelf.pathsview');
 goog.require('codeshelf.ediservicesview');
 goog.require('codeshelf.facilityeditorview');
 goog.require('codeshelf.hierarchylistview');
@@ -84,7 +85,9 @@ codeshelf.mainpage = function() {
 		// Later, if no facility exists yet, launch the facility editor.
 		// If one does exist, launch orders
 
-		loadListDemoView();
+		//loadListDemoView();
+
+		loadPathsView(facility);
 
 		loadFacilityEditor(facility);
 
@@ -95,6 +98,18 @@ codeshelf.mainpage = function() {
 		loadOrdersView(facility);
 
 		loadWorkAreaView(facility);
+	}
+
+	// new grid view for paths
+	function loadPathsView(facility) {
+		try {
+			var pathsView = codeshelf.pathsview(websession_, facility);
+			var pathsWindow = codeshelf.window(pathsView, frame_, getWindowDragLimit());
+			pathsWindow.open();
+		}
+		catch (err) {
+			alert(err);
+		}
 	}
 
 	function loadListDemoView() {
