@@ -30,9 +30,11 @@ codeshelf.pathsview = function(websession, facility) {
 
 	var contextMenu_;
 
-	function updateLink(event) {
+	function sendPathDelete(event) {
 		if ($(event.target).data("option") == "delete_path") {
 
+			var theLogger = goog.debug.Logger.getLogger('Paths view');
+			theLogger.info("just logging: delete path");
 
 		}
 	}
@@ -58,7 +60,7 @@ codeshelf.pathsview = function(websession, facility) {
 			contextMenu_.bind('mouseleave', function(event) {
 				$(this).fadeOut(5)
 			});
-			contextMenu_.bind("click", updateLink);
+			contextMenu_.bind("click", sendPathDelete);
 		},
 
 		doContextMenu: function(event, item, column) {
@@ -69,7 +71,12 @@ codeshelf.pathsview = function(websession, facility) {
 			contextMenu_.empty();
 
 			var line, input;
-			line = $('<li>Delete Path</li>').appendTo(contextMenu_).data("option", "delete_path");
+			// only level 0 click should delete path
+			// if (this.getLevel(item)=== 0)
+			if (view.getItemLevel(item)=== 0)
+				line = $('<li>Delete Path</li>').appendTo(contextMenu_).data("option", "delete_path");
+			else
+				line = $('<li>Delete Path Segment</li>').appendTo(contextMenu_).data("option", "delete_path_segment");
 
 			contextMenu_
 				.css('top', event.pageY - 10)
