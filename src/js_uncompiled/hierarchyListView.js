@@ -494,6 +494,11 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 		doResize: function() {
 			grid_.resizeCanvas();
 			grid_.autosizeColumns();
+		},
+
+		// public interface for getLevel
+		getItemLevel: function(item) {
+			return getLevel(item);
 		}
 	};
 
