@@ -2,11 +2,10 @@
 
 <project name="CodeShelfUX" default="" basedir="../">
 
-	<description>
-		CodeShelf build script.
-    </description>
-
+	<description>CodeShelf UX Project</description>
+	
 	<property name="build.dir" value="${basedir}/build" />
+	
 	<property name="build.lib.dir" value="${build.dir}/lib" />
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="uncompiled.js.dir" value="${basedir}/src/js_uncompiled" />
@@ -15,14 +14,47 @@
 	<property name="images.dir" value="${basedir}/src/images" />
 	<property name="icons.dir" value="${basedir}/src/icons" />
 	<property name="libs.dir" value="${basedir}/lib" />
-
+	
 	<property name="target.dir" value="${basedir}/target" />
 	<property name="target.web.dir" location="${target.dir}/web" />
 	<property name="target.coverage.dir" location="${target.dir}/coverage" />
 
 	<property name="target.compiled.js.dir" value="${target.dir}/js_compiled" />
+	
+	<!-- load ant contrib task definitions from build lib directory -->
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${build.lib.dir}/ant-contrib-1.0b3.jar"/>
+	
+	<target name="env-init">
+		<property environment="env" />
 
-	<property name="pythonexec" value="/usr/bin/python" />
+		<property name="username" value="${user.name}" />
+		<property name="hostname" value="${env.COMPUTERNAME}" />
+		
+		<!-- load generic properties -->
+		<echo>User: ${username}</echo>
+		<echo>Host Name: ${hostname}</echo>
+
+		<!-- load environment specific properties -->
+		<property name="build.local.properties" value="${basedir}\build\build.${username}-${hostname}.properties" />
+		<if>
+			<available file="${build.local.properties}"/>
+			<then>
+				<echo>Loading local properties from ${basedir}\build\build.${username}-${hostname}.properties</echo>
+				<property file="${build.local.properties}"/>
+			</then>
+			<else>
+				<fail>Unable to find local build properties file at ${build.local.properties}. Please create it.</fail>
+			</else>
+		</if>
+		
+		<!-- load generic properties -->
+		<echo>Loading generic properties from ${basedir}\build\build.properties</echo>
+		<property file="${basedir}\build\build.properties"/>
+		
+		<echo>Using Python located at ${python.exec}</echo>
+		
+		<!-- <echoproperties></echoproperties> -->
+	</target>	
 
 	<taskdef resource="pyAntTasks.properties">
 		<classpath>
@@ -92,9 +124,9 @@
 		</java>
 	</target>
 
-	<target name="generate.deps" depends="prep.dirs">
+	<target name="generate.deps" depends="env-init,prep.dirs">
 		<echo>${basedir}</echo>
-		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/depswriter.py" pythonpath="${basedir}" optimize="0" python="${pythonexec}">
+		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/depswriter.py" pythonpath="${basedir}" optimize="0" python="${python.exec}">
 			<arg value="--root_with_prefix=../lib/GoogleClosureLibrary ../../" />
 			<arg value="--root_with_prefix=../lib/GoogleClosureTemplates ../../../GoogleClosureTemplates" />
 			<arg value="--root_with_prefix=../lib/Arrowlets ../../../Arrowlets" />
