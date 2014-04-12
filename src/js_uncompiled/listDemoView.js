@@ -329,7 +329,7 @@ codeshelf.listdemoview = function() {
 
 		close: function() {
 			// Demonstration of our dialog/alert service
-			/*
+
 			var dialogOptions = {
 				closeButtonText: 'Cancel',
 				actionButtonText: 'OK',
@@ -339,11 +339,20 @@ codeshelf.listdemoview = function() {
 					var theLogger = goog.debug.Logger.getLogger('ListDemoView');
 					theLogger.info("In the alert, clicked the ok button");
 				}
-			}
+			};
 
-			/ Paul: how do you get hold of the service to call it?
-			angular.module('codeshelfApp').service("dialogService").showModalDialog({}, dialogOptions);
-			*/
+
+// This method of calling an angular service came highly unrecommended
+//   The slightly better  version is to find the running injector associated to the app
+//    angular.element($('body')).injector();
+//
+//   In general to use the dialogService well this whole class would probably need to turn into a controller and get properly injected
+
+			var injector = angular.injector(['ng', 'codeshelfApp']);
+
+			injector.invoke(['dialogService', function(dialogService){
+				dialogService.showModalDialog({}, dialogOptions);
+            }]);
 
 			var theLogger = goog.debug.Logger.getLogger('ListDemoView');
 			theLogger.info("called this close()");
