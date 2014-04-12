@@ -27,8 +27,10 @@
 	<target name="env-init">
 		<property environment="env" />
 
-		<property name="username" value="${user.name}" />
-		<property name="hostname" value="${env.COMPUTERNAME}" />
+		<!-- <echoproperties/> -->
+
+	    <property name="username" value="${user.name}" />
+		<exec executable="hostname" outputproperty="hostname"/>
 		
 		<!-- load generic properties -->
 		<echo>User: ${username}</echo>
@@ -53,7 +55,6 @@
 		
 		<echo>Using Python located at ${python.exec}</echo>
 		
-		<!-- <echoproperties></echoproperties> -->
 	</target>	
 
 	<taskdef resource="pyAntTasks.properties">
