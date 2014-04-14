@@ -349,6 +349,7 @@ codeshelf.listdemoview = function() {
 //
 //   In general to use the simpleDialogService well this whole class would probably need to turn into a controller and get properly injected
 
+//  ListViewDemo is not angular at all. This how to invoke an angular service in non-angular code.
 			var injector = angular.injector(['ng', 'codeshelfApp']);
 
 			injector.invoke(['simpleDialogService', function(simpleDialogService){

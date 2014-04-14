@@ -204,5 +204,9 @@ codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams', 'simpleD
 		// If you uncomment this line, you will see that MissingRouterCtrl is called when application starts
 		// And, only if you click the ok button, it logs, showing the callback works
 
-		simpleDialogService.showModalDialog({}, dialogOptions);
+		// simpleDialogService.showModalDialog({}, dialogOptions);
+
+		// Simple!
+		// See ListViewDemo for how to invoke an angular service in non-angular code.
+
 	}]);
