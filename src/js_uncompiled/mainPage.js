@@ -85,7 +85,7 @@ codeshelf.mainpage = function() {
 		// Later, if no facility exists yet, launch the facility editor.
 		// If one does exist, launch orders
 
-		//loadListDemoView();
+		loadListDemoView();
 
 		loadPathsView(facility);
 

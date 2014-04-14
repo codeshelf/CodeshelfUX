@@ -9,6 +9,7 @@ goog.require('slickgrid.formatters');
 goog.require('slickgrid.grid');
 goog.require('slickgrid.pager');
 goog.require('slickgrid.rowselection');
+goog.require('simpleDialogService');
 
 jQuery('.grid-header .ui-icon').addClass('ui-state-default ui-corner-all')['mouseover'](
 	function(e) {
@@ -346,12 +347,12 @@ codeshelf.listdemoview = function() {
 //   The slightly better  version is to find the running injector associated to the app
 //    angular.element($('body')).injector();
 //
-//   In general to use the dialogService well this whole class would probably need to turn into a controller and get properly injected
+//   In general to use the simpleDialogService well this whole class would probably need to turn into a controller and get properly injected
 
 			var injector = angular.injector(['ng', 'codeshelfApp']);
 
-			injector.invoke(['dialogService', function(dialogService){
-				dialogService.showModalDialog({}, dialogOptions);
+			injector.invoke(['simpleDialogService', function(simpleDialogService){
+				simpleDialogService.showModalDialog({}, dialogOptions);
             }]);
 
 			var theLogger = goog.debug.Logger.getLogger('ListDemoView');
