@@ -1,0 +1,61 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Example of Twitter Bootstrap 3 Dropdowns within a Navbar</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top role=navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Codeshelf</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Operations<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" onclick="return false" id="ordersWindow">Orders</a></li>
+                        <li><a href="#" onclick="return false" id="workAreaWindow">Work Area</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Configure<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" onclick="return false" id="facilityWindow">Facility Editor</a></li>
+                        <li><a href="#" onclick="return false" id="workAreaViewEditor">Work Area Editor</a></li>
+                        <li><a href="#" onclick="return false" id="pathsWindow">Path Associations</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Help<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Contact Codeshelf</a></li>
+                        <li class="divider"></li>
+                        <li class="nav-header disabled"><a>Prototype and Test</a></li>
+                        <li><a href="#">List View Demo</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container -->
+</nav>
+</body>
+</html>
