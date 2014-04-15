@@ -30,16 +30,24 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 			bodyText: 'Perform this action?'
 		};
 
-		this.showDialog = function (customDialogDefaults, customDialogOptions) {
+		var dialogResults = {
+			userClickedOk: false
+		}
+
+		this.showDialog = function (customDialogDefaults, customDialogOptions, customDialogResults) {
 			//Create temp objects to work with since we're in a singleton service
 			var tempDialogDefaults = {};
 			var tempDialogOptions = {};
+			var tempDialogResults = {};
 
 			//Map angular-ui dialog custom defaults to dialog defaults defined in this service
 			angular.extend(tempDialogDefaults, dialogDefaults, customDialogDefaults);
 
 			//Map dialog.html $scope custom properties to defaults defined in this service
 			angular.extend(tempDialogOptions, dialogOptions, customDialogOptions);
+
+			//We do not expect use to pass in result. This is a way to get the information out.
+			angular.extend(tempDialogResults, dialogResults, customDialogResults);
 
 			// If the customDialogOptions.closeButtonText is empty string, then find and hide the cancel button.
 			// in the html     <button type="button" class="btn" id="thecancelbutton"
@@ -49,6 +57,7 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 				tempDialogDefaults.controller = function ($scope, $modalInstance) {
 					$scope.dialogOptions = tempDialogOptions;
 					$scope.ok = function () {
+						dialogResults.userClickedOk = true;
 						$modalInstance.close(/*results*/);
 						customDialogOptions.callback();
 					};
@@ -73,6 +82,23 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 			if (!customDialogDefaults) customDialogDefaults = {};
 			customDialogDefaults.backdropClick = false;
 			this.showDialog(customDialogDefaults, customDialogOptions);
+		};
+
+		// Paul: this does not work at all. Problems include:
+		// customDialogResult is an empty proto object. Does not know it has a field for userClickedOk.
+		// Would not matter anyway. This executes and returns immediately. It does not wait for user to click or dismiss.
+		// So how do you call it?  See commented out call to getModalDialogResult() in codeshelf.controllers.js
+		// We have a working callback for when the ok is clicked, and modal dismisses when clicked. But it is hard to code
+		// If (user clicked the ok) {}
+		// A good prototype would be alert/ask on clicking the close button. But I did not want to use the more
+		// complicated injector for this first effort.
+
+		this.getModalDialogResult = function (customDialogDefaults, customDialogOptions, customDialogResults) {
+			if (!customDialogDefaults) customDialogDefaults = {};
+			if (!customDialogResults) customDialogResults = {};
+			customDialogDefaults.backdropClick = false;
+			this.showDialog(customDialogDefaults, customDialogOptions, customDialogResults);
+			return (customDialogResults.userClickedOk);
 		};
 
 	}]);

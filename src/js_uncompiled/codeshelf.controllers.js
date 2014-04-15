@@ -205,6 +205,13 @@ codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams', 'simpleD
 		// And, only if you click the ok button, it logs, showing the callback works
 
 		// simpleDialogService.showModalDialog({}, dialogOptions);
+		/*
+		if (!simpleDialogService.getModalDialogResult({}, dialogOptions)){
+			var theLogger = goog.debug.Logger.getLogger('Codeshelf router');
+			theLogger.info("did not click the ok button");
+
+		}
+		*/
 
 		// Simple!
 		// See ListViewDemo for how to invoke an angular service in non-angular code.
