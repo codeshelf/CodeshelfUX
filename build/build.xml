@@ -37,11 +37,11 @@
 		<echo>Host Name: ${hostname}</echo>
 
 		<!-- load environment specific properties -->
-		<property name="build.local.properties" value="${basedir}\build\build.${username}-${hostname}.properties" />
+		<property name="build.local.properties" value="${basedir}/build/user.build.properties/${username}-${hostname}.properties" />
 		<if>
 			<available file="${build.local.properties}"/>
 			<then>
-				<echo>Loading local properties from ${basedir}\build\build.${username}-${hostname}.properties</echo>
+				<echo>Loading local properties from ${basedir}/build/user.build.properties/${username}-${hostname}.properties</echo>
 				<property file="${build.local.properties}"/>
 			</then>
 			<else>
@@ -239,7 +239,7 @@
 				This patch can make this work right: http://codereview.appspot.com/6346071/
 				but we don't need modules yet.  When we need modules revisit this to see if Plovr updated to include the listed patch. -->
 		<echo>${basedir}</echo>
-		<java jar="./build/plovr-4b3caf2b7d84.jar" fork="true" failonerror="true" maxmemory="128m">
+		<java jar="${build.lib.dir}/plovr-4b3caf2b7d84.jar" fork="true" failonerror="true" maxmemory="128m">
 			<arg value="build" />
 			<arg value="./build/codeshelf.plovr.config" />
 			<arg value="--create_source_map" />
