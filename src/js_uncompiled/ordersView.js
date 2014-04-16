@@ -30,6 +30,28 @@ codeshelf.ordersview = function(websession, facility) {
 
 	function updateLink(event) {
 		if ($(event.target).data("option") == "link") {
+
+			// demonstration for using new customDialogService and partial html
+			var adhocDialogOptions = {
+				passedInUrl: 'partials/link-dropbox-dlog.html',
+				callback: function () {
+					var theLogger = goog.debug.Logger.getLogger('Orders View rightclick');
+					theLogger.info("Clicked the ok button");
+				}
+			}
+			// would be nice if this worked
+			//angular.module('codeshelfApp').service('adhocDialogService').showModalDialog({}, adhocDialogOptions);
+			var injector = angular.injector(['ng', 'codeshelfApp']);
+
+			injector.invoke(['adhocDialogService', function(adhocDialogService){
+				adhocDialogService.showModalDialog({}, adhocDialogOptions);
+			}]);
+
+
+
+			/* old dialog. This did not have full functionality seen in edi services window, but did launch
+			a dialog that looked right.
+
 			var buttonSet = new goog.ui.Dialog.ButtonSet().
 				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.OK).
 				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
@@ -54,9 +76,27 @@ codeshelf.ordersview = function(websession, facility) {
 				                     }
 			                     }
 			);
-
+		end old dialog */
 		}
 	}
+
+	// new stuff
+	function getLinkAccessCode(){
+		// Paul: we need this to be called from the "link" button.
+		var theLogger = goog.debug.Logger.getLogger('Orders View rightclick');
+		theLogger.info("Clicked the link button");
+
+	}
+
+	function getLinkAccessCode(){
+		// Paul: we need this to be called from the "save" button.
+		// One complication: we need access to the dbxcode that user left in the text entry box.
+		var theLogger = goog.debug.Logger.getLogger('Orders View rightclick');
+		theLogger.info("Clicked the savebutton");
+		// Note: we are getting the callback defined on adhocDialogOptions from the ok button. So, that callback
+		// could call through to getLinkAccessCode(). But that does not demonstrate the general solution.
+	}
+	// end new stuff
 
 	function websocketCmdCallbackFacility() {
 		var callback = {
