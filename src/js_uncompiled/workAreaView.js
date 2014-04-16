@@ -14,6 +14,8 @@ goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
+goog.require('adhocDialogService');
+
 
 /**
  * The work areas for this facility.
@@ -28,53 +30,31 @@ codeshelf.workareaview = function(websession, facility) {
 
 	var contextMenu_;
 
-	function updateLink(event) {
-		if ($(event.target).data("option") == "link") {
-			var buttonSet = new goog.ui.Dialog.ButtonSet().
-				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.OK).
-				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
+	function testDialog(event) {
+		if ($(event.target).data("option") == "testdialog") {
 
-			var dataEntryDialog = codeshelf.dataentrydialog('Link Dropbox', buttonSet);
-			var dialogContentElement = soy.renderAsElement(codeshelf.templates.linkDropboxDialog);
-			dataEntryDialog.setupDialog(dialogContentElement);
-			dataEntryDialog.open(function(event, dialog) {
-				                     if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.OK.key) {
+			// demonstration for using new customDialogService and partial html
+			var adhocDialogOptions = {
+				closeButtonText: 'Cancel',
+				actionButtonText: 'OK',
+				passedInUrl: 'partials/test-dialog.html',
+				callback: function () {
+					var theLogger = goog.debug.Logger.getLogger('Codeshelf router');
+					theLogger.info("Clicked the ok button");
+				}
+			}
+			// would be nice if this worked
+			//angular.module('codeshelfApp').service('adhocDialogService').showModalDialog({}, adhocDialogOptions);
+			var injector = angular.injector(['ng', 'codeshelfApp']);
 
-					                     // Call Facility.linkDropbox();
-					                     var data = {
-						                     'className':    domainobjects['Facility']['className'],
-						                     'persistentId': 1,
-						                     'methodName':   'linkDropbox',
-						                     'methodArgs':   [
-						                     ]
-					                     };
+			injector.invoke(['adhocDialogService', function(adhocDialogService){
+				adhocDialogService.showModalDialog({}, adhocDialogOptions);
+			}]);
 
-					                     var linkDropboxCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
-					                     websession_.sendCommand(linkDropboxCmd, websocketCmdCallbackFacility(kWebSessionCommandType.OBJECT_METHOD_REQ), true);
-				                     }
-			                     }
-			);
-
+			// There was roll-your-own dialog before, as in ediServicesView.js
 		}
 	}
 
-	function websocketCmdCallbackFacility() {
-		var callback = {
-			exec: function(command) {
-				if (!command['data'].hasOwnProperty('results')) {
-					alert('response has no result');
-				} else {
-					if (command['type'] == kWebSessionCommandType.OBJECT_METHOD_RESP) {
-						var url = command['data']['results'];
-						window.open(url, '_blank');
-						window.focus();
-					}
-				}
-			}
-		};
-
-		return callback;
-	}
 
 	var self = {
 
@@ -87,7 +67,7 @@ codeshelf.workareaview = function(websession, facility) {
 			contextMenu_.bind('mouseleave', function(event) {
 				$(this).fadeOut(5)
 			});
-			contextMenu_.bind("click", updateLink);
+			contextMenu_.bind("click", testDialog);
 		},
 
 		doContextMenu: function(event, item, column) {
@@ -98,7 +78,7 @@ codeshelf.workareaview = function(websession, facility) {
 			contextMenu_.empty();
 
 			var line, input;
-			line = $('<li>Link Dropbox</li>').appendTo(contextMenu_).data("option", "link");
+			line = $('<li>Test Dialog</li>').appendTo(contextMenu_).data("option", "testdialog");
 
 			contextMenu_
 				.css('top', event.pageY - 10)

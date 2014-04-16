@@ -6,6 +6,7 @@
 
 'use strict';
 goog.provide('simpleDialogService');
+goog.provide('adhocDialogService');
 
 /* From dWahlin  Building an Angular Dialog Service */
 /* modified to use ModalInstanceCtrl
@@ -103,6 +104,74 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 
 	}]);
 
+/* ************************** */
+
+/**
+ * A clone of the simpleDialogService, but making let the custom partial html do most of the work.
+ */
+
+angular.module('codeshelfApp').service('adhocDialogService', ['$modal',
+	function ($modal) {
+		var dialogDefaults = {
+			backdrop: true,
+			keyboard: true,
+			backdropClick: true,
+			dialogFade: true,
+			templateUrl: 'partials/dialog.html'
+		};
+
+		var adhocDialogOptions = {
+			closeButtonText: 'Close',
+			actionButtonText: 'OK',
+			passedInUrl: 'partials/dialog.html'
+		};
+
+		this.showDialog = function (customDialogDefaults, customAdhocDialogOptions) {
+			//Create temp objects to work with since we're in a singleton service
+			var tempDialogDefaults = {};
+			var tempAdhocDialogOptions = {};
+
+			//Map angular-ui dialog custom defaults to dialog defaults defined in this service
+			angular.extend(tempDialogDefaults, dialogDefaults, customDialogDefaults);
+
+			//Map dialog.html $scope custom properties to defaults defined in this service
+			angular.extend(tempAdhocDialogOptions, adhocDialogOptions, customAdhocDialogOptions);
+
+			tempDialogDefaults.templateUrl = customAdhocDialogOptions.passedInUrl;
+
+			if (!tempDialogDefaults.controller) {
+				tempDialogDefaults.controller = function ($scope, $modalInstance) {
+					$scope.adhocDialogOptions = tempAdhocDialogOptions;
+					$scope.ok = function () {
+						$modalInstance.close(/*results*/);
+						customAdhocDialogOptions.callback();
+					};
+
+					$scope.cancel = function () {
+						$modalInstance.dismiss('cancel');
+					};
+				};
+			}
+
+			var modalInstance = $modal.open(tempDialogDefaults);
+
+			modalInstance.result.then(function (selectedItem) {
+//				$scope.selected = selectedItem;
+			}, function () {
+//				$log.info('Modal dismissed at: ' + new Date());
+			});
+
+		};
+
+		this.showModalDialog = function (customDialogDefaults, customAdhocDialogOptions) {
+			if (!customDialogDefaults) customDialogDefaults = {};
+			customDialogDefaults.backdropClick = false;
+			this.showDialog(customDialogDefaults, customAdhocDialogOptions);
+		};
+
+	}]);
+/* ************************** */
+
 var ModalDemoCtrl = function ($scope, $modal, $log) {
 
   $scope.items = ['item1', 'item2', 'item3'];
@@ -110,8 +179,6 @@ var ModalDemoCtrl = function ($scope, $modal, $log) {
   $scope.open = function () {
 
     var modalInstance = $modal.open({
-	  // url is passed in by the service
-      // templateUrl: 'partials/dialog.html',
       controller: ModalInstanceCtrl,
       resolve: {
         items: function () {
