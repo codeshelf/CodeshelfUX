@@ -228,6 +228,7 @@
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/SlickGrid" value="../lib/SlickGrid" />
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/JQuery" value="../lib/JQuery" />
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/Raphael" value="../lib/Raphael" />
+		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/Bacon" value="../lib/Bacon" />
 		<echo file="${target.compiled.js.dir}/codeshelf.js" append="true">
 //# sourceMappingURL=/js/codeshelf.map</echo>
 	</target>

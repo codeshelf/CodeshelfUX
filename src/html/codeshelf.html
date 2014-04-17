@@ -25,7 +25,7 @@
 		<script src="./lib/AngularJS/angular.js" ></script>
 		<script src="./lib/AngularJS/i18n/angular-locale_en-us.js"></script>
 		<script src="./lib/AngularJS/angular-route.js"></script>
-		<script src="./lib/UIBootstrap/ui-bootstrap-tpls-0.7.0.js"></script>
+		<script src="./lib/UIBootstrap/ui-bootstrap-tpls-0.10.0.js"></script>
 
 		<link rel="icon" href="./favicon.gif" />
 	</head>
@@ -51,36 +51,5 @@
 			ga('send', 'pageview');
 
 		</script>
-
-        <!--JR  Moved this into partials/aisle-editor.html  Delete this section altogether
-		<script type="text/ng-template" id="XX_createAisleModalContent.html">
-				<div class="modal-header">
-					<h3>Create Aisle</h3>
-				</div>
-				<div class="modal-body">
-				  <div class="alert alert-danger" ng-repeat="msg in aisleForm.messages">{{msg}}</div>
-					<div id='instructions'>
-						Describe the bays on this aisle.  (You can adjust the oddballs later.)
-					</div>
-					<br>
-					<div class='dialogFields modal-dialog-content'>
-						<table>
-							<tr><td>Aisle ID: </td><td><input id='aisleId' class='aisleId' label='' autofocus ng-model="aisleForm.aisleId"/></td></tr>
-							<tr><td>Bay Height: </td><td><input id='bayHeight' class='bayHeight' label='Feet' placeholder="Feet" ng-model="aisleForm.bayHeight"/></td></tr>
-							<tr><td>Bay Width: </td><td><input id='bayWidth' class='bayWidth' label='Feet' placeholder="Feet" ng-model="aisleForm.bayWidth"/></td></tr>
-							<tr><td>Bay Depth: </td><td><input id='bayDepth' class='bayDepth' label='Feet' placeholder="Feet" ng-model="aisleForm.bayDepth"/></td></tr>
-							<tr><td>Bays High: </td><td><input id='baysHigh' class='baysHigh' label='Num' placeholder="Num" ng-model="aisleForm.baysHigh"/></td></tr>
-							<tr><td>Bays Long: </td><td><input id='baysLong' class='baysLong' label='Num' placeholder="Num" ng-model="aisleForm.baysLong"/></td></tr>
-                            <tr><td>Controller ID: </td><td><input id='controllerId' class='controllerId' label='ID' placeholder="ID" ng-model="aisleForm.controllerId"/></td></tr>
-						</table>
-						<br>
-						<div>Left Hand Bay: <input id="isLeftHandBay" type="checkbox" class="isLeftHandBay" ng-model="aisleForm.isLeftHandBay" value="true"  ng-true-value="true" ng-false-value="false"></div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button class="btn btn-primary" ng-click="ok()">OK</button>
-					<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-				</div>
-        </script> -->
 	</body>
 </html>
