@@ -1,0 +1,50 @@
+<!-- mainpage.html file -->
+<!-- This is exactly the same as what the template.soy file would give us
+     We want to change by:
+     - Changout this navbar for what is in the navbar.test2.html file
+     - Remove the frame and logo.
+     The codeshelf.gss has .codeshelfLogo, #logoBox, and .frame
+     Kill those when we remove these.
+     Note: the frame is used by other window launching and drag limits.
+-->
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <ul class="nav">
+                <li class="active">
+                    <a class="brand" href="#">Codeshelf</a>
+                </li>
+
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Views <b class="caret"></b></a>
+                    <ul class="dropdown-menu dropdown-toggle">
+                        <li><a href="#">Orders</a></li>
+                        <li><a href="#">Facility</a></li>
+                        <li><a href="#">Work Area</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Help <b class="caret"></b></a>
+                    <ul class="dropdown-menu dropdown-toggle">
+                        <li><a href="#">Contact Codeshelf</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+<div class='frame'>
+    <div id='logoBox' class='rotate'>
+        <h1 class='codeshelfLogo'>codeshelf</h1>
+    </div>
+</div>
