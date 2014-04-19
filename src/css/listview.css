@@ -1,6 +1,6 @@
 @import url('slick-default-theme.css');
 
-* {
+.windowContent {
     font-family: arial;
     font-size: 8pt;
 }
@@ -22,13 +22,13 @@ ul {
     cursor: default;
 }
 
-li {
+.windowContent li {
   background: url("../images/arrow_right_spearmint.png") no-repeat center left;
     padding: 0 0 0 14px;
 
     list-style: none;
     margin: 0;
-} 
+}
 
 #myGrid {
     background: white;
@@ -44,7 +44,7 @@ li {
 	color: black;
 	height: 24px;
 	line-height: 24px;
-}	
+}
 
 .grid-header label {
 	display: inline-block;
@@ -74,8 +74,8 @@ li {
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
 	border: 1px solid silver;
-	background: #f0f0f0;	
-	padding: 4px;		
+	background: #f0f0f0;
+	padding: 4px;
 	margin-bottom: 20px;
     width:320px;
     position:absolute;
@@ -83,7 +83,7 @@ li {
     left:650px;
 }
 
- 
+
 
 /* Individual cell styles */
 .slick-cell.task-name {
@@ -171,7 +171,7 @@ input.editor-percentcomplete {
 	z-index: 1000;
 	float: right;
 }
-	
+
 .editor-percentcomplete-helper {
     border: 0 solid gray;
     position: absolute;
@@ -182,7 +182,7 @@ input.editor-percentcomplete {
 
     width: 120px;
     height: 140px;
-    display: none;	
+    display: none;
 	overflow: visible;
 }
 
@@ -198,16 +198,16 @@ input.editor-percentcomplete {
 }
 
 .editor-percentcomplete-buttons {
-	float: right;	
+	float: right;
 }
 
 .editor-percentcomplete-buttons button {
-	width: 80px;	
+	width: 80px;
 }
 
 
 .editor-percentcomplete-slider {
-	float: left;	
+	float: left;
 }
 
  .editor-percentcomplete-picker:hover .editor-percentcomplete-helper {
@@ -222,7 +222,7 @@ input.editor-percentcomplete {
 select.editor-yesno {
 	width: 100%;
 	margin: 0;
-	vertical-align: middle;		
+	vertical-align: middle;
 }
 
 /* Slick.Editors.Checkbox */
@@ -232,5 +232,3 @@ input.editor-checkbox {
 	padding: 0;
 	border: 0;
 }
-
-
