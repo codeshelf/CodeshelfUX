@@ -129,17 +129,20 @@ var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', 
 
 		var anchorPoint = {'posTypeEnum': 'METERS_FROM_PARENT', 'x': aisle.xOriginMeters, 'y': aisle.yOriginMeters, 'z': 0.0};
 		var protoBayPoint = {'posTypeEnum': 'METERS_FROM_PARENT', 'x': aisle.bayWidth, 'y': aisle.bayDepth, 'z': aisle.bayHeight};
+
+		var aisleId = (aisle.aisleId) ? aisle.aisleId.toUpperCase() : '';
+		var controllerId = (aisle.controllerId) ? aisle.controllerId.toLowerCase() : '';
 		var data = {
 			'className': $scope.facilityContext['className'],
 			'persistentId': $scope.facilityContext['facility']['persistentId'],
 			'methodName': 'createAisle',
 			'methodArgs': [
-				{ 'name': 'inAisleId', 'value': aisle.aisleId.toUpperCase(), 'classType': 'java.lang.String'},
+				{ 'name': 'inAisleId', 'value': aisleId, 'classType': 'java.lang.String'},
 				{ 'name': 'anchorPoint', 'value': anchorPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'},
 				{ 'name': 'protoBayPoint', 'value': protoBayPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'},
 				{ 'name': 'inProtoBaysHigh', 'value': aisle.baysHigh, 'classType': 'java.lang.Integer'},
 				{ 'name': 'inProtoBaysLong', 'value': aisle.baysLong, 'classType': 'java.lang.Integer'},
-				{ 'name': 'inControllerId', 'value': aisle.controllerId.toLowerCase(), 'classType': 'java.lang.String'},
+				{ 'name': 'inControllerId', 'value': controllerId, 'classType': 'java.lang.String'},
 				{ 'name': 'inRunInXDir', 'value': aisle.runInXDim, 'classType': 'java.lang.Boolean'},
 				{ 'name': 'inLeftHandBay', 'value': aisle.isLeftHandBay, 'classType': 'java.lang.Boolean'}
 			]

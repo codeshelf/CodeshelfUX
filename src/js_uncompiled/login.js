@@ -76,7 +76,7 @@ codeshelf.loginWindow = function() {
 			var corners = 15;
 			var roundedLoginPanel = goog.ui.RoundedPanel.create(radius, borderWidth, borderColor, backgroundColor, corners);
 			var loginPanel = goog.dom.getElement('loginPanel');
-			roundedLoginPanel.decorate(loginPanel);
+//			roundedLoginPanel.decorate(loginPanel);
 
 			passwordInput.onkeydown = function(event) {
 				//logger_.info('Key ' + event.keyCode);

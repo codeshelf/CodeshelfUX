@@ -4,40 +4,56 @@
  * The template for the main page.
  */
 {template .mainPage}
-   <div class="navbar navbar-inverse navbar-fixed-top">
-	<div class="navbar-inner">
-    <div class="container">
-        <ul class="nav">
-            <li class="active">
-                <a class="brand" href="#">Codeshelf</a>
-            </li>
+<nav class="navbar navbar-inverse navbar-fixed-top role=navigation">
+    <div id="navbar-container" class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!-- is it possible to turn off the hover/highlight for the text brand? -->
+            <a class="navbar-brand" href="#">Codeshelf</a>
+            <a class="navbar-brand" href="#"><img src="favicon.gif" width="24" height="24"></a>
+        </div>
 
-			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			</a>
+       <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
 
-           <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Views <b class="caret"></b></a>
-                <ul class="dropdown-menu dropdown-toggle">
-                   <li><a href="#">Orders</a></li>
-                   <li><a href="#">Facility</a></li>
-                   <li><a href="#">Work Area</a></li>
-                </ul>
-            </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Operations<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" onclick="return false" id="ordersWindow">Orders</a></li>
+                        <li><a href="#" onclick="return false" id="workAreaWindow">Work Area</a></li>
+                    </ul>
+                </li>
 
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Help <b class="caret"></b></a>
-                <ul class="dropdown-menu dropdown-toggle">
-                   <li><a href="#">Contact Codeshelf</a></li>
-                </ul>
-            </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Configure<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" onclick="return false" id="facilityWindow">Facility Editor</a></li>
+                        <li><a href="#" onclick="return false" id="workAreaViewEditor">Work Area Editor</a></li>
+                        <li><a href="#" onclick="return false" id="pathsWindow">Path Associations</a></li>
+                    </ul>
+                </li>
 
-        </ul>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Help<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Contact Codeshelf</a></li>
+                        <li class="divider"></li>
+                        <li class="nav-header disabled"><a>Prototype and Test</a></li>
+                        <li><a href="#">List View Demo</a></li>
+                    </ul>
+                </li>
 
-    </div></div></div>
-
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container -->
+</nav>
 <div class='frame'>
 	<div id='logoBox' class='rotate'>
 		<h1 class='codeshelfLogo'>codeshelf</h1>
@@ -81,28 +97,32 @@
  */
 {template .loginDialog}
 <img id="background_image" class="background_image" src="../images/STS-125.jpg" alt="">
-<div id="loginPanel" class="panel panel-default" >
+
+<div id="loginPanel" class="panel panel-default">
+  <div class="panel-body">
 <form class="form-horizontal" role="form">
-  <div class="control-group">
-  	  <label for="organizationIdInput" class="control-label">Company:</label>
-    <div class="controls">
-	  <input type='text' required id='organizationIdInput' class='formControl' value='{LOGIN_ORG}' autocomplete='on' autofocus />
-    </div>
+  <div class="form-group">
+  	  <label for="organizationIdInput" class="col-sm-4 control-label">Company:</label>
+      <div class="col-sm-8">
+	  	   <input type='text' required id='organizationIdInput' class='form-control' value='{LOGIN_ORG}' autocomplete='on' autofocus />
+      </div>
   </div>
-  <div class="control-group">
-  	  <label for="userIdInput" class="control-label">Login:</label>
-    <div class="controls">
-	  <input type='email' required id='userIdInput' class='formControl' value='{LOGIN_ID}' autocomplete='on' placeholder="Email" />
-    </div>
+  <div class="form-group">
+  	  <label for="userIdInput" class="col-sm-4 control-label">Login:</label>
+      <div class="col-sm-8">
+	    <input type='email' required id='userIdInput' class='form-control' value='{LOGIN_ID}' autocomplete='on' placeholder="Email" />
+      </div>
   </div>
-  <div class="control-group">
-	  <label class="control-label" for="passwordInput" >Password:</label>
-      <div class="controls">
-	  <input type='password' required id='passwordInput' class="formControl" value='{LOGIN_PW}' autocomplete='on'/>
-    </div>
+  <div class="form-group">
+	  <label class="col-sm-4 control-label" for="passwordInput" >Password:</label>
+      <div class="col-sm-8">
+	  	  <input type='password' required id='passwordInput' class="form-control" value='{LOGIN_PW}' autocomplete='on'/>
+      </div>
   </div>
 </form>
+  </div>
 </div>
+
 {/template}
 
 /**
@@ -304,7 +324,7 @@
 	<div id='instructions'>
 		Click OK to link this facility to a Dropbox account.
 		This will open a URL in a new browser window that will make the request to Dropbox.
-		Once you approve the link in Dropbox it will give you a code.  
+		Once you approve the link in Dropbox it will give you a code.
 		Copy the DBX code into the text box and press Save.
 	</div>
 	<div class='dialogFields modal-dialog-content'>
