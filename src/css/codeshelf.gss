@@ -697,3 +697,16 @@ div.jquery-drag-to-select.active {
   background-color: transparent;
   color: #999999;
 }
+/* navbar overrides --------------------------------------------------------------- */
+
+/* keep the navbar left justified */
+#navbar-container {
+		  margin-left: 0px;
+}
+
+/* No hover effect on the navbar-brand. Don't imply it will do something */
+.navbar-inverse .navbar-brand:hover,
+.navbar-inverse .navbar-brand:focus {
+  background-color: transparent;
+  color: #999999;
+}
