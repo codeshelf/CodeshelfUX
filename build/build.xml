@@ -199,6 +199,7 @@
 			<arg value="--compiler_flags=--output_manifest=${target.compiled.js.dir}/codeshelf.manifest" />
 			<arg value="--compiler_flags=--property_map_output_file=${target.compiled.js.dir}/property.map" />
 			<arg value="--compiler_flags=--variable_map_output_file=${target.compiled.js.dir}/variable.map" />
+			<arg value="--compiler_flags=--externs=./src/js_externs/bacon.js" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/google_maps_api_v3_8.js" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-1.7.js" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-ui.1.8.19.js" />
@@ -269,6 +270,7 @@
 
 		<copy todir="${target.web.dir}">
 			<fileset dir="${html.dir}">
+				<include name="favicon.gif" />
 				<include name="codeshelf.html" />
 				<include name="signup.html" />
 				<include name="signin.html" />
@@ -283,7 +285,6 @@
 
 		<copy todir="${target.web.dir}">
 			<fileset dir="${icons.dir}">
-				<include name="favicon.ico" />
 			</fileset>
 		</copy>
 
