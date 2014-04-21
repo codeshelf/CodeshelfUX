@@ -29,18 +29,22 @@
         <script src="../../lib/AngularJS/angular-route.js"></script>
         <script src="../../lib/UIBootstrap/ui-bootstrap-tpls-0.10.0.js"></script>
 
-		<script type="text/javascript" src="../js_uncompiled/deps.js"></script>
+        <!-- add these two allows navbar dropdowns to work-->
+        <script src="../../lib/JQuery/jquery-1.7.1.js"></script>
+        <script src="../../lib/TwitterBootstrap/js/bootstrap.js"></script>
 
-		<link rel="icon" href="./favicon.gif" />
-	</head>
-	<body id="body" class="login_body" ng-controller="WorkAreaCtrl">
+       <script type="text/javascript" src="../js_uncompiled/deps.js"></script>
 
-		<script type="text/javascript">
-			goog.require('codeshelf.application');
-			goog.require('codeshelf.controllers');
-		</script>
+       <link rel="icon" href="./favicon.gif" />
+   </head>
+   <body id="body" class="login_body" ng-controller="WorkAreaCtrl">
 
-		<!--script type="text/javascript" src="../js_uncompiled/codeshelf.controllers.js"></script-->
+       <script type="text/javascript">
+           goog.require('codeshelf.application');
+           goog.require('codeshelf.controllers');
+       </script>
+
+       <!--script type="text/javascript" src="../js_uncompiled/codeshelf.controllers.js"></script-->
 		<div ng-view></div>
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
