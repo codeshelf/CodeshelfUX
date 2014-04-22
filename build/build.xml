@@ -3,9 +3,9 @@
 <project name="CodeShelfUX" default="" basedir="../">
 
 	<description>CodeShelf UX Project</description>
-	
+
 	<property name="build.dir" value="${basedir}/build" />
-	
+
 	<property name="build.lib.dir" value="${build.dir}/lib" />
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="uncompiled.js.dir" value="${basedir}/src/js_uncompiled" />
@@ -14,16 +14,16 @@
 	<property name="images.dir" value="${basedir}/src/images" />
 	<property name="icons.dir" value="${basedir}/src/icons" />
 	<property name="libs.dir" value="${basedir}/lib" />
-	
+
 	<property name="target.dir" value="${basedir}/target" />
 	<property name="target.web.dir" location="${target.dir}/web" />
 	<property name="target.coverage.dir" location="${target.dir}/coverage" />
 
 	<property name="target.compiled.js.dir" value="${target.dir}/js_compiled" />
-	
+
 	<!-- load ant contrib task definitions from build lib directory -->
 	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${build.lib.dir}/ant-contrib-1.0b3.jar"/>
-	
+
 	<target name="env-init">
 		<property environment="env" />
 
@@ -31,7 +31,7 @@
 
 	    <property name="username" value="${user.name}" />
 		<exec executable="hostname" outputproperty="hostname"/>
-		
+
 		<!-- load generic properties -->
 		<echo>User: ${username}</echo>
 		<echo>Host Name: ${hostname}</echo>
@@ -48,14 +48,14 @@
 				<fail>Unable to find local build properties file at ${build.local.properties}. Please create it.</fail>
 			</else>
 		</if>
-		
+
 		<!-- load generic properties -->
 		<echo>Loading generic properties from ${basedir}\build\build.properties</echo>
 		<property file="${basedir}\build\build.properties"/>
-		
+
 		<echo>Using Python located at ${python.exec}</echo>
-		
-	</target>	
+
+	</target>
 
 	<taskdef resource="pyAntTasks.properties">
 		<classpath>
@@ -200,6 +200,7 @@
 			<arg value="--compiler_flags=--property_map_output_file=${target.compiled.js.dir}/property.map" />
 			<arg value="--compiler_flags=--variable_map_output_file=${target.compiled.js.dir}/variable.map" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/bacon.js" />
+			<arg value="--compiler_flags=--externs=./src/js_externs/ui-bootstrap-tpls-0.10.0.js" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/google_maps_api_v3_8.js" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-1.7.js" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-ui.1.8.19.js" />
@@ -260,7 +261,6 @@
 				<include name="codeshelf.map" />
 			</fileset>
 		</copy>
-
 		<copy todir="${target.web.dir}/css">
 			<fileset dir="${css.dir}">
 				<include name="*.css" />

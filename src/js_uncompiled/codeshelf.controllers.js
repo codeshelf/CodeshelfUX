@@ -102,21 +102,21 @@ var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', 
 	$scope['convertData'] = function (aisleForm) {
 		var aisle = {};
 		//TODO this should be a proper OO method on an aisle shape since the point and the pixelsPerMeter come from outside in the shape
-		aisle.xOriginMeters = $scope.pixelsToMeter($scope.aisleShape.dragStartPoint.x);
-		aisle.yOriginMeters = $scope.pixelsToMeter($scope.aisleShape.dragStartPoint.y);
+		aisle['xOriginMeters'] = $scope.pixelsToMeter($scope.aisleShape.dragStartPoint.x);
+		aisle['yOriginMeters'] = $scope.pixelsToMeter($scope.aisleShape.dragStartPoint.y);
 
-		aisle.aisleId = aisleForm['aisleId'];
-		aisle.bayHeight = aisleForm['bayHeight'] * consts['feetInMeters'];
-		aisle.bayWidth = aisleForm['bayWidth'] * consts['feetInMeters'];
-		aisle.bayDepth = aisleForm['bayDepth'] * consts['feetInMeters'];
-		aisle.baysHigh = aisleForm['baysHigh'];
-		aisle.baysLong = aisleForm['baysLong'];
-		aisle.controllerId = aisleForm['controllerId'];
-		aisle.isLeftHandBay = aisleForm['isLeftHandBay'] == "true";
+		aisle['aisleId'] = aisleForm['aisleId'];
+		aisle['bayHeight'] = aisleForm['bayHeight'] * consts['feetInMeters'];
+		aisle['bayWidth'] = aisleForm['bayWidth'] * consts['feetInMeters'];
+		aisle['bayDepth'] = aisleForm['bayDepth'] * consts['feetInMeters'];
+		aisle['baysHigh'] = aisleForm['baysHigh'];
+		aisle['baysLong'] = aisleForm['baysLong'];
+		aisle['controllerId'] = aisleForm['controllerId'];
+		aisle['isLeftHandBay'] = aisleForm['isLeftHandBay'] == "true";
 
 		aisle.runInXDim = true;
 		if ($scope.aisleShape.rectangle.width < $scope.aisleShape.rectangle.height) {
-			aisle.runInXDim = false;
+			aisle['runInXDim'] = false;
 		}
 		return aisle;
 	};
