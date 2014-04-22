@@ -29,6 +29,8 @@ goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
 goog.require('goog.ui.Dialog');
 
+goog.require('extern.jquery');
+
 codeshelf.mainpage = function() {
 
 	var application_;
@@ -255,3 +257,42 @@ codeshelf.mainpage = function() {
 	return self;
 }
 ;
+
+function contactWasSelected() {
+	var dialogOptions = {
+		closeButtonText: '',
+		actionButtonText: 'OK',
+		headerText: 'Contact Codeshelf',
+		bodyText: 'Check out codeshelf.com',
+		callback: function () {
+
+		}
+	};
+
+	var injector = angular.injector(['ng', 'codeshelfApp']);
+
+	injector.invoke(['simpleDialogService', function(simpleDialogService){
+		simpleDialogService.showModalDialog({}, dialogOptions);
+	// Paul: as elsewhere, not working in compiled code. Need to exportSymbol for simpleDialogService?
+	}]);
+
+}
+// Necessary for now: compilation changes the function name.
+goog.exportSymbol('contactWasSelected', contactWasSelected);
+
+function demoWasSelected() {
+	var theLogger = goog.debug.Logger.getLogger('navbar');
+	theLogger.info(" demo selected from navbar");
+
+	// find our application to use it.
+	// Paul:
+	// codeshelfApp is found. However .mainpage is not in public scope, probably should
+	// not be as it can close.
+	// loadListViewDemo() might be moved to public scope on codeshelfApp, but I think it would
+	// have to be defined in codeshelf.controllers.js where the app is created. That
+	// would cause some code rearrangement.  AND we need to pass facility for other windows.
+	var codeshelfApp = angular.module('codeshelfApp');
+	// next line throws
+	codeshelfApp.mainpage.loadListViewDemo();
+}
+goog.exportSymbol('demoWasSelected', demoWasSelected);
