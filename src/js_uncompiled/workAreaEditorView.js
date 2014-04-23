@@ -85,7 +85,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			'persistentId': facility_['persistentId'],
 			'methodName': 'createPath',
 			'methodArgs': [
-				{name: 'domainId', value: path.domainId, 'classType': 'java.lang.String'},
+				{name: 'domainId', value: path['domainId'], 'classType': 'java.lang.String'},
 				{name: 'segments', value: path.segments, 'classType': '[Lcom.gadgetworks.codeshelf.model.domain.PathSegment;'}
 			]
 		};
