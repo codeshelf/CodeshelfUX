@@ -31,6 +31,43 @@ goog.require('goog.ui.Dialog');
 
 goog.require('extern.jquery');
 
+
+// utility functions for window launching
+function getWindowDragLimit() {
+	// we want the right and bottom limits large as the GCT window knows to scroll there.
+	// As for left and top, zeros are ok. See below it comes from "frame_ = goog.dom.query('.frame')[0];"
+	// which will have zeros for top and left
+	var theRectLimit = new goog.math.Rect(0,0,10000,10000);
+	return theRectLimit;
+}
+
+function getDomNodeForNextWindow() {
+	// The right thing to do is find the top window, and available size of the browser.
+	// Offset right and down of top window, unless too far compared to browser.
+	// If no window up yet, then set to a default place
+
+	var theNode;
+	// currently just gets the "frame" element that we want to remove
+	theNode = goog.dom.query('.frame')[0];
+	theNode.style.top = 40;
+	theNode.style.left = 5;
+
+	return theNode;
+}
+
+
+codeshelf.doLaunchListDemoView = function(){
+	try {
+		 var listDemoView = codeshelf.listdemoview();
+		 var listDemoWindow = codeshelf.window(listDemoView, frame_, getWindowDragLimit());
+		 listDemoWindow.open();
+		}
+	catch (err) {
+		 alert(err);
+		}
+}
+
+
 codeshelf.mainpage = function() {
 
 	var application_;
@@ -73,14 +110,6 @@ codeshelf.mainpage = function() {
 		return callback;
 	}
 
-	function getWindowDragLimit() {
-		// we want the right and bottom limits large as the GCT window knows to scroll there.
-		// As for left and top, zeros are ok. See below it comes from "frame_ = goog.dom.query('.frame')[0];"
-		// which will have zeros for top and left
-		var theRectLimit = new goog.math.Rect(0,0,10000,10000);
-		return theRectLimit;
-	}
-
 
 	function loadFacilityWindows(facility) {
 		// keep old behavior of launching all for now.
@@ -88,6 +117,7 @@ codeshelf.mainpage = function() {
 		// If one does exist, launch orders
 
 		loadListDemoView();
+		// this.doLaunchListDemoView();
 
 		loadPathsView(facility);
 
@@ -117,7 +147,7 @@ codeshelf.mainpage = function() {
 	function loadListDemoView() {
 		try {
 			var listDemoView = codeshelf.listdemoview();
-			var listDemoWindow = codeshelf.window(listDemoView, frame_, getWindowDragLimit());
+			var listDemoWindow = codeshelf.window(listDemoView, getDomNodeForNextWindow(), getWindowDragLimit());
 			listDemoWindow.open();
 		}
 		catch (err) {
@@ -191,7 +221,7 @@ codeshelf.mainpage = function() {
 	 */
 	var self = {
 
-		enter: function(application, websession) {
+	enter: function(application, websession) {
 
 			application_ = application;
 			websession_ = websession;
@@ -296,3 +326,14 @@ function demoWasSelected() {
 	codeshelfApp.mainpage.loadListViewDemo();
 }
 goog.exportSymbol('demoWasSelected', demoWasSelected);
+
+
+function launchListViewDemo() {
+	var theLogger = goog.debug.Logger.getLogger('navbar');
+	theLogger.info(" demo selected from navbar");
+
+	theApp = angular.module('codeshelfApp');
+	theApp.doLaunchListDemoView();
+
+}
+goog.exportSymbol('launchListViewDemo', launchListViewDemo);

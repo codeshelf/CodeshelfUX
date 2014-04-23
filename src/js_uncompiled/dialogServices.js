@@ -72,6 +72,9 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 
 			var modalInstance = $modal.open(tempDialogDefaults);
 
+			// attempt to hide cancel button here.
+
+
 			modalInstance.result.then(function (selectedItem) {
 //				$scope.selected = selectedItem;
 			}, function () {
