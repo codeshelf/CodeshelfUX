@@ -114,9 +114,9 @@ var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', 
 		aisle['controllerId'] = aisleForm['controllerId'];
 		aisle['isLeftHandBay'] = aisleForm['isLeftHandBay'] == "true";
 
-		aisle.runInXDim = true;
+		aisle['runInXDir'] = true;
 		if ($scope.aisleShape.rectangle.width < $scope.aisleShape.rectangle.height) {
-			aisle['runInXDim'] = false;
+			aisle['runInXDir'] = false;
 		}
 		return aisle;
 	};
@@ -127,11 +127,11 @@ var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', 
 
 	$scope.sendCreateAisleCommand = function (aisle, onSuccess, onError) {
 
-		var anchorPoint = {'posTypeEnum': 'METERS_FROM_PARENT', 'x': aisle.xOriginMeters, 'y': aisle.yOriginMeters, 'z': 0.0};
-		var protoBayPoint = {'posTypeEnum': 'METERS_FROM_PARENT', 'x': aisle.bayWidth, 'y': aisle.bayDepth, 'z': aisle.bayHeight};
+		var anchorPoint = {'posTypeEnum': 'METERS_FROM_PARENT', 'x': aisle['xOriginMeters'], 'y': aisle['yOriginMeters'], 'z': 0.0};
+		var protoBayPoint = {'posTypeEnum': 'METERS_FROM_PARENT', 'x': aisle['bayWidth'], 'y': aisle['bayDepth'], 'z': aisle['bayHeight']};
 
-		var aisleId = (aisle.aisleId) ? aisle.aisleId.toUpperCase() : '';
-		var controllerId = (aisle.controllerId) ? aisle.controllerId.toLowerCase() : '';
+		var aisleId = (aisle['aisleId']) ? aisle['aisleId'].toUpperCase() : '';
+		var controllerId = (aisle['controllerId']) ? aisle['controllerId'].toLowerCase() : '';
 		var data = {
 			'className': $scope.facilityContext['className'],
 			'persistentId': $scope.facilityContext['facility']['persistentId'],
@@ -140,11 +140,11 @@ var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', 
 				{ 'name': 'inAisleId', 'value': aisleId, 'classType': 'java.lang.String'},
 				{ 'name': 'anchorPoint', 'value': anchorPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'},
 				{ 'name': 'protoBayPoint', 'value': protoBayPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'},
-				{ 'name': 'inProtoBaysHigh', 'value': aisle.baysHigh, 'classType': 'java.lang.Integer'},
-				{ 'name': 'inProtoBaysLong', 'value': aisle.baysLong, 'classType': 'java.lang.Integer'},
+				{ 'name': 'inProtoBaysHigh', 'value': aisle['baysHigh'], 'classType': 'java.lang.Integer'},
+				{ 'name': 'inProtoBaysLong', 'value': aisle['baysLong'], 'classType': 'java.lang.Integer'},
 				{ 'name': 'inControllerId', 'value': controllerId, 'classType': 'java.lang.String'},
-				{ 'name': 'inRunInXDir', 'value': aisle.runInXDim, 'classType': 'java.lang.Boolean'},
-				{ 'name': 'inLeftHandBay', 'value': aisle.isLeftHandBay, 'classType': 'java.lang.Boolean'}
+				{ 'name': 'inRunInXDir', 'value': aisle['runInXDir'], 'classType': 'java.lang.Boolean'},
+				{ 'name': 'inLeftHandBay', 'value': aisle['isLeftHandBay'], 'classType': 'java.lang.Boolean'}
 			]
 		};
 
