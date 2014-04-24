@@ -15,7 +15,7 @@ goog.provide('adhocDialogService');
 * Needed improvement:  optionally hide the cancel button.
 */
 
-angular.module('codeshelfApp').service('simpleDialogService', ['$scope', '$modal',
+angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 	function ($modal) {
 		var dialogDefaults = {
 			backdrop: true,
@@ -53,8 +53,8 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$scope', '$modal
 			angular.extend(tempDialogResults, dialogResults, customDialogResults);
 
 			// If the customDialogOptions.cancelButtonText is empty string, there is visibility, or vice-versa, report error
-			// Not done yet.
-			// $customDialogOptions.cancelButtonVisibility = (!$customDialogOptions.closeButtonText || $customDialogOptions.closeButtonText == '')? 'hidden' : '';
+			// Changing the value here does not seem to translate to the dialog
+			// customDialogOptions.cancelButtonVisibility = (!customDialogOptions.closeButtonText || customDialogOptions.closeButtonText == '')? 'hidden' : '';
 
 
 			if (!tempDialogDefaults.controller) {
