@@ -4,6 +4,7 @@
  *  $Id: mainPage.js,v 1.52 2013/05/26 21:52:20 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
+goog.provide('codeshelf.doLaunchListDemoView'); // Better way? Only for use inside this file.
 goog.require('codeshelf.pathsview');
 goog.require('codeshelf.ediservicesview');
 goog.require('codeshelf.facilityeditorview');
@@ -46,8 +47,9 @@ function getDomNodeForNextWindow() {
 	// Offset right and down of top window, unless too far compared to browser.
 	// If no window up yet, then set to a default place
 
+	// for now, act as before, returning the frame
 	var theOwnerWindow = goog.dom.getElementByClass("window");
-	if (theOwnerWindow) {
+	if (false && theOwnerWindow) {
 		return theOwnerWindow;
 	}
 	else {
@@ -65,7 +67,7 @@ function getDomNodeForNextWindow() {
 codeshelf.doLaunchListDemoView = function(){
 	try {
 		 var listDemoView = codeshelf.listdemoview();
-		 var listDemoWindow = codeshelf.window(listDemoView, frame_, getWindowDragLimit());
+		 var listDemoWindow = codeshelf.window(listDemoView, getDomNodeForNextWindow(), getWindowDragLimit());
 		 listDemoWindow.open();
 		}
 	catch (err) {
@@ -118,19 +120,16 @@ codeshelf.mainpage = function() {
 
 
 	function loadFacilityWindows(facility) {
-		// keep old behavior of launching all for now.
-		// Later, if no facility exists yet, launch the facility editor.
-		// If one does exist, launch orders
+		// No longer open the list demo view
 
-		// Just 3 to see the launch order. TEMPORARY
-		loadListDemoView();
-		// this.doLaunchListDemoView();
+		// public scope so navbar can call it.
+		// codeshelf.doLaunchListDemoView();
 
 		loadPathsView(facility);
 
 		loadFacilityEditor(facility);
 
-		/*
+		/*  comment out these 4 to work on window ordering problem See CD_0009 */
 		loadWorkAreaEditorView(facility);
 
 		loadEdiServicesView(facility);
@@ -138,7 +137,7 @@ codeshelf.mainpage = function() {
 		loadOrdersView(facility);
 
 		loadWorkAreaView(facility);
-		*/
+
 	}
 
 	// new grid view for paths
@@ -147,17 +146,6 @@ codeshelf.mainpage = function() {
 			var pathsView = codeshelf.pathsview(websession_, facility);
 			var pathsWindow = codeshelf.window(pathsView, getDomNodeForNextWindow(), getWindowDragLimit());
 			pathsWindow.open();
-		}
-		catch (err) {
-			alert(err);
-		}
-	}
-
-	function loadListDemoView() {
-		try {
-			var listDemoView = codeshelf.listdemoview();
-			var listDemoWindow = codeshelf.window(listDemoView, getDomNodeForNextWindow(), getWindowDragLimit());
-			listDemoWindow.open();
 		}
 		catch (err) {
 			alert(err);
@@ -342,8 +330,6 @@ function launchListViewDemo() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');
 	theLogger.info(" demo selected from navbar");
 
-	theApp = angular.module('codeshelfApp');
-	theApp.doLaunchListDemoView();
-
+	codeshelf.doLaunchListDemoView();
 }
 goog.exportSymbol('launchListViewDemo', launchListViewDemo);
