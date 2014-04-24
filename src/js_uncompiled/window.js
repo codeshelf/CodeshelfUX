@@ -30,7 +30,18 @@ codeshelf.window = function(view, parent, limits) {
 
 			gWindowList[gWindowList.length] = thisWindow_;
 			windowElement_ = soy.renderAsElement(codeshelf.templates.window);
-			goog.dom.appendChild(parent_, windowElement_);
+			// Changing this from the original
+			// if "parent" is a class "window" then do not append to the parent. Rather, make it a sibling of the parent
+			// if "parent is not a window, then append as child.
+			if (parent_.className === "window") {
+				// try the append public method. Might have to use insertSiblingAfter
+				// goog.dom.appendChild(parent_, windowElement_);
+				goog.dom.insertSiblingAfter(windowElement_, parent_);
+			}
+			else
+			{
+				goog.dom.appendChild(parent_, windowElement_);
+			}
 
 			// Set the window to the next stagger position.
 			var curTop = parseInt(goog.style.getComputedStyle(windowElement_, 'top'), 10);

@@ -46,13 +46,19 @@ function getDomNodeForNextWindow() {
 	// Offset right and down of top window, unless too far compared to browser.
 	// If no window up yet, then set to a default place
 
-	var theNode;
-	// currently just gets the "frame" element that we want to remove
-	theNode = goog.dom.query('.frame')[0];
-	theNode.style.top = 40;
-	theNode.style.left = 5;
+	var theOwnerWindow = goog.dom.getElementByClass("window");
+	if (theOwnerWindow) {
+		return theOwnerWindow;
+	}
+	else {
+		var theNode;
+		// currently just gets the "frame" element that we want to remove
+		theNode = goog.dom.query('.frame')[0];
+		theNode.style.top = 40;
+		theNode.style.left = 5;
 
-	return theNode;
+		return theNode;
+	}
 }
 
 
@@ -116,6 +122,7 @@ codeshelf.mainpage = function() {
 		// Later, if no facility exists yet, launch the facility editor.
 		// If one does exist, launch orders
 
+		// Just 3 to see the launch order. TEMPORARY
 		loadListDemoView();
 		// this.doLaunchListDemoView();
 
@@ -123,6 +130,7 @@ codeshelf.mainpage = function() {
 
 		loadFacilityEditor(facility);
 
+		/*
 		loadWorkAreaEditorView(facility);
 
 		loadEdiServicesView(facility);
@@ -130,13 +138,14 @@ codeshelf.mainpage = function() {
 		loadOrdersView(facility);
 
 		loadWorkAreaView(facility);
+		*/
 	}
 
 	// new grid view for paths
 	function loadPathsView(facility) {
 		try {
 			var pathsView = codeshelf.pathsview(websession_, facility);
-			var pathsWindow = codeshelf.window(pathsView, frame_, getWindowDragLimit());
+			var pathsWindow = codeshelf.window(pathsView, getDomNodeForNextWindow(), getWindowDragLimit());
 			pathsWindow.open();
 		}
 		catch (err) {
@@ -161,7 +170,7 @@ codeshelf.mainpage = function() {
 			if (typeof google !== 'undefined') {
 				google.load('maps', '3', {'other_params': 'sensor=false', 'callback': function() {
 					var facilityEditorView = codeshelf.facilityeditorview(websession_, application_.getOrganization(), facility);
-					var facilityEditorWindow = codeshelf.window(facilityEditorView, frame_, getWindowDragLimit());
+					var facilityEditorWindow = codeshelf.window(facilityEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
 					facilityEditorWindow.open();
 				}});
 			}
@@ -174,7 +183,7 @@ codeshelf.mainpage = function() {
 	function loadWorkAreaEditorView(facility) {
 		try {
 			var workAreaEditorView = codeshelf.workareaeditorview(websession_, facility);
-			var workAreaEditorWindow = codeshelf.window(workAreaEditorView, frame_, getWindowDragLimit());
+			var workAreaEditorWindow = codeshelf.window(workAreaEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
 			workAreaEditorWindow.open();
 		}
 		catch (err) {
@@ -185,7 +194,7 @@ codeshelf.mainpage = function() {
 	function loadEdiServicesView(facility) {
 		try {
 			var ediServicesView_ = codeshelf.ediservicesview(websession_, facility);
-			var ediServicesWindow = codeshelf.window(ediServicesView_, frame_, getWindowDragLimit());
+			var ediServicesWindow = codeshelf.window(ediServicesView_, getDomNodeForNextWindow(), getWindowDragLimit());
 			ediServicesWindow.open();
 		}
 		catch (err) {
@@ -196,7 +205,7 @@ codeshelf.mainpage = function() {
 	function loadWorkAreaView(facility) {
 		try {
 			var workAreaView = codeshelf.workareaview(websession_, facility);
-			var workAreaWindow = codeshelf.window(workAreaView, frame_, getWindowDragLimit());
+			var workAreaWindow = codeshelf.window(workAreaView, getDomNodeForNextWindow(), getWindowDragLimit());
 			workAreaWindow.open();
 		}
 		catch (err) {
@@ -207,7 +216,7 @@ codeshelf.mainpage = function() {
 	function loadOrdersView(facility) {
 		try {
 			var ordersView = codeshelf.ordersview(websession_, facility);
-			var ordersWindow = codeshelf.window(ordersView, frame_, getWindowDragLimit());
+			var ordersWindow = codeshelf.window(ordersView, getDomNodeForNextWindow(), getWindowDragLimit());
 			ordersWindow.open();
 		}
 		catch (err) {
