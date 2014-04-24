@@ -290,7 +290,8 @@ codeshelf.mainpage = function() {
 
 function contactWasSelected() {
 	var dialogOptions = {
-		closeButtonText: '',
+		cancelButtonVisibility: 'hidden',
+		cancelButtonText: '',
 		actionButtonText: 'OK',
 		headerText: 'Contact Codeshelf',
 		bodyText: 'Check out codeshelf.com',

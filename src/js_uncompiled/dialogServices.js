@@ -15,7 +15,7 @@ goog.provide('adhocDialogService');
 * Needed improvement:  optionally hide the cancel button.
 */
 
-angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
+angular.module('codeshelfApp').service('simpleDialogService', ['$scope', '$modal',
 	function ($modal) {
 		var dialogDefaults = {
 			backdrop: true,
@@ -26,7 +26,8 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 		};
 
 		var dialogOptions = {
-			closeButtonText: 'Close',
+			cancelButtonVisibility: 'hidden',
+			cancelButtonText: 'Close',
 			actionButtonText: 'OK',
 			headerText: 'Proceed?',
 			bodyText: 'Perform this action?'
@@ -51,9 +52,10 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 			//We do not expect use to pass in result. This is a way to get the information out.
 			angular.extend(tempDialogResults, dialogResults, customDialogResults);
 
-			// If the customDialogOptions.closeButtonText is empty string, then find and hide the cancel button.
-			// in the html     <button type="button" class="btn" id="thecancelbutton"
+			// If the customDialogOptions.cancelButtonText is empty string, there is visibility, or vice-versa, report error
 			// Not done yet.
+			// $customDialogOptions.cancelButtonVisibility = (!$customDialogOptions.closeButtonText || $customDialogOptions.closeButtonText == '')? 'hidden' : '';
+
 
 			if (!tempDialogDefaults.controller) {
 				tempDialogDefaults.controller = function ($scope, $modalInstance) {
@@ -125,7 +127,7 @@ angular.module('codeshelfApp').service('adhocDialogService', ['$modal',
 		};
 
 		var adhocDialogOptions = {
-			closeButtonText: 'Close',
+			cancelButtonText: 'Cancel',
 			actionButtonText: 'OK',
 			passedInUrl: 'partials/dialog.html'
 		};

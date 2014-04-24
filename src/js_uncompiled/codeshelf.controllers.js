@@ -195,7 +195,8 @@ codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams', 'simpleD
 		// But this dialog is coming
 
 		var dialogOptions = {
-			closeButtonText: 'Cancel',
+			cancelButtonVisibility: '',
+			cancelButtonText: 'Cancel',
 			actionButtonText: 'OK',
 			headerText: 'Default Router',
 			bodyText: 'Default router was called',

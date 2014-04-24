@@ -35,7 +35,7 @@ codeshelf.workareaview = function(websession, facility) {
 
 			// demonstration for using new customDialogService and partial html
 			var adhocDialogOptions = {
-				closeButtonText: 'Cancel',
+				cancelButtonText: 'Cancel',
 				actionButtonText: 'OK',
 				passedInUrl: 'partials/test-dialog.html',
 				callback: function () {

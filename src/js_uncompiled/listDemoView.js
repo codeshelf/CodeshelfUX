@@ -332,7 +332,8 @@ codeshelf.listdemoview = function() {
 			// Demonstration of our dialog/alert service
 
 			var dialogOptions = {
-				closeButtonText: 'Cancel',
+				cancelButtonVisibility: '',
+				cancelButtonText: 'Cancel',
 				actionButtonText: 'OK',
 				headerText: 'Close the list view',
 				bodyText: 'Just at test of the dialog',

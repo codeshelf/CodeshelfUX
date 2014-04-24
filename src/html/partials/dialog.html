@@ -9,7 +9,8 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn" id="thecancelbutton"
-            ng-click="cancel()">{{dialogOptions.closeButtonText}}</button>
+            ng-style="{'visibility':dialogOptions.cancelButtonVisibility}"
+            ng-click="cancel()">{{dialogOptions.cancelButtonText}}</button>
     <button class="btn btn-primary"
             ng-click="ok()">{{dialogOptions.actionButtonText}}</button>
 </div>
