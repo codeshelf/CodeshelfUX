@@ -218,13 +218,12 @@ codeshelf.mainpage = function() {
 	}
 
 	// why does this not work as part of windowLauncher?
-	function loadFacilityEditor() {
+	function loadFacilityEditor(facility) {
 		try {
 			// Load the GMaps API and init() when done.
 			if (typeof google !== 'undefined') {
 				google.load('maps', '3', {'other_params': 'sensor=false', 'callback': function() {
-					// organization not used in facility editor view, so no longer pass that parameter.
-					var facilityEditorView = codeshelf.facilityeditorview(this.getWebsession(), organization_, this.getFacility());
+					var facilityEditorView = codeshelf.facilityeditorview(websession_, application_.getOrganization(), facility);
 					var facilityEditorWindow = codeshelf.window(facilityEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
 					facilityEditorWindow.open();
 				}});
@@ -241,7 +240,7 @@ codeshelf.mainpage = function() {
 
 		codeshelf.windowLauncher.loadPathsView();
 
-		loadFacilityEditor();
+		loadFacilityEditor(codeshelf.windowLauncher.getFacility());
 
 		/*  comment out these 4 to work on window ordering problem See CD_0009 */
 		codeshelf.windowLauncher.loadWorkAreaEditorView();
