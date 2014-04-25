@@ -17,10 +17,9 @@ goog.require('goog.dom.query');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 
-codeshelf.facilityeditorview = function (websession, organization, facility) {
-
+codeshelf.facilityeditorview = function (websession, facility) {
+// organization not used, so no longer passed as parameter
 	var websession_ = websession;
-	var organization_ = organization;
 	var facility_ = facility;
 
 	var map_;

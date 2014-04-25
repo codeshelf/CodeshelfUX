@@ -162,8 +162,23 @@ codeshelf.windowLauncher = (function() {
 		catch (err) {
 			alert(err);
 		}
-	}
+	},
 
+	loadFacilityEditor: function () {
+		try {
+			// Load the GMaps API and init() when done.
+			if (typeof google !== 'undefined') {
+				google.load('maps', '3', {'other_params': 'sensor=false', 'callback': function() {
+					var facilityEditorView = codeshelf.facilityeditorview(codeshelf.windowLauncher.getWebsession(), codeshelf.windowLauncher.getFacility());
+					var facilityEditorWindow = codeshelf.window(facilityEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
+					facilityEditorWindow.open();
+				}});
+			}
+		}
+		catch (err) {
+			alert(err);
+		}
+	}
 
 };
 })();
@@ -218,12 +233,13 @@ codeshelf.mainpage = function() {
 	}
 
 	// why does this not work as part of windowLauncher?
-	function loadFacilityEditor(facility) {
+	/*
+	function loadFacilityEditor() {
 		try {
 			// Load the GMaps API and init() when done.
 			if (typeof google !== 'undefined') {
 				google.load('maps', '3', {'other_params': 'sensor=false', 'callback': function() {
-					var facilityEditorView = codeshelf.facilityeditorview(websession_, application_.getOrganization(), facility);
+					var facilityEditorView = codeshelf.facilityeditorview(codeshelf.windowLauncher.getWebsession(), codeshelf.windowLauncher.getFacility());
 					var facilityEditorWindow = codeshelf.window(facilityEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
 					facilityEditorWindow.open();
 				}});
@@ -233,6 +249,7 @@ codeshelf.mainpage = function() {
 			alert(err);
 		}
 	}
+	*/
 
 	function loadFacilityWindows(facility) {
 		// No longer open the list demo view
@@ -240,7 +257,7 @@ codeshelf.mainpage = function() {
 
 		codeshelf.windowLauncher.loadPathsView();
 
-		loadFacilityEditor(codeshelf.windowLauncher.getFacility());
+		codeshelf.windowLauncher.loadFacilityEditor();
 
 		/*  comment out these 4 to work on window ordering problem See CD_0009 */
 		codeshelf.windowLauncher.loadWorkAreaEditorView();
@@ -381,6 +398,11 @@ function launchWorkAreaView() {
 	codeshelf.windowLauncher.loadWorkAreaView();
 }
 goog.exportSymbol('launchWorkAreaView', launchWorkAreaView);
+
+function launchFacilityEditor() {
+	codeshelf.windowLauncher.loadFacilityEditor();
+}
+goog.exportSymbol('launchFacilityEditor', launchFacilityEditor);
 
 function launchTestRunner() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');
