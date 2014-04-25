@@ -4,7 +4,7 @@
  *  $Id: mainPage.js,v 1.52 2013/05/26 21:52:20 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
-goog.provide('codeshelf.doLaunchListDemoView'); // Better way? Only for use inside this file.
+goog.provide('codeshelf.windowLauncher'); // Better way? Only for use inside this file.
 goog.require('codeshelf.pathsview');
 goog.require('codeshelf.ediservicesview');
 goog.require('codeshelf.facilityeditorview');
@@ -75,6 +75,100 @@ codeshelf.doLaunchListDemoView = function(){
 		}
 }
 
+// global (sort of singleton) called the "module pattern"
+codeshelf.windowLauncher = (function() {
+	// psuedo private
+	var facility;
+	var websession;
+
+	return {
+	// public methods
+	setFacility: function(inFacility){
+		facility = inFacility;
+	},
+
+	getFacility: function(){
+		return facility;
+	},
+	setWebsession: function(inWebsession){
+		websession = inWebsession;
+	},
+
+	getWebsession: function(){
+		return websession;
+	},
+
+	loadPathsView: function () {
+		try {
+			var pathsView = codeshelf.pathsview(this.getWebsession(), this.getFacility());
+			var pathsWindow = codeshelf.window(pathsView, getDomNodeForNextWindow(), getWindowDragLimit());
+			pathsWindow.open();
+		}
+		catch (err) {
+			alert(err);
+		}
+	},
+
+	doLaunchListDemoView: function(){
+		try {
+			var listDemoView = codeshelf.listdemoview();
+			var listDemoWindow = codeshelf.window(listDemoView, getDomNodeForNextWindow(), getWindowDragLimit());
+			listDemoWindow.open();
+		}
+		catch (err) {
+			alert(err);
+		}
+	},
+
+	loadWorkAreaEditorView: function () {
+		try {
+			var workAreaEditorView = codeshelf.workareaeditorview(this.getWebsession(), this.getFacility());
+			var workAreaEditorWindow = codeshelf.window(workAreaEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
+			workAreaEditorWindow.open();
+		}
+		catch (err) {
+			alert(err);
+		}
+	},
+
+	loadEdiServicesView: function() {
+		try {
+			var ediServicesView_ = codeshelf.ediservicesview(this.getWebsession(), this.getFacility());
+			var ediServicesWindow = codeshelf.window(ediServicesView_, getDomNodeForNextWindow(), getWindowDragLimit());
+			ediServicesWindow.open();
+		}
+		catch (err) {
+			alert(err);
+		}
+	},
+
+	loadWorkAreaView: function() {
+		try {
+			var workAreaView = codeshelf.workareaview(this.getWebsession(), this.getFacility());
+			var workAreaWindow = codeshelf.window(workAreaView, getDomNodeForNextWindow(), getWindowDragLimit());
+			workAreaWindow.open();
+		}
+		catch (err) {
+			alert(err);
+		}
+	},
+
+	loadOrdersView: function() {
+		try {
+			var ordersView = codeshelf.ordersview(this.getWebsession(), this.getFacility());
+			var ordersWindow = codeshelf.window(ordersView, getDomNodeForNextWindow(), getWindowDragLimit());
+			ordersWindow.open();
+		}
+		catch (err) {
+			alert(err);
+		}
+	}
+
+
+};
+})();
+
+
 
 codeshelf.mainpage = function() {
 
@@ -107,6 +201,11 @@ codeshelf.mainpage = function() {
 						} else {
 							for (var i = 0; i < command['data']['results'].length; i++) {
 								var facility = command['data']['results'][i];
+
+								// save the websession and facility so we can launch windows at any time.
+								codeshelf.windowLauncher.setWebsession(websession_);
+								codeshelf.windowLauncher.setFacility(facility);
+
 								loadFacilityWindows(facility);
 							}
 						}
@@ -118,46 +217,14 @@ codeshelf.mainpage = function() {
 		return callback;
 	}
 
-
-	function loadFacilityWindows(facility) {
-		// No longer open the list demo view
-
-		// public scope so navbar can call it.
-		// codeshelf.doLaunchListDemoView();
-
-		loadPathsView(facility);
-
-		loadFacilityEditor(facility);
-
-		/*  comment out these 4 to work on window ordering problem See CD_0009 */
-		loadWorkAreaEditorView(facility);
-
-		loadEdiServicesView(facility);
-
-		loadOrdersView(facility);
-
-		loadWorkAreaView(facility);
-
-	}
-
-	// new grid view for paths
-	function loadPathsView(facility) {
-		try {
-			var pathsView = codeshelf.pathsview(websession_, facility);
-			var pathsWindow = codeshelf.window(pathsView, getDomNodeForNextWindow(), getWindowDragLimit());
-			pathsWindow.open();
-		}
-		catch (err) {
-			alert(err);
-		}
-	}
-
-	function loadFacilityEditor(facility) {
+	// why does this not work as part of windowLauncher?
+	function loadFacilityEditor() {
 		try {
 			// Load the GMaps API and init() when done.
 			if (typeof google !== 'undefined') {
 				google.load('maps', '3', {'other_params': 'sensor=false', 'callback': function() {
-					var facilityEditorView = codeshelf.facilityeditorview(websession_, application_.getOrganization(), facility);
+					// organization not used in facility editor view, so no longer pass that parameter.
+					var facilityEditorView = codeshelf.facilityeditorview(this.getWebsession(), organization_, this.getFacility());
 					var facilityEditorWindow = codeshelf.window(facilityEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
 					facilityEditorWindow.open();
 				}});
@@ -168,49 +235,26 @@ codeshelf.mainpage = function() {
 		}
 	}
 
-	function loadWorkAreaEditorView(facility) {
-		try {
-			var workAreaEditorView = codeshelf.workareaeditorview(websession_, facility);
-			var workAreaEditorWindow = codeshelf.window(workAreaEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
-			workAreaEditorWindow.open();
-		}
-		catch (err) {
-			alert(err);
-		}
+	function loadFacilityWindows(facility) {
+		// No longer open the list demo view
+		// What windows should launch immediately?
+
+		codeshelf.windowLauncher.loadPathsView();
+
+		loadFacilityEditor();
+
+		/*  comment out these 4 to work on window ordering problem See CD_0009 */
+		codeshelf.windowLauncher.loadWorkAreaEditorView();
+
+		codeshelf.windowLauncher.loadEdiServicesView();
+
+		codeshelf.windowLauncher.loadOrdersView();
+
+		codeshelf.windowLauncher.loadWorkAreaView();
+
 	}
 
-	function loadEdiServicesView(facility) {
-		try {
-			var ediServicesView_ = codeshelf.ediservicesview(websession_, facility);
-			var ediServicesWindow = codeshelf.window(ediServicesView_, getDomNodeForNextWindow(), getWindowDragLimit());
-			ediServicesWindow.open();
-		}
-		catch (err) {
-			alert(err);
-		}
-	}
 
-	function loadWorkAreaView(facility) {
-		try {
-			var workAreaView = codeshelf.workareaview(websession_, facility);
-			var workAreaWindow = codeshelf.window(workAreaView, getDomNodeForNextWindow(), getWindowDragLimit());
-			workAreaWindow.open();
-		}
-		catch (err) {
-				alert(err);
-		}
-	}
-
-	function loadOrdersView(facility) {
-		try {
-			var ordersView = codeshelf.ordersview(websession_, facility);
-			var ordersWindow = codeshelf.window(ordersView, getDomNodeForNextWindow(), getWindowDragLimit());
-			ordersWindow.open();
-		}
-		catch (err) {
-				alert(err);
-		}
-	}
 
 	/**
 	 * The main page view.
@@ -330,6 +374,8 @@ function launchListViewDemo() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');
 	theLogger.info(" demo selected from navbar");
 
-	codeshelf.doLaunchListDemoView();
+	codeshelf.windowLauncher.doLaunchListDemoView();
+	codeshelf.windowLauncher.loadPathsView();
+
 }
 goog.exportSymbol('launchListViewDemo', launchListViewDemo);
