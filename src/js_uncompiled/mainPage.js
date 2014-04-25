@@ -351,30 +351,39 @@ function contactWasSelected() {
 // Necessary for now: compilation changes the function name.
 goog.exportSymbol('contactWasSelected', contactWasSelected);
 
-function demoWasSelected() {
-	var theLogger = goog.debug.Logger.getLogger('navbar');
-	theLogger.info(" demo selected from navbar");
-
-	// find our application to use it.
-	// Paul:
-	// codeshelfApp is found. However .mainpage is not in public scope, probably should
-	// not be as it can close.
-	// loadListViewDemo() might be moved to public scope on codeshelfApp, but I think it would
-	// have to be defined in codeshelf.controllers.js where the app is created. That
-	// would cause some code rearrangement.  AND we need to pass facility for other windows.
-	var codeshelfApp = angular.module('codeshelfApp');
-	// next line throws
-	codeshelfApp.mainpage.loadListViewDemo();
-}
-goog.exportSymbol('demoWasSelected', demoWasSelected);
-
 
 function launchListViewDemo() {
-	var theLogger = goog.debug.Logger.getLogger('navbar');
-	theLogger.info(" demo selected from navbar");
-
 	codeshelf.windowLauncher.doLaunchListDemoView();
-	codeshelf.windowLauncher.loadPathsView();
-
 }
 goog.exportSymbol('launchListViewDemo', launchListViewDemo);
+
+function launchPathsView() {
+	codeshelf.windowLauncher.loadPathsView();
+}
+goog.exportSymbol('launchPathsView', launchPathsView);
+
+function launchWorkAreaEditor() {
+	codeshelf.windowLauncher.loadWorkAreaEditorView();
+}
+goog.exportSymbol('launchWorkAreaEditor', launchWorkAreaEditor);
+
+function launchEdiServicesView() {
+	codeshelf.windowLauncher.loadEdiServicesView();
+}
+goog.exportSymbol('launchEdiServicesView', launchEdiServicesView);
+
+function launchOrdersView() {
+	codeshelf.windowLauncher.loadOrdersView();
+}
+goog.exportSymbol('launchOrdersView', launchOrdersView);
+
+function launchWorkAreaView() {
+	codeshelf.windowLauncher.loadWorkAreaView();
+}
+goog.exportSymbol('launchWorkAreaView', launchWorkAreaView);
+
+function launchTestRunner() {
+	var theLogger = goog.debug.Logger.getLogger('navbar');
+	theLogger.info("No tests yet from here");
+}
+goog.exportSymbol('launchTestRunner', launchTestRunner);
