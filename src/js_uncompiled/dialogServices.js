@@ -17,6 +17,7 @@ goog.provide('adhocDialogService');
 
 angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 	function ($modal) {
+/*
 		var dialogDefaults = {
 			backdrop: true,
 			keyboard: true,
@@ -24,14 +25,30 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 			dialogFade: true,
 			templateUrl: 'partials/dialog.html'
 		};
+*/
+		var dialogDefaults = {};
+		dialogDefaults ['backdrop'] = true;
+		dialogDefaults ['keyboard'] = true;
+		dialogDefaults ['backdropClick'] = true;
+		dialogDefaults ['dialogFade'] = true;
+		dialogDefaults ['templateUrl'] = "partials/dialog.html";
 
-		var dialogOptions = {
-			cancelButtonVisibility: 'hidden',
+
+/*
+		var dialogOptions = {};
+		dialogOptions ['cancelButtonVisibility'] = 'hidden';
 			cancelButtonText: 'Close',
 			actionButtonText: 'OK',
 			headerText: 'Proceed?',
 			bodyText: 'Perform this action?'
 		};
+*/
+		var dialogOptions = {};
+		dialogOptions ['cancelButtonVisibility'] = "hidden";
+		dialogOptions ['cancelButtonText'] = "Close";
+		dialogOptions ['actionButtonText'] = "OK";
+		dialogOptions ['headerText'] = "Proceed?";
+		dialogOptions ['bodyText'] = "Perform this action?";
 
 		var dialogResults = {
 			userClickedOk: false
@@ -87,7 +104,7 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 
 		this.showModalDialog = function (customDialogDefaults, customDialogOptions) {
 			if (!customDialogDefaults) customDialogDefaults = {};
-			customDialogDefaults.backdropClick = false;
+			customDialogDefaults['backdropClick'] = false;
 			this.showDialog(customDialogDefaults, customDialogOptions);
 		};
 
@@ -103,7 +120,7 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 		this.getModalDialogResult = function (customDialogDefaults, customDialogOptions, customDialogResults) {
 			if (!customDialogDefaults) customDialogDefaults = {};
 			if (!customDialogResults) customDialogResults = {};
-			customDialogDefaults.backdropClick = false;
+			customDialogDefaults['backdropClick'] = false;
 			this.showDialog(customDialogDefaults, customDialogOptions, customDialogResults);
 			return (customDialogResults.userClickedOk);
 		};
@@ -118,6 +135,7 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 
 angular.module('codeshelfApp').service('adhocDialogService', ['$modal',
 	function ($modal) {
+	/*
 		var dialogDefaults = {
 			backdrop: true,
 			keyboard: true,
@@ -125,6 +143,13 @@ angular.module('codeshelfApp').service('adhocDialogService', ['$modal',
 			dialogFade: true,
 			templateUrl: 'partials/dialog.html'
 		};
+	*/
+		var dialogDefaults = {};
+		dialogDefaults ['backdrop'] = true;
+		dialogDefaults ['keyboard'] = true;
+		dialogDefaults ['backdropClick'] = true;
+		dialogDefaults ['dialogFade'] = true;
+		dialogDefaults ['templateUrl'] = "partials/dialog.html";
 
 		var adhocDialogOptions = {
 			cancelButtonText: 'Cancel',
@@ -143,7 +168,7 @@ angular.module('codeshelfApp').service('adhocDialogService', ['$modal',
 			//Map dialog.html $scope custom properties to defaults defined in this service
 			angular.extend(tempAdhocDialogOptions, adhocDialogOptions, customAdhocDialogOptions);
 
-			tempDialogDefaults.templateUrl = customAdhocDialogOptions.passedInUrl;
+			tempDialogDefaults['templateUrl'] = customAdhocDialogOptions.passedInUrl;
 
 			if (!tempDialogDefaults.controller) {
 				tempDialogDefaults.controller = function ($scope, $modalInstance) {
@@ -171,7 +196,7 @@ angular.module('codeshelfApp').service('adhocDialogService', ['$modal',
 
 		this.showModalDialog = function (customDialogDefaults, customAdhocDialogOptions) {
 			if (!customDialogDefaults) customDialogDefaults = {};
-			customDialogDefaults.backdropClick = false;
+			customDialogDefaults['backdropClick'] = false;
 			this.showDialog(customDialogDefaults, customAdhocDialogOptions);
 		};
 

@@ -331,6 +331,7 @@ codeshelf.listdemoview = function() {
 		close: function() {
 			// Demonstration of our dialog/alert service
 
+/*
 			var dialogOptions = {
 				cancelButtonVisibility: '',
 				cancelButtonText: 'Cancel',
@@ -342,6 +343,18 @@ codeshelf.listdemoview = function() {
 					theLogger.info("In the alert, clicked the ok button");
 				}
 			};
+*/
+			var dialogOptions = {};
+			dialogOptions ['cancelButtonVisibility'] = "";
+			dialogOptions ['cancelButtonText'] = "Cancel";
+			dialogOptions ['actionButtonText'] = "OK";
+			dialogOptions ['headerText'] = "Close the list view";
+			dialogOptions ['bodyText'] = "Just at test of the dialog";
+			dialogOptions ['callback'] = function () {
+				var theLogger = goog.debug.Logger.getLogger('ListDemoView');
+				theLogger.info("In the alert, clicked the ok button");
+			};
+
 
 
 // This method of calling an angular service came highly unrecommended

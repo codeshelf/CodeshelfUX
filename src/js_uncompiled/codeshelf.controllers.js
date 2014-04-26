@@ -190,34 +190,5 @@ codeshelfApp.config(['$routeProvider',
 codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams', 'simpleDialogService',
 	function($scope, $routeParams, simpleDialogService) {
 
-		// Demonstration of use of dialog service
-		// modal with injections to significantly modify what the dialog is showing and doing.
-		// But this dialog is coming
-
-		var dialogOptions = {
-			cancelButtonVisibility: '',
-			cancelButtonText: 'Cancel',
-			actionButtonText: 'OK',
-			headerText: 'Default Router',
-			bodyText: 'Default router was called',
-			callback: function () {
-				var theLogger = goog.debug.Logger.getLogger('Codeshelf router');
-				theLogger.info("Clicked the ok button");
-			}
-		}
-		// If you uncomment this line, you will see that MissingRouterCtrl is called when application starts
-		// And, only if you click the ok button, it logs, showing the callback works
-
-		// simpleDialogService.showModalDialog({}, dialogOptions);
-		/*
-		if (!simpleDialogService.getModalDialogResult({}, dialogOptions)){
-			var theLogger = goog.debug.Logger.getLogger('Codeshelf router');
-			theLogger.info("did not click the ok button");
-
-		}
-		*/
-
-		// Simple!
-		// See ListViewDemo for how to invoke an angular service in non-angular code.
-
+		// was a demonstration of use of simpleDialogService
 	}]);

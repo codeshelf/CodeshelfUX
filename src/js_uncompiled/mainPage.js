@@ -346,6 +346,7 @@ codeshelf.mainpage = function() {
 ;
 
 function contactWasSelected() {
+/*
 	var dialogOptions = {
 		cancelButtonVisibility: 'hidden',
 		cancelButtonText: '',
@@ -356,6 +357,17 @@ function contactWasSelected() {
 
 		}
 	};
+*/
+	var dialogOptions = {};
+	dialogOptions ['cancelButtonVisibility'] = "hidden";
+	dialogOptions ['cancelButtonText'] = "";
+	dialogOptions ['actionButtonText'] = "OK";
+	dialogOptions ['headerText'] = "Contact Codeshelf";
+	dialogOptions ['bodyText'] = "Check out codeshelf.com";
+	dialogOptions ['callback'] = function () {
+
+	};
+
 
 	var injector = angular.injector(['ng', 'codeshelfApp']);
 
