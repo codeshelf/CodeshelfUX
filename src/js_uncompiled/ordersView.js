@@ -32,6 +32,7 @@ codeshelf.ordersview = function(websession, facility) {
 		if ($(event.target).data("option") == "link") {
 
 			// demonstration for using new customDialogService and partial html
+			/* this works in uncompiled only
 			var adhocDialogOptions = {
 				passedInUrl: 'partials/link-dropbox-dlog.html',
 				callback: function () {
@@ -46,7 +47,23 @@ codeshelf.ordersview = function(websession, facility) {
 			injector.invoke(['adhocDialogService', function(adhocDialogService){
 				adhocDialogService.showModalDialog({}, adhocDialogOptions);
 			}]);
+			*/
 
+			var adhocDialogOptions = {}
+
+			adhocDialogOptions['passedInUrl']= "partials/link-dropbox-dlog.html";
+			adhocDialogOptions['callback']= function () {
+					var theLogger = goog.debug.Logger.getLogger('Orders View rightclick');
+					theLogger.info("Clicked the ok button");
+				}
+
+			// would be nice if this worked
+			//angular.module('codeshelfApp').service('adhocDialogService').showModalDialog({}, adhocDialogOptions);
+			var injector = angular.injector(['ng', 'codeshelfApp']);
+
+			injector.invoke(['adhocDialogService', function(adhocDialogService){
+				adhocDialogService.showModalDialog({}, adhocDialogOptions);
+			}]);
 
 
 			/* old dialog. This did not have full functionality seen in edi services window, but did launch

@@ -146,11 +146,16 @@ angular.module('codeshelfApp').service('adhocDialogService', ['$modal',
 		dialogDefaults ['dialogFade'] = true;
 		dialogDefaults ['templateUrl'] = "partials/dialog.html";
 
+		/*
 		var adhocDialogOptions = {
 			cancelButtonText: 'Cancel',
 			actionButtonText: 'OK',
 			passedInUrl: 'partials/dialog.html'
-		};
+		}; */
+		var adhocDialogOptions = {}
+			adhocDialogOptions['cancelButtonText']= "Cancel";
+			adhocDialogOptions['actionButtonText']= "OK";
+			adhocDialogOptions['passedInUrl'] = "partials/dialog.html";
 
 		this.showDialog = function (customDialogDefaults, customAdhocDialogOptions) {
 			//Create temp objects to work with since we're in a singleton service
@@ -163,7 +168,7 @@ angular.module('codeshelfApp').service('adhocDialogService', ['$modal',
 			//Map dialog.html $scope custom properties to defaults defined in this service
 			angular.extend(tempAdhocDialogOptions, adhocDialogOptions, customAdhocDialogOptions);
 
-			tempDialogDefaults['templateUrl'] = customAdhocDialogOptions.passedInUrl;
+			tempDialogDefaults['templateUrl'] = customAdhocDialogOptions['passedInUrl'];
 
 			if (!tempDialogDefaults.controller) {
 				tempDialogDefaults.controller = function ($scope, $modalInstance) {
