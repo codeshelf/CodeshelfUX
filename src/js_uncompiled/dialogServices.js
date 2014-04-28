@@ -175,7 +175,7 @@ angular.module('codeshelfApp').service('adhocDialogService', ['$modal',
 					$scope.adhocDialogOptions = tempAdhocDialogOptions;
 					$scope.ok = function () {
 						$modalInstance.close(/*results*/);
-						customAdhocDialogOptions.callback();
+						customAdhocDialogOptions['callback']();
 					};
 
 					$scope.cancel = function () {

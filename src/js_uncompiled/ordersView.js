@@ -14,6 +14,7 @@ goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
+goog.require('adhocDialogService');
 
 /**
  * The current orders for this facility.

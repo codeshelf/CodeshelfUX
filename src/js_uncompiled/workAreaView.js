@@ -34,15 +34,17 @@ codeshelf.workareaview = function(websession, facility) {
 		if ($(event.target).data("option") == "testdialog") {
 
 			// demonstration for using new customDialogService and partial html
-			var adhocDialogOptions = {
-				cancelButtonText: 'Cancel',
-				actionButtonText: 'OK',
-				passedInUrl: 'partials/test-dialog.html',
-				callback: function () {
-					var theLogger = goog.debug.Logger.getLogger('Codeshelf router');
+			var adhocDialogOptions = {}
+				adhocDialogOptions['cancelButtonText']= "Cancel";
+				adhocDialogOptions['actionButtonText']= "OK";
+				adhocDialogOptions['passedInUrl']= "partials/test-dialog.html";
+				/* no callback this dialog
+				adhocDialogOptions['callback']= function () {
+					var theLogger = goog.debug.Logger.getLogger('test adhoc dialog');
 					theLogger.info("Clicked the ok button");
 				}
-			}
+				*/
+
 			// would be nice if this worked
 			//angular.module('codeshelfApp').service('adhocDialogService').showModalDialog({}, adhocDialogOptions);
 			var injector = angular.injector(['ng', 'codeshelfApp']);
@@ -51,7 +53,6 @@ codeshelf.workareaview = function(websession, facility) {
 				adhocDialogService.showModalDialog({}, adhocDialogOptions);
 			}]);
 
-			// There was roll-your-own dialog before, as in ediServicesView.js
 		}
 	}
 
