@@ -268,6 +268,9 @@ codeshelf.mainpage = function() {
 
 		codeshelf.windowLauncher.loadWorkAreaView();
 
+		// Enable to show an example of a confirmation dialog that waits for confirmation before closing
+//		codeshelf.windowLauncher.doLaunchListDemoView();
+
 	}
 
 

@@ -102,18 +102,28 @@ codeshelf.window = function(view, parent, limits) {
 
 		close: function() {
 			var closeFunction = function(event) {
-				// let the view dispose of anything special
-				view_.close();
 
-				// find and close the DOM window corresponding to this close button click
 				var closeButtonElement = event.currentTarget;
-				thisWindow_.disposeDOMWindowOwningThisElement(closeButtonElement);
-
+				// let the view dispose of anything special
+				var promise = view_.close();
+				//if promise returned, obey it
+				if (promise != null) {
+					promise.then(function onOk() {
+						thisWindow_.disposeDOMWindowOwningThisElement(closeButtonElement);
+					});
+				}
+				//otherwise do the usual
+				else {
+					thisWindow_.disposeDOMWindowOwningThisElement(closeButtonElement);
+				}
 				event.dispose();
-			}
+			};
 			return closeFunction;
 		},
 
+		/**
+		 * find and close the DOM window corresponding to this close button click
+		 */
 		disposeDOMWindowOwningThisElement: function(inElement){
 
 			var theOwnerWindow = goog.dom.getAncestorByClass(inElement, "window");

@@ -52,7 +52,7 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 
 		var dialogResults = {
 			userClickedOk: false
-		}
+		};
 
 		this.showDialog = function (customDialogDefaults, customDialogOptions, customDialogResults) {
 			//Create temp objects to work with since we're in a singleton service
@@ -94,18 +94,13 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 			// attempt to hide cancel button here.
 
 
-			modalInstance.result.then(function (selectedItem) {
-//				$scope.selected = selectedItem;
-			}, function () {
-//				$log.info('Modal dismissed at: ' + new Date());
-			});
-
+			return modalInstance.result;
 		};
 
 		this.showModalDialog = function (customDialogDefaults, customDialogOptions) {
 			if (!customDialogDefaults) customDialogDefaults = {};
 			customDialogDefaults['backdropClick'] = false;
-			this.showDialog(customDialogDefaults, customDialogOptions);
+			return this.showDialog(customDialogDefaults, customDialogOptions);
 		};
 
 		// Paul: this does not work at all. Problems include:
@@ -201,46 +196,3 @@ angular.module('codeshelfApp').service('adhocDialogService', ['$modal',
 		};
 
 	}]);
-/* ************************** */
-
-var ModalDemoCtrl = function ($scope, $modal, $log) {
-
-  $scope.items = ['item1', 'item2', 'item3'];
-
-  $scope.open = function () {
-
-    var modalInstance = $modal.open({
-      controller: ModalInstanceCtrl,
-      resolve: {
-        items: function () {
-          return $scope.items;
-        }
-      }
-    });
-
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
-    });
-  };
-};
-
-// Please note that $modalInstance represents a modal window (instance) dependency.
-// It is not the same as the $modal service used above.
-
-var ModalInstanceCtrl = function ($scope, $modalInstance, items) {
-
-  $scope.items = items;
-  $scope.selected = {
-    item: $scope.items[0]
-  };
-
-  $scope.ok = function () {
-    $modalInstance.close($scope.selected.item);
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
-};
