@@ -121,7 +121,6 @@ codeshelf.ediservicesview = function (websession, facility) {
 			contextMenu_.bind('mouseleave', function (event) {
 				$(this).fadeOut(5)
 			});
-			contextMenu_.bind("click", linkAccount);
 		},
 
 		// This is mainly demonstration/experiment. Ancestor hierarchyListView has a close(). Which is called?
@@ -136,10 +135,11 @@ codeshelf.ediservicesview = function (websession, facility) {
 
 			event.preventDefault();
 			contextMenu_.empty();
+			contextMenu_.bind("click", item, linkAccount);
 
 			var line = $('<li>Link Dropbox</li>').appendTo(contextMenu_);
 			line.data("option", "link");
-			line.data("dropboxServiceId", item['persistentId'])
+			//line.data(item['className'], item['persistentId'])
 
 			contextMenu_
 				.css('top', event.pageY - 10)
