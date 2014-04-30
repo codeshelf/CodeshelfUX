@@ -508,6 +508,14 @@ codeshelf.facilityeditorview = function (websession, facility) {
 		}
 	}
 
+	function logFacilityResponse(inStringToLog) {
+		//uncomment to really see the updates on facility view
+		if (false) {
+			var theLogger = goog.debug.Logger.getLogger('FacilityWebsocketResponse');
+			theLogger.info(inStringToLog);
+		}
+	}
+
 	function websocketCmdCallback(expectedResponseType) {
 		var callback = {
 			exec: function (command) {
@@ -521,18 +529,22 @@ codeshelf.facilityeditorview = function (websession, facility) {
 							// Make sure the class name matches.
 							if (object['className'] === domainobjects['Vertex']['className']) {
 								var latLng = new google.maps.LatLng(object['posY'], object['posX']);
-
 								if (object['op'] === 'cre') {
+									logFacilityResponse('FILTER_RESP:cre');
 									handleCreateFacilityVertexCmd(latLng, object);
 								} else if (object['op'] === 'upd') {
+									logFacilityResponse('FILTER_RESP:upd -- init or update vertex from backend');
 									handleUpdateFacilityVertexCmd(latLng, object);
 								} else if (object['op'] === 'dl') {
+									logFacilityResponse('FILTER_RESP:dl -- delete vertex from backend');
 									handleDeleteFacilityVertexCmd(latLng, object);
 								}
 							}
 						}
 					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+						logFacilityResponse('UPDATE_RESP -- ack the vertext update that I sent');
 					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+						logFacilityResponse('UPDATE_RESP -- ack the vertex delete that I sent');
 					}
 				}
 			}

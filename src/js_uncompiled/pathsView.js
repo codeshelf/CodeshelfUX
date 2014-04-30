@@ -32,9 +32,14 @@ codeshelf.pathsview = function(websession, facility) {
 
 	function sendPathDelete(event) {
 		if ($(event.target).data("option") == "delete_path") {
+			// Demonstrating correct right click use in list view.
+			// Note the bind below. Passes the item, which becomes event.data
+			// Important. event.data and thePath.domainId work uncompiled, but not compiled.
+			var thePath = event['data'];
 
 			var theLogger = goog.debug.Logger.getLogger('Paths view');
-			theLogger.info("just logging: delete path");
+			var aString = thePath['domainId'];
+			theLogger.info("just logging: delete path " + aString);
 
 		}
 	}
@@ -60,7 +65,6 @@ codeshelf.pathsview = function(websession, facility) {
 			contextMenu_.bind('mouseleave', function(event) {
 				$(this).fadeOut(5)
 			});
-			contextMenu_.bind("click", sendPathDelete);
 		},
 
 		doContextMenu: function(event, item, column) {
@@ -69,6 +73,7 @@ codeshelf.pathsview = function(websession, facility) {
 
 			event.preventDefault();
 			contextMenu_.empty();
+			contextMenu_.bind("click", item, sendPathDelete);
 
 			var line, input;
 			// only level 0 click should delete path
