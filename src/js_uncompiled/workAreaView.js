@@ -30,8 +30,9 @@ codeshelf.workareaview = function(websession, facility) {
 
 	var contextMenu_;
 
+	/* not called, but this dialog is the better example of link dialog */
 	function testDialog(event) {
-		if ($(event.target).data("option") == "testdialog") {
+		if ($(event.target).data("option") == "test_dialog") {
 
 			// demonstration for using new customDialogService and partial html
 			var adhocDialogOptions = {}
@@ -68,7 +69,6 @@ codeshelf.workareaview = function(websession, facility) {
 			contextMenu_.bind('mouseleave', function(event) {
 				$(this).fadeOut(5)
 			});
-			contextMenu_.bind("click", testDialog);
 		},
 
 		doContextMenu: function(event, item, column) {
@@ -77,9 +77,11 @@ codeshelf.workareaview = function(websession, facility) {
 
 			event.preventDefault();
 			contextMenu_.empty();
+			contextMenu_.bind("click", item, testDialog);
 
-			var line, input;
-			line = $('<li>Test Dialog</li>').appendTo(contextMenu_).data("option", "testdialog");
+			var line;
+			// this is a 3-level view: path, work area, work instruction
+			line = $('<li>Test Dialog</li>').appendTo(contextMenu_).data("option", "test_dialog");
 
 			contextMenu_
 				.css('top', event.pageY - 10)

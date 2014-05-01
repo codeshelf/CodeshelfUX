@@ -5,6 +5,7 @@
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.provide('codeshelf.windowLauncher'); // Better way? Only for use inside this file.
+goog.require('codeshelf.aisleslistview');
 goog.require('codeshelf.pathsview');
 goog.require('codeshelf.ediservicesview');
 goog.require('codeshelf.facilityeditorview');
@@ -168,6 +169,17 @@ codeshelf.windowLauncher = (function() {
 		}
 	},
 
+	loadAislesListView: function() {
+		try {
+			var aislesListView = codeshelf.aisleslistview(this.getWebsession(), this.getFacility());
+			var aislesListWindow = codeshelf.window(aislesListView, getDomNodeForNextWindow(), getWindowDragLimit());
+			aislesListWindow.open();
+		}
+		catch (err) {
+			alert(err);
+		}
+	},
+
 	loadFacilityEditor: function () {
 		try {
 			// Load the GMaps API and init() when done.
@@ -259,12 +271,11 @@ codeshelf.mainpage = function() {
 		// No longer open the list demo view
 		// What windows should launch immediately?
 
-		codeshelf.windowLauncher.loadPathsView();
+		// codeshelf.windowLauncher.loadPathsView();
 
-		codeshelf.windowLauncher.loadFacilityEditor();
+		// codeshelf.windowLauncher.loadFacilityEditor();
 
-		/*  comment out these 4 to work on window ordering problem See CD_0009 */
-		codeshelf.windowLauncher.loadWorkAreaEditorView();
+		// codeshelf.windowLauncher.loadWorkAreaEditorView();
 
 		codeshelf.windowLauncher.loadEdiServicesView();
 
@@ -276,7 +287,6 @@ codeshelf.mainpage = function() {
 //		codeshelf.windowLauncher.doLaunchListDemoView();
 
 	}
-
 
 
 	/**
@@ -422,6 +432,11 @@ function launchFacilityEditor() {
 	codeshelf.windowLauncher.loadFacilityEditor();
 }
 goog.exportSymbol('launchFacilityEditor', launchFacilityEditor);
+
+function launchAislesListView() {
+	codeshelf.windowLauncher.loadAislesListView();
+}
+goog.exportSymbol('launchAislesListView', launchAislesListView);
 
 function launchTestRunner() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');
