@@ -33,6 +33,10 @@ goog.require('goog.ui.Dialog');
 goog.require('extern.jquery');
 
 
+window.onbeforeunload = function () {
+	return "Leaving this page will reset the layout of the Codeshelf application";
+};
+
 // utility functions for window launching
 function getWindowDragLimit() {
 	// we want the right and bottom limits large as the GCT window knows to scroll there.
