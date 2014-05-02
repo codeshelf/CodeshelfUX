@@ -17,6 +17,17 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
+globalcontextmenuscope = {
+	'path': null
+};
+
+function sendPathDelete2() {
+	var theLogger = goog.debug.Logger.getLogger('Paths view');
+	var aString = globalcontextmenuscope.path['domainId'];
+	// var aString = "unknown path";
+	theLogger.info("just logging: delete path2 " + aString);
+}
+
 /**
  * The paths for this facility.
  * @param websession The websession used for updates.
@@ -30,6 +41,7 @@ codeshelf.pathsview = function(websession, facility) {
 
 	var contextMenu_;
 
+
 	function sendPathDelete(event) {
 		if ($(event.target).data("option") == "delete_path") {
 			// Demonstrating correct right click use in list view.
@@ -42,6 +54,7 @@ codeshelf.pathsview = function(websession, facility) {
 			theLogger.info("just logging: delete path " + aString);
 
 		}
+		// event.dispose(); // or else this event will be bound still, and fire again on next click
 	}
 
 	function websocketCmdCallbackFacility() {
@@ -75,13 +88,12 @@ codeshelf.pathsview = function(websession, facility) {
 			contextMenu_.empty();
 			contextMenu_.bind("click", item, sendPathDelete);
 
-			var line, input;
-			// only level 0 click should delete path
-			// if (this.getLevel(item)=== 0)
-			if (view.getItemLevel(item)=== 0)
-				line = $('<li>Delete Path</li>').appendTo(contextMenu_).data("option", "delete_path");
-			else
-				line = $('<li>Delete Path Segment</li>').appendTo(contextMenu_).data("option", "delete_path_segment");
+			var line, line2;
+			// this is single-level view
+			globalcontextmenuscope.path = item;
+
+			line = $('<li>Delete Path</li>').appendTo(contextMenu_).data("option", "delete_path");
+			//line2 = $('<li><a href="javascript:sendPathDelete2()">Delete Path2</a></li>').appendTo(contextMenu_).data("option", "delete_path2");
 
 			contextMenu_
 				.css('top', event.pageY - 10)
@@ -97,7 +109,6 @@ codeshelf.pathsview = function(websession, facility) {
 
 	var hierarchyMap = [];
 	hierarchyMap[0] = { className: domainobjects['Path']['className'], linkProperty: 'parent', filter : pathFilter, filterParams : pathFilterParams, properties: domainobjects['Path']['properties'] };
-	hierarchyMap[1] = { className: domainobjects['PathSegment']['className'], linkProperty: 'parent', filter : undefined, filterParams : undefined, properties: domainobjects['PathSegment']['properties'] };
 
 	// We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.hierarchylistview(websession_, domainobjects['Path'], hierarchyMap);
