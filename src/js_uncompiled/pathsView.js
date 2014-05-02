@@ -23,10 +23,14 @@ globalcontextmenuscope = {
 
 function sendPathDelete2() {
 	var theLogger = goog.debug.Logger.getLogger('Paths view');
-	var aString = globalcontextmenuscope.path['domainId'];
+	var aString = globalcontextmenuscope['path']['domainId'];
 	// var aString = "unknown path";
 	theLogger.info("just logging: delete path2 " + aString);
+
+	globalcontextmenuscope['path'] = null; // clear it now, just to be tidy.
 }
+goog.exportSymbol('sendPathDelete2', sendPathDelete2); // Silly that this is needed even in same file.
+
 
 /**
  * The paths for this facility.
@@ -52,6 +56,8 @@ codeshelf.pathsview = function(websession, facility) {
 			var theLogger = goog.debug.Logger.getLogger('Paths view');
 			var aString = thePath['domainId'];
 			theLogger.info("just logging: delete path " + aString);
+
+			globalcontextmenuscope['path'] = null; // clear it now, just to be tidy.
 
 		}
 		// event.dispose(); // or else this event will be bound still, and fire again on next click
@@ -90,10 +96,10 @@ codeshelf.pathsview = function(websession, facility) {
 
 			var line, line2;
 			// this is single-level view
-			globalcontextmenuscope.path = item;
+			globalcontextmenuscope['path'] = item;
 
 			line = $('<li>Delete Path</li>').appendTo(contextMenu_).data("option", "delete_path");
-			//line2 = $('<li><a href="javascript:sendPathDelete2()">Delete Path2</a></li>').appendTo(contextMenu_).data("option", "delete_path2");
+			// line2 = $('<li><a href="javascript:sendPathDelete2()">Delete Path2</a></li>').appendTo(contextMenu_).data("option", "delete_path2");
 
 			contextMenu_
 				.css('top', event.pageY - 10)
