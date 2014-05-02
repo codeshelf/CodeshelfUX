@@ -493,6 +493,14 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 	}
 
+	function logWorkAreaEditorResponse(inStringToLog) {
+		//uncomment to really see the updates on work area editor
+		if (false) {
+			var theLogger = goog.debug.Logger.getLogger('WorkAreaEditorWebsocket');
+			theLogger.info(inStringToLog);
+		}
+	}
+
 	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function (command) {
@@ -507,15 +515,20 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 								// Vertex updates.
 								if (object['op'] === 'cre') {
 									handleUpdateFacilityVertexCmd(object['posY'], object['posX'], object);
+
 								} else if (object['op'] === 'upd') {
 									handleUpdateFacilityVertexCmd(object['posY'], object['posX'], object);
+
 								} else if (object['op'] === 'dl') {
 									handleDeleteFacilityVertexCmd(object['posY'], object['posX'], object);
+
 								}
 							}
 						}
 					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+						logWorkAreaEditorResponse('UPDATE_RESP -- ack the facility vertex update that I sent');
 					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+						logFacilityResponse('UPDATE_RESP -- ack the facility vertex delete that I sent');
 					}
 				}
 			}
@@ -540,6 +553,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 									handleUpdateAisleCmd(object);
 								} else if (object['op'] === 'upd') {
 									handleUpdateAisleCmd(object);
+									logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update aisle from backend');
 								} else if (object['op'] === 'dl') {
 									handleDeleteAisleCmd(object);
 								}
@@ -549,6 +563,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 									handleUpdateAisleVertexCmd(object);
 								} else if (object['op'] === 'upd') {
 									handleUpdateAisleVertexCmd(object);
+									logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update aisle vertex from backend');
 								} else if (object['op'] === 'dl') {
 									handleDeleteAisleVertexCmd(object);
 								}
@@ -556,7 +571,9 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 						}
 					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+						logWorkAreaEditorResponse('UPDATE_RESP -- ack the aisle update that I sent');
 					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+						logWorkAreaEditorResponse('UPDATE_RESP -- ack the aisle delete that I sent');
 					}
 				}
 			}
@@ -581,6 +598,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 									handleUpdatePathCmd(object);
 								} else if (object['op'] === 'upd') {
 									handleUpdatePathCmd(object);
+									logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update path from backend');
 								} else if (object['op'] === 'dl') {
 									handleDeletePathCmd(object);
 								}
@@ -590,6 +608,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 									handleUpdatePathSegmentCmd(object);
 								} else if (object['op'] === 'upd') {
 									handleUpdatePathSegmentCmd(object);
+									logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update path segment from backend');
 								} else if (object['op'] === 'dl') {
 									handleDeletePathSegmentCmd(object);
 								}
@@ -597,7 +616,9 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 						}
 					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+						logWorkAreaEditorResponse('UPDATE_RESP -- ack the path update that I sent');
 					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+						logWorkAreaEditorResponse('UPDATE_RESP -- ack the path delete that I sent');
 					}
 				}
 			}
