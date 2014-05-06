@@ -13,7 +13,7 @@ goog.require('goog.style');
 codeshelf.window = function(view, parent, limits) {
 
 	var view_ = view;
-	var parent_ = parent;
+	var parent_ = parent; // might be null if first window opening.
 	var limits_ = limits;
 
 	var thisWindow_;
@@ -30,27 +30,33 @@ codeshelf.window = function(view, parent, limits) {
 
 			gWindowList[gWindowList.length] = thisWindow_;
 			windowElement_ = soy.renderAsElement(codeshelf.templates.window);
-			// Changing this from the original
-			// if "parent" is a class "window" then do not append to the parent. Rather, make it a sibling of the parent
-			// if "parent is not a window, then append as child.
-			if (parent_.className === "window") {
+			// In all cases, we will insert the new window after the navbar. That is, the new window will be the first
+			// in the DOM list. This is how it worked before, except it used to start as child of frame instead of
+			// sibling of navbar.
+
+			// Might work better with mainPage.js if that found the window or navbar, and this just offset from what is passed.
+			var theContainer = goog.dom.getElement("codeshelfwindows");
+
+			// Default as we will if no existing window found
+			var parentTopPosition = 55;
+			var parentLeftPosition = 25;
+			if (parent_ && parent_.className === "window") {
 				// try the append public method. Might have to use insertSiblingAfter
 				// goog.dom.appendChild(parent_, windowElement_);
+				parentTopPosition = parseInt(goog.style.getComputedStyle(parent_, 'top'), 10);
+				parentLeftPosition = parseInt(goog.style.getComputedStyle(parent_, 'left'), 10);
+			}
+			if (theContainer)
+				goog.dom.appendChild(theContainer, windowElement_);
+			else if (parent_) // Some error. We do not have our standard windows container. Now what?
 				goog.dom.insertSiblingAfter(windowElement_, parent_);
-			}
-			else
-			{
-				goog.dom.appendChild(parent_, windowElement_);
+			else {
+				var theLogger = goog.debug.Logger.getLogger('window.js');
+				theLogger.info("did not add window. No windows container?");
 			}
 
-			// Set the window to the next stagger position.
-			var curTop = parseInt(goog.style.getComputedStyle(windowElement_, 'top'), 10);
-			windowElement_.style.top = curTop + gXPosOffset + 'px';
-			gXPosOffset += 25;
-			var curLeft = parseInt(goog.style.getComputedStyle(windowElement_, 'left'), 10);
-			windowElement_.style.left = curLeft + gYPosOffset + 'px';
-			gYPosOffset += 25;
-
+			windowElement_.style.top = parentTopPosition + 25 + 'px';
+			windowElement_.style.left = parentLeftPosition + 25 + 'px';
 
 			var label = goog.dom.query('.windowTitle', windowElement_)[0];
 			label.innerHTML = view_.getViewName();

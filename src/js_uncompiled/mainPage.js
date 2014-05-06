@@ -51,20 +51,31 @@ function getDomNodeForNextWindow() {
 	// The right thing to do is find the top window, and available size of the browser.
 	// Offset right and down of top window, unless too far compared to browser.
 	// If no window up yet, then set to a default place
+	// The top window has z index = 1. Others are zero
 
-	// for now, act as before, returning the frame
-	var theOwnerWindow = goog.dom.getElementByClass("window");
-	if (false && theOwnerWindow) {
-		return theOwnerWindow;
+	var windows = goog.dom.getElementsByClass("window");
+	var theTopWindow = null;
+	// for/in loops will iterate over keys in the ancestor prototype chain as well, so generally don't
+	var l = windows.length;
+	for (var i = 0; i < l; i++) {
+		var aWindow = windows[i];
+		if (aWindow.style.zIndex === "1")
+			theTopWindow = aWindow;
+	}
+
+	if (theTopWindow) {
+		return theTopWindow;
 	}
 	else {
+		return null;
+		/*
 		var theNode;
 		// currently just gets the "frame" element that we want to remove
 		theNode = goog.dom.query('.frame')[0];
 		theNode.style.top = 40;
 		theNode.style.left = 5;
-
 		return theNode;
+		*/
 	}
 }
 
@@ -206,7 +217,6 @@ codeshelf.mainpage = function() {
 	var application_;
 	var organization_;
 	var websession_;
-	var frame_;
 	var frameTop_ = 35; // allow 30 for the navbar
 	var frameLeft_ = 5;
 	var limits_;
@@ -215,8 +225,8 @@ codeshelf.mainpage = function() {
 
 	function updateFrameSize(size) {
 		// goog.style.setSize(goog.dom.getElement('frame'), size);
-		frame_.style.width = size.width - 15 + 'px';
-		frame_.style.height = size.height - 5 + 'px';
+		// frame_.style.width = size.width - 15 + 'px';
+		// frame_.style.height = size.height - 5 + 'px';
 	}
 
 	function websocketCmdCallback() {
@@ -228,7 +238,7 @@ codeshelf.mainpage = function() {
 					if (command['type'] == kWebSessionCommandType.OBJECT_GETTER_RESP) {
 						if (command['data']['results'].length === 0) {
 							var clientInitializer = codeshelf.initializenewclient();
-							clientInitializer.start(websession_, application_.getOrganization(), frame_, loadFacilityWindows);
+							clientInitializer.start(websession_, application_.getOrganization(), loadFacilityWindows);
 						} else {
 							for (var i = 0; i < command['data']['results'].length; i++) {
 								var facility = command['data']['results'][i];
@@ -306,11 +316,13 @@ codeshelf.mainpage = function() {
 			goog.dom.setProperties(goog.dom.getDocument()['body'], {'class': 'main_body'});
 			goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.mainPage));
 
-			frame_ = goog.dom.query('.frame')[0];
-			frame_.style.top = frameTop_ + 5 + 'px';
-			frame_.style.left = frameLeft_ + 'px';
+			// The frame div no longer in the window
+			// frame_ = goog.dom.query('.frame')[0];
+			// frame_.style.top = frameTop_ + 5 + 'px';
+			// frame_.style.left = frameLeft_ + 'px';
 
-			limits_ = new goog.math.Rect(frameTop_, frameLeft_, 750, 600);
+
+			limits_ = new goog.math.Rect(0, 0, 750, 600);
 
 			updateFrameSize(goog.dom.getViewportSize());
 

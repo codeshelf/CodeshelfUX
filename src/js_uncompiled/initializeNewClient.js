@@ -13,7 +13,6 @@ codeshelf.initializenewclient = function() {
 
 	var websession_;
 	var organization_;
-	var frame_;
 	var facilityWindowLoader_;
 	var thisInitializeNewClient_;
 
@@ -25,7 +24,7 @@ codeshelf.initializenewclient = function() {
 				} else if (command['type'] == kWebSessionCommandType.OBJECT_METHOD_RESP) {
 //						var facility = command['data']['results'];
 //						var facilityEditor = codeshelf.facilityeditorview();
-//						facilityEditor.start(websession_, organization_, frame_, facility);
+//						facilityEditor.start(websession_, organization_, facility);
 				} else if (command['type'] == kWebSessionCommandType.OBJECT_GETTER_RESP) {
 					if (command['data']['results'].length !== 0) {
 						for (var i = 0; i < command['data']['results'].length; i++) {
@@ -92,10 +91,10 @@ codeshelf.initializenewclient = function() {
 	}
 
 	thisInitializeNewClient_ = {
-		start: function(websession, organization, parentFrame, facilityWindowLoader) {
+		start: function(websession, organization, facilityWindowLoader) {
 			websession_ = websession;
 			organization_ = organization;
-			frame_ = parentFrame;
+			// frame_ = parentFrame;
 			facilityWindowLoader_ = facilityWindowLoader;
 			if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(posSucceed, posFail);
