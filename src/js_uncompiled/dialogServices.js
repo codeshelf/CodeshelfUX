@@ -15,6 +15,13 @@ goog.provide('adhocDialogService');
 * Needed improvement:  optionally hide the cancel button.
 */
 
+/*
+ * simpleDialogService
+ * @constructor
+ * @export
+ * @ngInject
+ */
+
 angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 	function ($modal) {
 /*
@@ -97,7 +104,7 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 			return modalInstance.result;
 		};
 
-		this.showModalDialog = function (customDialogDefaults, customDialogOptions) {
+		this['showModalDialog'] = function (customDialogDefaults, customDialogOptions) {
 			if (!customDialogDefaults) customDialogDefaults = {};
 			customDialogDefaults['backdropClick'] = false;
 			return this.showDialog(customDialogDefaults, customDialogOptions);
@@ -124,8 +131,15 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 
 /* ************************** */
 
-/**
+/*
  * A clone of the simpleDialogService, but making let the custom partial html do most of the work.
+ */
+
+/*
+ * adhocDialogService
+ * @constructor
+ * @export
+ * @ngInject
  */
 
 angular.module('codeshelfApp').service('adhocDialogService', ['$modal',
@@ -194,7 +208,7 @@ angular.module('codeshelfApp').service('adhocDialogService', ['$modal',
 
 		};
 
-		this.showModalDialog = function (customDialogDefaults, customAdhocDialogOptions) {
+		this['showModalDialog'] = function (customDialogDefaults, customAdhocDialogOptions) {
 			if (!customDialogDefaults) customDialogDefaults = {};
 			customDialogDefaults['backdropClick'] = false;
 			this.showDialog(customDialogDefaults, customAdhocDialogOptions);

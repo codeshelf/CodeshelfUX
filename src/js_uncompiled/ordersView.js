@@ -42,11 +42,11 @@ codeshelf.ordersview = function(websession, facility) {
 				}
 			}
 			// would be nice if this worked
-			//angular.module('codeshelfApp').service('adhocDialogService').showModalDialog({}, adhocDialogOptions);
+			//angular.module('codeshelfApp').service('adhocDialogService')['showModalDialog']({}, adhocDialogOptions);
 			var injector = angular.injector(['ng', 'codeshelfApp']);
 
 			injector.invoke(['adhocDialogService', function(adhocDialogService){
-				adhocDialogService.showModalDialog({}, adhocDialogOptions);
+				adhocDialogService['showModalDialog']({}, adhocDialogOptions);
 			}]);
 			*/
 
@@ -59,11 +59,11 @@ codeshelf.ordersview = function(websession, facility) {
 				}
 
 			// would be nice if this worked
-			//angular.module('codeshelfApp').service('adhocDialogService').showModalDialog({}, adhocDialogOptions);
+			//angular.module('codeshelfApp').service('adhocDialogService')['showModalDialog']({}, adhocDialogOptions);
 			var injector = angular.injector(['ng', 'codeshelfApp']);
 
 			injector.invoke(['adhocDialogService', function(adhocDialogService){
-				adhocDialogService.showModalDialog({}, adhocDialogOptions);
+				adhocDialogService['showModalDialog']({}, adhocDialogOptions);
 			}]);
 
 

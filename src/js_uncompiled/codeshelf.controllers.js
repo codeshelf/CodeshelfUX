@@ -6,6 +6,7 @@
 
 'use strict';
 goog.provide('codeshelf.controllers');
+goog.provide('codeshelfApp');
 goog.require('codeshelf.websession');
 // goog.require('workAreaModalCtrlFile');
 

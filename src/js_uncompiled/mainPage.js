@@ -389,7 +389,7 @@ function contactWasSelected() {
 	var injector = angular.injector(['ng', 'codeshelfApp']);
 
 	injector.invoke(['simpleDialogService', function(simpleDialogService){
-		simpleDialogService.showModalDialog({}, dialogOptions);
+		simpleDialogService['showModalDialog']({}, dialogOptions);
 	// Paul: as elsewhere, not working in compiled code. Need to exportSymbol for simpleDialogService?
 	}]);
 
