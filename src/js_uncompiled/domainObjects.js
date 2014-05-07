@@ -14,6 +14,11 @@ domainobjects = {
 				'id':    'domainId',
 				'title': 'ID',
 				'width': 25
+			},
+			'pathSegId': {
+				'id':    'pathSegId',
+				'title': 'Path Segment',
+				'width': 40
 			}
 		}
 	},
@@ -275,6 +280,16 @@ domainobjects = {
 				'id':    'domainId',
 				'title': 'ID',
 				'width': 25
+			},
+			'segmentOrder': {
+				'id':    'segmentOrder',
+				'title': 'Seg. Order',
+				'width': 8
+			},
+			'persistentId': {
+				'id':    'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
 			}
 		}
 	},

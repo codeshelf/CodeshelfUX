@@ -122,14 +122,9 @@ codeshelf.aisleslistview = function(websession, facility) {
 	var aisleFilterParams = [
 		{ 'name': 'theId', 'value': facility_['persistentId']}
 	];
-	var bayFilter = 'parent.persistentId = :theId';
-	var bayFilterParams = [
-		{ 'name': 'theId', 'value': facility_['persistentId']}
-	];
 
 	var hierarchyMap = [];
 	hierarchyMap[0] = { className: domainobjects['Aisle']['className'], linkProperty: 'parent', filter : aisleFilter, filterParams : aisleFilterParams, properties: domainobjects['Aisle']['properties'] };
-	hierarchyMap[1] = { className: domainobjects['Bay']['className'], linkProperty: 'parent', filter : bayFilter, filterParams : bayFilterParams, properties: domainobjects['Bay']['properties'] };
 
 	// We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.hierarchylistview(websession_, domainobjects['Aisle'], hierarchyMap);
