@@ -5,6 +5,7 @@
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.provide('codeshelf.windowLauncher'); // Better way? Only for use inside this file.
+goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.aisleslistview');
 goog.require('codeshelf.pathsview');
 goog.require('codeshelf.ediservicesview');
@@ -246,6 +247,9 @@ codeshelf.mainpage = function() {
 								// save the websession and facility so we can launch windows at any time.
 								codeshelf.windowLauncher.setWebsession(websession_);
 								codeshelf.windowLauncher.setFacility(facility);
+								// and prepare the objectupdater.
+								codeshelf.objectUpdater.setWebsession(websession_);
+								codeshelf.objectUpdater.setFacility(facility);
 
 								loadFacilityWindows(facility);
 							}

@@ -17,20 +17,34 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-globalcontextmenuscope = {
-	'path': null
+pathscontextmenuscope = {
+	'path': null,
+	'pathsegment': null
 };
 
-function sendPathDelete2() {
+function clearContextMenuScope(){
+	pathscontextmenuscope['path'] = null; // clear it now, just to be tidy.
+	pathscontextmenuscope['pathsegment'] = null; // clear it now, just to be tidy.
+}
+function sendPathDelete() {
 	var theLogger = goog.debug.Logger.getLogger('Paths view');
-	var aString = globalcontextmenuscope['path']['domainId'];
+	var aString = pathscontextmenuscope['path']['domainId'];
 	// var aString = "unknown path";
 	theLogger.info("just logging: delete path2 " + aString);
 
-	globalcontextmenuscope['path'] = null; // clear it now, just to be tidy.
+	clearContextMenuScope();
 }
-goog.exportSymbol('sendPathDelete2', sendPathDelete2); // Silly that this is needed even in same file.
+goog.exportSymbol('sendPathDelete', sendPathDelete); // Silly that this is needed even in same file.
 
+function selectPathSegment() {
+	var theLogger = goog.debug.Logger.getLogger('Paths view');
+	var aString = pathscontextmenuscope['pathsegment']['domainId'];
+	// var aString = "unknown pathsegment";
+	theLogger.info("just logging: selected segment " + aString);
+	codeshelf.objectUpdater.setObjectInSelectionList(pathscontextmenuscope['pathsegment']);
+	clearContextMenuScope();
+}
+goog.exportSymbol('selectPathSegment', selectPathSegment);
 
 /**
  * The paths for this facility.
@@ -45,23 +59,6 @@ codeshelf.pathsview = function(websession, facility) {
 
 	var contextMenu_;
 
-
-	function sendPathDelete(event) {
-		if ($(event.target).data("option") == "delete_path") {
-			// Demonstrating correct right click use in list view.
-			// Note the bind below. Passes the item, which becomes event.data
-			// Important. event.data and thePath.domainId work uncompiled, but not compiled.
-			var thePath = event['data'];
-
-			var theLogger = goog.debug.Logger.getLogger('Paths view');
-			var aString = thePath['domainId'];
-			theLogger.info("just logging: delete path " + aString);
-
-			globalcontextmenuscope['path'] = null; // clear it now, just to be tidy.
-
-		}
-		// event.dispose(); // or else this event will be bound still, and fire again on next click
-	}
 
 	function websocketCmdCallbackFacility() {
 		var callback = {
@@ -92,14 +89,19 @@ codeshelf.pathsview = function(websession, facility) {
 
 			event.preventDefault();
 			contextMenu_.empty();
-			contextMenu_.bind("click", item, sendPathDelete);
+			// contextMenu_.bind("click", item, sendPathDelete);
 
-			var line, line2;
-			// this is single-level view
-			globalcontextmenuscope['path'] = item;
+			var line;
+			// this is a two-level view
 
-			line = $('<li>Delete Path</li>').appendTo(contextMenu_).data("option", "delete_path");
-			// line2 = $('<li><a href="javascript:sendPathDelete2()">Delete Path2</a></li>').appendTo(contextMenu_).data("option", "delete_path2");
+			if (view.getItemLevel(item) === 0) {
+				pathscontextmenuscope['path'] = item;
+				line = $('<li><a href="javascript:sendPathDelete()">Delete Path</a></li>').appendTo(contextMenu_).data("option", "delete_path");
+			}
+			else if (view.getItemLevel(item)=== 1) {
+				pathscontextmenuscope['pathsegment'] = item;
+				line = $('<li><a href="javascript:selectPathSegment()">Cache selected path segment</a></li>').appendTo(contextMenu_).data("option", "cache_selected");
+			}
 
 			contextMenu_
 				.css('top', event.pageY - 10)

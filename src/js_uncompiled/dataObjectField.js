@@ -4,6 +4,7 @@
  ******************************************************************************/
 
 goog.provide('codeshelf.dataobjectfield');
+goog.provide('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.websession');
 goog.require('goog.editor.SeamlessField');
@@ -124,3 +125,82 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 
 	return thisDataObjectField_;
 };
+
+/**
+ * Implements an arbitrary field update on existing database object
+ * @param {string}
+ *            className the name of the remote data class that this field edits.
+ * @param {string}
+ *            classProperty the name of the remote data class property that this
+ *            field edits.
+ * @param {stting}
+ *            classPersistenceId the GUID of the class object instance that this
+ *            field edits.
+ */
+codeshelf.objectUpdater = (function() {
+	// psuedo private
+	var facility;
+	var websession;
+	var singleObjectSelections = [];
+
+	return {
+		// clone 4 from window launcher. Should inherit or be decomposed.
+		setFacility: function(inFacility){
+			facility = inFacility;
+		},
+		getFacility: function(){
+			return facility;
+		},
+		setWebsession: function(inWebsession){
+			websession = inWebsession;
+		},
+		getWebsession: function(){
+			return websession;
+		},
+		// This is the point of the objectUpdater. Could we know the className automatically?
+		// This does not work. Need to pass teh persistentId and not the domainId, but js side generally does
+		// not have persistent ID.
+		// Could add 'domainId' into the data parameter structure.
+		updateOne: function(inChangingObject, inClassName, inFieldName, inFieldValue){
+
+			var data = {
+				'className':    inClassName,
+				'persistentId': inChangingObject['domainId'],
+				'properties':   [
+					{
+						'name':  inFieldName,
+						'value': inFieldValue
+					}
+				]
+			};
+			theWebSession = codeshelf.objectUpdater.getWebsession();
+			if (theWebSession) {
+				var fieldUpdateCmd = theWebSession.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
+				// Do we need a callback? Ideally not. General updating mechanism should work.
+				var emptyCallback = {
+					'exec': function (response) {
+
+					}
+				};
+				theWebSession.sendCommand(fieldUpdateCmd, emptyCallback, true);
+			}
+			else {
+				var theLogger = goog.debug.Logger.getLogger('objectUpdater');
+				theLogger.info("no webSession: failed to update");
+			}
+		},
+		// super-primitive "selection" manager
+		getFirstObjectiInSelectionList: function(){
+			return singleObjectSelections[0];
+		},
+		setObjectInSelectionList: function(inObject){
+			singleObjectSelections.length = 0; // for loop and popping is reported to be faster, but this works.
+			singleObjectSelections.push(inObject);
+		},
+		addObjectToSelectionList: function(inObject){
+			singleObjectSelections.push(inObject);
+		}
+
+	};
+})();
+

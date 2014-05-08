@@ -16,6 +16,42 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
+aislecontextmenuscope = {
+	'aisle': null
+};
+
+function clearAisleContextMenuScope(){
+	aislecontextmenuscope['aisle'] = null;
+}
+function associatePathSegment() {
+	var theLogger = goog.debug.Logger.getLogger('aisles view');
+	var theAisle = aislecontextmenuscope['aisle'];
+	if (theAisle) {
+		var aisleString = theAisle['domainId'];
+		var segString = "no segment selected";
+		var aPathSegment = codeshelf.objectUpdater.getFirstObjectiInSelectionList();
+		// this this really a pathSegment? Not a great test.
+		if (aPathSegment && aPathSegment.hasOwnProperty('segmentOrder'))
+			segString = aPathSegment['domainId'];
+		else
+			aPathSegment = null;
+		theLogger.info("just logging: associate aisle " + aisleString + " to segment " + segString);
+
+		if (aPathSegment) { // we think aisle must be good to get here from the popup menu item
+			// we want java-side names for class and field name here.
+			// This one may not work, as location as a pointer to pathSegment, and not a key value
+			codeshelf.objectUpdater.updateOne(theAisle, 'Aisle', 'pathSegment', aPathSegment['persistentId']);
+		}
+	}
+	else{
+		theLogger.error("null aisle. How? ");
+
+	}
+
+	clearAisleContextMenuScope();
+}
+goog.exportSymbol('associatePathSegment', associatePathSegment); // Silly that this is needed even in same file.
+
 /**
  * The aisles for this facility.
  * @param websession The websession used for updates.
@@ -40,45 +76,6 @@ codeshelf.aisleslistview = function(websession, facility) {
 		return callback;
 	}
 
-	function getThisFacility(){
-		var theFacility = facility_;
-		return theFacility;
-	}
-
-	function editAisle(inAisle, inFacility) {
-			var theLogger = goog.debug.Logger.getLogger('Aisles List View');
-			var aString = inAisle['domainId'];
-			theLogger.info("just logging: edit aisle " + aString);
-	}
-
-	function deleteAisle(inAisle, inFacility) {
-		var theLogger = goog.debug.Logger.getLogger('Aisles List View');
-		var aString = inAisle['domainId'];
-		theLogger.info("just logging: delete aisle " + aString);
-	}
-
-
-	function handleAisleContext(event) {
-		var thisFacility = getThisFacility();
-		if ($(event.target).data("option") == "edit_aisle") {
-			var theAisle = event['data'];
-			editAisle(theAisle, thisFacility);
-
-		} else if ($(event.target).data("option") == "delete_aisle") {
-			var theAisle = event['data'];
-			deleteAisle(theAisle, thisFacility);
-		}
-		// This makes the popup go away immediately after click.
-		$(this).fadeOut(5);
-		// Unfortunately, this still gets called multiple times for one click, and for different cells.
-		// Probably the first click event works right, then subsequent click on popup element reregisters.
-
-		// Popup does not work right. Should be able to right-click and without letting up, go onto item.
-		// However, here we must release, the reclick to get the item;
-
-
-	}
-
 	var self = {
 
 		getViewName: function() {
@@ -98,17 +95,13 @@ codeshelf.aisleslistview = function(websession, facility) {
 
 			event.preventDefault();
 			contextMenu_.empty();
-			contextMenu_.bind("click", item, handleAisleContext);
+			// contextMenu_.bind("click", item, handleAisleContext);
 
 			var line;
-			if (view.getItemLevel(item)=== 0)
-				line = $('<li>Edit Aisle</li>').appendTo(contextMenu_).data("option", "edit_aisle");
-			else
-				line = $('<li>Cannot edit single bay</li>').appendTo(contextMenu_).data("option", "cannot_edit_bay");
-			if (view.getItemLevel(item)=== 0)
-				line = $('<li>Delete Aisle</li>').appendTo(contextMenu_).data("option", "delete_aisle");
-			else
-				line = $('<li>Cannot delete single bay</li>').appendTo(contextMenu_).data("option", "cannot_delete_bay");
+			if (view.getItemLevel(item) === 0) {
+				aislecontextmenuscope['aisle'] = item;
+				line = $('<li><a href="javascript:associatePathSegment()">Associate Path Segment</li>').appendTo(contextMenu_).data("option", "associate_");
+			}
 
 			contextMenu_
 				.css('top', event.pageY - 10)
