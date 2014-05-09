@@ -32,6 +32,26 @@ goog.require('raphael');
 //goog.require('angular.route');
 
 /**
+ * Just snap to nearby grid value
+ * @param inPixelValue an integer
+ * @return {integer}
+ */
+function snapTo(inPixelValue){
+	// This works well within one work session if you leave the window scaled to same size through aisle creation.
+	var gridSnapValue = 10;
+	var divResult = Math.floor((inPixelValue)/gridSnapValue);
+	remResult = inPixelValue % gridSnapValue;
+	returnValue = divResult * gridSnapValue;
+	// want to snap to nearer grid.
+	if (remResult > gridSnapValue/2)
+		returnValue += gridSnapValue;
+	return returnValue;
+	// When window is very small, 10 is too large.
+	// More importantly, if you resize, pixel scale is impacted. It is impossible to match.
+	// stackoverflow: jquery UI? The draggable utility allows snapping.
+}
+
+/**
  * The facility in pixel space (instead of GPS space) where the user can work on it in a normal size/orientation.
  * @param websession The websession used for updates.
  * @param facility The facility we're editing.
@@ -836,17 +856,17 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 			var stroke = new goog.graphics.Stroke(1, 'black');
 			var fill = new goog.graphics.SolidFill('blue', 0.2);
-			startDragPoint_ = { 'x': event.browserEvent['offsetX'], y: event.browserEvent['offsetY'] };
+			startDragPoint_ = { 'x': snapTo(event.browserEvent['offsetX']), y: snapTo(event.browserEvent['offsetY']) };
 			currentRect_ = new goog.math.Rect(startDragPoint_.x, startDragPoint_.y, 0, 0);
 			currentDrawRect_ = graphics_.drawRect(startDragPoint_.x, startDragPoint_.y, 0, 0, stroke, fill);
 		},
 
 		doDraggerDrag: function (event) {
 			if (!Raphael.isPointInsidePath(goog.graphics.SvgGraphics.getSvgPath(facilityPath_),
-					startDragPoint_.x + event.target.deltaX, startDragPoint_.y + event.target.deltaY)) {
+					startDragPoint_.x + snapTo(event.target.deltaX), startDragPoint_.y + snapTo(event.target.deltaY))) {
 				// Dont' do anything, the last drag point was inside the facility bounds.
 			} else {
-				var x = event.target.deltaX;
+				var x = snapTo(event.target.deltaX);
 				if (x < 0) {
 					x *= -1;
 					currentRect_.left = startDragPoint_.x - x;
@@ -854,7 +874,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 					currentRect_.left = startDragPoint_.x;
 				}
 
-				var y = event.target.deltaY;
+				var y = snapTo(event.target.deltaY);
 				if (y < 0) {
 					y *= -1;
 					currentRect_.top = startDragPoint_.y - y;
