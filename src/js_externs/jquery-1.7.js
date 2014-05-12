@@ -15,7 +15,7 @@
  */
 
 /**
- * @fileoverview Externs for jQuery 1.7.1
+ * @fileoverview Externs for jQuery 1.7.2
  *
  * Note that some functions use different return types depending on the number
  * of parameters passed in. In these cases, you may need to annotate the type
@@ -33,6 +33,9 @@
  */
 var jQuerySelector;
 
+/** @typedef {function(...)|Array.<function(...)>} */
+var jQueryCallback;
+
 /**
  * @constructor
  * @param {(jQuerySelector|Element|Object|Array.<Element>|jQuery|string|
@@ -46,8 +49,8 @@ function jQuery(arg1, arg2) {}
 /**
  * @constructor
  * @extends {jQuery}
- * @param {(jQuerySelector|Element|Array.<Element>|Object|jQuery|string|
- *     function())} arg1
+ * @param {(jQuerySelector|Element|Object|Array.<Element>|jQuery|string|
+ *     function())=} arg1
  * @param {(Element|jQuery|Document|
  *     Object.<string, (string|function(!jQuery.event=))>)=} arg2
  * @return {!jQuery}
@@ -265,7 +268,7 @@ jQuery.prototype.appendTo = function(target) {};
 
 /**
  * @param {(string|Object.<string,*>)} arg1
- * @param {(string|number|function(number,string))=} arg2
+ * @param {(string|number|boolean|function(number,string))=} arg2
  * @return {(string|!jQuery)}
  */
 jQuery.prototype.attr = function(arg1, arg2) {};
@@ -529,6 +532,7 @@ jQuery.prototype.dblclick = function(arg1, handler) {};
 
 /**
  * @constructor
+ * @implements {jQuery.Promise}
  * @param {function()=} opt_fn
  * @see http://api.jquery.com/category/deferred-object/
  */
@@ -559,29 +563,33 @@ $.deferred = function(opt_fn) {};
 $.Deferred = function(opt_fn) {};
 
 /**
- * @param {function()} alwaysCallbacks
- * @param {function()=} alwaysCallbacks2
+ * @override
+ * @param {jQueryCallback} alwaysCallbacks
+ * @param {jQueryCallback=} alwaysCallbacks2
  * @return {jQuery.deferred}
  */
-jQuery.deferred.prototype.always =
-    function(alwaysCallbacks, alwaysCallbacks2) {};
+jQuery.deferred.prototype.always
+    = function(alwaysCallbacks, alwaysCallbacks2) {};
 
 /**
- * @param {function()} doneCallbacks
- * @param {function()=} doneCallbacks2
+ * @override
+ * @param {jQueryCallback} doneCallbacks
+ * @param {jQueryCallback=} doneCallbacks2
  * @return {jQuery.deferred}
  */
 jQuery.deferred.prototype.done = function(doneCallbacks, doneCallbacks2) {};
 
 /**
- * @param {function()} failCallbacks
- * @param {function()=} failCallbacks2
+ * @override
+ * @param {jQueryCallback} failCallbacks
+ * @param {jQueryCallback=} failCallbacks2
  * @return {jQuery.deferred}
  */
 jQuery.deferred.prototype.fail = function(failCallbacks, failCallbacks2) {};
 
 /**
  * @deprecated
+ * @override
  * @return {boolean}
  * @nosideeffects
  */
@@ -589,6 +597,7 @@ jQuery.deferred.prototype.isRejected = function() {};
 
 /**
  * @deprecated
+ * @override
  * @return {boolean}
  * @nosideeffects
  */
@@ -608,6 +617,7 @@ jQuery.deferred.prototype.notify = function(var_args) {};
 jQuery.deferred.prototype.notifyWith = function(context, var_args) {};
 
 /**
+ * @override
  * @param {function()=} doneFilter
  * @param {function()=} failFilter
  * @param {function()=} progressFilter
@@ -658,9 +668,10 @@ jQuery.deferred.prototype.resolveWith = function(context, args) {};
 jQuery.deferred.prototype.state = function() {};
 
 /**
- * @param {function()} doneCallbacks
- * @param {function()} failCallbacks
- * @param {function()=} progressCallbacks
+ * @override
+ * @param {jQueryCallback} doneCallbacks
+ * @param {jQueryCallback=} failCallbacks
+ * @param {jQueryCallback=} progressCallbacks
  * @return {jQuery.deferred}
  */
 jQuery.deferred.prototype.then
@@ -685,7 +696,6 @@ jQuery.prototype.delegate = function(selector, arg2, arg3, handler) {};
 /**
  * @param {Element} elem
  * @param {string=} queueName
- * @return {!jQuery}
  */
 jQuery.dequeue = function(elem, queueName) {};
 
@@ -698,7 +708,6 @@ jQuery.prototype.dequeue = function(queueName) {};
 /**
  * @param {Element} elem
  * @param {string=} queueName
- * @return {!jQuery}
  */
 $.dequeue = function(elem, queueName) {};
 
@@ -718,7 +727,7 @@ jQuery.prototype.die = function(arg1, handler) {};
 
 /**
  * @param {Object} collection
- * @param {function(number,*)} callback
+ * @param {function((number|string),?)} callback
  * @return {Object}
  */
 jQuery.each = function(collection, callback) {};
@@ -731,7 +740,7 @@ jQuery.prototype.each = function(fnc) {};
 
 /**
  * @param {Object} collection
- * @param {function(number,*)} callback
+ * @param {function((number|string),?)} callback
  * @return {Object}
  */
 $.each = function(collection, callback) {};
@@ -748,7 +757,6 @@ jQuery.prototype.end = function() {};
 /**
  * @param {number} arg1
  * @return {!jQuery}
- * @nosideeffects
  */
 jQuery.prototype.eq = function(arg1) {};
 
@@ -932,10 +940,7 @@ jQuery.prototype.filter = function(arg1) {};
  */
 jQuery.prototype.find = function(arg1) {};
 
-/**
- * @return {!jQuery}
- * @nosideeffects
- */
+/** @return {!jQuery} */
 jQuery.prototype.first = function() {};
 
 /** @see http://docs.jquery.com/Plugins/Authoring */
@@ -1288,6 +1293,15 @@ jQuery.prototype.jquery;
 jQuery.jqXHR = function () {};
 
 /**
+ * @override
+ * @param {jQueryCallback} alwaysCallbacks
+ * @param {jQueryCallback=} alwaysCallbacks2
+ * @return {jQuery.jqXHR}
+ */
+jQuery.jqXHR.prototype.always =
+    function(alwaysCallbacks, alwaysCallbacks2) {};
+
+/**
  * @deprecated
  * @param {function()} callback
  * @return {jQuery.jqXHR}
@@ -1296,8 +1310,8 @@ jQuery.jqXHR.prototype.complete = function (callback) {};
 
 /**
  * @override
- * @param {function()} doneCallbacks
- * @return {jQuery.Promise}
+ * @param {jQueryCallback} doneCallbacks
+ * @return {jQuery.jqXHR}
  */
 jQuery.jqXHR.prototype.done = function(doneCallbacks) {};
 
@@ -1310,8 +1324,8 @@ jQuery.jqXHR.prototype.error = function (callback) {};
 
 /**
  * @override
- * @param {function()} failCallbacks
- * @return {jQuery.Promise}
+ * @param {jQueryCallback} failCallbacks
+ * @return {jQuery.jqXHR}
  */
 jQuery.jqXHR.prototype.fail = function(failCallbacks) {};
 
@@ -1338,6 +1352,15 @@ jQuery.jqXHR.prototype.isResolved = function() {};
 jQuery.jqXHR.prototype.onreadystatechange = function (callback) {};
 
 /**
+ * @param {function()=} doneFilter
+ * @param {function()=} failFilter
+ * @param {function()=} progressFilter
+ * @return {jQuery.jqXHR}
+ */
+jQuery.jqXHR.prototype.pipe =
+    function(doneFilter, failFilter, progressFilter) {};
+
+/**
  * @deprecated
  * @param {function()} callback
  * @return {jQuery.jqXHR}
@@ -1346,11 +1369,13 @@ jQuery.jqXHR.prototype.success = function (callback) {};
 
 /**
  * @override
- * @param {function()} doneCallbacks
- * @param {function()} failCallbacks
- * @return {jQuery.Promise}
+ * @param {jQueryCallback} doneCallbacks
+ * @param {jQueryCallback=} failCallbacks
+ * @param {jQueryCallback=} progressCallbacks
+ * @return {jQuery.jqXHR}
  */
-jQuery.jqXHR.prototype.then = function(doneCallbacks, failCallbacks) {};
+jQuery.jqXHR.prototype.then =
+    function(doneCallbacks, failCallbacks, progressCallbacks) {};
 
 /**
  * @param {(function(!jQuery.event=)|Object.<string, *>)=} arg1
@@ -1373,10 +1398,7 @@ jQuery.prototype.keypress = function(arg1, handler) {};
  */
 jQuery.prototype.keyup = function(arg1, handler) {};
 
-/**
- * @return {!jQuery}
- * @nosideeffects
- */
+/** @return {!jQuery} */
 jQuery.prototype.last = function() {};
 
 /** @type {number} */
@@ -1559,7 +1581,7 @@ jQuery.now = function() {};
 $.now = function() {};
 
 /**
- * @param {(string|Object.<string,*>)} arg1
+ * @param {(string|Object.<string,*>)=} arg1
  * @param {(string|function(!jQuery.event=))=} selector
  * @param {function(!jQuery.event=)=} handler
  * @return {!jQuery}
@@ -1747,13 +1769,21 @@ jQuery.prototype.promise = function(type, target) {};
 jQuery.Promise = function () {};
 
 /**
- * @param {function()} doneCallbacks
+ * @param {jQueryCallback} alwaysCallbacks
+ * @param {jQueryCallback=} alwaysCallbacks2
+ * @return {jQuery.Promise}
+ */
+jQuery.Promise.prototype.always =
+    function(alwaysCallbacks, alwaysCallbacks2) {};
+
+/**
+ * @param {jQueryCallback} doneCallbacks
  * @return {jQuery.Promise}
  */
 jQuery.Promise.prototype.done = function(doneCallbacks) {};
 
 /**
- * @param {function()} failCallbacks
+ * @param {jQueryCallback} failCallbacks
  * @return {jQuery.Promise}
  */
 jQuery.Promise.prototype.fail = function(failCallbacks) {};
@@ -1773,16 +1803,27 @@ jQuery.Promise.prototype.isRejected = function() {};
 jQuery.Promise.prototype.isResolved = function() {};
 
 /**
- * @param {function()} doneCallbacks
- * @param {function()} failCallbacks
+ * @param {function()=} doneFilter
+ * @param {function()=} failFilter
+ * @param {function()=} progressFilter
  * @return {jQuery.Promise}
  */
-jQuery.Promise.prototype.then = function(doneCallbacks, failCallbacks) {};
+jQuery.Promise.prototype.pipe =
+    function(doneFilter, failFilter, progressFilter) {};
+
+/**
+ * @param {jQueryCallback} doneCallbacks
+ * @param {jQueryCallback=} failCallbacks
+ * @param {jQueryCallback=} progressCallbacks
+ * @return {jQuery.Promise}
+ */
+jQuery.Promise.prototype.then =
+    function(doneCallbacks, failCallbacks, progressCallbacks) {};
 
 /**
  * @param {(string|Object.<string,*>)} arg1
  * @param {(string|number|boolean|function(number,String))=} arg2
- * @return {(string|!jQuery)}
+ * @return {(string|boolean|!jQuery)}
  */
 jQuery.prototype.prop = function(arg1, arg2) {};
 
@@ -1961,33 +2002,35 @@ jQuery.prototype.size = function() {};
  * @param {number} start
  * @param {number=} end
  * @return {!jQuery}
- * @nosideeffects
  */
 jQuery.prototype.slice = function(start, end) {};
 
 /**
- * @param {(string|number|function())=} duration
- * @param {(function()|string)=} arg2
- * @param {function()=} callback
+ * @param {(Object.<string,*>|string|number)=} optionsOrDuration
+ * @param {(function()|string)=} completeOrEasing
+ * @param {function()=} complete
  * @return {!jQuery}
  */
-jQuery.prototype.slideDown = function(duration, arg2, callback) {};
+jQuery.prototype.slideDown =
+    function(optionsOrDuration, completeOrEasing, complete) {};
 
 /**
- * @param {(string|number|function())=} duration
- * @param {(function()|string)=} arg2
- * @param {function()=} callback
+ * @param {(Object.<string,*>|string|number)=} optionsOrDuration
+ * @param {(function()|string)=} completeOrEasing
+ * @param {function()=} complete
  * @return {!jQuery}
  */
-jQuery.prototype.slideToggle = function(duration, arg2, callback) {};
+jQuery.prototype.slideToggle =
+    function(optionsOrDuration, completeOrEasing, complete) {};
 
 /**
- * @param {(string|number|function())=} duration
- * @param {(function()|string)=} arg2
- * @param {function()=} callback
+ * @param {(Object.<string,*>|string|number)=} optionsOrDuration
+ * @param {(function()|string)=} completeOrEasing
+ * @param {function()=} complete
  * @return {!jQuery}
  */
-jQuery.prototype.slideUp = function(duration, arg2, callback) {};
+jQuery.prototype.slideUp =
+    function(optionsOrDuration, completeOrEasing, complete) {};
 
 /**
  * @param {(boolean|string)=} arg1
@@ -2041,6 +2084,12 @@ jQuery.support.cssFloat;
 
 /** @type {boolean} */
 $.support.cssFloat;
+
+/** @type {boolean} */
+jQuery.support.fixedPosition;
+
+/** @type {boolean} */
+$.support.fixedPosition;
 
 /** @type {boolean} */
 jQuery.support.hrefNormalized;
@@ -2131,7 +2180,7 @@ jQuery.prototype.toggleClass = function(arg1, flag) {};
 jQuery.prototype.trigger = function(arg1, var_args) {};
 
 /**
- * @param {string} eventType
+ * @param {string|jQuery.event} eventType
  * @param {Array.<*>=} extraParameters
  * @return {*}
  */
@@ -2203,22 +2252,24 @@ jQuery.prototype.unload = function(arg1, handler) {};
 jQuery.prototype.unwrap = function() {};
 
 /**
- * @param {(string|function(number,*))=} arg1
+ * @param {(string|Array.<string>|function(number,*))=} arg1
  * @return {(string|number|Array.<string>|!jQuery)}
  */
 jQuery.prototype.val = function(arg1) {};
 
 /**
- * @param {jQuery.deferred} deferreds
+ * @param {jQuery.deferred} deferred
+ * @param {...jQuery.deferred} deferreds
  * @return {jQuery.Promise}
  */
-jQuery.when = function(deferreds) {};
+jQuery.when = function(deferred, deferreds) {};
 
 /**
- * @param {jQuery.deferred} deferreds
+ * @param {jQuery.deferred} deferred
+ * @param {...jQuery.deferred} deferreds
  * @return {jQuery.Promise}
  */
-$.when = function(deferreds) {};
+$.when = function(deferred, deferreds) {};
 
 /**
  * @param {(string|number|function(number,number))=} arg1

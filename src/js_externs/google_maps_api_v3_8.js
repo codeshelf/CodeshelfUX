@@ -26,8 +26,8 @@ google.maps = {};
  * @enum {number|string}
  */
 google.maps.Animation = {
-	BOUNCE: '',
-	DROP: ''
+  BOUNCE: '',
+  DROP: ''
 };
 
 /**
@@ -196,18 +196,18 @@ google.maps.CircleOptions.prototype.zIndex;
  * @enum {number|string}
  */
 google.maps.ControlPosition = {
-	BOTTOM_CENTER: '',
-	BOTTOM_LEFT: '',
-	BOTTOM_RIGHT: '',
-	LEFT_BOTTOM: '',
-	LEFT_CENTER: '',
-	LEFT_TOP: '',
-	RIGHT_BOTTOM: '',
-	RIGHT_CENTER: '',
-	RIGHT_TOP: '',
-	TOP_CENTER: '',
-	TOP_LEFT: '',
-	TOP_RIGHT: ''
+  BOTTOM_CENTER: '',
+  BOTTOM_LEFT: '',
+  BOTTOM_RIGHT: '',
+  LEFT_BOTTOM: '',
+  LEFT_CENTER: '',
+  LEFT_TOP: '',
+  RIGHT_BOTTOM: '',
+  RIGHT_CENTER: '',
+  RIGHT_TOP: '',
+  TOP_CENTER: '',
+  TOP_LEFT: '',
+  TOP_RIGHT: ''
 };
 
 /**
@@ -507,14 +507,14 @@ google.maps.DirectionsService.prototype.route = function(request, callback) {};
  * @enum {number|string}
  */
 google.maps.DirectionsStatus = {
-	INVALID_REQUEST: '',
-	MAX_WAYPOINTS_EXCEEDED: '',
-	NOT_FOUND: '',
-	OK: '',
-	OVER_QUERY_LIMIT: '',
-	REQUEST_DENIED: '',
-	UNKNOWN_ERROR: '',
-	ZERO_RESULTS: ''
+  INVALID_REQUEST: '',
+  MAX_WAYPOINTS_EXCEEDED: '',
+  NOT_FOUND: '',
+  OK: '',
+  OVER_QUERY_LIMIT: '',
+  REQUEST_DENIED: '',
+  UNKNOWN_ERROR: '',
+  ZERO_RESULTS: ''
 };
 
 /**
@@ -591,9 +591,9 @@ google.maps.Distance.prototype.value;
  * @enum {number|string}
  */
 google.maps.DistanceMatrixElementStatus = {
-	NOT_FOUND: '',
-	OK: '',
-	ZERO_RESULTS: ''
+  NOT_FOUND: '',
+  OK: '',
+  ZERO_RESULTS: ''
 };
 
 /**
@@ -702,13 +702,13 @@ google.maps.DistanceMatrixService.prototype.getDistanceMatrix = function(request
  * @enum {number|string}
  */
 google.maps.DistanceMatrixStatus = {
-	INVALID_REQUEST: '',
-	MAX_DIMENSIONS_EXCEEDED: '',
-	MAX_ELEMENTS_EXCEEDED: '',
-	OK: '',
-	OVER_QUERY_LIMIT: '',
-	REQUEST_DENIED: '',
-	UNKNOWN_ERROR: ''
+  INVALID_REQUEST: '',
+  MAX_DIMENSIONS_EXCEEDED: '',
+  MAX_ELEMENTS_EXCEEDED: '',
+  OK: '',
+  OVER_QUERY_LIMIT: '',
+  REQUEST_DENIED: '',
+  UNKNOWN_ERROR: ''
 };
 
 /**
@@ -769,11 +769,11 @@ google.maps.ElevationService.prototype.getElevationForLocations = function(reque
  * @enum {number|string}
  */
 google.maps.ElevationStatus = {
-	INVALID_REQUEST: '',
-	OK: '',
-	OVER_QUERY_LIMIT: '',
-	REQUEST_DENIED: '',
-	UNKNOWN_ERROR: ''
+  INVALID_REQUEST: '',
+  OK: '',
+  OVER_QUERY_LIMIT: '',
+  REQUEST_DENIED: '',
+  UNKNOWN_ERROR: ''
 };
 
 /**
@@ -1067,10 +1067,10 @@ google.maps.GeocoderGeometry.prototype.viewport;
  * @enum {number|string}
  */
 google.maps.GeocoderLocationType = {
-	APPROXIMATE: '',
-	GEOMETRIC_CENTER: '',
-	RANGE_INTERPOLATED: '',
-	ROOFTOP: ''
+  APPROXIMATE: '',
+  GEOMETRIC_CENTER: '',
+  RANGE_INTERPOLATED: '',
+  ROOFTOP: ''
 };
 
 /**
@@ -1127,13 +1127,13 @@ google.maps.GeocoderResult.prototype.types;
  * @enum {number|string}
  */
 google.maps.GeocoderStatus = {
-	ERROR: '',
-	INVALID_REQUEST: '',
-	OK: '',
-	OVER_QUERY_LIMIT: '',
-	REQUEST_DENIED: '',
-	UNKNOWN_ERROR: '',
-	ZERO_RESULTS: ''
+  ERROR: '',
+  INVALID_REQUEST: '',
+  OK: '',
+  OVER_QUERY_LIMIT: '',
+  REQUEST_DENIED: '',
+  UNKNOWN_ERROR: '',
+  ZERO_RESULTS: ''
 };
 
 /**
@@ -1509,15 +1509,15 @@ google.maps.KmlLayerOptions.prototype.suppressInfoWindows;
  * @enum {number|string}
  */
 google.maps.KmlLayerStatus = {
-	DOCUMENT_NOT_FOUND: '',
-	DOCUMENT_TOO_LARGE: '',
-	FETCH_ERROR: '',
-	INVALID_DOCUMENT: '',
-	INVALID_REQUEST: '',
-	LIMITS_EXCEEDED: '',
-	OK: '',
-	TIMED_OUT: '',
-	UNKNOWN: ''
+  DOCUMENT_NOT_FOUND: '',
+  DOCUMENT_TOO_LARGE: '',
+  FETCH_ERROR: '',
+  INVALID_DOCUMENT: '',
+  INVALID_REQUEST: '',
+  LIMITS_EXCEEDED: '',
+  OK: '',
+  TIMED_OUT: '',
+  UNKNOWN: ''
 };
 
 /**
@@ -1762,7 +1762,7 @@ google.maps.MVCObject.prototype.notify = function(key) {};
 
 /**
  * @param {string} key
- * @param {*} value
+ * @param {?} value
  * @return {undefined}
  */
 google.maps.MVCObject.prototype.set = function(key, value) {};
@@ -2251,19 +2251,19 @@ google.maps.MapTypeControlOptions.prototype.style;
  * @enum {number|string}
  */
 google.maps.MapTypeControlStyle = {
-	DEFAULT: '',
-	DROPDOWN_MENU: '',
-	HORIZONTAL_BAR: ''
+  DEFAULT: '',
+  DROPDOWN_MENU: '',
+  HORIZONTAL_BAR: ''
 };
 
 /**
  * @enum {number|string}
  */
 google.maps.MapTypeId = {
-	HYBRID: '',
-	ROADMAP: '',
-	SATELLITE: '',
-	TERRAIN: ''
+  HYBRID: '',
+  ROADMAP: '',
+  SATELLITE: '',
+  TERRAIN: ''
 };
 
 /**
@@ -2276,6 +2276,7 @@ google.maps.MapTypeRegistry = function() {};
  * @param {string} id
  * @param {google.maps.MapType} mapType
  * @return {undefined}
+ * @override
  */
 google.maps.MapTypeRegistry.prototype.set = function(id, mapType) {};
 
@@ -2675,8 +2676,8 @@ google.maps.MaxZoomService.prototype.getMaxZoomAtLatLng = function(latlng, callb
  * @enum {number|string}
  */
 google.maps.MaxZoomStatus = {
-	ERROR: '',
-	OK: ''
+  ERROR: '',
+  OK: ''
 };
 
 /**
@@ -3225,7 +3226,7 @@ google.maps.ScaleControlOptions.prototype.style;
  * @enum {number|string}
  */
 google.maps.ScaleControlStyle = {
-	DEFAULT: ''
+  DEFAULT: ''
 };
 
 /**
@@ -3555,9 +3556,9 @@ google.maps.StreetViewService.prototype.getPanoramaByLocation = function(latlng,
  * @enum {number|string}
  */
 google.maps.StreetViewStatus = {
-	OK: '',
-	UNKNOWN_ERROR: '',
-	ZERO_RESULTS: ''
+  OK: '',
+  UNKNOWN_ERROR: '',
+  ZERO_RESULTS: ''
 };
 
 /**
@@ -3643,17 +3644,17 @@ google.maps.TrafficLayer.prototype.setMap = function(map) {};
  * @enum {number|string}
  */
 google.maps.TravelMode = {
-	BICYCLING: '',
-	DRIVING: '',
-	WALKING: ''
+  BICYCLING: '',
+  DRIVING: '',
+  WALKING: ''
 };
 
 /**
  * @enum {number|string}
  */
 google.maps.UnitSystem = {
-	IMPERIAL: '',
-	METRIC: ''
+  IMPERIAL: '',
+  METRIC: ''
 };
 
 /**
@@ -3675,9 +3676,9 @@ google.maps.ZoomControlOptions.prototype.style;
  * @enum {number|string}
  */
 google.maps.ZoomControlStyle = {
-	DEFAULT: '',
-	LARGE: '',
-	SMALL: ''
+  DEFAULT: '',
+  LARGE: '',
+  SMALL: ''
 };
 
 // Namespace
@@ -3687,18 +3688,18 @@ google.maps.adsense = {};
  * @enum {number|string}
  */
 google.maps.adsense.AdFormat = {
-	BANNER: '',
-	BUTTON: '',
-	HALF_BANNER: '',
-	LARGE_RECTANGLE: '',
-	LEADERBOARD: '',
-	MEDIUM_RECTANGLE: '',
-	SKYSCRAPER: '',
-	SMALL_RECTANGLE: '',
-	SMALL_SQUARE: '',
-	SQUARE: '',
-	VERTICAL_BANNER: '',
-	WIDE_SKYSCRAPER: ''
+  BANNER: '',
+  BUTTON: '',
+  HALF_BANNER: '',
+  LARGE_RECTANGLE: '',
+  LEADERBOARD: '',
+  MEDIUM_RECTANGLE: '',
+  SKYSCRAPER: '',
+  SMALL_RECTANGLE: '',
+  SMALL_SQUARE: '',
+  SQUARE: '',
+  VERTICAL_BANNER: '',
+  WIDE_SKYSCRAPER: ''
 };
 
 /**
@@ -3923,11 +3924,11 @@ google.maps.drawing.OverlayCompleteEvent.prototype.type;
  * @enum {number|string}
  */
 google.maps.drawing.OverlayType = {
-	CIRCLE: '',
-	MARKER: '',
-	POLYGON: '',
-	POLYLINE: '',
-	RECTANGLE: ''
+  CIRCLE: '',
+  MARKER: '',
+  POLYGON: '',
+  POLYLINE: '',
+  RECTANGLE: ''
 };
 
 // Namespace
@@ -3936,7 +3937,7 @@ google.maps.event = {};
 /**
  * @param {Object} instance
  * @param {string} eventName
- * @param {function(...[*])} handler
+ * @param {!Function} handler
  * @param {boolean=} opt_capture
  * @return {google.maps.MapsEventListener}
  */
@@ -3945,7 +3946,7 @@ google.maps.event.addDomListener = function(instance, eventName, handler, opt_ca
 /**
  * @param {Object} instance
  * @param {string} eventName
- * @param {function(...[*])} handler
+ * @param {!Function} handler
  * @param {boolean=} opt_capture
  * @return {google.maps.MapsEventListener}
  */
@@ -3954,7 +3955,7 @@ google.maps.event.addDomListenerOnce = function(instance, eventName, handler, op
 /**
  * @param {Object} instance
  * @param {string} eventName
- * @param {function(...[*])} handler
+ * @param {!Function} handler
  * @return {google.maps.MapsEventListener}
  */
 google.maps.event.addListener = function(instance, eventName, handler) {};
@@ -3962,7 +3963,7 @@ google.maps.event.addListener = function(instance, eventName, handler) {};
 /**
  * @param {Object} instance
  * @param {string} eventName
- * @param {function(...[*])} handler
+ * @param {!Function} handler
  * @return {google.maps.MapsEventListener}
  */
 google.maps.event.addListenerOnce = function(instance, eventName, handler) {};
@@ -4437,12 +4438,12 @@ google.maps.places.PlacesService.prototype.search = function(request, callback) 
  * @enum {number|string}
  */
 google.maps.places.PlacesServiceStatus = {
-	INVALID_REQUEST: '',
-	OK: '',
-	OVER_QUERY_LIMIT: '',
-	REQUEST_DENIED: '',
-	UNKNOWN_ERROR: '',
-	ZERO_RESULTS: ''
+  INVALID_REQUEST: '',
+  OK: '',
+  OVER_QUERY_LIMIT: '',
+  REQUEST_DENIED: '',
+  UNKNOWN_ERROR: '',
+  ZERO_RESULTS: ''
 };
 
 // Namespace
@@ -4470,16 +4471,16 @@ google.maps.weather.CloudLayer.prototype.setMap = function(map) {};
  * @enum {number|string}
  */
 google.maps.weather.LabelColor = {
-	BLACK: '',
-	WHITE: ''
+  BLACK: '',
+  WHITE: ''
 };
 
 /**
  * @enum {number|string}
  */
 google.maps.weather.TemperatureUnit = {
-	CELSIUS: '',
-	FAHRENHEIT: ''
+  CELSIUS: '',
+  FAHRENHEIT: ''
 };
 
 /**
@@ -4681,7 +4682,8 @@ google.maps.weather.WeatherMouseEvent.prototype.pixelOffset;
  * @enum {number|string}
  */
 google.maps.weather.WindSpeedUnit = {
-	KILOMETERS_PER_HOUR: '',
-	METERS_PER_SECOND: '',
-	MILES_PER_HOUR: ''
+  KILOMETERS_PER_HOUR: '',
+  METERS_PER_SECOND: '',
+  MILES_PER_HOUR: ''
 };
+
