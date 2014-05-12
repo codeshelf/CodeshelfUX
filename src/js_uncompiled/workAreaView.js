@@ -101,7 +101,7 @@ codeshelf.workareaview = function(websession, facility) {
 	hierarchyMap[2] = { className: domainobjects['WorkInstruction']['className'], linkProperty: 'parent', filter : undefined, filterParams : undefined, properties: domainobjects['WorkInstruction']['properties'] };
 
 	// We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['Path'], hierarchyMap);
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['Path'], hierarchyMap, 0);
 	jQuery.extend(view, self);
 	self = view;
 

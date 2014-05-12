@@ -112,7 +112,7 @@ codeshelf.dataentrydialog = function (title, buttonSet) {
 			var component = dialogFields_[fieldId];
 			if (component.fieldType === 'text') {
 				return component.field.getValue();
-			} else if (component.fieldType = 'checkbox') {
+			} else if (component.fieldType === 'checkbox') {
 				return component.field.getChecked();
 			} else {
 				return '';
