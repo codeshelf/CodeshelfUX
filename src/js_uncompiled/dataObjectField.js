@@ -27,7 +27,7 @@ goog.require('goog.ui.LabelInput');
  * @param {string}
  *            classProperty the name of the remote data class property that this
  *            field edits.
- * @param {stting}
+ * @param {string}
  *            classPersistenceId the GUID of the class object instance that this
  *            field edits.
  */
@@ -133,7 +133,7 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
  * @param {string}
  *            classProperty the name of the remote data class property that this
  *            field edits.
- * @param {stting}
+ * @param {string}
  *            classPersistenceId the GUID of the class object instance that this
  *            field edits.
  */
@@ -173,7 +173,8 @@ codeshelf.objectUpdater = (function() {
 					}
 				]
 			};
-			theWebSession = codeshelf.objectUpdater.getWebsession();
+			// JonR theWebSession = codeshelf.objectUpdater.getWebsession();
+			theWebSession = this.getWebsession();
 			if (theWebSession) {
 				var fieldUpdateCmd = theWebSession.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
 				// Do we need a callback? Ideally not. General updating mechanism should work.
@@ -190,7 +191,7 @@ codeshelf.objectUpdater = (function() {
 			}
 		},
 		// super-primitive "selection" manager
-		getFirstObjectiInSelectionList: function(){
+		getFirstObjectInSelectionList: function(){
 			return singleObjectSelections[0];
 		},
 		setObjectInSelectionList: function(inObject){

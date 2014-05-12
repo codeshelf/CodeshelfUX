@@ -120,7 +120,7 @@ codeshelf.pathsview = function(websession, facility) {
 	hierarchyMap[1] = { className: domainobjects['PathSegment']['className'], linkProperty: 'parent', filter : undefined, filterParams : undefined, properties: domainobjects['PathSegment']['properties'] };
 
 	// We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['Path'], hierarchyMap);
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['Path'], hierarchyMap, 0);
 	jQuery.extend(view, self);
 	self = view;
 
