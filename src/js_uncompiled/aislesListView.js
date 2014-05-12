@@ -8,6 +8,7 @@ file aislesListView.js author jon ranstrom
  */
 goog.provide('codeshelf.aisleslistview');
 goog.require('codeshelf.hierarchylistview');
+goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
 goog.require('extern.jquery');
@@ -29,7 +30,7 @@ function associatePathSegment() {
 	if (theAisle) {
 		var aisleString = theAisle['domainId'];
 		var segString = "no segment selected";
-		var aPathSegment = codeshelf.objectUpdater.getFirstObjectiInSelectionList();
+		var aPathSegment = codeshelf.objectUpdater.getFirstObjectInSelectionList();
 		// this this really a pathSegment? Not a great test.
 		if (aPathSegment && aPathSegment.hasOwnProperty('segmentOrder'))
 			segString = aPathSegment['domainId'];
@@ -120,7 +121,7 @@ codeshelf.aisleslistview = function(websession, facility) {
 	hierarchyMap[0] = { className: domainobjects['Aisle']['className'], linkProperty: 'parent', filter : aisleFilter, filterParams : aisleFilterParams, properties: domainobjects['Aisle']['properties'] };
 
 	// We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['Aisle'], hierarchyMap);
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['Aisle'], hierarchyMap, 0);
 	jQuery.extend(view, self);
 	self = view;
 
