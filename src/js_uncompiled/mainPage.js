@@ -31,6 +31,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
 goog.require('goog.ui.Dialog');
+goog.require('codeshelf.simpleDlogService');
 
 goog.require('extern.jquery');
 
@@ -379,35 +380,24 @@ codeshelf.mainpage = function() {
 ;
 
 function contactWasSelected() {
-/*
-	var dialogOptions = {
-		cancelButtonVisibility: 'hidden',
-		cancelButtonText: '',
-		actionButtonText: 'OK',
-		headerText: 'Contact Codeshelf',
-		bodyText: 'Check out codeshelf.com',
-		callback: function () {
 
-		}
-	};
-*/
 	var dialogOptions = {};
 	dialogOptions ['cancelButtonVisibility'] = "hidden";
 	dialogOptions ['cancelButtonText'] = "";
 	dialogOptions ['actionButtonText'] = "OK";
 	dialogOptions ['headerText'] = "Contact Codeshelf";
 	dialogOptions ['bodyText'] = "Check out codeshelf.com";
-	dialogOptions ['callback'] = function () {
+	dialogOptions ['callback'] = function () {};
 
-	};
-
-
+	/*
 	var injector = angular.injector(['ng', 'codeshelfApp']);
 
 	injector.invoke(['simpleDialogService', function(simpleDialogService){
 		simpleDialogService['showModalDialog']({}, dialogOptions);
 	// Paul: as elsewhere, not working in compiled code. Need to exportSymbol for simpleDialogService?
 	}]);
+	*/
+	codeshelf.simpleDlogService.showModalDialog({}, dialogOptions);
 
 }
 // Necessary for now: compilation changes the function name.

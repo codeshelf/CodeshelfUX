@@ -7,6 +7,7 @@
 'use strict';
 goog.require('codeshelf.controllers');
 goog.provide('simpleDialogService');
+goog.provide('codeshelf.simpleDlogService');
 goog.provide('adhocDialogService');
 
 /* From dWahlin  Building an Angular Dialog Service */
@@ -15,13 +16,90 @@ goog.provide('adhocDialogService');
 * Needed improvement:  optionally hide the cancel button.
 */
 
-/*
- * simpleDialogService
- * @constructor
- * @export
- * @ngInject
+/**
+ * Implements an arbitrary field update on existing database object
+ * @param {string}
+ *            className the name of the remote data class that this field edits.
+ * @param {string}
+ *            classProperty the name of the remote data class property that this
+ *            field edits.
+ * @param {string}
+ *            classPersistenceId the GUID of the class object instance that this
+ *            field edits.
  */
+codeshelf.simpleDlogService = (function() {
+	// psuedo private
+	var dialogDefaults = {};
+	dialogDefaults ['backdrop'] = true;
+	dialogDefaults ['keyboard'] = true;
+	dialogDefaults ['backdropClick'] = true;
+	dialogDefaults ['dialogFade'] = true;
+	dialogDefaults ['templateUrl'] = "partials/dialog.html";
 
+	var dialogOptions = {};
+	dialogOptions ['cancelButtonVisibility'] = "hidden";
+	dialogOptions ['cancelButtonText'] = "Close";
+	dialogOptions ['actionButtonText'] = "OK";
+	dialogOptions ['headerText'] = "Proceed?";
+	dialogOptions ['bodyText'] = "Perform this action?";
+
+	function showDialog(customDialogDefaults, customDialogOptions) {
+		//Create temp objects to work with since we're in a singleton service
+		var tempDialogDefaults = {};
+		var tempDialogOptions = {};
+
+		//Map angular-ui dialog custom defaults to dialog defaults defined in this service
+		angular.extend(tempDialogDefaults, dialogDefaults, customDialogDefaults);
+
+		//Map dialog.html $scope custom properties to defaults defined in this service
+		angular.extend(tempDialogOptions, dialogOptions, customDialogOptions);
+
+		// funky: do we need $modalInstance?
+		if (!tempDialogDefaults.controller) {
+			tempDialogDefaults.controller = function ($scope, $modalInstance) {
+				$scope.dialogOptions = tempDialogOptions;
+				$scope.ok = function () {
+					$modalInstance.close(/*results*/);
+					customDialogOptions.callback();
+				};
+
+				$scope.cancel = function () {
+					$modalInstance.dismiss('cancel');
+				};
+			};
+		}
+		var theLogger = goog.debug.Logger.getLogger('dlogService');
+
+		var injector = angular.injector(['ng', 'codeshelfApp']);
+		if (injector){
+			theLogger.info("found the injector");}
+
+		var theModalService = injector.get('$modal');
+		if (theModalService){
+			theLogger.info("found theModalService");}
+
+		var aModalInstance = theModalService.open(tempDialogDefaults);
+		if (aModalInstance){
+			theLogger.info("opened and got aModalInstance");}
+
+		return aModalInstance.result;
+	}
+
+	// public API
+	return {
+		showModalDialog: function(customDialogDefaults, customDialogOptions) {
+			if (!customDialogDefaults) customDialogDefaults = {};
+				customDialogDefaults['backdropClick'] = false;
+			return showDialog(customDialogDefaults, customDialogOptions);
+		}
+
+};
+})();
+
+/**
+ * simpleDialogService
+ *  *ngInject
+ */
 angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
 	function ($modal) {
 /*
