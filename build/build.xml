@@ -209,6 +209,7 @@
 			<arg value="--compiler_flags=--manage_closure_dependencies" />
 			<arg value="--compiler_flags=--closure_entry_point=codeshelf.application" />
 			<arg value="--compiler_flags=--jscomp_warning=missingProperties" />
+			<arg value="--compiler_flags=--angular_pass" />
 			<arg value="--compiler_flags=--jscomp_warning=checkTypes" />
 			<arg value="--compiler_flags=--logging_level=FINEST" />
 			<arg value="--compiler_flags=--summary_detail_level=3" />

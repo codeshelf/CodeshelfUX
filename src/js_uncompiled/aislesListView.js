@@ -70,7 +70,9 @@ codeshelf.aisleslistview = function(websession, facility) {
 	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function(command) {
-
+				/* appears to never be called
+				var theLogger = goog.debug.Logger.getLogger('aislesListView');
+				theLogger.info("callback exec called"); */
 			}
 		};
 
@@ -78,6 +80,15 @@ codeshelf.aisleslistview = function(websession, facility) {
 	}
 
 	var self = {
+
+		// following psuedo-inheritance
+		shouldAddThisColumn: function(inProperty){
+			// only fields in domainObjects for aisle will be asked for. We want to exclude persistent Id
+			if (inProperty['id'] ===  'persistentId')
+				return false;
+			else
+				return true;
+		},
 
 		getViewName: function() {
 			return 'Aisles List View';

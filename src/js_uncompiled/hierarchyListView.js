@@ -284,7 +284,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 					'cssClass':            'cell-reorder dnd'
 				};
 			}
-
+			var extraColumns = [];
 			var computedProperties = [];
 			for (var i = 0; i < hierarchyMap_.length; i++) {
 				var className = hierarchyMap_[i].className;
@@ -294,25 +294,32 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 						var property = properties[property];
 
 						// Check if the property already exists in the columns.
-						var foundEntry = goog.array.find(columns_, function(entry) {
+						var foundEntry = goog.array.find(columns_, function (entry) {
 							return entry.id === property.id;
 						});
 
 						if (foundEntry === null) {
-							if (domainObject_['properties'][property.id] !== undefined) {
-								computedProperties.push(property.id);
+							// default is to just add all available columns.
+							if (this.hasOwnProperty('shouldAddThisColumn') &&  !this.shouldAddThisColumn(property)) {
+								// property is going into the view, but we want it out of the view.
+								extraColumns.push(property);
 							}
+
+							if (domainObject_['properties'][property.id] !== undefined) {
+									computedProperties.push(property.id);
+							}
+
 							columns_[count++] = {
-								'id':                  property.id,
-								'name':                property.title,
-								'field':               property.id,
-								'behavior':            'select',
-								'headerCssClass':      ' ',
-								'width':               property.width,
+								'id': property.id,
+								'name': property.title,
+								'field': property.id,
+								'behavior': 'select',
+								'headerCssClass': ' ',
+								'width': property.width,
 								'cannotTriggerInsert': true,
-								'resizable':           true,
-								'selectable':          true,
-								'sortable':            true
+								'resizable': true,
+								'selectable': true,
+								'sortable': true
 							};
 						}
 					}
@@ -447,6 +454,27 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			sortDelay_ = new goog.async.Delay(function() {
 				dataView_.sort(comparer, sortdir_)
 			}, 500);
+
+			// remove extra columns that are not part of this view's default set
+			var oldColumns = grid_.getColumns();
+			var newColumns = [];
+
+			for (var i = 0, l = oldColumns.length; i < l; i++) {
+				columnProperty = oldColumns[i];
+				var foundMatch = false;
+				for (var j = 0, ln = extraColumns.length; j < ln; j++) {
+					extraColumnProperty = extraColumns[j];
+					// extra columns are not the same kind of object,but both have the id property
+					if (columnProperty['id'] === extraColumnProperty['id'])
+						foundMatch = true;
+				}
+				if (!foundMatch){
+					newColumns.push(columnProperty);
+				}
+			}
+			if (oldColumns.length != newColumns.length)
+				grid_.setColumns(newColumns);
+			// end default set
 
 		},
 

@@ -19,6 +19,11 @@ domainobjects = {
 				'id':    'pathSegId',
 				'title': 'Path Segment',
 				'width': 40
+			},
+			'persistentId': {
+				'id':    'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
 			}
 		}
 	},
