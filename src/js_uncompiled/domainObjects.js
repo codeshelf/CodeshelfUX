@@ -18,7 +18,7 @@ domainobjects = {
 			'pathSegId': {
 				'id':    'pathSegId',
 				'title': 'Path Segment',
-				'width': 40
+				'width': 25
 			},
 			'persistentId': {
 				'id':    'persistentId',
@@ -114,6 +114,17 @@ domainobjects = {
 //				'title': 'State',
 //				'width': 100
 //			}
+		}
+	},
+
+	'LedController': {
+		'className':  'LedController',
+		'properties': {
+			'domainId': {
+				'id':    'domainId',
+				'title': 'ID',
+				'width': 25
+			}
 		}
 	},
 

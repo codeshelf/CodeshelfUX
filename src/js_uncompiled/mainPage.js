@@ -7,6 +7,7 @@ goog.provide('codeshelf.mainpage');
 goog.provide('codeshelf.windowLauncher'); // Better way? Only for use inside this file.
 goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.aisleslistview');
+goog.require('codeshelf.ledcontrollerslistview');
 goog.require('codeshelf.pathsview');
 goog.require('codeshelf.ediservicesview');
 goog.require('codeshelf.facilityeditorview');
@@ -193,7 +194,18 @@ codeshelf.windowLauncher = (function() {
 		}
 	},
 
-	loadFacilityEditor: function () {
+	loadLedControllersListView: function() {
+		try {
+			var ledControllersListView = codeshelf.ledcontrollerslistview(this.getWebsession(), this.getFacility());
+			var ledControllersListWindow = codeshelf.window(ledControllersListView, getDomNodeForNextWindow(), getWindowDragLimit());
+			ledControllersListWindow.open();
+		}
+		catch (err) {
+			alert(err);
+		}
+	},
+
+		loadFacilityEditor: function () {
 		try {
 			// Load the GMaps API and init() when done.
 			if (typeof google !== 'undefined') {
@@ -292,11 +304,11 @@ codeshelf.mainpage = function() {
 
 		// codeshelf.windowLauncher.loadWorkAreaEditorView();
 
-		codeshelf.windowLauncher.loadEdiServicesView();
+		// codeshelf.windowLauncher.loadEdiServicesView();
 
-		codeshelf.windowLauncher.loadOrdersView();
+		// codeshelf.windowLauncher.loadOrdersView();
 
-		codeshelf.windowLauncher.loadWorkAreaView();
+		// codeshelf.windowLauncher.loadWorkAreaView();
 
 		// Enable to show an example of a confirmation dialog that waits for confirmation before closing
 //		codeshelf.windowLauncher.doLaunchListDemoView();
@@ -443,6 +455,11 @@ function launchAislesListView() {
 	codeshelf.windowLauncher.loadAislesListView();
 }
 goog.exportSymbol('launchAislesListView', launchAislesListView);
+
+function launchLedControllersListView() {
+	codeshelf.windowLauncher.loadLedControllersListView();
+}
+goog.exportSymbol('launchLedControllersListView', launchLedControllersListView);
 
 function launchTestRunner() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');
