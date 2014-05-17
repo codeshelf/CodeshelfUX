@@ -128,15 +128,16 @@
 	<target name="generate.deps" depends="env-init,prep.dirs">
 		<echo>${basedir}</echo>
 		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/depswriter.py" pythonpath="${basedir}" optimize="0" python="${python.exec}">
+			<arg value="--root_with_prefix=../lib/AngularJS ../../../AngularJS" />
+			<arg value="--root_with_prefix=../lib/Arrowlets ../../../Arrowlets" />
+			<arg value="--root_with_prefix=../lib/Bacon ../../../Bacon" />
 			<arg value="--root_with_prefix=../lib/GoogleClosureLibrary ../../" />
 			<arg value="--root_with_prefix=../lib/GoogleClosureTemplates ../../../GoogleClosureTemplates" />
-			<arg value="--root_with_prefix=../lib/Arrowlets ../../../Arrowlets" />
 			<arg value="--root_with_prefix=../lib/JQuery ../../../JQuery" />
-			<arg value="--root_with_prefix=../lib/SlickGrid ../../../SlickGrid" />
 			<arg value="--root_with_prefix=../lib/Raphael ../../../Raphael" />
-			<arg value="--root_with_prefix=../lib/AngularJS ../../../AngularJS" />
+			<arg value="--root_with_prefix=../lib/SlickGrid ../../../SlickGrid" />
+			<arg value="--root_with_prefix=../lib/TwitterBootstrap ../../../TwitterBootstrap" />
 			<arg value="--root_with_prefix=../lib/UIBootstrap ../../../UIBootstrap" />
-			<arg value="--root_with_prefix=../lib/Bacon ../../../Bacon" />
 			<arg value="--root_with_prefix=../src/js_uncompiled ../../../../src/js_uncompiled" />
 			<arg value="--output_file=../src/js_uncompiled/deps.js" />
 		</py-run>
@@ -225,8 +226,6 @@
 		<!-- Prepare the websocket link for the target host. -->
 		<echo>Webapp hostname: ${webapp.hostname}</echo>
 		<echo>${target.compiled.js.dir}/codeshelf.js</echo>
-		<replace file="${target.compiled.js.dir}/codeshelf.js" token="wss://localhost:8444" value="wss://${webapp.hostname}:8444" summary="true" />
-
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="src/js_uncompiled" value="../js_uncompiled" />
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/GoogleClosureLibrary" value="../lib/GoogleClosureLibrary" />
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/SlickGrid" value="../lib/SlickGrid" />
@@ -381,7 +380,7 @@
 
 	<target name="deploy-production">
 
-		<property name="webapp.hostname" value="login.codeshelf.io" />
+		<property name="webapp.hostname" value="test.codeshelf.com" />
 		<property name="compiler.options.optimization" value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
 		<property name="compiler.options.format" value="--compiler_flags=--source_map_format=V3" />
 		<property name="compiler.options.map" value="--compiler_flags=--create_source_map=${target.compiled.js.dir}/codeshelf.map" />
@@ -396,17 +395,20 @@
 		<copy todir="${target.web.dir}">
 			<fileset dir="${basedir}">
 				<include name="lib/AngularJS/**" />
+				<include name="lib/GoogleClosureLibrary/**" />
+				<include name="lib/JQuery/**" />
+				<include name="lib/TwitterBootstrap/**" />
 				<include name="lib/UIBootstrap/**" />
 			</fileset>
 		</copy>
 
-		<scp todir="codeshelf@login.codeshelf.io:/opt/codeshelf/web/app" verbose="true" keyfile="${user.home}/.ssh/codeshelf">
+		<scp todir="codeshelf@test.codeshelf.com:/opt/codeshelf/web/app" verbose="true" keyfile="${user.home}/.ssh/codeshelf">
 			<fileset dir="${target.web.dir}">
 				<include name="**/*" />
 				<exclude name="**/*.map" />
-				<modified>
+				<!--modified>   This has never worked very well.
 					<param name="cache.cachefile" value="${build.dir}/webapp.scp.cache" />
-				</modified>
+				</modified-->
 			</fileset>
 		</scp>
 	</target>

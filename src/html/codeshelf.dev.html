@@ -1,63 +1,85 @@
 <!DOCTYPE html>
 <html ng-app="codeshelfApp">
-	<head>
-		<title>Codeshelf</title>
-		<meta charset="utf-8">
-        <link rel="stylesheet" href="../../lib/TwitterBootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="../../lib/TwitterBootstrap/css/bootstrap-theme.min.css">
-		<link rel="stylesheet" href="../css/roundedpanel.css">
-		<link rel="stylesheet" href="../css/menu.css">
-		<link rel="stylesheet" href="../css/menuitem.css">
-		<link rel="stylesheet" href="../css/menuseparator.css">
-		<link rel="stylesheet" href="../css/checkbox.css">
-		<link rel="stylesheet" href="../css/dialog.css">
-		<link rel="stylesheet" href="../css/toolbar.css">
-		<link rel="stylesheet" href="../css/tree.css">
-		<link rel="stylesheet" href="../css/slick.grid.css" type="text/css" media="screen"/>
-		<link rel="stylesheet" href="../css/slick.pager.css" type="text/css" media="screen"/>
-		<link rel="stylesheet" href="../css/jquery-ui-1.8.16.custom.css" type="text/css" media="screen"/>
-		<link rel="stylesheet" href="../css/slick.columnpicker.css" type="text/css" media="screen"/>
-		<link rel="stylesheet" href="../css/codeshelf.css" type="text/css" media="screen"/>
-		<link rel="stylesheet" href="../css/listview.css" type="text/css" media="screen"/>
-		<link rel="stylesheet" href="../css/slick-default-theme.css" type="text/css" media="screen"/>
-		<!--script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script-->
-		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-		<script type="text/javascript" src="../../lib/GoogleClosureLibrary/closure/goog/base.js"></script>
+<head>
+	<title>Codeshelf</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="../../lib/TwitterBootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../lib/TwitterBootstrap/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="../css/roundedpanel.css">
+	<link rel="stylesheet" href="../css/menu.css">
+	<link rel="stylesheet" href="../css/menuitem.css">
+	<link rel="stylesheet" href="../css/menuseparator.css">
+	<link rel="stylesheet" href="../css/checkbox.css">
+	<link rel="stylesheet" href="../css/dialog.css">
+	<link rel="stylesheet" href="../css/toolbar.css">
+	<link rel="stylesheet" href="../css/tree.css">
+	<link rel="stylesheet" href="../css/slick.grid.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="../css/slick.pager.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="../css/jquery-ui-1.8.16.custom.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="../css/slick.columnpicker.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="../css/codeshelf.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="../css/listview.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="../css/slick-default-theme.css" type="text/css" media="screen"/>
+	<!--script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script-->
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-        <script src="../../lib/AngularJS/angular.min.js" ></script>
-        <script src="../../lib/AngularJS/i18n/angular-locale_en-us.js"></script>
-        <script src="../../lib/AngularJS/angular-route.js"></script>
-        <script src="../../lib/UIBootstrap/ui-bootstrap-tpls-0.10.0.js"></script>
+	<script type="text/javascript" src="../../lib/GoogleClosureLibrary/closure/goog/base.js"></script>
+	<script type="text/javascript" src="../../lib/AngularJS/angular.js"></script>
+	<script type="text/javascript" src="../../lib/AngularJS/i18n/angular-locale_en-us.js"></script>
+	<script type="text/javascript" src="../../lib/AngularJS/angular-route.js"></script>
+	<script type="text/javascript" src="../../lib/UIBootstrap/ui-bootstrap-tpls-0.10.0.js"></script>
+	<script type="text/javascript" src="../../lib/JQuery/jquery-1.7.1.js"></script>
+	<script type="text/javascript" src="../../lib/TwitterBootstrap/js/bootstrap.js"></script>
 
+	<!-- This script checks for, then loads a script to set the websocket address to something other than default. -->
+	<!-- There's an example file in the js_uncompiled directory. -->
+	<!--script src="./setSocketAddr.js"/-->
+	<script>
+//		function get_error(x) {
+//			<!-- do nothing -->
+//		}
+//		url = "./setSocketAddr.js";
+//		url += "?" + new Date().getTime() + Math.floor(Math.random() * 1000000);
+//		var script = document.createElement('script');
+//		script.id = "websocket.addr.script";
+//		script.onerror = function () {
+//			if (script.onerror)
+//					get_error(this.id)
+//		}
+//		script.src = url;
+//		document.head.appendChild(script);
+	</script>
 
-       <script type="text/javascript" src="../js_uncompiled/deps.js"></script>
+	<script type="text/javascript" src="../js_uncompiled/deps.js"></script>
 
-       <link rel="icon" href="./favicon.gif" />
-   </head>
-   <body id="body" class="login_body" ng-controller="WorkAreaCtrl">
+	<link rel="icon" href="./favicon.gif"/>
+</head>
+<body id="body" class="login_body" ng-controller="WorkAreaCtrl">
 
-       <script type="text/javascript">
-           goog.require('codeshelf.application');
-           goog.require('codeshelf.controllers');
-       </script>
+	<script type="text/javascript">
+		goog.require('codeshelf.application');
+		goog.require('codeshelf.controllers');
+	</script>
 
-       <!-- add to allow navbar dropdowns to work
-            Interesting. If in <head> section need the JQuery line in uncompiled-->
-       <!-- <script src="../../lib/JQuery/jquery-1.7.1.js"></script>  -->
-       <script src="../../lib/TwitterBootstrap/js/bootstrap.js"></script>
+	<!--script type="text/javascript" src="../js_uncompiled/codeshelf.controllers.js"></script-->
+	<div ng-view></div>
+	<script>
+		(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r;
+			i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date();
+			a = s.createElement(o),
+					m = s.getElementsByTagName(o)[0];
+			a.async = 1;
+			a.src = g;
+			m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-       <!--script type="text/javascript" src="../js_uncompiled/codeshelf.controllers.js"></script-->
-		<div ng-view></div>
-		<script>
-			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-					m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-39694820-1', 'codeshelf.io');
+		ga('send', 'pageview');
 
-			ga('create', 'UA-39694820-1', 'codeshelf.io');
-			ga('send', 'pageview');
+	</script>
 
-		</script>
-
-	</body>
+</body>
 </html>
