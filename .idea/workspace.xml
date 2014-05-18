@@ -2,13 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c319b0c7-b9cf-46f5-90a5-b0a625c84957" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/AngularJS.xml" afterPath="$PROJECT_DIR$/.idea/libraries/AngularJS.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/CodeShelfUX.iml" afterPath="$PROJECT_DIR$/.idea/CodeShelfUX.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/TwitterBootstrap/js/bootstrap.js" afterPath="$PROJECT_DIR$/lib/TwitterBootstrap/js/bootstrap.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/html/codeshelf.dev.html" afterPath="$PROJECT_DIR$/src/html/codeshelf.dev.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/html/codeshelf.html" afterPath="$PROJECT_DIR$/src/html/codeshelf.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/ediServicesView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/ediServicesView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/ordersView.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/ordersView.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js_uncompiled/websession.js" afterPath="$PROJECT_DIR$/src/js_uncompiled/websession.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -36,28 +34,18 @@
       <file leaf-file-name="websession.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/js_uncompiled/websession.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.55397725" vertical-offset="990" max-vertical-offset="3195">
-              <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.48863637" vertical-offset="1231" max-vertical-offset="3270">
+              <caret line="105" column="49" selection-start-line="105" selection-start-column="49" selection-end-line="105" selection-end-column="49" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="websocket.addr.json" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/html/websocket.addr.json">
+      <file leaf-file-name="hierarchyListView.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="90">
-              <caret line="0" column="8" selection-start-line="0" selection-start-column="8" selection-end-line="0" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="codeshelf.dev.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/html/codeshelf.dev.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.75" vertical-offset="300" max-vertical-offset="1365">
-              <caret line="50" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="3315" max-vertical-offset="8190">
+              <caret line="264" column="13" selection-start-line="264" selection-start-column="13" selection-end-line="264" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -85,8 +73,6 @@
         <option value="$PROJECT_DIR$/lib/SlickGrid/slick.dataview.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/workAreaView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/mainPage.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/ordersView.js" />
-        <option value="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/aisleView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/view.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/dataObjectField.js" />
@@ -105,10 +91,12 @@
         <option value="$PROJECT_DIR$/src/js_uncompiled/facilityEditorView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/dataEntryDialog.js" />
         <option value="$PROJECT_DIR$/src/html/setSocketAddr.js" />
-        <option value="$PROJECT_DIR$/src/html/codeshelf.html" />
         <option value="$PROJECT_DIR$/src/html/websocket.addr.json" />
         <option value="$PROJECT_DIR$/src/html/codeshelf.dev.html" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/ediServicesView.js" />
+        <option value="$PROJECT_DIR$/src/html/codeshelf.html" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/ordersView.js" />
+        <option value="$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js" />
         <option value="$PROJECT_DIR$/src/js_uncompiled/websession.js" />
       </list>
     </option>
@@ -234,134 +222,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="js_uncompiled" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeShelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeshelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="html" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeShelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeshelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeShelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeshelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleClosureLibrary" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeShelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeshelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleClosureLibrary" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="closure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeShelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeshelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleClosureLibrary" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="closure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="goog" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeShelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CodeshelfUX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GoogleClosureLibrary" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="closure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="goog" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="json" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -647,20 +507,6 @@
     </PATH>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/lib/GoogleClosureLibrary/closure/goog/dom/dom.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="420" max-vertical-offset="40698">
-          <caret line="30" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/html/codeshelf.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="166" max-vertical-offset="1246">
-          <caret line="41" column="30" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/codeshelf.controllers.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2226" max-vertical-offset="2324">
@@ -909,77 +755,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/target/web/lib/GoogleClosureLibrary/closure/goog/net/jsloader.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48387095" vertical-offset="1560" max-vertical-offset="5415">
-          <caret line="139" column="0" selection-start-line="139" selection-start-column="0" selection-end-line="139" selection-end-column="22" />
-          <folding>
-            <marker date="1400296291000" expanded="false" signature="-1:-1" placeholder="//..." />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="/** @fileoverview A utility to load JavaScript files via DOM script tags. ...*/" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="/** The name of the property of goog.global under which the JavaScript ...*/" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="/** The default length of time, in milliseconds, we are prepared to wait for a ...*/" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="/** Optional parameters for goog.net.jsloader.send. ...*/" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="/** Scripts (URIs) waiting to be loaded. ...*/" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="/** Loads and evaluates the JavaScript files at the specified URIs, guaranteeing ...*/" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="//..." />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="//..." />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="/** Loads and evaluates a JavaScript file. ...*/" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="//..." />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="//..." />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{&quot;type&quot;: 'text/javascript'...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="//..." />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="/** Loads a JavaScript file and verifies it was evaluated successfully, using a ...*/" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="/** Gets the DOM element under which we should add new script elements. ...*/" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="/** Cancels a given request. ...*/" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="/** Removes the script node and the timeout. ...*/" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="//..." />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="/** Possible error codes for jsloader. ...*/" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{&quot;LOAD_ERROR&quot;: 0...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="/** A jsloader error. ...*/" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1400296291000" expanded="true" signature="-1:-1" placeholder="/** The code for this error. ...*/" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/html/codeshelf.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.2743106" vertical-offset="232" max-vertical-offset="1335">
-          <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/dataEntryDialog.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="870" max-vertical-offset="1980">
@@ -1017,16 +792,8 @@
         <state vertical-scroll-proportion="0.4366812" vertical-offset="0" max-vertical-offset="5400">
           <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <element signature="n#!!doc" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/html/websocket.addr.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="689">
-          <caret line="0" column="8" selection-start-line="0" selection-start-column="8" selection-end-line="0" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1069,16 +836,62 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/html/codeshelf.dev.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.75" vertical-offset="300" max-vertical-offset="1365">
-          <caret line="50" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+        <state vertical-scroll-proportion="-17.5" vertical-offset="0" max-vertical-offset="1050">
+          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/html/websocket.addr.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="706">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/html/codeshelf.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.25" vertical-offset="0" max-vertical-offset="1050">
+          <caret line="18" column="34" selection-start-line="18" selection-start-column="34" selection-end-line="18" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/JQuery/jquery-1.7.1.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.39452055" vertical-offset="106632" max-vertical-offset="139230">
+          <caret line="7128" column="4" selection-start-line="7128" selection-start-column="4" selection-end-line="7128" selection-end-column="4" />
+          <folding>
+            <marker date="1385085298000" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1385085298000" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1385085298000" expanded="false" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/ordersView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.53974897" vertical-offset="2703" max-vertical-offset="3420">
+          <caret line="206" column="71" selection-start-line="206" selection-start-column="71" selection-end-line="206" selection-end-column="71" />
+          <folding>
+            <marker date="1400367421000" expanded="false" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js_uncompiled/hierarchyListView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3315" max-vertical-offset="8190">
+          <caret line="264" column="13" selection-start-line="264" selection-start-column="13" selection-end-line="264" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/js_uncompiled/websession.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.55397725" vertical-offset="990" max-vertical-offset="3195">
-          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.48863637" vertical-offset="1231" max-vertical-offset="3270">
+          <caret line="105" column="49" selection-start-line="105" selection-start-column="49" selection-end-line="105" selection-end-column="49" />
           <folding />
         </state>
       </provider>

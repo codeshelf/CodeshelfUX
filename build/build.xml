@@ -227,11 +227,12 @@
 		<echo>Webapp hostname: ${webapp.hostname}</echo>
 		<echo>${target.compiled.js.dir}/codeshelf.js</echo>
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="src/js_uncompiled" value="../js_uncompiled" />
+		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/Bacon" value="../lib/Bacon" />
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/GoogleClosureLibrary" value="../lib/GoogleClosureLibrary" />
-		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/SlickGrid" value="../lib/SlickGrid" />
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/JQuery" value="../lib/JQuery" />
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/Raphael" value="../lib/Raphael" />
-		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/Bacon" value="../lib/Bacon" />
+		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/SlickGrid" value="../lib/SlickGrid" />
+		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/TwitterBootstrap" value="../lib/TwitterBootstrap" />
 		<echo file="${target.compiled.js.dir}/codeshelf.js" append="true">
 //# sourceMappingURL=/js/codeshelf.map</echo>
 	</target>
@@ -395,7 +396,6 @@
 		<copy todir="${target.web.dir}">
 			<fileset dir="${basedir}">
 				<include name="lib/AngularJS/**" />
-				<include name="lib/GoogleClosureLibrary/**" />
 				<include name="lib/JQuery/**" />
 				<include name="lib/TwitterBootstrap/**" />
 				<include name="lib/UIBootstrap/**" />
@@ -415,10 +415,6 @@
 
 	<target name="deploy-localhost">
 
-		<hostinfo />
-		<echo>Host addr: ${ADDR4} </echo>
-
-		<!--property name="webapp.hostname" value="${ADDR4}" /-->
 		<property name="webapp.hostname" value="localhost" />
 		<property name="compiler.options.optimization" value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
 		<property name="compiler.options.format" value="--compiler_flags=--source_map_format=V3" />
@@ -439,7 +435,10 @@
 
 		<copy todir="${target.web.dir}">
 			<fileset dir="${basedir}">
-				<include name="lib/**" />
+				<include name="lib/AngularJS/**" />
+				<include name="lib/JQuery/**" />
+				<include name="lib/TwitterBootstrap/**" />
+				<include name="lib/UIBootstrap/**" />
 			</fileset>
 		</copy>
 	</target>

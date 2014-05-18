@@ -41,7 +41,6 @@ var kWebsessionState = {
 codeshelf.websession = function () {
 
 	var state_;
-	var thisWebsession_;
 	var websocketStarted_ = false;
 	var pendingCommands_;
 	var connectAttempts_ = 0;
@@ -49,9 +48,19 @@ codeshelf.websession = function () {
 	var websocket_;
 	var currentPage_;
 	var uniqueIdFunc_ = goog.events.getUniqueId;
-	var websocketAddr_ = "https://127.0.0.1:8444";
+	var websocketAddr_ = "wss://localhost:8444";
 
-	thisWebsession_ = {
+	function privateOpen_() {
+		try {
+			if (!websocket_.isOpen()) {
+				websocket_.open(websocketAddr_);
+			}
+		} catch (e) {
+			//
+		}
+	}
+
+	var self_ = {
 
 		getState: function () {
 			return state_;
@@ -83,27 +92,23 @@ codeshelf.websession = function () {
 
 			websocket_ = new goog.net.WebSocket(true, linearBackOff);
 			var webSocketEventHandler = new goog.events.EventHandler();
-			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.ERROR, thisWebsession_.onError);
-			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.OPENED, thisWebsession_.onOpen);
-			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.CLOSED, thisWebsession_.onClose);
-			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.MESSAGE, thisWebsession_.onMessage);
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.ERROR, self_.onError);
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.OPENED, self_.onOpen);
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.CLOSED, self_.onClose);
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.MESSAGE, self_.onMessage);
 
-			thisWebsession_.openWebSocket();
+			self_.openWebSocket();
 		},
 
 		openWebSocket: function () {
 			$.getJSON('websocket.addr.json', function (data) {
 				if (data.hasOwnProperty('addr')) {
-					websocketAddr_ = data.addr;
+					websocketAddr_ = data['addr'];
 				}
-
-				try {
-					if (!websocket_.isOpen()) {
-						websocket_.open(websocketAddr_);
-					}
-				} catch (e) {
-					//
-				}
+				privateOpen_();
+			}).fail(function () {
+				// Ignore
+				privateOpen_();
 			});
 		},
 
@@ -195,7 +200,7 @@ codeshelf.websession = function () {
 
 				// Check if the callback should remain active.
 				if (!commandWrapper.remainActive) {
-					thisWebsession_.cancelCommand(command);
+					self_.cancelCommand(command);
 				}
 			}
 
@@ -203,5 +208,5 @@ codeshelf.websession = function () {
 		}
 	};
 
-	return thisWebsession_;
+	return self_;
 };
