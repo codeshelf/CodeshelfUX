@@ -259,10 +259,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	function dispatchContextMenu(event) {
 		var cell = grid_.getCellFromEvent(event);
 		var item = dataView_.getItem(cell.row);
-		self.doContextMenu(event, item, columns_[cell.cell]);
+		self_.doContextMenu(event, item, columns_[cell.cell]);
 	}
 
-	var self = {
+	var self_ = {
 		doSetupView: function() {
 
 			var count = 0;
@@ -339,12 +339,12 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			percentCompleteThreshold_ = 0;
 			searchString_ = '';
 
-			goog.dom.appendChild(self.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
+			goog.dom.appendChild(self_.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
-			self.setupContextMenu();
+			self_.setupContextMenu();
 
 			dataView_ = new Slick.Data.DataView();
-			grid_ = new Slick.Grid(self.getMainPaneElement(), dataView_, columns_, options_);
+			grid_ = new Slick.Grid(self_.getMainPaneElement(), dataView_, columns_, options_);
 
 			grid_.onDragInit.subscribe(function(event, args) {
 				var blah = 1;
@@ -532,9 +532,9 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 
 // We want this view to extend the root/parent view, but we want to return this view.
 	var view = codeshelf.view();
-	jQuery.extend(view, self);
-	self = view;
+	jQuery.extend(view, self_);
+	self_ = view;
 
-	return self;
+	return self_;
 }
 ;

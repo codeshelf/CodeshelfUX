@@ -204,7 +204,7 @@ codeshelf.ordersview = function(websession, facility) {
 		{ 'name': 'theId', 'value': facility_['persistentId']}
 	];
 
-	var orderHeaderFilter = "statusEnum <> 'COMPLETE'";
+	var orderHeaderFilter = "statusEnum <> 'COMPLETE' and active = true";
 
 	var orderDetailFilter = "statusEnum <> 'COMPLETE'";
 

@@ -30,8 +30,8 @@ codeshelf.ediservicesview = function (websession, facility) {
 	var contextMenu_;
 
 	function linkAccount(event) {
-		if ($(event.target).data("option") == "link") {
-			var dropboxServiceId = $(event.target).data("dropboxServiceId");
+		if ($(event.target).data("option") === "link") {
+			var dropboxServiceId = event.data['persistentId'];
 			var buttonSet = new goog.ui.Dialog.ButtonSet().
 				addButton({key: 'link', caption: 'Link'}, false, false).
 				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE, false, false).
@@ -81,7 +81,7 @@ codeshelf.ediservicesview = function (websession, facility) {
 				if (!command['data'].hasOwnProperty('results')) {
 					alert('response has no result');
 				} else {
-					if (command['type'] == kWebSessionCommandType.OBJECT_METHOD_RESP) {
+					if (command['type'] === kWebSessionCommandType.OBJECT_METHOD_RESP) {
 						var url = command['data']['results'];
 						window.open(url, '_blank');
 						window.focus();
@@ -98,7 +98,7 @@ codeshelf.ediservicesview = function (websession, facility) {
 				if (!command['data'].hasOwnProperty('results')) {
 					alert('response has no result');
 				} else {
-					if (command['type'] == kWebSessionCommandType.OBJECT_METHOD_RESP) {
+					if (command['type'] === kWebSessionCommandType.OBJECT_METHOD_RESP) {
 						var result = command['data']['results'];
 						if (result === true) {
 							dataEntryDialog.close();

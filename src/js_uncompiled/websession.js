@@ -4,6 +4,7 @@
  *  $Id: websession.js,v 1.32 2012/12/07 08:58:02 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
+goog.require('extern.jquery');
 goog.require('goog.array');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
@@ -15,32 +16,31 @@ if (typeof MozWebSocket !== 'undefined') {
 }
 
 var kWebSessionCommandType = {
-	INVALID:              'INVALID',
-	LOGIN_REQ:            'LOGIN_RQ',
-	LOGIN_RESP:           'LOGIN_RS',
-	OBJECT_GETTER_REQ:    'OBJ_GET_RQ',
-	OBJECT_GETTER_RESP:   'OBJ_GET_RS',
-	OBJECT_UPDATE_REQ:    'OBJ_UPD_RQ',
-	OBJECT_UPDATE_RESP:   'OBJ_UPD_RS',
-	OBJECT_DELETE_REQ:    'OBJ_DEL_RQ',
-	OBJECT_DELETE_RESP:   'OBJ_DEL_RS',
-	OBJECT_LISTENER_REQ:  'OBJ_LSN_RQ',
+	INVALID: 'INVALID',
+	LOGIN_REQ: 'LOGIN_RQ',
+	LOGIN_RESP: 'LOGIN_RS',
+	OBJECT_GETTER_REQ: 'OBJ_GET_RQ',
+	OBJECT_GETTER_RESP: 'OBJ_GET_RS',
+	OBJECT_UPDATE_REQ: 'OBJ_UPD_RQ',
+	OBJECT_UPDATE_RESP: 'OBJ_UPD_RS',
+	OBJECT_DELETE_REQ: 'OBJ_DEL_RQ',
+	OBJECT_DELETE_RESP: 'OBJ_DEL_RS',
+	OBJECT_LISTENER_REQ: 'OBJ_LSN_RQ',
 	OBJECT_LISTENER_RESP: 'OBJ_LSN_RS',
-	OBJECT_FILTER_REQ:    'OBJ_FLT_RQ',
-	OBJECT_FILTER_RESP:   'OBJ_FLT_RS',
-	OBJECT_METHOD_REQ:    'OBJ_METH_RQ',
-	OBJECT_METHOD_RESP:   'OBJ_METH_RS'
+	OBJECT_FILTER_REQ: 'OBJ_FLT_RQ',
+	OBJECT_FILTER_RESP: 'OBJ_FLT_RS',
+	OBJECT_METHOD_REQ: 'OBJ_METH_RQ',
+	OBJECT_METHOD_RESP: 'OBJ_METH_RS'
 };
 
 var kWebsessionState = {
 	UNVALIDATED: 'UNVALIDATED',
-	VALIDATED:   'VALIDATED'
+	VALIDATED: 'VALIDATED'
 };
 
-codeshelf.websession = function() {
+codeshelf.websession = function () {
 
 	var state_;
-	var thisWebsession_;
 	var websocketStarted_ = false;
 	var pendingCommands_;
 	var connectAttempts_ = 0;
@@ -48,22 +48,35 @@ codeshelf.websession = function() {
 	var websocket_;
 	var currentPage_;
 	var uniqueIdFunc_ = goog.events.getUniqueId;
+	var websocketAddr_ = "wss://localhost:8444";
 
-	thisWebsession_ = {
+	function privateOpen_() {
+		try {
+			if (!websocket_.isOpen()) {
+				websocket_.open(websocketAddr_);
+			}
+		} catch (e) {
+			//
+		}
+	}
 
-		getState: function() {
+	var self_ = {
+
+		getState: function () {
 			return state_;
 		},
 
-		setState: function(state) {
+		setState: function (state) {
 			state_ = state;
 		},
 
-		initWebSocket: function(application) {
+		initWebSocket: function (application) {
 
 			application_ = application;
 			state_ = kWebsessionState.UNVALIDATED;
 			pendingCommands_ = new Object();
+
+			// Figure out the URI
 
 			/**
 			 * Strategy for reconnection that backs off linearly with a 1 second offset.
@@ -79,30 +92,36 @@ codeshelf.websession = function() {
 
 			websocket_ = new goog.net.WebSocket(true, linearBackOff);
 			var webSocketEventHandler = new goog.events.EventHandler();
-			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.ERROR, thisWebsession_.onError);
-			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.OPENED, thisWebsession_.onOpen);
-			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.CLOSED, thisWebsession_.onClose);
-			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.MESSAGE, thisWebsession_.onMessage);
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.ERROR, self_.onError);
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.OPENED, self_.onOpen);
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.CLOSED, self_.onClose);
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.MESSAGE, self_.onMessage);
 
-			try {
-				if (!websocket_.isOpen()) {
-					websocket_.open('wss://localhost:8444');
-				}
-			} catch (e) {
-				//
-			}
+			self_.openWebSocket();
 		},
 
-		createCommand: function(commandType, data) {
+		openWebSocket: function () {
+			$.getJSON('websocket.addr.json', function (data) {
+				if (data.hasOwnProperty('addr')) {
+					websocketAddr_ = data['addr'];
+				}
+				privateOpen_();
+			}).fail(function () {
+				// Ignore
+				privateOpen_();
+			});
+		},
+
+		createCommand: function (commandType, data) {
 			var command = {
-				'id':   uniqueIdFunc_('cid'),
+				'id': uniqueIdFunc_('cid'),
 				'type': commandType,
 				'data': data
 			};
 			return command;
 		},
 
-		sendCommand: function(inCommand, inCallback, inRemainActive) {
+		sendCommand: function (inCommand, inCallback, inRemainActive) {
 			// Attempt to send the command.
 			try {
 				if (inCallback == null) {
@@ -114,8 +133,8 @@ codeshelf.websession = function() {
 						// Put the pending command callback in the map.
 						var commandWrapper = {
 							remainActive: inRemainActive,
-							command:      inCommand,
-							callback:     inCallback
+							command: inCommand,
+							callback: inCallback
 						};
 						pendingCommands_[inCommand.id] = commandWrapper;
 
@@ -127,15 +146,15 @@ codeshelf.websession = function() {
 			}
 		},
 
-		cancelCommand: function(inCommand) {
+		cancelCommand: function (inCommand) {
 			delete pendingCommands_[inCommand.id];
 		},
 
-		setCurrentPage: function(currentPage) {
+		setCurrentPage: function (currentPage) {
 			currentPage_ = currentPage;
 		},
 
-		onError: function() {
+		onError: function () {
 			state_ = kWebsessionState.UNVALIDATED;
 			currentPage_.exit();
 			var reason;
@@ -146,11 +165,11 @@ codeshelf.websession = function() {
 			application_.restartApplication(reason);
 		},
 
-		onOpen: function() {
+		onOpen: function () {
 			websocketStarted_ = true;
 		},
 
-		onClose: function() {
+		onClose: function () {
 			state_ = kWebsessionState.UNVALIDATED;
 			currentPage_.exit();
 			var reason;
@@ -161,7 +180,7 @@ codeshelf.websession = function() {
 			application_.restartApplication(reason);
 		},
 
-		onMessage: function(messageEvent) {
+		onMessage: function (messageEvent) {
 			var command = goog.json.parse(messageEvent.message);
 
 			var commandWrapper = pendingCommands_[command.id];
@@ -181,7 +200,7 @@ codeshelf.websession = function() {
 
 				// Check if the callback should remain active.
 				if (!commandWrapper.remainActive) {
-					thisWebsession_.cancelCommand(command);
+					self_.cancelCommand(command);
 				}
 			}
 
@@ -189,5 +208,5 @@ codeshelf.websession = function() {
 		}
 	};
 
-	return thisWebsession_;
+	return self_;
 };
