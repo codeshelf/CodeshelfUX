@@ -34,9 +34,24 @@ function selectLedController() {
 goog.exportSymbol('selectLedController', selectLedController);
 
 function changeLedControllerId() {
-	var theLogger = goog.debug.Logger.getLogger('LED Controllers view');
-	var aString = ledcontrollercontextmenuscope['ledcontroller']['domainId'];
-	theLogger.info("change ID of selected led controller: " + aString);
+
+	var adhocDialogOptions = {}
+
+	adhocDialogOptions['passedInUrl']= "partials/change-led-id.html";
+	adhocDialogOptions['callback']= function () {
+		var theLogger = goog.debug.Logger.getLogger('LED Controllers view');
+		var aString = ledcontrollercontextmenuscope['ledcontroller']['domainId'];
+		theLogger.info("change ID of selected led controller: " + aString);
+	}
+
+	// would be nice if this worked
+	//angular.module('codeshelfApp').service('adhocDialogService')['showModalDialog']({}, adhocDialogOptions);
+	var injector = angular.injector(['ng', 'codeshelfApp']);
+
+	injector.invoke(['adhocDialogService', function(adhocDialogService){
+		adhocDialogService['showModalDialog']({}, adhocDialogOptions);
+	}]);
+
 
 	// codeshelf.objectUpdater.setObjectInSelectionList(ledcontrollercontextmenuscope['ledcontroller']);
 	clearLedControllerContextMenuScope();
