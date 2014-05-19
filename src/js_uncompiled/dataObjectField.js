@@ -162,10 +162,16 @@ codeshelf.objectUpdater = (function() {
 		// not have persistent ID.
 		// Could add 'domainId' into the data parameter structure.
 		updateOne: function(inChangingObject, inClassName, inFieldName, inFieldValue){
+			if (!inChangingObject || !inChangingObject.hasOwnProperty('persistentId')){
+				var theLogger = goog.debug.Logger.getLogger('objectUpdater');
+				theLogger.info("null object or object that does not have persistenId implemented");
+
+				return;
+			}
 
 			var data = {
 				'className':    inClassName,
-				'persistentId': inChangingObject['domainId'],
+				'persistentId': inChangingObject['persistentId'],
 				'properties':   [
 					{
 						'name':  inFieldName,

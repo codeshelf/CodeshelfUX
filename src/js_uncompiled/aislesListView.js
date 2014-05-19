@@ -33,15 +33,16 @@ function associatePathSegment() {
 		var aPathSegment = codeshelf.objectUpdater.getFirstObjectInSelectionList();
 		// this this really a pathSegment? Not a great test.
 		if (aPathSegment && aPathSegment.hasOwnProperty('segmentOrder'))
-			segString = aPathSegment['domainId'];
+			segString = aPathSegment['persistentId'];
 		else
-			aPathSegment = null;
-		theLogger.info("just logging: associate aisle " + aisleString + " to segment " + segString);
+			aPathSegment = null; // setting to null if it was a reference to something else
 
 		if (aPathSegment) { // we think aisle must be good to get here from the popup menu item
 			// we want java-side names for class and field name here.
 			// This one may not work, as location as a pointer to pathSegment, and not a key value
-			codeshelf.objectUpdater.updateOne(theAisle, 'Aisle', 'pathSegment', aPathSegment['persistentId']);
+			theLogger.info("associate aisle " + aisleString + " to segment " + segString);
+
+			codeshelf.objectUpdater.updateOne(theAisle, 'Aisle', 'pathSegId', aPathSegment['persistentId']);
 		}
 	}
 	else{
