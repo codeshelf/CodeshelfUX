@@ -308,7 +308,8 @@ codeshelf.mainpage = function() {
 
 		// codeshelf.windowLauncher.loadOrdersView();
 
-		// codeshelf.windowLauncher.loadWorkAreaView();
+		// Will this be the one operational view that all should see upon opening?
+		codeshelf.windowLauncher.loadWorkAreaView();
 
 		// Enable to show an example of a confirmation dialog that waits for confirmation before closing
 //		codeshelf.windowLauncher.doLaunchListDemoView();
