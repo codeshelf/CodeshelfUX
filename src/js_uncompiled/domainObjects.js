@@ -121,9 +121,19 @@ domainobjects = {
 		'className':  'LedController',
 		'properties': {
 			'domainId': {
-				'id':    'domainId',
+				'id': 'domainId',
 				'title': 'ID',
 				'width': 25
+			},
+			'persistentId': {
+				'id': 'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			},
+			'deviceGuid': {
+				'id': 'deviceGuid',
+				'title': 'Device GUID',
+				'width': 16
 			}
 		}
 	},

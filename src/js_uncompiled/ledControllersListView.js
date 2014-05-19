@@ -27,12 +27,21 @@ function clearLedControllerContextMenuScope(){
 function selectLedController() {
 	var theLogger = goog.debug.Logger.getLogger('LED Controllers view');
 	var aString = ledcontrollercontextmenuscope['ledcontroller']['domainId'];
-	// var aString = "unknown pathsegment";
 	theLogger.info("selected led controller: " + aString);
 	codeshelf.objectUpdater.setObjectInSelectionList(ledcontrollercontextmenuscope['ledcontroller']);
 	clearLedControllerContextMenuScope();
 }
 goog.exportSymbol('selectLedController', selectLedController);
+
+function changeLedControllerId() {
+	var theLogger = goog.debug.Logger.getLogger('LED Controllers view');
+	var aString = ledcontrollercontextmenuscope['ledcontroller']['domainId'];
+	theLogger.info("change ID of selected led controller: " + aString);
+
+	// codeshelf.objectUpdater.setObjectInSelectionList(ledcontrollercontextmenuscope['ledcontroller']);
+	clearLedControllerContextMenuScope();
+}
+goog.exportSymbol('changeLedControllerId', changeLedControllerId);
 
 /**
  * The aisles for this facility.
@@ -96,6 +105,7 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 			if (view.getItemLevel(item) === 0) {
 				ledcontrollercontextmenuscope['ledcontroller'] = item;
 				line = $('<li><a href="javascript:selectLedController()">Cache selected LED Controller</a></li>').appendTo(contextMenu_).data("option", "cache_selected");
+				line = $('<li><a href="javascript:changeLedControllerId()">Change ID of LED Controller</a></li>').appendTo(contextMenu_).data("option", "change_id");
 			}
 
 			contextMenu_
@@ -106,17 +116,8 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 
 	};
 	// ledController parent is codeshelf_network, whose parent is the facility
-	// normal case will not work
-	var ledControllerFilter = 'parent.persistentId = :theId';
-
-	// alternate1 does not work
-	// var ledControllerFilter = 'parent.persistentId.parent.persistent_id = :theId';
-
-	// alternate2 does not work
-	// var ledControllerFilter = 'parent.persistentId.parent_persistent_id = :theId';
-
-	// alternate3 does not work
-	// var ledControllerFilter = 'parent.parent.persistent_id = :theId';
+	// Luckily, ebeans can handle this form also.
+	var ledControllerFilter = 'parent.parent.persistentId = :theId';
 
 	var ledControllerFilterParams = [
 		{ 'name': 'theId', 'value': facility_['persistentId']}
