@@ -39,6 +39,48 @@ domainobjects = {
 		}
 	},
 
+	'Che': {
+		'className':  'Che',
+		'properties': {
+			'domainId': {
+				'id': 'domainId',
+				'title': 'ID',
+				'width': 25
+			},
+			'persistentId': {
+				'id': 'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			},
+			'deviceGuid': {
+				'id': 'deviceGuid',
+				'title': 'Device GUID',
+				'width': 16
+			},
+			'currentWorkArea': {
+				'id': 'currentWorkArea',
+				'title': 'Work Area',
+				'width': 16
+			},
+			'currentUser': {
+				'id': 'currentUser',
+				'title': 'User',
+				'width': 16
+			},
+			'lastBatteryLevel': {
+				'id': 'lastBatteryLevel',
+				'title': 'Battery',
+				'width': 16
+			},
+			'description': {
+				'id': 'description',
+				'title': 'Description',
+				'width': 40
+			}
+		}
+	},
+
+
 	'DropboxService': {
 		'className':  'DropboxService',
 		'properties': {

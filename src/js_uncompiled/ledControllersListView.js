@@ -87,7 +87,7 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 	var self = {
 
 		// following psuedo-inheritance
-		shouldAddThisColumn: function(inProperty){
+		'shouldAddThisColumn': function(inProperty){
 			// only fields in domainObjects for aisle will be asked for. We want to exclude persistent Id
 			if (inProperty['id'] ===  'persistentId')
 				return false;

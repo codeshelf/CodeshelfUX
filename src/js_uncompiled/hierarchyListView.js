@@ -300,7 +300,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 
 						if (foundEntry === null) {
 							// default is to just add all available columns.
-							if (this.hasOwnProperty('shouldAddThisColumn') &&  !this.shouldAddThisColumn(property)) {
+							if (this.hasOwnProperty('shouldAddThisColumn') &&  !this['shouldAddThisColumn'](property)) {
 								// property is going into the view, but we want it out of the view.
 								extraColumns.push(property);
 							}

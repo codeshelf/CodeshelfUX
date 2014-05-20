@@ -4,9 +4,9 @@
  *
  *******************************************************************************/
 /*
-file aislesListView.js author jon ranstrom
+file cheListView.js author jon ranstrom
  */
-goog.provide('codeshelf.aisleslistview');
+goog.provide('codeshelf.chelistview');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
@@ -17,42 +17,38 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-aislecontextmenuscope = {
-	'aisle': null
+checontextmenuscope = {
+	'che': null
 };
 
-function clearAisleContextMenuScope(){
-	aislecontextmenuscope['aisle'] = null;
+function clearCheContextMenuScope(){
+	checontextmenuscope['che'] = null;
 }
-function associatePathSegment() {
-	var theLogger = goog.debug.Logger.getLogger('aisles view');
-	var theAisle = aislecontextmenuscope['aisle'];
-	if (theAisle) {
-		var aisleString = theAisle['domainId'];
-		var segString = "no segment selected";
-		var aPathSegment = codeshelf.objectUpdater.getFirstObjectInSelectionList();
-		// this this really a pathSegment? Not a great test.
-		if (aPathSegment && aPathSegment.hasOwnProperty('segmentOrder'))
-			segString = aPathSegment['persistentId'];
-		else
-			aPathSegment = null; // setting to null if it was a reference to something else
 
-		if (aPathSegment) { // we think aisle must be good to get here from the popup menu item
-			// we want java-side names for class and field name here.
-			// This one may not work, as location as a pointer to pathSegment, and not a key value
-			theLogger.info("associate aisle " + aisleString + " to segment " + segString);
+function changeCheDescription() {
 
-			codeshelf.objectUpdater.updateOne(theAisle, 'Aisle', 'pathSegId', aPathSegment['persistentId']);
-		}
-	}
-	else{
-		theLogger.error("null aisle. How? ");
+	var adhocDialogOptions = {}
 
+	adhocDialogOptions['passedInUrl']= "partials/change-led-id.html";
+	adhocDialogOptions['callback']= function () {
+		var theLogger = goog.debug.Logger.getLogger('LED Controllers view');
+		var aString = checontextmenuscope['che']['domainId'];
+		theLogger.info("change description for selected CHE: " + aString);
 	}
 
-	clearAisleContextMenuScope();
+	// would be nice if this worked
+	//angular.module('codeshelfApp').service('adhocDialogService')['showModalDialog']({}, adhocDialogOptions);
+	var injector = angular.injector(['ng', 'codeshelfApp']);
+
+	injector.invoke(['adhocDialogService', function(adhocDialogService){
+		adhocDialogService['showModalDialog']({}, adhocDialogOptions);
+	}]);
+
+
+	// codeshelf.objectUpdater.setObjectInSelectionList(checontextmenuscope['che']);
+	clearCheContextMenuScope();
 }
-goog.exportSymbol('associatePathSegment', associatePathSegment); // Silly that this is needed even in same file.
+goog.exportSymbol('changeCheDescription', changeCheDescription);
 
 /**
  * The aisles for this facility.
@@ -60,7 +56,7 @@ goog.exportSymbol('associatePathSegment', associatePathSegment); // Silly that t
  * @param facility The facility to check.
  * @return {Object} The aisles list view.
  */
-codeshelf.aisleslistview = function(websession, facility) {
+codeshelf.cheslistview = function(websession, facility) {
 
 	var websession_ = websession;
 	var facility_ = facility;
@@ -87,12 +83,14 @@ codeshelf.aisleslistview = function(websession, facility) {
 			// only fields in domainObjects for aisle will be asked for. We want to exclude persistent Id
 			if (inProperty['id'] ===  'persistentId')
 				return false;
+			else if (inProperty['id'] ===  'deviceGuid')
+				return false;
 			else
 				return true;
 		},
 
 		getViewName: function() {
-			return 'Aisles List View';
+			return 'CHE List View';
 		},
 
 		setupContextMenu: function() {
@@ -112,8 +110,8 @@ codeshelf.aisleslistview = function(websession, facility) {
 
 			var line;
 			if (view.getItemLevel(item) === 0) {
-				aislecontextmenuscope['aisle'] = item;
-				line = $('<li><a href="javascript:associatePathSegment()">Associate Path Segment</li>').appendTo(contextMenu_).data("option", "associate_");
+				checontextmenuscope['che'] = item;
+				line = $('<li><a href="javascript:changeCheDescription()">Change Che Description</a></li>').appendTo(contextMenu_).data("option", "change_description");
 			}
 
 			contextMenu_
@@ -123,17 +121,18 @@ codeshelf.aisleslistview = function(websession, facility) {
 		}
 
 	};
+	// che parent is codeshelf_network, whose parent is the facility
+	var cheFilter = 'parent.parent.persistentId = :theId';
 
-	var aisleFilter = 'parent.persistentId = :theId';
-	var aisleFilterParams = [
+	var cheFilterParams = [
 		{ 'name': 'theId', 'value': facility_['persistentId']}
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { className: domainobjects['Aisle']['className'], linkProperty: 'parent', filter : aisleFilter, filterParams : aisleFilterParams, properties: domainobjects['Aisle']['properties'] };
+	hierarchyMap[0] = { className: domainobjects['Che']['className'], linkProperty: 'parent', filter : cheFilter, filterParams : cheFilterParams, properties: domainobjects['Che']['properties'] };
 
 	// We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['Aisle'], hierarchyMap, 0);
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['Che'], hierarchyMap, 0);
 	jQuery.extend(view, self);
 	self = view;
 

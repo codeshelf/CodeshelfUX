@@ -11,6 +11,7 @@ goog.require('goog.editor.SeamlessField');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.LabelInput');
+goog.require('codeshelf.sessionGlobals');
 
 /**
  * Implements an input field backed by a remote data object. It handles
@@ -139,24 +140,9 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
  */
 codeshelf.objectUpdater = (function() {
 	// psuedo private
-	var facility;
-	var websession;
 	var singleObjectSelections = [];
 
 	return {
-		// clone 4 from window launcher. Should inherit or be decomposed.
-		setFacility: function(inFacility){
-			facility = inFacility;
-		},
-		getFacility: function(){
-			return facility;
-		},
-		setWebsession: function(inWebsession){
-			websession = inWebsession;
-		},
-		getWebsession: function(){
-			return websession;
-		},
 		// This is the point of the objectUpdater. Could we know the className automatically?
 		// This does not work. Need to pass teh persistentId and not the domainId, but js side generally does
 		// not have persistent ID.
@@ -180,7 +166,7 @@ codeshelf.objectUpdater = (function() {
 				]
 			};
 			// JonR theWebSession = codeshelf.objectUpdater.getWebsession();
-			theWebSession = this.getWebsession();
+			theWebSession = codeshelf.sessionGlobals.getWebsession();
 			if (theWebSession) {
 				var fieldUpdateCmd = theWebSession.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
 				// Do we need a callback? Ideally not. General updating mechanism should work.

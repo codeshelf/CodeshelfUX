@@ -5,8 +5,10 @@
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.provide('codeshelf.windowLauncher'); // Better way? Only for use inside this file.
+goog.require('codeshelf.sessionGlobals');
 goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.aisleslistview');
+goog.require('codeshelf.chelistview');
 goog.require('codeshelf.ledcontrollerslistview');
 goog.require('codeshelf.pathsview');
 goog.require('codeshelf.ediservicesview');
@@ -95,7 +97,7 @@ codeshelf.doLaunchListDemoView = function(){
 }
 
 // global (sort of singleton) called the "module pattern"
-codeshelf.windowLauncher = (function() {
+codeshelf.sessionGlobals = (function() {
 	// psuedo private
 	var facility;
 	var websession;
@@ -115,113 +117,135 @@ codeshelf.windowLauncher = (function() {
 
 	getWebsession: function(){
 		return websession;
-	},
-
-	loadPathsView: function () {
-		try {
-			var pathsView = codeshelf.pathsview(this.getWebsession(), this.getFacility());
-			var pathsWindow = codeshelf.window(pathsView, getDomNodeForNextWindow(), getWindowDragLimit());
-			pathsWindow.open();
-		}
-		catch (err) {
-			alert(err);
-		}
-	},
-
-	doLaunchListDemoView: function(){
-		try {
-			var listDemoView = codeshelf.listdemoview();
-			var listDemoWindow = codeshelf.window(listDemoView, getDomNodeForNextWindow(), getWindowDragLimit());
-			listDemoWindow.open();
-		}
-		catch (err) {
-			alert(err);
-		}
-	},
-
-	loadWorkAreaEditorView: function () {
-		try {
-			var workAreaEditorView = codeshelf.workareaeditorview(this.getWebsession(), this.getFacility());
-			var workAreaEditorWindow = codeshelf.window(workAreaEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
-			workAreaEditorWindow.open();
-		}
-		catch (err) {
-			alert(err);
-		}
-	},
-
-	loadEdiServicesView: function() {
-		try {
-			var ediServicesView_ = codeshelf.ediservicesview(this.getWebsession(), this.getFacility());
-			var ediServicesWindow = codeshelf.window(ediServicesView_, getDomNodeForNextWindow(), getWindowDragLimit());
-			ediServicesWindow.open();
-		}
-		catch (err) {
-			alert(err);
-		}
-	},
-
-	loadWorkAreaView: function() {
-		try {
-			var workAreaView = codeshelf.workareaview(this.getWebsession(), this.getFacility());
-			var workAreaWindow = codeshelf.window(workAreaView, getDomNodeForNextWindow(), getWindowDragLimit());
-			workAreaWindow.open();
-		}
-		catch (err) {
-			alert(err);
-		}
-	},
-
-	loadOrdersView: function() {
-		try {
-			var ordersView = codeshelf.ordersview(this.getWebsession(), this.getFacility());
-			var ordersWindow = codeshelf.window(ordersView, getDomNodeForNextWindow(), getWindowDragLimit());
-			ordersWindow.open();
-		}
-		catch (err) {
-			alert(err);
-		}
-	},
-
-	loadAislesListView: function() {
-		try {
-			var aislesListView = codeshelf.aisleslistview(this.getWebsession(), this.getFacility());
-			var aislesListWindow = codeshelf.window(aislesListView, getDomNodeForNextWindow(), getWindowDragLimit());
-			aislesListWindow.open();
-		}
-		catch (err) {
-			alert(err);
-		}
-	},
-
-	loadLedControllersListView: function() {
-		try {
-			var ledControllersListView = codeshelf.ledcontrollerslistview(this.getWebsession(), this.getFacility());
-			var ledControllersListWindow = codeshelf.window(ledControllersListView, getDomNodeForNextWindow(), getWindowDragLimit());
-			ledControllersListWindow.open();
-		}
-		catch (err) {
-			alert(err);
-		}
-	},
-
-		loadFacilityEditor: function () {
-		try {
-			// Load the GMaps API and init() when done.
-			if (typeof google !== 'undefined') {
-				google.load('maps', '3', {'other_params': 'sensor=false', 'callback': function() {
-					var facilityEditorView = codeshelf.facilityeditorview(codeshelf.windowLauncher.getWebsession(), codeshelf.windowLauncher.getFacility());
-					var facilityEditorWindow = codeshelf.window(facilityEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
-					facilityEditorWindow.open();
-				}});
-			}
-		}
-		catch (err) {
-			alert(err);
-		}
 	}
 
+
 };
+})();
+
+// global (sort of singleton) called the "module pattern"
+codeshelf.windowLauncher = (function() {
+	// psuedo private
+
+	return {
+		// public methods
+
+		loadPathsView: function () {
+			try {
+				var pathsView = codeshelf.pathsview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var pathsWindow = codeshelf.window(pathsView, getDomNodeForNextWindow(), getWindowDragLimit());
+				pathsWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		doLaunchListDemoView: function(){
+			try {
+				var listDemoView = codeshelf.listdemoview();
+				var listDemoWindow = codeshelf.window(listDemoView, getDomNodeForNextWindow(), getWindowDragLimit());
+				listDemoWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadWorkAreaEditorView: function () {
+			try {
+				var workAreaEditorView = codeshelf.workareaeditorview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var workAreaEditorWindow = codeshelf.window(workAreaEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
+				workAreaEditorWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadEdiServicesView: function() {
+			try {
+				var ediServicesView_ = codeshelf.ediservicesview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var ediServicesWindow = codeshelf.window(ediServicesView_, getDomNodeForNextWindow(), getWindowDragLimit());
+				ediServicesWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadWorkAreaView: function() {
+			try {
+				var workAreaView = codeshelf.workareaview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var workAreaWindow = codeshelf.window(workAreaView, getDomNodeForNextWindow(), getWindowDragLimit());
+				workAreaWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadOrdersView: function() {
+			try {
+				var ordersView = codeshelf.ordersview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var ordersWindow = codeshelf.window(ordersView, getDomNodeForNextWindow(), getWindowDragLimit());
+				ordersWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadAislesListView: function() {
+			try {
+				var aislesListView = codeshelf.aisleslistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var aislesListWindow = codeshelf.window(aislesListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				aislesListWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadLedControllersListView: function() {
+			try {
+				var ledControllersListView = codeshelf.ledcontrollerslistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var ledControllersListWindow = codeshelf.window(ledControllersListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				ledControllersListWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadCheListView: function() {
+			try {
+				var cheListView = codeshelf.cheslistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var cheListWindow = codeshelf.window(cheListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				cheListWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadFacilityEditor: function () {
+			try {
+				// Load the GMaps API and init() when done.
+				if (typeof google !== 'undefined') {
+					google.load('maps', '3', {'other_params': 'sensor=false', 'callback': function() {
+						var facilityEditorView = codeshelf.facilityeditorview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+						var facilityEditorWindow = codeshelf.window(facilityEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
+						facilityEditorWindow.open();
+					}});
+				}
+			}
+			catch (err) {
+				alert(err);
+			}
+		}
+
+	};
 })();
 
 
@@ -258,11 +282,8 @@ codeshelf.mainpage = function() {
 								var facility = command['data']['results'][i];
 
 								// save the websession and facility so we can launch windows at any time.
-								codeshelf.windowLauncher.setWebsession(websession_);
-								codeshelf.windowLauncher.setFacility(facility);
-								// and prepare the objectupdater.
-								codeshelf.objectUpdater.setWebsession(websession_);
-								codeshelf.objectUpdater.setFacility(facility);
+								codeshelf.sessionGlobals.setWebsession(websession_);
+								codeshelf.sessionGlobals.setFacility(facility);
 
 								loadFacilityWindows(facility);
 							}
@@ -462,8 +483,24 @@ function launchLedControllersListView() {
 }
 goog.exportSymbol('launchLedControllersListView', launchLedControllersListView);
 
+function launchCheListView() {
+	codeshelf.windowLauncher.loadCheListView();
+}
+goog.exportSymbol('launchCheListView', launchCheListView);
+
 function launchTestRunner() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');
-	theLogger.info("No tests yet from here");
+	theLogger.info("Opening all windows available from navbar");
+	// But not the about dialog.  10 windows now.
+	launchListViewDemo();
+	launchPathsView();
+	launchWorkAreaEditor();
+	launchEdiServicesView();
+	launchOrdersView();
+	launchWorkAreaView();
+	launchFacilityEditor();
+	launchAislesListView();
+	launchLedControllersListView();
+	launchCheListView();
 }
 goog.exportSymbol('launchTestRunner', launchTestRunner);
