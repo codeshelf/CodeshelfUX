@@ -39,6 +39,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	var percentCompleteThreshold_;
 	var searchString_;
 	var sortDelay_;
+	var levelsInThisView = hierarchyMap_.length;
 
 	/**
 	 * Get the root item in the hierarchy for this item.
@@ -111,7 +112,9 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			// The items are at the same level, so we can attempt to compare them.
 
 			// Direct compare can only happen if the objects share the same parent.
-			if (itemA['parentPersistentId'] !== itemB['parentPersistentId']) {
+			// Or special (extremely common) case of single level view
+
+			if (_getLevelsInThisView() > 1 && itemA['parentPersistentId'] !== itemB['parentPersistentId']) {
 				var parentA = getParentAtLevel(itemA, itemALevel - 1, hierarchyMap_[itemALevel].linkProperty + 'PersistentId');
 				var parentB = getParentAtLevel(itemB, itemBLevel - 1, hierarchyMap_[itemBLevel].linkProperty + 'PersistentId');
 				result = comparer(parentA, parentB);
@@ -260,6 +263,12 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 		var cell = grid_.getCellFromEvent(event);
 		var item = dataView_.getItem(cell.row);
 		self_.doContextMenu(event, item, columns_[cell.cell]);
+	}
+
+
+	// do we need public interface for getLevelsInThisView?
+	function _getLevelsInThisView() {
+		return levelsInThisView;
 	}
 
 	var self_ = {
@@ -528,6 +537,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 		getItemLevel: function(item) {
 			return getLevel(item);
 		}
+
 	};
 
 // We want this view to extend the root/parent view, but we want to return this view.

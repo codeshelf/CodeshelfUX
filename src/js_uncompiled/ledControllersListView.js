@@ -141,8 +141,8 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 	var hierarchyMap = [];
 	hierarchyMap[0] = { className: domainobjects['LedController']['className'], linkProperty: 'parent', filter : ledControllerFilter, filterParams : ledControllerFilterParams, properties: domainobjects['LedController']['properties'] };
 
-	// We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['LedController'], hierarchyMap, 0);
+	// -1 for non-dragable. Single level view with normal sort rules
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['LedController'], hierarchyMap, -1);
 	jQuery.extend(view, self);
 	self = view;
 

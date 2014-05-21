@@ -132,8 +132,8 @@ codeshelf.aisleslistview = function(websession, facility) {
 	var hierarchyMap = [];
 	hierarchyMap[0] = { className: domainobjects['Aisle']['className'], linkProperty: 'parent', filter : aisleFilter, filterParams : aisleFilterParams, properties: domainobjects['Aisle']['properties'] };
 
-	// We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['Aisle'], hierarchyMap, 0);
+	// -1 for non-dragable. Single level view with normal sort rules
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['Aisle'], hierarchyMap, -1);
 	jQuery.extend(view, self);
 	self = view;
 
