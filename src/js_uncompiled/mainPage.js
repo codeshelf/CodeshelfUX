@@ -98,33 +98,6 @@ codeshelf.doLaunchListDemoView = function(){
 }
 
 // global (sort of singleton) called the "module pattern"
-codeshelf.sessionGlobals = (function() {
-	// psuedo private
-	var facility;
-	var websession;
-
-	return {
-	// public methods
-	setFacility: function(inFacility){
-		facility = inFacility;
-	},
-
-	getFacility: function(){
-		return facility;
-	},
-	setWebsession: function(inWebsession){
-		websession = inWebsession;
-	},
-
-	getWebsession: function(){
-		return websession;
-	}
-
-
-};
-})();
-
-// global (sort of singleton) called the "module pattern"
 codeshelf.windowLauncher = (function() {
 	// psuedo private
 
@@ -288,6 +261,9 @@ codeshelf.mainpage = function() {
 					if (command['type'] == kWebSessionCommandType.OBJECT_GETTER_RESP) {
 						if (command['data']['results'].length === 0) {
 							var clientInitializer = codeshelf.initializenewclient();
+							codeshelf.sessionGlobals.setWebsession(websession_);
+							// A bit odd here. We set the facility in clientInitializer
+
 							clientInitializer.start(websession_, application_.getOrganization(), loadFacilityWindows);
 						} else {
 							for (var i = 0; i < command['data']['results'].length; i++) {
@@ -297,7 +273,7 @@ codeshelf.mainpage = function() {
 								codeshelf.sessionGlobals.setWebsession(websession_);
 								codeshelf.sessionGlobals.setFacility(facility);
 
-								loadFacilityWindows(facility);
+								loadFacilityWindows();
 							}
 						}
 					}
@@ -308,26 +284,7 @@ codeshelf.mainpage = function() {
 		return callback;
 	}
 
-	// why does this not work as part of windowLauncher?
-	/*
-	function loadFacilityEditor() {
-		try {
-			// Load the GMaps API and init() when done.
-			if (typeof google !== 'undefined') {
-				google.load('maps', '3', {'other_params': 'sensor=false', 'callback': function() {
-					var facilityEditorView = codeshelf.facilityeditorview(codeshelf.windowLauncher.getWebsession(), codeshelf.windowLauncher.getFacility());
-					var facilityEditorWindow = codeshelf.window(facilityEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
-					facilityEditorWindow.open();
-				}});
-			}
-		}
-		catch (err) {
-			alert(err);
-		}
-	}
-	*/
-
-	function loadFacilityWindows(facility) {
+	function loadFacilityWindows() {
 		// No longer open the list demo view
 		// What windows should launch immediately?
 
