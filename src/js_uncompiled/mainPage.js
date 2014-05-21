@@ -245,7 +245,7 @@ codeshelf.windowLauncher = (function() {
 			try {
 				// Load the GMaps API and init() when done.
 				if (typeof google !== 'undefined') {
-					google.load('maps', '3', {'other_params': 'sensor=false', 'callback': function() {
+					google.load('maps', '3.15', {'other_params': 'sensor=false', 'callback': function() {
 						var facilityEditorView = codeshelf.facilityeditorview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
 						var facilityEditorWindow = codeshelf.window(facilityEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
 						facilityEditorWindow.open();
