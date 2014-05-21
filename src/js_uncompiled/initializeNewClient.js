@@ -4,6 +4,7 @@
  *  $Id: initializeNewClient.js,v 1.21 2012/11/19 10:47:24 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.initializenewclient');
+goog.require('codeshelf.sessionGlobals');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.websession');
 goog.require('goog.events.EventHandler');
@@ -29,7 +30,10 @@ codeshelf.initializenewclient = function() {
 					if (command['data']['results'].length !== 0) {
 						for (var i = 0; i < command['data']['results'].length; i++) {
 							var facility = command['data']['results'][i];
-							facilityWindowLoader_(facility);
+
+							codeshelf.sessionGlobals.setFacility(facility);
+
+							facilityWindowLoader_();
 						}
 					}
 				}
