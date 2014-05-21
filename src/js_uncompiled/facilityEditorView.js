@@ -5,7 +5,6 @@
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
 goog.require('codeshelf.dataobjectfield');
-goog.require('codeshelf.sessionGlobals');
 //goog.require('codeshelf.facilityeditorviewgmapsoverlay');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.websession');
