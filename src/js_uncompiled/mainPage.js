@@ -9,6 +9,7 @@ goog.require('codeshelf.sessionGlobals');
 goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.aisleslistview');
 goog.require('codeshelf.chelistview');
+goog.require('codeshelf.tierlistview');
 goog.require('codeshelf.ledcontrollerslistview');
 goog.require('codeshelf.pathsview');
 goog.require('codeshelf.ediservicesview');
@@ -223,6 +224,17 @@ codeshelf.windowLauncher = (function() {
 				var cheListView = codeshelf.cheslistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
 				var cheListWindow = codeshelf.window(cheListView, getDomNodeForNextWindow(), getWindowDragLimit());
 				cheListWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadTierListView: function() {
+			try {
+				var tierListView = codeshelf.tierlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var tierListWindow = codeshelf.window(tierListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				tierListWindow.open();
 			}
 			catch (err) {
 				alert(err);
@@ -488,10 +500,16 @@ function launchCheListView() {
 }
 goog.exportSymbol('launchCheListView', launchCheListView);
 
+function launchTierListView() {
+	codeshelf.windowLauncher.loadTierListView();
+}
+goog.exportSymbol('launchTierListView', launchTierListView);
+
+
 function launchTestRunner() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');
 	theLogger.info("Opening all windows available from navbar");
-	// But not the about dialog.  10 windows now.
+	// But not the about dialog.  11 windows now.
 	launchListViewDemo();
 	launchPathsView();
 	launchWorkAreaEditor();
@@ -502,5 +520,6 @@ function launchTestRunner() {
 	launchAislesListView();
 	launchLedControllersListView();
 	launchCheListView();
+	launchTierListView();
 }
 goog.exportSymbol('launchTestRunner', launchTestRunner);

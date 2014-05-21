@@ -20,6 +20,11 @@ domainobjects = {
 				'title': 'Path Segment',
 				'width': 25
 			},
+			'ledControllerId': {
+				'id':    'ledControllerId',
+				'title': 'Controller',
+				'width': 25
+			},
 			'persistentId': {
 				'id':    'persistentId',
 				'title': 'Persistent ID',
@@ -362,6 +367,46 @@ domainobjects = {
 		}
 	},
 
+	'Tier': {
+		'className':  'Tier',
+		'properties': {
+			'domainId': {
+				'id':    'domainId',
+				'title': 'ID',
+				'width': 25
+			},
+			'tierSortName': {
+				'id':    'tierSortName',
+				'title': 'Tier Sort',
+				'width': 25
+			},
+			'persistentId': {
+				'id':    'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			},
+			'ledChannel': {
+				'id':    'ledChannel',
+				'title': 'Channel',
+				'width': 8
+			},
+			'ledControllerId': {
+				'id':    'ledControllerId',
+				'title': 'Controller',
+				'width': 25
+			},
+			'firstLedNumAlongPath': {
+				'id':    'firstLedNumAlongPath',
+				'title': 'First LED',
+				'width': 10
+			},
+			'lastLedNumAlongPath': {
+				'id':    'lastLedNumAlongPath',
+				'title': 'Last LED',
+				'width': 10
+			}
+		}
+	},
 	'Vertex': {
 		'className':  'Vertex',
 		'properties': {
