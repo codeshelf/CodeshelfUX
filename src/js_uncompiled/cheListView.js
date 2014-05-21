@@ -26,12 +26,12 @@ function clearCheContextMenuScope(){
 }
 
 function changeCheDescription() {
-
+	var promise;
 	var adhocDialogOptions = {}
 
 	adhocDialogOptions['passedInUrl']= "partials/change-led-id.html";
 	adhocDialogOptions['callback']= function () {
-		var theLogger = goog.debug.Logger.getLogger('LED Controllers view');
+		var theLogger = goog.debug.Logger.getLogger('CHE view');
 		var aString = checontextmenuscope['che']['domainId'];
 		theLogger.info("change description for selected CHE: " + aString);
 	}
@@ -41,11 +41,24 @@ function changeCheDescription() {
 	var injector = angular.injector(['ng', 'codeshelfApp']);
 
 	injector.invoke(['adhocDialogService', function(adhocDialogService){
-		adhocDialogService['showModalDialog']({}, adhocDialogOptions);
+		promise = adhocDialogService['showModalDialog']({}, adhocDialogOptions);
 	}]);
 
+	if (promise != null) {
+		promise.then(function onOk() {
+			var theLogger = goog.debug.Logger.getLogger('CHE view');
+			theLogger.info("ok clicked for change CHE description");
+			// Can we debug this? Seems not. We need to get the input field contents. Perhaps we needed to bind it
+			// to a local/global
 
-	// codeshelf.objectUpdater.setObjectInSelectionList(checontextmenuscope['che']);
+			// If we have th input contents, then we want to update the CHE description field. (Why bother?)
+			// This should be simplest kind of update possible, with native field and no meta-field complexity.
+
+		});
+	}
+
+
+		// codeshelf.objectUpdater.setObjectInSelectionList(checontextmenuscope['che']);
 	clearCheContextMenuScope();
 }
 goog.exportSymbol('changeCheDescription', changeCheDescription);
