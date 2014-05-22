@@ -29,11 +29,18 @@ function changeCheDescription() {
 	var promise;
 	var adhocDialogOptions = {}
 
+	var theLogger = goog.debug.Logger.getLogger('CHE view');
+	var aString = checontextmenuscope['che']['domainId'];
+	theLogger.info("about to call dialog for selected CHE: " + aString);
+
+
+
 	adhocDialogOptions['passedInUrl']= "partials/change-led-id.html";
 	adhocDialogOptions['callback']= function () {
 		var theLogger = goog.debug.Logger.getLogger('CHE view');
 		var aString = checontextmenuscope['che']['domainId'];
 		theLogger.info("change description for selected CHE: " + aString);
+		// Paul: This is never called.
 	}
 
 	// would be nice if this worked
@@ -48,8 +55,8 @@ function changeCheDescription() {
 		promise.then(function onOk() {
 			var theLogger = goog.debug.Logger.getLogger('CHE view');
 			theLogger.info("ok clicked for change CHE description");
-			// Can we debug this? Seems not. We need to get the input field contents. Perhaps we needed to bind it
-			// to a local/global
+			// Paul: This is never called.
+			// We need to get the input field contents. Perhaps we needed to bind it to a local/global
 
 			// If we have th input contents, then we want to update the CHE description field. (Why bother?)
 			// This should be simplest kind of update possible, with native field and no meta-field complexity.
@@ -57,8 +64,14 @@ function changeCheDescription() {
 		});
 	}
 
+	// Paul: as expected, this is called immediately as the dialog goes up. So, if we need the che, that would have
+	// to be passed into scope somehow. clearCheContextMenuScope() is called.
 
-		// codeshelf.objectUpdater.setObjectInSelectionList(checontextmenuscope['che']);
+	// Temporary test code. We cannot get the value from the dialog input. But we can hard code a silly thing.
+	// That will test the backend for the simplest update. Since we are updating "description" field, we would like
+	// the code to call setDescription();
+	codeshelf.objectUpdater.updateOne(checontextmenuscope['che'], "Che", "description", "example description");
+
 	clearCheContextMenuScope();
 }
 goog.exportSymbol('changeCheDescription', changeCheDescription);
