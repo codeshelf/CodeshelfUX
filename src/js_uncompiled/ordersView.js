@@ -196,7 +196,34 @@ codeshelf.ordersview = function(websession, facility) {
 				.css('top', event.pageY - 10)
 				.css('left', event.pageX - 10)
 				.fadeIn(5);
+		},
+
+		// following psuedo-inheritance pattern
+		'shouldAddThisColumn': function(inProperty){
+			// exclude these fields. (Includ qty, UOM, container ID, order ID, SKU, Description.
+			// A combination of fields from each of 3 levels.
+			if (inProperty['id'] ===  'persistentId')
+				return false;
+			else if (inProperty['id'] ===  'fullDomainId')
+				return false;
+			else if (inProperty['id'] ===  'readableOrderDate')
+				return false;
+			else if (inProperty['id'] ===  'readableDueDate')
+				return false;
+			else if (inProperty['id'] ===  'shipmentId')
+				return false;
+			else if (inProperty['id'] ===  'customerId')
+				return false;
+			else if (inProperty['id'] ===  'workSequence')
+				return false;
+			else if (inProperty['id'] ===  'orderDetailId')
+				return false;
+			else if (inProperty['id'] ===  'statusEnum')
+				return false;
+			else
+				return true;
 		}
+
 	};
 
 	var orderGroupFilter = "parent.persistentId = :theId";
