@@ -10,7 +10,7 @@ goog.require('slickgrid.grid');
 goog.require('slickgrid.pager');
 goog.require('slickgrid.rowselection');
 goog.require('codeshelfApp');
-goog.require('simpleDialogService');
+goog.require('codeshelf.simpleDlogService');
 
 jQuery('.grid-header .ui-icon').addClass('ui-state-default ui-corner-all')['mouseover'](
 	function(e) {
@@ -330,21 +330,7 @@ codeshelf.listdemoview = function() {
 		},
 
 		close: function() {
-			// Demonstration of our dialog/alert service
 
-/*
-			var dialogOptions = {
-				cancelButtonVisibility: '',
-				cancelButtonText: 'Cancel',
-				actionButtonText: 'OK',
-				headerText: 'Close the list view',
-				bodyText: 'Just at test of the dialog',
-				callback: function () {
-					var theLogger = goog.debug.Logger.getLogger('ListDemoView');
-					theLogger.info("In the alert, clicked the ok button");
-				}
-			};
-*/
 			var dialogOptions = {};
 			dialogOptions ['cancelButtonVisibility'] = "";
 			dialogOptions ['cancelButtonText'] = "Cancel";
@@ -356,42 +342,20 @@ codeshelf.listdemoview = function() {
 				theLogger.info("In the alert, clicked the ok button");
 			};
 
+			codeshelf.simpleDlogService.showModalDialog({}, dialogOptions);
 
-
-// This method of calling an angular service came highly unrecommended
-//   The slightly better  version is to find the running injector associated to the app
-//    angular.element($('body')).injector();
-//
-//   In general to use the simpleDialogService well this whole class would probably need to turn into a controller and get properly injected
-
-//  ListViewDemo is not angular at all. This how to invoke an angular service in non-angular code.
+			/*
 			var promise;
 
-			var theLogger = goog.debug.Logger.getLogger('ListDemoView');
-			theLogger.info("before injector call");
-
-
 			var injector = angular.injector(['ng', 'codeshelfApp']);
-			theLogger.info("after injector call, before invoke");
 
 			injector.invoke(['simpleDialogService', function(simpleDialogService){
 				promise = simpleDialogService['showModalDialog']({}, dialogOptions);
             }]);
 			theLogger.info("after injector.invoke call, which calls the function");
 
-
-/*
-			var theInjector = angular.injector(['ng', 'codeshelfApp']);
-			// we have the injector. Works in uncompiled mode (compiled?
-			// hard to tell. Seems to work if simpleDialogService is factory, but not if service. How can that be?
-
-			var myService = theInjector.get('simpleDialogService'); // does not work in uncompiled
-			theLogger.info("after injector get call, before calling the function");
-			promise = myService['showModalDialog']({}, dialogOptions);
-			theLogger.info("after calling the function");
-*/
-
 			return promise;
+			*/
 		}
 	};
 
