@@ -385,21 +385,12 @@ codeshelf.mainpage = function() {
 function contactWasSelected() {
 
 	var dialogOptions = {};
-	dialogOptions ['cancelButtonVisibility'] = "hidden";
 	dialogOptions ['cancelButtonText'] = "";
 	dialogOptions ['actionButtonText'] = "OK";
 	dialogOptions ['headerText'] = "Contact Codeshelf";
 	dialogOptions ['bodyText'] = "Check out codeshelf.com";
 	dialogOptions ['callback'] = function () {};
 
-	/*
-	var injector = angular.injector(['ng', 'codeshelfApp']);
-
-	injector.invoke(['simpleDialogService', function(simpleDialogService){
-		simpleDialogService['showModalDialog']({}, dialogOptions);
-	// Paul: as elsewhere, not working in compiled code. Need to exportSymbol for simpleDialogService?
-	}]);
-	*/
 	codeshelf.simpleDlogService.showModalDialog({}, dialogOptions);
 
 }

@@ -17,6 +17,89 @@ goog.provide('adhocDialogService');
 */
 
 /**
+ * @param {!Object} $modal Angular UI Bootstrap service.
+ * @param {!angular.Q} $q Angular UI Bootstrap service.
+ * @constructor
+ * @export
+ * @ngInject
+ */
+codeshelfApp.SimpleDialogService = function($log, $modal, $q) {
+  /* PJM need to figure out what @type {!angular.$modal} */
+	this.log_ = $log;
+//  this.scope_ = $rootScope;
+	this.modal_ = $modal;
+	this.q_ = $q;
+};
+
+/**
+ * @return {Promise}  A promise that is resolved when the transition finishes.
+ * @export
+ */
+codeshelfApp.SimpleDialogService.prototype.open = function(dialogOptions) {
+	var modalOptions = {};
+	modalOptions['backdrop'] = true;
+	modalOptions['keyboard'] = true;
+	modalOptions['backdropClick'] = true;
+	modalOptions['dialogFade'] = true;
+	modalOptions['templateUrl'] = 'partials/dialog.html';
+//	modalOptions['scope'] = this.scope;
+	modalOptions['controller'] = codeshelfApp.SimpleDialogCtrl;
+
+	modalOptions['resolve'] = {
+		'dialogOptions' : function() {
+			return dialogOptions;
+		}
+	};
+
+	this.log_.info("about to open");
+	var modalInstance = this.modal_.open(modalOptions);
+	return modalInstance.result;
+};
+
+angular.module('codeshelfApp').service('simpleDialogService', ['$log', '$modal', '$q', codeshelfApp.SimpleDialogService]);
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.SimpleDialogCtrl = function($scope, $modalInstance, dialogOptions){
+	this.modalInstance_ = $modalInstance;
+	this.scope_ = $scope;
+	var defaultDialogOptions = {};
+	defaultDialogOptions['cancelButtonVisibility'] = 'visible';
+	defaultDialogOptions['cancelButtonText'] = "Close";
+	defaultDialogOptions['actionButtonText'] = "OK";
+	defaultDialogOptions['headerText'] = "Proceed?";
+	defaultDialogOptions['bodyText'] = "Perform this action?";
+
+	var options = angular.extend({}, defaultDialogOptions, dialogOptions);
+	options['cancelButtonVisibility'] = (options['cancelButtonText'] != "") ? "visible" : "hidden";
+
+	$scope['dialogOptions'] = options;
+	$scope['controller'] = this;
+};
+
+/**
+ * @export
+ */
+codeshelfApp.SimpleDialogCtrl.prototype.ok = function(){
+	this.modalInstance_.close();
+};
+
+/**
+ * @export
+ */
+codeshelfApp.SimpleDialogCtrl.prototype.cancel = function(){
+	this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
+};
+
+angular.module('codeshelfApp').controller('SimpleDialogCtrl', ['$scope', '$modalInstance', 'dialogOptions', codeshelfApp.SimpleDialogCtrl]);
+
+
+/**
  * Implements an arbitrary field update on existing database object
  * @param {string}
  *            className the name of the remote data class that this field edits.
@@ -28,184 +111,28 @@ goog.provide('adhocDialogService');
  *            field edits.
  */
 codeshelf.simpleDlogService = (function() {
-	// psuedo private
-	var dialogDefaults = {};
-	dialogDefaults ['backdrop'] = true;
-	dialogDefaults ['keyboard'] = true;
-	dialogDefaults ['backdropClick'] = true;
-	dialogDefaults ['dialogFade'] = true;
-	dialogDefaults ['templateUrl'] = "partials/dialog.html";
-
-	var dialogOptions = {};
-	dialogOptions ['cancelButtonVisibility'] = "hidden";
-	dialogOptions ['cancelButtonText'] = "Close";
-	dialogOptions ['actionButtonText'] = "OK";
-	dialogOptions ['headerText'] = "Proceed?";
-	dialogOptions ['bodyText'] = "Perform this action?";
-
-	function showDialog(customDialogDefaults, customDialogOptions) {
-		//Create temp objects to work with since we're in a singleton service
-		var tempDialogDefaults = {};
-		var tempDialogOptions = {};
-
-		//Map angular-ui dialog custom defaults to dialog defaults defined in this service
-		angular.extend(tempDialogDefaults, dialogDefaults, customDialogDefaults);
-
-		//Map dialog.html $scope custom properties to defaults defined in this service
-		angular.extend(tempDialogOptions, dialogOptions, customDialogOptions);
-
-		// funky: do we need $modalInstance?
-		if (!tempDialogDefaults.controller) {
-			tempDialogDefaults.controller = function ($scope, $modalInstance) {
-				$scope.dialogOptions = tempDialogOptions;
-				$scope.ok = function () {
-					$modalInstance.close(/*results*/);
-					customDialogOptions.callback();
-				};
-
-				$scope.cancel = function () {
-					$modalInstance.dismiss('cancel');
-				};
-			};
-		}
-		var theLogger = goog.debug.Logger.getLogger('dlogService');
-
-		var injector = angular.injector(['ng', 'codeshelfApp']);
-		if (injector){
-			theLogger.info("found the injector");}
-
-		var theModalService = injector.get('$modal');
-		if (theModalService){
-			theLogger.info("found theModalService");}
-
-		var aModalInstance = theModalService.open(tempDialogDefaults);
-		if (aModalInstance){
-			theLogger.info("opened and got aModalInstance");}
-
-		return aModalInstance.result;
-	}
-
 	// public API
 	return {
+
 		showModalDialog: function(customDialogDefaults, customDialogOptions) {
-			if (!customDialogDefaults) customDialogDefaults = {};
-				customDialogDefaults['backdropClick'] = false;
-			return showDialog(customDialogDefaults, customDialogOptions);
+			var injector = angular.injector(['ng', 'codeshelfApp']);
+			injector.invoke(['simpleDialogService', function(simpleDialogService){
+				console.log("Opening");
+				var response = simpleDialogService.open(customDialogOptions);
+				response.then(function() {
+					console.log("doing something");
+				//do something
+				//if success
+				//simpleDialogService.close();
+				//else
+				//simpleDialogService.showError("simpleError");
+				});
+			}]);
+
 		}
 
-};
+	};
 })();
-
-/**
- * simpleDialogService
- *  *ngInject
- */
-angular.module('codeshelfApp').service('simpleDialogService', ['$modal',
-	function ($modal) {
-/*
-		var dialogDefaults = {
-			backdrop: true,
-			keyboard: true,
-			backdropClick: true,
-			dialogFade: true,
-			templateUrl: 'partials/dialog.html'
-		};
-*/
-		var dialogDefaults = {};
-		dialogDefaults ['backdrop'] = true;
-		dialogDefaults ['keyboard'] = true;
-		dialogDefaults ['backdropClick'] = true;
-		dialogDefaults ['dialogFade'] = true;
-		dialogDefaults ['templateUrl'] = "partials/dialog.html";
-
-
-/*
-		var dialogOptions = {};
-		dialogOptions ['cancelButtonVisibility'] = 'hidden';
-			cancelButtonText: 'Close',
-			actionButtonText: 'OK',
-			headerText: 'Proceed?',
-			bodyText: 'Perform this action?'
-		};
-*/
-		var dialogOptions = {};
-		dialogOptions ['cancelButtonVisibility'] = "hidden";
-		dialogOptions ['cancelButtonText'] = "Close";
-		dialogOptions ['actionButtonText'] = "OK";
-		dialogOptions ['headerText'] = "Proceed?";
-		dialogOptions ['bodyText'] = "Perform this action?";
-
-		var dialogResults = {
-			userClickedOk: false
-		};
-
-		this.showDialog = function (customDialogDefaults, customDialogOptions, customDialogResults) {
-			//Create temp objects to work with since we're in a singleton service
-			var tempDialogDefaults = {};
-			var tempDialogOptions = {};
-			var tempDialogResults = {};
-
-			//Map angular-ui dialog custom defaults to dialog defaults defined in this service
-			angular.extend(tempDialogDefaults, dialogDefaults, customDialogDefaults);
-
-			//Map dialog.html $scope custom properties to defaults defined in this service
-			angular.extend(tempDialogOptions, dialogOptions, customDialogOptions);
-
-			//We do not expect use to pass in result. This is a way to get the information out.
-			angular.extend(tempDialogResults, dialogResults, customDialogResults);
-
-			// If the customDialogOptions.cancelButtonText is empty string, there is visibility, or vice-versa, report error
-			// Changing the value here does not seem to translate to the dialog
-			// customDialogOptions.cancelButtonVisibility = (!customDialogOptions.closeButtonText || customDialogOptions.closeButtonText == '')? 'hidden' : '';
-
-
-			if (!tempDialogDefaults.controller) {
-				tempDialogDefaults.controller = function ($scope, $modalInstance) {
-					$scope.dialogOptions = tempDialogOptions;
-					$scope.ok = function () {
-						dialogResults.userClickedOk = true;
-						$modalInstance.close(/*results*/);
-						customDialogOptions.callback();
-					};
-
-					$scope.cancel = function () {
-						$modalInstance.dismiss('cancel');
-					};
-				};
-			}
-
-			var modalInstance = $modal.open(tempDialogDefaults);
-
-			// attempt to hide cancel button here.
-
-
-			return modalInstance.result;
-		};
-
-		this['showModalDialog'] = function (customDialogDefaults, customDialogOptions) {
-			if (!customDialogDefaults) customDialogDefaults = {};
-			customDialogDefaults['backdropClick'] = false;
-			return this.showDialog(customDialogDefaults, customDialogOptions);
-		};
-
-		// Paul: this does not work at all. Problems include:
-		// customDialogResult is an empty proto object. Does not know it has a field for userClickedOk.
-		// Would not matter anyway. This executes and returns immediately. It does not wait for user to click or dismiss.
-		// So how do you call it?  See commented out call to getModalDialogResult() in codeshelf.controllers.js
-		// We have a working callback for when the ok is clicked, and modal dismisses when clicked. But it is hard to code
-		// If (user clicked the ok) {}
-		// A good prototype would be alert/ask on clicking the close button. But I did not want to use the more
-		// complicated injector for this first effort.
-
-		this.getModalDialogResult = function (customDialogDefaults, customDialogOptions, customDialogResults) {
-			if (!customDialogDefaults) customDialogDefaults = {};
-			if (!customDialogResults) customDialogResults = {};
-			customDialogDefaults['backdropClick'] = false;
-			this.showDialog(customDialogDefaults, customDialogOptions, customDialogResults);
-			return (customDialogResults.userClickedOk);
-		};
-
-	}]);
 
 /* ************************** */
 
