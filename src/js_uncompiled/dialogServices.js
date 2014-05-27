@@ -117,16 +117,19 @@ codeshelf.simpleDlogService = (function() {
 		showModalDialog: function(customDialogDefaults, customDialogOptions) {
 			var injector = angular.injector(['ng', 'codeshelfApp']);
 			injector.invoke(['simpleDialogService', function(simpleDialogService){
-				console.log("Opening");
+				// logs to devTools console only
+				console.log("Opening"); // log this before  the dialog opens
 				var response = simpleDialogService.open(customDialogOptions);
 				response.then(function() {
-					console.log("doing something");
-				//do something
-				//if success
-				//simpleDialogService.close();
-				//else
-				//simpleDialogService.showError("simpleError");
+					console.log("doing something"); // log this only if ok was clicked.
+					// Does not log for cancel. That is good. In principle, this can be used to determine whether to
+					// close the list demo view window, or similar cases.
+
+					// By the calling structure, the dialog still closes on cancel, which is also good.
+
+				// return response; // Paul: do we need to return the promise? (Does seem to help in current code structure.)
 				});
+				// return response; // Does not work here either.
 			}]);
 
 		}

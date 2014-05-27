@@ -331,6 +331,9 @@ codeshelf.listdemoview = function() {
 
 		close: function() {
 
+			var theLogger = goog.debug.Logger.getLogger('ListDemoView');
+			theLogger.info("Close function, before calling a dialog service "); // simpleDialogService or simpleDlogService
+
 			var dialogOptions = {};
 			dialogOptions ['cancelButtonVisibility'] = "";
 			dialogOptions ['cancelButtonText'] = "Cancel";
@@ -338,13 +341,19 @@ codeshelf.listdemoview = function() {
 			dialogOptions ['headerText'] = "Close the list view";
 			dialogOptions ['bodyText'] = "Just at test of the dialog";
 			dialogOptions ['callback'] = function () {
-				var theLogger = goog.debug.Logger.getLogger('ListDemoView');
-				theLogger.info("In the alert, clicked the ok button");
+				//var theLogger = goog.debug.Logger.getLogger('ListDemoView');
+				theLogger.info("Close function callback function"); // never called currently
 			};
 
-			codeshelf.simpleDlogService.showModalDialog({}, dialogOptions);
+			var promise;
+			promise = codeshelf.simpleDlogService.showModalDialog({}, dialogOptions);
 
-			/*
+			theLogger.info("Close function, after calling simpleDlogService"); // comes immediately
+			return promise;
+			// No difference between ok or cancel button.
+
+
+			/*  Original code that works used to work uncompiled. Now does not work at all. Dialog never comes
 			var promise;
 
 			var injector = angular.injector(['ng', 'codeshelfApp']);
