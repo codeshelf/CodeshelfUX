@@ -29,6 +29,16 @@ domainobjects = {
 				'id':    'persistentId',
 				'title': 'Persistent ID',
 				'width': 40
+			},
+			'anchorPosX': {
+				'id':    'anchorPosX',
+				'title': 'Anchor X',
+				'width': 40
+			},
+			'anchorPosY': {
+				'id':    'anchorPosY',
+				'title': 'Anchor Y',
+				'width': 40
 			}
 		}
 	},
