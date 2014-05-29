@@ -183,7 +183,7 @@
 	</target>
 
 	<target name="compile" depends="prep.dirs, generate.templates, generate.css, generate.deps, set.defaults">
-		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/closurebuilder.py" dir="${basedir}" optimize="0" python="${python.exec}">
+		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/closurebuilder.py" dir="${basedir}" optimize="0" python="${python.exec}" pythonpath="${basedir}">
 			<arg value="--root=./src/js_uncompiled" />
 			<arg value="--root=./lib/GoogleClosureLibrary/closure/" />
 			<arg value="--root=./lib/GoogleClosureLibrary/third_party/" />
@@ -412,6 +412,30 @@
 				</modified-->
 			</fileset>
 		</scp>
+	</target>
+
+        <target name="build-for-stage">
+
+                <property name="webapp.hostname" value="test.codeshelf.com" />
+                <property name="compiler.options.optimization" value="--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS" />
+                <property name="compiler.options.format" value="--compiler_flags=--source_map_format=V3" />
+                <property name="compiler.options.map" value="--compiler_flags=--create_source_map=${target.compiled.js.dir}/codeshelf.map" />
+                <property name="compiler.options.wrapper" value="--compiler_flags=--output_wrapper=&quot;(function(){%output%})();&quot;" />
+                <property name="compiler.options.pretty" value="--compiler_flags=--source_map_format=V3" />
+                <property name="compiler.options.debug" value="--compiler_flags=--source_map_format=V3" />
+                <property name="deploy.globals" value="${basedir}/src/templates/globals.deploy" />
+
+                <antcall target="build.webapp">
+                </antcall>
+
+                <copy todir="${target.web.dir}">
+                        <fileset dir="${basedir}">
+                                <include name="lib/AngularJS/**" />
+                                <include name="lib/JQuery/**" />
+                                <include name="lib/TwitterBootstrap/**" />
+                                <include name="lib/UIBootstrap/**" />
+                        </fileset>
+                </copy>
 	</target>
 
 	<target name="deploy-localhost">
