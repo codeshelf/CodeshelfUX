@@ -183,7 +183,7 @@
 	</target>
 
 	<target name="compile" depends="prep.dirs, generate.templates, generate.css, generate.deps, set.defaults">
-		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/closurebuilder.py" dir="${basedir}" optimize="0">
+		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/closurebuilder.py" dir="${basedir}" optimize="0" python="${python.exec}">
 			<arg value="--root=./src/js_uncompiled" />
 			<arg value="--root=./lib/GoogleClosureLibrary/closure/" />
 			<arg value="--root=./lib/GoogleClosureLibrary/third_party/" />
