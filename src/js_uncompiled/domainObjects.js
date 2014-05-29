@@ -377,6 +377,32 @@ domainobjects = {
 		}
 	},
 
+	'Slot': {
+		'className':  'Slot',
+		'properties': {
+			'domainId': {
+				'id':    'domainId',
+				'title': 'ID',
+				'width': 25
+			},
+			'persistentId': {
+				'id':    'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			},
+			'firstLedNumAlongPath': {
+				'id':    'firstLedNumAlongPath',
+				'title': 'First LED',
+				'width': 10
+			},
+			'lastLedNumAlongPath': {
+				'id':    'lastLedNumAlongPath',
+				'title': 'Last LED',
+				'width': 10
+			}
+		}
+	},
+
 	'Tier': {
 		'className':  'Tier',
 		'properties': {

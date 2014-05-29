@@ -8,6 +8,7 @@ file tierListView.js author jon ranstrom
  */
 goog.provide('codeshelf.tierlistview');
 goog.require('codeshelf.hierarchylistview');
+goog.require('codeshelf.tierslotlistview');
 goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
@@ -33,6 +34,21 @@ function doSomethingWithTier() {
 	clearTierContextMenuScope();
 }
 goog.exportSymbol('doSomethingWithTier', doSomethingWithTier);
+
+function doLaunchTierSlotList() {
+	// Not great. Want to use window launcher to open this window,
+	// and to have the benefit of getDomNodeForNextWindow, dragLimit.
+	// But requires codeshelf.windowLauncher introduces a cycle
+	aTier = tiercontextmenuscope['tier'];
+	var tierSlotListView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(), aTier);
+	// var tierSlotListWindow = codeshelf.window(tierSlotListView, getDomNodeForNextWindow(), getWindowDragLimit());
+	var theRectLimit = new goog.math.Rect(0,0,10000,10000);
+	var tierSlotListWindow = codeshelf.window(tierSlotListView, null, theRectLimit);
+	tierSlotListWindow.open();
+
+	clearTierContextMenuScope();
+}
+goog.exportSymbol('doLaunchTierSlotList', doLaunchTierSlotList);
 
 /**
  * The aisles for this facility.
@@ -68,8 +84,6 @@ codeshelf.tierlistview = function(websession, facility) {
 				return false;
 			else if (inProperty['id'] ===  'ledChannel')
 				return false;
-			else if (inProperty['id'] ===  'persistentId')
-				return false;
 			else
 				return true;
 		},
@@ -97,6 +111,7 @@ codeshelf.tierlistview = function(websession, facility) {
 			if (view.getItemLevel(item) === 0) {
 				tiercontextmenuscope['tier'] = item;
 				line = $('<li><a href="javascript:doSomethingWithTier()">Just a tier test</a></li>').appendTo(contextMenu_).data("option", "tier_update");
+				line = $('<li><a href="javascript:doLaunchTierSlotList()">Slots for this tier</a></li>').appendTo(contextMenu_).data("option", "slots_list");
 			}
 
 			contextMenu_

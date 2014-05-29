@@ -10,6 +10,7 @@ goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.aisleslistview');
 goog.require('codeshelf.chelistview');
 goog.require('codeshelf.tierlistview');
+goog.require('codeshelf.tierslotlistview');
 goog.require('codeshelf.ledcontrollerslistview');
 goog.require('codeshelf.pathsview');
 goog.require('codeshelf.ediservicesview');
@@ -207,6 +208,17 @@ codeshelf.windowLauncher = (function() {
 			try {
 				var tierListView = codeshelf.tierlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
 				var tierListWindow = codeshelf.window(tierListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				tierListWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadTierSlotListView: function(inTier) {
+			try {
+				var tierListSlotView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(), inTier);
+				var tierListSlotWindow = codeshelf.window(tierSlotListView, getDomNodeForNextWindow(), getWindowDragLimit());
 				tierListWindow.open();
 			}
 			catch (err) {
@@ -457,11 +469,17 @@ function launchTierListView() {
 }
 goog.exportSymbol('launchTierListView', launchTierListView);
 
+function launchTierSlotListView(inTier) {
+	codeshelf.windowLauncher.loadTierSlotListView(inTier);
+}
+goog.exportSymbol('launchTierListView', launchTierListView);
+
 
 function launchTestRunner() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');
 	theLogger.info("Opening all windows available from navbar");
 	// But not the about dialog.  11 windows now.
+	// But not the tier/slot window, which needs a tier reference to start.
 	launchListViewDemo();
 	launchPathsView();
 	launchWorkAreaEditor();
