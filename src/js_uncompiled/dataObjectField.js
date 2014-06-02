@@ -147,7 +147,7 @@ codeshelf.objectUpdater = (function() {
 		// This does not work. Need to pass teh persistentId and not the domainId, but js side generally does
 		// not have persistent ID.
 		// Could add 'domainId' into the data parameter structure.
-		updateOne: function(inChangingObject, inClassName, inFieldName, inFieldValue){
+		updateOne: function(inChangingObject, inClassName, inFieldName, inFieldValue, inFieldJavaType){
 			if (!inChangingObject || !inChangingObject.hasOwnProperty('persistentId')){
 				var theLogger = goog.debug.Logger.getLogger('objectUpdater');
 				theLogger.info("null object or object that does not have persistenId implemented");
@@ -161,7 +161,8 @@ codeshelf.objectUpdater = (function() {
 				'properties':   [
 					{
 						'name':  inFieldName,
-						'value': inFieldValue
+						'value': inFieldValue,
+						'classType': inFieldJavaType
 					}
 				]
 			};
@@ -196,4 +197,3 @@ codeshelf.objectUpdater = (function() {
 
 	};
 })();
-

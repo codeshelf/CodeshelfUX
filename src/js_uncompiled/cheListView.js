@@ -70,7 +70,7 @@ function changeCheDescription() {
 	// Temporary test code. We cannot get the value from the dialog input. But we can hard code a silly thing.
 	// That will test the backend for the simplest update. Since we are updating "description" field, we would like
 	// the code to call setDescription();
-	codeshelf.objectUpdater.updateOne(checontextmenuscope['che'], "Che", "description", "example description");
+	codeshelf.objectUpdater.updateOne(checontextmenuscope['che'], "Che", "description", "example description", "java.lang.String");
 
 	clearCheContextMenuScope();
 }
