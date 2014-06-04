@@ -155,16 +155,13 @@ codeshelf.objectUpdater = (function() {
 				return;
 			}
 
+			var properties = {};
+			properties[inFieldName] = inFieldValue;
+
 			var data = {
 				'className':    inClassName,
 				'persistentId': inChangingObject['persistentId'],
-				'properties':   [
-					{
-						'name':  inFieldName,
-						'value': inFieldValue,
-						'classType': inFieldJavaType
-					}
-				]
+				'properties':   properties
 			};
 			// JonR theWebSession = codeshelf.objectUpdater.getWebsession();
 			theWebSession = codeshelf.sessionGlobals.getWebsession();
