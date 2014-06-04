@@ -9,6 +9,7 @@ goog.require('codeshelf.sessionGlobals');
 goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.aisleslistview');
 goog.require('codeshelf.chelistview');
+goog.require('codeshelf.baylistview');
 goog.require('codeshelf.tierlistview');
 goog.require('codeshelf.tierslotlistview');
 goog.require('codeshelf.ledcontrollerslistview');
@@ -209,6 +210,17 @@ codeshelf.windowLauncher = (function() {
 				var tierListView = codeshelf.tierlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
 				var tierListWindow = codeshelf.window(tierListView, getDomNodeForNextWindow(), getWindowDragLimit());
 				tierListWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadBayListView: function() {
+			try {
+				var bayListView = codeshelf.baylistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var bayListWindow = codeshelf.window(bayListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				bayListWindow.open();
 			}
 			catch (err) {
 				alert(err);
@@ -469,10 +481,15 @@ function launchTierListView() {
 }
 goog.exportSymbol('launchTierListView', launchTierListView);
 
+function launchBayListView() {
+	codeshelf.windowLauncher.loadBayListView();
+}
+goog.exportSymbol('launchBayListView', launchBayListView);
+
 function launchTierSlotListView(inTier) {
 	codeshelf.windowLauncher.loadTierSlotListView(inTier);
 }
-goog.exportSymbol('launchTierListView', launchTierListView);
+goog.exportSymbol('launchTierSlotListView', launchTierSlotListView);
 
 
 function launchTestRunner() {
@@ -490,6 +507,7 @@ function launchTestRunner() {
 	launchAislesListView();
 	launchLedControllersListView();
 	launchCheListView();
+	launchBayListView();
 	launchTierListView();
 }
 goog.exportSymbol('launchTestRunner', launchTestRunner);

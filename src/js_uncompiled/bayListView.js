@@ -4,9 +4,9 @@
  *
  *******************************************************************************/
 /*
-file tierListView.js author jon ranstrom
+file bayListView.js author jon ranstrom
  */
-goog.provide('codeshelf.tierlistview');
+goog.provide('codeshelf.baylistview');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.tierslotlistview');
 goog.require('codeshelf.objectUpdater');
@@ -19,44 +19,29 @@ goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
 tiercontextmenuscope = {
-	'tier': null
+	'bay': null
 };
 
-function clearTierContextMenuScope(){
-	tiercontextmenuscope['tier'] = null;
+function clearBayContextMenuScope(){
+	baycontextmenuscope['bay'] = null;
 }
 
-function doSomethingWithTier() {
-	var theLogger = goog.debug.Logger.getLogger('Tier view');
-	var aString = tiercontextmenuscope['tier']['domainId'];
-	theLogger.info("change description for selected Tier: " + aString);
+function doSomethingWithBay() {
+	var theLogger = goog.debug.Logger.getLogger('Bay view');
+	var aString = tiercontextmenuscope['bay']['domainId'];
+	theLogger.info("change description for selected bay: " + aString);
 
 	clearTierContextMenuScope();
 }
-goog.exportSymbol('doSomethingWithTier', doSomethingWithTier);
-
-function doLaunchTierSlotList() {
-	// Not great. Want to use window launcher to open this window,
-	// and to have the benefit of getDomNodeForNextWindow, dragLimit.
-	// But requires codeshelf.windowLauncher introduces a cycle
-	aTier = tiercontextmenuscope['tier'];
-	var tierSlotListView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(), aTier);
-	// var tierSlotListWindow = codeshelf.window(tierSlotListView, getDomNodeForNextWindow(), getWindowDragLimit());
-	var theRectLimit = new goog.math.Rect(0,0,10000,10000);
-	var tierSlotListWindow = codeshelf.window(tierSlotListView, null, theRectLimit);
-	tierSlotListWindow.open();
-
-	clearTierContextMenuScope();
-}
-goog.exportSymbol('doLaunchTierSlotList', doLaunchTierSlotList);
+goog.exportSymbol('doSomethingWithBay', doSomethingWithBay);
 
 /**
- * The aisles for this facility.
+ * The bays for this facility. Or a the bays for one aisle later
  * @param websession The websession used for updates.
  * @param facility The facility to check.
  * @return {Object} The aisles list view.
  */
-codeshelf.tierlistview = function(websession, facility) {
+codeshelf.baylistview = function(websession, facility) {
 
 	var websession_ = websession;
 	var facility_ = facility;
@@ -82,8 +67,6 @@ codeshelf.tierlistview = function(websession, facility) {
 		'shouldAddThisColumn': function(inProperty){
 			if (inProperty['id'] ===  'persistentId')
 				return false;
-			else if (inProperty['id'] ===  'ledChannel')
-				return false;
 			else if (inProperty['id'] ===  'pickFaceEndPosX')
 				return false;
 			else if (inProperty['id'] ===  'pickFaceEndPosY')
@@ -97,7 +80,7 @@ codeshelf.tierlistview = function(websession, facility) {
 		},
 
 		getViewName: function() {
-			return 'Tiers List';
+			return 'Bays List';
 		},
 
 		setupContextMenu: function() {
@@ -117,9 +100,8 @@ codeshelf.tierlistview = function(websession, facility) {
 
 			var line;
 			if (view.getItemLevel(item) === 0) {
-				tiercontextmenuscope['tier'] = item;
-				line = $('<li><a href="javascript:doSomethingWithTier()">Just a tier test</a></li>').appendTo(contextMenu_).data("option", "tier_update");
-				line = $('<li><a href="javascript:doLaunchTierSlotList()">Slots for this tier</a></li>').appendTo(contextMenu_).data("option", "slots_list");
+				baycontextmenuscope['bay'] = item;
+				line = $('<li><a href="javascript:doSomethingWithBay()">Just a bay test</a></li>').appendTo(contextMenu_).data("option", "bay_update");
 			}
 
 			contextMenu_
@@ -130,17 +112,17 @@ codeshelf.tierlistview = function(websession, facility) {
 
 	};
 	// tier parent goes bay->aisle>facility
-	var tierFilter = 'parent.parent.parent.persistentId = :theId';
+	var bayFilter = 'parent.parent.persistentId = :theId';
 
-	var tierFilterParams = [
+	var bayFilterParams = [
 		{ 'name': 'theId', 'value': facility_['persistentId']}
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { className: domainobjects['Tier']['className'], linkProperty: 'parent', filter : tierFilter, filterParams : tierFilterParams, properties: domainobjects['Tier']['properties'] };
+	hierarchyMap[0] = { className: domainobjects['Bay']['className'], linkProperty: 'parent', filter : bayFilter, filterParams : bayFilterParams, properties: domainobjects['Bay']['properties'] };
 
 	// -1 for non-dragable. Single level view with normal sort rules
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['Tier'], hierarchyMap, -1);
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['Bay'], hierarchyMap, -1);
 	jQuery.extend(view, self);
 	self = view;
 

@@ -39,6 +39,16 @@ domainobjects = {
 				'id':    'anchorPosY',
 				'title': 'Anchor Y',
 				'width': 40
+			},
+			'pickFaceEndPosX': {
+				'id':    'pickFaceEndPosX',
+				'title': 'Pick End X',
+				'width': 40
+			},
+			pickFaceEndPosY: {
+				'id':    'pickFaceEndPosY',
+				'title': 'Pick End Y',
+				'width': 40
 			}
 		}
 	},
@@ -50,6 +60,42 @@ domainobjects = {
 				'id':    'domainId',
 				'title': 'ID',
 				'width': 25
+			},
+			'persistentId': {
+				'id': 'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			},
+			// a new baySort field, like the tierSort field.
+			'ledChannel': {
+				'id':    'ledChannel',
+				'title': 'Channel',
+				'width': 8
+			},
+			'ledControllerId': {
+				'id':    'ledControllerId',
+				'title': 'Controller',
+				'width': 25
+			},
+			'anchorPosX': {
+				'id':    'anchorPosX',
+				'title': 'Anchor X',
+				'width': 40
+			},
+			'anchorPosY': {
+				'id':    'anchorPosY',
+				'title': 'Anchor Y',
+				'width': 40
+			},
+			'pickFaceEndPosX': {
+				'id':    'pickFaceEndPosX',
+				'title': 'Pick End X',
+				'width': 40
+			},
+			pickFaceEndPosY: {
+				'id':    'pickFaceEndPosY',
+				'title': 'Pick End Y',
+				'width': 40
 			}
 		}
 	},
@@ -440,6 +486,26 @@ domainobjects = {
 				'id':    'lastLedNumAlongPath',
 				'title': 'Last LED',
 				'width': 10
+			},
+			'anchorPosX': {
+				'id':    'anchorPosX',
+				'title': 'Anchor X',
+				'width': 40
+			},
+			'anchorPosY': {
+				'id':    'anchorPosY',
+				'title': 'Anchor Y',
+				'width': 40
+			},
+			'pickFaceEndPosX': {
+				'id':    'pickFaceEndPosX',
+				'title': 'Pick End X',
+				'width': 40
+			},
+			pickFaceEndPosY: {
+				'id':    'pickFaceEndPosY',
+				'title': 'Pick End Y',
+				'width': 40
 			}
 		}
 	},
