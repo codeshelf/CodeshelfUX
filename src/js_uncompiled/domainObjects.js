@@ -66,7 +66,11 @@ domainobjects = {
 				'title': 'Persistent ID',
 				'width': 40
 			},
-			// a new baySort field, like the tierSort field.
+			'baySortName': {
+				'id':    'baySortName',
+				'title': 'Bay Sort',
+				'width': 25
+			},
 			'ledChannel': {
 				'id':    'ledChannel',
 				'title': 'Channel',

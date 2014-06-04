@@ -67,6 +67,8 @@ codeshelf.baylistview = function(websession, facility) {
 		'shouldAddThisColumn': function(inProperty){
 			if (inProperty['id'] ===  'persistentId')
 				return false;
+			else if (inProperty['id'] ===  'domainId')
+				return false;
 			else if (inProperty['id'] ===  'pickFaceEndPosX')
 				return false;
 			else if (inProperty['id'] ===  'pickFaceEndPosY')
