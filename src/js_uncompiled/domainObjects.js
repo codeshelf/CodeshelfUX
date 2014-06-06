@@ -466,6 +466,11 @@ domainobjects = {
 				'title': 'Tier Sort',
 				'width': 25
 			},
+			'baySortName': {
+				'id':    'baySortName',
+				'title': 'Bay Sort',
+				'width': 25
+			},
 			'persistentId': {
 				'id':    'persistentId',
 				'title': 'Persistent ID',
