@@ -56,20 +56,22 @@ goog.exportSymbol('doLaunchTierSlotList', doLaunchTierSlotList);
  * @param facility The facility to check.
  * @return {Object} The aisles list view.
  */
-codeshelf.tierlistview = function(websession, facility) {
+codeshelf.tierlistview = function(websession, facility, aisle) {
 
 	var websession_ = websession;
 	var facility_ = facility;
+	// If aisle is null, then all tiers for all aisle in this facility. If aisle passed in, then only tiers in this aisle.
+	var aisle_ = aisle;
 
 	var contextMenu_;
 
 
 	function websocketCmdCallbackFacility() {
 		var callback = {
-			exec: function(command) {
+			exec: function (command) {
 				/* appears to never be called
-				var theLogger = goog.debug.Logger.getLogger('aislesListView');
-				theLogger.info("callback exec called"); */
+				 var theLogger = goog.debug.Logger.getLogger('aislesListView');
+				 theLogger.info("callback exec called"); */
 			}
 		};
 
@@ -79,37 +81,37 @@ codeshelf.tierlistview = function(websession, facility) {
 	var self = {
 
 		// following psuedo-inheritance
-		'shouldAddThisColumn': function(inProperty){
-			if (inProperty['id'] ===  'persistentId')
+		'shouldAddThisColumn': function (inProperty) {
+			if (inProperty['id'] === 'persistentId')
 				return false;
-			else if (inProperty['id'] ===  'domainId')
+			else if (inProperty['id'] === 'domainId')
 				return false;
-			else if (inProperty['id'] ===  'ledChannel')
+			else if (inProperty['id'] === 'ledChannel')
 				return false;
-			else if (inProperty['id'] ===  'pickFaceEndPosX')
+			else if (inProperty['id'] === 'pickFaceEndPosX')
 				return false;
-			else if (inProperty['id'] ===  'pickFaceEndPosY')
+			else if (inProperty['id'] === 'pickFaceEndPosY')
 				return false;
-			else if (inProperty['id'] ===  'anchorPosX')
+			else if (inProperty['id'] === 'anchorPosX')
 				return false;
-			else if (inProperty['id'] ===  'anchorPosY')
+			else if (inProperty['id'] === 'anchorPosY')
 				return false;
 			else
 				return true;
 		},
 
-		getViewName: function() {
+		getViewName: function () {
 			return 'Tiers List';
 		},
 
-		setupContextMenu: function() {
+		setupContextMenu: function () {
 			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			contextMenu_.bind('mouseleave', function(event) {
+			contextMenu_.bind('mouseleave', function (event) {
 				$(this).fadeOut(5)
 			});
 		},
 
-		doContextMenu: function(event, item, column) {
+		doContextMenu: function (event, item, column) {
 			if (event && event.stopPropagation)
 				event.stopPropagation();
 
@@ -131,12 +133,26 @@ codeshelf.tierlistview = function(websession, facility) {
 		}
 
 	};
-	// tier parent goes bay->aisle>facility
-	var tierFilter = 'parent.parent.parent.persistentId = :theId';
 
-	var tierFilterParams = [
-		{ 'name': 'theId', 'value': facility_['persistentId']}
-	];
+	// If aisle is null, then all tiers for all aisle in this facility. If aisle passed in, then only tiers in this aisle.
+
+	var tierFilter;
+	var tierFilterParams;
+	if (null === aisle_) {
+		// tier parent goes bay->aisle>facility
+		tierFilter = 'parent.parent.parent.persistentId = :theId';
+
+		tierFilterParams = [
+			{ 'name': 'theId', 'value': facility_['persistentId']}
+		];
+	}
+	else {
+		tierFilter = 'parent.parent.persistentId = :theId';
+
+		tierFilterParams = [
+			{ 'name': 'theId', 'value': aisle_['persistentId']}
+		];
+	}
 
 	var hierarchyMap = [];
 	hierarchyMap[0] = { className: domainobjects['Tier']['className'], linkProperty: 'parent', filter : tierFilter, filterParams : tierFilterParams, properties: domainobjects['Tier']['properties'] };

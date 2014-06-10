@@ -55,6 +55,33 @@ function associatePathSegment() {
 goog.exportSymbol('associatePathSegment', associatePathSegment); // Silly that this is needed even in same file.
 
 /**
+ *
+ */
+function launchTiersForAisle() {
+	var theLogger = goog.debug.Logger.getLogger('aisles view');
+	var theAisle = aislecontextmenuscope['aisle'];
+	if (theAisle) {
+		var aisleString = theAisle['domainId'];
+		// Not great. Want to use window launcher to open this window,
+		// and to have the benefit of getDomNodeForNextWindow, dragLimit.
+		// But requires codeshelf.windowLauncher introduces a cycle
+		var tierListView = codeshelf.tierlistview(codeshelf.sessionGlobals.getWebsession(), null, theAisle);
+		// var tierSlotListWindow = codeshelf.window(tierSlotListView, getDomNodeForNextWindow(), getWindowDragLimit());
+		var theRectLimit = new goog.math.Rect(0,0,10000,10000);
+		var tierListWindow = codeshelf.window(tierListView, null, theRectLimit);
+		tierListWindow.open();
+
+	}
+	else{
+		theLogger.error("null aisle. How? ");
+
+	}
+
+	clearAisleContextMenuScope();
+}
+goog.exportSymbol('launchTiersForAisle', launchTiersForAisle); // needed even in same file.
+
+/**
  * The aisles for this facility.
  * @param websession The websession used for updates.
  * @param facility The facility to check.
@@ -114,6 +141,7 @@ codeshelf.aisleslistview = function(websession, facility) {
 			if (view.getItemLevel(item) === 0) {
 				aislecontextmenuscope['aisle'] = item;
 				line = $('<li><a href="javascript:associatePathSegment()">Associate Path Segment</li>').appendTo(contextMenu_).data("option", "associate_");
+				line = $('<li><a href="javascript:launchTiersForAisle()">Tiers in this Aisle</li>').appendTo(contextMenu_).data("option", "launchtiers");
 			}
 
 			contextMenu_
