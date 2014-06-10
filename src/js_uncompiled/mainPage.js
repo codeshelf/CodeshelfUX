@@ -229,7 +229,7 @@ codeshelf.windowLauncher = (function() {
 
 		loadTierSlotListView: function(inTier) {
 			try {
-				var tierListSlotView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(), inTier);
+				var tierListSlotView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), inTier);
 				var tierListSlotWindow = codeshelf.window(tierSlotListView, getDomNodeForNextWindow(), getWindowDragLimit());
 				tierListWindow.open();
 			}

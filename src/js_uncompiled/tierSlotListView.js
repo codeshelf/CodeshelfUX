@@ -40,9 +40,10 @@ goog.exportSymbol('doSomethingWithSlot', doSomethingWithSlot);
  * @param facility The facility to check.
  * @return {Object} The aisles list view.
  */
-codeshelf.tierslotlistview = function(websession, inTier) {
+codeshelf.tierslotlistview = function(websession, facility, inTier) {
 
 	var websession_ = websession;
+	var facility_ = facility; // not used here, but the ancestor view wants facility in the constructor
 	var tier_ = inTier;
 
 	var contextMenu_;

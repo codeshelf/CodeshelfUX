@@ -143,14 +143,11 @@ codeshelf.objectUpdater = (function() {
 	var singleObjectSelections = [];
 
 	return {
-		// This is the point of the objectUpdater. Could we know the className automatically?
-		// This does not work. Need to pass teh persistentId and not the domainId, but js side generally does
-		// not have persistent ID.
-		// Could add 'domainId' into the data parameter structure.
+		// This is a trivial single field update. Works for things like CHE description field
 		updateOne: function(inChangingObject, inClassName, inFieldName, inFieldValue, inFieldJavaType){
 			if (!inChangingObject || !inChangingObject.hasOwnProperty('persistentId')){
 				var theLogger = goog.debug.Logger.getLogger('objectUpdater');
-				theLogger.info("null object or object that does not have persistenId implemented");
+				theLogger.info("null object or object that does not have persistentId implemented");
 
 				return;
 			}
@@ -163,11 +160,11 @@ codeshelf.objectUpdater = (function() {
 				'persistentId': inChangingObject['persistentId'],
 				'properties':   properties
 			};
-			// JonR theWebSession = codeshelf.objectUpdater.getWebsession();
 			theWebSession = codeshelf.sessionGlobals.getWebsession();
 			if (theWebSession) {
 				var fieldUpdateCmd = theWebSession.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
-				// Do we need a callback? Ideally not. General updating mechanism should work.
+				// Do we need a callback? Ideally not. General updating mechanism should workl for success.
+				// As for errors returned, would be nice to see something
 				var emptyCallback = {
 					'exec': function (response) {
 
@@ -180,6 +177,44 @@ codeshelf.objectUpdater = (function() {
 				theLogger.info("no webSession: failed to update");
 			}
 		},
+
+		// This is a trivial single field update. Works for things like CHE description field
+		callMethod: function(inDomainObject, inClassName, inMethodName, inMethodArgs){
+			if (!inDomainObject || !inDomainObject.hasOwnProperty('persistentId')){
+				var theLogger = goog.debug.Logger.getLogger('objectUpdater');
+				theLogger.info("null object or object that does not have persistentId implemented");
+
+				return;
+			}
+
+			var properties = {};
+			properties[inFieldName] = inFieldValue;
+
+			var data = {
+				'className':    inClassName,
+				'persistentId': inDomainObject['persistentId'],
+				'methodName': inMethodName,
+				'methodArgs': inMethodArgs
+			};
+
+			theWebSession = codeshelf.sessionGlobals.getWebsession();
+			if (theWebSession) {
+				var methodCallCmd = theWebSession.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+				// Do we need a callback? Ideally not. General updating mechanism should workl for success.
+				// As for errors returned, would be nice to see something
+				var emptyCallback = {
+					'exec': function (response) {
+
+					}
+				};
+				theWebSession.sendCommand(fieldUpdateCmd, methodCallCmd, true);
+			}
+			else {
+				var theLogger = goog.debug.Logger.getLogger('objectUpdater');
+				theLogger.info("no webSession: failed to update");
+			}
+		},
+
 		// super-primitive "selection" manager
 		getFirstObjectInSelectionList: function(){
 			return singleObjectSelections[0];
