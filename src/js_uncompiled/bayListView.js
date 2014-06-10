@@ -8,7 +8,6 @@ file bayListView.js author jon ranstrom
  */
 goog.provide('codeshelf.baylistview');
 goog.require('codeshelf.hierarchylistview');
-goog.require('codeshelf.tierslotlistview');
 goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');

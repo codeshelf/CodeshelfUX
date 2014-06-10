@@ -28,12 +28,16 @@ function clearTierContextMenuScope(){
 
 function setControllerForTier() {
 	var theLogger = goog.debug.Logger.getLogger('Tier view');
-	var tierName = tiercontextmenuscope['tier']['domainId'];
-	theLogger.info("setting controller for selected Tier: " + aString);
+	theTier = tiercontextmenuscope['tier'];
+	if (theTier === null){
+		theLogger.info("null tier in context menu choice"); //why? saw this.
+	}
+	var tierName = theTier['domainId'];
+	theLogger.info("setting controller for selected Tier: " + tierName);
 	// What we really want here is dialog with pick list of controllers, picklist for channel, and picklist for choices.
 	// Choices are this tier only, all matching tiers in this aisle, or all selected tiers (need improved list selection first).
 
-	/*
+
 	// For now, use what we have, "selection manager" selection of controller, and assume channel 1.
 	var cntrlString = "no controller selected";
 	var aController = codeshelf.objectUpdater.getFirstObjectInSelectionList();
@@ -55,21 +59,21 @@ function setControllerForTier() {
 			{ 'name': 'inTiersStr', 'value': "", 'classType':  'java.lang.String'}
 		];
 
-		codeshelf.objectUpdater.callMethod(tiercontextmenuscope['tier'], 'Tier', 'setControllerChannel', methodArgs);
+		codeshelf.objectUpdater.callMethod(theTier, 'Tier', 'setControllerChannel', methodArgs);
 	}
 
-	*/
+
 
 	clearTierContextMenuScope();
 }
-goog.exportSymbol('setControllerForTier', doSomethingWithTier);
+goog.exportSymbol('setControllerForTier', setControllerForTier);
 
 function doLaunchTierSlotList() {
 	// Not great. Want to use window launcher to open this window,
 	// and to have the benefit of getDomNodeForNextWindow, dragLimit.
 	// But requires codeshelf.windowLauncher introduces a cycle
 	aTier = tiercontextmenuscope['tier'];
-	var tierSlotListView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), aTier);
+	var tierSlotListView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(),codeshelf.sessionGlobals.getFacility(), aTier);
 	// var tierSlotListWindow = codeshelf.window(tierSlotListView, getDomNodeForNextWindow(), getWindowDragLimit());
 	var theRectLimit = new goog.math.Rect(0,0,10000,10000);
 	var tierSlotListWindow = codeshelf.window(tierSlotListView, null, theRectLimit);
@@ -168,13 +172,6 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 	// If aisle is null, then all tiers for all aisle in this facility. If aisle passed in, then only tiers in this aisle.
 
 	// tier parent goes bay->aisle>facility
-	var tierFilter = 'parent.parent.parent.persistentId = :theId';
-
-	var tierFilterParams = [
-		{ 'name': 'theId', 'value': facility_['persistentId']}
-	];
-
-	/*
 	var tierFilter;
 	var tierFilterParams;
 
@@ -193,7 +190,7 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 			{ 'name': 'theId', 'value': aisle_['persistentId']}
 		];
 	}
-	*/
+
 
 	var hierarchyMap = [];
 	hierarchyMap[0] = { className: domainobjects['Tier']['className'], linkProperty: 'parent', filter : tierFilter, filterParams : tierFilterParams, properties: domainobjects['Tier']['properties'] };

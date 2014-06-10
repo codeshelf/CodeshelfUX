@@ -65,7 +65,7 @@ function launchTiersForAisle() {
 		// Not great. Want to use window launcher to open this window,
 		// and to have the benefit of getDomNodeForNextWindow, dragLimit.
 		// But requires codeshelf.windowLauncher introduces a cycle
-		var tierListView = codeshelf.tierlistview(codeshelf.sessionGlobals.getWebsession(), null, theAisle);
+		var tierListView = codeshelf.tierlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), theAisle);
 		// var tierSlotListWindow = codeshelf.window(tierSlotListView, getDomNodeForNextWindow(), getWindowDragLimit());
 		var theRectLimit = new goog.math.Rect(0,0,10000,10000);
 		var tierListWindow = codeshelf.window(tierListView, null, theRectLimit);

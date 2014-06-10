@@ -187,9 +187,6 @@ codeshelf.objectUpdater = (function() {
 				return;
 			}
 
-			var properties = {};
-			properties[inFieldName] = inFieldValue;
-
 			var data = {
 				'className':    inClassName,
 				'persistentId': inDomainObject['persistentId'],
@@ -207,7 +204,7 @@ codeshelf.objectUpdater = (function() {
 
 					}
 				};
-				theWebSession.sendCommand(fieldUpdateCmd, methodCallCmd, true);
+				theWebSession.sendCommand(methodCallCmd, emptyCallback, true);
 			}
 			else {
 				var theLogger = goog.debug.Logger.getLogger('objectUpdater');

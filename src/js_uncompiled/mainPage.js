@@ -227,7 +227,7 @@ codeshelf.windowLauncher = (function() {
 			}
 		},
 
-		loadTierSlotListView: function(inTier) {
+		loadTierSlotListView: function(inTier) { // this one cannot be called from window launcher
 			try {
 				var tierListSlotView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), inTier);
 				var tierListSlotWindow = codeshelf.window(tierSlotListView, getDomNodeForNextWindow(), getWindowDragLimit());
