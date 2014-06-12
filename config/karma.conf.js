@@ -70,6 +70,7 @@ module.exports = function (config) {
 	   plugins: [
 		   'karma-closure',
 		   'karma-junit-reporter',
+                   'karma-teamcity-reporter',
 		   'karma-script-launcher',
 		   'karma-jasmine',
 		   //These plugins must be included for each of the browser types that get run
