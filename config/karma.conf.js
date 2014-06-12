@@ -61,7 +61,9 @@ module.exports = function (config) {
 	   //Uncomment to test in other browsers
 	   browsers: [
 		   'PhantomJS'
-		   //,'Chrome'
+		   //'Chrome'
+		   //'config/xvfb_chrome.sh'
+                   //,'Firefox'
 		   //,'Safari'
 	   ],
 
@@ -79,6 +81,9 @@ module.exports = function (config) {
 	   junitReporter: {
 		   outputFile: 'test_out/unit.xml',
 		   suite: 'unit'
-	   }
+	   },
+
+           // Continuous Integration mode
+           singleRun: true
 	});
 };
