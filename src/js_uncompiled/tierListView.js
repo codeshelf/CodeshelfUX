@@ -26,7 +26,7 @@ function clearTierContextMenuScope(){
 	tiercontextmenuscope['tier'] = null;
 }
 
-function setControllerForTier() {
+function setControllerForTier(inAllTiers) {
 	var theLogger = goog.debug.Logger.getLogger('Tier view');
 	theTier = tiercontextmenuscope['tier'];
 	if (theTier === null){
@@ -37,6 +37,10 @@ function setControllerForTier() {
 	// What we really want here is dialog with pick list of controllers, picklist for channel, and picklist for choices.
 	// Choices are this tier only, all matching tiers in this aisle, or all selected tiers (need improved list selection first).
 
+	tierAisleValue = "";
+	if (inAllTiers === true){
+		tierAisleValue = "aisle"
+	}
 
 	// For now, use what we have, "selection manager" selection of controller, and assume channel 1.
 	var cntrlString = "no controller selected";
@@ -55,8 +59,8 @@ function setControllerForTier() {
 
 		var methodArgs = [
 			{ 'name': 'inControllerPersistentIDStr', 'value': cntlrPersistId, 'classType': 'java.lang.String'},
-			{ 'name': 'inChannelStr', 'value': "1", 'classType': 'java.lang.String'},
-			{ 'name': 'inTiersStr', 'value': "", 'classType':  'java.lang.String'}
+			{ 'name': 'inChannelStr', 'value': "0", 'classType': 'java.lang.String'},
+			{ 'name': 'inTiersStr', 'value': tierAisleValue, 'classType':  'java.lang.String'}
 		];
 
 		codeshelf.objectUpdater.callMethod(theTier, 'Tier', 'setControllerChannel', methodArgs);
@@ -66,7 +70,16 @@ function setControllerForTier() {
 
 	clearTierContextMenuScope();
 }
-goog.exportSymbol('setControllerForTier', setControllerForTier);
+
+function setControllerForTierOnly() {
+	setControllerForTier(false);
+}
+goog.exportSymbol('setControllerForTierOnly', setControllerForTierOnly);
+
+function setControllerForTiersInAisle() {
+	setControllerForTier(true);
+}
+goog.exportSymbol('setControllerForTiersInAisle', setControllerForTiersInAisle);
 
 function doLaunchTierSlotList() {
 	// Not great. Want to use window launcher to open this window,
@@ -156,7 +169,8 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 			if (view.getItemLevel(item) === 0) {
 				tiercontextmenuscope['tier'] = item;
 				// This needs to be conditional. Does this session have permission to set controller?
-				line = $('<li><a href="javascript:setControllerForTier()">Set controller for tier</a></li>').appendTo(contextMenu_).data("option", "tier_cntlr");
+				line = $('<li><a href="javascript:setControllerForTierOnly()">Set controller this tier only</a></li>').appendTo(contextMenu_).data("option", "tier_cntlr");
+				line = $('<li><a href="javascript:setControllerForTiersInAisle()">Set controller for tiers this aisle</a></li>').appendTo(contextMenu_).data("option", "tier_cntlr");
 
 				line = $('<li><a href="javascript:doLaunchTierSlotList()">Slots for this tier</a></li>').appendTo(contextMenu_).data("option", "slots_list");
 			}

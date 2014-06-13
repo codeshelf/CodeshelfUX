@@ -42,7 +42,12 @@ function associatePathSegment() {
 			// This one may not work, as location as a pointer to pathSegment, and not a key value
 			theLogger.info("associate aisle " + aisleString + " to segment " + segString);
 
-			codeshelf.objectUpdater.updateOne(theAisle, 'Aisle', 'pathSegId', aPathSegment['persistentId']);
+			var methodArgs = [
+				{ 'name': 'inPathSegPersistentID', 'value': segString, 'classType': 'java.lang.String'}
+			];
+
+			codeshelf.objectUpdater.callMethod(theAisle, 'Aisle', 'associatePathSegment', methodArgs);
+
 		}
 	}
 	else{
