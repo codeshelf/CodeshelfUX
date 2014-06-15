@@ -1,0 +1,25 @@
+{
+  "name": "CodeshelfUX",
+  "version": "1.0.0",
+  "homepage": "https://github.com/codeshelf/CodeshelfUX",
+  "authors": [
+	  "Jeff Williams <jeff.williams@codeshelf.com>",
+	  "Jon Ranstrom <jon.ranstrom@codeshelf.com",
+      "Paul Monteiro <paul.monteiro@codeshelf.com>",
+
+  ],
+  "description": "The primary codeshelf web ui",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-dialog-service": "~5.0.0"
+  }
+}
