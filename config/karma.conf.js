@@ -12,7 +12,7 @@ module.exports = function (config) {
 			{pattern: 'lib/GoogleClosureLibrary/closure/goog/deps.js', included: false, served: false},
 			'lib/AngularJS/angular.js',
 			'lib/AngularJS/angular-*.js',
-			'lib/UIBootstrap/ui-bootstrap-tpls-0.7.0.js',
+			'lib/UIBootstrap/ui-bootstrap-tpls-0.10.0.js',
 
 			{pattern: 'src/js_uncompiled/codeshelf.controllers.js'},
 
