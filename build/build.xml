@@ -24,6 +24,23 @@
 	<!-- load ant contrib task definitions from build lib directory -->
 	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${build.lib.dir}/ant-contrib-1.0b3.jar"/>
 
+	<macrodef name="copy-libraries-for-deployment">
+	  <sequential>
+		<copy todir="${target.web.dir}">
+			<fileset dir="${basedir}">
+				<include name="lib/AngularJS/**" />
+				<include name="lib/JQuery/**" />
+				<include name="lib/TwitterBootstrap/**" />
+				<include name="lib/UIBootstrap/**" />
+				<include name="lib/angular-*/**" />
+			</fileset>
+			<fileset dir="${src.dir}">
+				<include name="fonts/**" />
+			</fileset>
+		</copy>
+	  </sequential>
+	</macrodef>
+
 	<target name="env-init">
 		<property environment="env" />
 
@@ -128,7 +145,6 @@
 	<target name="generate.deps" depends="env-init,prep.dirs">
 		<echo>${basedir}</echo>
 		<py-run script="./lib/GoogleClosureLibrary/closure/bin/build/depswriter.py" pythonpath="${basedir}" optimize="0" python="${python.exec}">
-			<arg value="--root_with_prefix=../lib/AngularJS ../../../AngularJS" />
 			<arg value="--root_with_prefix=../lib/Arrowlets ../../../Arrowlets" />
 			<arg value="--root_with_prefix=../lib/Bacon ../../../Bacon" />
 			<arg value="--root_with_prefix=../lib/GoogleClosureLibrary ../../" />
@@ -137,7 +153,6 @@
 			<arg value="--root_with_prefix=../lib/Raphael ../../../Raphael" />
 			<arg value="--root_with_prefix=../lib/SlickGrid ../../../SlickGrid" />
 			<arg value="--root_with_prefix=../lib/TwitterBootstrap ../../../TwitterBootstrap" />
-			<arg value="--root_with_prefix=../lib/UIBootstrap ../../../UIBootstrap" />
 			<arg value="--root_with_prefix=../src/js_uncompiled ../../../../src/js_uncompiled" />
 			<arg value="--output_file=../src/js_uncompiled/deps.js" />
 		</py-run>
@@ -192,9 +207,7 @@
 			<arg value="--root=./lib/Bacon/" />
 			<arg value="--root=./lib/SlickGrid/" />
 			<arg value="--root=./lib/Raphael/" />
-			<arg value="--root=./lib/AngularJS/" />
 			<arg value="--root=./lib/TwitterBootstrap/" />
-			<arg value="--root=./lib/UIBootstrap/" />
 			<arg value="--namespace=codeshelf.application" />
 			<arg value="--output_mode=compiled" />
 			<arg value="--compiler_jar=./lib/GoogleClosureLibrary/compiler.jar" />
@@ -394,18 +407,7 @@
 		<antcall target="build.webapp">
 		</antcall>
 
-		<copy todir="${target.web.dir}">
-			<fileset dir="${basedir}">
-				<include name="lib/AngularJS/**" />
-				<include name="lib/JQuery/**" />
-				<include name="lib/TwitterBootstrap/**" />
-				<include name="lib/UIBootstrap/**" />
-				<include name="lib/angular-*/**" />
-			</fileset>
-			<fileset dir="${basedir}/src">
-				<include name="fonts/**" />
-			</fileset>
-		</copy>
+		<copy-libraries-for-deployment />
 
 		<scp todir="codeshelf@test.codeshelf.com:/opt/codeshelf/web/app" verbose="true" keyfile="${user.home}/.ssh/codeshelf">
 			<fileset dir="${target.web.dir}">
@@ -432,14 +434,7 @@
                 <antcall target="build.webapp">
                 </antcall>
 
-                <copy todir="${target.web.dir}">
-                        <fileset dir="${basedir}">
-                                <include name="lib/AngularJS/**" />
-                                <include name="lib/JQuery/**" />
-                                <include name="lib/TwitterBootstrap/**" />
-                                <include name="lib/UIBootstrap/**" />
-                        </fileset>
-                </copy>
+				<copy-libraries-for-deployment />
 	</target>
 
 	<target name="deploy-localhost">
@@ -462,17 +457,6 @@
 			</fileset>
 		</copy>
 
-		<copy todir="${target.web.dir}">
-			<fileset dir="${basedir}">
-				<include name="lib/AngularJS/**" />
-				<include name="lib/JQuery/**" />
-				<include name="lib/TwitterBootstrap/**" />
-				<include name="lib/UIBootstrap/**" />
-				<include name="lib/angular-*/**" />
-			</fileset>
-			<fileset dir="${basedir}/src">
-				<include name="fonts/**" />
-			</fileset>
-		</copy>
+		<copy-libraries-for-deployment />
 	</target>
 </project>
