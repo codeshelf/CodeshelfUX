@@ -149,17 +149,31 @@ codeshelf.simpleDlogService = (function() {
 	// public API
 	return {
 
-		showModalDialog: function(modalOptions, dialogScope) {
+		showModalDialog: function(header, msg, opts) {
 			var response;
-			var injector = angular.injector(['ng', 'codeshelfApp']);
-			injector.invoke(['simpleDialogService', function(simpleDialogService){
+			var injector = angular.injector(['ng', 'codeshelfApp', 'dialogs.main', 'ngSanitize']);
+			injector.invoke(['dialogs', function(dialogs){
 				// logs to devTools console only
 				console.log("Opening"); // log this before  the dialog opens
-				response = simpleDialogService.open(modalOptions, dialogScope);
+				var promise = dialogs.confirm(header, msg, opts);
+				response = promise.result;
 			}]);
 			return response;
 
 		},
+		showNotifyDialog: function(header, msg, opts) {
+			var response;
+			var injector = angular.injector(['ng', 'codeshelfApp', 'dialogs.main', 'ngSanitize']);
+			injector.invoke(['dialogs', function(dialogs){
+				// logs to devTools console only
+				console.log("Opening"); // log this before  the dialog opens
+				var promise = dialogs.notify(header, msg, opts);
+				response = promise.result;
+			}]);
+			return response;
+
+		},
+
 		showCustomDialog: function(templateUrl, controller, data, opts) {
 
 			var response;

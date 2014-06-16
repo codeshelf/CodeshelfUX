@@ -5,8 +5,7 @@
   "authors": [
 	  "Jeff Williams <jeff.williams@codeshelf.com>",
 	  "Jon Ranstrom <jon.ranstrom@codeshelf.com",
-      "Paul Monteiro <paul.monteiro@codeshelf.com>",
-
+      "Paul Monteiro <paul.monteiro@codeshelf.com>"
   ],
   "description": "The primary codeshelf web ui",
   "license": "MIT",

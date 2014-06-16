@@ -467,6 +467,9 @@
 				<include name="lib/UIBootstrap/**" />
 				<include name="lib/angular-*/**" />
 			</fileset>
+			<fileset dir="${basedir}/src">
+				<include name="fonts/**" />
+			</fileset>
 		</copy>
 	</target>
 </project>

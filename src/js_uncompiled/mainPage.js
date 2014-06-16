@@ -395,19 +395,7 @@ codeshelf.mainpage = function() {
 ;
 
 function contactWasSelected() {
-
-	var dialogOptions = {};
-	dialogOptions ['cancelButtonText'] = "";
-	dialogOptions ['actionButtonText'] = "OK";
-	dialogOptions ['headerText'] = "Contact Codeshelf";
-	dialogOptions ['bodyText'] = "Check out codeshelf.com";
-	dialogOptions ['callback'] = function () {
-		// Paul: looks like callback is not defined in dialogOptions in dialogService anymore.
-		// That is ok if the promise works instead.
-		console.log("contactWasSelected callback"); // prove if the callback worked. It does not.
-	};
-
-	codeshelf.simpleDlogService.showModalDialog({}, dialogOptions);
+	codeshelf.simpleDlogService.showNotifyDialog("Contact Codeshelf", "Check out <a href=\"http://www.codeshelf.com\">codeshelf.com</a>");
 
 }
 // Necessary for now: compilation changes the function name.
