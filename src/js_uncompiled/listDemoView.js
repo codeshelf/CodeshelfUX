@@ -345,7 +345,7 @@ codeshelf.listdemoview = function() {
 				theLogger.info("Close function callback function"); // never called currently
 			};
 
-			var promise = codeshelf.simpleDlogService.showModalDialog({}, dialogOptions);
+			var promise = codeshelf.simpleDlogService.showModalDialog("Close the list view", "Just a test of the dialog", dialogOptions);
 
 			theLogger.info("Close function, after calling simpleDlogService"); // comes immediately
 			return promise;

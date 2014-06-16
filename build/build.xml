@@ -400,6 +400,7 @@
 				<include name="lib/JQuery/**" />
 				<include name="lib/TwitterBootstrap/**" />
 				<include name="lib/UIBootstrap/**" />
+				<include name="lib/angular-*/**" />
 			</fileset>
 		</copy>
 
@@ -464,6 +465,10 @@
 				<include name="lib/JQuery/**" />
 				<include name="lib/TwitterBootstrap/**" />
 				<include name="lib/UIBootstrap/**" />
+				<include name="lib/angular-*/**" />
+			</fileset>
+			<fileset dir="${basedir}/src">
+				<include name="fonts/**" />
 			</fileset>
 		</copy>
 	</target>

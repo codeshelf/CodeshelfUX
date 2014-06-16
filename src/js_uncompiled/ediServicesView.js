@@ -16,6 +16,19 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
+
+function linkAccount(persistentId) {
+	var dropboxServiceId = persistentId;
+
+	var modalInstance = codeshelf.simpleDlogService.showCustomDialog(
+		"partials/link-dropbox-dlog.html",
+		"DropboxLinkController as controller",
+		{"dropboxServiceId": dropboxServiceId});
+	modalInstance.result.then(function(){
+		//then do nothing
+	});
+}
+goog.exportSymbol('linkAccount', linkAccount);
 /**
  * The current state of edi files for this facility.
  * @param websession The websession used for updates.
@@ -29,86 +42,6 @@ codeshelf.ediservicesview = function (websession, facility) {
 
 	var contextMenu_;
 
-	function linkAccount(event) {
-		if ($(event.target).data("option") === "link") {
-			var dropboxServiceId = event.data['persistentId'];
-			var buttonSet = new goog.ui.Dialog.ButtonSet().
-				addButton({key: 'link', caption: 'Link'}, false, false).
-				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE, false, false).
-				addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.CANCEL, true, true);
-
-			var dataEntryDialog = codeshelf.dataentrydialog('Link Dropbox', buttonSet);
-			var dialogContentElement = soy.renderAsElement(codeshelf.templates.linkDropboxDialog);
-			dataEntryDialog.setupDialog(dialogContentElement);
-			dataEntryDialog.createField('dbxCode', 'text');
-			dataEntryDialog.open(function (event, dialog) {
-					if (event.key === 'link') {
-						// Call Facility.startLinkDropbox();
-						var data = {
-							'className': domainobjects['DropboxService']['className'],
-							'persistentId': dropboxServiceId,
-							'methodName': 'startLink',
-							'methodArgs': [
-							]
-						};
-						var startLinkDropboxCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
-						websession_.sendCommand(startLinkDropboxCmd, startLinkCallback(), true);
-						return false;
-					} else if (event.key === goog.ui.Dialog.ButtonSet.DefaultButtons.SAVE.key) {
-						// Call Facility.finishLinkDropbox();
-						var dbxCode = dialog.getFieldValue('dbxCode');
-						var data = {
-							'className': domainobjects['DropboxService']['className'],
-							'persistentId': dropboxServiceId,
-							'methodName': 'finishLink',
-							'methodArgs': [
-								{'name': 'code', 'value': dbxCode, 'classType': 'java.lang.String'}
-							]
-						};
-						var finishLinkDropboxCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
-						websession_.sendCommand(finishLinkDropboxCmd, finishLinkCallback(dataEntryDialog), true);
-						return false;
-					}
-				}
-			);
-
-		}
-	}
-
-	function startLinkCallback() {
-		var callback = {
-			exec: function (command) {
-				if (!command['data'].hasOwnProperty('results')) {
-					alert('response has no result');
-				} else {
-					if (command['type'] === kWebSessionCommandType.OBJECT_METHOD_RESP) {
-						var url = command['data']['results'];
-						window.open(url, '_blank');
-						window.focus();
-					}
-				}
-			}
-		};
-		return callback;
-	}
-
-	function finishLinkCallback(dataEntryDialog) {
-		var callback = {
-			exec: function (command) {
-				if (!command['data'].hasOwnProperty('results')) {
-					alert('response has no result');
-				} else {
-					if (command['type'] === kWebSessionCommandType.OBJECT_METHOD_RESP) {
-						var result = command['data']['results'];
-						if (result === true) {
-							dataEntryDialog.close();
-						}
-					}
-				}
-			}
-		};
-		return callback;
-	}
 
 	var self = {
 
@@ -119,7 +52,7 @@ codeshelf.ediservicesview = function (websession, facility) {
 		setupContextMenu: function () {
 			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
 			contextMenu_.bind('mouseleave', function (event) {
-				$(this).fadeOut(5)
+				$(this).fadeOut(5);
 			});
 		},
 
@@ -135,12 +68,9 @@ codeshelf.ediservicesview = function (websession, facility) {
 
 			event.preventDefault();
 			contextMenu_.empty();
-			contextMenu_.bind("click", item, linkAccount);
-
-			var line = $('<li>Link Dropbox</li>').appendTo(contextMenu_);
+			var persistentId = item['persistentId'];
+			var line = $('<li><a href="javascript:linkAccount(\'' + persistentId + '\')">Link Dropbox</a></li>').appendTo(contextMenu_);
 			line.data("option", "link");
-			//line.data(item['className'], item['persistentId'])
-
 			contextMenu_
 				.css('top', event.pageY - 10)
 				.css('left', event.pageX - 10)
@@ -164,3 +94,100 @@ codeshelf.ediservicesview = function (websession, facility) {
 
 	return view;
 };
+
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.DropboxLinkController = function($scope, $modalInstance, websession, data){
+
+	$scope['dropboxServiceId'] = data['dropboxServiceId'];
+	$scope['dropbox'] = {};
+	this.scope_ = $scope;
+	this.modalInstance_ = $modalInstance;
+	this.websession_ = websession;
+};
+
+
+/**
+ * @export
+ */
+codeshelfApp.DropboxLinkController.prototype.link = function(){
+	// Call Facility.startLinkDropbox();
+	var data = {
+		'className': domainobjects['DropboxService']['className'],
+		'persistentId': this.scope_['dropboxServiceId'],
+		'methodName': 'startLink',
+		'methodArgs': [
+		]
+	};
+	var startLinkDropboxCmd = this.websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+	this.websession_.sendCommand(startLinkDropboxCmd, this.startLinkCallback_(), true);
+};
+
+/**
+ * @export
+ */
+codeshelfApp.DropboxLinkController.prototype.ok = function(){
+	// Call Facility.finishLinkDropbox();
+	var accessCode = this.scope_['dropbox']['accessCode'];
+	var data = {
+		'className': domainobjects['DropboxService']['className'],
+		'persistentId': this.scope_['dropboxServiceId'],
+		'methodName': 'finishLink',
+		'methodArgs': [
+			{'name': 'code', 'value': accessCode, 'classType': 'java.lang.String'}
+		]
+	};
+	var finishLinkDropboxCmd = this.websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+	this.websession_.sendCommand(finishLinkDropboxCmd, this.finishLinkCallback_(this.modalInstance_), true);
+};
+
+/**
+ * @export
+ */
+codeshelfApp.DropboxLinkController.prototype.cancel = function(){
+	this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
+};
+
+
+codeshelfApp.DropboxLinkController.prototype.startLinkCallback_ = function() {
+	var callback = {
+		exec: function (command) {
+			if (!command['data'].hasOwnProperty('results')) {
+				alert('response has no result');
+			} else {
+				if (command['type'] === kWebSessionCommandType.OBJECT_METHOD_RESP) {
+					var url = command['data']['results'];
+					window.open(url, '_blank');
+					window.focus();
+				}
+			}
+		}
+	};
+	return callback;
+};
+
+codeshelfApp.DropboxLinkController.prototype.finishLinkCallback_ = function(modalInstance) {
+	var callback = {
+		exec: function (command) {
+			if (!command['data'].hasOwnProperty('results')) {
+				alert('response has no result');
+			} else {
+				if (command['type'] === kWebSessionCommandType.OBJECT_METHOD_RESP) {
+					var result = command['data']['results'];
+					if (result === true) {
+						modalInstance.close();
+					}
+				}
+			}
+		}
+	};
+	return callback;
+};
+
+angular.module('codeshelfApp').controller('DropboxLinkController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.DropboxLinkController]);

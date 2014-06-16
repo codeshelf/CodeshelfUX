@@ -13,7 +13,7 @@ goog.require('codeshelf.websession');
 
 var codeshelfApp = angular.module('codeshelfApp', [
 		'ui.bootstrap', 'ngRoute'
-	]).factory('$websession', function () {
+	]).factory('websession', function () {
 		return application.getWebsession();
 	})
 /*.config(['$routeProvider',
@@ -63,7 +63,7 @@ var WorkAreaCtrl = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', 
 }]);
 
 
-var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', '$modalInstance', '$log', '$websession', 'facilityContext', 'aisleShape', function ($scope, $modalInstance, $log, $websession, facilityContext, aisleShape) {
+var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', '$modalInstance', '$log', 'websession', 'facilityContext', 'aisleShape', function ($scope, $modalInstance, $log, websession, facilityContext, aisleShape) {
 
 	var consts = {};
 	Object.defineProperty(consts, 'feetInMeters', {'value': 0.3048,
@@ -76,7 +76,7 @@ var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', 
 		messages: []
 	};
 
-	$scope.websession = $websession;
+	$scope.websession = websession;
 	$scope.facilityContext = facilityContext;
 	$scope.aisleShape = aisleShape;
 

@@ -7,6 +7,7 @@
 file cheListView.js author jon ranstrom
  */
 goog.provide('codeshelf.chelistview');
+goog.require('codeshelf.controllers');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
@@ -21,58 +22,28 @@ checontextmenuscope = {
 	'che': null
 };
 
+
 function clearCheContextMenuScope(){
 	checontextmenuscope['che'] = null;
 }
 
 function changeCheDescription() {
-	var promise;
-	var adhocDialogOptions = {}
+	var che = checontextmenuscope['che'];
+	var data = {
+		'che': che
+	};
 
 	var theLogger = goog.debug.Logger.getLogger('CHE view');
-	var aString = checontextmenuscope['che']['domainId'];
-	theLogger.info("about to call dialog for selected CHE: " + aString);
+	theLogger.info("about to call dialog for selected CHE: " + che['domainId']);
 
 
 
-	adhocDialogOptions['passedInUrl']= "partials/change-led-id.html";
-	adhocDialogOptions['callback']= function () {
-		var theLogger = goog.debug.Logger.getLogger('CHE view');
-		var aString = checontextmenuscope['che']['domainId'];
-		theLogger.info("change description for selected CHE: " + aString);
-		// Paul: This is never called.
-	}
+	var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-che.html", "CheController as controller", data);
 
-	// would be nice if this worked
-	//angular.module('codeshelfApp').service('adhocDialogService')['showModalDialog']({}, adhocDialogOptions);
-	var injector = angular.injector(['ng', 'codeshelfApp']);
+	promise.result.then(function(){
+		clearCheContextMenuScope();
 
-	injector.invoke(['adhocDialogService', function(adhocDialogService){
-		promise = adhocDialogService['showModalDialog']({}, adhocDialogOptions);
-	}]);
-
-	if (promise != null) {
-		promise.then(function onOk() {
-			var theLogger = goog.debug.Logger.getLogger('CHE view');
-			theLogger.info("ok clicked for change CHE description");
-			// Paul: This is never called.
-			// We need to get the input field contents. Perhaps we needed to bind it to a local/global
-
-			// If we have th input contents, then we want to update the CHE description field. (Why bother?)
-			// This should be simplest kind of update possible, with native field and no meta-field complexity.
-
-		});
-	}
-
-	// Paul: as expected, this is called immediately as the dialog goes up. So, if we need the che, that would have
-	// to be passed into scope somehow. clearCheContextMenuScope() is called.
-
-	// Temporary test code. We cannot get the value from the dialog input. But we can hard code a silly thing.
-	// That will test the backend for the simplest update. Since we are updating "description" field, we would like
-	// the code to call setDescription();
-	codeshelf.objectUpdater.updateOne(checontextmenuscope['che'], "Che", "description", "example description2");
-
-	clearCheContextMenuScope();
+	});
 }
 goog.exportSymbol('changeCheDescription', changeCheDescription);
 
@@ -164,3 +135,36 @@ codeshelf.cheslistview = function(websession, facility) {
 
 	return view;
 };
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.CheController = function($scope, $modalInstance, data){
+
+	this.scope_ = $scope;
+	this.modalInstance_ = $modalInstance;
+	$scope['che'] = data['che'];
+};
+
+/**
+ * @export
+ */
+codeshelfApp.CheController.prototype.ok = function(){
+	var che = this.scope_['che'];
+	var property = "description";
+	codeshelf.objectUpdater.updateOne(che, "Che", property, che[property]);
+	this.modalInstance_.close();
+};
+
+/**
+ * @export
+ */
+codeshelfApp.CheController.prototype.cancel = function(){
+	this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
+};
+
+angular.module('codeshelfApp').controller('CheController', ['$scope', '$modalInstance', 'data', codeshelfApp.CheController]);

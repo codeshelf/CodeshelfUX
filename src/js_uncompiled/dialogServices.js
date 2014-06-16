@@ -26,7 +26,6 @@ goog.provide('adhocDialogService');
 codeshelfApp.SimpleDialogService = function($log, $modal, $q) {
   /* PJM need to figure out what @type {!angular.$modal} */
 	this.log_ = $log;
-//  this.scope_ = $rootScope;
 	this.modal_ = $modal;
 	this.q_ = $q;
 };
@@ -35,26 +34,72 @@ codeshelfApp.SimpleDialogService = function($log, $modal, $q) {
  * @return {Promise}  A promise that is resolved when the transition finishes.
  * @export
  */
-codeshelfApp.SimpleDialogService.prototype.open = function(dialogOptions) {
-	var modalOptions = {};
-	modalOptions['backdrop'] = true;
-	modalOptions['keyboard'] = true;
-	modalOptions['backdropClick'] = true;
-	modalOptions['dialogFade'] = true;
-	modalOptions['templateUrl'] = 'partials/dialog.html';
-//	modalOptions['scope'] = this.scope;
-	modalOptions['controller'] = codeshelfApp.SimpleDialogCtrl;
+codeshelfApp.SimpleDialogService.prototype.open = function(modalOptions, dialogScope) {
+	var defaultModalOptions = {};
+	defaultModalOptions['backdrop'] = true;
+	defaultModalOptions['keyboard'] = true;
+	defaultModalOptions['backdropClick'] = true;
+	defaultModalOptions['dialogFade'] = true;
+	defaultModalOptions['templateUrl'] = 'partials/dialog.html';
+	defaultModalOptions['controller'] = codeshelfApp.SimpleDialogCtrl;
+	var mergedModalOptions = angular.extend({}, defaultModalOptions, modalOptions);
+
+
+	var defaultDialogScope = {};
+	defaultDialogScope['cancelButtonVisibility'] = 'visible';
+	defaultDialogScope['cancelButtonText'] = "Close";
+	defaultDialogScope['actionButtonText'] = "OK";
+	defaultDialogScope['headerText'] = "Proceed?";
+	defaultDialogScope['bodyText'] = "Perform this action?";
+
+	var mergedDialogScope = angular.extend({}, defaultDialogScope, dialogScope);
+	mergedDialogScope['cancelButtonVisibility'] = (mergedDialogScope['cancelButtonText'] != "") ? "visible" : "hidden";
 
 	modalOptions['resolve'] = {
-		'dialogOptions' : function() {
-			return dialogOptions;
+		'dialogScope' : function() {
+			return mergedDialogScope;
 		}
 	};
 
-	this.log_.info("about to open");
-	var modalInstance = this.modal_.open(modalOptions);
+
+	var modalInstance = this.modal_.open(mergedModalOptions);
 	return modalInstance.result;
 };
+
+/**
+ * @return {Promise}  A promise that is resolved when the transition finishes.
+ * @export
+ */
+codeshelfApp.SimpleDialogService.prototype.openCustom = function(templateUrl, controller, data, opts) {
+	var defaultModalOptions = {};
+	defaultModalOptions['backdrop'] = true;
+	defaultModalOptions['keyboard'] = true;
+	defaultModalOptions['backdropClick'] = true;
+	defaultModalOptions['dialogFade'] = true;
+	defaultModalOptions['templateUrl'] = templateUrl;
+	defaultModalOptions['controller'] = controller;
+	var mergedModalOptions = angular.extend({}, defaultModalOptions, opts);
+
+
+	var defaultDialogScope = {};
+	defaultDialogScope['cancelButtonVisibility'] = 'visible';
+	defaultDialogScope['cancelButtonText'] = "Close";
+	defaultDialogScope['actionButtonText'] = "OK";
+	defaultDialogScope['headerText'] = "Proceed?";
+	defaultDialogScope['bodyText'] = "Perform this action?";
+
+	var mergedDialogScope = angular.extend({}, defaultDialogScope, data);
+	mergedDialogScope['cancelButtonVisibility'] = (mergedDialogScope['cancelButtonText'] != "") ? "visible" : "hidden";
+
+	mergedModalOptions['resolve'] = {
+		'dialogScope' : function() { return mergedDialogScope;}
+	};
+
+
+	var modalInstance = this.modal_.open(mergedModalOptions);
+	return modalInstance.result;
+};
+
 
 angular.module('codeshelfApp').service('simpleDialogService', ['$log', '$modal', '$q', codeshelfApp.SimpleDialogService]);
 
@@ -65,20 +110,10 @@ angular.module('codeshelfApp').service('simpleDialogService', ['$log', '$modal',
  *  @ngInject
  *  @export
  */
-codeshelfApp.SimpleDialogCtrl = function($scope, $modalInstance, dialogOptions){
-	this.modalInstance_ = $modalInstance;
+codeshelfApp.SimpleDialogCtrl = function($scope, $modalInstance, dialogScope){
 	this.scope_ = $scope;
-	var defaultDialogOptions = {};
-	defaultDialogOptions['cancelButtonVisibility'] = 'visible';
-	defaultDialogOptions['cancelButtonText'] = "Close";
-	defaultDialogOptions['actionButtonText'] = "OK";
-	defaultDialogOptions['headerText'] = "Proceed?";
-	defaultDialogOptions['bodyText'] = "Perform this action?";
-
-	var options = angular.extend({}, defaultDialogOptions, dialogOptions);
-	options['cancelButtonVisibility'] = (options['cancelButtonText'] != "") ? "visible" : "hidden";
-
-	$scope['dialogOptions'] = options;
+	this.modalInstance_ = $modalInstance;
+	$scope['dialogScope'] = dialogScope;
 	$scope['controller'] = this;
 };
 
@@ -96,7 +131,7 @@ codeshelfApp.SimpleDialogCtrl.prototype.cancel = function(){
 	this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
 };
 
-angular.module('codeshelfApp').controller('SimpleDialogCtrl', ['$scope', '$modalInstance', 'dialogOptions', codeshelfApp.SimpleDialogCtrl]);
+angular.module('codeshelfApp').controller('SimpleDialogCtrl', ['$scope', '$modalInstance', 'dialogScope', codeshelfApp.SimpleDialogCtrl]);
 
 
 /**
@@ -114,16 +149,41 @@ codeshelf.simpleDlogService = (function() {
 	// public API
 	return {
 
-		showModalDialog: function(customDialogDefaults, customDialogOptions) {
+		showModalDialog: function(header, msg, opts) {
 			var response;
-			var injector = angular.injector(['ng', 'codeshelfApp']);
-			injector.invoke(['simpleDialogService', function(simpleDialogService){
+			var injector = angular.injector(['ng', 'codeshelfApp', 'dialogs.main', 'ngSanitize']);
+			injector.invoke(['dialogs', function(dialogs){
 				// logs to devTools console only
 				console.log("Opening"); // log this before  the dialog opens
-				response = simpleDialogService.open(customDialogOptions);
+				var promise = dialogs.confirm(header, msg, opts);
+				response = promise.result;
 			}]);
 			return response;
 
+		},
+		showNotifyDialog: function(header, msg, opts) {
+			var response;
+			var injector = angular.injector(['ng', 'codeshelfApp', 'dialogs.main', 'ngSanitize']);
+			injector.invoke(['dialogs', function(dialogs){
+				// logs to devTools console only
+				console.log("Opening"); // log this before  the dialog opens
+				var promise = dialogs.notify(header, msg, opts);
+				response = promise.result;
+			}]);
+			return response;
+
+		},
+
+		showCustomDialog: function(templateUrl, controller, data, opts) {
+
+			var response;
+			var injector = angular.injector(['ng', 'codeshelfApp', 'dialogs.main', 'ngSanitize']);
+			injector.invoke(['dialogs', function(dialogs){
+				// logs to devTools console only
+				console.log("Opening"); // log this before  the dialog opens
+				response = dialogs.create(templateUrl, controller, data, opts);
+			}]);
+			return response;
 		}
 
 	};
