@@ -2,36 +2,28 @@
      author jon ranstrom 2014.04.16
      The goal is a an angular-ish dialog with consistent styles
 -->
-<script>
-    /*
-    function thisLinkCtrl($scope) {
-        $scope.dbxCode = 'paste_code_here';
-        $scope.word = /^\s*\w*\s*$/;
-    }
-    */
-</script>
-<div class="modal-header">
-    <h3>Configure the DropBox Link</h3>
-</div>
-<div class="modal-body">
-     <div id='instructions'>
-         <!-- forcing separate lines on these instructions-->
-         <p>Click <strong>Link</strong> to link this facility to a Dropbox account.</p>
-         <p>This will open a URL in a new browser window that will make the request to Dropbox.
-         Once you approve the link in Dropbox it will give you a code.</p>
-         <p>Copy the DBX code into the text box and press <strong>Save</strong>.</p>
-     </div>
-    <!-- web examples show adding ng-controller="thisLinkCtrl", but that kills the ok,cancel button action -->
-    <form name="link_config">
-        Access Code: <input type="text" name="input" ng-model="dbxCode">
-    </form>
-</div>
+<form name="link_config">
 
-<div class="modal-footer">
-    <button class="btn" ng-click="getLinkAccessCode()">Link</button>
-    <button class="btn btn-primary" ng-click="ok()">Save</button>
-    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+	<div class="modal-header">
+		<h3>Configure the DropBox Link</h3>
+	</div>
+	<div class="modal-body">
+		<div id='instructions'>
+			<!-- forcing separate lines on these instructions-->
+			<p>Click <strong>Link</strong> to link this facility to a Dropbox account.</p>
+			<p>This will open a URL in a new browser window that will make the request to Dropbox.
+				Once you approve the link in Dropbox it will give you a code.</p>
+			<p>Copy the DBX code into the text box and press <strong>Save</strong>.</p>
+		</div>
+        Access Code: <input type="text" name="input" ng-model="dropbox.accessCode">
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn" ng-click="controller.link()">Link</button>
+		<button class="btn btn-primary" ng-click="controller.ok()">Save</button>
+		<button class="btn btn-warning" ng-click="controller.cancel()">Cancel</button>
 </div>
+</form>
 
 
 <!-- from the templates.soy file
