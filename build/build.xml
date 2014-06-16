@@ -402,6 +402,9 @@
 				<include name="lib/UIBootstrap/**" />
 				<include name="lib/angular-*/**" />
 			</fileset>
+			<fileset dir="${basedir}/src">
+				<include name="fonts/**" />
+			</fileset>
 		</copy>
 
 		<scp todir="codeshelf@test.codeshelf.com:/opt/codeshelf/web/app" verbose="true" keyfile="${user.home}/.ssh/codeshelf">
