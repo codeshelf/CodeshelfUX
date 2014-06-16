@@ -26,21 +26,67 @@ function clearTierContextMenuScope(){
 	tiercontextmenuscope['tier'] = null;
 }
 
-function doSomethingWithTier() {
+function setControllerForTier(inAllTiers) {
 	var theLogger = goog.debug.Logger.getLogger('Tier view');
-	var aString = tiercontextmenuscope['tier']['domainId'];
-	theLogger.info("change description for selected Tier: " + aString);
+	theTier = tiercontextmenuscope['tier'];
+	if (theTier === null){
+		theLogger.info("null tier in context menu choice"); //why? saw this.
+	}
+	var tierName = theTier['domainId'];
+	theLogger.info("setting controller for selected Tier: " + tierName);
+	// What we really want here is dialog with pick list of controllers, picklist for channel, and picklist for choices.
+	// Choices are this tier only, all matching tiers in this aisle, or all selected tiers (need improved list selection first).
+
+	tierAisleValue = "";
+	if (inAllTiers === true){
+		tierAisleValue = "aisle"
+	}
+
+	// For now, use what we have, "selection manager" selection of controller, and assume channel 1.
+	var cntrlString = "no controller selected";
+	var aController = codeshelf.objectUpdater.getFirstObjectInSelectionList();
+	// this this really a controller? Not a great test.
+	if (aController && aController.hasOwnProperty('deviceGuid'))
+		cntrlString = aController['domainId'];
+	else
+		aController = null; // setting to null if it was a reference to something else
+
+	if (aController) { // we think aisle must be good to get here from the popup menu item
+		// we want java-side names for class and field name here.
+		// This one may not work, as location as a pointer to pathSegment, and not a key value
+		theLogger.info("set tier " + tierName + " to controller " + cntrlString);
+		cntlrPersistId = aController['persistentId'];
+
+		var methodArgs = [
+			{ 'name': 'inControllerPersistentIDStr', 'value': cntlrPersistId, 'classType': 'java.lang.String'},
+			{ 'name': 'inChannelStr', 'value': "0", 'classType': 'java.lang.String'},
+			{ 'name': 'inTiersStr', 'value': tierAisleValue, 'classType':  'java.lang.String'}
+		];
+
+		codeshelf.objectUpdater.callMethod(theTier, 'Tier', 'setControllerChannel', methodArgs);
+	}
+
+
 
 	clearTierContextMenuScope();
 }
-goog.exportSymbol('doSomethingWithTier', doSomethingWithTier);
+
+function setControllerForTierOnly() {
+	setControllerForTier(false);
+}
+goog.exportSymbol('setControllerForTierOnly', setControllerForTierOnly);
+
+function setControllerForTiersInAisle() {
+	setControllerForTier(true);
+}
+goog.exportSymbol('setControllerForTiersInAisle', setControllerForTiersInAisle);
 
 function doLaunchTierSlotList() {
 	// Not great. Want to use window launcher to open this window,
 	// and to have the benefit of getDomNodeForNextWindow, dragLimit.
 	// But requires codeshelf.windowLauncher introduces a cycle
 	aTier = tiercontextmenuscope['tier'];
-	var tierSlotListView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(), aTier);
+	var tierSlotListView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(),codeshelf.sessionGlobals.getFacility(), aTier);
 	// var tierSlotListWindow = codeshelf.window(tierSlotListView, getDomNodeForNextWindow(), getWindowDragLimit());
 	var theRectLimit = new goog.math.Rect(0,0,10000,10000);
 	var tierSlotListWindow = codeshelf.window(tierSlotListView, null, theRectLimit);
@@ -56,20 +102,22 @@ goog.exportSymbol('doLaunchTierSlotList', doLaunchTierSlotList);
  * @param facility The facility to check.
  * @return {Object} The aisles list view.
  */
-codeshelf.tierlistview = function(websession, facility) {
+codeshelf.tierlistview = function(websession, facility, aisle) {
 
 	var websession_ = websession;
 	var facility_ = facility;
+	// If aisle is null, then all tiers for all aisle in this facility. If aisle passed in, then only tiers in this aisle.
+	var aisle_ = aisle;
 
 	var contextMenu_;
 
 
 	function websocketCmdCallbackFacility() {
 		var callback = {
-			exec: function(command) {
+			exec: function (command) {
 				/* appears to never be called
-				var theLogger = goog.debug.Logger.getLogger('aislesListView');
-				theLogger.info("callback exec called"); */
+				 var theLogger = goog.debug.Logger.getLogger('aislesListView');
+				 theLogger.info("callback exec called"); */
 			}
 		};
 
@@ -79,27 +127,37 @@ codeshelf.tierlistview = function(websession, facility) {
 	var self = {
 
 		// following psuedo-inheritance
-		'shouldAddThisColumn': function(inProperty){
-			if (inProperty['id'] ===  'persistentId')
+		'shouldAddThisColumn': function (inProperty) {
+			if (inProperty['id'] === 'persistentId')
 				return false;
-			else if (inProperty['id'] ===  'ledChannel')
+			else if (inProperty['id'] === 'domainId')
+				return false;
+			else if (inProperty['id'] === 'ledChannel')
+				return false;
+			else if (inProperty['id'] === 'pickFaceEndPosX')
+				return false;
+			else if (inProperty['id'] === 'pickFaceEndPosY')
+				return false;
+			else if (inProperty['id'] === 'anchorPosX')
+				return false;
+			else if (inProperty['id'] === 'anchorPosY')
 				return false;
 			else
 				return true;
 		},
 
-		getViewName: function() {
+		getViewName: function () {
 			return 'Tiers List';
 		},
 
-		setupContextMenu: function() {
+		setupContextMenu: function () {
 			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			contextMenu_.bind('mouseleave', function(event) {
+			contextMenu_.bind('mouseleave', function (event) {
 				$(this).fadeOut(5)
 			});
 		},
 
-		doContextMenu: function(event, item, column) {
+		doContextMenu: function (event, item, column) {
 			if (event && event.stopPropagation)
 				event.stopPropagation();
 
@@ -110,7 +168,10 @@ codeshelf.tierlistview = function(websession, facility) {
 			var line;
 			if (view.getItemLevel(item) === 0) {
 				tiercontextmenuscope['tier'] = item;
-				line = $('<li><a href="javascript:doSomethingWithTier()">Just a tier test</a></li>').appendTo(contextMenu_).data("option", "tier_update");
+				// This needs to be conditional. Does this session have permission to set controller?
+				line = $('<li><a href="javascript:setControllerForTierOnly()">Set controller this tier only</a></li>').appendTo(contextMenu_).data("option", "tier_cntlr");
+				line = $('<li><a href="javascript:setControllerForTiersInAisle()">Set controller for tiers this aisle</a></li>').appendTo(contextMenu_).data("option", "tier_cntlr");
+
 				line = $('<li><a href="javascript:doLaunchTierSlotList()">Slots for this tier</a></li>').appendTo(contextMenu_).data("option", "slots_list");
 			}
 
@@ -121,12 +182,29 @@ codeshelf.tierlistview = function(websession, facility) {
 		}
 
 	};
-	// tier parent goes bay->aisle>facility
-	var tierFilter = 'parent.parent.parent.persistentId = :theId';
 
-	var tierFilterParams = [
-		{ 'name': 'theId', 'value': facility_['persistentId']}
-	];
+	// If aisle is null, then all tiers for all aisle in this facility. If aisle passed in, then only tiers in this aisle.
+
+	// tier parent goes bay->aisle>facility
+	var tierFilter;
+	var tierFilterParams;
+
+	if (null === aisle_) {
+		// tier parent goes bay->aisle>facility
+		tierFilter = 'parent.parent.parent.persistentId = :theId';
+
+		tierFilterParams = [
+			{ 'name': 'theId', 'value': facility_['persistentId']}
+		];
+	}
+	else {
+		tierFilter = 'parent.parent.persistentId = :theId';
+
+		tierFilterParams = [
+			{ 'name': 'theId', 'value': aisle_['persistentId']}
+		];
+	}
+
 
 	var hierarchyMap = [];
 	hierarchyMap[0] = { className: domainobjects['Tier']['className'], linkProperty: 'parent', filter : tierFilter, filterParams : tierFilterParams, properties: domainobjects['Tier']['properties'] };

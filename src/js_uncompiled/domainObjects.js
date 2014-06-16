@@ -39,6 +39,16 @@ domainobjects = {
 				'id':    'anchorPosY',
 				'title': 'Anchor Y',
 				'width': 40
+			},
+			'pickFaceEndPosX': {
+				'id':    'pickFaceEndPosX',
+				'title': 'Pick End X',
+				'width': 40
+			},
+			pickFaceEndPosY: {
+				'id':    'pickFaceEndPosY',
+				'title': 'Pick End Y',
+				'width': 40
 			}
 		}
 	},
@@ -50,6 +60,46 @@ domainobjects = {
 				'id':    'domainId',
 				'title': 'ID',
 				'width': 25
+			},
+			'persistentId': {
+				'id': 'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			},
+			'baySortName': {
+				'id':    'baySortName',
+				'title': 'Bay Sort',
+				'width': 25
+			},
+			'ledChannel': {
+				'id':    'ledChannel',
+				'title': 'Channel',
+				'width': 8
+			},
+			'ledControllerId': {
+				'id':    'ledControllerId',
+				'title': 'Controller',
+				'width': 25
+			},
+			'anchorPosX': {
+				'id':    'anchorPosX',
+				'title': 'Anchor X',
+				'width': 40
+			},
+			'anchorPosY': {
+				'id':    'anchorPosY',
+				'title': 'Anchor Y',
+				'width': 40
+			},
+			'pickFaceEndPosX': {
+				'id':    'pickFaceEndPosX',
+				'title': 'Pick End X',
+				'width': 40
+			},
+			pickFaceEndPosY: {
+				'id':    'pickFaceEndPosY',
+				'title': 'Pick End Y',
+				'width': 40
 			}
 		}
 	},
@@ -416,6 +466,11 @@ domainobjects = {
 				'title': 'Tier Sort',
 				'width': 25
 			},
+			'baySortName': {
+				'id':    'baySortName',
+				'title': 'Bay Sort',
+				'width': 25
+			},
 			'persistentId': {
 				'id':    'persistentId',
 				'title': 'Persistent ID',
@@ -440,6 +495,26 @@ domainobjects = {
 				'id':    'lastLedNumAlongPath',
 				'title': 'Last LED',
 				'width': 10
+			},
+			'anchorPosX': {
+				'id':    'anchorPosX',
+				'title': 'Anchor X',
+				'width': 40
+			},
+			'anchorPosY': {
+				'id':    'anchorPosY',
+				'title': 'Anchor Y',
+				'width': 40
+			},
+			'pickFaceEndPosX': {
+				'id':    'pickFaceEndPosX',
+				'title': 'Pick End X',
+				'width': 40
+			},
+			pickFaceEndPosY: {
+				'id':    'pickFaceEndPosY',
+				'title': 'Pick End Y',
+				'width': 40
 			}
 		}
 	},

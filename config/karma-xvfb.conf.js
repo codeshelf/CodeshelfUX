@@ -12,7 +12,7 @@ module.exports = function (config) {
 			{pattern: 'lib/GoogleClosureLibrary/closure/goog/deps.js', included: false, served: false},
 			'lib/AngularJS/angular.js',
 			'lib/AngularJS/angular-*.js',
-			'lib/UIBootstrap/ui-bootstrap-tpls-0.10.0.js',
+			'lib/UIBootstrap/ui-bootstrap-tpls-0.7.0.js',
 
 			{pattern: 'src/js_uncompiled/codeshelf.controllers.js'},
 
@@ -60,9 +60,9 @@ module.exports = function (config) {
 
 	   //Uncomment to test in other browsers
 	   browsers: [
-		   'PhantomJS'
+		   //'PhantomJS'
 		   //'Chrome'
-		   //'config/xvfb_chrome.sh'
+		   'config/xvfb_chrome.sh'
                    //,'Firefox'
 		   //,'Safari'
 	   ],
@@ -70,7 +70,6 @@ module.exports = function (config) {
 	   plugins: [
 		   'karma-closure',
 		   'karma-junit-reporter',
-                   'karma-teamcity-reporter',
 		   'karma-script-launcher',
 		   'karma-jasmine',
 		   //These plugins must be included for each of the browser types that get run
