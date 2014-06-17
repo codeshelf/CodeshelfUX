@@ -18,7 +18,7 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-tiercontextmenuscope = {
+var tiercontextmenuscope = {
 	'tier': null
 };
 
@@ -28,47 +28,27 @@ function clearTierContextMenuScope(){
 
 function setControllerForTier(inAllTiers) {
 	var theLogger = goog.debug.Logger.getLogger('Tier view');
-	theTier = tiercontextmenuscope['tier'];
+	var theTier = tiercontextmenuscope['tier'];
 	if (theTier === null){
 		theLogger.info("null tier in context menu choice"); //why? saw this.
 	}
 	var tierName = theTier['domainId'];
 	theLogger.info("setting controller for selected Tier: " + tierName);
-	// What we really want here is dialog with pick list of controllers, picklist for channel, and picklist for choices.
-	// Choices are this tier only, all matching tiers in this aisle, or all selected tiers (need improved list selection first).
 
-	tierAisleValue = "";
+	var tierAisleValue = "";
 	if (inAllTiers === true){
-		tierAisleValue = "aisle"
+		tierAisleValue = "aisle";
 	}
 
-	// For now, use what we have, "selection manager" selection of controller, and assume channel 1.
-	var cntrlString = "no controller selected";
-	var aController = codeshelf.objectUpdater.getFirstObjectInSelectionList();
-	// this this really a controller? Not a great test.
-	if (aController && aController.hasOwnProperty('deviceGuid'))
-		cntrlString = aController['domainId'];
-	else
-		aController = null; // setting to null if it was a reference to something else
+	var data = {
+		"tier" : theTier,
+		"tierAisleValue" : tierAisleValue
+	};
+	var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-tier.html", "TierController as controller", data);
+	modalInstance.result.then(function(){
+		clearTierContextMenuScope();
 
-	if (aController) { // we think aisle must be good to get here from the popup menu item
-		// we want java-side names for class and field name here.
-		// This one may not work, as location as a pointer to pathSegment, and not a key value
-		theLogger.info("set tier " + tierName + " to controller " + cntrlString);
-		cntlrPersistId = aController['persistentId'];
-
-		var methodArgs = [
-			{ 'name': 'inControllerPersistentIDStr', 'value': cntlrPersistId, 'classType': 'java.lang.String'},
-			{ 'name': 'inChannelStr', 'value': "0", 'classType': 'java.lang.String'},
-			{ 'name': 'inTiersStr', 'value': tierAisleValue, 'classType':  'java.lang.String'}
-		];
-
-		codeshelf.objectUpdater.callMethod(theTier, 'Tier', 'setControllerChannel', methodArgs);
-	}
-
-
-
-	clearTierContextMenuScope();
+	});
 }
 
 function setControllerForTierOnly() {
@@ -216,3 +196,116 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 
 	return view;
 };
+
+/**
+ * @param {!angular.$http} $http The Angular http service.
+ * @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.LedControllerService = function($q, websession) {
+  this.websession_ = websession;
+  this.q_ = $q;
+  this.facility_ = codeshelf.sessionGlobals.getFacility();
+};
+
+codeshelfApp.LedControllerService.prototype.getLedControllers = function() {
+	var deferred = this.q_.defer();
+	// ledController parent is codeshelf_network, whose parent is the facility
+	// Luckily, ebeans can handle this form also.
+	var ledControllerFilter = 'parent.parent.persistentId = :theId';
+
+	var ledControllerFilterParams = [
+		{ 'name': 'theId', 'value': this.facility_["persistentId"] }
+	];
+
+	var data = {
+		'className':     domainobjects['LedController']['className'],
+		'propertyNames': Object.keys(domainobjects['LedController']['properties']),
+		'filterClause':  ledControllerFilter,
+		'filterParams':  ledControllerFilterParams
+	};
+
+	var setListViewFilterCmd = this.websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
+	this.websession_.sendCommand(
+		setListViewFilterCmd,
+		this.filterResponseCallback_(deferred),
+		true);
+	return deferred.promise;
+};
+
+codeshelfApp.LedControllerService.prototype.filterResponseCallback_ = function(deferred){
+	var callback = {
+		exec: function(command) {
+			if (!command['data'].hasOwnProperty('results')) {
+				deferred.reject('response has no result');
+			} else if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+				deferred.resolve(command['data']['results']);
+			}
+		}
+	};
+	return callback;
+};
+angular.module('codeshelfApp').service('ledcontrollers', ['$q', 'websession', codeshelfApp.LedControllerService]);
+
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.TierController = function($scope, $modalInstance, data, ledcontrollers){
+	this.scope_ = $scope;
+	this.modalInstance_ = $modalInstance;
+	$scope['tierAisleValue'] = data['tierAisleValue'];
+	$scope['tier'] = data['tier'];
+
+	var channelRange = [];
+	for (var i = 1; i <= 8; i++) {
+		channelRange.push(i);
+	}
+
+	ledcontrollers.getLedControllers().then(function(ledControllers) {
+		$scope['ledControllers'] = ledControllers;
+		$scope['channelRange'] = channelRange;
+	});
+};
+
+/**
+ * @export
+ */
+codeshelfApp.TierController.prototype.ok = function(){
+
+	// we want java-side names for class and field name here.
+	// This one may not work, as location as a pointer to pathSegment, and not a key value
+	var tier = this.scope_['tier'];
+	var tierName = tier['domainId'];
+	var tierAisleValue = this.scope_["tierAisleValue"];
+	var controllerDomainId = tier['ledControllerId'];
+
+	var controllers = this.scope_['ledControllers'];
+	var controller = controllers.filter(function(c){
+			return c['domainId'] == controllerDomainId;
+		}).shift();
+	var cntlrPersistId = controller['persistentId'];
+
+	var channelStr = tier['ledChannel'];
+	var methodArgs = [
+		{ 'name': 'inControllerPersistentIDStr', 'value': cntlrPersistId, 'classType': 'java.lang.String'},
+		{ 'name': 'inChannelStr', 'value': channelStr, 'classType': 'java.lang.String'},
+		{ 'name': 'inTiersStr', 'value': tierAisleValue, 'classType':  'java.lang.String'}
+	];
+
+	codeshelf.objectUpdater.callMethod(tier, 'Tier', 'setControllerChannel', methodArgs);
+	this.modalInstance_.close();
+};
+
+/**
+ * @export
+ */
+codeshelfApp.TierController.prototype.cancel = function(){
+	this.modalInstance_['dismiss']();
+};
+angular.module('codeshelfApp').controller('TierController', ['$scope', '$modalInstance', 'data', 'ledcontrollers', codeshelfApp.TierController]);
