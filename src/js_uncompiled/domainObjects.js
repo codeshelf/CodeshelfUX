@@ -449,6 +449,11 @@ domainobjects = {
 				'id':    'lastLedNumAlongPath',
 				'title': 'Last LED',
 				'width': 10
+			},
+			'primaryAliasId': {
+				'id':    'primaryAliasId',
+				'title': 'Alias',
+				'width': 10
 			}
 		}
 	},
