@@ -7,6 +7,8 @@
 file aislesListView.js author jon ranstrom
  */
 goog.provide('codeshelf.aisleslistview');
+goog.require('codeshelf.simpleDlogService');
+goog.require('codeshelf.ledcontrollers.service');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
@@ -17,13 +19,37 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-aislecontextmenuscope = {
+
+
+var aislecontextmenuscope = {
 	'aisle': null
 };
 
 function clearAisleContextMenuScope(){
 	aislecontextmenuscope['aisle'] = null;
 }
+
+
+function setControllerForAisle() {
+	var theLogger = goog.debug.Logger.getLogger('aisles view');
+	var theAisle = aislecontextmenuscope['aisle'];
+	if (theAisle) {
+		var aisleString = theAisle['domainId'];
+
+	}
+
+	var data = {
+		"aisle" : theAisle
+	};
+	var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-aisle-controller.html", "AisleLedController as controller", data);
+	modalInstance.result.then(function(){
+		clearAisleContextMenuScope();
+
+	});
+}
+goog.exportSymbol('setControllerForAisle', setControllerForAisle); // Silly that this is needed even in same file.
+
+
 function associatePathSegment() {
 	var theLogger = goog.debug.Logger.getLogger('aisles view');
 	var theAisle = aislecontextmenuscope['aisle'];
@@ -145,6 +171,7 @@ codeshelf.aisleslistview = function(websession, facility) {
 			var line;
 			if (view.getItemLevel(item) === 0) {
 				aislecontextmenuscope['aisle'] = item;
+				line = $('<li><a href="javascript:setControllerForAisle()">Set controller this aisle</a></li>').appendTo(contextMenu_).data("option", "tier_cntlr");
 				line = $('<li><a href="javascript:associatePathSegment()">Associate Path Segment</li>').appendTo(contextMenu_).data("option", "associate_");
 				line = $('<li><a href="javascript:launchTiersForAisle()">Tiers in this Aisle</li>').appendTo(contextMenu_).data("option", "launchtiers");
 			}
@@ -172,3 +199,65 @@ codeshelf.aisleslistview = function(websession, facility) {
 
 	return view;
 };
+
+
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.AisleLedController = function($scope, $modalInstance, data, ledcontrollers){
+	this.scope_ = $scope;
+	this.modalInstance_ = $modalInstance;
+	$scope['aisle'] = data['aisle'];
+
+	var channelRange = [];
+	for (var i = 1; i <= 8; i++) {
+		channelRange.push(i);
+	}
+
+	ledcontrollers.getLedControllers().then(function(ledControllers) {
+		$scope['ledControllers'] = ledControllers;
+		$scope['channelRange'] = channelRange;
+	});
+};
+
+/**
+ * @export
+ */
+codeshelfApp.AisleLedController.prototype.ok = function(){
+
+	// we want java-side names for class and field name here.
+	// This one may not work, as location as a pointer to pathSegment, and not a key value
+	var aisle = this.scope_['aisle'];
+	var aisleName = aisle['domainId'];
+	var controllerDomainId = aisle['ledControllerId'];
+
+	var controllers = this.scope_['ledControllers'];
+	var controller = controllers.filter(function(c){
+			return c['domainId'] == controllerDomainId;
+		}).shift();
+	if (controller) {
+		var cntlrPersistId = controller['persistentId'];
+
+		var channelStr = aisle['ledChannel'];
+		var methodArgs = [
+			{ 'name': 'inControllerPersistentIDStr', 'value': cntlrPersistId, 'classType': 'java.lang.String'},
+			{ 'name': 'inChannelStr', 'value': channelStr, 'classType': 'java.lang.String'}
+		];
+
+		codeshelf.objectUpdater.callMethod(aisle, 'Aisle', 'setControllerChannel', methodArgs);
+		this.modalInstance_.close();
+	}
+};
+
+/**
+ * @export
+ */
+codeshelfApp.AisleLedController.prototype.cancel = function(){
+	this.modalInstance_['dismiss']();
+};
+angular.module('codeshelfApp').controller('AisleLedController', ['$scope', '$modalInstance', 'data', 'ledcontrollers', codeshelfApp.AisleLedController]);

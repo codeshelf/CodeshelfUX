@@ -20,6 +20,11 @@ domainobjects = {
 				'title': 'Path Segment',
 				'width': 25
 			},
+			'ledChannel': {
+				'id':    'ledChannel',
+				'title': 'Channel',
+				'width': 8
+			},
 			'ledControllerId': {
 				'id':    'ledControllerId',
 				'title': 'Controller',

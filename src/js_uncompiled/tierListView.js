@@ -7,6 +7,8 @@
 file tierListView.js author jon ranstrom
  */
 goog.provide('codeshelf.tierlistview');
+goog.require('codeshelf.simpleDlogService');
+goog.require('codeshelf.ledcontrollers.service');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.tierslotlistview');
 goog.require('codeshelf.objectUpdater');
@@ -197,56 +199,6 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 	return view;
 };
 
-/**
- * @param {!angular.$http} $http The Angular http service.
- * @constructor
- *  @ngInject
- *  @export
- */
-codeshelfApp.LedControllerService = function($q, websession) {
-  this.websession_ = websession;
-  this.q_ = $q;
-  this.facility_ = codeshelf.sessionGlobals.getFacility();
-};
-
-codeshelfApp.LedControllerService.prototype.getLedControllers = function() {
-	var deferred = this.q_.defer();
-	// ledController parent is codeshelf_network, whose parent is the facility
-	// Luckily, ebeans can handle this form also.
-	var ledControllerFilter = 'parent.parent.persistentId = :theId';
-
-	var ledControllerFilterParams = [
-		{ 'name': 'theId', 'value': this.facility_["persistentId"] }
-	];
-
-	var data = {
-		'className':     domainobjects['LedController']['className'],
-		'propertyNames': Object.keys(domainobjects['LedController']['properties']),
-		'filterClause':  ledControllerFilter,
-		'filterParams':  ledControllerFilterParams
-	};
-
-	var setListViewFilterCmd = this.websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-	this.websession_.sendCommand(
-		setListViewFilterCmd,
-		this.filterResponseCallback_(deferred),
-		true);
-	return deferred.promise;
-};
-
-codeshelfApp.LedControllerService.prototype.filterResponseCallback_ = function(deferred){
-	var callback = {
-		exec: function(command) {
-			if (!command['data'].hasOwnProperty('results')) {
-				deferred.reject('response has no result');
-			} else if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-				deferred.resolve(command['data']['results']);
-			}
-		}
-	};
-	return callback;
-};
-angular.module('codeshelfApp').service('ledcontrollers', ['$q', 'websession', codeshelfApp.LedControllerService]);
 
 
 /**
@@ -289,17 +241,22 @@ codeshelfApp.TierController.prototype.ok = function(){
 	var controller = controllers.filter(function(c){
 			return c['domainId'] == controllerDomainId;
 		}).shift();
-	var cntlrPersistId = controller['persistentId'];
 
-	var channelStr = tier['ledChannel'];
-	var methodArgs = [
-		{ 'name': 'inControllerPersistentIDStr', 'value': cntlrPersistId, 'classType': 'java.lang.String'},
-		{ 'name': 'inChannelStr', 'value': channelStr, 'classType': 'java.lang.String'},
-		{ 'name': 'inTiersStr', 'value': tierAisleValue, 'classType':  'java.lang.String'}
-	];
+	if (controller) {
+		var cntlrPersistId = controller['persistentId'];
 
-	codeshelf.objectUpdater.callMethod(tier, 'Tier', 'setControllerChannel', methodArgs);
-	this.modalInstance_.close();
+		var channelStr = tier['ledChannel'];
+		var methodArgs = [
+			{ 'name': 'inControllerPersistentIDStr', 'value': cntlrPersistId, 'classType': 'java.lang.String'},
+			{ 'name': 'inChannelStr', 'value': channelStr, 'classType': 'java.lang.String'},
+			{ 'name': 'inTiersStr', 'value': tierAisleValue, 'classType':  'java.lang.String'}
+		];
+
+		codeshelf.objectUpdater.callMethod(tier, 'Tier', 'setControllerChannel', methodArgs);
+		this.modalInstance_.close();
+	}
+
+
 };
 
 /**

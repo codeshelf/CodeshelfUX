@@ -35,17 +35,20 @@
 	<script type="text/javascript" src="../../lib/angular-dialog-service/dialogs.js"></script>
 
 	<script type="text/javascript" src="../js_uncompiled/deps.js"></script>
-
+	<script>
+		//Simplest way to ensure that the angular module is defined early as possible
+		var codeshelfApp = angular.module('codeshelfApp', [
+		  'ui.bootstrap',
+  		  'ngRoute'
+		]);
+	</script>
 	<link rel="icon" href="./favicon.gif"/>
 </head>
-<body id="body" class="login_body" ng-controller="WorkAreaCtrl">
-
+<body id="body" class="login_body">
 	<script type="text/javascript">
 		goog.require('codeshelf.application');
 		goog.require('codeshelf.controllers');
 	</script>
-
-	<!--script type="text/javascript" src="../js_uncompiled/codeshelf.controllers.js"></script-->
 	<div ng-view></div>
 	<script>
 		(function (i, s, o, g, r, a, m) {

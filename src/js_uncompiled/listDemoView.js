@@ -9,7 +9,6 @@ goog.require('slickgrid.formatters');
 goog.require('slickgrid.grid');
 goog.require('slickgrid.pager');
 goog.require('slickgrid.rowselection');
-goog.require('codeshelfApp');
 goog.require('codeshelf.simpleDlogService');
 
 jQuery('.grid-header .ui-icon').addClass('ui-state-default ui-corner-all')['mouseover'](

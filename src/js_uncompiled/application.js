@@ -10,12 +10,7 @@ goog.require('codeshelf.websession');
 goog.require('domainobjects');
 goog.require('goog.dom');
 
-// TODO Insert angular js into the app
-// 'use strict';
-//
-//var codeshelfApp = angular.module('codeshelfApp', [
-//    'ui.bootstrap'
-//]);
+'use strict';
 
 var codeshelf = codeshelf || {}; // Identifies this file as the codeshelf base.
 
@@ -103,3 +98,7 @@ var gFocusedWindow = 0;
 // Launch the application.
 var application = codeshelf.application();
 application.startApplication();
+
+angular.module("codeshelfApp").factory('websession', function () {
+		return application.getWebsession();
+	});

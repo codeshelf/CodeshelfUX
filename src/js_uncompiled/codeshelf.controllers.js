@@ -6,34 +6,9 @@
 
 'use strict';
 goog.provide('codeshelf.controllers');
-goog.provide('codeshelfApp');
 goog.require('codeshelf.websession');
-// goog.require('workAreaModalCtrlFile');
 
-
-var codeshelfApp = angular.module('codeshelfApp', [
-		'ui.bootstrap', 'ngRoute'
-	]).factory('websession', function () {
-		return application.getWebsession();
-	})
-/*.config(['$routeProvider',
- function($routeProvider) {
- $routeProvider.
- when('/login', {
- templateUrl: 'partials/login.html',
- controller: 'LoginCtrl'
- }).
- when('/main', {
- templateUrl: 'partials/main.html',
- controller: 'MainlCtrl'
- }).
- otherwise({
- redirectTo: '/login'
- });
- }])
- */;
-
-var WorkAreaCtrl = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', '$log', function ($scope, $modal, $log) {
+var WorkAreaCtrl = angular.module('codeshelfApp').controller('WorkAreaCtrl', ['$scope', '$modal', '$log', function ($scope, $modal, $log) {
 
 	$scope.open = function (facilityContext, aisleShape) {
 		//TODO facility might be able to come from a parent controller
@@ -63,7 +38,7 @@ var WorkAreaCtrl = codeshelfApp.controller('WorkAreaCtrl', ['$scope', '$modal', 
 }]);
 
 
-var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', '$modalInstance', '$log', 'websession', 'facilityContext', 'aisleShape', function ($scope, $modalInstance, $log, websession, facilityContext, aisleShape) {
+var WorkAreaModalCtrl = angular.module('codeshelfApp').controller('WorkAreaModalCtrl', ['$scope', '$modalInstance', '$log', 'websession', 'facilityContext', 'aisleShape', function ($scope, $modalInstance, $log, websession, facilityContext, aisleShape) {
 
 	var consts = {};
 	Object.defineProperty(consts, 'feetInMeters', {'value': 0.3048,
@@ -167,29 +142,3 @@ var WorkAreaModalCtrl = codeshelfApp.controller('WorkAreaModalCtrl', ['$scope', 
 		$scope.websession.sendCommand(createAisleCmd, callback, true);
 	};
 }]);
-
-
-
-codeshelfApp.config(['$routeProvider',
-	function($routeProvider) {
-		$routeProvider.
-/*
-			when('/WorkAreaCtrl', {
-				'templateUrl': 'partials/aisle-editor.html',
-				'controller': 'WorkAreaModalCtrl'
-			}).
-*/
-			when('/MissingRouter', {
-				templateUrl: 'partials/missing-router.html',
-				controller: 'MissingRouterCtrl'
-			}).
-			otherwise({
-				redirectTo: '/MissingRouter'
-			});
-	}]);
-
-codeshelfApp.controller('MissingRouterCtrl', ['$scope', '$routeParams', 'simpleDialogService',
-	function($scope, $routeParams, simpleDialogService) {
-
-		// was a demonstration of use of simpleDialogService
-	}]);
