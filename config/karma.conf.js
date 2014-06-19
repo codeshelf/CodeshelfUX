@@ -13,9 +13,7 @@ module.exports = function (config) {
 			'lib/AngularJS/angular.js',
 			'lib/AngularJS/angular-*.js',
 			'lib/UIBootstrap/ui-bootstrap-tpls-0.10.0.js',
-
-			{pattern: 'src/js_uncompiled/codeshelf.controllers.js'},
-
+			'src/js_uncompiled/codeshelfAngularApp.js',
 			//watch files but do not include them; files using closure require mechanism will get
 			// included during the preprocessor step
 			{pattern: 'lib/GoogleClosureTemplates/*.js', included: false},

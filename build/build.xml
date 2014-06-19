@@ -272,6 +272,9 @@
 	<target name="build.webapp" depends="clean, generate.templates, generate.css, generate.deps, compile">
 
 		<copy todir="${target.web.dir}/js">
+		    <fileset dir="${uncompiled.js.dir}">
+				<include name="codeshelfAngularApp.js" />
+			</fileset>
 			<fileset dir="${target.compiled.js.dir}">
 				<include name="codeshelf.js" />
 				<include name="codeshelf.map" />
