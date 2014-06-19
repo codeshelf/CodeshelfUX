@@ -390,6 +390,11 @@ domainobjects = {
 				'id':    'workSequence',
 				'title': 'Work Seq',
 				'width': 15
+			},
+			'orderLocationAliasIds': {
+				'id':    'orderLocationAliasIds',
+				'title': 'Location',
+				'width': 10
 			}
 		}
 	},
