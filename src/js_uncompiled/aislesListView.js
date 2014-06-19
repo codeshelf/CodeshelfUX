@@ -9,6 +9,7 @@ file aislesListView.js author jon ranstrom
 goog.provide('codeshelf.aisleslistview');
 goog.require('codeshelf.simpleDlogService');
 goog.require('codeshelf.ledcontrollers.service');
+goog.require('codeshelf.pathsegment.service');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
@@ -29,59 +30,37 @@ function clearAisleContextMenuScope(){
 	aislecontextmenuscope['aisle'] = null;
 }
 
-
+/**
+ * Set LED Controller for an aisle
+ */
 function setControllerForAisle() {
-	var theLogger = goog.debug.Logger.getLogger('aisles view');
 	var theAisle = aislecontextmenuscope['aisle'];
-	if (theAisle) {
-		var aisleString = theAisle['domainId'];
-
-	}
-
 	var data = {
 		"aisle" : theAisle
 	};
 	var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-aisle-controller.html", "AisleLedController as controller", data);
 	modalInstance.result.then(function(){
 		clearAisleContextMenuScope();
-
 	});
 }
 goog.exportSymbol('setControllerForAisle', setControllerForAisle); // Silly that this is needed even in same file.
 
 
 function associatePathSegment() {
-	var theLogger = goog.debug.Logger.getLogger('aisles view');
 	var theAisle = aislecontextmenuscope['aisle'];
 	if (theAisle) {
-		var aisleString = theAisle['domainId'];
-		var segString = "no segment selected";
-		var aPathSegment = codeshelf.objectUpdater.getFirstObjectInSelectionList();
-		// this this really a pathSegment? Not a great test.
-		if (aPathSegment && aPathSegment.hasOwnProperty('segmentOrder'))
-			segString = aPathSegment['persistentId'];
-		else
-			aPathSegment = null; // setting to null if it was a reference to something else
-
-		if (aPathSegment) { // we think aisle must be good to get here from the popup menu item
-			// we want java-side names for class and field name here.
-			// This one may not work, as location as a pointer to pathSegment, and not a key value
-			theLogger.info("associate aisle " + aisleString + " to segment " + segString);
-
-			var methodArgs = [
-				{ 'name': 'inPathSegPersistentID', 'value': segString, 'classType': 'java.lang.String'}
-			];
-
-			codeshelf.objectUpdater.callMethod(theAisle, 'Aisle', 'associatePathSegment', methodArgs);
-
-		}
+		var data = {
+			"aisle" : theAisle
+		};
+		var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-aisle-pathsegment.html", "AislePathSegmentsController as controller", data);
+		modalInstance.result.then(function(){
+			clearAisleContextMenuScope();
+		});
 	}
 	else{
 		theLogger.error("null aisle. How? ");
 
 	}
-
-	clearAisleContextMenuScope();
 }
 goog.exportSymbol('associatePathSegment', associatePathSegment); // Silly that this is needed even in same file.
 
@@ -199,6 +178,58 @@ codeshelf.aisleslistview = function(websession, facility) {
 
 	return view;
 };
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.AislePathSegmentsController = function($scope, $modalInstance, data, pathsegmentservice){
+	this.scope_ = $scope;
+	this.modalInstance_ = $modalInstance;
+	$scope['aisle'] = data['aisle'];
+
+	pathsegmentservice.getPathSegments().then(function(pathSegments) {
+		$scope['pathSegments'] = pathSegments;
+	});
+};
+
+/**
+ * @export
+ */
+codeshelfApp.AislePathSegmentsController.prototype.ok = function(){
+
+	// we want java-side names for class and field name here.
+	// This one may not work, as location as a pointer to pathSegment, and not a key value
+	var aisle = this.scope_['aisle'];
+	var aisleName = aisle['domainId'];
+	var domainId = aisle['pathSegmentId'];
+
+	var pathSegments = this.scope_['pathSegments'];
+	var pathSegment = pathSegments.filter(function(c){
+			return c['domainId'] == domainId;
+		}).shift();
+	if (pathSegment) {
+		var pathSegmentPersistId = pathSegment['persistentId'];
+
+		var methodArgs = [
+			{ 'name': 'inPathSegmentPersistentIDStr', 'value': pathSegmentPersistId, 'classType': 'java.lang.String'}
+		];
+
+		codeshelf.objectUpdater.callMethod(aisle, 'Aisle', 'associatePathSegment', methodArgs);
+		this.modalInstance_.close();
+	}
+};
+
+/**
+ * @export
+ */
+codeshelfApp.AislePathSegmentsController.prototype.cancel = function(){
+	this.modalInstance_['dismiss']();
+};
+angular.module('codeshelfApp').controller('AislePathSegmentsController', ['$scope', '$modalInstance', 'data', 'pathsegmentservice', codeshelfApp.AislePathSegmentsController]);
 
 
 
