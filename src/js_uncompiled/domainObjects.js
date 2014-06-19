@@ -54,6 +54,11 @@ domainobjects = {
 				'id':    'pickFaceEndPosY',
 				'title': 'Pick End Y',
 				'width': 40
+			},
+			fullDomainId: {
+				'id':    'fullDomainId',
+				'title': 'Nominal ID',
+				'width': 10
 			}
 		}
 	},
@@ -105,6 +110,11 @@ domainobjects = {
 				'id':    'pickFaceEndPosY',
 				'title': 'Pick End Y',
 				'width': 40
+			},
+			fullDomainId: {
+				'id':    'fullDomainId',
+				'title': 'Nominal ID',
+				'width': 10
 			}
 		}
 	},
@@ -459,6 +469,11 @@ domainobjects = {
 				'id':    'primaryAliasId',
 				'title': 'Alias',
 				'width': 10
+			},
+			fullDomainId: {
+				'id':    'fullDomainId',
+				'title': 'Nominal ID',
+				'width': 10
 			}
 		}
 	},
@@ -529,6 +544,11 @@ domainobjects = {
 			'slotAliasRange': {
 				'id':    'slotAliasRange',
 				'title': 'Slot Aliases',
+				'width': 10
+			},
+			fullDomainId: {
+				'id':    'fullDomainId',
+				'title': 'Nominal ID',
 				'width': 10
 			}
 		}

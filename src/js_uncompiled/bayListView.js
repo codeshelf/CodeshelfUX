@@ -76,6 +76,8 @@ codeshelf.baylistview = function(websession, facility) {
 				return false;
 			else if (inProperty['id'] ===  'anchorPosY')
 				return false;
+			else if (inProperty['id'] ===  'fullDomainId')
+				return false;
 			else
 				return true;
 		},

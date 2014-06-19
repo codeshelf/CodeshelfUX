@@ -67,6 +67,8 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 		'shouldAddThisColumn': function(inProperty){
 			if (inProperty['id'] ===  'persistentId')
 				return false;
+			else if (inProperty['id'] ===  'fullDomainId')
+				return false;
 			else
 				return true;
 		},
