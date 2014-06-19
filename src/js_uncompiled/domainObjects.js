@@ -525,6 +525,11 @@ domainobjects = {
 				'id':    'pickFaceEndPosY',
 				'title': 'Pick End Y',
 				'width': 40
+			},
+			'slotAliasRange': {
+				'id':    'slotAliasRange',
+				'title': 'Slot Aliases',
+				'width': 10
 			}
 		}
 	},
