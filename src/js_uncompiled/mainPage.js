@@ -10,6 +10,7 @@ goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.aisleslistview');
 goog.require('codeshelf.chelistview');
 goog.require('codeshelf.baylistview');
+goog.require('codeshelf.containeruselistview');
 goog.require('codeshelf.tierlistview');
 goog.require('codeshelf.tierslotlistview');
 goog.require('codeshelf.ledcontrollerslistview');
@@ -232,6 +233,17 @@ codeshelf.windowLauncher = (function() {
 				var tierListSlotView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), inTier);
 				var tierListSlotWindow = codeshelf.window(tierSlotListView, getDomNodeForNextWindow(), getWindowDragLimit());
 				tierListWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadContainerUseListView: function() {
+			try {
+				var containerUseListView = codeshelf.containeruselistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), null);
+				var containerUseWindow = codeshelf.window(containerUseListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				containerUseWindow.open();
 			}
 			catch (err) {
 				alert(err);
@@ -479,11 +491,16 @@ function launchTierSlotListView(inTier) {
 }
 goog.exportSymbol('launchTierSlotListView', launchTierSlotListView);
 
+function launchContainerUseListView() {
+	codeshelf.windowLauncher.loadContainerUseListView();
+}
+goog.exportSymbol('launchContainerUseListView', launchContainerUseListView);
+
 
 function launchTestRunner() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');
 	theLogger.info("Opening all windows available from navbar");
-	// But not the about dialog.  11 windows now.
+	// But not the about dialog.  12 windows now.
 	// But not the tier/slot window, which needs a tier reference to start.
 	launchListViewDemo();
 	launchPathsView();
@@ -497,5 +514,6 @@ function launchTestRunner() {
 	launchCheListView();
 	launchBayListView();
 	launchTierListView();
+	launchContainerUseListView();
 }
 goog.exportSymbol('launchTestRunner', launchTestRunner);

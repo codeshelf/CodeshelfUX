@@ -161,6 +161,37 @@ domainobjects = {
 	},
 
 
+	'ContainerUse': {
+		'className':  'ContainerUse',
+		'properties': {
+			'domainId':         {
+				'id':    'domainId',
+				'title': 'Domain ID',
+				'width': 30
+			},
+			'persistentId': {
+				'id': 'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			},
+			'cheName':     {
+				'id':    'cheName',
+				'title': 'CHE',
+				'width': 10
+			},
+			'orderName':     {
+				'id':    'orderName',
+				'title': 'Order',
+				'width': 10
+			},
+			'containerName': {
+				'id':    'containerName',
+				'title': 'Container',
+				'width': 10
+			}
+		}
+	},
+
 	'DropboxService': {
 		'className':  'DropboxService',
 		'properties': {
