@@ -220,6 +220,8 @@ codeshelf.ordersview = function(websession, facility) {
 				return false;
 			else if (inProperty['id'] ===  'statusEnum')
 				return false;
+			else if (inProperty['id'] ===  'active')
+				return false;
 			else
 				return true;
 		}

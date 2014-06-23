@@ -370,6 +370,11 @@ domainobjects = {
 				'id':    'workSequence',
 				'title': 'Work Seq',
 				'width': 15
+			},
+			'active': {
+				'id':    'active',
+				'title': 'Active',
+				'width': 8
 			}
 		}
 	},
@@ -386,6 +391,11 @@ domainobjects = {
 				'id':    'orderId',
 				'title': 'Order ID',
 				'width': 15
+			},
+			'description':  {
+				'id':    'description',
+				'title': 'Description',
+				'width': 50
 			},
 			'readableOrderDate':      {
 				'id':    'readableOrderDate',
