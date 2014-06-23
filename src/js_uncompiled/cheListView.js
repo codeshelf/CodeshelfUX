@@ -47,6 +47,25 @@ function changeCheDescription() {
 }
 goog.exportSymbol('changeCheDescription', changeCheDescription);
 
+function testOnlySetUpChe() {
+	var che = checontextmenuscope['che'];
+	if (che === null)
+		return;
+
+	cheDomainId = che['domainId'];
+	var theLogger = goog.debug.Logger.getLogger('CHE view');
+	theLogger.info("about do a fake setup cart for CHE: " + cheDomainId);
+
+	var methodArgs = [
+		{ 'name': 'inCheDomainId', 'value': cheDomainId, 'classType': 'java.lang.String'}
+	];
+
+	codeshelf.objectUpdater.callMethod(facility_, 'Facility', 'fakeSetUpChe', methodArgs);
+
+	clearCheContextMenuScope();
+}
+goog.exportSymbol('testOnlySetUpChe', testOnlySetUpChe);
+
 /**
  * The aisles for this facility.
  * @param websession The websession used for updates.
@@ -109,6 +128,7 @@ codeshelf.cheslistview = function(websession, facility) {
 			if (view.getItemLevel(item) === 0) {
 				checontextmenuscope['che'] = item;
 				line = $('<li><a href="javascript:changeCheDescription()">Change Che Description</a></li>').appendTo(contextMenu_).data("option", "change_description");
+				line = $('<li><a href="javascript:testOnlySetUpChe()">TESTING ONLY--Set up CHE</a></li>').appendTo(contextMenu_).data("option", "fake_setup");
 			}
 
 			contextMenu_

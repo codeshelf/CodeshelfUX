@@ -344,6 +344,11 @@ domainobjects = {
 				'id':    'uomMasterId',
 				'title': 'UOM',
 				'width': 5
+			},
+			'active': {
+				'id':    'active',
+				'title': 'Active',
+				'width': 8
 			}
 		}
 	},
@@ -435,6 +440,16 @@ domainobjects = {
 			'orderLocationAliasIds': {
 				'id':    'orderLocationAliasIds',
 				'title': 'Location',
+				'width': 10
+			},
+			'active': {
+				'id':    'active',
+				'title': 'Active',
+				'width': 8
+			},
+			'orderTypeEnum': {
+				'id':    'orderTypeEnum',
+				'title': 'Order Type',
 				'width': 10
 			}
 		}
