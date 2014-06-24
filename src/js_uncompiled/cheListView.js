@@ -47,6 +47,8 @@ function changeCheDescription() {
 }
 goog.exportSymbol('changeCheDescription', changeCheDescription);
 
+var websession_ = null;
+
 function testOnlySetUpChe() {
 	var che = checontextmenuscope['che'];
 	if (che === null)
@@ -75,7 +77,7 @@ goog.exportSymbol('testOnlySetUpChe', testOnlySetUpChe);
 codeshelf.cheslistview = function(websession, facility) {
 
 	var websession_ = websession;
-	var facility_ = facility;
+	facility_ = facility; // defined above so it available to testOnlySetUpChe
 
 	var contextMenu_;
 
