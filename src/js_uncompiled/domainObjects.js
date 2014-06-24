@@ -132,8 +132,8 @@ domainobjects = {
 				'title': 'Persistent ID',
 				'width': 40
 			},
-			'deviceGuid': {
-				'id': 'deviceGuid',
+			'deviceGuidStr': {
+				'id': 'deviceGuidStr',
 				'title': 'Device GUID',
 				'width': 16
 			},
@@ -283,8 +283,8 @@ domainobjects = {
 				'title': 'Persistent ID',
 				'width': 40
 			},
-			'deviceGuid': {
-				'id': 'deviceGuid',
+			'deviceGuidStr': {
+				'id': 'deviceGuidStr',
 				'title': 'Device GUID',
 				'width': 16
 			}

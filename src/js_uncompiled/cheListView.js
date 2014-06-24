@@ -37,7 +37,7 @@ function changeCheDescription() {
 	theLogger.info("about to call dialog for selected CHE: " + che['domainId']);
 
 
-
+	// See codeshelfApp.CheController defined below. And then referenced in angular.module
 	var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-che.html", "CheController as controller", data);
 
 	promise.result.then(function(){
@@ -129,8 +129,8 @@ codeshelf.cheslistview = function(websession, facility) {
 			var line;
 			if (view.getItemLevel(item) === 0) {
 				checontextmenuscope['che'] = item;
-				line = $('<li><a href="javascript:changeCheDescription()">Change Che Description</a></li>').appendTo(contextMenu_).data("option", "change_description");
-				line = $('<li><a href="javascript:testOnlySetUpChe()">TESTING ONLY--Set up CHE</a></li>').appendTo(contextMenu_).data("option", "fake_setup");
+				line = $('<li><a href="javascript:changeCheDescription()">Edit CHE</a></li>').appendTo(contextMenu_).data("option", "change_description");
+				line = $('<li><a href="javascript:testOnlySetUpChe()">TESTING ONLY--Simulate cart set up</a></li>').appendTo(contextMenu_).data("option", "fake_setup");
 			}
 
 			contextMenu_
@@ -170,15 +170,48 @@ codeshelfApp.CheController = function($scope, $modalInstance, data){
 	this.scope_ = $scope;
 	this.modalInstance_ = $modalInstance;
 	$scope['che'] = data['che'];
+
+	// tweaking separate fields
+	// first has html/angular scope matching js field.
+	$scope['che']['description'] = data['che']['description'];
+	// second could match. Just being different to practice for when we have to be different
+	$scope['che']['domainid'] = data['che']['domainId'];
+	$scope['che']['cntrlrid'] = data['che']['deviceGuidStr'];
+
 };
+
+// check not-null, and not empty. Does not check for only white space.
+function isEmptyString(str) {
+	return (!str || 0 === str.length);
+}
 
 /**
  * @export
  */
 codeshelfApp.CheController.prototype.ok = function(){
 	var che = this.scope_['che'];
-	var property = "description";
-	codeshelf.objectUpdater.updateOne(che, "Che", property, che[property]);
+	var descriptionProperty = "description";
+	var jsDomainProperty = "domainid"; // this matches the partial html
+	var javaDomainProperty = "domainId"; // Passed as the java field
+	var jsControllerProperty = "cntrlrid"; // this matches the partial html
+	var javaControllerProperty = "deviceGuid"; // Passed as the java field
+	// "description is the name used here, and matches the java-side field name. This is a trivial update
+	if (!isEmptyString(che[descriptionProperty]))
+		codeshelf.objectUpdater.updateOne(che, "Che", descriptionProperty, che[descriptionProperty]);
+
+	// This is a domainID change, which may cause trouble. If there is trouble, might need to change to
+	// objectUpdater.callMethod() to do the change with all necessary cleanup
+	if (!isEmptyString(che[jsDomainProperty]))
+		codeshelf.objectUpdater.updateOne(che, "Che", javaDomainProperty, che[jsDomainProperty]);
+
+	if (!isEmptyString(che[jsControllerProperty])) {
+		var methodArgs = [
+			{ 'name': 'inNewControllerId', 'value': che[jsControllerProperty], 'classType': 'java.lang.String'}
+		];
+
+		codeshelf.objectUpdater.callMethod(che, "Che", 'changeControllerId', methodArgs);
+	}
+
 	this.modalInstance_.close();
 };
 
