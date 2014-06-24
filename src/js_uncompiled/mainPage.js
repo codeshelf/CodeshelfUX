@@ -162,9 +162,9 @@ codeshelf.windowLauncher = (function() {
 			}
 		},
 
-		loadOrdersView: function() {
+		loadOrdersView: function(inOutboundOrders) {
 			try {
-				var ordersView = codeshelf.ordersview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var ordersView = codeshelf.ordersview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), inOutboundOrders);
 				var ordersWindow = codeshelf.window(ordersView, getDomNodeForNextWindow(), getWindowDragLimit());
 				ordersWindow.open();
 			}
@@ -447,9 +447,14 @@ function launchEdiServicesView() {
 goog.exportSymbol('launchEdiServicesView', launchEdiServicesView);
 
 function launchOrdersView() {
-	codeshelf.windowLauncher.loadOrdersView();
+	codeshelf.windowLauncher.loadOrdersView(true); // OUTBOUND orders
 }
 goog.exportSymbol('launchOrdersView', launchOrdersView);
+
+function launchBatchOrdersView() {
+	codeshelf.windowLauncher.loadOrdersView(false); // CROSS orders, no outbound
+}
+goog.exportSymbol('launchBatchOrdersView', launchBatchOrdersView);
 
 function launchWorkAreaView() {
 	codeshelf.windowLauncher.loadWorkAreaView();
@@ -506,7 +511,7 @@ function launchTestRunner() {
 	launchPathsView();
 	launchWorkAreaEditor();
 	launchEdiServicesView();
-	launchOrdersView();
+	launchOrdersView(); // only outbound orders
 	launchWorkAreaView();
 	launchFacilityEditor();
 	launchAislesListView();

@@ -22,10 +22,11 @@ goog.require('adhocDialogService');
  * @param facility The facility to check.
  * @return {Object} The orders view.
  */
-codeshelf.ordersview = function(websession, facility) {
+codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 
 	var websession_ = websession;
 	var facility_ = facility;
+	var outboundOrders_ = inOutboundOrders;
 
 	var contextMenu_;
 
@@ -171,7 +172,10 @@ codeshelf.ordersview = function(websession, facility) {
 	var self = {
 
 		getViewName: function() {
-			return 'Orders';
+			if (outboundOrders_)
+				return 'Outbound Orders';
+			else
+				return 'Cross Batch Orders';
 		},
 
 		setupContextMenu: function() {
@@ -233,7 +237,13 @@ codeshelf.ordersview = function(websession, facility) {
 		{ 'name': 'theId', 'value': facility_['persistentId']}
 	];
 
-	var orderHeaderFilter = "statusEnum <> 'COMPLETE' and active = true";
+	var orderHeaderFilter = "";
+
+	if (outboundOrders_)
+		orderHeaderFilter = "statusEnum <> 'COMPLETE' and active = true and orderTypeEnum = 'OUTBOUND' ";
+	else
+		orderHeaderFilter = "statusEnum <> 'COMPLETE' and active = true and orderTypeEnum = 'CROSS' ";
+
 
 	var orderDetailFilter = "statusEnum <> 'COMPLETE'";
 
