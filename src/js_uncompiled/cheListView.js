@@ -209,7 +209,7 @@ codeshelfApp.CheController.prototype.ok = function(){
 			{ 'name': 'inNewControllerId', 'value': che[jsControllerProperty], 'classType': 'java.lang.String'}
 		];
 
-		codeshelf.objectUpdater.callMethod(che, "Che", 'changeControllerId', methodArgs);
+		codeshelf.objectUpdater.callMethod(che, 'Che', 'changeControllerId', methodArgs);
 	}
 
 	this.modalInstance_.close();
