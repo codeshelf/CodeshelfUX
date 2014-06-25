@@ -232,7 +232,7 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 
 	};
 
-	var orderGroupFilter = "parent.persistentId = :theId";
+	var orderGroupFilter = "parent.persistentId = :theId  and active = true ";
 	var orderGroupFilterParams = [
 		{ 'name': 'theId', 'value': facility_['persistentId']}
 	];

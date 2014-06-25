@@ -128,7 +128,7 @@ codeshelf.containeruselistview = function(websession, facility, inChe) {
 	}
 	else {
 		// containerUse has currentChe field. Need a metafield?
-		var containerUseFilter = "currentChePersistentid = :theId  and active = true";
+		var containerUseFilter = "current_che_persistentid = :theId  and active = true";
 
 		var containerUseFilterParams = [
 			{ 'name': 'theId', 'value': che_['persistentId']}

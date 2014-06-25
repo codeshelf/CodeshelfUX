@@ -653,6 +653,51 @@ domainobjects = {
 				'id':    'description',
 				'title': 'Description',
 				'width': 50
+			},
+			'persistentId': {
+				'id':    'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			},
+			'statusEnum': {
+				'id':    'statusEnum',
+				'title': 'Status',
+				'width': 10
+			},
+			'containerId': {
+				'id':    'containerId',
+				'title': 'Container',
+				'width': 10
+			},
+			'pickInstruction': {
+				'id':    'pickInstruction',
+				'title': 'Where',
+				'width': 10
+			},
+			'planQuantity': {
+				'id':    'planQuantity',
+				'title': 'Quant.',
+				'width': 6
+			},
+			'planMinQuantity': {
+				'id':    'planMinQuantity',
+				'title': 'Min.',
+				'width': 6
+			},
+			'planMaxQuantity': {
+				'id':    'planMaxQuantity',
+				'title': 'Max.',
+				'width': 6
+			},
+			'actualQuantity': {
+				'id':    'actualQuantity',
+				'title': 'Actual',
+				'width': 6
+			},
+			'groupAndSortCode': {
+				'id':    'groupAndSortCode',
+				'title': 'Sort',
+				'width': 6
 			}
 		}
 	}

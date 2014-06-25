@@ -27,7 +27,7 @@ function clearCheContextMenuScope(){
 	checontextmenuscope['che'] = null;
 }
 
-function changeCheDescription() {
+function editChe() {
 	var che = checontextmenuscope['che'];
 	var data = {
 		'che': che
@@ -45,7 +45,7 @@ function changeCheDescription() {
 
 	});
 }
-goog.exportSymbol('changeCheDescription', changeCheDescription);
+goog.exportSymbol('editChe', editChe);
 
 var websession_ = null;
 
@@ -67,6 +67,25 @@ function testOnlySetUpChe() {
 	clearCheContextMenuScope();
 }
 goog.exportSymbol('testOnlySetUpChe', testOnlySetUpChe);
+
+function cheWorkInstructions() {
+	var che = checontextmenuscope['che'];
+	if (che === null)
+		return;
+
+	cheDomainId = che['domainId'];
+	if (che) {
+		var cheDomainId = che['domainId'];
+		var wiListView = codeshelf.workinstructionlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che, null, null);
+		// var wiListWindow = codeshelf.window(tierSlotListView, getDomNodeForNextWindow(), getWindowDragLimit());
+		var theRectLimit = new goog.math.Rect(0,0,10000,10000);
+		var wiListWindow = codeshelf.window(wiListView, null, theRectLimit);
+		wiListWindow.open();
+	}
+
+	clearCheContextMenuScope();
+}
+goog.exportSymbol('cheWorkInstructions', cheWorkInstructions);
 
 /**
  * The aisles for this facility.
@@ -129,7 +148,8 @@ codeshelf.cheslistview = function(websession, facility) {
 			var line;
 			if (view.getItemLevel(item) === 0) {
 				checontextmenuscope['che'] = item;
-				line = $('<li><a href="javascript:changeCheDescription()">Edit CHE</a></li>').appendTo(contextMenu_).data("option", "change_description");
+				line = $('<li><a href="javascript:cheWorkInstructions()">Work Instructions</a></li>').appendTo(contextMenu_).data("option", "work_instructions");
+				line = $('<li><a href="javascript:editChe()">Edit CHE</a></li>').appendTo(contextMenu_).data("option", "change_description");
 				line = $('<li><a href="javascript:testOnlySetUpChe()">TESTING ONLY--Simulate cart set up</a></li>').appendTo(contextMenu_).data("option", "fake_setup");
 			}
 

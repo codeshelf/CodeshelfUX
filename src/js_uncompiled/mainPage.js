@@ -11,6 +11,7 @@ goog.require('codeshelf.aisleslistview');
 goog.require('codeshelf.chelistview');
 goog.require('codeshelf.baylistview');
 goog.require('codeshelf.containeruselistview');
+goog.require('codeshelf.workinstructionlistview');
 goog.require('codeshelf.tierlistview');
 goog.require('codeshelf.tierslotlistview');
 goog.require('codeshelf.ledcontrollerslistview');
@@ -244,6 +245,17 @@ codeshelf.windowLauncher = (function() {
 				var containerUseListView = codeshelf.containeruselistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), null);
 				var containerUseWindow = codeshelf.window(containerUseListView, getDomNodeForNextWindow(), getWindowDragLimit());
 				containerUseWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadWorkInstructionListView: function() {
+			try {
+				var workInstructionListView = codeshelf.workinstructionlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), null, null, null);
+				var workInstructionWindow = codeshelf.window(workInstructionListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				workInstructionWindow.open();
 			}
 			catch (err) {
 				alert(err);
@@ -501,6 +513,11 @@ function launchContainerUseListView() {
 }
 goog.exportSymbol('launchContainerUseListView', launchContainerUseListView);
 
+function launchWorkInstructionListView() {
+	codeshelf.windowLauncher.loadWorkInstructionListView();
+}
+goog.exportSymbol('launchWorkInstructionListView', launchWorkInstructionListView);
+
 
 function launchTestRunner() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');
@@ -520,5 +537,7 @@ function launchTestRunner() {
 	launchBayListView();
 	launchTierListView();
 	launchContainerUseListView();
+	launchWorkInstructionListView();
+
 }
 goog.exportSymbol('launchTestRunner', launchTestRunner);
