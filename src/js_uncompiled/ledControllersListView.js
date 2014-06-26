@@ -7,6 +7,7 @@
 file ledControllersListView.js author jon ranstrom
  */
 goog.provide('codeshelf.ledcontrollerslistview');
+goog.require('codeshelf.controllers');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
@@ -24,45 +25,32 @@ ledcontrollercontextmenuscope = {
 function clearLedControllerContextMenuScope(){
 	ledcontrollercontextmenuscope['ledcontroller'] = null;
 }
-function selectLedController() {
-	var theLogger = goog.debug.Logger.getLogger('LED Controllers view');
-	var aString = ledcontrollercontextmenuscope['ledcontroller']['domainId'];
-	theLogger.info("selected led controller: " + aString);
-	codeshelf.objectUpdater.setObjectInSelectionList(ledcontrollercontextmenuscope['ledcontroller']);
-	clearLedControllerContextMenuScope();
-}
-goog.exportSymbol('selectLedController', selectLedController);
 
 function changeLedControllerId() {
+	var ledcontroller = ledcontrollercontextmenuscope['ledcontroller'];
+	var data = {
+		'ledcontroller': ledcontroller
+	};
 
-	var adhocDialogOptions = {}
-
-	adhocDialogOptions['passedInUrl']= "partials/change-led-id.html";
-	adhocDialogOptions['callback']= function () {
-		var theLogger = goog.debug.Logger.getLogger('LED Controllers view');
-		var aString = ledcontrollercontextmenuscope['ledcontroller']['domainId'];
-		theLogger.info("change ID of selected led controller: " + aString);
-	}
-
-	// would be nice if this worked
-	//angular.module('codeshelfApp').service('adhocDialogService')['showModalDialog']({}, adhocDialogOptions);
-	var injector = angular.injector(['ng', 'codeshelfApp']);
-
-	injector.invoke(['adhocDialogService', function(adhocDialogService){
-		adhocDialogService['showModalDialog']({}, adhocDialogOptions);
-	}]);
+	var theLogger = goog.debug.Logger.getLogger('Led controller view');
+	theLogger.info("change ID dialog for LED Controller: " + ledcontroller['domainId']);
 
 
-	// codeshelf.objectUpdater.setObjectInSelectionList(ledcontrollercontextmenuscope['ledcontroller']);
-	clearLedControllerContextMenuScope();
+	// See codeshelfApp.LedNgController defined below. And then referenced in angular.module
+	var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-led-id.html", "LedNgController as controller", data);
+
+	promise.result.then(function(){
+		clearLedControllerContextMenuScope();
+
+	});
 }
 goog.exportSymbol('changeLedControllerId', changeLedControllerId);
 
 /**
- * The aisles for this facility.
+ * The aisle controllers for this facility.
  * @param websession The websession used for updates.
  * @param facility The facility to check.
- * @return {Object} The aisles list view.
+ * @return {Object} The LED Controllers list view.
  */
 codeshelf.ledcontrollerslistview = function(websession, facility) {
 
@@ -119,7 +107,6 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 			var line;
 			if (view.getItemLevel(item) === 0) {
 				ledcontrollercontextmenuscope['ledcontroller'] = item;
-				line = $('<li><a href="javascript:selectLedController()">Cache selected LED Controller</a></li>').appendTo(contextMenu_).data("option", "cache_selected");
 				line = $('<li><a href="javascript:changeLedControllerId()">Change ID of LED Controller</a></li>').appendTo(contextMenu_).data("option", "change_id");
 			}
 
@@ -148,3 +135,54 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 
 	return view;
 };
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.LedNgController = function($scope, $modalInstance, data){
+
+	this.scope_ = $scope;
+	this.modalInstance_ = $modalInstance;
+	$scope['ledcontroller'] = data['ledcontroller'];
+
+	$scope['ledcontroller']['led_controller_id'] = data['ledcontroller']['deviceGuidStr'];
+
+};
+
+/**
+ * @export
+ */
+codeshelfApp.LedNgController.prototype.ok = function(){
+	var ledcontroller = this.scope_['ledcontroller'];
+	var jsControllerProperty = "led_controller_id"; // this matches the partial html
+	var javaControllerProperty = "deviceGuid"; // Passed as the java field
+
+	// check not-null, and not empty. Does not check for only white space.
+	function thisIsEmptyString(str) {
+		return (!str || 0 === str.length);
+	}
+
+
+	if (!thisIsEmptyString(ledcontroller[jsControllerProperty])) {
+		var methodArgs = [
+			{ 'name': 'inNewControllerId', 'value': ledcontroller[jsControllerProperty], 'classType': 'java.lang.String'}
+		];
+
+		codeshelf.objectUpdater.callMethod(ledcontroller, 'LedController', 'changeLedControllerId', methodArgs);
+	}
+
+	this.modalInstance_.close();
+};
+
+/**
+ * @export
+ */
+codeshelfApp.LedNgController.prototype.cancel = function(){
+	this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
+};
+
+angular.module('codeshelfApp').controller('LedNgController', ['$scope', '$modalInstance', 'data', codeshelfApp.LedNgController]);

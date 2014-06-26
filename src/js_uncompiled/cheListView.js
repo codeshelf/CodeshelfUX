@@ -38,7 +38,7 @@ function editChe() {
 
 
 	// See codeshelfApp.CheController defined below. And then referenced in angular.module
-	var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-che.html", "CheController as controller", data);
+	var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-che.html", "CheNgController as controller", data);
 
 	promise.result.then(function(){
 		clearCheContextMenuScope();
@@ -185,7 +185,7 @@ codeshelf.cheslistview = function(websession, facility) {
  *  @ngInject
  *  @export
  */
-codeshelfApp.CheController = function($scope, $modalInstance, data){
+codeshelfApp.CheNgController = function($scope, $modalInstance, data){
 
 	this.scope_ = $scope;
 	this.modalInstance_ = $modalInstance;
@@ -208,7 +208,7 @@ function isEmptyString(str) {
 /**
  * @export
  */
-codeshelfApp.CheController.prototype.ok = function(){
+codeshelfApp.CheNgController.prototype.ok = function(){
 	var che = this.scope_['che'];
 	var descriptionProperty = "description";
 	var jsDomainProperty = "domainid"; // this matches the partial html
@@ -238,8 +238,8 @@ codeshelfApp.CheController.prototype.ok = function(){
 /**
  * @export
  */
-codeshelfApp.CheController.prototype.cancel = function(){
+codeshelfApp.CheNgController.prototype.cancel = function(){
 	this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
 };
 
-angular.module('codeshelfApp').controller('CheController', ['$scope', '$modalInstance', 'data', codeshelfApp.CheController]);
+angular.module('codeshelfApp').controller('CheNgController', ['$scope', '$modalInstance', 'data', codeshelfApp.CheNgController]);
