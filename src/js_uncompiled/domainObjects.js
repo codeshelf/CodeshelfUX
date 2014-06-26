@@ -669,6 +669,11 @@ domainobjects = {
 				'title': 'Container',
 				'width': 10
 			},
+			'assignedCheName': {
+				'id':    'assignedCheName',
+				'title': 'CHE',
+				'width': 6
+			},
 			'pickInstruction': {
 				'id':    'pickInstruction',
 				'title': 'Where',

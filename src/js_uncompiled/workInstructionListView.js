@@ -81,6 +81,8 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inGrou
 				return true;
 			else if (inProperty['id'] ===  'planQuantity')
 				return true;
+			else if (inProperty['id'] ===  'assignedCheName')
+				return true;
 			else
 				return false;
 			// need to add che once we have the meta field
