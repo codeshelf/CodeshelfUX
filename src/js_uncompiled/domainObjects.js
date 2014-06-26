@@ -642,27 +642,28 @@ domainobjects = {
 	},
 
 	'WorkInstruction': {
+		// let's default to sort,where,description, quantity,container,Che
 		'className':  'WorkInstruction',
 		'properties': {
-			'domainId':    {
-				'id':    'domainId',
-				'title': 'ID',
-				'width': 25
+			'groupAndSortCode': {
+				'id':    'groupAndSortCode',
+				'title': 'Sort',
+				'width': 6
+			},
+			'pickInstruction': {
+				'id':    'pickInstruction',
+				'title': 'Where',
+				'width': 10
 			},
 			'description': {
 				'id':    'description',
 				'title': 'Description',
 				'width': 50
 			},
-			'persistentId': {
-				'id':    'persistentId',
-				'title': 'Persistent ID',
-				'width': 40
-			},
-			'statusEnum': {
-				'id':    'statusEnum',
-				'title': 'Status',
-				'width': 10
+			'planQuantity': {
+				'id':    'planQuantity',
+				'title': 'Quant.',
+				'width': 6
 			},
 			'containerId': {
 				'id':    'containerId',
@@ -674,15 +675,20 @@ domainobjects = {
 				'title': 'CHE',
 				'width': 6
 			},
-			'pickInstruction': {
-				'id':    'pickInstruction',
-				'title': 'Where',
-				'width': 10
+			'domainId':    {
+				'id':    'domainId',
+				'title': 'ID',
+				'width': 25
 			},
-			'planQuantity': {
-				'id':    'planQuantity',
-				'title': 'Quant.',
-				'width': 6
+			'persistentId': {
+				'id':    'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			},
+			'statusEnum': {
+				'id':    'statusEnum',
+				'title': 'Status',
+				'width': 10
 			},
 			'planMinQuantity': {
 				'id':    'planMinQuantity',
@@ -699,11 +705,6 @@ domainobjects = {
 				'title': 'Actual',
 				'width': 6
 			},
-			'groupAndSortCode': {
-				'id':    'groupAndSortCode',
-				'title': 'Sort',
-				'width': 6
-			}
 		}
 	}
 };
