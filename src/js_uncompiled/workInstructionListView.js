@@ -129,8 +129,8 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inGrou
 	var workInstructionFilterParams;
 
 	if (null != che_) {
-		// all work instructions for this che, including complete. But only active orders. (Not checking active details
-		workInstructionFilter = "assignedChe = :theId and parent.parent.active = true";
+		// all work instructions for this che, including complete. But only active orders. (Not checking active details)
+		workInstructionFilter = "assignedChe = :theId and statusEnum != 'COMPLETE' and parent.parent.active = true";
 
 		// Experiments
 		// Does not work:  "assignedChePersistentid = :theId";      // seems like it could work, and would if there were a text field
@@ -147,7 +147,7 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inGrou
 	}
 	else { // all uncompleted work instructions this facility. Include REVERT though
 		// work instuction parentage goes workInstruction->orderDetail->orderHeader->facility
-		workInstructionFilter = "parent.parent.parent.persistentId = :theId and statusEnum != 'COMPLETE' ";
+		workInstructionFilter = "parent.parent.parent.persistentId = :theId and statusEnum != 'COMPLETE' and parent.parent.active = true";
 
 		workInstructionFilterParams = [
 			{ 'name': 'theId', 'value': facility_['persistentId']}
