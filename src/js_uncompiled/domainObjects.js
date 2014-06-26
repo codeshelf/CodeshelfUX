@@ -704,7 +704,7 @@ domainobjects = {
 				'id':    'actualQuantity',
 				'title': 'Actual',
 				'width': 6
-			},
+			}
 		}
 	}
 };
