@@ -395,7 +395,7 @@ domainobjects = {
 			'orderId':      {
 				'id':    'orderId',
 				'title': 'Order ID',
-				'width': 15
+				'width': 25
 			},
 			'description':  {
 				'id':    'description',
