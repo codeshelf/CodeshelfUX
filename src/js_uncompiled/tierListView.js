@@ -64,14 +64,9 @@ function setControllerForTiersInAisle() {
 goog.exportSymbol('setControllerForTiersInAisle', setControllerForTiersInAisle);
 
 function doLaunchTierSlotList() {
-	// Not great. Want to use window launcher to open this window,
-	// and to have the benefit of getDomNodeForNextWindow, dragLimit.
-	// But requires codeshelf.windowLauncher introduces a cycle
 	aTier = tiercontextmenuscope['tier'];
 	var tierSlotListView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(),codeshelf.sessionGlobals.getFacility(), aTier);
-	// var tierSlotListWindow = codeshelf.window(tierSlotListView, getDomNodeForNextWindow(), getWindowDragLimit());
-	var theRectLimit = new goog.math.Rect(0,0,10000,10000);
-	var tierSlotListWindow = codeshelf.window(tierSlotListView, null, theRectLimit);
+	var tierSlotListWindow = codeshelf.window(tierSlotListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 	tierSlotListWindow.open();
 
 	clearTierContextMenuScope();
@@ -79,20 +74,20 @@ function doLaunchTierSlotList() {
 goog.exportSymbol('doLaunchTierSlotList', doLaunchTierSlotList);
 
 /**
- * The aisles for this facility.
+ * The tiers for this facility or tiers for one aisle.
+ *If aisle is null, then all tiers for all aisle in this facility. If aisle passed in, then only tiers in this aisle.
  * @param websession The websession used for updates.
  * @param facility The facility to check.
- * @return {Object} The aisles list view.
+ * @param aisle May be null.
+ * @return {Object} The tiers list view.
  */
 codeshelf.tierlistview = function(websession, facility, aisle) {
 
 	var websession_ = websession;
 	var facility_ = facility;
-	// If aisle is null, then all tiers for all aisle in this facility. If aisle passed in, then only tiers in this aisle.
 	var aisle_ = aisle;
 
 	var contextMenu_;
-
 
 	function websocketCmdCallbackFacility() {
 		var callback = {
@@ -168,7 +163,6 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 	};
 
 	// If aisle is null, then all tiers for all aisle in this facility. If aisle passed in, then only tiers in this aisle.
-
 	// tier parent goes bay->aisle>facility
 	var tierFilter;
 	var tierFilterParams;

@@ -72,21 +72,13 @@ function launchTiersForAisle() {
 	var theAisle = aislecontextmenuscope['aisle'];
 	if (theAisle) {
 		var aisleString = theAisle['domainId'];
-		// Not great. Want to use window launcher to open this window,
-		// and to have the benefit of getDomNodeForNextWindow, dragLimit.
-		// But requires codeshelf.windowLauncher introduces a cycle
 		var tierListView = codeshelf.tierlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), theAisle);
-		// var tierSlotListWindow = codeshelf.window(tierSlotListView, getDomNodeForNextWindow(), getWindowDragLimit());
-		var theRectLimit = new goog.math.Rect(0,0,10000,10000);
-		var tierListWindow = codeshelf.window(tierListView, null, theRectLimit);
+		var tierListWindow = codeshelf.window(tierListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 		tierListWindow.open();
-
 	}
 	else{
 		theLogger.error("null aisle. How? ");
-
 	}
-
 	clearAisleContextMenuScope();
 }
 goog.exportSymbol('launchTiersForAisle', launchTiersForAisle); // needed even in same file.

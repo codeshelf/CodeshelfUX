@@ -77,12 +77,9 @@ function cheWorkInstructions() {
 	if (che) {
 		var cheDomainId = che['domainId'];
 		var wiListView = codeshelf.workinstructionlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che, null, null);
-		// var wiListWindow = codeshelf.window(tierSlotListView, getDomNodeForNextWindow(), getWindowDragLimit());
-		var theRectLimit = new goog.math.Rect(0,0,10000,10000);
-		var wiListWindow = codeshelf.window(wiListView, null, theRectLimit);
+		var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 		wiListWindow.open();
 	}
-
 	clearCheContextMenuScope();
 }
 goog.exportSymbol('cheWorkInstructions', cheWorkInstructions);

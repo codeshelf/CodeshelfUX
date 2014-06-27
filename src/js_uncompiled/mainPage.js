@@ -48,52 +48,11 @@ window.onbeforeunload = function () {
 	return "Leaving this page will reset the layout of the Codeshelf application";
 };
 
-// utility functions for window launching
-function getWindowDragLimit() {
-	// we want the right and bottom limits large as the GCT window knows to scroll there.
-	// As for left and top, zeros are ok. See below it comes from "frame_ = goog.dom.query('.frame')[0];"
-	// which will have zeros for top and left
-	var theRectLimit = new goog.math.Rect(0,0,10000,10000);
-	return theRectLimit;
-}
-
-function getDomNodeForNextWindow() {
-	// The right thing to do is find the top window, and available size of the browser.
-	// Offset right and down of top window, unless too far compared to browser.
-	// If no window up yet, then set to a default place
-	// The top window has z index = 1. Others are zero
-
-	var windows = goog.dom.getElementsByClass("window");
-	var theTopWindow = null;
-	// for/in loops will iterate over keys in the ancestor prototype chain as well, so generally don't
-	var l = windows.length;
-	for (var i = 0; i < l; i++) {
-		var aWindow = windows[i];
-		if (aWindow.style.zIndex === "1")
-			theTopWindow = aWindow;
-	}
-
-	if (theTopWindow) {
-		return theTopWindow;
-	}
-	else {
-		return null;
-		/*
-		var theNode;
-		// currently just gets the "frame" element that we want to remove
-		theNode = goog.dom.query('.frame')[0];
-		theNode.style.top = 40;
-		theNode.style.left = 5;
-		return theNode;
-		*/
-	}
-}
-
 
 codeshelf.doLaunchListDemoView = function(){
 	try {
 		 var listDemoView = codeshelf.listdemoview();
-		 var listDemoWindow = codeshelf.window(listDemoView, getDomNodeForNextWindow(), getWindowDragLimit());
+		 var listDemoWindow = codeshelf.window(listDemoView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 		 listDemoWindow.open();
 		}
 	catch (err) {
@@ -111,7 +70,7 @@ codeshelf.windowLauncher = (function() {
 		loadPathsView: function () {
 			try {
 				var pathsView = codeshelf.pathsview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
-				var pathsWindow = codeshelf.window(pathsView, getDomNodeForNextWindow(), getWindowDragLimit());
+				var pathsWindow = codeshelf.window(pathsView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				pathsWindow.open();
 			}
 			catch (err) {
@@ -122,7 +81,7 @@ codeshelf.windowLauncher = (function() {
 		doLaunchListDemoView: function(){
 			try {
 				var listDemoView = codeshelf.listdemoview();
-				var listDemoWindow = codeshelf.window(listDemoView, getDomNodeForNextWindow(), getWindowDragLimit());
+				var listDemoWindow = codeshelf.window(listDemoView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				listDemoWindow.open();
 			}
 			catch (err) {
@@ -133,7 +92,7 @@ codeshelf.windowLauncher = (function() {
 		loadWorkAreaEditorView: function () {
 			try {
 				var workAreaEditorView = codeshelf.workareaeditorview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
-				var workAreaEditorWindow = codeshelf.window(workAreaEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
+				var workAreaEditorWindow = codeshelf.window(workAreaEditorView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				workAreaEditorWindow.open();
 			}
 			catch (err) {
@@ -144,7 +103,7 @@ codeshelf.windowLauncher = (function() {
 		loadEdiServicesView: function() {
 			try {
 				var ediServicesView_ = codeshelf.ediservicesview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
-				var ediServicesWindow = codeshelf.window(ediServicesView_, getDomNodeForNextWindow(), getWindowDragLimit());
+				var ediServicesWindow = codeshelf.window(ediServicesView_, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				ediServicesWindow.open();
 			}
 			catch (err) {
@@ -155,7 +114,7 @@ codeshelf.windowLauncher = (function() {
 		loadWorkAreaView: function() {
 			try {
 				var workAreaView = codeshelf.workareaview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
-				var workAreaWindow = codeshelf.window(workAreaView, getDomNodeForNextWindow(), getWindowDragLimit());
+				var workAreaWindow = codeshelf.window(workAreaView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				workAreaWindow.open();
 			}
 			catch (err) {
@@ -166,7 +125,7 @@ codeshelf.windowLauncher = (function() {
 		loadOrdersView: function(inOutboundOrders) {
 			try {
 				var ordersView = codeshelf.ordersview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), inOutboundOrders);
-				var ordersWindow = codeshelf.window(ordersView, getDomNodeForNextWindow(), getWindowDragLimit());
+				var ordersWindow = codeshelf.window(ordersView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				ordersWindow.open();
 			}
 			catch (err) {
@@ -177,7 +136,7 @@ codeshelf.windowLauncher = (function() {
 		loadAislesListView: function() {
 			try {
 				var aislesListView = codeshelf.aisleslistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
-				var aislesListWindow = codeshelf.window(aislesListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				var aislesListWindow = codeshelf.window(aislesListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				aislesListWindow.open();
 			}
 			catch (err) {
@@ -188,7 +147,7 @@ codeshelf.windowLauncher = (function() {
 		loadLedControllersListView: function() {
 			try {
 				var ledControllersListView = codeshelf.ledcontrollerslistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
-				var ledControllersListWindow = codeshelf.window(ledControllersListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				var ledControllersListWindow = codeshelf.window(ledControllersListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				ledControllersListWindow.open();
 			}
 			catch (err) {
@@ -199,7 +158,7 @@ codeshelf.windowLauncher = (function() {
 		loadCheListView: function() {
 			try {
 				var cheListView = codeshelf.cheslistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
-				var cheListWindow = codeshelf.window(cheListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				var cheListWindow = codeshelf.window(cheListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				cheListWindow.open();
 			}
 			catch (err) {
@@ -210,7 +169,7 @@ codeshelf.windowLauncher = (function() {
 		loadTierListView: function() {
 			try {
 				var tierListView = codeshelf.tierlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), null);
-				var tierListWindow = codeshelf.window(tierListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				var tierListWindow = codeshelf.window(tierListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				tierListWindow.open();
 			}
 			catch (err) {
@@ -221,7 +180,7 @@ codeshelf.windowLauncher = (function() {
 		loadBayListView: function() {
 			try {
 				var bayListView = codeshelf.baylistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
-				var bayListWindow = codeshelf.window(bayListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				var bayListWindow = codeshelf.window(bayListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				bayListWindow.open();
 			}
 			catch (err) {
@@ -232,7 +191,7 @@ codeshelf.windowLauncher = (function() {
 		loadTierSlotListView: function(inTier) { // this one cannot be called from window launcher
 			try {
 				var tierListSlotView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), inTier);
-				var tierListSlotWindow = codeshelf.window(tierSlotListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				var tierListSlotWindow = codeshelf.window(tierSlotListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				tierListWindow.open();
 			}
 			catch (err) {
@@ -243,7 +202,7 @@ codeshelf.windowLauncher = (function() {
 		loadContainerUseListView: function() {
 			try {
 				var containerUseListView = codeshelf.containeruselistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), null);
-				var containerUseWindow = codeshelf.window(containerUseListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				var containerUseWindow = codeshelf.window(containerUseListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				containerUseWindow.open();
 			}
 			catch (err) {
@@ -254,7 +213,7 @@ codeshelf.windowLauncher = (function() {
 		loadWorkInstructionListView: function() {
 			try {
 				var workInstructionListView = codeshelf.workinstructionlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), null, null, null);
-				var workInstructionWindow = codeshelf.window(workInstructionListView, getDomNodeForNextWindow(), getWindowDragLimit());
+				var workInstructionWindow = codeshelf.window(workInstructionListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				workInstructionWindow.open();
 			}
 			catch (err) {
@@ -268,7 +227,7 @@ codeshelf.windowLauncher = (function() {
 				if (typeof google !== 'undefined') {
 					google.load('maps', '3.15', {'other_params': 'sensor=false', 'callback': function() {
 						var facilityEditorView = codeshelf.facilityeditorview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
-						var facilityEditorWindow = codeshelf.window(facilityEditorView, getDomNodeForNextWindow(), getWindowDragLimit());
+						var facilityEditorWindow = codeshelf.window(facilityEditorView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 						facilityEditorWindow.open();
 					}});
 				}
@@ -333,24 +292,11 @@ codeshelf.mainpage = function() {
 	}
 
 	function loadFacilityWindows() {
-		// No longer open the list demo view
 		// What windows should launch immediately?
 
-		// codeshelf.windowLauncher.loadPathsView();
-
-		// codeshelf.windowLauncher.loadFacilityEditor();
-
-		// codeshelf.windowLauncher.loadWorkAreaEditorView();
-
-		// codeshelf.windowLauncher.loadEdiServicesView();
-
-		// codeshelf.windowLauncher.loadOrdersView();
 
 		// Will this be the one operational view that all should see upon opening?
 		codeshelf.windowLauncher.loadWorkAreaView();
-
-		// Enable to show an example of a confirmation dialog that waits for confirmation before closing
-//		codeshelf.windowLauncher.doLaunchListDemoView();
 
 	}
 
