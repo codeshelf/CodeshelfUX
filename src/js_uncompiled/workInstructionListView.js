@@ -7,6 +7,7 @@
 file workInstructionListView.js author jon ranstrom
  */
 goog.provide('codeshelf.workinstructionlistview');
+goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
@@ -24,17 +25,24 @@ function clearWorkInstructionContextMenuScope(){
 	workinstructioncontextmenuscope['workinstruction'] = null;
 }
 
-function doSomethingWithWorkInstruction() {
-	// What will we do?  Most likely, something like
-	// 1) lights on for all slots where the item in the container is
-	// 2) Maybe a list of all item/item details for items in this container
-	var theLogger = goog.debug.Logger.getLogger('Work Instruction view');
-	var aString = workinstructioncontextmenuscope['WorkInstruction']['domainId'];
-	theLogger.info("will do something with container use: " + aString);
-
+function doFakeCompleteWorkInstruction(inUpdateKind) {
+	wi = workinstructioncontextmenuscope['workinstruction'];
+	var methodArgs = [
+		{ 'name': 'inCompleteStr', 'value': inUpdateKind, 'classType': 'java.lang.String'}
+	];
+	codeshelf.objectUpdater.callMethod(wi, 'WorkInstruction', 'fakeCompleteWi', methodArgs);
 	clearWorkInstructionContextMenuScope();
 }
-goog.exportSymbol('doSomethingWithWorkInstruction', doSomethingWithWorkInstruction);
+
+function completeWorkInstruction() {
+	doFakeCompleteWorkInstruction('COMPLETE');
+}
+goog.exportSymbol('completeWorkInstruction', completeWorkInstruction);
+
+function shortWorkInstruction() {
+	doFakeCompleteWorkInstruction('SHORT');
+}
+goog.exportSymbol('shortWorkInstruction', shortWorkInstruction);
 
 /**
  * The active container uses for this facility.
@@ -113,8 +121,9 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inGrou
 
 			var line;
 			if (view.getItemLevel(item) === 0) {
-				containerusecontextmenuscope['containeruse'] = item;
-				line = $('<li><a href="javascript:doSomethingWithWorkInstruction()">Work Instruction test</a></li>').appendTo(contextMenu_).data("option", "use_action");
+				workinstructioncontextmenuscope['workinstruction'] = item;
+				line = $('<li><a href="javascript:completeWorkInstruction()">TESTING ONLY-Complete</a></li>').appendTo(contextMenu_).data("option", "wi_complete");
+				line = $('<li><a href="javascript:shortWorkInstruction()">TESTING ONLY-Short</a></li>').appendTo(contextMenu_).data("option", "wi_short");
 			}
 
 			contextMenu_
