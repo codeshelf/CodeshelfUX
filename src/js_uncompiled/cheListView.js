@@ -22,7 +22,6 @@ checontextmenuscope = {
 	'che': null
 };
 
-
 function clearCheContextMenuScope(){
 	checontextmenuscope['che'] = null;
 }
@@ -72,10 +71,7 @@ function cheWorkInstructions() {
 	var che = checontextmenuscope['che'];
 	if (che === null)
 		return;
-
-	cheDomainId = che['domainId'];
 	if (che) {
-		var cheDomainId = che['domainId'];
 		var wiListView = codeshelf.workinstructionlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che, null, null);
 		var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 		wiListWindow.open();
@@ -83,6 +79,19 @@ function cheWorkInstructions() {
 	clearCheContextMenuScope();
 }
 goog.exportSymbol('cheWorkInstructions', cheWorkInstructions);
+
+function cheContainers() {
+	var che = checontextmenuscope['che'];
+	if (che === null)
+		return;
+	if (che) {
+		var useListView = codeshelf.containeruselistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che);
+		var useListWindow = codeshelf.window(useListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+		useListWindow.open();
+	}
+	clearCheContextMenuScope();
+}
+goog.exportSymbol('cheContainers', cheContainers);
 
 /**
  * The aisles for this facility.
@@ -146,6 +155,7 @@ codeshelf.cheslistview = function(websession, facility) {
 			if (view.getItemLevel(item) === 0) {
 				checontextmenuscope['che'] = item;
 				line = $('<li><a href="javascript:cheWorkInstructions()">Work Instructions</a></li>').appendTo(contextMenu_).data("option", "work_instructions");
+				line = $('<li><a href="javascript:cheContainers()">Containers</a></li>').appendTo(contextMenu_).data("option", "containers");
 				line = $('<li><a href="javascript:editChe()">Edit CHE</a></li>').appendTo(contextMenu_).data("option", "change_description");
 				line = $('<li><a href="javascript:testOnlySetUpChe()">TESTING ONLY--Simulate cart set up</a></li>').appendTo(contextMenu_).data("option", "fake_setup");
 			}

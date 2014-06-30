@@ -179,6 +179,11 @@ domainobjects = {
 				'title': 'CHE',
 				'width': 10
 			},
+			'containerName': {
+				'id':    'containerName',
+				'title': 'Container',
+				'width': 10
+			},
 			'orderName':     {
 				'id':    'orderName',
 				'title': 'Order',

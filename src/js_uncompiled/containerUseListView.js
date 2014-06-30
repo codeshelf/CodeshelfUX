@@ -80,7 +80,7 @@ codeshelf.containeruselistview = function(websession, facility, inChe) {
 		getViewName: function() {
 			returnStr = "Containers";
 			if (che_ != null){
-				returnStr = returnStr + " in " + che_['domainId'];
+				returnStr = returnStr + " on " + che_['domainId'];
 			}
 			return returnStr;
 		},
