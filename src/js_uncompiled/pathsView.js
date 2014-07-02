@@ -30,21 +30,18 @@ function sendPathDelete() {
 	var theLogger = goog.debug.Logger.getLogger('Paths view');
 	var aString = pathscontextmenuscope['path']['domainId'];
 	// var aString = "unknown path";
-	theLogger.info("just logging: delete path2 " + aString);
+	theLogger.info("delete path2 " + aString);
+
+	thePath = pathscontextmenuscope['path'];
+	var methodArgs = [
+	];
+	codeshelf.objectUpdater.callMethod(thePath, 'Path', 'deleteThisPath', methodArgs);
+
 
 	clearContextMenuScope();
 }
 goog.exportSymbol('sendPathDelete', sendPathDelete); // Silly that this is needed even in same file.
 
-function selectPathSegment() {
-	var theLogger = goog.debug.Logger.getLogger('Paths view');
-	var aString = pathscontextmenuscope['pathsegment']['domainId'];
-	// var aString = "unknown pathsegment";
-	theLogger.info("just logging: selected segment " + aString);
-	codeshelf.objectUpdater.setObjectInSelectionList(pathscontextmenuscope['pathsegment']);
-	clearContextMenuScope();
-}
-goog.exportSymbol('selectPathSegment', selectPathSegment);
 
 /**
  * The paths for this facility.
@@ -97,10 +94,6 @@ codeshelf.pathsview = function(websession, facility) {
 			if (view.getItemLevel(item) === 0) {
 				pathscontextmenuscope['path'] = item;
 				line = $('<li><a href="javascript:sendPathDelete()">Delete Path</a></li>').appendTo(contextMenu_).data("option", "delete_path");
-			}
-			else if (view.getItemLevel(item)=== 1) {
-				pathscontextmenuscope['pathsegment'] = item;
-				line = $('<li><a href="javascript:selectPathSegment()">Cache selected path segment</a></li>').appendTo(contextMenu_).data("option", "cache_selected");
 			}
 
 			contextMenu_

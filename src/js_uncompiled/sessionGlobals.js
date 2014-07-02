@@ -14,6 +14,9 @@ codeshelf.sessionGlobals = (function() {
 	// psuedo private
 	var facility;
 	var websession;
+	// GoodEggs reliably has order groups. How?
+	// Acculogistics does not have order groups.
+	var hasOrderGroups;
 
 	return {
 	// public methods
@@ -32,7 +35,16 @@ codeshelf.sessionGlobals = (function() {
 		return websession;
 	},
 
-	// For window launching
+	// hasOrderGroups is start of functional permissions and configuration
+	getHasOrderGroups: function(){
+		return hasOrderGroups;
+	},
+	setHasOrderGroups: function(inHasOrderGroups){
+		hasOrderGroups = inHasOrderGroups;
+	},
+
+
+		// For window launching
 	// Perhaps not "session" globals, but global functions anyway. A place to avoid cloning
 	getWindowDragLimit: function() {
 		// we want the right and bottom limits large as the GCT window knows to scroll there.

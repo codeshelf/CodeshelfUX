@@ -11,6 +11,7 @@ goog.require('codeshelf.aisleslistview');
 goog.require('codeshelf.chelistview');
 goog.require('codeshelf.baylistview');
 goog.require('codeshelf.containeruselistview');
+goog.require('codeshelf.itemlistview');
 goog.require('codeshelf.workinstructionlistview');
 goog.require('codeshelf.tierlistview');
 goog.require('codeshelf.tierslotlistview');
@@ -221,6 +222,17 @@ codeshelf.windowLauncher = (function() {
 			}
 		},
 
+		loadItemsListView: function() {
+			try {
+				var itemListView = codeshelf.itemlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var itemWindow = codeshelf.window(itemListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				itemWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
 		loadFacilityEditor: function () {
 			try {
 				// Load the GMaps API and init() when done.
@@ -279,6 +291,9 @@ codeshelf.mainpage = function() {
 								// save the websession and facility so we can launch windows at any time.
 								codeshelf.sessionGlobals.setWebsession(websession_);
 								codeshelf.sessionGlobals.setFacility(facility);
+
+								// Need to set this true for GoodEggs, false for most. How?
+								codeshelf.sessionGlobals.setHasOrderGroups(false);
 
 								loadFacilityWindows();
 							}
@@ -464,11 +479,16 @@ function launchWorkInstructionListView() {
 }
 goog.exportSymbol('launchWorkInstructionListView', launchWorkInstructionListView);
 
+function launchInventoryView() {
+	codeshelf.windowLauncher.loadItemsListView();
+}
+goog.exportSymbol('launchInventoryView', launchInventoryView);
+
 
 function launchTestRunner() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');
 	theLogger.info("Opening all windows available from navbar");
-	// But not the about dialog.  12 windows now.
+	// But not the about dialog.  15 windows now.
 	// But not the tier/slot window, which needs a tier reference to start.
 	launchListViewDemo();
 	launchPathsView();
@@ -484,6 +504,7 @@ function launchTestRunner() {
 	launchTierListView();
 	launchContainerUseListView();
 	launchWorkInstructionListView();
+	launchInventoryView();
 
 }
 goog.exportSymbol('launchTestRunner', launchTestRunner);

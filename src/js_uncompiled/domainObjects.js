@@ -275,6 +275,44 @@ domainobjects = {
 		}
 	},
 
+	'Item': {
+		'className':  'Item',
+		'properties': {
+			'domainId': {
+				'id': 'domainId',
+				'title': 'ID',
+				'width': 25
+			},
+			'persistentId': {
+				'id': 'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			},
+			itemLocationFullDomainId: {
+				'id':    'itemLocationFullDomainId',
+				'title': 'Nominal Location',
+				'width': 16
+			},
+			itemLocationAlias: {
+				'id':    'itemLocationAlias',
+				'title': 'Location',
+				'width': 10
+			},
+			itemDescription: {
+				'id':    'itemDescription',
+				'title': 'Description',
+				'width': 10
+			},
+			itemQuantityUom: {
+				'id':    'itemQuantityUom',
+				'title': 'Quantity',
+				'width': 10
+			}
+
+
+		}
+	},
+
 	'LedController': {
 		'className':  'LedController',
 		'properties': {

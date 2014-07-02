@@ -350,6 +350,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 
 			goog.dom.appendChild(self_.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
+			// setupContextMenu is another psuedo-inheritance pattern thing. No base class method. Just assume it is probably there.
+			// If not there, the view will not open correctly. There is no way to check from here whether the descended class has property 'setupContextMenu'.
 			self_.setupContextMenu();
 
 			dataView_ = new Slick.Data.DataView();
