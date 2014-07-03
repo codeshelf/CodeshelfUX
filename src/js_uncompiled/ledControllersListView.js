@@ -7,7 +7,6 @@
 file ledControllersListView.js author jon ranstrom
  */
 goog.provide('codeshelf.ledcontrollerslistview');
-goog.require('codeshelf.controllers');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');

@@ -7,7 +7,6 @@
 goog.provide('codeshelf.workareaeditorview');
 
 goog.require('codeshelf.aisleview');
-goog.require('codeshelf.controllers');
 goog.require('codeshelf.dataentrydialog');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
@@ -92,8 +91,8 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 													   configurable: true});
 
 		var data = {
-			facilityContext: facilityContext,
-			aisleShape: aisleShape
+			"facilityContext": facilityContext,
+			"aisleShape": aisleShape
 		};
 		var promise = codeshelf.simpleDlogService.showCustomDialog("partials/aisle-editor.html", "WorkAreaModalCtrl as controller", data);
 
