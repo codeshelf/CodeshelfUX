@@ -5,7 +5,6 @@
  *******************************************************************************/
 
 'use strict';
-goog.require('codeshelf.controllers');
 goog.provide('simpleDialogService');
 goog.provide('codeshelf.simpleDlogService');
 goog.provide('adhocDialogService');
