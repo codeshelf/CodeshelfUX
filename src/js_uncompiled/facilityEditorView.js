@@ -10,7 +10,6 @@ goog.require('codeshelf.templates');
 goog.require('codeshelf.websession');
 goog.require('codeshelf.workareaeditorview');
 goog.require('domainobjects');
-goog.require('extern.jquery');
 goog.require('extern.jquery.css.rotate');
 goog.require('extern.jquery.css.transform');
 goog.require('goog.dom.query');

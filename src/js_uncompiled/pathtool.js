@@ -1,6 +1,6 @@
 goog.provide("codeshelf.pathtool");
 
-goog.require('extern.jquery');
+
 goog.require('bacon');
 
 function Path(pathDomainId, pixelToMeters) {

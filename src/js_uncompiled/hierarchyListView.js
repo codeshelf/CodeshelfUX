@@ -1,16 +1,8 @@
 goog.provide('codeshelf.hierarchylistview');
-goog.require('extern.jquery');
+goog.require('codeshelf.view');
+goog.require('goog.debug.Logger');
 goog.require('goog.async.Delay');
-goog.require('slickgrid.cellcopymanager');
-goog.require('slickgrid.cellselection');
-goog.require('slickgrid.columnpicker');
-goog.require('slickgrid.dataview');
-goog.require('slickgrid.editors');
-goog.require('slickgrid.formatters');
-goog.require('slickgrid.grid');
-goog.require('slickgrid.pager');
-goog.require('slickgrid.rowmovemanager');
-goog.require('slickgrid.rowselection');
+//require jquery ui resizable
 
 codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, draggableHierarchyLevel) {
 
@@ -44,7 +36,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	/**
 	 * Get the root item in the hierarchy for this item.
 	 * @param {Object} item  The item where we want to get the parent.
-	 * @param {Integer} level The level above this item in the hierarchy class.
+	 * @param {Number} level The level above this item in the hierarchy class.
 	 * @return {Object} the root item (at level) for this item.
 	 */
 	function getParentAtLevel(item, level, linkProperty) {
@@ -76,7 +68,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	/**
 	 * Figure our what level this item is on based on the class hierarchy.
 	 * @param item
-	 * @return {Integer}  the level (0-n)
+	 * @return {Number}  the level (0-n)
 	 */
 	function getLevel(item) {
 		if (item['getLevel'] !== undefined) {
@@ -228,7 +220,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 										};
 
 										var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-										websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+										websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
 									}
 								}
 							}
@@ -340,6 +332,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 				'enableAddRow':         true,
 				'enableCellNavigation': true,
 				'asyncEditorLoading':   true,
+				'enableColumnReorder':   false,
 				'forceFitColumns':      true,
 				'topPanelHeight':       25,
 				'autoEdit':             false
@@ -381,7 +374,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			};
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
+			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
 
 			grid_.onClick.subscribe(function(event) {
 				var cell = grid_.getCellFromEvent(event);
@@ -541,10 +534,11 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	};
 
 // We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.view();
+	var view = codeshelf.view({});
 	jQuery.extend(view, self_);
 	self_ = view;
 
 	return self_;
 }
 ;
+goog.exportSymbol('codeshelf.hierarchylistview', codeshelf.hierarchylistview);

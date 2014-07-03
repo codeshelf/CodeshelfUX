@@ -10,7 +10,7 @@ goog.provide('codeshelf.containeruselistview');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
-goog.require('extern.jquery');
+
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.query');

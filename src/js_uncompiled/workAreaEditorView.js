@@ -14,7 +14,7 @@ goog.require('codeshelf.view');
 goog.require('codeshelf.pathtool');
 goog.require('codeshelf.websession');
 goog.require('domainobjects');
-goog.require('extern.jquery');
+
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.query');

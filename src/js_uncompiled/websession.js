@@ -4,7 +4,7 @@
  *  $Id: websession.js,v 1.32 2012/12/07 08:58:02 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.websession');
-goog.require('extern.jquery');
+
 goog.require('goog.array');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
