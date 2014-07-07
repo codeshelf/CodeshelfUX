@@ -17,7 +17,7 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-slotcontextmenuscope = {
+var slotcontextmenuscope = {
 	'slot': null
 };
 
@@ -48,19 +48,6 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 
 	var contextMenu_;
 
-
-	function websocketCmdCallbackFacility() {
-		var callback = {
-			exec: function(command) {
-				/* appears to never be called
-				var theLogger = goog.debug.Logger.getLogger('aislesListView');
-				theLogger.info("callback exec called"); */
-			}
-		};
-
-		return callback;
-	}
-
 	var self = {
 
 		// following psuedo-inheritance
@@ -80,7 +67,7 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 		setupContextMenu: function() {
 			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
 			contextMenu_.bind('mouseleave', function(event) {
-				$(this).fadeOut(5)
+				$(this).fadeOut(5);
 			});
 		},
 

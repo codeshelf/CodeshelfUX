@@ -68,7 +68,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	/**
 	 * Figure our what level this item is on based on the class hierarchy.
 	 * @param item
-	 * @return {Number}  the level (0-n)
+	 * @return {Number | null}  the level (0-n)
 	 */
 	function getLevel(item) {
 		if (item['getLevel'] !== undefined) {
@@ -83,6 +83,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 				}
 			}
 		}
+		return null;
 	}
 
 	/**
@@ -163,7 +164,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 		var items = dataView_.getItems();
 		for (var key = 0; key < items.length; key++) {
 			if (items.hasOwnProperty(key)) {
-				item = items[key];
+				var item = items[key];
 				if (item['parentPersistentId'] === object['persistentId']) {
 					removeChildren(item);
 					// We just deleted at least one item and everything has shifted down, so go back a eval the same item again.
@@ -205,7 +206,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 										}
 
 										var computedProperties = [];
-										for (property in hierarchyMap_[j + 1].properties) {
+										for (var property in hierarchyMap_[j + 1].properties) {
 											if (hierarchyMap_[j + 1].properties.hasOwnProperty(property)) {
 												computedProperties.push(hierarchyMap_[j + 1].properties[property].id);
 											}
@@ -384,19 +385,19 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 
 			grid_.onKeyDown.subscribe(function(event) {
 				// select all rows on ctrl-a
-				if (event.which != 65 || !event.ctrlKey)
-					return false;
+				if (event.which == 65 && event.ctrlKey) {
+					var rows = [];
+					selectedRowIds_ = [];
 
-				var rows = [];
-				selectedRowIds_ = [];
+					for (var i = 0; i < dataView_.getLength(); i++) {
+						rows.push(i);
+						selectedRowIds_.push(dataView_.getItem(i).id);
+					}
 
-				for (var i = 0; i < dataView_.getLength(); i++) {
-					rows.push(i);
-					selectedRowIds_.push(dataView_.getItem(i).id);
+					grid_.setSelectedRows(rows);
+					event.preventDefault();
 				}
 
-				grid_.setSelectedRows(rows);
-				event.preventDefault();
 			});
 
 			grid_.onColumnsReordered.subscribe(function(event) {
@@ -456,7 +457,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			grid_.onContextMenu.subscribe(dispatchContextMenu);
 
 			sortDelay_ = new goog.async.Delay(function() {
-				dataView_.sort(comparer, sortdir_)
+				dataView_.sort(comparer, sortdir_);
 			}, 500);
 
 			// remove extra columns that are not part of this view's default set
@@ -464,10 +465,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			var newColumns = [];
 
 			for (var i = 0, l = oldColumns.length; i < l; i++) {
-				columnProperty = oldColumns[i];
+				var columnProperty = oldColumns[i];
 				var foundMatch = false;
 				for (var j = 0, ln = extraColumns.length; j < ln; j++) {
-					extraColumnProperty = extraColumns[j];
+					var extraColumnProperty = extraColumns[j];
 					// extra columns are not the same kind of object,but both have the id property
 					if (columnProperty['id'] === extraColumnProperty['id'])
 						foundMatch = true;
@@ -541,6 +542,5 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	self_ = view;
 
 	return self_;
-}
-;
+};
 goog.exportSymbol('codeshelf.hierarchylistview', codeshelf.hierarchylistview);
