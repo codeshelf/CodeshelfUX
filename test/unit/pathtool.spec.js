@@ -1,7 +1,6 @@
 //'use strict';
 
 goog.require('codeshelf.pathtool');
-goog.require('extern.jquery');
 
 /* jasmine specs for controllers go here */
 describe('Codeshelf pathdrawing', function() {

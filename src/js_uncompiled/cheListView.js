@@ -7,12 +7,11 @@
 file cheListView.js author jon ranstrom
  */
 goog.provide('codeshelf.chelistview');
-goog.require('codeshelf.controllers');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
-goog.require('extern.jquery');
+
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.query');

@@ -41,7 +41,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
 goog.require('goog.ui.Dialog');
 goog.require('codeshelf.simpleDlogService');
-goog.require('extern.jquery');
+
 goog.require('twitter.bootstrap');
 
 

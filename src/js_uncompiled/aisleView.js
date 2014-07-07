@@ -100,8 +100,8 @@ codeshelf.aisleview = function(websession, aisle) {
 	 */
 	function convertBayVertexToPoint(bayElement, vertex) {
 		var point = {};
-		point.x = parseInt(bayElement.style.left) + (vertex['posX'] * self.getPixelsPerMeter());
-		point.y = parseInt(bayElement.style.top) + (vertex['posY'] * self.getPixelsPerMeter());
+		point.x = parseInt(bayElement.style.left, 10) + (vertex['posX'] * self.getPixelsPerMeter());
+		point.y = parseInt(bayElement.style.top, 10) + (vertex['posY'] * self.getPixelsPerMeter());
 		return point;
 	}
 
@@ -120,10 +120,9 @@ codeshelf.aisleview = function(websession, aisle) {
 				id: bay['domainId']
 			});
 			goog.dom.appendChild(self.getMainPaneElement(), bayData['bayElement']);
-			bayData['bayElement'].style.left = (parseInt(self.getMainPaneElement().style.left) + (bay['anchorPosX'] * self
-				.getPixelsPerMeter()))
+			bayData['bayElement'].style.left = (parseInt(self.getMainPaneElement().style.left, 10) + (bay['anchorPosX'] * self.getPixelsPerMeter()))
 				+ 'px';
-			bayData['bayElement'].style.top = (parseInt(self.getMainPaneElement().style.top) + (bay['anchorPosY'] * self
+			bayData['bayElement'].style.top = (parseInt(self.getMainPaneElement().style.top, 10) + (bay['anchorPosY'] * self
 				.getPixelsPerMeter()))
 				+ 'px';
 

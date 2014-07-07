@@ -1,12 +1,12 @@
 goog.provide('codeshelf.listview');
-goog.require('extern.jquery');
-goog.require('slickgrid.columnpicker');
-goog.require('slickgrid.dataview');
-goog.require('slickgrid.editors');
-goog.require('slickgrid.formatters');
-goog.require('slickgrid.grid');
-goog.require('slickgrid.pager');
-goog.require('slickgrid.rowselection');
+
+
+
+
+
+
+
+
 
 codeshelf.listview = function(viewName, websession, domainObject, filterClause, filterParams) {
 

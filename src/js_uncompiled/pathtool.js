@@ -1,8 +1,12 @@
 goog.provide("codeshelf.pathtool");
 
-goog.require('extern.jquery');
+
 goog.require('bacon');
 
+
+/**
+ * @constructor
+ */
 function Path(pathDomainId, pixelToMeters) {
 	this['direction'] = "FORWARD";
 	this['domainId'] = pathDomainId;
@@ -23,6 +27,9 @@ function Path(pathDomainId, pixelToMeters) {
 	};
 }
 
+/**
+ * @constructor
+ */
 function PathTool(canvas, createPath) {
 	var clicks = $(canvas).asEventStream("click");
 	//ESCs are only captured by documents and  inputs

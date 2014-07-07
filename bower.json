@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "homepage": "https://github.com/codeshelf/CodeshelfUX",
   "authors": [
-	  "Jeff Williams <jeff.williams@codeshelf.com>",
-	  "Jon Ranstrom <jon.ranstrom@codeshelf.com",
-      "Paul Monteiro <paul.monteiro@codeshelf.com>"
+    "Jeff Williams <jeff.williams@codeshelf.com>",
+    "Jon Ranstrom <jon.ranstrom@codeshelf.com",
+    "Paul Monteiro <paul.monteiro@codeshelf.com>"
   ],
   "description": "The primary codeshelf web ui",
   "license": "MIT",
@@ -19,6 +19,13 @@
     "tests"
   ],
   "dependencies": {
-    "angular-dialog-service": "~5.0.0"
+    "angular-dialog-service": "~5.0.0",
+    "angular-i18n": "~1.2.18",
+    "angular-route": "~1.2.18",
+    "jquery": "~1.8.1",
+    "SlickGrid": "mleibman/SlickGrid#2.1"
+  },
+  "resolutions": {
+    "jquery": "~1.8.1"
   }
 }

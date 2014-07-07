@@ -10,6 +10,7 @@ module.exports = function (config) {
 			{pattern: 'lib/GoogleClosureLibrary/closure/goog/base.js'},
 			// external deps
 			{pattern: 'lib/GoogleClosureLibrary/closure/goog/deps.js', included: false, served: false},
+			'lib/jquery/jquery.js',
 			'lib/AngularJS/angular.js',
 			'lib/AngularJS/angular-*.js',
 			'lib/UIBootstrap/ui-bootstrap-tpls-0.10.0.js',
@@ -18,7 +19,7 @@ module.exports = function (config) {
 			// included during the preprocessor step
 			{pattern: 'lib/GoogleClosureTemplates/*.js', included: false},
 
-			{pattern: 'lib/JQuery/*.js', included: false},
+			{pattern: 'lib/jquery-ext/*.js', included: false},
 			{pattern: 'lib/Bacon/bacon.js', included: false},
 			{pattern: 'lib/Raphael/*.js', included: false},
 			{pattern: 'lib/SlickGrid/**/*.js', included: false},
@@ -41,7 +42,7 @@ module.exports = function (config) {
 		],
 
 		preprocessors: {
-			'lib/JQuery/*.js': ['closure'],
+			'lib/jquery-ext/*.js': ['closure'],
 			'lib/Bacon/bacon.js': ['closure'],
 			'lib/Raphael/*.js': ['closure'],
 			'lib/SlickGrid/**/*.js' : ['closure'],

@@ -1,14 +1,5 @@
 goog.provide('codeshelf.listdemoview');
-goog.require('extern.jquery');
-goog.require('slickgrid.cellcopymanager');
-goog.require('slickgrid.cellselection');
-goog.require('slickgrid.columnpicker');
-goog.require('slickgrid.dataview');
-goog.require('slickgrid.editors');
-goog.require('slickgrid.formatters');
-goog.require('slickgrid.grid');
-goog.require('slickgrid.pager');
-goog.require('slickgrid.rowselection');
+
 goog.require('codeshelf.simpleDlogService');
 
 jQuery('.grid-header .ui-icon').addClass('ui-state-default ui-corner-all')['mouseover'](

@@ -5,7 +5,11 @@
  *******************************************************************************/
 goog.provide('codeshelf.view');
 goog.require('codeshelf.window');
+goog.require('codeshelf.websession');
+goog.require('codeshelf.templates');
+
 goog.require('extern.jquery.dragToSelect');
+goog.require('soy');
 goog.require('goog.async.Delay');
 goog.require('goog.dom');
 goog.require('goog.fx.Dragger');
