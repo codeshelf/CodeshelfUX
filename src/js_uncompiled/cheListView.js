@@ -147,10 +147,6 @@ codeshelf.cheslistview = function(websession, facility) {
 				event.stopPropagation();
 
 			event.preventDefault();
-			openContextMenu(item);
-		},
-
-		openContextMenu: function(item) {
 			contextMenu_.empty();
 			// contextMenu_.bind("click", item, handleAisleContext);
 
@@ -167,6 +163,10 @@ codeshelf.cheslistview = function(websession, facility) {
 				.css('top', event.pageY - 10)
 				.css('left', event.pageX - 10)
 				.fadeIn(5);
+		},
+
+		openContextMenu: function(item) {
+
 		}
 	};
 	// che parent is codeshelf_network, whose parent is the facility
@@ -177,18 +177,7 @@ codeshelf.cheslistview = function(websession, facility) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { className: domainobjects['Che']['className'], linkProperty: 'parent', filter : cheFilter, filterParams : cheFilterParams, properties: domainobjects['Che']['properties'],
-	actions: { "context" :
-			   {
-				   id: "context",
-				   title: "More",
-				   width: 10,
-				   handler: function(dataItem) {
-					   self.openContextMenu(dataItem);
-				   }
-			   }
-		}
-	};
+	hierarchyMap[0] = { className: domainobjects['Che']['className'], linkProperty: 'parent', filter : cheFilter, filterParams : cheFilterParams, properties: domainobjects['Che']['properties']	};
 
 	// -1 for non-dragable. Single level view with normal sort rules
 	var view = codeshelf.hierarchylistview(websession_, domainobjects['Che'], hierarchyMap, -1);
