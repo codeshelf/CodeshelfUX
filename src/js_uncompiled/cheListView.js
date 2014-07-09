@@ -182,6 +182,7 @@ codeshelf.cheslistview = function(websession, facility) {
 			   {
 				   id: "context",
 				   title: "More",
+				   width: 10,
 				   handler: function(dataItem) {
 					   self.openContextMenu(dataItem);
 				   }

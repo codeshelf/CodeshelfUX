@@ -10,7 +10,7 @@ goog.require('goog.async.Delay');
  * @type {string}
  */
 codeshelf.buttonFormatter = function(row, cell, value, columnDef, dataContext) {
-	return '<button class="action ' + columnDef.id + '" >&nbsp;</button>';
+	return '<button class="btn action ' + columnDef.id + '" ><span class="glyphicon glyphicon-chevron-down" style="vertical-align:middle"></span></button>';
 };
 
 codeshelf.grid = {};
