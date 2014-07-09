@@ -14,6 +14,7 @@ module.exports = function (config) {
 			'lib/AngularJS/angular.js',
 			'lib/AngularJS/angular-*.js',
 			'lib/UIBootstrap/ui-bootstrap-tpls-0.10.0.js',
+			'lib/SlickGrid/slickgrid.concat.js',
 			'src/js_uncompiled/codeshelfAngularApp.js',
 			//watch files but do not include them; files using closure require mechanism will get
 			// included during the preprocessor step
