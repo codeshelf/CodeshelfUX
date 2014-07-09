@@ -1,5 +1,6 @@
 goog.provide('codeshelf.hierarchylistview');
 goog.require('codeshelf.view');
+goog.require('goog.array');
 goog.require('goog.debug.Logger');
 goog.require('goog.async.Delay');
 //require jquery ui resizable
@@ -358,9 +359,12 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 
 			//Add click handlers from the columns
 			goog.array.forEach(columns_, function(column) {
-				if(typeof column.cellClickHandler === 'function') {
+
+				if(typeof column['cellClickHandler'] === 'function') {
+				logger_.fine("register cellClickHandler with grid for column " + column);
 					grid_.onClick.subscribe(function(event, args) {
-						column.cellClickHandler(event, args);
+						logger_.fine("cellClickHandler executing for " + column);
+						column['cellClickHandler'](event, args);
 					});
 				}
 			});
