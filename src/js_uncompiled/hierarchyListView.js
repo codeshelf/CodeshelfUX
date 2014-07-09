@@ -1,9 +1,9 @@
 goog.provide('codeshelf.hierarchylistview');
 goog.require('codeshelf.view');
+goog.require('goog.array');
 goog.require('goog.debug.Logger');
 goog.require('goog.async.Delay');
 //require jquery ui resizable
-
 codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, draggableHierarchyLevel) {
 
 	var logger_ = goog.debug.Logger.getLogger('codeshelf.hierarchylistview');
@@ -19,7 +19,6 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	var domainObject_ = domainObject;
 	var hierarchyMap_ = hierarchyMap;
 	var draggableHierarchyLevel_ = (draggableHierarchyLevel === undefined ? -1 : draggableHierarchyLevel);
-
 	var dataView_;
 	var grid_;
 	var selectedRowIds_ = [];
@@ -28,8 +27,6 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	var columns_ = [];
 	var options_;
 	var sortdir_ = 1;
-	var percentCompleteThreshold_;
-	var searchString_;
 	var sortDelay_;
 	var levelsInThisView = hierarchyMap_.length;
 
@@ -68,7 +65,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	/**
 	 * Figure our what level this item is on based on the class hierarchy.
 	 * @param item
-	 * @return {Number}  the level (0-n)
+	 * @return {Number | null}  the level (0-n)
 	 */
 	function getLevel(item) {
 		if (item['getLevel'] !== undefined) {
@@ -83,6 +80,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 				}
 			}
 		}
+		return null;
 	}
 
 	/**
@@ -163,7 +161,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 		var items = dataView_.getItems();
 		for (var key = 0; key < items.length; key++) {
 			if (items.hasOwnProperty(key)) {
-				item = items[key];
+				var item = items[key];
 				if (item['parentPersistentId'] === object['persistentId']) {
 					removeChildren(item);
 					// We just deleted at least one item and everything has shifted down, so go back a eval the same item again.
@@ -205,7 +203,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 										}
 
 										var computedProperties = [];
-										for (property in hierarchyMap_[j + 1].properties) {
+										for (var property in hierarchyMap_[j + 1].properties) {
 											if (hierarchyMap_[j + 1].properties.hasOwnProperty(property)) {
 												computedProperties.push(hierarchyMap_[j + 1].properties[property].id);
 											}
@@ -263,15 +261,36 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 		return levelsInThisView;
 	}
 
+	function createContextMenuColumn() {
+		var actionDef = {
+				   id: "context",
+				   title: "More",
+				   width: 10,
+				   handler: function(event) {
+					   dispatchContextMenu(event);
+				   }
+			   };
+		var column = codeshelf.grid.toButtonColumn(actionDef);
+		return column;
+	}
+
 	var self_ = {
 		doSetupView: function() {
 
-			var count = 0;
+			columns_ = codeshelf.grid.toColumnsForHierarchy(hierarchyMap_);
+
+			var extraColumns = goog.array.filter(columns_, function() {
+				return (this.hasOwnProperty('shouldAddThisColumn') &&  !this['shouldAddThisColumn'](property));
+			});
+			var computedProperties = goog.array.reduce(columns_, function(ids, column) {
+				ids.push(column.id);
+				return ids;
+			}, []);
+
+
 			// If we've specified drag-ordering then present a drag-ordering column.
 			if (draggableHierarchyLevel_ != -1) {
-				// Compute the columns we need for this domain object.
-				count = 1;
-				columns_[0] = {
+				var selectAndMove = {
 					'id':                  'id',
 					'name':                '',
 					'field':               '',
@@ -284,47 +303,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 					'sortable':            false,
 					'cssClass':            'cell-reorder dnd'
 				};
-			}
-			var extraColumns = [];
-			var computedProperties = [];
-			for (var i = 0; i < hierarchyMap_.length; i++) {
-				var className = hierarchyMap_[i].className;
-				var properties = hierarchyMap_[i].properties;
-				for (property in properties) {
-					if (properties.hasOwnProperty(property)) {
-						var property = properties[property];
-
-						// Check if the property already exists in the columns.
-						var foundEntry = goog.array.find(columns_, function (entry) {
-							return entry.id === property.id;
-						});
-
-						if (foundEntry === null) {
-							// default is to just add all available columns.
-							if (this.hasOwnProperty('shouldAddThisColumn') &&  !this['shouldAddThisColumn'](property)) {
-								// property is going into the view, but we want it out of the view.
-								extraColumns.push(property);
-							}
-
-							if (domainObject_['properties'][property.id] !== undefined) {
-									computedProperties.push(property.id);
-							}
-
-							columns_[count++] = {
-								'id': property.id,
-								'name': property.title,
-								'field': property.id,
-								'behavior': 'select',
-								'headerCssClass': ' ',
-								'width': property.width,
-								'cannotTriggerInsert': true,
-								'resizable': true,
-								'selectable': true,
-								'sortable': true
-							};
-						}
-					}
-				}
+				columns_.unshift(selectAndMove);
 			}
 
 			options_ = {
@@ -338,14 +317,14 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 				'autoEdit':             false
 			};
 
-			percentCompleteThreshold_ = 0;
-			searchString_ = '';
-
 			goog.dom.appendChild(self_.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
 			// setupContextMenu is another psuedo-inheritance pattern thing. No base class method. Just assume it is probably there.
 			// If not there, the view will not open correctly. There is no way to check from here whether the descended class has property 'setupContextMenu'.
-			self_.setupContextMenu();
+			if (typeof self_.setupContextMenu === 'function') {
+				self_.setupContextMenu();
+				columns_.push(createContextMenuColumn());
+			}
 
 			dataView_ = new Slick.Data.DataView();
 			grid_ = new Slick.Grid(self_.getMainPaneElement(), dataView_, columns_, options_);
@@ -378,25 +357,33 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
 
-			grid_.onClick.subscribe(function(event) {
-				var cell = grid_.getCellFromEvent(event);
+			//Add click handlers from the columns
+			goog.array.forEach(columns_, function(column) {
+
+				if(typeof column['cellClickHandler'] === 'function') {
+				logger_.fine("register cellClickHandler with grid for column " + column);
+					grid_.onClick.subscribe(function(event, args) {
+						logger_.fine("cellClickHandler executing for " + column);
+						column['cellClickHandler'](event, args);
+					});
+				}
 			});
 
 			grid_.onKeyDown.subscribe(function(event) {
 				// select all rows on ctrl-a
-				if (event.which != 65 || !event.ctrlKey)
-					return false;
+				if (event.which == 65 && event.ctrlKey) {
+					var rows = [];
+					selectedRowIds_ = [];
 
-				var rows = [];
-				selectedRowIds_ = [];
+					for (var i = 0; i < dataView_.getLength(); i++) {
+						rows.push(i);
+						selectedRowIds_.push(dataView_.getItem(i).id);
+					}
 
-				for (var i = 0; i < dataView_.getLength(); i++) {
-					rows.push(i);
-					selectedRowIds_.push(dataView_.getItem(i).id);
+					grid_.setSelectedRows(rows);
+					event.preventDefault();
 				}
 
-				grid_.setSelectedRows(rows);
-				event.preventDefault();
 			});
 
 			grid_.onColumnsReordered.subscribe(function(event) {
@@ -456,7 +443,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			grid_.onContextMenu.subscribe(dispatchContextMenu);
 
 			sortDelay_ = new goog.async.Delay(function() {
-				dataView_.sort(comparer, sortdir_)
+				dataView_.sort(comparer, sortdir_);
 			}, 500);
 
 			// remove extra columns that are not part of this view's default set
@@ -464,10 +451,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			var newColumns = [];
 
 			for (var i = 0, l = oldColumns.length; i < l; i++) {
-				columnProperty = oldColumns[i];
+				var columnProperty = oldColumns[i];
 				var foundMatch = false;
 				for (var j = 0, ln = extraColumns.length; j < ln; j++) {
-					extraColumnProperty = extraColumns[j];
+					var extraColumnProperty = extraColumns[j];
 					// extra columns are not the same kind of object,but both have the id property
 					if (columnProperty['id'] === extraColumnProperty['id'])
 						foundMatch = true;
@@ -476,6 +463,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 					newColumns.push(columnProperty);
 				}
 			}
+
 			if (oldColumns.length != newColumns.length)
 				grid_.setColumns(newColumns);
 			// end default set
@@ -510,8 +498,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			dataView_.beginUpdate();
 			dataView_.setItems([], 'persistentId');
 			dataView_.setFilterArgs({
-				                        percentCompleteThreshold: percentCompleteThreshold_,
-				                        searchString:             searchString_
+				                        percentCompleteThreshold: 0,
+				                        searchString:             ''
 			                        });
 			dataView_.endUpdate();
 
@@ -541,6 +529,92 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	self_ = view;
 
 	return self_;
-}
-;
+};
 goog.exportSymbol('codeshelf.hierarchylistview', codeshelf.hierarchylistview);
+
+
+codeshelf.grid = {};
+
+codeshelf.grid.toColumnsForHierarchy = function(hierarchyLevels) {
+
+	var concatenatedColumns = goog.array.reduce(hierarchyLevels, function(allCols, hierarchyLevel) {
+		var columns = codeshelf.grid.toColumns(hierarchyLevel);
+		return allCols.concat(columns);
+	}, []);
+
+	var mergedColumns = [];
+	goog.array.removeDuplicates(concatenatedColumns, mergedColumns, function match(item){ return item.id;});
+	return mergedColumns;
+};
+
+/**
+ * Takes a hierarchy level definition and returns columns for the grid
+ * @param {codeshelf.HierarchyLevel} hierarchyLevelDef
+ */
+codeshelf.grid.toColumns = function(hierarchyLevelDef) {
+	var columns = [];
+	var className = hierarchyLevelDef.className;
+	var properties = hierarchyLevelDef.properties;
+	for (var property in properties) {
+		if (properties.hasOwnProperty(property)) {
+			var propertyDef = properties[property];
+			var newColumn = {
+					'id': propertyDef.id,
+					'name': propertyDef.title,
+					'field': propertyDef.id,
+					'behavior': 'select',
+					'headerCssClass': ' ',
+					'width': propertyDef.width,
+					'cannotTriggerInsert': true,
+					'resizable': true,
+					'selectable': true,
+					'sortable': true
+			};
+		}
+			columns.push(newColumn);
+	}
+	if (!(typeof hierarchyLevelDef.actions == "undefined")) {
+
+		var actions = hierarchyLevelDef.actions;
+		for(var key in actions) {
+			var actionDef = actions[key];
+			var newActionColumn = codeshelf.grid.toButtonColumn(actionDef);
+			columns.push(newActionColumn);
+		}
+	}
+	return columns;
+};
+
+codeshelf.grid.toButtonColumn = function(actionDef) {
+	var targetClasses = ["action", actionDef.id];
+
+	var cellClickHandler = function(event, args) {
+		for(var i = 0; i < targetClasses.length; i++) {
+			if ($(event.target).closest("." + targetClasses[i]).length == 0) {
+				return;
+			}
+		}
+		actionDef.handler(event, args);
+	};
+
+	var classAttribute = targetClasses.join(' ');
+	var formatter = function(row, cell, value, columnDef, dataContext) {
+		return '<button class="btn ' + classAttribute + '" ><span class="glyphicon glyphicon-chevron-down" style="vertical-align:middle"></span></button>';
+	};
+
+	var newActionColumn = {
+		'id': actionDef.id,
+		'name': actionDef.title,
+		'field': actionDef.id,
+		'behavior': 'select',
+		'headerCssClass': ' ',
+		'width': actionDef.width,
+		'cannotTriggerInsert': true,
+		'resizable': true,
+		'selectable': false,
+		'sortable': true,
+		'formatter': formatter,
+		'cellClickHandler': cellClickHandler
+	};
+	return newActionColumn;
+};

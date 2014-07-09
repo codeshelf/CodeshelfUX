@@ -106,6 +106,19 @@ ul {
 	cursor: move;
 }
 
+.slick-cell {
+	box-sizing: content-box; /* affects the measurements in slickgrid that left spacing on the bottom*/
+}
+
+.slick-cell .btn {
+	border: 2px outset buttonface; /** chrome */
+	padding: 0px 6px 2px 5px;
+}
+
+.slick-header-column.ui-state-default {
+	box-sizing: content-box; /* affects the measurements in slickgrid that left spacing on the bottom*/
+}
+
 .cell-move-handle:hover {
 	background: #b6b9bd;
 }

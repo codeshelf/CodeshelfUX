@@ -163,8 +163,11 @@ codeshelf.cheslistview = function(websession, facility) {
 				.css('top', event.pageY - 10)
 				.css('left', event.pageX - 10)
 				.fadeIn(5);
-		}
+		},
 
+		openContextMenu: function(item) {
+
+		}
 	};
 	// che parent is codeshelf_network, whose parent is the facility
 	var cheFilter = 'parent.parent.persistentId = :theId';
@@ -174,7 +177,7 @@ codeshelf.cheslistview = function(websession, facility) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { className: domainobjects['Che']['className'], linkProperty: 'parent', filter : cheFilter, filterParams : cheFilterParams, properties: domainobjects['Che']['properties'] };
+	hierarchyMap[0] = { className: domainobjects['Che']['className'], linkProperty: 'parent', filter : cheFilter, filterParams : cheFilterParams, properties: domainobjects['Che']['properties']	};
 
 	// -1 for non-dragable. Single level view with normal sort rules
 	var view = codeshelf.hierarchylistview(websession_, domainobjects['Che'], hierarchyMap, -1);
