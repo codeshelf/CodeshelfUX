@@ -59,6 +59,11 @@ domainobjects = {
 				'id':    'fullDomainId',
 				'title': 'Nominal ID',
 				'width': 10
+			},
+			posAlongPath: {
+				'id':    'posAlongPath',
+				'title': 'Meters Along Path',
+				'width': 10
 			}
 		}
 	},
@@ -114,6 +119,11 @@ domainobjects = {
 			fullDomainId: {
 				'id':    'fullDomainId',
 				'title': 'Nominal ID',
+				'width': 10
+			},
+			posAlongPath: {
+				'id':    'posAlongPath',
+				'title': 'Meters Along Path',
 				'width': 10
 			}
 		}
@@ -578,6 +588,11 @@ domainobjects = {
 				'id':    'fullDomainId',
 				'title': 'Nominal ID',
 				'width': 10
+			},
+			posAlongPath: {
+				'id':    'posAlongPath',
+				'title': 'Meters Along Path',
+				'width': 10
 			}
 		}
 	},
@@ -653,6 +668,11 @@ domainobjects = {
 			fullDomainId: {
 				'id':    'fullDomainId',
 				'title': 'Nominal ID',
+				'width': 10
+			},
+			posAlongPath: {
+				'id':    'posAlongPath',
+				'title': 'Meters Along Path',
 				'width': 10
 			}
 		}
