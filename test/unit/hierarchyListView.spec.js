@@ -12,45 +12,71 @@ describe('hierarchyListView', function() {
 	});
 
 	it("initialize view", function() {
-		var hierarchyLevel = createLevel();
+		var hierarchyLevel = createDefaultLevel();
 		var listview = codeshelf.hierarchylistview(websession, {}, [hierarchyLevel], -1);
 		listview.setupView(pane);
 		var total = getAllColumnIds(hierarchyLevel).length;
-		expect(jqPane.find(".slick-header-column").size()).toEqual(total);
+		expect(getRenderedColumns().size()).toEqual(total);
 	});
 
 	describe("column setup", function() {
 
 		it("for a single level a column is created for each property and action", function() {
-			var hierarchyLevelDef = createLevel();
+			var hierarchyLevelDef = createDefaultLevel();
 
 			var total = getAllColumnIds(hierarchyLevelDef).length;
 			expect(total).not.toEqual(0);
 			var listview = codeshelf.hierarchylistview(websession, {}, [hierarchyLevelDef], -1);
 			listview.setupView(pane);
-			expect(jqPane.find(".slick-header-column").size()).toEqual(total);
+			expect(getRenderedColumns().size()).toEqual(total);
 
 		});
 
 		it("handles levels with no actions", function() {
-			var hierarchyLevelDef = createLevel();
+			var hierarchyLevelDef = createDefaultLevel();
 			delete(hierarchyLevelDef.actions);
 			var listview = codeshelf.hierarchylistview(websession, {}, [hierarchyLevelDef], -1);
 			listview.setupView(pane);
 			var total = getAllColumnIds(hierarchyLevelDef).length;
-			expect(jqPane.find(".slick-header-column").size()).toEqual(total);
+			expect(getRenderedColumns().size()).toEqual(total);
 		});
 
 		it("if two levels, columns are not duplicated", function() {
-			var hierarchyLevelDef1 = createLevel();
-			var hierarchyLevelDef2 = createLevel();
+			var hierarchyLevelDef1 = createDefaultLevel();
+			var hierarchyLevelDef2 = createDefaultLevel();
 			hierarchyLevelDef2.properties  = goog.object.clone(hierarchyLevelDef2.properties);
 			hierarchyLevelDef2.properties["additional"] = createProperty("additional");
 
 			var listview = codeshelf.hierarchylistview(websession, {}, [hierarchyLevelDef1, hierarchyLevelDef2], -1);
 			listview.setupView(pane);
 			var total = getAllColumnIds(hierarchyLevelDef1).length + 1;
-			expect(jqPane.find(".slick-header-column").size()).toEqual(total);
+			expect(getRenderedColumns().size()).toEqual(total);
+
+		});
+
+		it("should show column by default 'shouldAddThisColumn' ", function() {
+			var self = {
+				'shouldAddThisColumn': function(inProperty) {
+					if(inProperty['id'] == 'idToShow') {
+						return true;
+					}
+					else if (inProperty['id'] == 'idToHide') {
+						return false;
+					}
+					else {
+						throw "column filter did not match property, " + inProperty['id'];
+					}
+				}
+			};
+
+			var hierarchyLevelDef1 = createLevel([createProperty("idToShow"), createProperty("idToHide")], []);
+
+
+			var listview = codeshelf.hierarchylistview(websession, {}, [hierarchyLevelDef1], -1);
+			jQuery.extend(listview, self);
+			listview.setupView(pane);
+			expect(getAllColumnIds(hierarchyLevelDef1).length).toEqual(2);
+			expect(getRenderedColumns().size()).toEqual(1);
 
 		});
 	});
@@ -58,34 +84,59 @@ describe('hierarchyListView', function() {
 	var createProperty = function(id) {
 		return {
 			'id':   id,
-			'title': 'ID',
+			'title': id.toUpperCase(),
 			'width': 25
 		};
 	};
 
-	var createLevel = function() {
-		var tierSlotFilter = 'parent.persistentId = :theId';
+	var createAction = function(id) {
+		return {
+			id: id,
+			title: id.toUpperCase(),
+			handler: function(dataItem) {
+				console.log("do light");
+			}
+		};
+	};
 
-		var tierSlotFilterParams = [
+	var createDefaultLevel = function() {
+		return createLevel([createProperty("testProperty")], []);
+	};
+
+	var createLevel = function(properties, actions) {
+		var propertiesObj = {};
+		if(properties instanceof Array) {
+			goog.array.forEach(properties, function(property) {
+				propertiesObj[property.id] = property;
+			});
+		}
+		else {
+			throw "property array required";
+		}
+
+		var actionsObj = {};
+		if(actions instanceof Array) {
+			goog.array.forEach(actions, function(action) {
+				propertiesObj[action.id] = action;
+			});
+		}
+		else {
+			throw "actions array required";
+		}
+		var filter  = 'parent.persistentId = :theId';
+
+		var filterParams = [
 			{ 'name': 'theId', 'value': "persistentid-aaaaa"}
 		];
 
 		var hierarchyLevel =
 			{
-				className: domainobjects['Slot']['className'],
+				className: "testclassname",
 				linkProperty: 'parent',
-				filter : tierSlotFilter,
-				filterParams : tierSlotFilterParams,
-				properties: domainobjects['Slot']['properties'],
-				actions: [
-					{
-						id: "context",
-						title: "More",
-						handler: function(dataItem) {
-							self.openContextMenu();
-						}
-					}
-				]
+				filter : filter,
+				filterParams : filterParams,
+				properties: propertiesObj,
+				actions: actionsObj
 			};
 		return hierarchyLevel;
 	};
@@ -94,6 +145,10 @@ describe('hierarchyListView', function() {
 		var propKeys = goog.object.getKeys(hierarchyLevel.properties);
 		var actionKeys = goog.object.getKeys(hierarchyLevel.actions);
 		return propKeys.concat(actionKeys);
+	};
+
+	var getRenderedColumns = function() {
+		return jqPane.find(".slick-header-column");
 	};
 
 });

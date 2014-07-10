@@ -125,7 +125,7 @@ codeshelf.cheslistview = function(websession, facility) {
 			// only fields in domainObjects for aisle will be asked for. We want to exclude persistent Id
 			if (inProperty['id'] ===  'persistentId')
 				return false;
-			else if (inProperty['id'] ===  'deviceGuid')
+			else if (inProperty['id'] ===  'deviceGuidStr')
 				return false;
 			else
 				return true;

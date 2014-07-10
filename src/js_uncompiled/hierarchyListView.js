@@ -447,27 +447,13 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			}, 500);
 
 			// remove extra columns that are not part of this view's default set
-			var oldColumns = grid_.getColumns();
-			var newColumns = [];
-
-			for (var i = 0, l = oldColumns.length; i < l; i++) {
-				var columnProperty = oldColumns[i];
-				var foundMatch = false;
-				for (var j = 0, ln = extraColumns.length; j < ln; j++) {
-					var extraColumnProperty = extraColumns[j];
-					// extra columns are not the same kind of object,but both have the id property
-					if (columnProperty['id'] === extraColumnProperty['id'])
-						foundMatch = true;
-				}
-				if (!foundMatch){
-					newColumns.push(columnProperty);
-				}
+			if (self_.hasOwnProperty('shouldAddThisColumn')) {
+				var allColumns = grid_.getColumns();
+				var columnsToShow = goog.array.filter(allColumns, function(column) {
+					return self_['shouldAddThisColumn'](column);
+				});
+				grid_.setColumns(columnsToShow);
 			}
-
-			if (oldColumns.length != newColumns.length)
-				grid_.setColumns(newColumns);
-			// end default set
-
 		},
 
 		open: function() {
