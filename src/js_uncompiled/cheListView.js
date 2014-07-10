@@ -17,81 +17,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-checontextmenuscope = {
-	'che': null
-};
-
-function clearCheContextMenuScope(){
-	checontextmenuscope['che'] = null;
-}
-
-function editChe() {
-	var che = checontextmenuscope['che'];
-	var data = {
-		'che': che
-	};
-
-	var theLogger = goog.debug.Logger.getLogger('CHE view');
-	theLogger.info("about to call dialog for selected CHE: " + che['domainId']);
-
-
-	// See codeshelfApp.CheController defined below. And then referenced in angular.module
-	var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-che.html", "CheNgController as controller", data);
-
-	promise.result.then(function(){
-		clearCheContextMenuScope();
-
-	});
-}
-goog.exportSymbol('editChe', editChe);
-
-var websession_ = null;
-
-function testOnlySetUpChe() {
-	var che = checontextmenuscope['che'];
-	if (che === null)
-		return;
-
-	cheDomainId = che['domainId'];
-	var theLogger = goog.debug.Logger.getLogger('CHE view');
-	theLogger.info("about do a fake setup cart for CHE: " + cheDomainId);
-
-	var methodArgs = [
-		{ 'name': 'inCheDomainId', 'value': cheDomainId, 'classType': 'java.lang.String'}
-	];
-
-	codeshelf.objectUpdater.callMethod(facility_, 'Facility', 'fakeSetUpChe', methodArgs);
-
-	clearCheContextMenuScope();
-}
-goog.exportSymbol('testOnlySetUpChe', testOnlySetUpChe);
-
-function cheWorkInstructions() {
-	var che = checontextmenuscope['che'];
-	if (che === null)
-		return;
-	if (che) {
-		var wiListView = codeshelf.workinstructionlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che, null, null);
-		var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
-		wiListWindow.open();
-	}
-	clearCheContextMenuScope();
-}
-goog.exportSymbol('cheWorkInstructions', cheWorkInstructions);
-
-function cheContainers() {
-	var che = checontextmenuscope['che'];
-	if (che === null)
-		return;
-	if (che) {
-		var useListView = codeshelf.containeruselistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che);
-		var useListWindow = codeshelf.window(useListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
-		useListWindow.open();
-	}
-	clearCheContextMenuScope();
-}
-goog.exportSymbol('cheContainers', cheContainers);
-
 /**
  * The aisles for this facility.
  * @param websession The websession used for updates.
@@ -101,7 +26,7 @@ goog.exportSymbol('cheContainers', cheContainers);
 codeshelf.cheslistview = function(websession, facility) {
 
 	var websession_ = websession;
-	facility_ = facility; // defined above so it available to testOnlySetUpChe
+	var facility_ = facility; // defined above so it available to testOnlySetUpChe
 
 	var contextMenu_;
 
@@ -137,8 +62,8 @@ codeshelf.cheslistview = function(websession, facility) {
 
 		setupContextMenu: function() {
 			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			contextMenu_.bind('mouseleave', function(event) {
-				$(this).fadeOut(5)
+			contextMenu_.on('mouseleave', function(event) {
+				self.closeContextMenu();
 			});
 		},
 
@@ -152,21 +77,96 @@ codeshelf.cheslistview = function(websession, facility) {
 
 			var line;
 			if (view.getItemLevel(item) === 0) {
-				checontextmenuscope['che'] = item;
-				line = $('<li><a href="javascript:cheWorkInstructions()">Work Instructions</a></li>').appendTo(contextMenu_).data("option", "work_instructions");
-				line = $('<li><a href="javascript:cheContainers()">Containers</a></li>').appendTo(contextMenu_).data("option", "containers");
-				line = $('<li><a href="javascript:editChe()">Edit CHE</a></li>').appendTo(contextMenu_).data("option", "change_description");
-				line = $('<li><a href="javascript:testOnlySetUpChe()">TESTING ONLY--Simulate cart set up</a></li>').appendTo(contextMenu_).data("option", "fake_setup");
-			}
+				line = $('<li><a href="#">Work Instructions</a></li>')
+					.appendTo(contextMenu_)
+					.data("option", "work_instructions")
+					.one("click", function() {
+						self.closeContextMenu();
+						self.cheWorkInstructions(item);
+					});
+				line = $('<li><a href="#">Containers</a></li>')
+					.appendTo(contextMenu_)
+					.data("option", "containers")
+					.one("click", function() {
+						self.closeContextMenu();
+						self.cheContainers(item);
+					});
+				line = $('<li><a href="#">Edit CHE</a></li>')
+					.appendTo(contextMenu_)
+					.data("option", "change_description")
+					.one("click",  function() {
+						self.closeContextMenu();
+						self.editChe(item);
+					});
+				line = $('<li><a href="#">TESTING ONLY--Simulate cart set up</a></li>')
+					.appendTo(contextMenu_)
+					.data("option", "fake_setup")
+					.one("click",  function() {
+						self.closeContextMenu();
+						self.testOnlySetUpChe(item);
+					});
+				$('html').on("click.outsidecontextmenu", function(event) {
+					self.closeContextMenu();
+				});
+				contextMenu_
+					.css('top', event.pageY - 10)
+					.css('left', event.pageX - 10)
+					.fadeIn(5);
 
-			contextMenu_
-				.css('top', event.pageY - 10)
-				.css('left', event.pageX - 10)
-				.fadeIn(5);
+			}
 		},
 
-		openContextMenu: function(item) {
+		closeContextMenu: function(item) {
+			$(contextMenu_).fadeOut(5);
+			$('html').off("click.outsidecontextmenu");
+		},
 
+		editChe:  function(che){
+			var data = {
+				'che': che
+			};
+
+			var theLogger = goog.debug.Logger.getLogger('CHE view');
+			theLogger.info("about to call dialog for selected CHE: " + che['domainId']);
+
+
+			// See codeshelfApp.CheController defined below. And then referenced in angular.module
+			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-che.html", "CheNgController as controller", data);
+
+			promise.result.then(function(){
+
+			});
+		},
+		cheContainers: function(che) {
+			if (che === null)
+				return;
+			if (che) {
+				var useListView = codeshelf.containeruselistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che);
+				var useListWindow = codeshelf.window(useListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				useListWindow.open();
+			}
+		},
+		cheWorkInstructions: function(che) {
+			if (che === null)
+				return;
+			if (che) {
+				var wiListView = codeshelf.workinstructionlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che, null, null);
+				var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				wiListWindow.open();
+			}
+		},
+		testOnlySetUpChe: function(che) {
+			if (che === null)
+				return;
+
+			cheDomainId = che['domainId'];
+			var theLogger = goog.debug.Logger.getLogger('CHE view');
+			theLogger.info("about do a fake setup cart for CHE: " + cheDomainId);
+
+			var methodArgs = [
+				{ 'name': 'inCheDomainId', 'value': cheDomainId, 'classType': 'java.lang.String'}
+			];
+			codeshelf.objectUpdater.callMethod(facility_, 'Facility', 'fakeSetUpChe', methodArgs);
 		}
 	};
 	// che parent is codeshelf_network, whose parent is the facility
