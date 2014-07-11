@@ -5,6 +5,8 @@
  *******************************************************************************/
 goog.provide('codeshelf.mainpage');
 goog.provide('codeshelf.windowLauncher'); // Better way? Only for use inside this file.
+goog.require('codeshelf.authz');
+goog.require('codeshelf.navbar');
 goog.require('codeshelf.sessionGlobals');
 goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.aisleslistview');
@@ -41,7 +43,6 @@ goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
 goog.require('goog.ui.Dialog');
 goog.require('codeshelf.simpleDlogService');
-
 goog.require('twitter.bootstrap');
 
 
@@ -319,7 +320,7 @@ codeshelf.mainpage = function() {
 	 */
 	var self = {
 
-	enter: function(application, websession) {
+	enter: function(application, websession, authz) {
 
 			application_ = application;
 			websession_ = websession;
@@ -328,13 +329,10 @@ codeshelf.mainpage = function() {
 			websession_.setCurrentPage(this);
 
 			goog.dom.setProperties(goog.dom.getDocument()['body'], {'class': 'main_body'});
-			goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.mainPage));
+			var navbar = new codeshelf.Navbar();
 
-			// The frame div no longer in the window
-			// frame_ = goog.dom.query('.frame')[0];
-			// frame_.style.top = frameTop_ + 5 + 'px';
-			// frame_.style.left = frameLeft_ + 'px';
-
+			var filteredNavbar = navbar.toUserNavbar(authz);
+			goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.mainPage, {"navbar": filteredNavbar}));
 
 			limits_ = new goog.math.Rect(0, 0, 750, 600);
 
@@ -359,14 +357,6 @@ codeshelf.mainpage = function() {
 					window.focusWindow();
 				}
 			});
-
-//			var filter = 'parentOrganization.persistentId = :theId';
-//			var filterParams = [
-//				{ 'name': 'theId', 'value': organization_['persistentId']}
-//			];
-//			var listView = codeshelf.listview('Facilities List', websession_, domainobjects['Facility'], filter, filterParams);
-//			var listWindow = codeshelf.window(listView, frame_, undefined);
-//			listWindow.open();
 
 			var data = {
 				'className':    organization_['className'],

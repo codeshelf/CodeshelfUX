@@ -2,6 +2,7 @@
 
 /**
  * The template for the main page.
+ * @param navbar
  */
 {template .mainPage}
 <nav class="navbar navbar-inverse navbar-fixed-top role=navigation">
@@ -24,68 +25,26 @@
         <<div class="navbar-collapse collapse">
         <!-- <div class="mystaticnavbar"> -->
            <ul class="nav navbar-nav">
-
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Operations<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="javascript:launchOrdersView()">Outbound Orders</a></li>
-
-                        // Need to do next line conditionally. Do it for GoodEggs. Don't for Accu-Logistics
-                        <li><a href="javascript:launchBatchOrdersView()">Cross Batch Orders</a></li>
-
-                        <li><a href="javascript:launchWorkAreaView()">Work Areas</a></li>
-                        <li><a href="javascript:launchContainerUseListView()">Containers</a></li>
-                        <li><a href="javascript:launchWorkInstructionListView()">All Work Instructions</a></li>
-                        <li><a href="javascript:launchInventoryView()">Inventory</a></li>
-                    </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Places<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="javascript:launchCheListView()">CHE</a></li>
-                        <li><a href="javascript:launchAislesListView()">Aisles List</a></li>
-                        <li><a href="javascript:launchBayListView()">Bays List</a></li>
-                        <li><a href="javascript:launchTierListView()">Tiers List</a></li>
-                     </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Configure<b class="caret"></b></a>
-                          //These are approximately in the order the user needs them for new site.
-                    <ul class="dropdown-menu">
-                        <li><a href="javascript:doFacilityNameDialog()">Set Facility Name</a></li>
-                        <li><a href="javascript:launchFacilityEditor()">Facility Outline</a></li>
-                        <li><a href="javascript:launchEdiServicesView()">EDI Services</a></li>
-                        <li><a href="javascript:launchLedControllersListView()">LED Controllers List</a></li>
-                        <li><a href="javascript:launchWorkAreaEditor()">Work Area Editor</a></li>
-                        <li><a href="javascript:launchPathsView()">Paths List</a></li>
-                     </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Help<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="javascript:contactWasSelected()">Contact Codeshelf</a></li>
-                        <li class="divider"></li>
-                        <li class="nav-header disabled"><a>Prototype and Test</a></li>
-                        <li><a href="javascript:launchListViewDemo()">List View Demo</a></li>
-                        <li><a href="javascript:launchTestRunner()">Debug Tests</a></li>
-                    </ul>
-                </li>
-
+		   	    {foreach $dropdown in $navbar}
+					<li class="dropdown">
+	                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{$dropdown.label}<b class="caret"></b></a>
+	                    <ul class="dropdown-menu">
+							{foreach $item in $dropdown.menu}
+							    {if $item.divider}
+								  <li class="divider"></li>
+								{else}
+									{let $liClass : ($item.disabled) ? 'nav-header disabled' : '' /}
+									<li class="{$liClass}"><a href="{$item.href}" >{$item.label}</a></li>
+								{/if}
+							{/foreach}
+	                    </ul>
+	                </li>
+				{/foreach}
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container -->
 </nav>
 <div id='codeshelfwindows' class='container'></div>
-<!--
-<div class='frame'>
-	<div id='logoBox' class='rotate'>
-		<h1 class='codeshelfLogo'>codeshelf</h1>
-	</div>
-</div>
--->
 {/template}
 
 /**

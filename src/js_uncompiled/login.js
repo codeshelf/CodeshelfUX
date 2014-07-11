@@ -12,7 +12,6 @@ goog.require('goog.dom.query');
 goog.require('goog.style');
 goog.require('goog.ui.RoundedPanel');
 goog.require('goog.window');
-//goog.require('arrowlets');
 
 codeshelf.loginWindow = function() {
 
@@ -43,7 +42,13 @@ codeshelf.loginWindow = function() {
 						application_.setOrganization(command['data']['organization']);
 						self.exit();
 						var mainpage = codeshelf.mainpage();
-						mainpage.enter(application_, websession_);
+
+						var authz = new codeshelf.Authz();
+						authz.setPermissions([
+							"*:view"
+						//	, "*:edit"
+						]);
+						mainpage.enter(application_, websession_, authz);
 					} else {
 						alert('Login invalid');
 					}
