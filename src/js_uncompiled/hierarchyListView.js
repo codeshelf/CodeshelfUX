@@ -311,7 +311,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 				'enableAddRow':         true,
 				'enableCellNavigation': true,
 				'asyncEditorLoading':   true,
-				'enableColumnReorder':   false,
+				'enableColumnReorder':   true,
 				'forceFitColumns':      true,
 				'topPanelHeight':       25,
 				'autoEdit':             false
