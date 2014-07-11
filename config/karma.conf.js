@@ -11,6 +11,7 @@ module.exports = function (config) {
 			// external deps
 			{pattern: 'lib/GoogleClosureLibrary/closure/goog/deps.js', included: false, served: false},
 			'lib/jquery/jquery.js',
+			'lib/jquery-ui/jquery-ui.js',
 			'lib/AngularJS/angular.js',
 			'lib/AngularJS/angular-*.js',
 			'lib/UIBootstrap/ui-bootstrap-tpls-0.10.0.js',
@@ -85,6 +86,6 @@ module.exports = function (config) {
 	   },
 
            // Continuous Integration mode
-//           singleRun: true
+           singleRun: true
 	});
 };
