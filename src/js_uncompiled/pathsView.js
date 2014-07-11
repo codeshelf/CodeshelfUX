@@ -69,6 +69,18 @@ codeshelf.pathsview = function(websession, facility) {
 
 	var self = {
 
+		// following psuedo-inheritance
+		'shouldAddThisColumn': function(inProperty){
+			if (inProperty['id'] ===  'domainId')
+				return true;
+			else if (inProperty['id'] ===  'segmentOrder')
+				return true;
+			else if (inProperty['id'] ===  'associatedLocationCount')
+				return true;
+			else
+				return false;
+		},
+
 		getViewName: function() {
 			return 'Paths';
 		},

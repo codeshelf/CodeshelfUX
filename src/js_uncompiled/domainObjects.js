@@ -531,6 +531,16 @@ domainobjects = {
 				'id':    'domainId',
 				'title': 'ID',
 				'width': 25
+			},
+			'associatedLocationCount': {
+				'id':    'associatedLocationCount',
+				'title': 'Locations',
+				'width': 8
+			},
+			'persistentId': {
+				'id':    'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
 			}
 		}
 	},
@@ -552,6 +562,11 @@ domainobjects = {
 				'id':    'persistentId',
 				'title': 'Persistent ID',
 				'width': 40
+			},
+			'associatedLocationCount': {
+				'id':    'associatedLocationCount',
+				'title': 'Locations',
+				'width': 8
 			}
 		}
 	},
