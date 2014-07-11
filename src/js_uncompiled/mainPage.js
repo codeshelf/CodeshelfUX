@@ -311,7 +311,7 @@ codeshelf.mainpage = function() {
 
 
 		// Will this be the one operational view that all should see upon opening?
-		codeshelf.windowLauncher.loadWorkAreaView();
+		codeshelf.windowLauncher.loadCheListView();
 
 	}
 
@@ -393,10 +393,22 @@ codeshelf.mainpage = function() {
 
 function contactWasSelected() {
 	codeshelf.simpleDlogService.showNotifyDialog("Contact Codeshelf", "Check out <a href=\"http://www.codeshelf.com\">codeshelf.com</a>");
-
 }
 // Necessary for now: compilation changes the function name.
 goog.exportSymbol('contactWasSelected', contactWasSelected);
+
+function doFacilityNameDialog() {
+	var data = {
+		'facility': codeshelf.sessionGlobals.getFacility()
+	};
+	// See codeshelfApp.facilityNgController defined below. And then referenced in angular.module
+	var promise = codeshelf.simpleDlogService.showCustomDialog("partials/set-facility-name.html", "FacilityNgController as controller", data);
+
+	promise.result.then(function(){
+
+	});
+}
+goog.exportSymbol('doFacilityNameDialog', doFacilityNameDialog);
 
 
 function launchListViewDemo() {
@@ -508,3 +520,58 @@ function launchTestRunner() {
 
 }
 goog.exportSymbol('launchTestRunner', launchTestRunner);
+
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.FacilityNgController = function($scope, $modalInstance, data){
+
+	this.scope_ = $scope;
+	this.modalInstance_ = $modalInstance;
+	$scope['facility'] = data['facility'];
+
+	// tweaking separate fields
+	// first has html/angular scope matching js field.
+	$scope['facility']['description'] = data['facility']['description'];
+	// second could match. Just being different to practice for when we have to be different
+	$scope['facility']['domainid'] = data['facility']['domainId'];
+};
+
+// check not-null, and not empty. Does not check for only white space.
+function isEmptyString(str) {
+	return (!str || 0 === str.length);
+}
+
+/**
+ * @export
+ */
+codeshelfApp.FacilityNgController.prototype.ok = function(){
+	var facility = this.scope_['facility'];
+	var descriptionProperty = "description";
+	var jsDomainProperty = "domainid"; // this matches the partial html
+	var javaDomainProperty = "domainId"; // Passed as the java field
+	// "description is the name used here, and matches the java-side field name. This is a trivial update
+	if (!isEmptyString(facility[descriptionProperty]))
+		codeshelf.objectUpdater.updateOne(facility, "Facility", descriptionProperty, facility[descriptionProperty]);
+
+	// This is a domainID change, which may cause trouble. If there is trouble, might need to change to
+	// objectUpdater.callMethod() to do the change with all necessary cleanup
+	if (!isEmptyString(facility[jsDomainProperty]))
+		codeshelf.objectUpdater.updateOne(facility, "Facility", javaDomainProperty, facility[jsDomainProperty]);
+
+	this.modalInstance_.close();
+};
+
+/**
+ * @export
+ */
+codeshelfApp.FacilityNgController.prototype.cancel = function(){
+	this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
+};
+
+angular.module('codeshelfApp').controller('FacilityNgController', ['$scope', '$modalInstance', 'data', codeshelfApp.FacilityNgController]);
