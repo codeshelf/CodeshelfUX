@@ -293,7 +293,7 @@ codeshelf.mainpage = function() {
 								codeshelf.sessionGlobals.setFacility(facility);
 
 								// Need to set this true for GoodEggs, false for most. How?
-								codeshelf.sessionGlobals.setHasOrderGroups(false);
+								codeshelf.sessionGlobals.setHasOrderGroups(true);
 
 								loadFacilityWindows();
 							}

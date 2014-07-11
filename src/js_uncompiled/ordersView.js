@@ -160,12 +160,22 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 
 	var orderHeaderFilter = "";
 
-	if (outboundOrders_)
-		orderHeaderFilter = "parent.persistentId = :theId and statusEnum <> 'COMPLETE' and active = true and orderTypeEnum = 'OUTBOUND' ";
-	else
-		orderHeaderFilter = "statusEnum <> 'COMPLETE' and active = true and orderTypeEnum = 'CROSS' ";
+	// Rather complicated. 4 significantly different view types
+	if (codeshelf.sessionGlobals.getHasOrderGroups()) {
+		if (outboundOrders_)
+			orderHeaderFilter = "statusEnum <> 'COMPLETE' and active = true and orderTypeEnum = 'OUTBOUND' ";
+		else
+			orderHeaderFilter = "statusEnum <> 'COMPLETE' and active = true and orderTypeEnum = 'CROSS' ";
+	}
+	else {
+		if (outboundOrders_)
+			orderHeaderFilter = "parent.persistentId = :theId and statusEnum <> 'COMPLETE' and active = true and orderTypeEnum = 'OUTBOUND' ";
+		else
+			orderHeaderFilter = "parent.persistentId = :theId and statusEnum <> 'COMPLETE' and active = true and orderTypeEnum = 'CROSS' ";
+	}
 
-	// used if NOT codeshelf.sessionGlobals.getHasOrderGroups()
+	// This is only used if NOT getHasOrderGroups(). See below. undefined used for orderGroups as there is no parameter to substitute.
+	// Probably would be good to parameterize much more: orderTypeEnum in particular.
 	var orderHeaderFilterParams = [
 		{ 'name': 'theId', 'value': facility_['persistentId']}
 	];
