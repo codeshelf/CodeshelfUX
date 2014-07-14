@@ -292,8 +292,9 @@ codeshelf.mainpage = function() {
 								codeshelf.sessionGlobals.setWebsession(websession_);
 								codeshelf.sessionGlobals.setFacility(facility);
 
-								// Need to set this true for GoodEggs, false for most. How?
+								// GoodEggs has groups and crossbatch. Accu neither. Could be a mix
 								codeshelf.sessionGlobals.setHasOrderGroups(true);
+								codeshelf.sessionGlobals.setHasCrossBatchOrders(true);
 
 								loadFacilityWindows();
 							}

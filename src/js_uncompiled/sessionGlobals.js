@@ -17,6 +17,7 @@ codeshelf.sessionGlobals = (function() {
 	// GoodEggs reliably has order groups. How?
 	// Acculogistics does not have order groups.
 	var hasOrderGroups;
+	var hasCrossBatchOrders;
 
 	return {
 	// public methods
@@ -41,6 +42,13 @@ codeshelf.sessionGlobals = (function() {
 	},
 	setHasOrderGroups: function(inHasOrderGroups){
 		hasOrderGroups = inHasOrderGroups;
+	},
+
+	getHasCrossBatchOrders: function(){
+		return hasCrossBatchOrders;
+	},
+	setHasCrossBatchOrders: function(inCrossBatchOrders){
+		hasCrossBatchOrders = inCrossBatchOrders;
 	},
 
 
