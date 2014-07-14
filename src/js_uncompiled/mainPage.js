@@ -292,10 +292,6 @@ codeshelf.mainpage = function() {
 								codeshelf.sessionGlobals.setWebsession(websession_);
 								codeshelf.sessionGlobals.setFacility(facility);
 
-								// GoodEggs has groups and crossbatch. Accu neither. Could be a mix
-								codeshelf.sessionGlobals.setHasOrderGroups(true);
-								codeshelf.sessionGlobals.setHasCrossBatchOrders(true);
-
 								loadFacilityWindows();
 							}
 						}

@@ -36,23 +36,7 @@ codeshelf.sessionGlobals = (function() {
 		return websession;
 	},
 
-	// hasOrderGroups is start of functional permissions and configuration
-	getHasOrderGroups: function(){
-		return hasOrderGroups;
-	},
-	setHasOrderGroups: function(inHasOrderGroups){
-		hasOrderGroups = inHasOrderGroups;
-	},
-
-	getHasCrossBatchOrders: function(){
-		return hasCrossBatchOrders;
-	},
-	setHasCrossBatchOrders: function(inCrossBatchOrders){
-		hasCrossBatchOrders = inCrossBatchOrders;
-	},
-
-
-		// For window launching
+	// For window launching
 	// Perhaps not "session" globals, but global functions anyway. A place to avoid cloning
 	getWindowDragLimit: function() {
 		// we want the right and bottom limits large as the GCT window knows to scroll there.
@@ -89,4 +73,3 @@ codeshelf.sessionGlobals = (function() {
 
 };
 })();
-
