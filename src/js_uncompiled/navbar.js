@@ -12,10 +12,10 @@ codeshelf.Navbar = function() {
              // Need to do next line conditionally. Do it for GoodEggs. Don't for Accu-Logistics
 			 {"href": "javascript:launchBatchOrdersView()", "label": "Cross Batch Orders", "permission": "order:view:crossbatch"},
 
-			 {"href": "javascript:launchWorkAreaView()", "label": "Work Areas" },
-			 {"href": "javascript:l{aunchContainerUseListView()", "label": "Containers" },
-			 {"href": "javascript:launchWorkInstructionListView()", "label": "All Work Instructions" },
-			 {"href": "javascript:launchInventoryView()", "label": "Inventory" }
+			 {"href": "javascript:launchWorkAreaView()", "label": "Work Areas", "permission": "workaread:view" },
+			 {"href": "javascript:l{aunchContainerUseListView()", "label": "Containers", "permission" : "container:view" },
+			 {"href": "javascript:launchWorkInstructionListView()", "label": "All Work Instructions", "permission" : "workinstructions:view" },
+			 {"href": "javascript:launchInventoryView()", "label": "Inventory", "permission":"inventory"}
 		 ]
 		},
 		{"key": "places",
@@ -36,7 +36,7 @@ codeshelf.Navbar = function() {
 			 {"href": "javascript:launchEdiServicesView()", "label": "EDI Services", "permission": "edi:edit" },
 			 {"href": "javascript:launchLedControllersListView()", "label": "LED Controllers List", "permission": "ledController:view" },
 			 {"href": "javascript:launchWorkAreaEditor()", "label": "Work Area Editor",  "permission": "workArea:edit"},
-			 {"href": "javascript:launchPathsView()", "label": "Paths List" }
+			 {"href": "javascript:launchPathsView()", "label": "Paths List", "permission": "path:view" }
 		 ]},
 
 		{"key": "help",
@@ -44,9 +44,9 @@ codeshelf.Navbar = function() {
 		 "menu": [
 			 {"href": "javascript:contactWasSelected()", "label": "Contact Codeshelf" },
 			 {"divider": true},
-			 {"href": "javascript:prototypeAndTest()", "label": "Prototype and Test", "disabled": true },
-			 {"href": "javascript:launchListViewDemo()", "label": "List View Demo" },
-			 {"href": "javascript:launchTestRunner()", "label": "Debug Tests" }
+			 {"href": "javascript:prototypeAndTest()", "label": "Prototype and Test", "disabled": true , "permission": "demo"},
+			 {"href": "javascript:launchListViewDemo()", "label": "List View Demo", "permission": "demo" },
+			 {"href": "javascript:launchTestRunner()", "label": "Debug Tests", "permission": "demo" }
 		 ]}
 	];
 };
