@@ -29,8 +29,8 @@
 					<li class="dropdown">
 	                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{$dropdown.label}<b class="caret"></b></a>
 	                    <ul class="dropdown-menu">
-							{foreach $item in $dropdown.menu}
-							    {if $item.divider}
+							{foreach $item in $dropdown['menu']}
+							    {if $item['divider']}
 								  <li class="divider"></li>
 								{else}
 									{let $liClass : ($item.disabled) ? 'nav-header disabled' : '' /}

@@ -45,8 +45,9 @@ codeshelf.loginWindow = function() {
 
 						var authz = new codeshelf.Authz();
 						authz.setPermissions([
-							"*:view"
+						//	"*:view"
 						//	, "*:edit"
+							"*"
 						]);
 						mainpage.enter(application_, websession_, authz);
 					} else {

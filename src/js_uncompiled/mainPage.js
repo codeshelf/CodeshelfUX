@@ -42,6 +42,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
 goog.require('goog.ui.Dialog');
+goog.require('goog.json');
 goog.require('codeshelf.simpleDlogService');
 goog.require('twitter.bootstrap');
 
@@ -93,7 +94,7 @@ codeshelf.windowLauncher = (function() {
 
 		loadWorkAreaEditorView: function () {
 			try {
-				var workAreaEditorView = codeshelf.workareaeditorview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var workAreaEditorView = codeshelf.workareaeditorview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), {});
 				var workAreaEditorWindow = codeshelf.window(workAreaEditorView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				workAreaEditorWindow.open();
 			}
@@ -272,7 +273,15 @@ codeshelf.mainpage = function() {
 		// frame_.style.height = size.height - 5 + 'px';
 	}
 
-	function websocketCmdCallback() {
+	function setupNavbar(facility, authz) {
+		goog.dom.setProperties(goog.dom.getDocument()['body'], {'class': 'main_body'});
+		var navbar = new codeshelf.Navbar();
+
+		var filteredNavbar = navbar.getNavbarItems(facility, authz);
+		goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.mainPage, {navbar: filteredNavbar}));
+	}
+
+	function getFacilitiesCallback(authz) {
 		var callback = {
 			exec: function(command) {
 				if (!command['data'].hasOwnProperty('results')) {
@@ -286,14 +295,18 @@ codeshelf.mainpage = function() {
 
 							clientInitializer.start(websession_, application_.getOrganization(), loadFacilityWindows);
 						} else {
+							var lastFacility = null;
 							for (var i = 0; i < command['data']['results'].length; i++) {
-								var facility = command['data']['results'][i];
+								var lastFacility = command['data']['results'][i];
 
 								// save the websession and facility so we can launch windows at any time.
 								codeshelf.sessionGlobals.setWebsession(websession_);
-								codeshelf.sessionGlobals.setFacility(facility);
+								codeshelf.sessionGlobals.setFacility(lastFacility);
 
 								loadFacilityWindows();
+							}
+							if (lastFacility != null) {
+								setupNavbar(lastFacility, authz);
 							}
 						}
 					}
@@ -328,12 +341,6 @@ codeshelf.mainpage = function() {
 
 			websession_.setCurrentPage(this);
 
-			goog.dom.setProperties(goog.dom.getDocument()['body'], {'class': 'main_body'});
-			var navbar = new codeshelf.Navbar();
-
-			var filteredNavbar = navbar.toUserNavbar(authz);
-			goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.mainPage, {"navbar": filteredNavbar}));
-
 			limits_ = new goog.math.Rect(0, 0, 750, 600);
 
 			updateFrameSize(goog.dom.getViewportSize());
@@ -364,9 +371,8 @@ codeshelf.mainpage = function() {
 				'getterMethod': 'getFacilities'
 			};
 
-			var websession = application_.getWebsession();
-			var getFacilitiesCmd = websession.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
-			websession.sendCommand(getFacilitiesCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
+			var getFacilitiesCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
+			websession.sendCommand(getFacilitiesCmd, getFacilitiesCallback(authz), false);
 		},
 
 		exit: function() {
