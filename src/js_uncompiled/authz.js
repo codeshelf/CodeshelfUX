@@ -8,6 +8,9 @@ codeshelf.Authz = function() {
 	this.permissions = []
 };
 
+/**
+ * @param {!Array} permissionStringArray
+ */
 codeshelf.Authz.prototype.setPermissions = function(permissionStringArray) {
 	this.permissions = goog.array.map(permissionStringArray, function(permissionString) {
 		return new codeshelf.WildcardPermission(permissionString);

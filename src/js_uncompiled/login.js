@@ -40,15 +40,25 @@ codeshelf.loginWindow = function() {
 					if (command['data']['LOGIN_RS'] == 'SUCCEED') {
 						websession_.setState(kWebsessionState.VALIDATED);
 						application_.setOrganization(command['data']['organization']);
+						var user = command['data']['user'];
+						var email = user['email'];
+						var authz = new codeshelf.Authz();
+						if (email == 'configure@example.com') {
+							authz.setPermissions(["*"]);
+						} else if (email == 'view@example.com'
+								   || email == 'a@example.com') {
+							authz.setPermissions(["*:view"]);
+						} else if (email == 'simulate@example.com') {
+							authz.setPermissions(["*"]);
+						} else if (email == 'che@example.com') {
+							authz.setPermissions(["*:view", "che:simulate"]);
+						} else {
+							authz.setPermissions([]); // no permissions by default
+						}
+						authz = Object.freeze(authz); //ECMAScript 5 prevent changes from this point
 						self.exit();
 						var mainpage = codeshelf.mainpage();
 
-						var authz = new codeshelf.Authz();
-						authz.setPermissions([
-						//	"*:view"
-						//	, "*:edit"
-							"*"
-						]);
 						mainpage.enter(application_, websession_, authz);
 					} else {
 						alert('Login invalid');
