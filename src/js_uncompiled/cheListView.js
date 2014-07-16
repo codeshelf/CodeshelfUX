@@ -80,31 +80,42 @@ codeshelf.cheslistview = function(websession, facility) {
 				line = $('<li><a href="#">Work Instructions</a></li>')
 					.appendTo(contextMenu_)
 					.data("option", "work_instructions")
-					.one("click", function() {
+					.one("click", function () {
 						self.closeContextMenu();
 						self.cheWorkInstructions(item);
 					});
 				line = $('<li><a href="#">Containers</a></li>')
 					.appendTo(contextMenu_)
 					.data("option", "containers")
-					.one("click", function() {
+					.one("click", function () {
 						self.closeContextMenu();
 						self.cheContainers(item);
 					});
 				line = $('<li><a href="#">Edit CHE</a></li>')
 					.appendTo(contextMenu_)
 					.data("option", "change_description")
-					.one("click",  function() {
+					.one("click", function () {
 						self.closeContextMenu();
 						self.editChe(item);
 					});
-				line = $('<li><a href="#">TESTING ONLY--Simulate cart set up</a></li>')
-					.appendTo(contextMenu_)
-					.data("option", "fake_setup")
-					.one("click",  function() {
-						self.closeContextMenu();
-						self.testOnlySetUpChe(item);
-					});
+				if (facility_['hasCrossBatchOrders']) {
+					line = $('<li><a href="#">TESTING ONLY--Simulate GoodEggs cart set up</a></li>')
+						.appendTo(contextMenu_)
+						.data("option", "fake_setup1")
+						.one("click", function () {
+							self.closeContextMenu();
+							self.testOnlySetUpGoodEggsChe(item);
+						});
+				}
+				else {
+					line = $('<li><a href="#">TESTING ONLY--Simulate Accu-Logistics cart set up</a></li>')
+						.appendTo(contextMenu_)
+						.data("option", "fake_setup2")
+						.one("click", function () {
+							self.closeContextMenu();
+							self.testOnlySetUpAccuChe(item);
+						});
+				}
 				$('html').on("click.outsidecontextmenu", function(event) {
 					self.closeContextMenu();
 				});
@@ -155,19 +166,33 @@ codeshelf.cheslistview = function(websession, facility) {
 				wiListWindow.open();
 			}
 		},
-		testOnlySetUpChe: function(che) {
+		testOnlySetUpGoodEggsChe: function(che) {
 			if (che === null)
 				return;
 
 			cheDomainId = che['domainId'];
 			var theLogger = goog.debug.Logger.getLogger('CHE view');
-			theLogger.info("about do a fake setup cart for CHE: " + cheDomainId);
+			theLogger.info("about do a fake GoodEggs setup for CHE: " + cheDomainId);
 
 			var methodArgs = [
 				{ 'name': 'inCheDomainId', 'value': cheDomainId, 'classType': 'java.lang.String'}
 			];
 			codeshelf.objectUpdater.callMethod(facility_, 'Facility', 'fakeSetUpChe', methodArgs);
+		},
+		testOnlySetUpAccuChe: function(che) {
+			if (che === null)
+				return;
+
+			cheDomainId = che['domainId'];
+			var theLogger = goog.debug.Logger.getLogger('CHE view');
+			theLogger.info("about do a fake Accu setup for CHE: " + cheDomainId);
+
+			var methodArgs = [
+				{ 'name': 'inCheDomainId', 'value': cheDomainId, 'classType': 'java.lang.String'}
+			];
+			codeshelf.objectUpdater.callMethod(facility_, 'Facility', 'fakeSetUpAccuChe', methodArgs);
 		}
+
 	};
 	// che parent is codeshelf_network, whose parent is the facility
 	var cheFilter = 'parent.parent.persistentId = :theId';
