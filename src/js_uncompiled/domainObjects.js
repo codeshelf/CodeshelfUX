@@ -743,6 +743,21 @@ domainobjects = {
 				'title': 'Quant.',
 				'width': 6
 			},
+			'uomMasterId': {
+				'id':    'uomMasterId',
+				'title': 'UOM',
+				'width': 3
+			},
+			'orderId': {
+				'id':    'orderId',
+				'title': 'for Order',
+				'width': 15
+			},
+			'orderDetailId': {
+				'id':    'orderDetailId',
+				'title': 'for Order Detail',
+				'width': 15
+			},
 			'containerId': {
 				'id':    'containerId',
 				'title': 'Container',
