@@ -89,6 +89,8 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inGrou
 				return true;
 			else if (inProperty['id'] ===  'planQuantity')
 				return true;
+			else if (inProperty['id'] ===  'uomMasterId')
+				return true;
 			else if (inProperty['id'] ===  'assignedCheName')
 				return true;
 			else

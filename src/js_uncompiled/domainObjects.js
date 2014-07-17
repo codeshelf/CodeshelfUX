@@ -398,6 +398,16 @@ domainobjects = {
 				'title': 'UOM',
 				'width': 5
 			},
+			'wiLocation': {
+				'id':    'wiLocation',
+				'title': 'WI Location',
+				'width': 10
+			},
+			'wiChe': {
+				'id':    'wiChe',
+				'title': 'WI CHE',
+				'width': 6
+			},
 			'active': {
 				'id':    'active',
 				'title': 'Active',
