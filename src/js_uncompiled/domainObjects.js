@@ -743,6 +743,11 @@ domainobjects = {
 				'title': 'Where',
 				'width': 10
 			},
+			wiPosAlongPath: {
+				'id':    'wiPosAlongPath',
+				'title': 'Meters Along Path',
+				'width': 10
+			},
 			'description': {
 				'id':    'description',
 				'title': 'Description',
