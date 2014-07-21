@@ -170,14 +170,26 @@ codeshelf.cheslistview = function(websession, facility) {
 			if (che === null)
 				return;
 
+			var data = {
+				'che': che
+			};
+
+
 			cheDomainId = che['domainId'];
 			var theLogger = goog.debug.Logger.getLogger('CHE view');
 			theLogger.info("about do a fake GoodEggs setup for CHE: " + cheDomainId);
 
+			// See codeshelfApp.CheController defined below. And then referenced in angular.module
+			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/setup-che.html", "SetupCheNgController as controller", data);
+
+			promise.result.then(function(){
+			});
+			/*
 			var methodArgs = [
 				{ 'name': 'inCheDomainId', 'value': cheDomainId, 'classType': 'java.lang.String'}
 			];
 			codeshelf.objectUpdater.callMethod(facility_, 'Facility', 'fakeSetUpChe', methodArgs);
+			*/
 		},
 		testOnlySetUpAccuChe: function(che) {
 			if (che === null)
@@ -212,6 +224,11 @@ codeshelf.cheslistview = function(websession, facility) {
 	return view;
 };
 
+// check not-null, and not empty. Does not check for only white space.
+function isEmptyString(str) {
+	return (!str || 0 === str.length);
+}
+
 /**
  *  @param {!angular.Scope} $scope
  *  @param  $modalInstance
@@ -234,10 +251,6 @@ codeshelfApp.CheNgController = function($scope, $modalInstance, data){
 
 };
 
-// check not-null, and not empty. Does not check for only white space.
-function isEmptyString(str) {
-	return (!str || 0 === str.length);
-}
 
 /**
  * @export
@@ -277,3 +290,50 @@ codeshelfApp.CheNgController.prototype.cancel = function(){
 };
 
 angular.module('codeshelfApp').controller('CheNgController', ['$scope', '$modalInstance', 'data', codeshelfApp.CheNgController]);
+
+
+//**************** Different dialog for simulating cart setup *****************
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.SetupCheNgController = function($scope, $modalInstance, data){
+
+	this.scope_ = $scope;
+	this.modalInstance_ = $modalInstance;
+	$scope['che'] = data['che'];
+
+	$scope['che']['containersOnChe'] = data['che']['containersOnChe'];
+};
+
+
+/**
+ * @export
+ */
+codeshelfApp.SetupCheNgController.prototype.ok = function(){
+	var che = this.scope_['che'];
+	var containersProperty = "containersOnChe";
+
+	if (!isEmptyString(che[containersProperty])) {
+		var methodArgs = [
+			{ 'name': 'inContainerIds', 'value': che[containersProperty], 'classType': 'java.lang.String'}
+		];
+
+		codeshelf.objectUpdater.callMethod(che, 'Che', 'fakeSetupUpContainers', methodArgs);
+	}
+
+	this.modalInstance_.close();
+};
+
+/**
+ * @export
+ */
+codeshelfApp.SetupCheNgController.prototype.cancel = function(){
+	this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
+};
+
+angular.module('codeshelfApp').controller('SetupCheNgController', ['$scope', '$modalInstance', 'data', codeshelfApp.SetupCheNgController]);
