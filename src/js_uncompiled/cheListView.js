@@ -98,24 +98,15 @@ codeshelf.cheslistview = function(websession, facility) {
 						self.closeContextMenu();
 						self.editChe(item);
 					});
-				if (facility_['hasCrossBatchOrders']) {
-					line = $('<li><a href="#">TESTING ONLY--Simulate GoodEggs cart set up</a></li>')
-						.appendTo(contextMenu_)
-						.data("option", "fake_setup1")
-						.one("click", function () {
-							self.closeContextMenu();
-							self.testOnlySetUpGoodEggsChe(item);
-						});
-				}
-				else {
-					line = $('<li><a href="#">TESTING ONLY--Simulate Accu-Logistics cart set up</a></li>')
-						.appendTo(contextMenu_)
-						.data("option", "fake_setup2")
-						.one("click", function () {
-							self.closeContextMenu();
-							self.testOnlySetUpAccuChe(item);
-						});
-				}
+
+				line = $('<li><a href="#">TESTING ONLY--Simulate cart set up</a></li>')
+					.appendTo(contextMenu_)
+					.data("option", "fake_setup1")
+					.one("click", function () {
+						self.closeContextMenu();
+						self.testOnlySetUpChe(item);
+					});
+
 				$('html').on("click.outsidecontextmenu", function(event) {
 					self.closeContextMenu();
 				});
@@ -166,7 +157,7 @@ codeshelf.cheslistview = function(websession, facility) {
 				wiListWindow.open();
 			}
 		},
-		testOnlySetUpGoodEggsChe: function(che) {
+		testOnlySetUpChe: function(che) {
 			if (che === null)
 				return;
 
@@ -184,25 +175,6 @@ codeshelf.cheslistview = function(websession, facility) {
 
 			promise.result.then(function(){
 			});
-			/*
-			var methodArgs = [
-				{ 'name': 'inCheDomainId', 'value': cheDomainId, 'classType': 'java.lang.String'}
-			];
-			codeshelf.objectUpdater.callMethod(facility_, 'Facility', 'fakeSetUpChe', methodArgs);
-			*/
-		},
-		testOnlySetUpAccuChe: function(che) {
-			if (che === null)
-				return;
-
-			cheDomainId = che['domainId'];
-			var theLogger = goog.debug.Logger.getLogger('CHE view');
-			theLogger.info("about do a fake Accu setup for CHE: " + cheDomainId);
-
-			var methodArgs = [
-				{ 'name': 'inCheDomainId', 'value': cheDomainId, 'classType': 'java.lang.String'}
-			];
-			codeshelf.objectUpdater.callMethod(facility_, 'Facility', 'fakeSetUpAccuChe', methodArgs);
 		}
 
 	};
@@ -323,7 +295,7 @@ codeshelfApp.SetupCheNgController.prototype.ok = function(){
 			{ 'name': 'inContainerIds', 'value': che[containersProperty], 'classType': 'java.lang.String'}
 		];
 
-		codeshelf.objectUpdater.callMethod(che, 'Che', 'fakeSetupUpContainers', methodArgs);
+		codeshelf.objectUpdater.callMethod(che, 'Che', 'fakeSetupUpContainersOnChe', methodArgs);
 	}
 
 	this.modalInstance_.close();
