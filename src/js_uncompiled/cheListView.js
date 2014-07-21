@@ -202,7 +202,7 @@ codeshelf.cheslistview = function(websession, facility) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { className: domainobjects['Che']['className'], linkProperty: 'parent', filter : cheFilter, filterParams : cheFilterParams, properties: domainobjects['Che']['properties']	};
+	hierarchyMap[0] = { "className": domainobjects['Che']['className'], "linkProperty": 'parent', "filter" : cheFilter, "filterParams" : cheFilterParams, "properties": domainobjects['Che']['properties']	};
 
 	// -1 for non-dragable. Single level view with normal sort rules
 	var view = codeshelf.hierarchylistview(websession_, domainobjects['Che'], hierarchyMap, -1);

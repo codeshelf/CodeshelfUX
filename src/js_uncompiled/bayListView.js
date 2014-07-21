@@ -122,7 +122,7 @@ codeshelf.baylistview = function(websession, facility) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { className: domainobjects['Bay']['className'], linkProperty: 'parent', filter : bayFilter, filterParams : bayFilterParams, properties: domainobjects['Bay']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['Bay']['className'], "linkProperty": 'parent', "filter" : bayFilter, "filterParams" : bayFilterParams, "properties": domainobjects['Bay']['properties'] };
 
 	// -1 for non-dragable. Single level view with normal sort rules
 	var view = codeshelf.hierarchylistview(websession_, domainobjects['Bay'], hierarchyMap, -1);

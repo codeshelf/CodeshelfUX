@@ -100,7 +100,7 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { className: domainobjects['Slot']['className'], linkProperty: 'parent', filter : tierSlotFilter, filterParams : tierSlotFilterParams, properties: domainobjects['Slot']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['Slot']['className'], "linkProperty": 'parent', "filter" : tierSlotFilter, "filterParams" : tierSlotFilterParams, "properties": domainobjects['Slot']['properties'] };
 
 	// -1 for non-dragable. Single level view with normal sort rules
 	var view = codeshelf.hierarchylistview(websession_, domainobjects['Slot'], hierarchyMap, -1);

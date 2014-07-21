@@ -125,7 +125,7 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { className: domainobjects['LedController']['className'], linkProperty: 'parent', filter : ledControllerFilter, filterParams : ledControllerFilterParams, properties: domainobjects['LedController']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['LedController']['className'], "linkProperty": 'parent', "filter" : ledControllerFilter, "filterParams" : ledControllerFilterParams, "properties": domainobjects['LedController']['properties'] };
 
 	// -1 for non-dragable. Single level view with normal sort rules
 	var view = codeshelf.hierarchylistview(websession_, domainobjects['LedController'], hierarchyMap, -1);

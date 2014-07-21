@@ -1,9 +1,13 @@
 goog.provide('codeshelf.hierarchylistview');
+goog.require('codeshelf.multilevelcomparer');
 goog.require('codeshelf.view');
 goog.require('goog.array');
 goog.require('goog.debug.Logger');
 goog.require('goog.async.Delay');
 //require jquery ui resizable
+/**
+ * @param {Array.<codeshelf.HierarchyLevel>} hierarchyMap
+ */
 codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, draggableHierarchyLevel) {
 
 	var logger_ = goog.debug.Logger.getLogger('codeshelf.hierarchylistview');
@@ -26,135 +30,9 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	// Compute the columns we need for this domain object.
 	var columns_ = [];
 	var options_;
-	var sortdir_ = 1;
+	var sortdir_ = true; //ascending
 	var sortDelay_;
 	var levelsInThisView = hierarchyMap_.length;
-
-	/**
-	 * Get the root item in the hierarchy for this item.
-	 * @param {Object} item  The item where we want to get the parent.
-	 * @param {Number} level The level above this item in the hierarchy class.
-	 * @return {Object} the root item (at level) for this item.
-	 */
-	function getParentAtLevel(item, level, linkProperty) {
-		var currentLevel = getLevel(item);
-
-		if (item['parentAtLevel'] === undefined) {
-			item['parentAtLevel'] = [];
-		}
-
-		if (level === currentLevel) {
-			item['parentAtLevel'][level] = item;
-		} else {
-			if (item['parentAtLevel'][level] === undefined) {
-				var dataItems = dataView_.getItems();
-				for (var dataItemPos in dataItems) {
-					if (dataItems.hasOwnProperty(dataItemPos)) {
-						if (dataItems[dataItemPos]['persistentId'] === item[linkProperty]) {
-							item['parentAtLevel'][level] = getParentAtLevel(dataItems[dataItemPos], level, hierarchyMap_[level].linkProperty + 'PersistentId');
-							break;
-						}
-					}
-				}
-			}
-		}
-
-		return item['parentAtLevel'][level];
-	}
-
-	/**
-	 * Figure our what level this item is on based on the class hierarchy.
-	 * @param item
-	 * @return {Number | null}  the level (0-n)
-	 */
-	function getLevel(item) {
-		if (item['getLevel'] !== undefined) {
-			return item['getLevel'];
-		}
-
-		for (var hierarcyPos in hierarchyMap_) {
-			if (hierarchyMap_.hasOwnProperty(hierarcyPos)) {
-				if (item['className'] === hierarchyMap_[hierarcyPos].className) {
-					item['getLevel'] = parseInt(hierarcyPos, 10);
-					return item['getLevel'];
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Compare the colums from left-to-right (so that they sort left-to-right).
-	 * @param itemA
-	 * @param itemB
-	 * @return {Number}
-	 */
-	function comparer(itemA, itemB) {
-
-//		logger_.info('A: ' + itemA.fullDomainId);
-//		logger_.info('B: ' + itemB.fullDomainId);
-
-		var result = 0;
-		var itemALevel = getLevel(itemA);
-		var itemBLevel = getLevel(itemB);
-
-		if (itemALevel === itemBLevel) {
-			// The items are at the same level, so we can attempt to compare them.
-
-			// Direct compare can only happen if the objects share the same parent.
-			// Or special (extremely common) case of single level view
-
-			if (_getLevelsInThisView() > 1 && itemA['parentPersistentId'] !== itemB['parentPersistentId']) {
-				var parentA = getParentAtLevel(itemA, itemALevel - 1, hierarchyMap_[itemALevel].linkProperty + 'PersistentId');
-				var parentB = getParentAtLevel(itemB, itemBLevel - 1, hierarchyMap_[itemBLevel].linkProperty + 'PersistentId');
-				result = comparer(parentA, parentB);
-			} else {
-				if (hierarchyMap_[itemALevel].comparer !== undefined) {
-					// If we've defined a comparer at this level then use it.
-					result = hierarchyMap_[itemALevel].comparer(itemA, itemB);
-				} else {
-					// If the two items are at the same level then compare them by column values from left-to-right.
-					var columns = grid_.getColumns();
-					for (var column in columns) {
-						if (columns.hasOwnProperty(column)) {
-							if (itemA[columns[column].id] !== itemB[columns[column].id]) {
-								var x = itemA[columns[column].id];
-								var y = itemB[columns[column].id];
-
-								if (sortdir_) {
-									result = (x === y ? 0 : (x > y ? 1 : -1));
-									break;
-								} else {
-									result = (x === y ? 0 : (x < y ? 1 : -1));
-									break;
-								}
-							}
-						}
-					}
-				}
-			}
-		} else {
-			// The items are at different levels, so we need to find a common level where we can compare them.
-			if (itemALevel < itemBLevel) {
-				itemB = getParentAtLevel(itemB, itemALevel, hierarchyMap_[itemBLevel].linkProperty + 'PersistentId');
-				if ((itemB === undefined) || (itemA['persistentId'] === itemB['persistentId'])) {
-					result = -1;
-				} else {
-					result = comparer(itemA, itemB);
-				}
-			} else {
-				itemA = getParentAtLevel(itemA, itemBLevel, hierarchyMap_[itemALevel].linkProperty + 'PersistentId');
-				if ((itemA === undefined) || (itemA['persistentId'] === itemB['persistentId'])) {
-					result = 1;
-				} else {
-					result = comparer(itemA, itemB);
-				}
-			}
-		}
-
-//		logger_.info('R: ' + result);
-		return result;
-	}
 
 	function removeChildren(object) {
 		dataView_.deleteItem(object['persistentId']);
@@ -186,32 +64,32 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 						// If it's not already added to the view, then send a filter request to get all of the child objects that goes with it.
 						if ((object['op'] === 'cre') || (object['op'] === 'upd')) {
 							for (var j = 0; j < (hierarchyMap_.length - 1); j++) {
-								if (hierarchyMap_[j].className === object['className']) {
-									item = dataView_.getItemById(object['persistentId']);
+								if (hierarchyMap_[j]["className"] === object['className']) {
+									var item = dataView_.getItemById(object['persistentId']);
 									if (item === undefined) {
 
-										var filter = hierarchyMap_[j + 1].linkProperty + '.persistentId = :theId';
-										if (hierarchyMap_[j + 1].filter !== undefined) {
-											filter += ' and ' + hierarchyMap_[j + 1].filter;
+										var filter = hierarchyMap_[j + 1]["linkProperty"] + '.persistentId = :theId';
+										if (hierarchyMap_[j + 1]["filter"] !== undefined) {
+											filter += ' and ' + hierarchyMap_[j + 1]["filter"];
 										}
 
 										var filterParams = [
 											{ 'name': 'theId', 'value': object['persistentId']}
 										];
-										if (hierarchyMap_[j + 1].filterParams !== undefined) {
-											filterParams.push(hierarchyMap_[j + 1].filterParams);
+										if (hierarchyMap_[j + 1]["filterParams"] !== undefined) {
+											filterParams.push(hierarchyMap_[j + 1]["filterParams"]);
 										}
 
 										var computedProperties = [];
-										for (var property in hierarchyMap_[j + 1].properties) {
-											if (hierarchyMap_[j + 1].properties.hasOwnProperty(property)) {
-												computedProperties.push(hierarchyMap_[j + 1].properties[property].id);
+										for (var property in hierarchyMap_[j + 1]["properties"]) {
+											if (hierarchyMap_[j + 1]["properties"].hasOwnProperty(property)) {
+												computedProperties.push(hierarchyMap_[j + 1]["properties"][property].id);
 											}
 										}
-										computedProperties.push(hierarchyMap_[j + 1].linkProperty + 'PersistentId');
+										computedProperties.push(hierarchyMap_[j + 1]["linkProperty"] + 'PersistentId');
 
 										var data = {
-											'className':     hierarchyMap_[j + 1].className,
+											'className':     hierarchyMap_[j + 1]["className"],
 											'propertyNames': computedProperties,
 											'filterClause':  filter,
 											'filterParams':  filterParams
@@ -256,6 +134,25 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 	}
 
 
+	/**
+	 * Figure our what level this item is on based on the class hierarchy.
+	 * @param item
+	 * @return {Number}  the level (0-n)
+	 */
+	function getLevel(item) {
+		if (item['getLevel'] !== undefined) {
+			return item['getLevel'];
+		}
+
+		for(var i = 0; i < hierarchyMap_.length; i++) {
+			if (item['className'] === hierarchyMap_[i]['className']) {
+				item['getLevel'] = i;
+				return item['getLevel'];
+			}
+		}
+		throw "level not found for: " + item['className'];
+	};
+
 	// do we need public interface for getLevelsInThisView?
 	function _getLevelsInThisView() {
 		return levelsInThisView;
@@ -272,6 +169,47 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			   };
 		var column = codeshelf.grid.toButtonColumn(actionDef);
 		return column;
+	}
+
+	function newComparer() {
+		var comparer = new codeshelf.MultilevelComparer(hierarchyMap_, dataView_.getItems());
+		var compareFunction = goog.bind(comparer.compare, comparer);
+		return compareFunction;
+	}
+
+	/**
+     * returns a compare function by providing a getPropertiesFunc to
+     *   codeshelf.grid.propertyComparer
+     * @type {function(!Object, !Object)}
+     */
+	function createDefaultComparer() {
+
+		function gridColumnsToProperties() {
+			var columns = grid_.getColumns();
+			var columnIds = goog.array.map(columns, function(column) {
+				return column["id"];
+			});
+			return columnIds;
+		}
+
+		var partialPropertyCompareFunc = goog.partial(codeshelf.grid.propertyComparer, gridColumnsToProperties);
+
+		return function(itemA, itemB) {
+
+			if  (itemA['persistentId'] == itemB['persistentId']) {
+				return 0;
+			}
+			else {
+				var result = partialPropertyCompareFunc(itemA, itemB);
+				if (sortdir_) {
+					return result;
+				}
+				else {
+					return result*-1;
+				}
+
+			}
+		};
 	}
 
 	var self_ = {
@@ -347,11 +285,21 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			// Setup the column picker, so the user can change the visible columns.
 			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
+
+
+
+			for(var i = 0; i < hierarchyMap_.length; i++) {
+				var hierarchyLevel = hierarchyMap_[i];
+				if (typeof hierarchyLevel["comparer"] === "undefined") {
+					hierarchyLevel["comparer"] = createDefaultComparer();
+				}
+			}
+
 			var data = {
 				'className':     domainObject_['className'],
 				'propertyNames': computedProperties,
-				'filterClause':  hierarchyMap_[0].filter,
-				'filterParams':  hierarchyMap_[0].filterParams
+				'filterClause':  hierarchyMap_[0]["filter"],
+				'filterParams':  hierarchyMap_[0]["filterParams"]
 			};
 
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
@@ -387,7 +335,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			});
 
 			grid_.onColumnsReordered.subscribe(function(event) {
-				dataView_.sort(comparer, sortdir_);
+				dataView_.sort(newComparer(), sortdir_);
 			});
 
 			grid_.onSelectedRowsChanged.subscribe(function(event) {
@@ -401,8 +349,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			});
 
 			grid_.onSort.subscribe(function(event, args) {
-				sortdir_ = args.sortAsc;
-				dataView_.sort(comparer, 1);
+//				sortdir_ = args.sortAsc;
+				dataView_.sort(newComparer(), true);
 			});
 
 			// wire up model events to drive the grid
@@ -443,7 +391,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			grid_.onContextMenu.subscribe(dispatchContextMenu);
 
 			sortDelay_ = new goog.async.Delay(function() {
-				dataView_.sort(comparer, sortdir_);
+				dataView_.sort(newComparer(), sortdir_);
 			}, 500);
 
 			// remove extra columns that are not part of this view's default set
@@ -518,8 +466,66 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 };
 goog.exportSymbol('codeshelf.hierarchylistview', codeshelf.hierarchylistview);
 
-
 codeshelf.grid = {};
+
+codeshelf.grid.propertyComparer = function(getPropertiesFunc, itemA, itemB) {
+	var result = 0;
+	var properties = getPropertiesFunc();
+	for(var i = 0; i < properties.length; i++) {
+		var property = properties[i];
+		var valueA = itemA[property];
+		var valueB = itemB[property];
+
+		// remember that NaN === NaN returns false
+		// and isNaN(undefined) returns true
+		if (typeof valueA === "undefined" && typeof valueB === "undefined") {
+			result = 0;
+		}
+		else if (isNaN(valueA) && isNaN(valueB)
+			&& typeof valueA === 'number' && typeof valueB === 'number') {
+			result = 0;
+		}
+		else if (typeof valueA === 'number' && typeof valueB === 'number') {
+			if (valueA != valueB) {
+				result = (valueA < valueB) ? -1 : 1;
+				break;
+			}
+		}
+		else if (typeof valueA === "string" && typeof valueB === "string"){
+			result =  goog.string.caseInsensitiveCompare(valueA, valueB);
+			if (result != 0) {
+				break;
+			}
+		}
+		else if (typeof valueA === "boolean" && typeof valueB === "boolean"){
+			if (valueA != valueB) {
+				if (valueA == true) {
+					result = -1;
+					break;
+				}
+			}
+		}
+		else { //attempt string compare as default
+			if (typeof valueA === "undefined") {
+				result = 1;
+				break;
+			}
+			else if (typeof valueB === "undefined"){
+				result = -1;
+				break;
+			}
+			else {
+				result =  goog.string.caseInsensitiveCompare(valueA.toString(), valueB.toString());
+				if (result != 0) {
+					break;
+				}
+			}
+		}
+	}
+	return result;
+};
+
+
 
 codeshelf.grid.toColumnsForHierarchy = function(hierarchyLevels) {
 
@@ -539,8 +545,8 @@ codeshelf.grid.toColumnsForHierarchy = function(hierarchyLevels) {
  */
 codeshelf.grid.toColumns = function(hierarchyLevelDef) {
 	var columns = [];
-	var className = hierarchyLevelDef.className;
-	var properties = hierarchyLevelDef.properties;
+	var className = hierarchyLevelDef["className"];
+	var properties = hierarchyLevelDef["properties"];
 	for (var property in properties) {
 		if (properties.hasOwnProperty(property)) {
 			var propertyDef = properties[property];

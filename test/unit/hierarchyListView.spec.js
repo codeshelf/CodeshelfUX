@@ -1,6 +1,5 @@
-'use strict';
-
 goog.require('codeshelf.hierarchylistview');
+goog.require('goog.array');
 
 describe('hierarchyListView', function() {
 	var websession, jqPane, pane;
@@ -79,6 +78,111 @@ describe('hierarchyListView', function() {
 			expect(getRenderedColumns().size()).toEqual(1);
 
 		});
+	});
+
+	describe("default comparer for level", function() {
+
+
+
+		it("returns zero if properties have undefined values", function() {
+			var itemA = {
+				"first": undefined
+			};
+			var itemB = {
+				"first": undefined
+			};
+
+
+			var comparer = createComparer(["first"]);
+			expect(comparer(itemA, itemB)).toEqual(0);
+
+		});
+
+		it("uses next property if first values are undefined", function() {
+			var itemA = {
+				"first": undefined,
+				"second": 1
+			};
+			var itemB = {
+				"first": undefined,
+				"second": 2
+			};
+
+
+			var comparer = createComparer(["first", "second"]);
+			expect(comparer(itemA, itemB)).toEqual(-1);
+
+		});
+
+		it("if first property is equal use second", function() {
+			var itemA = {
+				"first": 1,
+				"second": 1
+			};
+			var itemB = {
+				"first": 1,
+				"second": 2
+			};
+
+
+			var comparer = createComparer(["first", "second"]);
+			expect(comparer(itemA, itemB)).toEqual(-1);
+
+		});
+
+
+		it("if first property sorts first, ignores second", function() {
+			var itemA = {
+				"first": 1,
+				"second": 1
+			};
+			var itemB = {
+				"first": 2,
+				"second": 1
+			};
+
+
+			var comparer = createComparer(["first", "second"]);
+			expect(comparer(itemA, itemB)).toEqual(-1);
+
+		});
+
+		it("if property is string sorts localeCompare", function() {
+			var itemA = {
+				"first": "a",
+				"second": 1
+			};
+			var itemB = {
+				"first": "b",
+				"second": 1
+			};
+
+			var comparer = createComparer(["first", "second"]);
+			expect(comparer(itemA, itemB)).toEqual(-1);
+
+		});
+
+		it("if property is boolean sorts true first", function() {
+			var itemA = {
+				"first": true,
+				"second": 1
+			};
+			var itemB = {
+				"first": false,
+				"second": 1
+			};
+
+
+			var comparer = createComparer(["first", "second"]);
+			expect(comparer(itemA, itemB)).toEqual(-1);
+
+		});
+
+		function createComparer(properties) {
+			return goog.partial(codeshelf.grid.propertyComparer, function() {
+				return properties;
+			});
+		};
 	});
 
 	var createProperty = function(id) {

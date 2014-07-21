@@ -166,7 +166,7 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inGrou
 
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { className: domainobjects['WorkInstruction']['className'], linkProperty: 'parent', filter : workInstructionFilter, filterParams : workInstructionFilterParams, properties: domainobjects['WorkInstruction']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['WorkInstruction']['className'], "linkProperty": 'parent', "filter" : workInstructionFilter, "filterParams" : workInstructionFilterParams, "properties": domainobjects['WorkInstruction']['properties'] };
 
 	// -1 for non-dragable. Single level view with normal sort rules
 	var view = codeshelf.hierarchylistview(websession_, domainobjects['WorkInstruction'], hierarchyMap, -1);

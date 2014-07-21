@@ -50,9 +50,9 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 	}
 
 	function workSequenceComparer(orderHeaderA, orderHeaderB) {
-		if (orderHeaderA.workSequence < orderHeaderB.workSequence) {
+		if (orderHeaderA["workSequence"] < orderHeaderB["workSequence"]) {
 			return -1;
-		} else if (orderHeaderA.workSequence > orderHeaderB.workSequence) {
+		} else if (orderHeaderA["workSequence"] > orderHeaderB["workSequence"]) {
 			return 1;
 		} else {
 			return dueDateComparer(orderHeaderA, orderHeaderB);
@@ -60,8 +60,8 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 	}
 
 	function dueDateComparer(orderHeaderA, orderHeaderB) {
-		dateA = new Date(orderHeaderA.readableDueDate);
-		dateB = new Date(orderHeaderB.readableDueDate);
+		var dateA = new Date(orderHeaderA['readableDueDate']);
+		var dateB = new Date(orderHeaderB['readableDueDate']);
 		if (dateA < dateB) {
 			return -1;
 		} else if (dateA > dateB) {
@@ -72,13 +72,12 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 	}
 
 	function orderIdComparer(orderHeaderA, orderHeaderB) {
-		if (orderHeaderA.orderId < orderHeaderB.orderId) {
+		if (orderHeaderA['orderId'] < orderHeaderB['orderId']) {
 			return -1;
-		} else if (orderHeaderA.orderId > orderHeaderB.orderId) {
+		} else if (orderHeaderA['orderId'] > orderHeaderB['orderId']) {
 			return 1;
 		} else {
-			// Punt to make the left one randomly lower.
-			return -1;
+			return goog.string.caseInsensitiveCompare(orderHeaderA['persistentId'], orderHeaderB['persistentId']);
 		}
 	}
 
@@ -178,9 +177,9 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 		];
 
 		// GoodEggs reliably has order groups. So deliver a 3-level view.
-		hierarchyMap[0] = { className: domainobjects['OrderGroup']['className'], linkProperty: 'parent', filter: orderGroupFilter, filterParams: orderGroupFilterParams, properties: domainobjects['OrderGroup']['properties'], comparer: undefined };
-		hierarchyMap[1] = { className: domainobjects['OrderHeader']['className'], linkProperty: 'orderGroup', filter: orderHeaderFilter, filterParams: undefined, properties: domainobjects['OrderHeader']['properties'], comparer: workSequenceComparer };
-		hierarchyMap[2] = { className: domainobjects['OrderDetail']['className'], linkProperty: 'parent', filter: orderDetailFilter, filterParams: undefined, properties: domainobjects['OrderDetail']['properties'], comparer: undefined };
+		hierarchyMap[0] = { "className": domainobjects['OrderGroup']['className'], "linkProperty": 'parent', "filter": orderGroupFilter, "filterParams": orderGroupFilterParams, "properties": domainobjects['OrderGroup']['properties'], "comparer": undefined };
+		hierarchyMap[1] = { "className": domainobjects['OrderHeader']['className'], "linkProperty": 'orderGroup', "filter": orderHeaderFilter, "filterParams": undefined, "properties": domainobjects['OrderHeader']['properties'], "comparer": workSequenceComparer };
+		hierarchyMap[2] = { "className": domainobjects['OrderDetail']['className'], "linkProperty": 'parent', "filter": orderDetailFilter, "filterParams": undefined, "properties": domainobjects['OrderDetail']['properties'], "comparer": undefined };
 
 		view = codeshelf.hierarchylistview(websession_, domainobjects['OrderGroup'], hierarchyMap, 1);
 	} else {
@@ -191,8 +190,8 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 		];
 
 		// Accu-Logistics and many sites have no group at all, or are missing many. Just ignore and do the order headers.
-		hierarchyMap[0] = { className: domainobjects['OrderHeader']['className'], linkProperty: 'parent', filter: orderHeaderFilter, filterParams: orderHeaderFilterParams, properties: domainobjects['OrderHeader']['properties'], comparer: workSequenceComparer };
-		hierarchyMap[1] = { className: domainobjects['OrderDetail']['className'], linkProperty: 'parent', filter: orderDetailFilter, filterParams: undefined, properties: domainobjects['OrderDetail']['properties'], comparer: undefined };
+		hierarchyMap[0] = { "className": domainobjects['OrderHeader']['className'], "linkProperty": 'parent', "filter": orderHeaderFilter, "filterParams": orderHeaderFilterParams, "properties": domainobjects['OrderHeader']['properties'], "comparer": workSequenceComparer };
+		hierarchyMap[1] = { "className": domainobjects['OrderDetail']['className'], "linkProperty": 'parent', "filter": orderDetailFilter, "filterParams": undefined, "properties": domainobjects['OrderDetail']['properties'], "comparer": undefined };
 
 		view = codeshelf.hierarchylistview(websession_, domainobjects['OrderHeader'], hierarchyMap, 1);
 	}
