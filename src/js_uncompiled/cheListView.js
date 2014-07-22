@@ -10,6 +10,7 @@ goog.provide('codeshelf.chelistview');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
+goog.require('codeshelf.contextmenu');
 goog.require('codeshelf.view');
 
 goog.require('goog.array');
@@ -61,66 +62,59 @@ codeshelf.cheslistview = function(websession, facility) {
 		},
 
 		setupContextMenu: function() {
-			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			contextMenu_.on('mouseleave', function(event) {
-				self.closeContextMenu();
+			var contextDefs = [
+				{
+				"label": "Work Instructions",
+				"permission": "workinstructions:view",
+				"action": function(itemContext) {
+					self.cheWorkInstructions(itemContext);
+					}
+				},
+				{
+					"label": "Containers",
+					"permission": "containers:view",
+					"action": function(itemContext) {
+						self.cheContainers(itemContext);
+					}
+				},
+				{
+					"label": "Edit CHE",
+					"permission": "che:edit",
+					"action": function(itemContext) {
+						self.editChe(itemContext);
+					}
+				},
+				{
+					"label": "TESTING ONLY--Simulate cart set up",
+					"permission": "che:simulate",
+					"action": function(itemContext) {
+						self.testOnlySetUpChe(itemContext);
+					}
+				}
+
+			];
+
+			var filteredContextDefs = goog.array.filter(contextDefs, function(contextDef) {
+				var permissionNeeded = contextDef["permission"];
+				return websession_.getAuthz().hasPermission(permissionNeeded);
 			});
+			contextMenu_ = new codeshelf.ContextMenu(filteredContextDefs);
+			contextMenu_.setupContextMenu();
 		},
 
 		doContextMenu: function(event, item, column) {
 			if (event && event.stopPropagation)
 				event.stopPropagation();
 
-			event.preventDefault();
-			contextMenu_.empty();
-			// contextMenu_.bind("click", item, handleAisleContext);
+				event.preventDefault();
 
-			var line;
 			if (view.getItemLevel(item) === 0) {
-				line = $('<li><a href="#">Work Instructions</a></li>')
-					.appendTo(contextMenu_)
-					.data("option", "work_instructions")
-					.one("click", function () {
-						self.closeContextMenu();
-						self.cheWorkInstructions(item);
-					});
-				line = $('<li><a href="#">Containers</a></li>')
-					.appendTo(contextMenu_)
-					.data("option", "containers")
-					.one("click", function () {
-						self.closeContextMenu();
-						self.cheContainers(item);
-					});
-				line = $('<li><a href="#">Edit CHE</a></li>')
-					.appendTo(contextMenu_)
-					.data("option", "change_description")
-					.one("click", function () {
-						self.closeContextMenu();
-						self.editChe(item);
-					});
-
-				line = $('<li><a href="#">TESTING ONLY--Simulate cart set up</a></li>')
-					.appendTo(contextMenu_)
-					.data("option", "fake_setup1")
-					.one("click", function () {
-						self.closeContextMenu();
-						self.testOnlySetUpChe(item);
-					});
-
-				$('html').on("click.outsidecontextmenu", function(event) {
-					self.closeContextMenu();
-				});
-				contextMenu_
-					.css('top', event.pageY - 10)
-					.css('left', event.pageX - 10)
-					.fadeIn(5);
-
+				contextMenu_.doContextMenu(event, item, column);
 			}
 		},
 
 		closeContextMenu: function(item) {
-			$(contextMenu_).fadeOut(5);
-			$('html').off("click.outsidecontextmenu");
+			contextMenu_.closeContextMenu(item);
 		},
 
 		editChe:  function(che){
@@ -165,8 +159,7 @@ codeshelf.cheslistview = function(websession, facility) {
 				'che': che
 			};
 
-
-			cheDomainId = che['domainId'];
+			var cheDomainId = che['domainId'];
 			var theLogger = goog.debug.Logger.getLogger('CHE view');
 			theLogger.info("about do a fake GoodEggs setup for CHE: " + cheDomainId);
 

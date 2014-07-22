@@ -160,7 +160,8 @@ codeshelf.windowLauncher = (function() {
 
 		loadCheListView: function() {
 			try {
-				var cheListView = codeshelf.cheslistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var cheListView = codeshelf.cheslistview(codeshelf.sessionGlobals.getWebsession(),
+														 codeshelf.sessionGlobals.getFacility());
 				var cheListWindow = codeshelf.window(cheListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				cheListWindow.open();
 			}

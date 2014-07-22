@@ -15,25 +15,11 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-itemcontextmenuscope = {
-	'item': null
-};
-
-function clearItemContextMenuScope(){
-	itemcontextmenuscope['item'] = null;
-}
-
 function doSomethingWithItem() {
 	// What will we do?  Most likely, something like
 	// 1) lights on for all slots where the item in the container is
 	// 2) Maybe a list of all item/item details for items in this container
-	var theLogger = goog.debug.Logger.getLogger('Inventory view');
-	var aString = itemcontextmenuscope['item']['domainId'];
-	theLogger.info("will do something with inventory item: " + aString);
-
-	clearitemContextMenuScope();
 }
-goog.exportSymbol('doSomethingWithItem', doSomethingWithItem);
 
 /**
  * The active inventory items for this facility.
@@ -76,37 +62,9 @@ codeshelf.itemlistview = function(websession, facility) {
 		},
 
 		getViewName: function() {
-			returnStr = "Inventory Items";
+			var returnStr = "Inventory Items";
 			return returnStr;
-		},
-
-		setupContextMenu: function() {
-			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			contextMenu_.bind('mouseleave', function(event) {
-				$(this).fadeOut(5)
-			});
-		},
-
-		doContextMenu: function(event, item, column) {
-			if (event && event.stopPropagation)
-				event.stopPropagation();
-
-			event.preventDefault();
-			contextMenu_.empty();
-			// contextMenu_.bind("click", item, handleAisleContext);
-
-			var line;
-			if (view.getItemLevel(item) === 0) {
-				itemcontextmenuscope['item'] = item;
-				line = $('<li><a href="javascript:doSomethingWithItem()">Inventory Item test</a></li>').appendTo(contextMenu_).data("option", "use_action");
-			}
-
-			contextMenu_
-				.css('top', event.pageY - 10)
-				.css('left', event.pageX - 10)
-				.fadeIn(5);
 		}
-
 	};
 
 	// If che_ is null, then all active container uses for this facility. If che passed in, then only container uses on that CHE.

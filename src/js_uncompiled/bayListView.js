@@ -17,23 +17,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-tiercontextmenuscope = {
-	'bay': null
-};
-
-function clearBayContextMenuScope(){
-	baycontextmenuscope['bay'] = null;
-}
-
-function doSomethingWithBay() {
-	var theLogger = goog.debug.Logger.getLogger('Bay view');
-	var aString = tiercontextmenuscope['bay']['domainId'];
-	theLogger.info("change description for selected bay: " + aString);
-
-	clearTierContextMenuScope();
-}
-goog.exportSymbol('doSomethingWithBay', doSomethingWithBay);
-
 /**
  * The bays for this facility. Or a the bays for one aisle later
  * @param websession The websession used for updates.
@@ -84,35 +67,7 @@ codeshelf.baylistview = function(websession, facility) {
 
 		getViewName: function() {
 			return 'Bays List';
-		},
-
-		setupContextMenu: function() {
-			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			contextMenu_.bind('mouseleave', function(event) {
-				$(this).fadeOut(5)
-			});
-		},
-
-		doContextMenu: function(event, item, column) {
-			if (event && event.stopPropagation)
-				event.stopPropagation();
-
-			event.preventDefault();
-			contextMenu_.empty();
-			// contextMenu_.bind("click", item, handleAisleContext);
-
-			var line;
-			if (view.getItemLevel(item) === 0) {
-				baycontextmenuscope['bay'] = item;
-				line = $('<li><a href="javascript:doSomethingWithBay()">Just a bay test</a></li>').appendTo(contextMenu_).data("option", "bay_update");
-			}
-
-			contextMenu_
-				.css('top', event.pageY - 10)
-				.css('left', event.pageX - 10)
-				.fadeIn(5);
 		}
-
 	};
 	// tier parent goes bay->aisle>facility
 	var bayFilter = 'parent.parent.persistentId = :theId';

@@ -17,33 +17,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-ledcontrollercontextmenuscope = {
-	'ledcontroller': null
-};
-
-function clearLedControllerContextMenuScope(){
-	ledcontrollercontextmenuscope['ledcontroller'] = null;
-}
-
-function changeLedControllerId() {
-	var ledcontroller = ledcontrollercontextmenuscope['ledcontroller'];
-	var data = {
-		'ledcontroller': ledcontroller
-	};
-
-	var theLogger = goog.debug.Logger.getLogger('Led controller view');
-	theLogger.info("change ID dialog for LED Controller: " + ledcontroller['domainId']);
-
-
-	// See codeshelfApp.LedNgController defined below. And then referenced in angular.module
-	var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-led-id.html", "LedNgController as controller", data);
-
-	promise.result.then(function(){
-		clearLedControllerContextMenuScope();
-
-	});
-}
-goog.exportSymbol('changeLedControllerId', changeLedControllerId);
 
 /**
  * The aisle controllers for this facility.
@@ -89,32 +62,50 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 		},
 
 		setupContextMenu: function() {
-			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			contextMenu_.bind('mouseleave', function(event) {
-				$(this).fadeOut(5)
+			var contextDefs = [
+				{
+					"label": "Change ID of LED Controller",
+					"permission": "ledcontroller:edit",
+					"action": function(itemContext) {
+						self.changeLedControllerId(itemContext);
+					}
+				}
+			];
+			var filteredContextDefs = goog.array.filter(contextDefs, function(contextDef) {
+				var permissionNeeded = contextDef["permission"];
+				return websession_.getAuthz().hasPermission(permissionNeeded);
 			});
+			contextMenu_ = new codeshelf.ContextMenu(filteredContextDefs);
+			contextMenu_.setupContextMenu();
+
 		},
 
+
 		doContextMenu: function(event, item, column) {
-			if (event && event.stopPropagation)
-				event.stopPropagation();
+			contextMenu_.doContextMenu(event, item, column);
+		},
 
-			event.preventDefault();
-			contextMenu_.empty();
-			// contextMenu_.bind("click", item, handleAisleContext);
+		closeContextMenu: function(item) {
+			contextMenu_.closeContextMenu(item);
+		},
 
-			var line;
-			if (view.getItemLevel(item) === 0) {
-				ledcontrollercontextmenuscope['ledcontroller'] = item;
-				line = $('<li><a href="javascript:changeLedControllerId()">Change ID of LED Controller</a></li>').appendTo(contextMenu_).data("option", "change_id");
-			}
+		changeLedControllerId: function(item) {
+			var ledcontroller = item;
+			var data = {
+				'ledcontroller': ledcontroller
+			};
 
-			contextMenu_
-				.css('top', event.pageY - 10)
-				.css('left', event.pageX - 10)
-				.fadeIn(5);
+			var theLogger = goog.debug.Logger.getLogger('Led controller view');
+			theLogger.info("change ID dialog for LED Controller: " + ledcontroller['domainId']);
+
+
+			// See codeshelfApp.LedNgController defined below. And then referenced in angular.module
+			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-led-id.html", "LedNgController as controller", data);
+
+			promise.result.then(function(){
+
+			});
 		}
-
 	};
 	// ledController parent is codeshelf_network, whose parent is the facility
 	// Luckily, ebeans can handle this form also.

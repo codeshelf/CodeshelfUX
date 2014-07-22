@@ -16,19 +16,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-
-function linkAccount(persistentId) {
-	var dropboxServiceId = persistentId;
-
-	var modalInstance = codeshelf.simpleDlogService.showCustomDialog(
-		"partials/link-dropbox-dlog.html",
-		"DropboxLinkController as controller",
-		{"dropboxServiceId": dropboxServiceId});
-	modalInstance.result.then(function(){
-		//then do nothing
-	});
-}
-goog.exportSymbol('linkAccount', linkAccount);
 /**
  * The current state of edi files for this facility.
  * @param websession The websession used for updates.
@@ -50,32 +37,46 @@ codeshelf.ediservicesview = function (websession, facility) {
 		},
 
 		setupContextMenu: function () {
-			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			contextMenu_.bind('mouseleave', function (event) {
-				$(this).fadeOut(5);
+			var contextDefs = [
+				{
+					"label": "Link Dropbox",
+					"permission": "edit:edit",
+					"action": function(itemContext) {
+						self.linkAccount(itemContext);
+					}
+				}
+			];
+			var filteredContextDefs = goog.array.filter(contextDefs, function(contextDef) {
+				var permissionNeeded = contextDef["permission"];
+				return websession_.getAuthz().hasPermission(permissionNeeded);
 			});
-		},
-
-		// This is mainly demonstration/experiment. Ancestor hierarchyListView has a close(). Which is called?
-		close: function() {
-			var theLogger = goog.debug.Logger.getLogger('EDI Services view');
-			theLogger.info("Called this close");
+			contextMenu_ = new codeshelf.ContextMenu(filteredContextDefs);
+			contextMenu_.setupContextMenu();
 		},
 
 		doContextMenu: function (event, item, column) {
 			if (event && event.stopPropagation)
 				event.stopPropagation();
 
-			event.preventDefault();
-			contextMenu_.empty();
-			var persistentId = item['persistentId'];
-			var line = $('<li><a href="javascript:linkAccount(\'' + persistentId + '\')">Link Dropbox</a></li>').appendTo(contextMenu_);
-			line.data("option", "link");
-			contextMenu_
-				.css('top', event.pageY - 10)
-				.css('left', event.pageX - 10)
-				.fadeIn(5);
+				event.preventDefault();
+
+			if (view.getItemLevel(item) === 0) {
+				contextMenu_.doContextMenu(event, item, column);
+			}
+		},
+
+		linkAccount: function(item) {
+			var dropboxServiceId = item['persistentId'];
+
+			var modalInstance = codeshelf.simpleDlogService.showCustomDialog(
+				"partials/link-dropbox-dlog.html",
+				"DropboxLinkController as controller",
+				{"dropboxServiceId": dropboxServiceId});
+				modalInstance.result.then(function(){
+					//then do nothing
+				});
 		}
+
 	};
 
 	var serviceFilter = 'parent.persistentId = :theId';

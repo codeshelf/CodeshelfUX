@@ -17,32 +17,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-workinstructioncontextmenuscope = {
-	'workinstruction': null
-};
-
-function clearWorkInstructionContextMenuScope(){
-	workinstructioncontextmenuscope['workinstruction'] = null;
-}
-
-function doFakeCompleteWorkInstruction(inUpdateKind) {
-	wi = workinstructioncontextmenuscope['workinstruction'];
-	var methodArgs = [
-		{ 'name': 'inCompleteStr', 'value': inUpdateKind, 'classType': 'java.lang.String'}
-	];
-	codeshelf.objectUpdater.callMethod(wi, 'WorkInstruction', 'fakeCompleteWi', methodArgs);
-	clearWorkInstructionContextMenuScope();
-}
-
-function completeWorkInstruction() {
-	doFakeCompleteWorkInstruction('COMPLETE');
-}
-goog.exportSymbol('completeWorkInstruction', completeWorkInstruction);
-
-function shortWorkInstruction() {
-	doFakeCompleteWorkInstruction('SHORT');
-}
-goog.exportSymbol('shortWorkInstruction', shortWorkInstruction);
 
 /**
  * The active container uses for this facility.
@@ -59,19 +33,6 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inGrou
 	var order_ = inOrder;
 
 	var contextMenu_;
-
-
-	function websocketCmdCallbackFacility() {
-		var callback = {
-			exec: function(command) {
-				/* appears to never be called
-				var theLogger = goog.debug.Logger.getLogger('aislesListView');
-				theLogger.info("callback exec called"); */
-			}
-		};
-
-		return callback;
-	}
 
 	var self = {
 
@@ -99,7 +60,7 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inGrou
 		},
 
 		getViewName: function() {
-			returnStr = "Work Instructions";
+			var returnStr = "Work Instructions";
 			if (che_ != null){
 				returnStr = returnStr + " for " + che_['domainId'];
 			}
@@ -107,33 +68,55 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inGrou
 		},
 
 		setupContextMenu: function() {
-			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			contextMenu_.bind('mouseleave', function(event) {
-				$(this).fadeOut(5)
+			var contextDefs = [
+				{
+					"label": "TESTING ONLY-Complete",
+					"permission": "workinstructions:simulate",
+					"action": function(itemContext) {
+						self.completeWorkInstruction(itemContext);
+					}
+				},
+				{
+					"label": "TESTING ONLY-Short",
+					"permission": "workinstructions:simulate",
+					"action": function(itemContext) {
+						self.shortWorkInstruction(itemContext);
+					}
+				}
+			];
+
+			var filteredContextDefs = goog.array.filter(contextDefs, function(contextDef) {
+				var permissionNeeded = contextDef["permission"];
+				return websession_.getAuthz().hasPermission(permissionNeeded);
 			});
+			contextMenu_ = new codeshelf.ContextMenu(filteredContextDefs);
+			contextMenu_.setupContextMenu();
 		},
 
 		doContextMenu: function(event, item, column) {
-			if (event && event.stopPropagation)
-				event.stopPropagation();
+			contextMenu_.doContextMenu(event, item, column);
+		},
 
-			event.preventDefault();
-			contextMenu_.empty();
-			// contextMenu_.bind("click", item, handleAisleContext);
+		closeContextMenu: function(item) {
+			contextMenu_.closeContextMenu(item);
+		},
 
-			var line;
-			if (view.getItemLevel(item) === 0) {
-				workinstructioncontextmenuscope['workinstruction'] = item;
-				line = $('<li><a href="javascript:completeWorkInstruction()">TESTING ONLY-Complete</a></li>').appendTo(contextMenu_).data("option", "wi_complete");
-				line = $('<li><a href="javascript:shortWorkInstruction()">TESTING ONLY-Short</a></li>').appendTo(contextMenu_).data("option", "wi_short");
-			}
 
-			contextMenu_
-				.css('top', event.pageY - 10)
-				.css('left', event.pageX - 10)
-				.fadeIn(5);
+		doFakeCompleteWorkInstruction: function(item, inUpdateKind) {
+			var wi = item;
+			var methodArgs = [
+				{ 'name': 'inCompleteStr', 'value': inUpdateKind, 'classType': 'java.lang.String'}
+			];
+			codeshelf.objectUpdater.callMethod(wi, 'WorkInstruction', 'fakeCompleteWi', methodArgs);
+		},
+
+		completeWorkInstruction: function(item) {
+			self.doFakeCompleteWorkInstruction(item, 'COMPLETE');
+		},
+
+		shortWorkInstruction: function(item) {
+			self.doFakeCompleteWorkInstruction(item, 'SHORT');
 		}
-
 	};
 
 	var workInstructionFilter;

@@ -39,6 +39,7 @@ codeshelf.loginWindow = function() {
 				} else {
 					if (command['data']['LOGIN_RS'] == 'SUCCEED') {
 						websession_.setState(kWebsessionState.VALIDATED);
+
 						application_.setOrganization(command['data']['organization']);
 						var user = command['data']['user'];
 						var email = user['email'];
@@ -56,6 +57,7 @@ codeshelf.loginWindow = function() {
 							authz.setPermissions([]); // no permissions by default
 						}
 						authz = Object.freeze(authz); //ECMAScript 5 prevent changes from this point
+						websession_.setAuthz(authz);
 						self.exit();
 						var mainpage = codeshelf.mainpage();
 

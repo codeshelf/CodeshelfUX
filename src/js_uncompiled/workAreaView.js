@@ -16,7 +16,6 @@ goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('adhocDialogService');
 
-
 /**
  * The work areas for this facility.
  * @param websession The websession used for updates.
@@ -62,31 +61,6 @@ codeshelf.workareaview = function(websession, facility) {
 
 		getViewName: function() {
 			return 'Work Areas';
-		},
-
-		setupContextMenu: function() {
-			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			contextMenu_.bind('mouseleave', function(event) {
-				$(this).fadeOut(5)
-			});
-		},
-
-		doContextMenu: function(event, item, column) {
-			if (event && event.stopPropagation)
-				event.stopPropagation();
-
-			event.preventDefault();
-			contextMenu_.empty();
-			contextMenu_.bind("click", item, testDialog);
-
-			var line;
-			// this is a 3-level view: path, work area, work instruction
-			line = $('<li>Test Dialog</li>').appendTo(contextMenu_).data("option", "test_dialog");
-
-			contextMenu_
-				.css('top', event.pageY - 10)
-				.css('left', event.pageX - 10)
-				.fadeIn(5);
 		}
 	};
 

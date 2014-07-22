@@ -17,23 +17,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-var slotcontextmenuscope = {
-	'slot': null
-};
-
-function clearSlotContextMenuScope(){
-	slotcontextmenuscope['slot'] = null;
-}
-
-function doSomethingWithSlot() {
-	var theLogger = goog.debug.Logger.getLogger('Slot view');
-	var aString = slotcontextmenuscope['slot']['domainId'];
-	theLogger.info("change description for selected Slot: " + aString);
-
-	clearSlotContextMenuScope();
-}
-goog.exportSymbol('doSomethingWithSlot', doSomethingWithSlot);
-
 /**
  * The aisles for this facility.
  * @param websession The websession used for updates.
@@ -49,7 +32,6 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 	var contextMenu_;
 
 	var self = {
-
 		// following psuedo-inheritance
 		'shouldAddThisColumn': function(inProperty){
 			if (inProperty['id'] ===  'persistentId')
@@ -62,35 +44,7 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 
 		getViewName: function() {
 			return 'Slots in Tier ' + tier_['tierSortName'];
-		},
-
-		setupContextMenu: function() {
-			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			contextMenu_.bind('mouseleave', function(event) {
-				$(this).fadeOut(5);
-			});
-		},
-
-		doContextMenu: function(event, item, column) {
-			if (event && event.stopPropagation)
-				event.stopPropagation();
-
-			event.preventDefault();
-			contextMenu_.empty();
-			// contextMenu_.bind("click", item, handleAisleContext);
-
-			var line;
-			if (view.getItemLevel(item) === 0) {
-				slotcontextmenuscope['slot'] = item;
-				line = $('<li><a href="javascript:doSomethingWithSlot()">Just a Slot test</a></li>').appendTo(contextMenu_).data("option", "slot_update");
-			}
-
-			contextMenu_
-				.css('top', event.pageY - 10)
-				.css('left', event.pageX - 10)
-				.fadeIn(5);
 		}
-
 	};
 	// tier parent goes bay->aisle>facility
 	var tierSlotFilter = 'parent.persistentId = :theId';

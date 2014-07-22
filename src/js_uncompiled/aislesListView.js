@@ -20,69 +20,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-
-
-var aislecontextmenuscope = {
-	'aisle': null
-};
-
-function clearAisleContextMenuScope(){
-	aislecontextmenuscope['aisle'] = null;
-}
-
-/**
- * Set LED Controller for an aisle
- */
-function setControllerForAisle() {
-	var theAisle = aislecontextmenuscope['aisle'];
-	var data = {
-		"aisle" : theAisle
-	};
-	var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-aisle-controller.html", "AisleLedController as controller", data);
-	modalInstance.result.then(function(){
-		clearAisleContextMenuScope();
-	});
-}
-goog.exportSymbol('setControllerForAisle', setControllerForAisle); // Silly that this is needed even in same file.
-
-
-function associatePathSegment() {
-	var theAisle = aislecontextmenuscope['aisle'];
-	if (theAisle) {
-		var data = {
-			"aisle" : theAisle
-		};
-		var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-aisle-pathsegment.html", "AislePathSegmentsController as controller", data);
-		modalInstance.result.then(function(){
-			clearAisleContextMenuScope();
-		});
-	}
-	else{
-		theLogger.error("null aisle. How? ");
-
-	}
-}
-goog.exportSymbol('associatePathSegment', associatePathSegment); // Silly that this is needed even in same file.
-
-/**
- *
- */
-function launchTiersForAisle() {
-	var theLogger = goog.debug.Logger.getLogger('aisles view');
-	var theAisle = aislecontextmenuscope['aisle'];
-	if (theAisle) {
-		var aisleString = theAisle['domainId'];
-		var tierListView = codeshelf.tierlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), theAisle);
-		var tierListWindow = codeshelf.window(tierListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
-		tierListWindow.open();
-	}
-	else{
-		theLogger.error("null aisle. How? ");
-	}
-	clearAisleContextMenuScope();
-}
-goog.exportSymbol('launchTiersForAisle', launchTiersForAisle); // needed even in same file.
-
 /**
  * The aisles for this facility.
  * @param websession The websession used for updates.
@@ -127,34 +64,87 @@ codeshelf.aisleslistview = function(websession, facility) {
 		},
 
 		setupContextMenu: function() {
-			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			contextMenu_.bind('mouseleave', function(event) {
-				$(this).fadeOut(5)
+			var contextDefs = [
+				{
+					"label": "Set controller this aisle",
+					"permission": "aisle:edit",
+					"action": function(itemContext) {
+						self.setControllerForAisle(itemContext);
+					}
+				},
+				{
+					"label": "Associate Path Segment",
+					"permission": "aisle:edit",
+					"action": function(itemContext) {
+						self.associatePathSegment(itemContext);
+					}
+				},
+				{
+					"label": "Tiers in this Aisle",
+					"permission": "tier:view",
+					"action": function(itemContext) {
+						self.launchTiersForAisle(itemContext);
+					}
+				}
+			];
+
+			var filteredContextDefs = goog.array.filter(contextDefs, function(contextDef) {
+				var permissionNeeded = contextDef["permission"];
+				return websession_.getAuthz().hasPermission(permissionNeeded);
 			});
+			contextMenu_ = new codeshelf.ContextMenu(filteredContextDefs);
+			contextMenu_.setupContextMenu();
 		},
 
 		doContextMenu: function(event, item, column) {
 			if (event && event.stopPropagation)
 				event.stopPropagation();
 
-			event.preventDefault();
-			contextMenu_.empty();
-			// contextMenu_.bind("click", item, handleAisleContext);
+				event.preventDefault();
 
-			var line;
 			if (view.getItemLevel(item) === 0) {
-				aislecontextmenuscope['aisle'] = item;
-				line = $('<li><a href="javascript:setControllerForAisle()">Set controller this aisle</a></li>').appendTo(contextMenu_).data("option", "tier_cntlr");
-				line = $('<li><a href="javascript:associatePathSegment()">Associate Path Segment</li>').appendTo(contextMenu_).data("option", "associate_");
-				line = $('<li><a href="javascript:launchTiersForAisle()">Tiers in this Aisle</li>').appendTo(contextMenu_).data("option", "launchtiers");
+				contextMenu_.doContextMenu(event, item, column);
 			}
+		},
 
-			contextMenu_
-				.css('top', event.pageY - 10)
-				.css('left', event.pageX - 10)
-				.fadeIn(5);
+		closeContextMenu: function(item) {
+			contextMenu_.closeContextMenu(item);
+		},
+
+		/**
+		 * Set LED Controller for an aisle
+		 */
+		setControllerForAisle: function(item) {
+			var theAisle = item;
+			var data = {
+				"aisle" : theAisle
+			};
+			var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-aisle-controller.html", "AisleLedController as controller", data);
+			modalInstance.result.then(function(){
+
+			});
+		},
+
+
+	associatePathSegment: function(item) {
+		var theAisle = item;
+		if (theAisle) {
+			var data = {
+				"aisle" : theAisle
+			};
+			var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-aisle-pathsegment.html", "AislePathSegmentsController as controller", data);
+			modalInstance.result.then(function(){
+			});
 		}
-
+	},
+	launchTiersForAisle: function(item) {
+			var theAisle = item;
+			if (theAisle) {
+				var tierListView = codeshelf.tierlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), theAisle);
+				var tierListWindow = codeshelf.window(tierListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				tierListWindow.open();
+			}
+		}
 	};
 
 	var aisleFilter = 'parent.persistentId = :theId';

@@ -20,59 +20,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-var tiercontextmenuscope = {
-	'tier': null
-};
-
-function clearTierContextMenuScope(){
-	tiercontextmenuscope['tier'] = null;
-}
-
-function setControllerForTier(inAllTiers) {
-	var theLogger = goog.debug.Logger.getLogger('Tier view');
-	var theTier = tiercontextmenuscope['tier'];
-	if (theTier === null){
-		theLogger.info("null tier in context menu choice"); //why? saw this.
-	}
-	var tierName = theTier['domainId'];
-	theLogger.info("setting controller for selected Tier: " + tierName);
-
-	var tierAisleValue = "";
-	if (inAllTiers === true){
-		tierAisleValue = "aisle";
-	}
-
-	var data = {
-		"tier" : theTier,
-		"tierAisleValue" : tierAisleValue
-	};
-	var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-tier.html", "TierController as controller", data);
-	modalInstance.result.then(function(){
-		clearTierContextMenuScope();
-
-	});
-}
-
-function setControllerForTierOnly() {
-	setControllerForTier(false);
-}
-goog.exportSymbol('setControllerForTierOnly', setControllerForTierOnly);
-
-function setControllerForTiersInAisle() {
-	setControllerForTier(true);
-}
-goog.exportSymbol('setControllerForTiersInAisle', setControllerForTiersInAisle);
-
-function doLaunchTierSlotList() {
-	aTier = tiercontextmenuscope['tier'];
-	var tierSlotListView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(),codeshelf.sessionGlobals.getFacility(), aTier);
-	var tierSlotListWindow = codeshelf.window(tierSlotListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
-	tierSlotListWindow.open();
-
-	clearTierContextMenuScope();
-}
-goog.exportSymbol('doLaunchTierSlotList', doLaunchTierSlotList);
-
 /**
  * The tiers for this facility or tiers for one aisle.
  *If aisle is null, then all tiers for all aisle in this facility. If aisle passed in, then only tiers in this aisle.
@@ -130,36 +77,84 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 		},
 
 		setupContextMenu: function () {
-			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			contextMenu_.bind('mouseleave', function (event) {
-				$(this).fadeOut(5)
+			var contextDefs = [
+				{
+					"label" : "Set controller this tier only</a>",
+					"permission": "tier:edit",
+					"action": function(itemContext) {
+						self.setControllerForTierOnly(itemContext);
+					}
+				},
+				{
+					"label" : "Set controller for tiers this aisle</a>",
+					"permission": "tier:edit",
+					"action": function(itemContext) {
+						self.setControllerForTiersInAisle(itemContext);
+					}
+				},
+				{
+					"label" : "Slots for this tier</a>",
+					"permission": "slot:view",
+					"action": function(itemContext) {
+						self.doLaunchTierSlotList(itemContext);
+					}
+				}
+
+			];
+			var filteredContextDefs = goog.array.filter(contextDefs, function(contextDef) {
+				var permissionNeeded = contextDef["permission"];
+				return websession_.getAuthz().hasPermission(permissionNeeded);
+			});
+			contextMenu_ = new codeshelf.ContextMenu(filteredContextDefs);
+			contextMenu_.setupContextMenu();
+		},
+
+		doContextMenu: function(event, item, column) {
+			contextMenu_.doContextMenu(event, item, column);
+		},
+
+		closeContextMenu: function(item) {
+			contextMenu_.closeContextMenu(item);
+		},
+
+		setControllerForTier: function(item, inAllTiers) {
+			var theLogger = goog.debug.Logger.getLogger('Tier view');
+			var theTier = item;
+			if (theTier === null){
+				theLogger.info("null tier in context menu choice"); //why? saw this.
+			}
+			var tierName = theTier['domainId'];
+			theLogger.info("setting controller for selected Tier: " + tierName);
+
+			var tierAisleValue = "";
+			if (inAllTiers === true){
+				tierAisleValue = "aisle";
+			}
+
+			var data = {
+				"tier" : theTier,
+				"tierAisleValue" : tierAisleValue
+			};
+			var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-tier.html", "TierController as controller", data);
+			modalInstance.result.then(function(){
+
 			});
 		},
 
-		doContextMenu: function (event, item, column) {
-			if (event && event.stopPropagation)
-				event.stopPropagation();
+		setControllerForTierOnly: function(item) {
+			self.setControllerForTier(item, false);
+		},
 
-			event.preventDefault();
-			contextMenu_.empty();
-			// contextMenu_.bind("click", item, handleAisleContext);
+		setControllerForTiersInAisle: function(item) {
+			self.setControllerForTier(item, true);
+		},
 
-			var line;
-			if (view.getItemLevel(item) === 0) {
-				tiercontextmenuscope['tier'] = item;
-				// This needs to be conditional. Does this session have permission to set controller?
-				line = $('<li><a href="javascript:setControllerForTierOnly()">Set controller this tier only</a></li>').appendTo(contextMenu_).data("option", "tier_cntlr");
-				line = $('<li><a href="javascript:setControllerForTiersInAisle()">Set controller for tiers this aisle</a></li>').appendTo(contextMenu_).data("option", "tier_cntlr");
-
-				line = $('<li><a href="javascript:doLaunchTierSlotList()">Slots for this tier</a></li>').appendTo(contextMenu_).data("option", "slots_list");
-			}
-
-			contextMenu_
-				.css('top', event.pageY - 10)
-				.css('left', event.pageX - 10)
-				.fadeIn(5);
+		doLaunchTierSlotList: function(item) {
+			var aTier = item;
+			var tierSlotListView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(),codeshelf.sessionGlobals.getFacility(), aTier);
+			var tierSlotListWindow = codeshelf.window(tierSlotListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+			tierSlotListWindow.open();
 		}
-
 	};
 
 	// If aisle is null, then all tiers for all aisle in this facility. If aisle passed in, then only tiers in this aisle.

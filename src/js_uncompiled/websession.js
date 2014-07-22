@@ -41,6 +41,7 @@ var kWebsessionState = {
 codeshelf.websession = function () {
 
 	var state_;
+	var authz_;
 	var websocketStarted_ = false;
 	var pendingCommands_;
 	var connectAttempts_ = 0;
@@ -68,6 +69,15 @@ codeshelf.websession = function () {
 
 		setState: function (state) {
 			state_ = state;
+		},
+
+
+		getAuthz: function () {
+			return authz_;
+		},
+
+		setAuthz: function (authz) {
+			authz_ = authz;
 		},
 
 		initWebSocket: function (application) {

@@ -16,25 +16,11 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-containerusecontextmenuscope = {
-	'containeruse': null
-};
-
-function clearContainerUseContextMenuScope(){
-	containerusecontextmenuscope['containeruse'] = null;
-}
-
 function doSomethingWithContainerUse() {
 	// What will we do?  Most likely, something like
 	// 1) lights on for all slots where the item in the container is
 	// 2) Maybe a list of all item/item details for items in this container
-	var theLogger = goog.debug.Logger.getLogger('ContainerUse view');
-	var aString = containerusecontextmenuscope['containeruse']['domainId'];
-	theLogger.info("will do something with container use: " + aString);
-
-	clearContainerUseContextMenuScope();
 }
-goog.exportSymbol('doSomethingWithContainerUse', doSomethingWithContainerUse);
 
 /**
  * The active container uses for this facility.
@@ -78,38 +64,11 @@ codeshelf.containeruselistview = function(websession, facility, inChe) {
 		},
 
 		getViewName: function() {
-			returnStr = "Containers";
+			var returnStr = "Containers";
 			if (che_ != null){
 				returnStr = returnStr + " on " + che_['domainId'];
 			}
 			return returnStr;
-		},
-
-		setupContextMenu: function() {
-			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			contextMenu_.bind('mouseleave', function(event) {
-				$(this).fadeOut(5)
-			});
-		},
-
-		doContextMenu: function(event, item, column) {
-			if (event && event.stopPropagation)
-				event.stopPropagation();
-
-			event.preventDefault();
-			contextMenu_.empty();
-			// contextMenu_.bind("click", item, handleAisleContext);
-
-			var line;
-			if (view.getItemLevel(item) === 0) {
-				containerusecontextmenuscope['containeruse'] = item;
-				line = $('<li><a href="javascript:doSomethingWithContainerUse()">ContainerUse test</a></li>').appendTo(contextMenu_).data("option", "use_action");
-			}
-
-			contextMenu_
-				.css('top', event.pageY - 10)
-				.css('left', event.pageX - 10)
-				.fadeIn(5);
 		}
 
 	};
@@ -128,9 +87,9 @@ codeshelf.containeruselistview = function(websession, facility, inChe) {
 	}
 	else {
 		// containerUse has currentChe field. Need a metafield?
-		var containerUseFilter = "current_che_persistentid = :theId  and active = true";
+		containerUseFilter = "current_che_persistentid = :theId  and active = true";
 
-		var containerUseFilterParams = [
+		containerUseFilterParams = [
 			{ 'name': 'theId', 'value': che_['persistentId']}
 		];
 	}

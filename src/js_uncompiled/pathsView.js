@@ -17,31 +17,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-pathscontextmenuscope = {
-	'path': null,
-	'pathsegment': null
-};
-
-function clearContextMenuScope(){
-	pathscontextmenuscope['path'] = null; // clear it now, just to be tidy.
-	pathscontextmenuscope['pathsegment'] = null; // clear it now, just to be tidy.
-}
-function sendPathDelete() {
-	var theLogger = goog.debug.Logger.getLogger('Paths view');
-	var aString = pathscontextmenuscope['path']['domainId'];
-	// var aString = "unknown path";
-	theLogger.info("delete path2 " + aString);
-
-	thePath = pathscontextmenuscope['path'];
-	var methodArgs = [
-	];
-	codeshelf.objectUpdater.callMethod(thePath, 'Path', 'deleteThisPath', methodArgs);
-
-
-	clearContextMenuScope();
-}
-goog.exportSymbol('sendPathDelete', sendPathDelete); // Silly that this is needed even in same file.
-
 
 /**
  * The paths for this facility.
@@ -86,32 +61,47 @@ codeshelf.pathsview = function(websession, facility) {
 		},
 
 		setupContextMenu: function() {
-			contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			contextMenu_.bind('mouseleave', function(event) {
-				$(this).fadeOut(5)
+			var contextDefs = [
+				{
+					"label": "Delete Path",
+					"permission": "path:edit",
+					"action": function(itemContext) {
+						self.sendPathDelete(itemContext);
+					}
+				}
+			];
+			var filteredContextDefs = goog.array.filter(contextDefs, function(contextDef) {
+				var permissionNeeded = contextDef["permission"];
+				return websession_.getAuthz().hasPermission(permissionNeeded);
 			});
+			contextMenu_ = new codeshelf.ContextMenu(filteredContextDefs);
+			contextMenu_.setupContextMenu();
 		},
 
 		doContextMenu: function(event, item, column) {
 			if (event && event.stopPropagation)
 				event.stopPropagation();
 
-			event.preventDefault();
-			contextMenu_.empty();
-			// contextMenu_.bind("click", item, sendPathDelete);
-
-			var line;
-			// this is a two-level view
+				event.preventDefault();
 
 			if (view.getItemLevel(item) === 0) {
-				pathscontextmenuscope['path'] = item;
-				line = $('<li><a href="javascript:sendPathDelete()">Delete Path</a></li>').appendTo(contextMenu_).data("option", "delete_path");
+				contextMenu_.doContextMenu(event, item, column);
 			}
+		},
 
-			contextMenu_
-				.css('top', event.pageY - 10)
-				.css('left', event.pageX - 10)
-				.fadeIn(5);
+		closeContextMenu: function(item) {
+			contextMenu_.closeContextMenu(item);
+		},
+
+		sendPathDelete: function(item) {
+			var theLogger = goog.debug.Logger.getLogger('Paths view');
+			var aString = item['domainId'];
+			theLogger.info("delete path2 " + aString);
+
+			var thePath = item;
+			var methodArgs = [
+			];
+			codeshelf.objectUpdater.callMethod(thePath, 'Path', 'deleteThisPath', methodArgs);
 		}
 	};
 

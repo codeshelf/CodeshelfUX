@@ -81,7 +81,6 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 		}
 	}
 
-
 	var self = {
 
 		getViewName: function () {
@@ -90,35 +89,6 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 			else
 				return 'Cross Batch Orders';
 		},
-
-		setupContextMenu: function () {
-			/*
-			 contextMenu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);
-			 contextMenu_.bind('mouseleave', function(event) {
-			 $(this).fadeOut(5)
-			 });
-			 */
-		},
-
-		doContextMenu: function (event, item, column) {
-			/*
-			 if (event && event.stopPropagation)
-			 event.stopPropagation();
-
-			 event.preventDefault();
-			 contextMenu_.empty();
-			 // contextMenu_.bind("click", item, sendPathDelete);
-
-			 var line;
-			 // this is a two-level view
-
-			 contextMenu_
-			 .css('top', event.pageY - 10)
-			 .css('left', event.pageX - 10)
-			 .fadeIn(5);
-			 */
-		},
-
 
 		// following psuedo-inheritance pattern
 		'shouldAddThisColumn': function (inProperty) {

@@ -7,3 +7,5 @@ bin
 /.tern-project
 /lib/GoogleClosureLibrary/closure/bin/build/source.pyc
 /lib/GoogleClosureLibrary/closure/bin/build/treescan.pyc
+/.projectile
+/.tern-port
