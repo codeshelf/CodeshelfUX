@@ -59,7 +59,7 @@ codeshelf.baylistview = function(websession, facility) {
 				return false;
 			else if (inProperty['id'] ===  'anchorPosY')
 				return false;
-			else if (inProperty['id'] ===  'fullDomainId')
+			else if (inProperty['id'] ===  'nominalLocationId')
 				return false;
 			else
 				return true;

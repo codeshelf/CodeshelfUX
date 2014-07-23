@@ -55,8 +55,8 @@ domainobjects = {
 				'title': 'Pick End Y',
 				'width': 40
 			},
-			fullDomainId: {
-				'id':    'fullDomainId',
+			nominalLocationId: {
+				'id':    'nominalLocationId',
 				'title': 'Nominal ID',
 				'width': 10
 			},
@@ -116,8 +116,8 @@ domainobjects = {
 				'title': 'Pick End Y',
 				'width': 40
 			},
-			fullDomainId: {
-				'id':    'fullDomainId',
+			nominalLocationId: {
+				'id':    'nominalLocationId',
 				'title': 'Nominal ID',
 				'width': 10
 			},
@@ -298,8 +298,8 @@ domainobjects = {
 				'title': 'Persistent ID',
 				'width': 40
 			},
-			itemLocationFullDomainId: {
-				'id':    'itemLocationFullDomainId',
+			nominalLocationId: {
+				'id':    'nominalLocationId',
 				'title': 'Nominal Location',
 				'width': 16
 			},
@@ -609,8 +609,8 @@ domainobjects = {
 				'title': 'Alias',
 				'width': 10
 			},
-			fullDomainId: {
-				'id':    'fullDomainId',
+			nominalLocationId: {
+				'id':    'nominalLocationId',
 				'title': 'Nominal ID',
 				'width': 10
 			},
@@ -690,8 +690,8 @@ domainobjects = {
 				'title': 'Slot Aliases',
 				'width': 10
 			},
-			fullDomainId: {
-				'id':    'fullDomainId',
+			'nominalLocationId': {
+				'id':    'nominalLocationId',
 				'title': 'Nominal ID',
 				'width': 10
 			},
@@ -743,8 +743,8 @@ domainobjects = {
 				'title': 'Where',
 				'width': 10
 			},
-			'nominalId': {
-				'id':    'locationNominalId',
+			'nominalLocationId': {
+				'id':    'nominalLocationId',
 				'title': 'Nominal Location',
 				'width': 12
 			},
