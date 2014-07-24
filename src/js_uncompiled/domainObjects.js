@@ -199,10 +199,25 @@ domainobjects = {
 				'title': 'Order',
 				'width': 10
 			},
-			'containerName': {
-				'id':    'containerName',
-				'title': 'Container',
-				'width': 10
+			'itemInCntrDescription': {
+				'id':    'itemInCntrDescription',
+				'title': 'First Item Description',
+				'width': 40
+			},
+			'itemInCntrSku': {
+				'id':    'itemInCntrSku',
+				'title': 'Firsts Item SKU',
+				'width': 25
+			},
+			'itemInCntrPersistentId': {
+				'id':    'itemInCntrPersistentId',
+				'title': 'Item Master PersistentId',
+				'width': 25
+			},
+			'active': {
+				'id':    'active',
+				'title': 'Active',
+				'width': 8
 			}
 		}
 	},

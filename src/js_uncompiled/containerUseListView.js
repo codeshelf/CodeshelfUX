@@ -55,7 +55,9 @@ codeshelf.containeruselistview = function(websession, facility, inChe) {
 		'shouldAddThisColumn': function(inProperty){
 			if (inProperty['id'] ===  'cheName')
 				return true;
-			else if (inProperty['id'] ===  'orderName')
+			else if (inProperty['id'] ===  'itemInCntrDescription')
+				return true;
+			else if (inProperty['id'] ===  'itemInCntrSku')
 				return true;
 			else if (inProperty['id'] ===  'containerName')
 				return true;
