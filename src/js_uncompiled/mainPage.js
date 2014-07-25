@@ -14,6 +14,7 @@ goog.require('codeshelf.chelistview');
 goog.require('codeshelf.baylistview');
 goog.require('codeshelf.containeruselistview');
 goog.require('codeshelf.itemlistview');
+goog.require('codeshelf.itemmasterlistview');
 goog.require('codeshelf.workinstructionlistview');
 goog.require('codeshelf.tierlistview');
 goog.require('codeshelf.tierslotlistview');
@@ -219,6 +220,17 @@ codeshelf.windowLauncher = (function() {
 				var workInstructionListView = codeshelf.workinstructionlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), null, "", null);
 				var workInstructionWindow = codeshelf.window(workInstructionListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				workInstructionWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadItemMastersListView: function() {
+			try {
+				var itemMasterListView = codeshelf.itemmasterlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var itemMasterWindow = codeshelf.window(itemMasterListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				itemMasterWindow.open();
 			}
 			catch (err) {
 				alert(err);
@@ -490,6 +502,10 @@ function launchInventoryView() {
 }
 goog.exportSymbol('launchInventoryView', launchInventoryView);
 
+function launchItemMastersView() {
+	codeshelf.windowLauncher.loadItemMastersListView();
+}
+goog.exportSymbol('launchItemMastersView', launchItemMastersView);
 
 function launchTestRunner() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');
@@ -511,6 +527,7 @@ function launchTestRunner() {
 	launchContainerUseListView();
 	launchWorkInstructionListView();
 	launchInventoryView();
+	launchItemMastersView();
 
 }
 goog.exportSymbol('launchTestRunner', launchTestRunner);
