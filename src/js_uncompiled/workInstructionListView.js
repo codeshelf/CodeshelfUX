@@ -17,6 +17,10 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
+// check not-null, and not empty. Does not check for only white space.
+function isEmptyString(str) {
+	return (!str || 0 === str.length);
+}
 
 /**
  * The active container uses for this facility.
@@ -24,12 +28,12 @@ goog.require('goog.ui.tree.TreeControl');
  * @param facility The facility to check.
  * @return {Object} The container use list view.
  */
-codeshelf.workinstructionlistview = function(websession, facility, inChe, inGroup, inOrder) {
+codeshelf.workinstructionlistview = function(websession, facility, inChe, inItemMasterId, inOrder) {
 
 	var websession_ = websession;
 	var facility_ = facility; // not used here, but the ancestor view wants facility in the constructor
 	var che_ = inChe;
-	var group_ = inGroup;
+	var itemMasterId_ = inItemMasterId;
 	var order_ = inOrder;
 
 	var contextMenu_;
@@ -63,6 +67,10 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inGrou
 			var returnStr = "Work Instructions";
 			if (che_ != null){
 				returnStr = returnStr + " for " + che_['domainId'];
+			}
+			if (!isEmptyString(itemMasterId_)){
+				returnStr = returnStr + " for item" ; // don't have the item description or sku here.
+				// The persistent ID is useless. Will be obvious in the view anyway
 			}
 			return returnStr;
 		},
@@ -136,6 +144,15 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inGrou
 
 		workInstructionFilterParams = [
 			{ 'name': 'theId', 'value': che_['persistentId']}
+		];
+
+	}
+	else if (!isEmptyString(itemMasterId_)) {
+		// all work instructions for this item, including complete.
+		workInstructionFilter = "itemMaster = :theId";
+
+		workInstructionFilterParams = [
+			{ 'name': 'theId', 'value': itemMasterId_}
 		];
 
 	}
