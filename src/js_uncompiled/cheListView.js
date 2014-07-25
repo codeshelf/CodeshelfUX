@@ -49,12 +49,14 @@ codeshelf.cheslistview = function(websession, facility) {
 		// following psuedo-inheritance
 		'shouldAddThisColumn': function(inProperty){
 			// only fields in domainObjects for aisle will be asked for. We want to exclude persistent Id
-			if (inProperty['id'] ===  'persistentId')
-				return false;
-			else if (inProperty['id'] ===  'deviceGuidStr')
-				return false;
-			else
+			if (inProperty['id'] ===  'domainId')
 				return true;
+			else if (inProperty['id'] ===  'activeContainers')
+				return true;
+			else if (inProperty['id'] ===  'description')
+				return true;
+			else
+				return false;
 		},
 
 		getViewName: function() {

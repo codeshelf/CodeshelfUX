@@ -166,10 +166,14 @@ domainobjects = {
 				'id': 'description',
 				'title': 'Description',
 				'width': 40
+			},
+			'activeContainers': {
+				'id': 'activeContainers',
+				'title': 'Containers',
+				'width': 40
 			}
 		}
 	},
-
 
 	'ContainerUse': {
 		'className':  'ContainerUse',
