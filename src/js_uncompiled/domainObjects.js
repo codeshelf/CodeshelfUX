@@ -206,9 +206,10 @@ domainobjects = {
 			},
 			'itemInCntrSku': {
 				'id':    'itemInCntrSku',
-				'title': 'Firsts Item SKU',
+				'title': 'First Item SKU',
 				'width': 25
 			},
+			// not so much a UI field, as we need the persistent ID for the feature to show all WIs for this item
 			'itemInCntrPersistentId': {
 				'id':    'itemInCntrPersistentId',
 				'title': 'Item Master PersistentId',
@@ -752,6 +753,11 @@ domainobjects = {
 				'id':    'groupAndSortCode',
 				'title': 'Sort',
 				'width': 6
+			},
+			'completeTimeForUi': {
+				'id':    'completeTimeForUi',
+				'title': 'Complete',
+				'width': 8
 			},
 			'pickInstruction': {
 				'id':    'pickInstruction',

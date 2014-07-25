@@ -14,13 +14,9 @@ goog.require('codeshelf.view');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.string');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
-
-// check not-null, and not empty. Does not check for only white space.
-function isEmptyString(str) {
-	return (!str || 0 === str.length);
-}
 
 /**
  * The active container uses for this facility.
@@ -40,7 +36,7 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inItem
 
 	var self = {
 
-		// following psuedo-inheritance
+		// somewhat variable default fields depending on what sort of list this is
 		'shouldAddThisColumn': function(inProperty){
 			if (inProperty['id'] ===  'description')
 				return true;
@@ -50,14 +46,16 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inItem
 				return true;
 			else if (inProperty['id'] ===  'statusEnum')
 				return true;
-			else if (inProperty['id'] ===  'groupAndSortCode')
-				return true;
 			else if (inProperty['id'] ===  'planQuantity')
 				return true;
 			else if (inProperty['id'] ===  'uomMasterId')
 				return true;
+			else if (inProperty['id'] ===  'groupAndSortCode')
+				return goog.string.isEmpty(itemMasterId_) // mostly completed WIs in item WI list. Sort code is irrelevant
 			else if (inProperty['id'] ===  'assignedCheName')
-				return true;
+				return (che_ === null); //list title has the CHE if a CHE wi list
+			else if (inProperty['id'] ===  'completeTimeForUi')
+				return (!goog.string.isEmpty(itemMasterId_)); //might want this for CHE wi list also
 			else
 				return false;
 			// need to add che once we have the meta field
@@ -68,7 +66,7 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inItem
 			if (che_ != null){
 				returnStr = returnStr + " for " + che_['domainId'];
 			}
-			if (!isEmptyString(itemMasterId_)){
+			if (!goog.string.isEmpty(itemMasterId_)){
 				returnStr = returnStr + " for item" ; // don't have the item description or sku here.
 				// The persistent ID is useless. Will be obvious in the view anyway
 			}
@@ -147,7 +145,7 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inItem
 		];
 
 	}
-	else if (!isEmptyString(itemMasterId_)) {
+	else if (!goog.string.isEmpty(itemMasterId_)) {
 		// all work instructions for this item, including complete.
 		workInstructionFilter = "itemMaster = :theId";
 
