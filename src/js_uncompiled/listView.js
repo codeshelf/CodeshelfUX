@@ -54,12 +54,10 @@ codeshelf.listview = function(viewName, websession, domainObject, filterClause, 
 
 	function websocketCmdCallback() {
 		var callback = {
-			exec: function(command) {
-				if (!command['data'].hasOwnProperty('results')) {
-					alert('response has no result');
-				} else if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-					for (var i = 0; i < command['data']['results'].length; i++) {
-						var object = command['data']['results'][i];
+			exec: function(type,command) {
+				if (type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+					for (var i = 0; i < command['results'].length; i++) {
+						var object = command['results'][i];
 						if (object['op'] === 'cre') {
 							dataView_.addItem(object);
 						} else if (object['op'] === 'upd') {
@@ -77,7 +75,6 @@ codeshelf.listview = function(viewName, websession, domainObject, filterClause, 
 				}
 			}
 		};
-
 		return callback;
 	}
 
@@ -135,14 +132,17 @@ codeshelf.listview = function(viewName, websession, domainObject, filterClause, 
 
 			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
+			/*
 			var data = {
 				'className':     domainObject_['className'],
 				'propertyNames': properties_,
 				'filterClause':  filterClause_,
 				'filterParams':  filterParams_
 			};
-
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
+			*/
+
+			var setListViewFilterCmd = createRegisterFilterRequest(domainObject_['className'],properties_,filterClause_,filterParams_);
 			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 
 			menu_ = $("<span class='contextMenu' style='display:none;position:absolute;z-index:20;' />").appendTo(document['body']);

@@ -63,6 +63,7 @@ codeshelf.facilityeditorview = function (websession, facility) {
 				// If the this segment forms an angle of 85-95deg with an imaginary angle back to vertex zero
 				// then extend or shorten this segment to make it exactly 90deg.
 
+				/*
 				var data = {
 					'className': domainobjects['Facility']['className'],
 					'persistentId': facility_['persistentId'],
@@ -75,12 +76,16 @@ codeshelf.facilityeditorview = function (websession, facility) {
 						{'name': 'drawOrder', 'value': vertexNum, 'classType': 'java.lang.Integer'}
 					]
 				};
-
 				var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+				*/
+				var className = domainobjects['Facility']['className'];
+				var persistentId = facility_['persistentId'];
+				var newVertexCmd = websession_.createObjectMethodRequest(className,persistentId,methodName,methodArgs);
 				websession_.sendCommand(newVertexCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_METHOD_RESP), false);
 
 				// If this was the anchor vertex then set the location of the facility as well.
 				var anchorPoint = {'posTypeEnum': 'GPS', 'x': event.latLng.lng(), 'y': event.latLng.lat(), 'z' : 0.0};
+				/*
 				var data = {
 					'className': domainobjects['Facility']['className'],
 					'persistentId': facility_['persistentId'],
@@ -89,6 +94,11 @@ codeshelf.facilityeditorview = function (websession, facility) {
 					]
 				};
 				var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
+				*/
+				var className = domainobjects['Facility']['className'];
+				var persistentId = facility_['persistentId'];
+				var properties = [{'name': 'anchorPoint', 'value': anchorPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'}];
+				var moveVertexCmd = websession_.createObjectUpdateRequest(className,persistentId,properties);
 				websession_.sendCommand(moveVertexCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
 			}
 		}, 250);
@@ -243,6 +253,7 @@ codeshelf.facilityeditorview = function (websession, facility) {
 
 					if (canEditOutline_) {
 						var anchorPoint = {'posTypeEnum': 'GPS', 'x': marker.getPosition().lng(), 'y': marker.getPosition().lat(), 'z' : 0.0};
+						/*
 						var data = {
 							'className': domainobjects['Vertex']['className'],
 							'persistentId': vertex['persistentId'],
@@ -250,16 +261,17 @@ codeshelf.facilityeditorview = function (websession, facility) {
 								{'name': 'point', 'value': anchorPoint, 'classType' : 'com.gadgetworks.codeshelf.model.domain.Point'}
 							]
 						};
-						var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ,
-							data);
-						websession_.sendCommand(moveVertexCmd,
-							websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP),
-							false);
+						var moveVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
+						*/
+						var className = domainobjects['Vertex']['className'];
+						var persistentId = vertex['persistentId'];
+						var properties = [{'name': 'point', 'value': anchorPoint, 'classType' : 'com.gadgetworks.codeshelf.model.domain.Point'}];
+						var moveVertexCmd = websession_.createObjectUpdateRequest(className,persistentId,properties);
+						websession_.sendCommand(moveVertexCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP),false);
 					}
 				}
 			}
 		);
-//			}
 
 		//  The vertex at DrawPos 0 goes to the anchor marker.
 		if (vertex['drawOrder'] === 0) {
@@ -336,13 +348,16 @@ codeshelf.facilityeditorview = function (websession, facility) {
 	function deleteFacilityOutline() {
 		// Clear all of the markers from the map.
 		for (var i = Object.size(facilityOutlineVertices_) - 1; i >= 0; i--) {
-
+			/*
 			var data = {
 				'className': domainobjects['Vertex']['className'],
 				'persistentId': facilityOutlineVertices_[i].Vertex['persistentId']
 			};
-
 			var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_DELETE_REQ, data);
+			*/
+			var className = domainobjects['Vertex']['className'];
+			var persistentId = facilityOutlineVertices_[i].Vertex['persistentId'];
+			var newVertexCmd = websession_.createObjectDeleteRequest(className,persistentId);
 			websession_.sendCommand(newVertexCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_DELETE_RESP), false);
 		}
 	}
@@ -517,34 +532,29 @@ codeshelf.facilityeditorview = function (websession, facility) {
 
 	function websocketCmdCallback(expectedResponseType) {
 		var callback = {
-			exec: function (command) {
-				if (!command['data'].hasOwnProperty('results')) {
-					alert('response has no result');
-				} else {
-					if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command['data']['results'].length; i++) {
-							var object = command['data']['results'][i];
-
-							// Make sure the class name matches.
-							if (object['className'] === domainobjects['Vertex']['className']) {
-								var latLng = new google.maps.LatLng(object['posY'], object['posX']);
-								if (object['op'] === 'cre') {
-									logFacilityResponse('FILTER_RESP:cre');
-									handleCreateFacilityVertexCmd(latLng, object);
-								} else if (object['op'] === 'upd') {
-									logFacilityResponse('FILTER_RESP:upd -- init or update vertex from backend');
-									handleUpdateFacilityVertexCmd(latLng, object);
-								} else if (object['op'] === 'dl') {
-									logFacilityResponse('FILTER_RESP:dl -- delete vertex from backend');
-									handleDeleteFacilityVertexCmd(latLng, object);
-								}
+			exec: function (type,command) {
+				if (type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+					for (var i = 0; i < command['results'].length; i++) {
+						var object = command['results'][i];
+						// Make sure the class name matches.
+						if (object['className'] === domainobjects['Vertex']['className']) {
+							var latLng = new google.maps.LatLng(object['posY'], object['posX']);
+							if (object['op'] === 'cre') {
+								logFacilityResponse('FILTER_RESP:cre');
+								handleCreateFacilityVertexCmd(latLng, object);
+							} else if (object['op'] === 'upd') {
+								logFacilityResponse('FILTER_RESP:upd -- init or update vertex from backend');
+								handleUpdateFacilityVertexCmd(latLng, object);
+							} else if (object['op'] === 'dl') {
+								logFacilityResponse('FILTER_RESP:dl -- delete vertex from backend');
+								handleDeleteFacilityVertexCmd(latLng, object);
 							}
 						}
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-						logFacilityResponse('UPDATE_RESP -- ack the vertext update that I sent');
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
-						logFacilityResponse('UPDATE_RESP -- ack the vertex delete that I sent');
 					}
+				} else if (type == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+					logFacilityResponse('UPDATE_RESP -- ack the vertext update that I sent');
+				} else if (type == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+					logFacilityResponse('UPDATE_RESP -- ack the vertex delete that I sent');
 				}
 			}
 		};
@@ -664,6 +674,7 @@ codeshelf.facilityeditorview = function (websession, facility) {
 
 		open: function () {
 			// Create the filter to listen to all vertex updates for this facility.
+			/*
 			var data = {
 				'className': domainobjects['Vertex']['className'],
 				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder'],
@@ -672,10 +683,14 @@ codeshelf.facilityeditorview = function (websession, facility) {
 					{ 'name': 'theId', 'value': facility_['persistentId']}
 				]
 			};
-
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP),
-				true);
+			*/
+			var className = domainobjects['Vertex']['className'];
+			var propertyNames = ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder'];
+			var filterClause = 'parent.persistentId = :theId';
+			var filterParams = [{ 'name': 'theId', 'value': facility_['persistentId']}];
+			var setListViewFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
+			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP),true);
 		},
 
 		close: function () {

@@ -104,7 +104,21 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 	}
 
 	function savePath(path) {
-		var data = {
+
+		function callbackForCreatePath() {
+			var callback = {
+				exec: function (type,command) {
+					if (command['type'] == kWebSessionCommandType.OBJECT_METHOD_RESP) {
+						//handle error case
+						console.log(command);
+					}
+				}
+			};
+			return callback;
+		}
+
+		/*
+ 		var data = {
 			'className': domainobjects['Facility']['className'],
 			'persistentId': facility_['persistentId'],
 			'methodName': 'createPath',
@@ -113,25 +127,16 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 				{name: 'segments', value: path.segments, 'classType': '[Lcom.gadgetworks.codeshelf.model.domain.PathSegment;'}
 			]
 		};
-
-		function callbackForCreatePath() {
-			var callback = {
-				exec: function (command) {
-					if (!command['data'].hasOwnProperty('results')) {
-						alert('response has no result');
-					} else {
-						if (command['type'] == kWebSessionCommandType.OBJECT_METHOD_RESP) {
-							//handle error case
-							console.log(command);
-						}
-					}
-				}
-			};
-
-			return callback;
-		}
-
 		var newPath = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+		 */
+
+		var className = domainobjects['Facility']['className'];
+		var persistentId = facility_['persistentId'];
+		var methodArgs = [
+		                  {name: 'domainId', value: path['domainId'], 'classType': 'java.lang.String'},
+		                  {name: 'segments', value: path.segments, 'classType': '[Lcom.gadgetworks.codeshelf.model.domain.PathSegment;'}
+					];
+		var newPath = websession_.createObjectMethodRequest(className,persistentId,'createPath',methodArgs)
 		websession_.sendCommand(newPath, callbackForCreatePath(), false);
 
 		var theLogger = goog.debug.Logger.getLogger('Work Area Editor');
@@ -427,6 +432,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			aisles_[aisle['persistentId']] = aisleData;
 
 			// Create the filter to listen to all vertex updates for this aisle.
+			/*
 			var vertexFilterData = {
 				'className': domainobjects['Vertex']['className'],
 				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
@@ -435,8 +441,13 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 					{ 'name': 'theId', 'value': aisle['persistentId']}
 				]
 			};
-
 			var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
+			*/
+			var className = domainobjects['Vertex']['className'];
+			var propertyNames = ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder', 'parentPersistentId'];
+			var filterClause = 'parent.persistentId = :theId';
+			var filterParams = [{ 'name': 'theId', 'value': aisle['persistentId']}];
+			var vertexFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
 			websession_.sendCommand(vertexFilterCmd, websocketCmdCallbackAisle(), true);
 		}
 		self.invalidate();
@@ -476,6 +487,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			paths_[path['persistentId']] = pathData;
 
 			// Create the filter to listen to all vertex updates for this aisle.
+			/*
 			var pathSegmentFilterData = {
 				'className': domainobjects['PathSegment']['className'],
 				'propertyNames': ['domainId', 'posTypeEnum', 'startPosX', 'startPosY', 'endPosX', 'endPosY', 'parentPersistentId'],
@@ -484,10 +496,14 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 					{ 'name': 'theId', 'value': path['persistentId']}
 				]
 			};
-
 			var pathSegmentFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, pathSegmentFilterData);
-			websession_.sendCommand(pathSegmentFilterCmd, websocketCmdCallbackPath(),
-				true);
+			*/
+			var className = domainobjects['PathSegment']['className'];
+			var propertyNames = ['domainId', 'posTypeEnum', 'startPosX', 'startPosY', 'endPosX', 'endPosY', 'parentPersistentId'];
+			var filterClause = 'parent.persistentId = :theId';
+			var filterParams = [{ 'name': 'theId', 'value': path['persistentId']}];
+			var pathSegmentFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
+			websession_.sendCommand(pathSegmentFilterCmd, websocketCmdCallbackPath(),true);
 		}
 		self.invalidate();
 	}
@@ -527,78 +543,69 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 	function websocketCmdCallbackFacility() {
 		var callback = {
-			exec: function (command) {
-				if (!command['data'].hasOwnProperty('results')) {
-					alert('response has no result');
-				} else {
-					if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command['data']['results'].length; i++) {
-							var object = command['data']['results'][i];
+			exec: function (type,command) {
+				if (type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+					for (var i = 0; i < command['results'].length; i++) {
+						var object = command['results'][i];
 
-							if (object['className'] === domainobjects['Vertex']['className']) {
-								// Vertex updates.
-								if (object['op'] === 'cre') {
-									handleUpdateFacilityVertexCmd(object['posY'], object['posX'], object);
+						if (object['className'] === domainobjects['Vertex']['className']) {
+							// Vertex updates.
+							if (object['op'] === 'cre') {
+								handleUpdateFacilityVertexCmd(object['posY'], object['posX'], object);
 
-								} else if (object['op'] === 'upd') {
-									handleUpdateFacilityVertexCmd(object['posY'], object['posX'], object);
+							} else if (object['op'] === 'upd') {
+								handleUpdateFacilityVertexCmd(object['posY'], object['posX'], object);
 
-								} else if (object['op'] === 'dl') {
-									handleDeleteFacilityVertexCmd(object['posY'], object['posX'], object);
+							} else if (object['op'] === 'dl') {
+								handleDeleteFacilityVertexCmd(object['posY'], object['posX'], object);
 
-								}
 							}
 						}
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-						logWorkAreaEditorResponse('UPDATE_RESP -- ack the facility vertex update that I sent');
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
-						logFacilityResponse('UPDATE_RESP -- ack the facility vertex delete that I sent');
 					}
+				} else if (type == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+					logWorkAreaEditorResponse('UPDATE_RESP -- ack the facility vertex update that I sent');
+				} else if (type == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+					logFacilityResponse('UPDATE_RESP -- ack the facility vertex delete that I sent');
 				}
 			}
 		};
-
 		return callback;
 	}
 
 	function websocketCmdCallbackAisle() {
 		var callback = {
-			exec: function (command) {
-				if (!command['data'].hasOwnProperty('results')) {
-					alert('response has no result');
-				} else {
-					if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command['data']['results'].length; i++) {
-							var object = command['data']['results'][i];
+			exec: function (type,command) {
+				if (type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+					for (var i = 0; i < command['results'].length; i++) {
+						var object = command['results'][i];
 
-							if (object['className'] === domainobjects['Aisle']['className']) {
-								// Aisle updates
-								if (object['op'] === 'cre') {
-									handleUpdateAisleCmd(object);
-								} else if (object['op'] === 'upd') {
-									handleUpdateAisleCmd(object);
-									logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update aisle from backend');
-								} else if (object['op'] === 'dl') {
-									handleDeleteAisleCmd(object);
-								}
-							} else if (object['className'] === domainobjects['Vertex']['className']) {
-								// Vertex updates.
-								if (object['op'] === 'cre') {
-									handleUpdateAisleVertexCmd(object);
-								} else if (object['op'] === 'upd') {
-									handleUpdateAisleVertexCmd(object);
-									logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update aisle vertex from backend');
-								} else if (object['op'] === 'dl') {
-									handleDeleteAisleVertexCmd(object);
-								}
+						if (object['className'] === domainobjects['Aisle']['className']) {
+							// Aisle updates
+							if (object['op'] === 'cre') {
+								handleUpdateAisleCmd(object);
+							} else if (object['op'] === 'upd') {
+								handleUpdateAisleCmd(object);
+								logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update aisle from backend');
+							} else if (object['op'] === 'dl') {
+								handleDeleteAisleCmd(object);
 							}
-
+						} else if (object['className'] === domainobjects['Vertex']['className']) {
+							// Vertex updates.
+							if (object['op'] === 'cre') {
+								handleUpdateAisleVertexCmd(object);
+							} else if (object['op'] === 'upd') {
+								handleUpdateAisleVertexCmd(object);
+								logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update aisle vertex from backend');
+							} else if (object['op'] === 'dl') {
+								handleDeleteAisleVertexCmd(object);
+							}
 						}
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-						logWorkAreaEditorResponse('UPDATE_RESP -- ack the aisle update that I sent');
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
-						logWorkAreaEditorResponse('UPDATE_RESP -- ack the aisle delete that I sent');
+
 					}
+				} else if (type == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+					logWorkAreaEditorResponse('UPDATE_RESP -- ack the aisle update that I sent');
+				} else if (type == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+					logWorkAreaEditorResponse('UPDATE_RESP -- ack the aisle delete that I sent');
 				}
 			}
 		};
@@ -608,42 +615,37 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 	function websocketCmdCallbackPath() {
 		var callback = {
-			exec: function (command) {
-				if (!command['data'].hasOwnProperty('results')) {
-					alert('response has no result');
-				} else {
-					if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command['data']['results'].length; i++) {
-							var object = command['data']['results'][i];
+			exec: function (type,command) {
+				if (type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+					for (var i = 0; i < command['results'].length; i++) {
+						var object = command['results'][i];
 
-							if (object['className'] === domainobjects['Path']['className']) {
-								// Aisle updates
-								if (object['op'] === 'cre') {
-									handleUpdatePathCmd(object);
-								} else if (object['op'] === 'upd') {
-									handleUpdatePathCmd(object);
-									logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update path from backend');
-								} else if (object['op'] === 'dl') {
-									handleDeletePathCmd(object);
-								}
-							} else if (object['className'] === domainobjects['PathSegment']['className']) {
-								// VAisle ertex updates.
-								if (object['op'] === 'cre') {
-									handleUpdatePathSegmentCmd(object);
-								} else if (object['op'] === 'upd') {
-									handleUpdatePathSegmentCmd(object);
-									logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update path segment from backend');
-								} else if (object['op'] === 'dl') {
-									handleDeletePathSegmentCmd(object);
-								}
+						if (object['className'] === domainobjects['Path']['className']) {
+							// Aisle updates
+							if (object['op'] === 'cre') {
+								handleUpdatePathCmd(object);
+							} else if (object['op'] === 'upd') {
+								handleUpdatePathCmd(object);
+								logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update path from backend');
+							} else if (object['op'] === 'dl') {
+								handleDeletePathCmd(object);
 							}
-
+						} else if (object['className'] === domainobjects['PathSegment']['className']) {
+							// VAisle ertex updates.
+							if (object['op'] === 'cre') {
+								handleUpdatePathSegmentCmd(object);
+							} else if (object['op'] === 'upd') {
+								handleUpdatePathSegmentCmd(object);
+								logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update path segment from backend');
+							} else if (object['op'] === 'dl') {
+								handleDeletePathSegmentCmd(object);
+							}
 						}
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-						logWorkAreaEditorResponse('UPDATE_RESP -- ack the path update that I sent');
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
-						logWorkAreaEditorResponse('UPDATE_RESP -- ack the path delete that I sent');
 					}
+				} else if (type == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+					logWorkAreaEditorResponse('UPDATE_RESP -- ack the path update that I sent');
+				} else if (type == kWebSessionCommandType.OBJECT_DELETE_RESP) {
+					logWorkAreaEditorResponse('UPDATE_RESP -- ack the path delete that I sent');
 				}
 			}
 		};
@@ -787,6 +789,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 		open: function () {
 			// Create the filter to listen to all vertex updates for this facility.
+			/*
 			var vertexFilterData = {
 				'className': domainobjects['Vertex']['className'],
 				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder'],
@@ -795,11 +798,17 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 					{ 'name': 'theId', 'value': facility_['persistentId']}
 				]
 			};
-
 			var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
+			*/
+			var className = domainobjects['Vertex']['className'];
+			var propertyNames = ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder'];
+			var filterClause = 'parent.persistentId = :theId';
+			var filterParams = [{'name': 'theId', 'value': facility_['persistentId']}];
+			var vertexFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
 			websession_.sendCommand(vertexFilterCmd, websocketCmdCallbackFacility(), true);
 
 			// Create the filter to listen to all aisle updates for this facility.
+			/*
 			var aisleFilterData = {
 				'className': domainobjects['Aisle']['className'],
 				'propertyNames': ['domainId', 'anchorPosX', 'anchorPosY'],
@@ -808,11 +817,18 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 					{ 'name': 'theId', 'value': facility_['persistentId']}
 				]
 			};
-
 			var aisleFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, aisleFilterData);
+			*/
+			
+			var className = domainobjects['Aisle']['className'];
+			var propertyNames = ['domainId', 'anchorPosX', 'anchorPosY'];
+			var filterClause = 'parent.persistentId = :theId';
+			var filterParams = [{ 'name': 'theId', 'value': facility_['persistentId']}]; 
+			var aisleFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
 			websession_.sendCommand(aisleFilterCmd, websocketCmdCallbackAisle(), true);
 
 			// Create the filter to listen to all path updates for this facility.
+			/*
 			var pathFilterData = {
 				'className': domainobjects['Path']['className'],
 				'propertyNames': ['domainId', 'travelDirEnum'],
@@ -821,8 +837,14 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 					{ 'name': 'theId', 'value': facility_['persistentId']}
 				]
 			};
-
 			var pathFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, pathFilterData);
+			*/
+			
+			var className = domainobjects['Path']['className'];
+			var propertyNames = ['domainId', 'travelDirEnum'];
+			var filterClause = 'parent.persistentId = :theId';
+			var filterParams = [{ 'name': 'theId', 'value': facility_['persistentId']}];
+			var pathFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
 			websession_.sendCommand(pathFilterCmd, websocketCmdCallbackPath(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 		},
 
@@ -1076,6 +1098,8 @@ codeshelfApp.WorkAreaModalCtrl.prototype.sendCreateAisleCommand = function (aisl
 
 		var aisleId = (aisle['aisleId']) ? aisle['aisleId'].toUpperCase() : '';
 		var controllerId = (aisle['controllerId']) ? aisle['controllerId'].toLowerCase() : '';
+		
+		/*
 		var data = {
 			'className': this.scope_.facilityContext['className'],
 			'persistentId': this.scope_.facilityContext['facility']['persistentId'],
@@ -1091,18 +1115,33 @@ codeshelfApp.WorkAreaModalCtrl.prototype.sendCreateAisleCommand = function (aisl
 				{ 'name': 'inLeftHandBay', 'value': aisle['isLeftHandBay'], 'classType': 'java.lang.Boolean'}
 			]
 		};
-
 		var createAisleCmd = this.scope_.websession.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+		*/
+		
+		var className = this.scope_.facilityContext['className'];
+		var persistentId = this.scope_.facilityContext['facility']['persistentId'];
+		var methodArgs = [
+		  				{ 'name': 'inAisleId', 'value': aisleId, 'classType': 'java.lang.String'},
+						{ 'name': 'anchorPoint', 'value': anchorPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'},
+						{ 'name': 'protoBayPoint', 'value': protoBayPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'},
+						{ 'name': 'inProtoBaysHigh', 'value': aisle['baysHigh'], 'classType': 'java.lang.Integer'},
+						{ 'name': 'inProtoBaysLong', 'value': aisle['baysLong'], 'classType': 'java.lang.Integer'},
+						{ 'name': 'inControllerId', 'value': controllerId, 'classType': 'java.lang.String'},
+						{ 'name': 'inRunInXDir', 'value': aisle['runInXDir'], 'classType': 'java.lang.Boolean'},
+						{ 'name': 'inLeftHandBay', 'value': aisle['isLeftHandBay'], 'classType': 'java.lang.Boolean'}
+					];
+		var createAisleCmd = this.scope_.createObjectMethodRequest(className,persistentId,'createAisle',methodArgs)
+		
 		var scope = this.scope_;
 		var callback = {
-			'exec': function (response) {
+			'exec': function (type,response) {
 				scope.$apply(function () {
-					if (response['data']['status'] == "ERROR") {
-						var errorResult = response['data']['results'];
+					if (response['status'] == "Fail") {
+						var errorResult = response['results'];
 						onError(errorResult);
 					}
 					else {
-						var dataResult = response['data']['results'];
+						var dataResult = response['results'];
 						onSuccess(dataResult);
 					}
 				});

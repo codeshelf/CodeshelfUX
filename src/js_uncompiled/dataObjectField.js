@@ -49,15 +49,17 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 	thisDataObjectField_ = {
 
 		start: function() {
+			/*
 			var data = {
 				'className':     className_,
 				'objectIds':     [ classPersistenceId_ ],
 				'propertyNames': [ classProperty_ ]
 			};
-
 			var fieldListenerCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_LISTENER_REQ, data);
-			websession_.sendCommand(fieldListenerCmd, thisDataObjectField_
-				.websocketCmdCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP), true);
+			*/
+			debugger;
+			var fieldListenerCmd = websession_.createObjectListenerRequest(className_,[ classPersistenceId_ ],[ classProperty_ ]);
+			websession_.sendCommand(fieldListenerCmd, thisDataObjectField_.websocketCmdCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP), true);
 
 			// Put the HTML markup in the parent element.
 			var fieldId = uniqueIdFunc_('field');
@@ -76,12 +78,12 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 
 		websocketCmdCallback: function(expectedResponseType) {
 			var callback = {
-				exec: function(command) {
-					if (!command['data'].hasOwnProperty('results')) {
+				exec: function(type, message) {
+					if (message.results==undefined) {
 						alert('response has no result');
-					} else if (command['type'] === kWebSessionCommandType.OBJECT_LISTENER_RESP) {
-						for (var i = 0; i < command['data']['results'].length; i++) {
-							var object = command['data']['results'][i];
+					} else if (type === kWebSessionCommandType.OBJECT_LISTENER_RESP) {
+						for (var i = 0; i < command['results'].length; i++) {
+							var object = command['results'][i];
 
 							// Make sure the class name and persistent ID match.
 							if ((object['className'] === className_) && (object['persistentId'] == classPersistenceId_)) {
@@ -105,6 +107,7 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 			if (googleField_.hasChanged()) {
 				var text = googleField_.getValue();
 
+				/*
 				var data = {
 					'className':    className_,
 					'persistentId': classPersistenceId_,
@@ -115,10 +118,12 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 						}
 					]
 				};
-
 				var fieldUpdateCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
-				websession_.sendCommand(fieldUpdateCmd, thisDataObjectField_
-					.websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
+				*/
+
+				var properties =  [{'name':  'description','value': text}];
+				var fieldUpdateCmd = websession_.createObjectUpdateRequest(className_,classPersistenceId_,properties);
+				websession_.sendCommand(fieldUpdateCmd, thisDataObjectField_.websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
 			}
 		}
 
@@ -139,7 +144,7 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
  *            field edits.
  */
 codeshelf.objectUpdater = (function() {
-	// psuedo private
+	// pseudo private
 	var singleObjectSelections = [];
 
 	return {
@@ -155,19 +160,13 @@ codeshelf.objectUpdater = (function() {
 			var properties = {};
 			properties[inFieldName] = inFieldValue;
 
-			var data = {
-				'className':    inClassName,
-				'persistentId': inChangingObject['persistentId'],
-				'properties':   properties
-			};
 			theWebSession = codeshelf.sessionGlobals.getWebsession();
 			if (theWebSession) {
-				var fieldUpdateCmd = theWebSession.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
-				// Do we need a callback? Ideally not. General updating mechanism should workl for success.
+				var fieldUpdateCmd = theWebSession.createObjectUpdateRequest(inClassName,inChangingObject.persistentId,properties);
+				// Do we need a callback? Ideally not. General updating mechanism should work for success.
 				// As for errors returned, would be nice to see something
 				var emptyCallback = {
 					'exec': function (response) {
-
 					}
 				};
 				theWebSession.sendCommand(fieldUpdateCmd, emptyCallback, true);
@@ -187,21 +186,25 @@ codeshelf.objectUpdater = (function() {
 				return;
 			}
 
-			var data = {
-				'className':    inClassName,
-				'persistentId': inDomainObject['persistentId'],
-				'methodName': inMethodName,
-				'methodArgs': inMethodArgs
-			};
-
 			theWebSession = codeshelf.sessionGlobals.getWebsession();
 			if (theWebSession) {
+				
+				/*
+				var data = {
+						'className':    inClassName,
+						'persistentId': inDomainObject['persistentId'],
+						'methodName': inMethodName,
+						'methodArgs': inMethodArgs
+					};
 				var methodCallCmd = theWebSession.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+				*/
+				
+				var methodCallCmd = theWebSession.createObjectMethodRequest(inClassName,inDomainObject['persistentId'], inMethodName, inMethodArgs);
+				
 				// Do we need a callback? Ideally not. General updating mechanism should workl for success.
 				// As for errors returned, would be nice to see something
 				var emptyCallback = {
 					'exec': function (response) {
-
 					}
 				};
 				theWebSession.sendCommand(methodCallCmd, emptyCallback, true);

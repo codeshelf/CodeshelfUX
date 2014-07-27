@@ -130,6 +130,7 @@ codeshelf.aisleview = function(websession, aisle) {
 
 			// Create the filter to listen to all vertex updates for this
 			// facility.
+			/*
 			var vertexFilterData = {
 				'className':     domainobjects['Vertex']['className'],
 				'propertyNames': [ 'domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder', 'parentPersistentId' ],
@@ -141,8 +142,13 @@ codeshelf.aisleview = function(websession, aisle) {
 					}
 				]
 			};
-
 			var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
+			*/
+			var className = domainobjects['Vertex']['className'];
+			var propertyNames = [ 'domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder', 'parentPersistentId' ];
+			var clause = "parent.persistentId = :theId";
+			var params = [{ 'name':  'theId','value': bay['persistentId']}];
+			var vertexFilterCmd =  websession_.createRegisterFilterRequest(className,propertyNames,clause,params);
 			websession_.sendCommand(vertexFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 		}
 		self.invalidate(bay);
@@ -193,38 +199,33 @@ codeshelf.aisleview = function(websession, aisle) {
 	 */
 	function websocketCmdCallback(expectedResponseType) {
 		var callback = {
-			exec: function(command) {
-				if (!command['data'].hasOwnProperty('results')) {
-					alert('response has no result');
-				} else {
-					if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-						for (var i = 0; i < command['data']['results'].length; i++) {
-							var object = command['data']['results'][i];
+			exec: function(type,command) {
+				if (type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+					for (var i = 0; i < command['results'].length; i++) {
+						var object = command['results'][i];
 
-							if (object['className'] === domainobjects['Bay']['className']) {
-								// Bay updates
-								if (object['op'] === 'cre') {
-									handleUpdateBayCmd(object);
-								} else if (object['op'] === 'upd') {
-									handleUpdateBayCmd(object);
-								} else if (object['op'] === 'dl') {
-									handleDeleteBayCmd(object);
-								}
-							} else if (object['className'] === domainobjects['Vertex']['className']) {
-								// Vertex updates.
-								if (object['op'] === 'cre') {
-									handleUpdateBayVertexCmd(object);
-								} else if (object['op'] === 'upd') {
-									handleUpdateBayVertexCmd(object);
-								} else if (object['op'] === 'dl') {
-									handleDeleteBayVertexCmd(object);
-								}
+						if (object['className'] === domainobjects['Bay']['className']) {
+							// Bay updates
+							if (object['op'] === 'cre') {
+								handleUpdateBayCmd(object);
+							} else if (object['op'] === 'upd') {
+								handleUpdateBayCmd(object);
+							} else if (object['op'] === 'dl') {
+								handleDeleteBayCmd(object);
 							}
-
+						} else if (object['className'] === domainobjects['Vertex']['className']) {
+							// Vertex updates.
+							if (object['op'] === 'cre') {
+								handleUpdateBayVertexCmd(object);
+							} else if (object['op'] === 'upd') {
+								handleUpdateBayVertexCmd(object);
+							} else if (object['op'] === 'dl') {
+								handleDeleteBayVertexCmd(object);
+							}
 						}
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-					} else if (command['type'] == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 					}
+				} else if (type == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
+				} else if (type == kWebSessionCommandType.OBJECT_DELETE_RESP) {
 				}
 			}
 		};
@@ -255,6 +256,7 @@ codeshelf.aisleview = function(websession, aisle) {
 				graphics_.render(self.getMainPaneElement());
 
 				// Create the filter to listen to all bay updates for this aisle.
+				/*
 				var data = {
 					'className':     domainobjects['Bay']['className'],
 					'propertyNames': [ 'domainId', 'anchorPosTypeEnum', 'anchorPosX', 'anchorPosY', 'anchorPosZ' ],
@@ -266,8 +268,13 @@ codeshelf.aisleview = function(websession, aisle) {
 						}
 					]
 				};
-
 				var bayFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
+				*/
+				var className = domainobjects['Bay']['className'];
+				var propertyNames = [ 'domainId', 'anchorPosTypeEnum', 'anchorPosX', 'anchorPosY', 'anchorPosZ' ];
+				var clause = 'parent.persistentId = :theId AND anchorPosZ = 0';
+				var params =  [{'name':  'theId','value': aisle_['persistentId']}];
+				var bayFilterCmd =  websession_.createRegisterFilterRequest(className,propertyNames,clause,params);
 				websession_.sendCommand(bayFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 			},
 

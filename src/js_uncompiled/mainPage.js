@@ -296,31 +296,27 @@ codeshelf.mainpage = function() {
 
 	function getFacilitiesCallback(authz) {
 		var callback = {
-			exec: function(command) {
-				if (!command['data'].hasOwnProperty('results')) {
-					alert('response has no result');
-				} else {
-					if (command['type'] == kWebSessionCommandType.OBJECT_GETTER_RESP) {
-						if (command['data']['results'].length === 0) {
-							var clientInitializer = codeshelf.initializenewclient();
+			exec: function(type,command) {
+				if (type == kWebSessionCommandType.OBJECT_GETTER_RESP) {
+					if (command['results'].length === 0) {
+						var clientInitializer = codeshelf.initializenewclient();
+						codeshelf.sessionGlobals.setWebsession(websession_);
+						// A bit odd here. We set the facility in clientInitializer
+
+						clientInitializer.start(websession_, application_.getOrganization(), loadFacilityWindows);
+					} else {
+						var lastFacility = null;
+						for (var i = 0; i < command['results'].length; i++) {
+							var lastFacility = command['results'][i];
+
+							// save the websession and facility so we can launch windows at any time.
 							codeshelf.sessionGlobals.setWebsession(websession_);
-							// A bit odd here. We set the facility in clientInitializer
+							codeshelf.sessionGlobals.setFacility(lastFacility);
 
-							clientInitializer.start(websession_, application_.getOrganization(), loadFacilityWindows);
-						} else {
-							var lastFacility = null;
-							for (var i = 0; i < command['data']['results'].length; i++) {
-								var lastFacility = command['data']['results'][i];
-
-								// save the websession and facility so we can launch windows at any time.
-								codeshelf.sessionGlobals.setWebsession(websession_);
-								codeshelf.sessionGlobals.setFacility(lastFacility);
-
-								loadFacilityWindows();
-							}
-							if (lastFacility != null) {
-								setupNavbar(lastFacility, authz);
-							}
+							loadFacilityWindows();
+						}
+						if (lastFacility != null) {
+							setupNavbar(lastFacility, authz);
 						}
 					}
 				}
@@ -378,6 +374,7 @@ codeshelf.mainpage = function() {
 				}
 			});
 
+			/*
 			var data = {
 				'className':    organization_['className'],
 				'persistentId': organization_['persistentId'],
@@ -385,6 +382,9 @@ codeshelf.mainpage = function() {
 			};
 
 			var getFacilitiesCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
+			*/
+			
+			var getFacilitiesCmd = websession_.createObjectGetRequest(organization_['className'],organization_['persistentId'],'getFacilities');
 			websession.sendCommand(getFacilitiesCmd, getFacilitiesCallback(authz), false);
 		},
 

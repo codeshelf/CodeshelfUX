@@ -119,6 +119,7 @@ codeshelfApp.DropboxLinkController = function($scope, $modalInstance, websession
  */
 codeshelfApp.DropboxLinkController.prototype.link = function(){
 	// Call Facility.startLinkDropbox();
+	/*
 	var data = {
 		'className': domainobjects['DropboxService']['className'],
 		'persistentId': this.scope_['dropboxServiceId'],
@@ -127,6 +128,10 @@ codeshelfApp.DropboxLinkController.prototype.link = function(){
 		]
 	};
 	var startLinkDropboxCmd = this.websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+	*/
+	var className = domainobjects['DropboxService']['className'];
+	var persistentId = this.scope_['dropboxServiceId'];
+	var startLinkDropboxCmd = this.websession_.createObjectMethodRequest(className, persistentId,'startLink',[]);
 	this.websession_.sendCommand(startLinkDropboxCmd, this.startLinkCallback_(), true);
 };
 
@@ -136,6 +141,7 @@ codeshelfApp.DropboxLinkController.prototype.link = function(){
 codeshelfApp.DropboxLinkController.prototype.ok = function(){
 	// Call Facility.finishLinkDropbox();
 	var accessCode = this.scope_['dropbox']['accessCode'];
+	/*
 	var data = {
 		'className': domainobjects['DropboxService']['className'],
 		'persistentId': this.scope_['dropboxServiceId'],
@@ -145,6 +151,11 @@ codeshelfApp.DropboxLinkController.prototype.ok = function(){
 		]
 	};
 	var finishLinkDropboxCmd = this.websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
+	*/
+	var className = domainobjects['DropboxService']['className'];
+	var persistentId = this.scope_['dropboxServiceId'];
+	var args = [{'name': 'code', 'value': accessCode, 'classType': 'java.lang.String'}];
+	var startLinkDropboxCmd = this.websession_.createObjectMethodRequest(className, persistentId,'finishLink',args);
 	this.websession_.sendCommand(finishLinkDropboxCmd, this.finishLinkCallback_(this.modalInstance_), true);
 };
 
@@ -158,15 +169,11 @@ codeshelfApp.DropboxLinkController.prototype.cancel = function(){
 
 codeshelfApp.DropboxLinkController.prototype.startLinkCallback_ = function() {
 	var callback = {
-		exec: function (command) {
-			if (!command['data'].hasOwnProperty('results')) {
-				alert('response has no result');
-			} else {
-				if (command['type'] === kWebSessionCommandType.OBJECT_METHOD_RESP) {
-					var url = command['data']['results'];
-					window.open(url, '_blank');
-					window.focus();
-				}
+		exec: function (type,command) {
+			if (type === kWebSessionCommandType.OBJECT_METHOD_RESP) {
+				var url = command['results'];
+				window.open(url, '_blank');
+				window.focus();
 			}
 		}
 	};
@@ -175,15 +182,11 @@ codeshelfApp.DropboxLinkController.prototype.startLinkCallback_ = function() {
 
 codeshelfApp.DropboxLinkController.prototype.finishLinkCallback_ = function(modalInstance) {
 	var callback = {
-		exec: function (command) {
-			if (!command['data'].hasOwnProperty('results')) {
-				alert('response has no result');
-			} else {
-				if (command['type'] === kWebSessionCommandType.OBJECT_METHOD_RESP) {
-					var result = command['data']['results'];
-					if (result === true) {
-						modalInstance.close();
-					}
+		exec: function (type,command) {
+			if (type === kWebSessionCommandType.OBJECT_METHOD_RESP) {
+				var result = command['results'];
+				if (result === true) {
+					modalInstance.close();
 				}
 			}
 		}

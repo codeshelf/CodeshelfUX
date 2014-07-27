@@ -53,12 +53,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 // When we get an object, check to see if we have it's child objects too.
 	function websocketCmdCallback() {
 		var callback = {
-			exec: function(command) {
-				if (!command['data'].hasOwnProperty('results')) {
-					alert('response has no result');
-				} else if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-					for (var i = 0; i < command['data']['results'].length; i++) {
-						var object = command['data']['results'][i];
+			exec: function(type,command) {
+				if (type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+					for (var i = 0; i < command['results'].length; i++) {
+						var object = command['results'][i];
 
 						// If this is an object create or update then we need to check if it's already added to the view.
 						// If it's not already added to the view, then send a filter request to get all of the child objects that goes with it.
@@ -88,14 +86,17 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 										}
 										computedProperties.push(hierarchyMap_[j + 1]["linkProperty"] + 'PersistentId');
 
+										/*
 										var data = {
 											'className':     hierarchyMap_[j + 1]["className"],
 											'propertyNames': computedProperties,
 											'filterClause':  filter,
 											'filterParams':  filterParams
 										};
-
 										var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
+										*/
+										var className = hierarchyMap_[j + 1]["className"];
+										var setListViewFilterCmd = websession_.createRegisterFilterRequest(className,computedProperties,filter,filterParams);
 										websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
 									}
 								}
@@ -285,9 +286,6 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			// Setup the column picker, so the user can change the visible columns.
 			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
-
-
-
 			for(var i = 0; i < hierarchyMap_.length; i++) {
 				var hierarchyLevel = hierarchyMap_[i];
 				if (typeof hierarchyLevel["comparer"] === "undefined") {
@@ -295,14 +293,16 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 				}
 			}
 
+			/*
 			var data = {
 				'className':     domainObject_['className'],
 				'propertyNames': computedProperties,
 				'filterClause':  hierarchyMap_[0]["filter"],
 				'filterParams':  hierarchyMap_[0]["filterParams"]
 			};
-
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
+			*/
+			var setListViewFilterCmd = websession_.createRegisterFilterRequest(domainObject_['className'],computedProperties,hierarchyMap_[0]["filter"],hierarchyMap_[0]["filterParams"]);
 			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
 
 			//Add click handlers from the columns

@@ -33,15 +33,12 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 
 	function websocketCmdCallbackFacility() {
 		var callback = {
-			exec: function (command) {
-				if (!command['data'].hasOwnProperty('results')) {
-					alert('response has no result');
-				} else {
-					if (command['type'] == kWebSessionCommandType.OBJECT_METHOD_RESP) {
-						var url = command['data']['results'];
-						window.open(url, '_blank');
-						window.focus();
-					}
+			exec: function (type,command) {
+				debugger;
+				if (type == kWebSessionCommandType.OBJECT_METHOD_RESP) {
+					var url = command['results'];
+					window.open(url, '_blank');
+					window.focus();
 				}
 			}
 		};

@@ -25,27 +25,27 @@ codeshelfApp.PathSegmentService.prototype.getPathSegments = function() {
 		{ 'name': 'theId', 'value': this.facility_["persistentId"] }
 	];
 
+	/*
 	var data = {
 		'className':     domainobjects['PathSegment']['className'],
 		'propertyNames': Object.keys(domainobjects['PathSegment']['properties']),
 		'filterClause':  filter,
 		'filterParams':  filterParams
 	};
-
 	var setListViewFilterCmd = this.websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-	this.websession_.sendCommand(
-		setListViewFilterCmd,
-		this.filterResponseCallback_(deferred),
-		true);
+	*/
+	
+	var className = domainobjects['PathSegment']['className'];
+	var propertyNames = Object.keys(domainobjects['PathSegment']['properties']);
+	var setListViewFilterCmd = createRegisterFilterRequest(className,propertyNames,filter,filterParams);
+	this.websession_.sendCommand(setListViewFilterCmd,this.filterResponseCallback_(deferred),true);
 	return deferred.promise;
 };
 
 codeshelfApp.PathSegmentService.prototype.filterResponseCallback_ = function(deferred){
 	var callback = {
-		exec: function(command) {
-			if (!command['data'].hasOwnProperty('results')) {
-				deferred.reject('response has no result');
-			} else if (command['type'] == kWebSessionCommandType.OBJECT_FILTER_RESP) {
+		exec: function(type,command) {
+			if (type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
 				deferred.resolve(command['data']['results']);
 			}
 		}

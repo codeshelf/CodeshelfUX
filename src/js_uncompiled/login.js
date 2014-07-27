@@ -21,50 +21,43 @@ codeshelf.loginWindow = function() {
 	var application_;
 
 	function loginCheck() {
-
-		var credentialData = {
-			'organizationId' : goog.dom.getElement('organizationIdInput').value,
-			'userId': goog.dom.getElement('userIdInput').value,
-			'password': goog.dom.getElement('passwordInput').value
-		};
-		var loginCommand = websession_.createCommand(kWebSessionCommandType.LOGIN_REQ, credentialData);
+		var loginCommand = {
+				'LoginRequest' : {
+					'organizationId' : goog.dom.getElement('organizationIdInput').value,
+					'userId': goog.dom.getElement('userIdInput').value,
+					'password': goog.dom.getElement('passwordInput').value,
+				}
+			};
 		websession_.sendCommand(loginCommand, websocketCmdCallback(kWebSessionCommandType.LOGIN_RESP), false);
 	}
 
 	function websocketCmdCallback(expectedResponseType) {
 		var callback = {
-			exec: function(command) {
-				if (!command['data'].hasOwnProperty(kWebSessionCommandType.LOGIN_RESP)) {
-					alert('response has no login result');
-				} else {
-					if (command['data']['LOGIN_RS'] == 'SUCCEED') {
-						websession_.setState(kWebsessionState.VALIDATED);
-
-						application_.setOrganization(command['data']['organization']);
-						var user = command['data']['user'];
-						var email = user['email'];
-						var authz = new codeshelf.Authz();
-						if (email == 'configure@example.com') {
-							authz.setPermissions(["*"]);
-						} else if (email == 'view@example.com'
-								   || email == 'a@example.com') {
-							authz.setPermissions(["*:view"]);
-						} else if (email == 'simulate@example.com') {
-							authz.setPermissions(["*"]);
-						} else if (email == 'che@example.com') {
-							authz.setPermissions(["*:view", "che:simulate"]);
-						} else {
-							authz.setPermissions([]); // no permissions by default
-						}
-						authz = Object.freeze(authz); //ECMAScript 5 prevent changes from this point
-						websession_.setAuthz(authz);
-						self.exit();
-						var mainpage = codeshelf.mainpage();
-
-						mainpage.enter(application_, websession_, authz);
+			exec: function(type,command) {
+				if (command.status == 'Success') {
+					websession_.setState(kWebsessionState.VALIDATED);
+					application_.setOrganization(command['organization']);
+					var user = command['user'];
+					var email = user['email'];
+					var authz = new codeshelf.Authz();
+					if (email == 'configure@example.com') {
+						authz.setPermissions(["*"]);
+					} else if (email == 'view@example.com'
+							   || email == 'a@example.com') {
+						authz.setPermissions(["*:view"]);
+					} else if (email == 'simulate@example.com') {
+						authz.setPermissions(["*"]);
+					} else if (email == 'che@example.com') {
+						authz.setPermissions(["*:view", "che:simulate"]);
 					} else {
-						alert('Login invalid');
+						authz.setPermissions([]); // no permissions by default
 					}
+					authz = Object.freeze(authz); //ECMAScript 5 prevent changes from this point
+					websession_.setAuthz(authz);
+					self.exit();
+					var mainpage = codeshelf.mainpage();
+
+					mainpage.enter(application_, websession_, authz);
 				}
 			}
 		};
