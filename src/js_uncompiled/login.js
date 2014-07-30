@@ -44,14 +44,14 @@ codeshelf.loginWindow = function() {
 						var user = command['data']['user'];
 						var email = user['email'];
 						var authz = new codeshelf.Authz();
-						if (email == 'configure@example.com') {
+						if (email.match('^configure')) {
 							authz.setPermissions(["*"]);
-						} else if (email == 'view@example.com'
+						} else if (email.match('^view')
 								   || email == 'a@example.com') {
 							authz.setPermissions(["*:view"]);
-						} else if (email == 'simulate@example.com') {
+						} else if (email.match('^simulate')) {
 							authz.setPermissions(["*"]);
-						} else if (email == 'che@example.com') {
+						} else if (email.match('^che')) {
 							authz.setPermissions(["*:view", "che:simulate"]);
 						} else {
 							authz.setPermissions([]); // no permissions by default
