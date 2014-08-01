@@ -297,6 +297,7 @@
 				<include name="codeshelf.html" />
 				<include name="signup.html" />
 				<include name="signin.html" />
+				<include name="version.json" />
 				<include name="partials/**" />
 			</fileset>
 		</copy>
