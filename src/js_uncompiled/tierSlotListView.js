@@ -38,6 +38,10 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 				return false;
 			else if (inProperty['id'] ===  'nominalLocationId')
 				return false;
+			else if (inProperty['id'] ===  'pickFaceEndPosX')
+				return false;
+			else if (inProperty['id'] ===  'pickFaceEndPosY')
+				return false;
 			else
 				return true;
 		},

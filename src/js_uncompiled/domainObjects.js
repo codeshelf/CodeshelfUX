@@ -674,6 +674,16 @@ domainobjects = {
 				'id':    'posAlongPath',
 				'title': 'Meters Along Path',
 				'width': 10
+			},
+			pickFaceEndPosX: {
+				'id':    'pickFaceEndPosX',
+				'title': 'Pick End X',
+				'width': 40
+			},
+			pickFaceEndPosY: {
+				'id':    'pickFaceEndPosY',
+				'title': 'Pick End Y',
+				'width': 40
 			}
 		}
 	},
