@@ -31,6 +31,7 @@ codeshelf.view = function(options) {
 
 	var viewId_;
 	var parentView_;
+	var parentWindow_ = null;
 	var subViews_ = {};
 	var pixelsPerMeter_;
 	var isInvalidated_ = false;
@@ -126,6 +127,9 @@ codeshelf.view = function(options) {
 	}
 
 	function mouseDoubleClickHandler(event) {
+		// We want to bring window forward. Used to just dispose of the event.
+		if (parentWindow_ != null)
+			parentWindow_.focusWindow();
 		event.dispose();
 	}
 
@@ -178,6 +182,11 @@ codeshelf.view = function(options) {
 	 * @type {Object}
 	 */
 	self = {
+
+		setParentWindow: function(inWindow) { // this is public in order to be called from doubleclick handler
+		parentWindow_ = inWindow;
+		},
+
 
 		setupView: function(mainPaneElement) {
 
