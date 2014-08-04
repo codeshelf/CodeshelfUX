@@ -34,16 +34,18 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 	var self = {
 		// following psuedo-inheritance
 		'shouldAddThisColumn': function(inProperty){
-			if (inProperty['id'] ===  'persistentId')
-				return false;
-			else if (inProperty['id'] ===  'nominalLocationId')
-				return false;
-			else if (inProperty['id'] ===  'pickFaceEndPosX')
-				return false;
-			else if (inProperty['id'] ===  'pickFaceEndPosY')
-				return false;
-			else
+			if (inProperty['id'] ===  'firstLedNumAlongPath')
 				return true;
+			else if (inProperty['id'] ===  'lastLedNumAlongPath')
+				return true;
+			else if (inProperty['id'] ===  'primaryAliasId')
+				return true;
+			else if (inProperty['id'] ===  'posAlongPath')
+				return true;
+			else if (inProperty['id'] ===  'domainId')
+				return true;
+			else
+				return false;
 		},
 
 		getViewName: function() {
