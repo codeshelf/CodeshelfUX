@@ -34,7 +34,6 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function (type,command) {
-				debugger;
 				if (type == kWebSessionCommandType.OBJECT_METHOD_RESP) {
 					var url = command['results'];
 					window.open(url, '_blank');

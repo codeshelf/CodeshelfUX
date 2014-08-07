@@ -57,7 +57,6 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 			};
 			var fieldListenerCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_LISTENER_REQ, data);
 			*/
-			debugger;
 			var fieldListenerCmd = websession_.createObjectListenerRequest(className_,[ classPersistenceId_ ],[ classProperty_ ]);
 			websession_.sendCommand(fieldListenerCmd, thisDataObjectField_.websocketCmdCallback(kWebSessionCommandType.OBJECT_LISTENER_RESP), true);
 

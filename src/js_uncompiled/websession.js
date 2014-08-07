@@ -28,10 +28,11 @@ var kWebSessionCommandType = {
 	OBJECT_DELETE_REQ: 'OBJ_DEL_RQ',
 	OBJECT_DELETE_RESP: 'OBJ_DEL_RS',
 	OBJECT_LISTENER_REQ: 'OBJ_LSN_RQ',
-	OBJECT_LISTENER_RESP: 'OBJ_LSN_RS',
+	//OBJECT_LISTENER_RESP: 'OBJ_LSN_RS',
+	OBJECT_LISTENER_RESP: 'ObjectChangeResponse',
 	OBJECT_FILTER_REQ: 'OBJ_FLT_RQ',
 	// OBJECT_FILTER_RESP: 'OBJ_FLT_RS',
-	OBJECT_FILTER_RESP: 'RegisterFilterResponse',
+	OBJECT_FILTER_RESP: 'ObjectChangeResponse',
 	OBJECT_METHOD_REQ: 'OBJ_METH_RQ',
 	// OBJECT_METHOD_RESP: 'OBJ_METH_RS',
 	OBJECT_METHOD_RESP: 'ObjectMethodResponse',
@@ -147,7 +148,6 @@ codeshelf.websession = function () {
 			return command;
 			*/
 			alert('createCommand method is no longer support.  please use specific methods to create requests');
-			debugger;
 		},
 
 		// new generic function to request object getter data
