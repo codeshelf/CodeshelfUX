@@ -675,6 +675,16 @@ domainobjects = {
 				'title': 'Meters Along Path',
 				'width': 10
 			},
+			'anchorPosX': {
+				'id':    'anchorPosX',
+				'title': 'Anchor X',
+				'width': 40
+			},
+			'anchorPosY': {
+				'id':    'anchorPosY',
+				'title': 'Anchor Y',
+				'width': 40
+			},
 			pickFaceEndPosX: {
 				'id':    'pickFaceEndPosX',
 				'title': 'Pick End X',

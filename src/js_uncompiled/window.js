@@ -103,6 +103,8 @@ codeshelf.window = function(view, parent, limits) {
 
 			view_.setupView(thisWindow_.getContentElement());
 			view_.open();
+			// new take window reference on view to pass back focus on doubleclick if the view wants.
+			view_.setParentWindow(thisWindow_);
 			thisWindow_.focusWindow();
 		},
 
