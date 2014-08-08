@@ -45,7 +45,9 @@ var kWebsessionState = {
 	VALIDATED: 'VALIDATED'
 };
 
+
 codeshelf.websession = function () {
+	var logger_ = goog.debug.Logger.getLogger('codeshelf.websession');
 
 	var logger_ = goog.debug.Logger.getLogger("codeshelf.websession");
 	var state_;
@@ -88,27 +90,13 @@ codeshelf.websession = function () {
 			authz_ = authz;
 		},
 
-		initWebSocket: function (application) {
+		initWebSocket: function (application, websocket) {
 
 			application_ = application;
 			state_ = kWebsessionState.UNVALIDATED;
 			pendingCommands_ = new Object();
 
-			// Figure out the URI
-
-			/**
-			 * Strategy for reconnection that backs off linearly with a 1 second offset.
-			 * @return {number} The amount of time to the next reconnect, in milliseconds.
-			 */
-
-			function linearBackOff() {
-				if (connectAttempts_ < 10) {
-					connectAttempts_++;
-				}
-				return (connectAttempts_ * 1000);
-			}
-
-			websocket_ = new goog.net.WebSocket(true, linearBackOff);
+			websocket_ = websocket;
 			var webSocketEventHandler = new goog.events.EventHandler();
 			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.ERROR, self_.onError);
 			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.OPENED, self_.onOpen);
@@ -221,7 +209,7 @@ codeshelf.websession = function () {
 				};
 			return command;
 		},
-		
+
 		createKeepAliveMessage: function () {
 			var command = {
 				'KeepAlive' : {
@@ -231,14 +219,29 @@ codeshelf.websession = function () {
 			return command;
 		},
 
+		update: function(csDomainObject) {
+			var promise = jQuery.Deferred();
+			var data = goog.json.serialize(csDomainObject);
+			var command = self_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
+			self_.sendCommand(command,  {
+					exec: function(response) {
+						promise.resolve(response);
+					},
+					fail: function(response) {
+						promise.reject(response);
+					}
+			}, false);
+			return promise;
+		},
+
 		sendCommand: function (inCommand, inCallback, inRemainActive) {
 			// Attempt to send the command.
 			try {
 				if (inCallback == null) {
-					alert('callback for cmd was null');
+					logger_.error("callback for cmd was null");
 				} else {
 					if (!websocket_.isOpen()) {
-						//alert('WebSocket not open: try again later');
+						inCallback.fail("websocket is not open");
 					} else {
 						var messageId = self_.getMessageId(inCommand);
 						if (messageId==undefined) {
@@ -260,7 +263,7 @@ codeshelf.websession = function () {
 				logger_.severe("Error sending message: "+e);
 			}
 		},
-		
+
 		sendMessage: function (inCommand) {
 			// Attempt to send the message.
 			try {
@@ -277,7 +280,7 @@ codeshelf.websession = function () {
 				var theLogger = goog.debug.Logger.getLogger('websocket');
 				theLogger.error("Error sending message: "+e);
 			}
-		},		
+		},
 
 		getMessageId: function (message) {
 			// extract id using old format
@@ -334,21 +337,26 @@ codeshelf.websession = function () {
 			var command = goog.json.parse(messageEvent.message);
 			var messageId = command[Object.keys(command)[0]]['requestId'];
 			var commandType = Object.keys(command)[0];
-			
+
 			// check for keep alive message
 			if (commandType=="KeepAlive") {
 				// respond with keep alive
 				var msg = self_.createKeepAliveMessage();
 				self_.sendMessage(msg);
 				return;
-			}			
-			
+			}
+
 			// handle other messages
 			var commandWrapper = pendingCommands_[messageId];
 			var callback = commandWrapper.callback;
 			if (callback == null) {
 				alert('callback for cmd was null');
 			} else {
+				var failFn = callback["fail"];
+				if (typeof failFn === 'undefined') {
+					failFn = function(response) {};
+				}
+
 				if (Object.keys(command).length==1) {
 					if (commandType != undefined) {
 						var unwrappedMessage = command[Object.keys(command)[0]];
@@ -356,30 +364,22 @@ codeshelf.websession = function () {
 						if (commandType == kWebSessionCommandType.OBJECT_FILTER_RESP && unwrappedMessage['results'] == undefined) {
 							// filter response has no data
 							logger_.severe('filter response has no data:' + goog.debug.expose(command));
-						}
-						else {
+							failFn('filter response has no data');
+						} else if (unwrappedMessage['results']['status'] == "ERROR") {
+							failFn(commandType, unwrappedMessage);
+						} else {
 							callback.exec(commandType, unwrappedMessage);
 						}
 					}
 					else {
 						logger_.severe('command has no type');
+						failFn('command has no type');
 					}
 				}
 				else {
 					logger_.severe('invalid response: one root property expected');
+					failFn('invalid response: one root property expected');
 				}
-				/*
-				if (!command.hasOwnProperty('type')) {
-					alert('response has no type');
-				} else {
-					if (!command.hasOwnProperty('data')) {
-						alert('reponse has no data');
-					} else {
-						callback.exec(command);
-					}
-				}
-				*/
-
 				// Check if the callback should remain active.
 				if (!commandWrapper.remainActive) {
 					self_.cancelCommand(command);
@@ -395,7 +395,7 @@ codeshelf.websession = function () {
 			  }
 			  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 		}
-		
+
 	};
 
 	return self_;
