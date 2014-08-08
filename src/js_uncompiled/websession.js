@@ -35,8 +35,7 @@ var kWebSessionCommandType = {
 	OBJECT_FILTER_RESP: 'ObjectChangeResponse',
 	OBJECT_METHOD_REQ: 'OBJ_METH_RQ',
 	// OBJECT_METHOD_RESP: 'OBJ_METH_RS',
-	OBJECT_METHOD_RESP: 'ObjectMethodResponse',
-
+	OBJECT_METHOD_RESP: 'ObjectMethodResponse'
 };
 
 var kWebsessionState = {
@@ -133,12 +132,12 @@ codeshelf.websession = function () {
 			if (commandType==kWebSessionCommandType.OBJECT_GETTER_REQ) {
 				var command = {
 					ObjectGetRequest : {
-						
+
 					}
-				}				
+				}
 			}
 			else {
-				
+
 			}
 			var command = {
 				'id': uniqueIdFunc_('cid'),
@@ -161,7 +160,7 @@ codeshelf.websession = function () {
 				};
 			return command;
 		},
-		
+
 		// new generic function to invoke an object method
 		createObjectMethodRequest : function (className,persistentId,methodName,methodArgs) {
 			var command = {
@@ -173,8 +172,8 @@ codeshelf.websession = function () {
 					}
 				};
 			return command;
-		},		
-		
+		},
+
 		createObjectUpdateRequest : function (className,persistentId,properties) {
 			var command = {
 					ObjectUpdateRequest : {
@@ -185,7 +184,7 @@ codeshelf.websession = function () {
 				};
 			return command;
 		},
-		
+
 		createObjectListenerRequest : function (className,persistentIds,properties) {
 			var command = {
 					ObjectListenerRequest : {
@@ -195,8 +194,8 @@ codeshelf.websession = function () {
 					}
 				};
 			return command;
-		},		
-		
+		},
+
 		createObjectDeleteRequest : function (className,persistentId,properties) {
 			var command = {
 					ObjectUpdateRequest : {
@@ -205,7 +204,7 @@ codeshelf.websession = function () {
 					}
 				};
 			return command;
-		},		
+		},
 
 		// new generic function to register a filter
 		createRegisterFilterRequest : function (className,propertyNames,clause,params) {
@@ -218,8 +217,8 @@ codeshelf.websession = function () {
 					}
 				};
 			return command;
-		},		
-		
+		},
+
 		sendCommand: function (inCommand, inCallback, inRemainActive) {
 			// Attempt to send the command.
 			try {
@@ -233,7 +232,7 @@ codeshelf.websession = function () {
 						if (messageId==undefined) {
 							messageId = self_.setMessageId(inCommand);
 						}
-						
+
 						// Put the pending command callback in the map.
 						var commandWrapper = {
 							remainActive: inRemainActive,
@@ -250,7 +249,7 @@ codeshelf.websession = function () {
 				theLogger.error("Error sending message: "+e);
 			}
 		},
-		
+
 		getMessageId: function (message) {
 			// extract id using old format
 			var messageId = message.id;
@@ -260,14 +259,14 @@ codeshelf.websession = function () {
 			}
 			return messageId;
 		},
-		
+
 		setMessageId: function (message) {
 			// generate message id, if not already defined
 			messageId = uniqueIdFunc_('cid');
 			message[Object.keys(message)[0]].messageId = messageId;
 			return messageId;
 		},
-		
+
 		cancelCommand: function (inCommand) {
 			delete pendingCommands_[inCommand.id];
 		},

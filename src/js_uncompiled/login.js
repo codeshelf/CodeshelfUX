@@ -25,7 +25,7 @@ codeshelf.loginWindow = function() {
 				'LoginRequest' : {
 					'organizationId' : goog.dom.getElement('organizationIdInput').value,
 					'userId': goog.dom.getElement('userIdInput').value,
-					'password': goog.dom.getElement('passwordInput').value,
+					'password': goog.dom.getElement('passwordInput').value
 				}
 			};
 		websession_.sendCommand(loginCommand, websocketCmdCallback(kWebSessionCommandType.LOGIN_RESP), false);
