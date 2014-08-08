@@ -356,7 +356,6 @@ codeshelf.websession = function () {
 				if (typeof failFn === 'undefined') {
 					failFn = function(response) {};
 				}
-
 				if (Object.keys(command).length==1) {
 					if (commandType != undefined) {
 						var unwrappedMessage = command[Object.keys(command)[0]];
