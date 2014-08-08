@@ -71,7 +71,6 @@ describe("multilevel comparer", function() {
 
 
 	it("sorts details under parent", function() {
-		debugger;
 		items = [itemA1, itemB1, itemB, itemA];
 		var sortedItems = [itemA, itemA1, itemB, itemB1];
 
