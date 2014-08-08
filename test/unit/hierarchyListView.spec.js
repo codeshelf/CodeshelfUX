@@ -78,6 +78,19 @@ describe('hierarchyListView', function() {
 			expect(getRenderedColumns().size()).toEqual(1);
 
 		});
+
+		it("should add property attributes to columnsd ", function() {
+			var property = createProperty("idToShow");
+			property.editor = {"att": 1};
+			var hierarchyLevelDef = createLevel([property], []);
+			var columns = codeshelf.grid.toColumnsForHierarchy([hierarchyLevelDef]);
+			expect(columns.length).toEqual(1);
+			expect(columns[0].editor).toBeDefined();
+			expect(columns[0].editor.att).toEqual(1);
+		});
+
+
+
 	});
 
 	describe("default comparer for level", function() {

@@ -6,7 +6,6 @@
 goog.provide('domainobjects');
 
 domainobjects = {
-
 	'Aisle': {
 		'className':  'Aisle',
 		'properties': {
@@ -331,7 +330,8 @@ domainobjects = {
 			itemCmFromLeft: {
 				'id':    'itemCmFromLeft',
 				'title': 'CM From Left',
-				'width': 10
+				'width': 10,
+				'editor': Slick.Editors.Text
 			},
 			posAlongPathui: {
 				'id':    'posAlongPathui',
