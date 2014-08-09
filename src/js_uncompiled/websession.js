@@ -10,6 +10,8 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.json');
 goog.require('goog.net.WebSocket');
+goog.require('goog.debug');
+goog.require('goog.debug.Logger');
 
 if (typeof MozWebSocket !== 'undefined') {
 	var WebSocket = MozWebSocket;
@@ -35,8 +37,7 @@ var kWebSessionCommandType = {
 	OBJECT_FILTER_RESP: 'ObjectChangeResponse',
 	OBJECT_METHOD_REQ: 'OBJ_METH_RQ',
 	// OBJECT_METHOD_RESP: 'OBJ_METH_RS',
-	OBJECT_METHOD_RESP: 'ObjectMethodResponse',
-
+	OBJECT_METHOD_RESP: 'ObjectMethodResponse'
 };
 
 var kWebsessionState = {
@@ -46,6 +47,7 @@ var kWebsessionState = {
 
 codeshelf.websession = function () {
 
+	var logger_ = goog.debug.Logger.getLogger("codeshelf.websession");
 	var state_;
 	var authz_;
 	var websocketStarted_ = false;
@@ -133,12 +135,12 @@ codeshelf.websession = function () {
 			if (commandType==kWebSessionCommandType.OBJECT_GETTER_REQ) {
 				var command = {
 					ObjectGetRequest : {
-						
+
 					}
-				}				
+				}
 			}
 			else {
-				
+
 			}
 			var command = {
 				'id': uniqueIdFunc_('cid'),
@@ -153,7 +155,7 @@ codeshelf.websession = function () {
 		// new generic function to request object getter data
 		createObjectGetRequest : function (className,persistentId,method) {
 			var command = {
-					ObjectGetRequest : {
+				'ObjectGetRequest' : {
 						'className' : className,
 						'persistentId': persistentId,
 						'getterMethod': 'getFacilities'
@@ -161,11 +163,11 @@ codeshelf.websession = function () {
 				};
 			return command;
 		},
-		
+
 		// new generic function to invoke an object method
 		createObjectMethodRequest : function (className,persistentId,methodName,methodArgs) {
 			var command = {
-					ObjectMethodRequest : {
+				'ObjectMethodRequest' : {
 						'className' : className,
 						'persistentId': persistentId,
 						'methodName': methodName,
@@ -173,11 +175,11 @@ codeshelf.websession = function () {
 					}
 				};
 			return command;
-		},		
-		
+		},
+
 		createObjectUpdateRequest : function (className,persistentId,properties) {
 			var command = {
-					ObjectUpdateRequest : {
+				'ObjectUpdateRequest' : {
 						'className':    className,
 						'persistentId': persistentId,
 						'properties':   properties
@@ -185,32 +187,32 @@ codeshelf.websession = function () {
 				};
 			return command;
 		},
-		
+
 		createObjectListenerRequest : function (className,persistentIds,properties) {
 			var command = {
-					RegisterFilterRequest : {
+				'RegisterListenerRequest' : {
 						'className':    className,
 						'objectIds': persistentIds,
 						'propertyNames': properties
 					}
 				};
 			return command;
-		},		
-		
+		},
+
 		createObjectDeleteRequest : function (className,persistentId,properties) {
 			var command = {
-					ObjectUpdateRequest : {
+				'ObjectUpdateRequest' : {
 						'className':    className,
 						'persistentId': persistentId
 					}
 				};
 			return command;
-		},		
+		},
 
 		// new generic function to register a filter
 		createRegisterFilterRequest : function (className,propertyNames,clause,params) {
 			var command = {
-					RegisterFilterRequest : {
+				'RegisterFilterRequest' : {
 						'className':     className,
 						'propertyNames': propertyNames,
 						'filterClause':  clause,
@@ -219,16 +221,7 @@ codeshelf.websession = function () {
 				};
 			return command;
 		},
-		
-		createKeepAliveMessage: function () {
-			var command = {
-					'KeepAlive' : {
-						'messageId': self_.getUUID()
-					}
-				};
-			return command;
-		},		
-		
+
 		sendCommand: function (inCommand, inCallback, inRemainActive) {
 			// Attempt to send the command.
 			try {
@@ -242,6 +235,7 @@ codeshelf.websession = function () {
 						if (messageId==undefined) {
 							messageId = self_.setMessageId(inCommand);
 						}
+
 						// Put the pending command callback in the map.
 						var commandWrapper = {
 							remainActive: inRemainActive,
@@ -254,46 +248,27 @@ codeshelf.websession = function () {
 					}
 				}
 			} catch (e) {
-				var theLogger = goog.debug.Logger.getLogger('websocket');
-				theLogger.error("Error sending message: "+e);
+				logger_.severe("Error sending message: "+e);
 			}
 		},
-		
-		sendMessage: function (inCommand) {
-			// Attempt to send the message.
-			try {
-				if (!websocket_.isOpen()) {
-					// alert('WebSocket not open: try again later');
-				} else {
-					var messageId = self_.getMessageId(inCommand);
-					if (messageId==undefined) {
-						messageId = self_.setMessageId(inCommand);
-					}
-					websocket_.send(goog.json.serialize(inCommand));
-				}
-			} catch (e) {
-				var theLogger = goog.debug.Logger.getLogger('websocket');
-				theLogger.error("Error sending message: "+e);
-			}
-		},
-		
+
 		getMessageId: function (message) {
 			// extract id using old format
-			var messageId = message.id;
+			var messageId = message['id'];
 			if (messageId==undefined) {
 				// try new format, if not defined
-				messageId = message[Object.keys(message)[0]].messageId;
+				messageId = message[Object.keys(message)[0]]['messageId'];
 			}
 			return messageId;
 		},
-		
+
 		setMessageId: function (message) {
 			// generate message id, if not already defined
-			messageId = uniqueIdFunc_('cid');
-			message[Object.keys(message)[0]].messageId = messageId;
+			var messageId = uniqueIdFunc_('cid');
+			message[Object.keys(message)[0]]['messageId'] = messageId;
 			return messageId;
 		},
-		
+
 		cancelCommand: function (inCommand) {
 			delete pendingCommands_[inCommand.id];
 		},
@@ -330,41 +305,31 @@ codeshelf.websession = function () {
 
 		onMessage: function (messageEvent) {
 			var command = goog.json.parse(messageEvent.message);
-			var commandType = Object.keys(command)[0];
-			var messageId = command[Object.keys(command)[0]].requestId;
-
-			// check for keep alive message
-			if (commandType=="KeepAlive") {
-				// respond with keep alive
-				var msg = self_.createKeepAliveMessage();
-				self_.sendMessage(msg);
-				return;
-			}
-			
-			// handle other messages
+			var messageId = command[Object.keys(command)[0]]['requestId'];
 			var commandWrapper = pendingCommands_[messageId];
-			var callback = commandWrapper.callback;			
+			var callback = commandWrapper.callback;
 			if (callback == null) {
 				alert('callback for cmd was null');
 			} else {
 				if (Object.keys(command).length==1) {
+					var commandType = Object.keys(command)[0];
 					if (commandType != undefined) {
-						var unwrappedMessage = command[Object.keys(command)[0]]
+						var unwrappedMessage = command[Object.keys(command)[0]];
 						// validate message
-						if (commandType == kWebSessionCommandType.OBJECT_FILTER_RESP && unwrappedMessage.results==undefined) {
+						if (commandType == kWebSessionCommandType.OBJECT_FILTER_RESP && unwrappedMessage['results'] == undefined) {
 							// filter response has no data
-							alert('filter response has no data');
+							logger_.severe('filter response has no data:' + goog.debug.expose(command));
 						}
 						else {
 							callback.exec(commandType, unwrappedMessage);
 						}
 					}
 					else {
-						alert('command has no type');
+						logger_.severe('command has no type');
 					}
 				}
 				else {
-					alert('invalid response: one root property expected');
+					logger_.severe('invalid response: one root property expected');
 				}
 				/*
 				if (!command.hasOwnProperty('type')) {
@@ -385,15 +350,8 @@ codeshelf.websession = function () {
 			}
 
 			messageEvent.dispose();
-		},
-		
-		getUUID: function() {
-			  function s4() {
-				  return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-			  }
-			  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 		}
-	}
+	};
 
 	return self_;
 };

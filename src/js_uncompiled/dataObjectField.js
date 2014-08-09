@@ -78,11 +78,11 @@ codeshelf.dataobjectfield = function(websession, parentElement, className, class
 		websocketCmdCallback: function(expectedResponseType) {
 			var callback = {
 				exec: function(type, message) {
-					if (message.results==undefined) {
+					if (message['results']==undefined) {
 						alert('response has no result');
 					} else if (type === kWebSessionCommandType.OBJECT_LISTENER_RESP) {
-						for (var i = 0; i < command['results'].length; i++) {
-							var object = command['results'][i];
+						for (var i = 0; i < message['results'].length; i++) {
+							var object = message['results'][i];
 
 							// Make sure the class name and persistent ID match.
 							if ((object['className'] === className_) && (object['persistentId'] == classPersistenceId_)) {
@@ -187,7 +187,7 @@ codeshelf.objectUpdater = (function() {
 
 			theWebSession = codeshelf.sessionGlobals.getWebsession();
 			if (theWebSession) {
-				
+
 				/*
 				var data = {
 						'className':    inClassName,
@@ -197,9 +197,9 @@ codeshelf.objectUpdater = (function() {
 					};
 				var methodCallCmd = theWebSession.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
 				*/
-				
+
 				var methodCallCmd = theWebSession.createObjectMethodRequest(inClassName,inDomainObject['persistentId'], inMethodName, inMethodArgs);
-				
+
 				// Do we need a callback? Ideally not. General updating mechanism should workl for success.
 				// As for errors returned, would be nice to see something
 				var emptyCallback = {
