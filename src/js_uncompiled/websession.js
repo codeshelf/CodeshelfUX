@@ -221,6 +221,15 @@ codeshelf.websession = function () {
 				};
 			return command;
 		},
+		
+		createKeepAliveMessage: function () {
+			var command = {
+				'KeepAlive' : {
+					'messageId': self_.getUUID()
+				}
+			};
+			return command;
+		},
 
 		sendCommand: function (inCommand, inCallback, inRemainActive) {
 			// Attempt to send the command.
@@ -251,6 +260,24 @@ codeshelf.websession = function () {
 				logger_.severe("Error sending message: "+e);
 			}
 		},
+		
+		sendMessage: function (inCommand) {
+			// Attempt to send the message.
+			try {
+				if (!websocket_.isOpen()) {
+					// alert('WebSocket not open: try again later');
+				} else {
+					var messageId = self_.getMessageId(inCommand);
+					if (messageId==undefined) {
+						messageId = self_.setMessageId(inCommand);
+					}
+					websocket_.send(goog.json.serialize(inCommand));
+				}
+			} catch (e) {
+				var theLogger = goog.debug.Logger.getLogger('websocket');
+				theLogger.error("Error sending message: "+e);
+			}
+		},		
 
 		getMessageId: function (message) {
 			// extract id using old format
@@ -306,13 +333,23 @@ codeshelf.websession = function () {
 		onMessage: function (messageEvent) {
 			var command = goog.json.parse(messageEvent.message);
 			var messageId = command[Object.keys(command)[0]]['requestId'];
+			var commandType = Object.keys(command)[0];
+			
+			// check for keep alive message
+			if (commandType=="KeepAlive") {
+				// respond with keep alive
+				var msg = self_.createKeepAliveMessage();
+				self_.sendMessage(msg);
+				return;
+			}			
+			
+			// handle other messages
 			var commandWrapper = pendingCommands_[messageId];
 			var callback = commandWrapper.callback;
 			if (callback == null) {
 				alert('callback for cmd was null');
 			} else {
 				if (Object.keys(command).length==1) {
-					var commandType = Object.keys(command)[0];
 					if (commandType != undefined) {
 						var unwrappedMessage = command[Object.keys(command)[0]];
 						// validate message
@@ -350,7 +387,15 @@ codeshelf.websession = function () {
 			}
 
 			messageEvent.dispose();
+		},
+
+		getUUID: function() {
+			  function s4() {
+				  return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+			  }
+			  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 		}
+		
 	};
 
 	return self_;
