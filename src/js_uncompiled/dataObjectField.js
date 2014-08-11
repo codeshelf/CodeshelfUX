@@ -161,7 +161,7 @@ codeshelf.objectUpdater = (function() {
 
 			theWebSession = codeshelf.sessionGlobals.getWebsession();
 			if (theWebSession) {
-				var fieldUpdateCmd = theWebSession.createObjectUpdateRequest(inClassName,inChangingObject.persistentId,properties);
+				var fieldUpdateCmd = theWebSession.createObjectUpdateRequest(inClassName,inChangingObject['persistentId'],properties);
 				// Do we need a callback? Ideally not. General updating mechanism should work for success.
 				// As for errors returned, would be nice to see something
 				var emptyCallback = {
