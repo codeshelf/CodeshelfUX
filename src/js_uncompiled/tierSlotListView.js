@@ -40,7 +40,7 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 				return true;
 			else if (inProperty['id'] ===  'primaryAliasId')
 				return true;
-			else if (inProperty['id'] ===  'posAlongPath')
+			else if (inProperty['id'] ===  'posAlongPathui')
 				return true;
 			else if (inProperty['id'] ===  'domainId')
 				return true;

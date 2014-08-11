@@ -35,23 +35,23 @@ domainobjects = {
 				'title': 'Persistent ID',
 				'width': 40
 			},
-			'anchorPosX': {
-				'id':    'anchorPosX',
+			'anchorPosXui': {
+				'id':    'anchorPosXui',
 				'title': 'Anchor X',
 				'width': 40
 			},
-			'anchorPosY': {
-				'id':    'anchorPosY',
+			'anchorPosYui': {
+				'id':    'anchorPosYui',
 				'title': 'Anchor Y',
 				'width': 40
 			},
-			'pickFaceEndPosX': {
-				'id':    'pickFaceEndPosX',
+			'pickFaceEndPosXui': {
+				'id':    'pickFaceEndPosXui',
 				'title': 'Pick End X',
 				'width': 40
 			},
-			pickFaceEndPosY: {
-				'id':    'pickFaceEndPosY',
+			pickFaceEndPosYui: {
+				'id':    'pickFaceEndPosYui',
 				'title': 'Pick End Y',
 				'width': 40
 			},
@@ -60,9 +60,14 @@ domainobjects = {
 				'title': 'Nominal ID',
 				'width': 10
 			},
-			posAlongPath: {
-				'id':    'posAlongPath',
+			posAlongPathui: {
+				'id':    'posAlongPathui',
 				'title': 'Meters Along Path',
+				'width': 10
+			},
+			'primaryAliasId': {
+				'id':    'primaryAliasId',
+				'title': 'Alias',
 				'width': 10
 			}
 		}
@@ -96,23 +101,23 @@ domainobjects = {
 				'title': 'Controller',
 				'width': 25
 			},
-			'anchorPosX': {
-				'id':    'anchorPosX',
+			'anchorPosXui': {
+				'id':    'anchorPosXui',
 				'title': 'Anchor X',
 				'width': 40
 			},
-			'anchorPosY': {
-				'id':    'anchorPosY',
+			'anchorPosYui': {
+				'id':    'anchorPosYui',
 				'title': 'Anchor Y',
 				'width': 40
 			},
-			'pickFaceEndPosX': {
-				'id':    'pickFaceEndPosX',
+			'pickFaceEndPosXui': {
+				'id':    'pickFaceEndPosXui',
 				'title': 'Pick End X',
 				'width': 40
 			},
-			pickFaceEndPosY: {
-				'id':    'pickFaceEndPosY',
+			pickFaceEndPosYui: {
+				'id':    'pickFaceEndPosYui',
 				'title': 'Pick End Y',
 				'width': 40
 			},
@@ -121,9 +126,14 @@ domainobjects = {
 				'title': 'Nominal ID',
 				'width': 10
 			},
-			posAlongPath: {
-				'id':    'posAlongPath',
+			posAlongPathui: {
+				'id':    'posAlongPathui',
 				'title': 'Meters Along Path',
+				'width': 10
+			},
+			'primaryAliasId': {
+				'id':    'primaryAliasId',
+				'title': 'Alias',
 				'width': 10
 			}
 		}
@@ -670,28 +680,28 @@ domainobjects = {
 				'title': 'Nominal ID',
 				'width': 10
 			},
-			posAlongPath: {
-				'id':    'posAlongPath',
+			posAlongPathui: {
+				'id':    'posAlongPathui',
 				'title': 'Meters Along Path',
 				'width': 10
 			},
-			'anchorPosX': {
-				'id':    'anchorPosX',
+			'anchorPosXui': {
+				'id':    'anchorPosXui',
 				'title': 'Anchor X',
 				'width': 40
 			},
-			'anchorPosY': {
-				'id':    'anchorPosY',
+			'anchorPosYui': {
+				'id':    'anchorPosYui',
 				'title': 'Anchor Y',
 				'width': 40
 			},
-			pickFaceEndPosX: {
-				'id':    'pickFaceEndPosX',
+			pickFaceEndPosXui: {
+				'id':    'pickFaceEndPosXui',
 				'title': 'Pick End X',
 				'width': 40
 			},
-			pickFaceEndPosY: {
-				'id':    'pickFaceEndPosY',
+			pickFaceEndPosYui: {
+				'id':    'pickFaceEndPosYui',
 				'title': 'Pick End Y',
 				'width': 40
 			}
@@ -741,23 +751,23 @@ domainobjects = {
 				'title': 'Last LED',
 				'width': 10
 			},
-			'anchorPosX': {
-				'id':    'anchorPosX',
+			'anchorPosXui': {
+				'id':    'anchorPosXui',
 				'title': 'Anchor X',
 				'width': 40
 			},
-			'anchorPosY': {
-				'id':    'anchorPosY',
+			'anchorPosYui': {
+				'id':    'anchorPosYui',
 				'title': 'Anchor Y',
 				'width': 40
 			},
-			'pickFaceEndPosX': {
-				'id':    'pickFaceEndPosX',
+			'pickFaceEndPosXui': {
+				'id':    'pickFaceEndPosXui',
 				'title': 'Pick End X',
 				'width': 40
 			},
-			pickFaceEndPosY: {
-				'id':    'pickFaceEndPosY',
+			pickFaceEndPosYui: {
+				'id':    'pickFaceEndPosYui',
 				'title': 'Pick End Y',
 				'width': 40
 			},
@@ -771,9 +781,14 @@ domainobjects = {
 				'title': 'Nominal ID',
 				'width': 10
 			},
-			posAlongPath: {
-				'id':    'posAlongPath',
+			posAlongPathui: {
+				'id':    'posAlongPathui',
 				'title': 'Meters Along Path',
+				'width': 10
+			},
+			'primaryAliasId': {
+				'id':    'primaryAliasId',
+				'title': 'Alias',
 				'width': 10
 			}
 		}
