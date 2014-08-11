@@ -54,22 +54,20 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 		'shouldAddThisColumn': function (inProperty) {
 			if (inProperty['id'] === 'persistentId')
 				return false;
-			else if (inProperty['id'] === 'domainId')
-				return false;
-			else if (inProperty['id'] === 'ledChannel')
-				return false;
-			else if (inProperty['id'] === 'pickFaceEndPosX')
-				return false;
-			else if (inProperty['id'] === 'pickFaceEndPosY')
-				return false;
-			else if (inProperty['id'] === 'anchorPosX')
-				return false;
-			else if (inProperty['id'] === 'anchorPosY')
-				return false;
-			else if (inProperty['id'] ===  'nominalLocationId')
-				return false;
-			else
+			else if (inProperty['id'] === 'tierSortName')
 				return true;
+			else if (inProperty['id'] === 'baySortName')
+				return true;
+			else if (inProperty['id'] === 'firstLedNumAlongPath')
+				return true;
+			else if (inProperty['id'] === 'lastLedNumAlongPath')
+				return true;
+			else if (inProperty['id'] === 'slotAliasRange')
+				return true;
+			else if (inProperty['id'] === 'posAlongPathui')
+				return true;
+			else
+				return false;
 		},
 
 		getViewName: function () {

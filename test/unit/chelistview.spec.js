@@ -5,7 +5,7 @@ describe('cheListView', function() {
 	var websession, jqPane, pane;
 
 	beforeEach(function() {
-		websession = jasmine.createSpyObj('websession', ['createCommand', 'sendCommand']);
+		websession = jasmine.createSpyObj('websession', ['createCommand', 'sendCommand', 'createRegisterFilterRequest']);
 		websession['getAuthz'] = function() {
 			return new codeshelf.Authz();
 		};

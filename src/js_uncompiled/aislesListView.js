@@ -53,10 +53,18 @@ codeshelf.aisleslistview = function(websession, facility) {
 			// only fields in domainObjects for aisle will be asked for. We want to exclude persistent Id
 			if (inProperty['id'] ===  'persistentId')
 				return false;
-			else if (inProperty['id'] ===  'nominalLocationId')
-				return false;
-			else
+			else if (inProperty['id'] ===  'domainId')
 				return true;
+			else if (inProperty['id'] ===  'pathSegId')
+				return true;
+			else if (inProperty['id'] ===  'posAlongPathui')
+				return true;
+			else if (inProperty['id'] ===  'anchorPosXui')
+				return true;
+			else if (inProperty['id'] ===  'anchorPosYui')
+				return true;
+			else
+				return false;
 		},
 
 		getViewName: function() {
