@@ -70,7 +70,7 @@ codeshelf.workareaview = function(websession, facility) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['Path']['className'], "linkProperty": 'parent', "filter" : pathFilter, filterParams : pathFilterParams, "properties": domainobjects['Path']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['Path']['className'], "linkProperty": 'parent', "filter" : pathFilter, "filterParams" : pathFilterParams, "properties": domainobjects['Path']['properties'] };
 	hierarchyMap[1] = { "className": domainobjects['WorkArea']['className'], "linkProperty": 'parent', "filter" : undefined, "filterParams" : undefined, "properties": domainobjects['WorkArea']['properties'] };
 	hierarchyMap[2] = { "className": domainobjects['WorkInstruction']['className'], "linkProperty": 'parent', "filter" : undefined, "filterParams" : undefined, "properties": domainobjects['WorkInstruction']['properties'] };
 
