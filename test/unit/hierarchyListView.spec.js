@@ -5,7 +5,7 @@ describe('hierarchyListView', function() {
 	var websession, jqPane, pane;
 
 	beforeEach(function() {
-		websession = jasmine.createSpyObj('websession', ['createCommand', 'sendCommand']);
+		websession = jasmine.createSpyObj('websession', ['createCommand', 'sendCommand', 'createRegisterFilterRequest']);
 		jqPane = $("<div/>");
 		pane = jqPane.get(0);
 	});
