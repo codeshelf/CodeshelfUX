@@ -213,17 +213,15 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 		};
 	}
 
-    function flashCell(className, row, cell, speed) {
+    function flashCell(className, jqCell, speed) {
       speed = speed || 100;
-	  var $cell = $(grid_.getCellNode(row, cell));
-
 	  function toggleCellClass(times) {
 		  if (!times) {
             return;
           }
           setTimeout(function () {
-                $cell.queue(function () {
-                  $cell.toggleClass(className).dequeue();
+                jqCell.queue(function () {
+                  jqCell.toggleClass(className).dequeue();
                   toggleCellClass(times - 1);
                 });
               },
@@ -280,12 +278,14 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 				'editCommandHandler': function(item, column, editCommand) {
 					editCommand.execute();
 					logger_.fine("item edited:" + goog.debug.expose(item));
-					websession_.update(item)
+					var $cell = $(grid_.getCellNode(editCommand.row, editCommand.cell));
+					$cell.removeClass("cell-updated-success", "cell-updated-fail");
+					websession_.update(item, [column['id']])
 						.done(function() {
-							flashCell("cell-updated-success", editCommand.row, editCommand.cell);
+							flashCell("cell-updated-success", $cell);
 						})
 						.fail(function() {
-							flashCell("cell-updated-fail", editCommand.row, editCommand.cell);
+							$cell.addClass("cell-updated-fail");
 						});
 				}
 			};
@@ -598,7 +598,8 @@ codeshelf.grid.toColumns = function(hierarchyLevelDef) {
 					'cannotTriggerInsert': true,
 					'resizable': true,
 					'selectable': true,
-					'sortable': true
+					'sortable': true,
+					'focusable': false
 			};
 			goog.object.extend(newColumn, propertyDef);
 		}

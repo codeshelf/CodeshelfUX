@@ -1,5 +1,6 @@
 goog.require('codeshelf.websession');
 goog.require('goog.array');
+goog.require('goog.object');
 
 describe('websession', function() {
 	var websocketStub;
@@ -40,14 +41,16 @@ describe('websession', function() {
 
 		var callback = jasmine.createSpy("update_callback");
 
-		var domainObject = {"persistentId": 111};
+		var domainObject = {"className" : "DomainObjectClass", "persistentId": 111};
 		websession.update(domainObject).done(callback);
 
 		var command = goog.json.parse(sendSpy.mostRecentCall.args[0]);
+		var commandBody = goog.object.getValues(command).shift();
 		websocketStub.onMessage_({data: goog.json.serialize({
-			id: command.id,
-			type: kWebSessionCommandType.OBJECT_UPDATE_REQ,
-			data: command.data
+			'ObjectUpdateResponse': {
+				'requestId': commandBody['messageId'],
+				'results': domainObject
+			}
 		})});
 		expect(callback).toHaveBeenCalled();
 	});

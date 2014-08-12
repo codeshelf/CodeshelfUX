@@ -40,6 +40,11 @@ var kWebSessionCommandType = {
 	OBJECT_METHOD_RESP: 'ObjectMethodResponse'
 };
 
+var kResponseStatus = {
+	SUCCESS: "Success",
+	FAIL: "Fail"
+};
+
 var kWebsessionState = {
 	UNVALIDATED: 'UNVALIDATED',
 	VALIDATED: 'VALIDATED'
@@ -165,6 +170,11 @@ codeshelf.websession = function () {
 			return command;
 		},
 
+		/**
+		 * @param {string} className
+		 * @param {string} persistentId
+		 * @param {object} properties
+		 */
 		createObjectUpdateRequest : function (className,persistentId,properties) {
 			var command = {
 				'ObjectUpdateRequest' : {
@@ -219,10 +229,13 @@ codeshelf.websession = function () {
 			return command;
 		},
 
-		update: function(csDomainObject) {
+		update: function(csDomainObject, selectedFields) {
 			var promise = jQuery.Deferred();
-			var data = goog.json.serialize(csDomainObject);
-			var command = self_.createCommand(kWebSessionCommandType.OBJECT_UPDATE_REQ, data);
+			var objectProperties = {};
+			goog.array.forEach(selectedFields, function(fieldName) {
+				objectProperties[fieldName] = csDomainObject[fieldName];
+			});
+			var command = self_.createObjectUpdateRequest(csDomainObject['className'], csDomainObject['persistentId'], objectProperties);
 			self_.sendCommand(command,  {
 					exec: function(response) {
 						promise.resolve(response);
@@ -364,7 +377,7 @@ codeshelf.websession = function () {
 							// filter response has no data
 							logger_.severe('filter response has no data:' + goog.debug.expose(command));
 							failFn('filter response has no data');
-						} else if (unwrappedMessage['results']['status'] == "ERROR") {
+						} else if (unwrappedMessage['status'] == kResponseStatus.FAIL) {
 							failFn(commandType, unwrappedMessage);
 						} else {
 							callback.exec(commandType, unwrappedMessage);

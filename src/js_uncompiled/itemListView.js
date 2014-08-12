@@ -57,6 +57,8 @@ codeshelf.itemlistview = function(websession, facility) {
 				return true;
 			else if (inProperty['id'] ===  'itemQuantityUom')
 				return true;
+			else if (inProperty['id'] ===  'distanceFromLeft')
+				return true;
 			else
 				return false;
 		},

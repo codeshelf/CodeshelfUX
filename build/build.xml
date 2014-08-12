@@ -32,6 +32,7 @@
 				<include name="lib/jquery-ext/**" />
 				<include name="lib/jquery/**" />
 				<include name="lib/jquery-ui/*.js" />
+				<include name="lib/jquery-ui/**/*.css" />
 				<include name="lib/TwitterBootstrap/**" />
 				<include name="lib/UIBootstrap/**" />
 				<include name="lib/angular-*/**" />

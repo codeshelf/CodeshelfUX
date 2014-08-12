@@ -4,6 +4,7 @@
  ******************************************************************************/
 
 goog.provide('domainobjects');
+goog.require('codeshelf.gridautocompleteeditor');
 
 domainobjects = {
 	'Aisle': {
@@ -312,11 +313,6 @@ domainobjects = {
 				'title': 'Nominal Location',
 				'width': 16
 			},
-			itemLocationAlias: {
-				'id':    'itemLocationAlias',
-				'title': 'Location',
-				'width': 10
-			},
 			itemDescription: {
 				'id':    'itemDescription',
 				'title': 'Description',
@@ -327,12 +323,6 @@ domainobjects = {
 				'title': 'Quantity',
 				'width': 10
 			},
-			itemCmFromLeft: {
-				'id':    'itemCmFromLeft',
-				'title': 'CM From Left',
-				'width': 10,
-				'editor': Slick.Editors.Text
-			},
 			posAlongPathui: {
 				'id':    'posAlongPathui',
 				'title': 'Meters Along Path',
@@ -342,6 +332,20 @@ domainobjects = {
 				'id':    'itemTier',
 				'title': 'Tier',
 				'width': 6
+			},
+			itemLocationAlias: {
+				'id':    'itemLocationAlias',
+				'title': 'Location',
+				'width': 10,
+				'editor' : Slick.Editors.Text,
+				'focusable': true
+			},
+			itemCmFromLeft: {
+				'id':    'itemCmFromLeft',
+				'title': 'CM From Left',
+				'width': 10,
+				'editor': Slick.Editors.Text,
+				'focusable': true
 			}
 		}
 	},
