@@ -292,26 +292,6 @@ domainobjects = {
 				'title': 'Facility Name',
 				'width': 50
 			}
-//			'providerEnum':     {
-//				'id':    'providerEnum',
-//				'title': 'Provider',
-//				'width': 100
-//			},
-//			'serviceStateEnum':     {
-//				'id':    'serviceStateEnum',
-//				'title': 'State',
-//				'width': 100
-//			},
-//			'documentId':     {
-//				'id':    'documentId',
-//				'title': 'DocumentId',
-//				'width': 100
-//			},
-//			'documentStateEnum':     {
-//				'id':    'documentStateEnum',
-//				'title': 'State',
-//				'width': 100
-//			}
 		}
 	},
 
@@ -347,9 +327,22 @@ domainobjects = {
 				'id':    'itemQuantityUom',
 				'title': 'Quantity',
 				'width': 10
+			},
+			itemCmFromLeft: {
+				'id':    'itemCmFromLeft',
+				'title': 'CM From Left',
+				'width': 10
+			},
+			posAlongPathui: {
+				'id':    'posAlongPathui',
+				'title': 'Meters Along Path',
+				'width': 10
+			},
+			itemTier: {
+				'id':    'itemTier',
+				'title': 'Tier',
+				'width': 6
 			}
-
-
 		}
 	},
 
