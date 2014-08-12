@@ -21,19 +21,11 @@ codeshelf.initializenewclient = function() {
 		var callback = {
 			exec: function(type,command) {
 				if (type == kWebSessionCommandType.OBJECT_METHOD_RESP) {
-//						var facility = command['data']['results'];
-//						var facilityEditor = codeshelf.facilityeditorview();
-//						facilityEditor.start(websession_, organization_, facility);
+					var facility = command['results'];
+					codeshelf.sessionGlobals.setFacility(facility);
+					facilityWindowLoader_();
 				} else if (type == kWebSessionCommandType.OBJECT_GETTER_RESP) {
-					if (command['results'].length !== 0) {
-						for (var i = 0; i < command['data']['results'].length; i++) {
-							var facility = command['data']['results'][i];
-							codeshelf.sessionGlobals.setFacility(facility);
-							facilityWindowLoader_();
-						}
-					}
 				}
-
 			}
 		};
 
@@ -55,50 +47,19 @@ codeshelf.initializenewclient = function() {
 			case error.UNKNOWN_ERROR:
 				break;
 		}
-
 		// Since we don't know the user's location let's default to the Safeway DC Tracy, CA
 		//createFacility(-121.517029, 37.717198);
-
 	}
 
 	function createFacility(longitude, latitude) {
-
-		var anchorPoint = {'posTypeEnum': 'GPS', 'x': longitude, 'y': latitude, 'z' : 0.0};
-		/*
-		var data = {
-			'className':    domainobjects['Organization']['className'],
-			'persistentId': organization_['persistentId'],
-			'methodName':   'createFacility',
-			'methodArgs':   [
-				{'name': 'domainId', 'value': 'F1', 'classType': 'java.lang.String'},
-				{'name': 'description', 'value': 'First Facility', 'classType': 'java.lang.String'},
-				{'name': 'anchorPoint', 'value': anchorPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'}
-			]
-		};
-		var newFacilityCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
-		*/
-		
-		// var className = domainobjects['Organization']['className'];
 		var methodArgs = [
 		  				{'name': 'domainId', 'value': 'F1', 'classType': 'java.lang.String'},
 						{'name': 'description', 'value': 'First Facility', 'classType': 'java.lang.String'},
-						{'name': 'anchorPoint', 'value': anchorPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'}
+						{'name': 'x', 'value': longitude, 'classType': 'java.lang.Double'},
+						{'name': 'y', 'value': latitude, 'classType': 'java.lang.Double'}
 					];
 		var newFacilityCmd = websession_.createObjectMethodRequest(domainobjects['Organization']['className'],organization_['persistentId'],'createFacility',methodArgs);
 		websession_.sendCommand(newFacilityCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_METHOD_RESP), false);
-
-		// Attempt to reload this new facility.
-		/*
-		var data = {
-			'className':    organization_['className'],
-			'persistentId': organization_['persistentId'],
-			'getterMethod': 'getFacilities'
-		};
-		var getFacilitiesCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
-		*/
-
-		var getFacilitiesCmd = websession_.createObjectGetRequest(organization_['className'],organization_['persistentId'],'getFacilities');
-		websession_.sendCommand(getFacilitiesCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_GETTER_RESP), false);
 	}
 
 	thisInitializeNewClient_ = {
