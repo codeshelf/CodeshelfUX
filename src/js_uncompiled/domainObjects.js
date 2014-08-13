@@ -4,7 +4,6 @@
  ******************************************************************************/
 
 goog.provide('domainobjects');
-goog.require('codeshelf.gridautocompleteeditor');
 
 domainobjects = {
 	'Aisle': {
