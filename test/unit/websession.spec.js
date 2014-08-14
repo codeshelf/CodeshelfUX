@@ -41,8 +41,8 @@ describe('websession', function() {
 
 		var callback = jasmine.createSpy("update_callback");
 
-		var domainObject = {"className" : "DomainObjectClass", "persistentId": 111};
-		websession.update(domainObject).done(callback);
+		var domainObject = {"className" : "DomainObjectClass", "persistentId": 111, "testField": 3};
+		websession.update(domainObject, ["testField"] ).done(callback);
 
 		var command = goog.json.parse(sendSpy.mostRecentCall.args[0]);
 		var commandBody = goog.object.getValues(command).shift();
@@ -68,8 +68,8 @@ describe('websession', function() {
 		});
 
 		var callback = jasmine.createSpy("fail_callback");
-		var domainObject = {};
-		websession.update(domainObject).fail(callback);
+		var domainObject = {"className" : "DomainObjectClass", "persistentId": 111, "testField": 3};
+		websession.update(domainObject, ["testField"] ).fail(callback);
 
 		expect(sendSpy).not.toHaveBeenCalled();
 		expect(callback).toHaveBeenCalled();
