@@ -394,8 +394,12 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			});
 
 			dataView_.onRowsChanged.subscribe(function(event, args) {
-				grid_.invalidateRows(args.rows);
-				grid_.render();
+				var rows = args.rows;
+				for(var i = 0; i < rows.length; i++) {
+					var row = rows[i];
+					grid_.updateRow(row);
+
+				}
 
 				if (selectedRowIds_.length > 0) {
 					// since how the original data maps onto rows has changed,
