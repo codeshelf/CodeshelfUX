@@ -40,15 +40,17 @@ codeshelf.loginWindow = function() {
 					var user = command['user'];
 					var email = user['email'];
 					var authz = new codeshelf.Authz();
-					if (email == 'configure@example.com') {
+					if (email.indexOf('configure') == 0) {
 						authz.setPermissions(["*"]);
-					} else if (email == 'view@example.com'
+					} else if (email.indexOf('view') == 0
 							   || email == 'a@example.com') {
 						authz.setPermissions(["*:view"]);
-					} else if (email == 'simulate@example.com') {
+					} else if (email.indexOf('simulate') == 0) {
 						authz.setPermissions(["*"]);
-					} else if (email == 'che@example.com') {
+					} else if (email.indexOf('che') == 0) {
 						authz.setPermissions(["*:view", "che:simulate"]);
+					} else if (email.indexOf('work') == 0) {
+						authz.setPermissions(["*:view", "item:edit"]);
 					} else {
 						authz.setPermissions([]); // no permissions by default
 					}

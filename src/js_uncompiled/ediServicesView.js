@@ -88,8 +88,13 @@ codeshelf.ediservicesview = function (websession, facility) {
 	hierarchyMap[0] = { "className": domainobjects['DropboxService']['className'], "linkProperty": 'parent', "filter": serviceFilter, "filterParams": serviceFilterParams, "properties": domainobjects['DropboxService']['properties'] };
 	hierarchyMap[1] = { "className": domainobjects['EdiDocumentLocator']['className'], "linkProperty": 'parent', "filter": undefined, "filterParams": undefined, "properties": domainobjects['EdiDocumentLocator']['properties'] };
 
-	// We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['DropboxService'], hierarchyMap, 0);
+	var viewOptions = {
+		'editable':  true,
+		// -1 for non-dragable. Single level view with normal sort rules
+		'draggableHierarchyLevel': 0
+	};
+
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['DropboxService'], hierarchyMap,viewOptions);
 	jQuery.extend(view, self);
 	self = view;
 

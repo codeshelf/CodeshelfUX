@@ -10,7 +10,7 @@ goog.require('goog.object');
 /**
  * @param {Array.<codeshelf.HierarchyLevel>} hierarchyMap
  */
-codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, draggableHierarchyLevel) {
+codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, viewOptions) {
 
 	var logger_ = goog.debug.Logger.getLogger('codeshelf.hierarchylistview');
 
@@ -21,16 +21,26 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 		$(e.target).removeClass('ui-state-hover');
 	});
 
+	var defaultViewOptions = {
+		"editable": true,
+		"draggableHierarchyLevel" : -1
+	};
+
 	var websession_ = websession;
 	var domainObject_ = domainObject;
 	var hierarchyMap_ = hierarchyMap;
-	var draggableHierarchyLevel_ = (draggableHierarchyLevel === undefined ? -1 : draggableHierarchyLevel);
+	var viewOptions_ = goog.object.clone(defaultViewOptions);
+	goog.object.extend(viewOptions_, viewOptions);
 	var dataView_;
 	var grid_;
 	var selectedRowIds_ = [];
 
 	// Compute the columns we need for this domain object.
 	var columns_ = [];
+
+	/**
+	 * @type {Slick.Options}
+     */
 	var options_;
 	var sortdir_ = true; //ascending
 	var sortDelay_;
@@ -213,6 +223,11 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 		};
 	}
 
+	/**
+	 * @param {string}
+	 * @param {Object}
+	 * @param {?number}
+     */
     function flashCell(className, jqCell, speed) {
       speed = speed || 100;
 	  function toggleCellClass(times) {
@@ -226,9 +241,28 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
                 });
               },
               speed);
-        }
-        toggleCellClass(4);
       }
+        toggleCellClass(4);
+    }
+
+	/**
+	 * @param {Object} item
+	 * @param {Object} column
+	 * @param {Slick.EditCommand} editCommand
+	 */
+	function editCommandHandler(item, column, editCommand) {
+		editCommand["execute"](); //TODO determine why this gets obfuscated suring compile
+		logger_.fine("item edited:" + goog.debug.expose(item));
+		var $cell = $(grid_.getCellNode(editCommand['row'], editCommand['cell']));
+		$cell.removeClass("cell-updated-success", "cell-updated-fail");
+		websession_.update(item, [column['id']])
+			.done(function() {
+				flashCell("cell-updated-success", $cell);
+			})
+			.fail(function() {
+				$cell.addClass("cell-updated-fail");
+			});
+	}
 
 	var self_ = {
 		logger: goog.debug.Logger.getLogger('hierarch list view'),
@@ -247,7 +281,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 
 
 			// If we've specified drag-ordering then present a drag-ordering column.
-			if (draggableHierarchyLevel_ != -1) {
+			if (viewOptions_["draggableHierarchyLevel"] != -1) {
 				var selectAndMove = {
 					'id':                  'id',
 					'name':                '',
@@ -265,7 +299,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			}
 
 			options_ = {
-				'editable':             true,
+				'editable':             viewOptions_['editable'],
 				'enableAddRow':         true,
 				'enableCellNavigation': true,
 				'asyncEditorLoading':   true,
@@ -275,19 +309,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 				'autoEdit':             true,
 
 				cellHighlightCssClass: "cell-changed",
-				'editCommandHandler': function(item, column, editCommand) {
-					editCommand.execute();
-					logger_.fine("item edited:" + goog.debug.expose(item));
-					var $cell = $(grid_.getCellNode(editCommand.row, editCommand.cell));
-					$cell.removeClass("cell-updated-success", "cell-updated-fail");
-					websession_.update(item, [column['id']])
-						.done(function() {
-							flashCell("cell-updated-success", $cell);
-						})
-						.fail(function() {
-							$cell.addClass("cell-updated-fail");
-						});
-				}
+
+				'editCommandHandler': editCommandHandler
 			};
 
 			goog.dom.appendChild(self_.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));

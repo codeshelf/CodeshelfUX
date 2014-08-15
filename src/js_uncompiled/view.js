@@ -177,10 +177,6 @@ codeshelf.view = function(options) {
 	}
 
 
-	/**
-	 * The view parent object.
-	 * @type {Object}
-	 */
 	self = {
 
 		setParentWindow: function(inWindow) { // this is public in order to be called from doubleclick handler
