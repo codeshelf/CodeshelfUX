@@ -9,6 +9,7 @@ goog.require('codeshelf.mainpage');
 goog.require('codeshelf.websession');
 goog.require('domainobjects');
 goog.require('goog.dom');
+goog.require('goog.net.WebSocket');
 
 'use strict';
 
@@ -38,6 +39,22 @@ codeshelf.application = function() {
 		}, 1250);
 	}
 
+	/**
+     * @type {goog.net.WebSocket}
+     */
+	function createWebSocket() {
+		var connectAttempts = 0;
+
+		function linearBackOff() {
+				if (connectAttempts < 10) {
+					connectAttempts++;
+				}
+				return (connectAttempts * 1000);
+			}
+
+		return new goog.net.WebSocket(true, linearBackOff);
+	}
+
 	self = {
 
 		getWebsession: function() {
@@ -58,7 +75,7 @@ codeshelf.application = function() {
 
 		startApplication: function() {
 			webSession_ = codeshelf.websession();
-			webSession_.initWebSocket(self);
+			webSession_.initWebSocket(self, createWebSocket());
 			initApplication();
 		},
 

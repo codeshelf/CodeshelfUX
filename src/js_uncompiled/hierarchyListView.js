@@ -2,8 +2,10 @@ goog.provide('codeshelf.hierarchylistview');
 goog.require('codeshelf.multilevelcomparer');
 goog.require('codeshelf.view');
 goog.require('goog.array');
+goog.require('goog.debug');
 goog.require('goog.debug.Logger');
 goog.require('goog.async.Delay');
+goog.require('goog.object');
 //require jquery ui resizable
 /**
  * @param {Array.<codeshelf.HierarchyLevel>} hierarchyMap
@@ -119,8 +121,6 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 					// We don't want to sort right away, because we might be getting a lot of updates.
 					// The delay timer gets reset each time we call start - only after updates are quite for 500ms do we sort.
 					sortDelay_.start();
-
-					;
 				}
 			}
 		};
@@ -213,7 +213,26 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 		};
 	}
 
+    function flashCell(className, jqCell, speed) {
+      speed = speed || 100;
+	  function toggleCellClass(times) {
+		  if (!times) {
+            return;
+          }
+          setTimeout(function () {
+                jqCell.queue(function () {
+                  jqCell.toggleClass(className).dequeue();
+                  toggleCellClass(times - 1);
+                });
+              },
+              speed);
+        }
+        toggleCellClass(4);
+      }
+
 	var self_ = {
+		logger: goog.debug.Logger.getLogger('hierarch list view'),
+
 		doSetupView: function() {
 
 			columns_ = codeshelf.grid.toColumnsForHierarchy(hierarchyMap_);
@@ -253,7 +272,22 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 				'enableColumnReorder':   true,
 				'forceFitColumns':      true,
 				'topPanelHeight':       25,
-				'autoEdit':             false
+				'autoEdit':             true,
+
+				cellHighlightCssClass: "cell-changed",
+				'editCommandHandler': function(item, column, editCommand) {
+					editCommand.execute();
+					logger_.fine("item edited:" + goog.debug.expose(item));
+					var $cell = $(grid_.getCellNode(editCommand.row, editCommand.cell));
+					$cell.removeClass("cell-updated-success", "cell-updated-fail");
+					websession_.update(item, [column['id']])
+						.done(function() {
+							flashCell("cell-updated-success", $cell);
+						})
+						.fail(function() {
+							$cell.addClass("cell-updated-fail");
+						});
+				}
 			};
 
 			goog.dom.appendChild(self_.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
@@ -360,8 +394,12 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			});
 
 			dataView_.onRowsChanged.subscribe(function(event, args) {
-				grid_.invalidateRows(args.rows);
-				grid_.render();
+				var rows = args.rows;
+				for(var i = 0; i < rows.length; i++) {
+					var row = rows[i];
+					grid_.updateRow(row);
+
+				}
 
 				if (selectedRowIds_.length > 0) {
 					// since how the original data maps onto rows has changed,
@@ -389,6 +427,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, d
 			});
 
 			grid_.onContextMenu.subscribe(dispatchContextMenu);
+
+			grid_.onCellChange.subscribe(function(e, args) {
+				logger_.fine("Cell changed" + goog.debug.expose(args));
+			});
 
 			sortDelay_ = new goog.async.Delay(function() {
 				dataView_.sort(newComparer(), sortdir_);
@@ -556,12 +598,14 @@ codeshelf.grid.toColumns = function(hierarchyLevelDef) {
 					'field': propertyDef.id,
 					'behavior': 'select',
 					'headerCssClass': ' ',
-					'width': propertyDef.width,
+					'width': 10,
 					'cannotTriggerInsert': true,
 					'resizable': true,
 					'selectable': true,
-					'sortable': true
+					'sortable': true,
+					'focusable': false
 			};
+			goog.object.extend(newColumn, propertyDef);
 		}
 			columns.push(newColumn);
 	}

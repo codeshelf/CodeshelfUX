@@ -365,6 +365,14 @@ div.jquery-drag-to-select.active {
 	font-size:			10px;
 }
 
+.cell-updated-success {
+	background:			green;
+}
+
+.cell-updated-fail {
+	background:			red;
+}
+
 .slick-row.selected .cell-selection {
 	background-color:	transparent;
 	/* show default selected row background */

@@ -6,7 +6,6 @@
 goog.provide('domainobjects');
 
 domainobjects = {
-
 	'Aisle': {
 		'className':  'Aisle',
 		'properties': {
@@ -292,26 +291,6 @@ domainobjects = {
 				'title': 'Facility Name',
 				'width': 50
 			}
-//			'providerEnum':     {
-//				'id':    'providerEnum',
-//				'title': 'Provider',
-//				'width': 100
-//			},
-//			'serviceStateEnum':     {
-//				'id':    'serviceStateEnum',
-//				'title': 'State',
-//				'width': 100
-//			},
-//			'documentId':     {
-//				'id':    'documentId',
-//				'title': 'DocumentId',
-//				'width': 100
-//			},
-//			'documentStateEnum':     {
-//				'id':    'documentStateEnum',
-//				'title': 'State',
-//				'width': 100
-//			}
 		}
 	},
 
@@ -320,7 +299,7 @@ domainobjects = {
 		'properties': {
 			'domainId': {
 				'id': 'domainId',
-				'title': 'ID',
+				'title': 'Id',
 				'width': 25
 			},
 			'persistentId': {
@@ -328,15 +307,15 @@ domainobjects = {
 				'title': 'Persistent ID',
 				'width': 40
 			},
+			'itemMasterId': {
+				'id': 'itemMasterId',
+				'title': 'SKU',
+				'width': 25
+			},
 			nominalLocationId: {
 				'id':    'nominalLocationId',
 				'title': 'Nominal Location',
 				'width': 16
-			},
-			itemLocationAlias: {
-				'id':    'itemLocationAlias',
-				'title': 'Location',
-				'width': 10
 			},
 			itemDescription: {
 				'id':    'itemDescription',
@@ -347,9 +326,31 @@ domainobjects = {
 				'id':    'itemQuantityUom',
 				'title': 'Quantity',
 				'width': 10
+			},
+			posAlongPathui: {
+				'id':    'posAlongPathui',
+				'title': 'Meters Along Path',
+				'width': 10
+			},
+			itemTier: {
+				'id':    'itemTier',
+				'title': 'Tier',
+				'width': 6
+			},
+			itemLocationAlias: {
+				'id':    'itemLocationAlias',
+				'title': 'Location',
+				'width': 10,
+				'editor' : Slick.Editors.Text,
+				'focusable': true
+			},
+			itemCmFromLeft: {
+				'id':    'itemCmFromLeft',
+				'title': 'CM From Left',
+				'width': 10,
+				'editor': Slick.Editors.Text,
+				'focusable': true
 			}
-
-
 		}
 	},
 
@@ -358,7 +359,7 @@ domainobjects = {
 		'properties': {
 			'domainId': {
 				'id': 'domainId',
-				'title': 'ID',
+				'title': 'SKU',
 				'width': 25
 			},
 			description: {
