@@ -61,6 +61,8 @@ codeshelf.itemlistview = function(websession, facility) {
 				return true;
 			else if (inProperty['id'] ===  'itemCmFromLeft')
 				return true;
+			else if (inProperty['id'] ===  'posAlongPathui')
+				return true;
 			else
 				return false;
 		},

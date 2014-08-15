@@ -350,6 +350,11 @@ domainobjects = {
 				'width': 10,
 				'editor': Slick.Editors.Text,
 				'focusable': true
+			},
+			'uomMasterId':         {
+				'id':    'uomMasterId',
+				'title': 'UOM',
+				'width': 5
 			}
 		}
 	},
