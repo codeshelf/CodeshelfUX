@@ -160,7 +160,7 @@ codeshelfApp.DropboxLinkController.prototype.ok = function(){
 	var className = domainobjects['DropboxService']['className'];
 	var persistentId = this.scope_['dropboxServiceId'];
 	var args = [{'name': 'code', 'value': accessCode, 'classType': 'java.lang.String'}];
-	var startLinkDropboxCmd = this.websession_.createObjectMethodRequest(className, persistentId,'finishLink',args);
+	var finishLinkDropboxCmd = this.websession_.createObjectMethodRequest(className, persistentId,'finishLink',args);
 	this.websession_.sendCommand(finishLinkDropboxCmd, this.finishLinkCallback_(this.modalInstance_), true);
 };
 
