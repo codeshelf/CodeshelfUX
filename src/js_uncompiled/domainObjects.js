@@ -299,13 +299,18 @@ domainobjects = {
 		'properties': {
 			'domainId': {
 				'id': 'domainId',
-				'title': 'ID',
+				'title': 'Id',
 				'width': 25
 			},
 			'persistentId': {
 				'id': 'persistentId',
 				'title': 'Persistent ID',
 				'width': 40
+			},
+			'itemMasterId': {
+				'id': 'itemMasterId',
+				'title': 'SKU',
+				'width': 25
 			},
 			nominalLocationId: {
 				'id':    'nominalLocationId',
@@ -354,7 +359,7 @@ domainobjects = {
 		'properties': {
 			'domainId': {
 				'id': 'domainId',
-				'title': 'ID',
+				'title': 'SKU',
 				'width': 25
 			},
 			description: {

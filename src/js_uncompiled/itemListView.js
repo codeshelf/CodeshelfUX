@@ -55,6 +55,8 @@ codeshelf.itemlistview = function(websession, facility) {
 				return true;
 			else if (inProperty['id'] ===  'itemDescription')
 				return true;
+			else if (inProperty['id'] ===  'itemMasterId')
+				return true;
 			else if (inProperty['id'] ===  'itemQuantityUom')
 				return true;
 			else if (inProperty['id'] ===  'itemCmFromLeft')
