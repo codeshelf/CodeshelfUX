@@ -130,6 +130,46 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 		var newPath = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
 		 */
 
+		/*
+
+		Generated: 
+		{"CreatePathRequest":{
+			"facilityId":"fed0d5c0-2273-11e4-a00f-0c4de99ad9d1",
+			"domainId":"F1.1",
+			"pathSegments":[
+				{"segmentOrder":0,"domainId":"F1.1.0","posTypeEnum":"METERS_FROM_PARENT","startPosX":null,"startPosY":null,"startPosZ":null,"endPosX":null,"endPosY":null,"endPosZ":null},
+				{"segmentOrder":1,"domainId":"F1.1.1","posTypeEnum":"METERS_FROM_PARENT","startPosX":null,"startPosY":null,"startPosZ":null,"endPosX":null,"endPosY":null,"endPosZ":null},
+				{"segmentOrder":2,"domainId":"F1.1.2","posTypeEnum":"METERS_FROM_PARENT","startPosX":null,"startPosY":null,"startPosZ":null,"endPosX":null,"endPosY":null,"endPosZ":null}
+			],
+			"messageId":"cid_12"
+		}}
+
+
+		Should-be:
+		{"CreatePathRequest":{
+			"messageId":"5b752530-23ee-11e4-bc68-48d705ccef0f",
+			"facilityId":"5b6bd660-23ee-11e4-bc68-48d705ccef0f",
+			"domainId":"DOMID-2",
+			"pathSegments":[
+				{"className":"PathSegment","domainId":"P.0","persistentId":null,"version":null,"posTypeEnum":"METERS_FROM_PARENT","startPoint":{"className":"Point","posTypeEnum":"METERS_FROM_PARENT","x":0.0,"y":0.0,"z":0.0},"endPoint":{"className":"Point","posTypeEnum":"METERS_FROM_PARENT","x":0.0,"y":0.0,"z":0.0}},
+				{"className":"PathSegment","domainId":"P.1","persistentId":null,"version":null,"posTypeEnum":"METERS_FROM_PARENT","startPoint":{"className":"Point","posTypeEnum":"METERS_FROM_PARENT","x":1.0,"y":1.0,"z":1.0},"endPoint":{"className":"Point","posTypeEnum":"METERS_FROM_PARENT","x":1.0,"y":1.0,"z":1.0}},
+				{"className":"PathSegment","domainId":"P.2","persistentId":null,"version":null,"posTypeEnum":"METERS_FROM_PARENT","startPoint":{"className":"Point","posTypeEnum":"METERS_FROM_PARENT","x":2.0,"y":2.0,"z":2.0},"endPoint":{"className":"Point","posTypeEnum":"METERS_FROM_PARENT","x":2.0,"y":2.0,"z":2.0}}
+			]
+		}}
+		
+		
+		*/
+		
+		var cmd = {
+			CreatePathRequest : {
+				'facilityId' : facility_['persistentId'],
+				'domainId' : path['domainId'],
+				'pathSegments' : path['segments']
+			}
+		};
+		websession_.sendCommand(cmd, callbackForCreatePath(), false);
+		
+		/*
 		var className = domainobjects['Facility']['className'];
 		var persistentId = facility_['persistentId'];
 		var methodArgs = [
@@ -137,7 +177,9 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 		                  {name: 'segments', value: path.segments, 'classType': '[Lcom.gadgetworks.codeshelf.model.domain.PathSegment;'}
 					];
 		var newPath = websession_.createObjectMethodRequest(className,persistentId,'createPath',methodArgs)
+		
 		websession_.sendCommand(newPath, callbackForCreatePath(), false);
+		*/
 
 		var theLogger = goog.debug.Logger.getLogger('Work Area Editor');
 		theLogger.info("saved a new path");
