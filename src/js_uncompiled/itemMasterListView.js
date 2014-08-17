@@ -120,8 +120,13 @@ codeshelf.itemmasterlistview = function(websession, facility) {
 	var hierarchyMap = [];
 	hierarchyMap[0] = { "className": domainobjects['ItemMaster']['className'], "linkProperty": 'parent', "filter" : itemMasterFilter, "filterParams" : itemMasterFilterParams, "properties": domainobjects['ItemMaster']['properties'] };
 
-	// -1 for non-dragable. Single level view with normal sort rules
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['ItemMaster'], hierarchyMap, -1);
+	var viewOptions = {
+		'editable':  true,
+		// -1 for non-dragable. Single level view with normal sort rules
+		'draggableHierarchyLevel': -1
+	};
+
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['ItemMaster'], hierarchyMap, viewOptions);
 	jQuery.extend(view, self);
 	self = view;
 

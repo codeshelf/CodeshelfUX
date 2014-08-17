@@ -15,6 +15,7 @@ function Path(pathDomainId, pixelToMeters) {
 	this.addSegment = function (lineSegment) {
 		var segment = {};
 		segment['segmentOrder'] = this.segmentIndex++;
+		segment['className'] = 'PathSegment'
 		segment['domainId'] = pathDomainId + "." + segment['segmentOrder'];
 		segment['posTypeEnum'] = "METERS_FROM_PARENT";
 		segment['startPosX'] = pixelToMeters(lineSegment.startPoint.x);

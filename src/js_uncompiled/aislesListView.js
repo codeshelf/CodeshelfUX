@@ -163,8 +163,12 @@ codeshelf.aisleslistview = function(websession, facility) {
 	var hierarchyMap = [];
 	hierarchyMap[0] = { "className": domainobjects['Aisle']['className'], "linkProperty": 'parent', "filter" : aisleFilter, "filterParams" : aisleFilterParams, "properties": domainobjects['Aisle']['properties'] };
 
-	// -1 for non-dragable. Single level view with normal sort rules
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['Aisle'], hierarchyMap, -1);
+	var viewOptions = {
+		'editable':  true,
+		// -1 for non-dragable. Single level view with normal sort rules
+		'draggableHierarchyLevel': -1
+	};
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['Aisle'], hierarchyMap, viewOptions);
 	jQuery.extend(view, self);
 	self = view;
 

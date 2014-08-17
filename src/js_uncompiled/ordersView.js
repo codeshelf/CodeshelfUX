@@ -147,7 +147,12 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 		hierarchyMap[1] = { "className": domainobjects['OrderHeader']['className'], "linkProperty": 'orderGroup', "filter": orderHeaderFilter, "filterParams": undefined, "properties": domainobjects['OrderHeader']['properties'], "comparer": workSequenceComparer };
 		hierarchyMap[2] = { "className": domainobjects['OrderDetail']['className'], "linkProperty": 'parent', "filter": orderDetailFilter, "filterParams": undefined, "properties": domainobjects['OrderDetail']['properties'], "comparer": undefined };
 
-		view = codeshelf.hierarchylistview(websession_, domainobjects['OrderGroup'], hierarchyMap, 1);
+		var viewOptions = {
+			'editable':  true,
+			// -1 for non-dragable. Single level view with normal sort rules
+			'draggableHierarchyLevel': 1
+		};
+		view = codeshelf.hierarchylistview(websession_, domainobjects['OrderGroup'], hierarchyMap,viewOptions);
 	} else {
 		// This is only used if NOT getHasOrderGroups(). See below. undefined used for orderGroups as there is no parameter to substitute.
 		// Probably would be good to parameterize much more: orderTypeEnum in particular.
@@ -158,8 +163,12 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 		// Accu-Logistics and many sites have no group at all, or are missing many. Just ignore and do the order headers.
 		hierarchyMap[0] = { "className": domainobjects['OrderHeader']['className'], "linkProperty": 'parent', "filter": orderHeaderFilter, "filterParams": orderHeaderFilterParams, "properties": domainobjects['OrderHeader']['properties'], "comparer": workSequenceComparer };
 		hierarchyMap[1] = { "className": domainobjects['OrderDetail']['className'], "linkProperty": 'parent', "filter": orderDetailFilter, "filterParams": undefined, "properties": domainobjects['OrderDetail']['properties'], "comparer": undefined };
-
-		view = codeshelf.hierarchylistview(websession_, domainobjects['OrderHeader'], hierarchyMap, 1);
+		var viewOptions = {
+			'editable':  true,
+			// -1 for non-dragable. Single level view with normal sort rules
+			'draggableHierarchyLevel': -1
+		};
+		view = codeshelf.hierarchylistview(websession_, domainobjects['OrderHeader'], hierarchyMap, viewOptions);
 	}
 
 	jQuery.extend(view, self);

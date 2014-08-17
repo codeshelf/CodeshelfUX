@@ -74,8 +74,12 @@ codeshelf.workareaview = function(websession, facility) {
 	hierarchyMap[1] = { "className": domainobjects['WorkArea']['className'], "linkProperty": 'parent', "filter" : undefined, "filterParams" : undefined, "properties": domainobjects['WorkArea']['properties'] };
 	hierarchyMap[2] = { "className": domainobjects['WorkInstruction']['className'], "linkProperty": 'parent', "filter" : undefined, "filterParams" : undefined, "properties": domainobjects['WorkInstruction']['properties'] };
 
-	// We want this view to extend the root/parent view, but we want to return this view.
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['Path'], hierarchyMap, 0);
+	var viewOptions = {
+		'editable':  true,
+		// -1 for non-dragable. Single level view with normal sort rules
+		'draggableHierarchyLevel': 0
+	};
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['Path'], hierarchyMap, viewOptions);
 	jQuery.extend(view, self);
 	self = view;
 

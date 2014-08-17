@@ -141,8 +141,12 @@ codeshelf.containeruselistview = function(websession, facility, inChe) {
 	var hierarchyMap = [];
 	hierarchyMap[0] = { "className": domainobjects['ContainerUse']['className'], "linkProperty": 'parent', "filter" : containerUseFilter, "filterParams" : containerUseFilterParams, "properties": domainobjects['ContainerUse']['properties'] };
 
-	// -1 for non-dragable. Single level view with normal sort rules
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['ContainerUse'], hierarchyMap, -1);
+	var viewOptions = {
+		'editable':  true,
+		// -1 for non-dragable. Single level view with normal sort rules
+		'draggableHierarchyLevel': -1
+	};
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['ContainerUse'], hierarchyMap, viewOptions);
 	jQuery.extend(view, self);
 	self = view;
 

@@ -3,6 +3,10 @@ goog.require('goog.array');
 
 describe('hierarchyListView', function() {
 	var websession, jqPane, pane;
+	var viewOptions = {
+		editable: true,
+		draggableHierarchyLevel: -1
+	};
 
 	beforeEach(function() {
 		websession = jasmine.createSpyObj('websession', ['createCommand', 'sendCommand', 'createRegisterFilterRequest']);
@@ -12,7 +16,7 @@ describe('hierarchyListView', function() {
 
 	it("initialize view", function() {
 		var hierarchyLevel = createDefaultLevel();
-		var listview = codeshelf.hierarchylistview(websession, {}, [hierarchyLevel], -1);
+		var listview = codeshelf.hierarchylistview(websession, {}, [hierarchyLevel], viewOptions);
 		listview.setupView(pane);
 		var total = getAllColumnIds(hierarchyLevel).length;
 		expect(getRenderedColumns().size()).toEqual(total);
@@ -25,7 +29,7 @@ describe('hierarchyListView', function() {
 
 			var total = getAllColumnIds(hierarchyLevelDef).length;
 			expect(total).not.toEqual(0);
-			var listview = codeshelf.hierarchylistview(websession, {}, [hierarchyLevelDef], -1);
+			var listview = codeshelf.hierarchylistview(websession, {}, [hierarchyLevelDef], viewOptions);
 			listview.setupView(pane);
 			expect(getRenderedColumns().size()).toEqual(total);
 
@@ -34,7 +38,7 @@ describe('hierarchyListView', function() {
 		it("handles levels with no actions", function() {
 			var hierarchyLevelDef = createDefaultLevel();
 			delete(hierarchyLevelDef.actions);
-			var listview = codeshelf.hierarchylistview(websession, {}, [hierarchyLevelDef], -1);
+			var listview = codeshelf.hierarchylistview(websession, {}, [hierarchyLevelDef], viewOptions);
 			listview.setupView(pane);
 			var total = getAllColumnIds(hierarchyLevelDef).length;
 			expect(getRenderedColumns().size()).toEqual(total);
@@ -46,7 +50,7 @@ describe('hierarchyListView', function() {
 			hierarchyLevelDef2.properties  = goog.object.clone(hierarchyLevelDef2.properties);
 			hierarchyLevelDef2.properties["additional"] = createProperty("additional");
 
-			var listview = codeshelf.hierarchylistview(websession, {}, [hierarchyLevelDef1, hierarchyLevelDef2], -1);
+			var listview = codeshelf.hierarchylistview(websession, {}, [hierarchyLevelDef1, hierarchyLevelDef2], viewOptions);
 			listview.setupView(pane);
 			var total = getAllColumnIds(hierarchyLevelDef1).length + 1;
 			expect(getRenderedColumns().size()).toEqual(total);
@@ -71,7 +75,7 @@ describe('hierarchyListView', function() {
 			var hierarchyLevelDef1 = createLevel([createProperty("idToShow"), createProperty("idToHide")], []);
 
 
-			var listview = codeshelf.hierarchylistview(websession, {}, [hierarchyLevelDef1], -1);
+			var listview = codeshelf.hierarchylistview(websession, {}, [hierarchyLevelDef1], viewOptions);
 			jQuery.extend(listview, self);
 			listview.setupView(pane);
 			expect(getAllColumnIds(hierarchyLevelDef1).length).toEqual(2);
