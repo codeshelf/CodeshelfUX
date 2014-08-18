@@ -34,11 +34,11 @@ codeshelfApp.PathSegmentService.prototype.getPathSegments = function() {
 	};
 	var setListViewFilterCmd = this.websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 	*/
-	
+
 	var className = domainobjects['PathSegment']['className'];
 	var propertyNames = Object.keys(domainobjects['PathSegment']['properties']);
-	var setListViewFilterCmd = createRegisterFilterRequest(className,propertyNames,filter,filterParams);
-	this.websession_.sendCommand(setListViewFilterCmd,this.filterResponseCallback_(deferred),true);
+	var setListViewFilterCmd = this.websession_.createRegisterFilterRequest(className,propertyNames,filter,filterParams);
+	this.websession_.sendCommand(setListViewFilterCmd,this.filterResponseCallback_(deferred),false);
 	return deferred.promise;
 };
 
@@ -46,7 +46,7 @@ codeshelfApp.PathSegmentService.prototype.filterResponseCallback_ = function(def
 	var callback = {
 		exec: function(type,command) {
 			if (type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-				deferred.resolve(command['data']['results']);
+				deferred.resolve(command['results']);
 			}
 		}
 	};

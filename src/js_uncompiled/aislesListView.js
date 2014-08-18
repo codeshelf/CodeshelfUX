@@ -272,8 +272,8 @@ codeshelfApp.AisleLedController.prototype.ok = function(){
 
 		var channelStr = aisle['ledChannel'];
 		var methodArgs = [
-			{ 'name': 'inControllerPersistentIDStr', 'value': cntlrPersistId, 'classType': 'java.lang.String'},
-			{ 'name': 'inChannelStr', 'value': channelStr, 'classType': 'java.lang.String'}
+			{ 'name': 'inControllerPersistentIDStr', 'value': String(cntlrPersistId), 'classType': 'java.lang.String'},
+			{ 'name': 'inChannelStr', 'value': String(channelStr), 'classType': 'java.lang.String'}
 		];
 
 		codeshelf.objectUpdater.callMethod(aisle, 'Aisle', 'setControllerChannel', methodArgs);
