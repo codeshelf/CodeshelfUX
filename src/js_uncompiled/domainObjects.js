@@ -68,6 +68,11 @@ domainobjects = {
 				'id':    'primaryAliasId',
 				'title': 'Alias',
 				'width': 10
+			},
+			'verticesUi': {
+				'id': 'verticesUi',
+				'title': 'Vertices',
+				'width': 40
 			}
 		}
 	},
@@ -134,6 +139,11 @@ domainobjects = {
 				'id':    'primaryAliasId',
 				'title': 'Alias',
 				'width': 10
+			},
+			'verticesUi': {
+				'id': 'verticesUi',
+				'title': 'Vertices',
+				'width': 40
 			}
 		}
 	},
