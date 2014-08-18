@@ -358,7 +358,7 @@ domainobjects = {
 				'id':    'itemCmFromLeft',
 				'title': 'CM From Left',
 				'width': 10,
-				'editor': Slick.Editors.Integer,
+				'editor': Slick.Editors.Text,
 				'focusable': true
 			},
 			'uomMasterId':         {
