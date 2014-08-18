@@ -132,7 +132,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 		/*
 
-		Generated: 
+		Generated:
 		{"CreatePathRequest":{
 			"facilityId":"fed0d5c0-2273-11e4-a00f-0c4de99ad9d1",
 			"domainId":"F1.1",
@@ -156,19 +156,19 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 				{"className":"PathSegment","domainId":"P.2","persistentId":null,"version":null,"posTypeEnum":"METERS_FROM_PARENT","startPoint":{"className":"Point","posTypeEnum":"METERS_FROM_PARENT","x":2.0,"y":2.0,"z":2.0},"endPoint":{"className":"Point","posTypeEnum":"METERS_FROM_PARENT","x":2.0,"y":2.0,"z":2.0}}
 			]
 		}}
-		
-		
+
+
 		*/
-		
+
 		var cmd = {
-			CreatePathRequest : {
+			'CreatePathRequest' : {
 				'facilityId' : facility_['persistentId'],
 				'domainId' : path['domainId'],
 				'pathSegments' : path['segments']
 			}
 		};
 		websession_.sendCommand(cmd, callbackForCreatePath(), false);
-		
+
 		/*
 		var className = domainobjects['Facility']['className'];
 		var persistentId = facility_['persistentId'];
@@ -177,7 +177,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 		                  {name: 'segments', value: path.segments, 'classType': '[Lcom.gadgetworks.codeshelf.model.domain.PathSegment;'}
 					];
 		var newPath = websession_.createObjectMethodRequest(className,persistentId,'createPath',methodArgs)
-		
+
 		websession_.sendCommand(newPath, callbackForCreatePath(), false);
 		*/
 
@@ -861,11 +861,11 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			};
 			var aisleFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, aisleFilterData);
 			*/
-			
+
 			var className = domainobjects['Aisle']['className'];
 			var propertyNames = ['domainId', 'anchorPosX', 'anchorPosY'];
 			var filterClause = 'parent.persistentId = :theId';
-			var filterParams = [{ 'name': 'theId', 'value': facility_['persistentId']}]; 
+			var filterParams = [{ 'name': 'theId', 'value': facility_['persistentId']}];
 			var aisleFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
 			websession_.sendCommand(aisleFilterCmd, websocketCmdCallbackAisle(), true);
 
@@ -881,7 +881,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			};
 			var pathFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, pathFilterData);
 			*/
-			
+
 			var className = domainobjects['Path']['className'];
 			var propertyNames = ['domainId', 'travelDirEnum'];
 			var filterClause = 'parent.persistentId = :theId';
@@ -1140,7 +1140,7 @@ codeshelfApp.WorkAreaModalCtrl.prototype.sendCreateAisleCommand = function (aisl
 
 		var aisleId = (aisle['aisleId']) ? aisle['aisleId'].toUpperCase() : '';
 		var controllerId = (aisle['controllerId']) ? aisle['controllerId'].toLowerCase() : '';
-		
+
 		/*
 		var data = {
 			'className': this.scope_.facilityContext['className'],
@@ -1159,7 +1159,7 @@ codeshelfApp.WorkAreaModalCtrl.prototype.sendCreateAisleCommand = function (aisl
 		};
 		var createAisleCmd = this.scope_.websession.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
 		*/
-		
+
 		var className = this.scope_.facilityContext['className'];
 		var persistentId = this.scope_.facilityContext['facility']['persistentId'];
 		var methodArgs = [
@@ -1173,7 +1173,7 @@ codeshelfApp.WorkAreaModalCtrl.prototype.sendCreateAisleCommand = function (aisl
 						{ 'name': 'inLeftHandBay', 'value': aisle['isLeftHandBay'], 'classType': 'java.lang.Boolean'}
 					];
 		var createAisleCmd = this.scope_.createObjectMethodRequest(className,persistentId,'createAisle',methodArgs)
-		
+
 		var scope = this.scope_;
 		var callback = {
 			'exec': function (type,response) {
