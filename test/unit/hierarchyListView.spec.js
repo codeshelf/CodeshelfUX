@@ -99,8 +99,6 @@ describe('hierarchyListView', function() {
 
 	describe("default comparer for level", function() {
 
-
-
 		it("returns zero if properties have undefined values", function() {
 			var itemA = {
 				"first": undefined
@@ -164,13 +162,13 @@ describe('hierarchyListView', function() {
 
 		});
 
-		it("if property is string sorts localeCompare", function() {
+		it("if property is string sorts alphanumeric", function() {
 			var itemA = {
-				"first": "a",
+				"first": "A9",
 				"second": 1
 			};
 			var itemB = {
-				"first": "b",
+				"first": "A10",
 				"second": 1
 			};
 

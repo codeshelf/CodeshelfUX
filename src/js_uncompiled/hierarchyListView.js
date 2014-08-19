@@ -6,6 +6,7 @@ goog.require('goog.debug');
 goog.require('goog.debug.Logger');
 goog.require('goog.async.Delay');
 goog.require('goog.object');
+goog.require('codeshelf.ASCIIAlphaNumericComparer');
 //require jquery ui resizable
 /**
  * @param {Array.<codeshelf.HierarchyLevel>} hierarchyMap
@@ -592,7 +593,7 @@ codeshelf.grid.propertyComparer = function(getPropertiesFunc, itemA, itemB) {
 			}
 		}
 		else if (typeof valueA === "string" && typeof valueB === "string"){
-			result =  goog.string.caseInsensitiveCompare(valueA, valueB);
+			result =  codeshelf.ASCIIAlphaNumericComparer(valueA, valueB);
 			if (result != 0) {
 				break;
 			}
