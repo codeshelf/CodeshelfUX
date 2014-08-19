@@ -63,9 +63,9 @@ function PathTool(canvas, createPath) {
 
 	/**
      * @returns {{
-	   x: Number,
-	   y: Number,
-	   z: Number
+	   x: number,
+	   y: number,
+	   z: number
 	 }}
      */
 	function convertClickToPoint(click) {

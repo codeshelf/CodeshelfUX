@@ -234,9 +234,9 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 	}
 
 	/**
-	 * @param {string}
-	 * @param {Object}
-	 * @param {?number}
+	 * @param {string} className
+	 * @param {Object} jqCell
+	 * @param {?number} speed
      */
     function flashCell(className, jqCell, speed) {
       speed = speed || 100;
