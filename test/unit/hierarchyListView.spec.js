@@ -99,6 +99,21 @@ describe('hierarchyListView', function() {
 
 	describe("default comparer for level", function() {
 
+		it("returns item with null property first", function() {
+			var itemA = {
+				"first": "A"
+			};
+			var itemB = {
+				"first": null
+			};
+
+
+			var comparer = createComparer(["first"]);
+			expect(comparer(itemA, itemB)).toEqual(1);
+
+		});
+
+
 		it("returns zero if properties have undefined values", function() {
 			var itemA = {
 				"first": undefined

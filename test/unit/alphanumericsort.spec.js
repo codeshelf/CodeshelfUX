@@ -37,4 +37,16 @@ describe('alphanumericsort', function() {
 		expect(testStrings).toEqual(["A1.T1", "A1.T1"]);
 	});
 
+	it("sorts null to front", function() {
+		var testStrings = ["A1.T1", null];
+		testStrings.sort(alphaNumericComparer);
+		expect(testStrings).toEqual([null, "A1.T1"]);
+	});
+
+	it("sorts empty to front", function() {
+		var testStrings = ["A1.T1", ""];
+		testStrings.sort(alphaNumericComparer);
+		expect(testStrings).toEqual(["", "A1.T1"]);
+	});
+
 });

@@ -579,7 +579,10 @@ codeshelf.grid.propertyComparer = function(getPropertiesFunc, itemA, itemB) {
 
 		// remember that NaN === NaN returns false
 		// and isNaN(undefined) returns true
-		if (typeof valueA === "undefined" && typeof valueB === "undefined") {
+		if (valueA == null && valueB == null) {
+			result =  0;
+		}
+		else if (typeof valueA === "undefined" && typeof valueB === "undefined") {
 			result = 0;
 		}
 		else if (isNaN(valueA) && isNaN(valueB)
@@ -607,16 +610,16 @@ codeshelf.grid.propertyComparer = function(getPropertiesFunc, itemA, itemB) {
 			}
 		}
 		else { //attempt string compare as default
-			if (typeof valueA === "undefined") {
-				result = 1;
-				break;
-			}
-			else if (typeof valueB === "undefined"){
+			if (typeof valueA === "undefined" || valueA == null) {
 				result = -1;
 				break;
 			}
+			else if (typeof valueB === "undefined" || valueB == null){
+				result = 1;
+				break;
+			}
 			else {
-				result =  goog.string.caseInsensitiveCompare(valueA.toString(), valueB.toString());
+				result = codeshelf.ASCIIAlphaNumericComparer(valueA.toString(), valueB.toString());
 				if (result != 0) {
 					break;
 				}
