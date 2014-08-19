@@ -32,8 +32,6 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inItem
 	var itemMasterId_ = inItemMasterId;
 	var order_ = inOrder;
 
-	var contextMenu_;
-
 	var self = {
 
 		// somewhat variable default fields depending on what sort of list this is
@@ -51,7 +49,7 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inItem
 			else if (inProperty['id'] ===  'uomMasterId')
 				return true;
 			else if (inProperty['id'] ===  'groupAndSortCode')
-				return goog.string.isEmpty(itemMasterId_) // mostly completed WIs in item WI list. Sort code is irrelevant
+				return goog.string.isEmpty(itemMasterId_); // mostly completed WIs in item WI list. Sort code is irrelevant
 			else if (inProperty['id'] ===  'assignedCheName')
 				return (che_ === null); //list title has the CHE if a CHE wi list
 			else if (inProperty['id'] ===  'completeTimeForUi')
@@ -72,41 +70,6 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inItem
 			}
 			return returnStr;
 		},
-
-		setupContextMenu: function() {
-			var contextDefs = [
-				{
-					"label": "TESTING ONLY-Complete",
-					"permission": "workinstructions:simulate",
-					"action": function(itemContext) {
-						self.completeWorkInstruction(itemContext);
-					}
-				},
-				{
-					"label": "TESTING ONLY-Short",
-					"permission": "workinstructions:simulate",
-					"action": function(itemContext) {
-						self.shortWorkInstruction(itemContext);
-					}
-				}
-			];
-
-			var filteredContextDefs = goog.array.filter(contextDefs, function(contextDef) {
-				var permissionNeeded = contextDef["permission"];
-				return websession_.getAuthz().hasPermission(permissionNeeded);
-			});
-			contextMenu_ = new codeshelf.ContextMenu(filteredContextDefs);
-			contextMenu_.setupContextMenu();
-		},
-
-		doContextMenu: function(event, item, column) {
-			contextMenu_.doContextMenu(event, item, column);
-		},
-
-		closeContextMenu: function(item) {
-			contextMenu_.closeContextMenu(item);
-		},
-
 
 		doFakeCompleteWorkInstruction: function(item, inUpdateKind) {
 			var wi = item;
@@ -134,7 +97,7 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inItem
 
 		// Experiments
 		// Does not work:  "assignedChePersistentid = :theId";      // seems like it could work, and would if there were a text field
-																	// assignedChePersistentid that would persist as assigned_che_persistentid
+		// assignedChePersistentid that would persist as assigned_che_persistentid
 
 		// Does work PREFERRED:  "assignedChe = :theId";            // the work instruction java field name is assignedChe
 		// Does work:  "assigned_che_persistentid = :theId";        // the database field is assigned_che_persistentid for field assignedChe
@@ -160,11 +123,28 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inItem
 
 		workInstructionFilterParams = [
 			{ 'name': 'theId', 'value': facility_['persistentId']}
-		];	}
+		];
+	}
 
+	var contextDefs = [
+		{
+			"label": "TESTING ONLY-Complete",
+			"permission": "workinstructions:simulate",
+			"action": function(itemContext) {
+				self.completeWorkInstruction(itemContext);
+			}
+		},
+		{
+			"label": "TESTING ONLY-Short",
+			"permission": "workinstructions:simulate",
+			"action": function(itemContext) {
+				self.shortWorkInstruction(itemContext);
+			}
+		}
+	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['WorkInstruction']['className'], "linkProperty": 'parent', "filter" : workInstructionFilter, "filterParams" : workInstructionFilterParams, "properties": domainobjects['WorkInstruction']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['WorkInstruction']['className'], "linkProperty": 'parent', "filter" : workInstructionFilter, "filterParams" : workInstructionFilterParams, "properties": domainobjects['WorkInstruction']['properties'], "contextMenuDefs" : contextDefs };
 
 	var viewOptions = {
 		'editable':  true,

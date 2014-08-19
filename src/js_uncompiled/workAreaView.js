@@ -27,8 +27,6 @@ codeshelf.workareaview = function(websession, facility) {
 	var websession_ = websession;
 	var facility_ = facility;
 
-	var contextMenu_;
-
 	/* not called, but this dialog is the better example of link dialog */
 	function testDialog(event) {
 		if ($(event.target).data("option") == "test_dialog") {

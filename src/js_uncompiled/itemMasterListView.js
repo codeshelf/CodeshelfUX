@@ -28,10 +28,6 @@ codeshelf.itemmasterlistview = function(websession, facility) {
 
 	var websession_ = websession;
 	var facility_ = facility; // not used here, but the ancestor view wants facility in the constructor
-
-	var contextMenu_;
-
-
 	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function(command) {
@@ -63,39 +59,6 @@ codeshelf.itemmasterlistview = function(websession, facility) {
 			return returnStr;
 		},
 
-		setupContextMenu: function() {
-			var contextDefs = [
-				{
-					"label" : "Work Instructions for this Item</a>",
-					"permission": "workInstruction:view",
-					"action": function(itemContext) {
-						self.doLaunchWorkInstructionList(itemContext);
-					}
-				}
-			];
-			var filteredContextDefs = goog.array.filter(contextDefs, function(contextDef) {
-				var permissionNeeded = contextDef["permission"];
-				return websession_.getAuthz().hasPermission(permissionNeeded);
-			});
-			contextMenu_ = new codeshelf.ContextMenu(filteredContextDefs);
-			contextMenu_.setupContextMenu();
-		},
-
-		doContextMenu: function(event, item, column) {
-			if (event && event.stopPropagation)
-				event.stopPropagation();
-
-			event.preventDefault();
-
-			if (view.getItemLevel(item) === 0) {
-				contextMenu_.doContextMenu(event, item, column);
-			}
-		},
-
-		closeContextMenu: function(item) {
-			contextMenu_.closeContextMenu(item);
-		},
-
 		doLaunchWorkInstructionList: function(item) {
 			var masterPersistentId = item.persistentId;
 			var wiListView = codeshelf.workinstructionlistview(codeshelf.sessionGlobals.getWebsession(),codeshelf.sessionGlobals.getFacility(), null, masterPersistentId, null);
@@ -104,6 +67,16 @@ codeshelf.itemmasterlistview = function(websession, facility) {
 		}
 
 	};
+
+	var contextDefs = [
+		{
+			"label" : "Work Instructions for this Item</a>",
+			"permission": "workInstruction:view",
+			"action": function(itemContext) {
+				self.doLaunchWorkInstructionList(itemContext);
+			}
+		}
+	];
 
 	// If che_ is null, then all active container uses for this facility. If che passed in, then only container uses on that CHE.
 	var itemMasterFilter;
@@ -118,7 +91,7 @@ codeshelf.itemmasterlistview = function(websession, facility) {
 
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['ItemMaster']['className'], "linkProperty": 'parent', "filter" : itemMasterFilter, "filterParams" : itemMasterFilterParams, "properties": domainobjects['ItemMaster']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['ItemMaster']['className'], "linkProperty": 'parent', "filter" : itemMasterFilter, "filterParams" : itemMasterFilterParams, "properties": domainobjects['ItemMaster']['properties'], "contextMenuDefs" : contextDefs };
 
 	var viewOptions = {
 		'editable':  true,

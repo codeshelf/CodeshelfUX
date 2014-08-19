@@ -32,9 +32,6 @@ codeshelf.itemlistview = function(websession, facility) {
 	var websession_ = websession;
 	var facility_ = facility; // not used here, but the ancestor view wants facility in the constructor
 
-	var contextMenu_;
-
-
 	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function(command) {

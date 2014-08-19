@@ -34,6 +34,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 	var dataView_;
 	var grid_;
 	var selectedRowIds_ = [];
+	var contextMenusByLevel_ = [];
 
 	// Compute the columns we need for this domain object.
 	var columns_ = [];
@@ -139,11 +140,20 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 	}
 
 	function dispatchContextMenu(event) {
+		if (event && event.stopPropagation) {
+			event.stopPropagation();
+
+		}
+		event.preventDefault();
+
 		var cell = grid_.getCellFromEvent(event);
 		var item = dataView_.getItem(cell.row);
-		self_.doContextMenu(event, item, columns_[cell.cell]);
+		var itemLevel = view.getItemLevel(item);
+		var contextMenu = contextMenusByLevel_[itemLevel];
+		if (contextMenu != null) {
+			contextMenu.doContextMenu(event, item, columns_[cell.cell]);
+		}
 	}
-
 
 	/**
 	 * Figure our what level this item is on based on the class hierarchy.
@@ -264,6 +274,31 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 			});
 	}
 
+	function setupContextMenus(hierarchyMap) {
+		for(var i = 0; i < hierarchyMap.length; i++) {
+			var hierarchyMapDef = hierarchyMap[i];
+			var contextMenuDefs = hierarchyMapDef["contextMenuDefs"];
+			if (contextMenuDefs == null) {
+				contextMenuDefs = [];
+			}
+			var filteredContextDefs = goog.array.filter(contextMenuDefs, function(contextDef) {
+				var permissionNeeded = contextDef["permission"];
+				return websession_.getAuthz().hasPermission(permissionNeeded);
+			});
+			var contextMenu = null;
+			if (filteredContextDefs.length > 0 ) {
+				contextMenu = new codeshelf.ContextMenu(filteredContextDefs);
+				contextMenu.setupContextMenu();
+			}
+			contextMenusByLevel_.push(contextMenu);
+		}
+	}
+
+
+	function hasContextMenu() {
+		return goog.array.some(contextMenusByLevel_, function(contextMenu) { return contextMenu != null;});
+	}
+
 	var self_ = {
 		logger: goog.debug.Logger.getLogger('hierarch list view'),
 
@@ -271,9 +306,6 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 
 			columns_ = codeshelf.grid.toColumnsForHierarchy(hierarchyMap_);
 
-			var extraColumns = goog.array.filter(columns_, function() {
-				return (this.hasOwnProperty('shouldAddThisColumn') &&  !this['shouldAddThisColumn'](property));
-			});
 			var computedProperties = goog.array.reduce(columns_, function(ids, column) {
 				ids.push(column.id);
 				return ids;
@@ -315,19 +347,20 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 
 			goog.dom.appendChild(self_.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
+
+			setupContextMenus(hierarchyMap_);
 			// setupContextMenu is another psuedo-inheritance pattern thing. No base class method. Just assume it is probably there.
 			// If not there, the view will not open correctly. There is no way to check from here whether the descended class has property 'setupContextMenu'.
-			if (typeof self_.setupContextMenu === 'function') {
-				self_.setupContextMenu();
+			if (hasContextMenu()) {
 				columns_.push(createContextMenuColumn());
 			}
 
 			dataView_ = new Slick.Data.DataView();
 			grid_ = new Slick.Grid(self_.getMainPaneElement(), dataView_, columns_, options_);
 
-			grid_.onDragInit.subscribe(function(event, args) {
-				var blah = 1;
-			});
+			if (hasContextMenu()) {
+				grid_.onContextMenu.subscribe (dispatchContextMenu);
+			}
 
 			// Setup the selection model.
 			grid_.setSelectionModel(new Slick.CellSelectionModel());
@@ -449,8 +482,6 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 					                 });
 			});
 
-			grid_.onContextMenu.subscribe(dispatchContextMenu);
-
 			grid_.onCellChange.subscribe(function(e, args) {
 				logger_.fine("Cell changed" + goog.debug.expose(args));
 			});
@@ -463,7 +494,11 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 			if (self_.hasOwnProperty('shouldAddThisColumn')) {
 				var allColumns = grid_.getColumns();
 				var columnsToShow = goog.array.filter(allColumns, function(column) {
-					return self_['shouldAddThisColumn'](column);
+					if (column['id'] == "context") {
+						return true;
+					} else {
+						return self_['shouldAddThisColumn'](column);
+					}
 				});
 				grid_.setColumns(columnsToShow);
 			}

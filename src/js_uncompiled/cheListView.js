@@ -29,9 +29,6 @@ codeshelf.cheslistview = function(websession, facility) {
 	var websession_ = websession;
 	var facility_ = facility; // defined above so it available to testOnlySetUpChe
 
-	var contextMenu_;
-
-
 	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function(command) {
@@ -61,62 +58,6 @@ codeshelf.cheslistview = function(websession, facility) {
 
 		getViewName: function() {
 			return 'CHE List View';
-		},
-
-		setupContextMenu: function() {
-			var contextDefs = [
-				{
-				"label": "Work Instructions",
-				"permission": "workinstructions:view",
-				"action": function(itemContext) {
-					self.cheWorkInstructions(itemContext);
-					}
-				},
-				{
-					"label": "Containers",
-					"permission": "containers:view",
-					"action": function(itemContext) {
-						self.cheContainers(itemContext);
-					}
-				},
-				{
-					"label": "Edit CHE",
-					"permission": "che:edit",
-					"action": function(itemContext) {
-						self.editChe(itemContext);
-					}
-				},
-				{
-					"label": "TESTING ONLY--Simulate cart set up",
-					"permission": "che:simulate",
-					"action": function(itemContext) {
-						self.testOnlySetUpChe(itemContext);
-					}
-				}
-
-			];
-
-			var filteredContextDefs = goog.array.filter(contextDefs, function(contextDef) {
-				var permissionNeeded = contextDef["permission"];
-				return websession_.getAuthz().hasPermission(permissionNeeded);
-			});
-			contextMenu_ = new codeshelf.ContextMenu(filteredContextDefs);
-			contextMenu_.setupContextMenu();
-		},
-
-		doContextMenu: function(event, item, column) {
-			if (event && event.stopPropagation)
-				event.stopPropagation();
-
-				event.preventDefault();
-
-			if (view.getItemLevel(item) === 0) {
-				contextMenu_.doContextMenu(event, item, column);
-			}
-		},
-
-		closeContextMenu: function(item) {
-			contextMenu_.closeContextMenu(item);
 		},
 
 		editChe:  function(che){
@@ -173,6 +114,39 @@ codeshelf.cheslistview = function(websession, facility) {
 		}
 
 	};
+
+	var contextDefs = [
+		{
+			"label": "Work Instructions",
+			"permission": "workinstructions:view",
+			"action": function(itemContext) {
+				self.cheWorkInstructions(itemContext);
+			}
+		},
+		{
+			"label": "Containers",
+			"permission": "containers:view",
+			"action": function(itemContext) {
+				self.cheContainers(itemContext);
+			}
+		},
+		{
+			"label": "Edit CHE",
+			"permission": "che:edit",
+			"action": function(itemContext) {
+				self.editChe(itemContext);
+			}
+		},
+		{
+			"label": "TESTING ONLY--Simulate cart set up",
+			"permission": "che:simulate",
+			"action": function(itemContext) {
+				self.testOnlySetUpChe(itemContext);
+			}
+		}
+
+	];
+
 	// che parent is codeshelf_network, whose parent is the facility
 	var cheFilter = 'parent.parent.persistentId = :theId';
 
@@ -181,7 +155,12 @@ codeshelf.cheslistview = function(websession, facility) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['Che']['className'], "linkProperty": 'parent', "filter" : cheFilter, "filterParams" : cheFilterParams, "properties": domainobjects['Che']['properties']	};
+	hierarchyMap[0] = { "className": domainobjects['Che']['className'],
+						"linkProperty": 'parent',
+						"filter" : cheFilter,
+						"filterParams" : cheFilterParams,
+						"properties": domainobjects['Che']['properties'],
+						"contextMenuDefs": contextDefs};
 
 	var viewOptions = {
 		'editable':  true,
@@ -192,7 +171,6 @@ codeshelf.cheslistview = function(websession, facility) {
 	var view = codeshelf.hierarchylistview(websession_, domainobjects['Che'], hierarchyMap, viewOptions);
 	jQuery.extend(view, self);
 	self = view;
-
 	return view;
 };
 

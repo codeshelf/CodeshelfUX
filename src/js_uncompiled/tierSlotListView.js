@@ -29,8 +29,6 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 	var facility_ = facility; // not used here, but the ancestor view wants facility in the constructor
 	var tier_ = inTier;
 
-	var contextMenu_;
-
 	var self = {
 		// following psuedo-inheritance
 		'shouldAddThisColumn': function(inProperty){
