@@ -6,7 +6,7 @@ goog.require('goog.debug');
 goog.require('goog.debug.Logger');
 goog.require('goog.async.Delay');
 goog.require('goog.object');
-goog.require('codeshelf.ASCIIAlphaNumericComparer');
+
 //require jquery ui resizable
 /**
  * @param {Array.<codeshelf.HierarchyLevel>} hierarchyMap
@@ -193,45 +193,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 		return column;
 	}
 
-	function newComparer() {
-		var comparer = new codeshelf.MultilevelComparer(hierarchyMap_, dataView_.getItems());
+	function newMultilevelCompareFunction(sortAsc) {
+			var comparer = new codeshelf.MultilevelComparer(hierarchyMap_, dataView_.getItems(), grid_.getColumns(), sortAsc);
 		var compareFunction = goog.bind(comparer.compare, comparer);
 		return compareFunction;
-	}
-
-	/**
-     * returns a compare function by providing a getPropertiesFunc to
-     *   codeshelf.grid.propertyComparer
-     * @type {function(!Object, !Object)}
-     */
-	function createDefaultComparer() {
-
-		function gridColumnsToProperties() {
-			var columns = grid_.getColumns();
-			var columnIds = goog.array.map(columns, function(column) {
-				return column["id"];
-			});
-			return columnIds;
-		}
-
-		var partialPropertyCompareFunc = goog.partial(codeshelf.grid.propertyComparer, gridColumnsToProperties);
-
-		return function(itemA, itemB) {
-
-			if  (itemA['persistentId'] == itemB['persistentId']) {
-				return 0;
-			}
-			else {
-				var result = partialPropertyCompareFunc(itemA, itemB);
-				if (sortdir_) {
-					return result;
-				}
-				else {
-					return result*-1;
-				}
-
-			}
-		};
 	}
 
 	/**
@@ -300,6 +265,25 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 		return goog.array.some(contextMenusByLevel_, function(contextMenu) { return contextMenu != null;});
 	}
 
+	function sortDataView(dataView, sortAsc) {
+		dataView.sort(newMultilevelCompareFunction(sortAsc), true);
+	}
+
+	function setSortColumn(grid, column, sortAsc) {
+		/* Setting sortable false after the render removes the sort indicator whenever reordering is done
+		 var allColumns = grid.getColumns();
+		for(var i = 0; i < allColumns.length; i++) {
+			var sortable = false;
+			if (column['id'] == allColumns[i]['id']) {
+				sortable = true;
+			}
+			allColumns[i]['sortable'] = sortable;
+		}
+*/
+		grid_.setSortColumn(column['id'], sortAsc);
+
+	}
+
 	var self_ = {
 		logger: goog.debug.Logger.getLogger('hierarch list view'),
 
@@ -340,8 +324,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 				'forceFitColumns':      true,
 				'topPanelHeight':       25,
 				'autoEdit':             true,
-
-				cellHighlightCssClass: "cell-changed",
+				'multiColumnSort': false,
+				'cellHighlightCssClass': "cell-changed",
 
 				'editCommandHandler': editCommandHandler
 			};
@@ -377,22 +361,6 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 			// Setup the column picker, so the user can change the visible columns.
 			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
-			for(var i = 0; i < hierarchyMap_.length; i++) {
-				var hierarchyLevel = hierarchyMap_[i];
-				if (typeof hierarchyLevel["comparer"] === "undefined") {
-					hierarchyLevel["comparer"] = createDefaultComparer();
-				}
-			}
-
-			/*
-			var data = {
-				'className':     domainObject_['className'],
-				'propertyNames': computedProperties,
-				'filterClause':  hierarchyMap_[0]["filter"],
-				'filterParams':  hierarchyMap_[0]["filterParams"]
-			};
-			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-			*/
 			var setListViewFilterCmd = websession_.createRegisterFilterRequest(domainObject_['className'],computedProperties,hierarchyMap_[0]["filter"],hierarchyMap_[0]["filterParams"]);
 			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
 
@@ -426,7 +394,11 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 			});
 
 			grid_.onColumnsReordered.subscribe(function(event) {
-				dataView_.sort(newComparer(), sortdir_);
+				var sortCols = grid_.getSortColumns();
+				var firstSortAsc = sortCols[0]['sortAsc'];
+				var firstColumn = grid_.getColumns()[0];
+				setSortColumn(grid_, firstColumn, firstSortAsc);
+				sortDataView(dataView_, firstSortAsc);
 			});
 
 			grid_.onSelectedRowsChanged.subscribe(function(event) {
@@ -440,8 +412,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 			});
 
 			grid_.onSort.subscribe(function(event, args) {
-//				sortdir_ = args.sortAsc;
-				dataView_.sort(newComparer(), true);
+				if (!args['multiColumnSort']) {
+					var sortAsc = args.sortAsc;
+				}
+				sortDataView(dataView_, sortAsc);
 			});
 
 			// wire up model events to drive the grid
@@ -488,7 +462,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 			});
 
 			sortDelay_ = new goog.async.Delay(function() {
-				dataView_.sort(newComparer(), sortdir_);
+				var firstSortAsc = grid_.getSortColumns()[0]['sortAsc'];
+				sortDataView(dataView_, firstSortAsc);
 			}, 500);
 
 			// remove extra columns that are not part of this view's default set
@@ -502,6 +477,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 					}
 				});
 				grid_.setColumns(columnsToShow);
+				var sortAsc = true;
+				setSortColumn(grid_, columnsToShow[0], sortAsc);
 			}
 		},
 
@@ -567,69 +544,6 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 };
 goog.exportSymbol('codeshelf.hierarchylistview', codeshelf.hierarchylistview);
 
-codeshelf.grid = {};
-
-codeshelf.grid.propertyComparer = function(getPropertiesFunc, itemA, itemB) {
-	var result = 0;
-	var properties = getPropertiesFunc();
-	for(var i = 0; i < properties.length; i++) {
-		var property = properties[i];
-		var valueA = itemA[property];
-		var valueB = itemB[property];
-
-		// remember that NaN === NaN returns false
-		// and isNaN(undefined) returns true
-		if (valueA == null && valueB == null) {
-			result =  0;
-		}
-		else if (typeof valueA === "undefined" && typeof valueB === "undefined") {
-			result = 0;
-		}
-		else if (isNaN(valueA) && isNaN(valueB)
-			&& typeof valueA === 'number' && typeof valueB === 'number') {
-			result = 0;
-		}
-		else if (typeof valueA === 'number' && typeof valueB === 'number') {
-			if (valueA != valueB) {
-				result = (valueA < valueB) ? -1 : 1;
-				break;
-			}
-		}
-		else if (typeof valueA === "string" && typeof valueB === "string"){
-			result =  codeshelf.ASCIIAlphaNumericComparer(valueA, valueB);
-			if (result != 0) {
-				break;
-			}
-		}
-		else if (typeof valueA === "boolean" && typeof valueB === "boolean"){
-			if (valueA != valueB) {
-				if (valueA == true) {
-					result = -1;
-					break;
-				}
-			}
-		}
-		else { //attempt string compare as default
-			if (typeof valueA === "undefined" || valueA == null) {
-				result = -1;
-				break;
-			}
-			else if (typeof valueB === "undefined" || valueB == null){
-				result = 1;
-				break;
-			}
-			else {
-				result = codeshelf.ASCIIAlphaNumericComparer(valueA.toString(), valueB.toString());
-				if (result != 0) {
-					break;
-				}
-			}
-		}
-	}
-	return result;
-};
-
-
 
 codeshelf.grid.toColumnsForHierarchy = function(hierarchyLevels) {
 
@@ -659,12 +573,13 @@ codeshelf.grid.toColumns = function(hierarchyLevelDef) {
 					'name': propertyDef.title,
 					'field': propertyDef.id,
 					'behavior': 'select',
-					'headerCssClass': ' ',
+					//'headerCssClass': ' ',
+					defaultSortAsc: true,
 					'width': 10,
 					'cannotTriggerInsert': true,
 					'resizable': true,
 					'selectable': true,
-					'sortable': true,
+					'sortable': true,  //sortable so that it will set up structure for arrows
 					'focusable': false
 			};
 			goog.object.extend(newColumn, propertyDef);
@@ -710,7 +625,7 @@ codeshelf.grid.toButtonColumn = function(actionDef) {
 		'cannotTriggerInsert': true,
 		'resizable': true,
 		'selectable': false,
-		'sortable': true,
+		'sortable': false,
 		'formatter': formatter,
 		'cellClickHandler': cellClickHandler
 	};

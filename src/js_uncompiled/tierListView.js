@@ -220,7 +220,7 @@ codeshelfApp.TierController.prototype.ok = function(){
 	if (controller) {
 		var cntlrPersistId = controller['persistentId'];
 
-		var channelStr = tier['ledChannel'];
+		var channelStr = String(tier ['ledChannel']);
 		var methodArgs = [
 			{ 'name': 'inControllerPersistentIDStr', 'value': cntlrPersistId, 'classType': 'java.lang.String'},
 			{ 'name': 'inChannelStr', 'value': channelStr, 'classType': 'java.lang.String'},

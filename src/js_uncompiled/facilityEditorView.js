@@ -77,12 +77,12 @@ codeshelf.facilityeditorview = function (websession, facility) {
 
 				// update facility anchor point
 				// If this was the anchor vertex then set the location of the facility as well.
-				updateAnchor(event.latLng.lng(), event.latLng.lat(), 0.0);
+				updateAnchorPoint(event.latLng.lng(), event.latLng.lat(), 0.0);
 			}
 		}, 250);
 	}
 
-	function updateAnchor(x, y, z) {
+	function updateAnchorPoint(x, y, z) {
 		var methodArgs = [
 			{'name': 'x', 'value': x, 'classType': 'java.lang.Double'},
 			{'name': 'y', 'value': y, 'classType': 'java.lang.Double'},
@@ -90,7 +90,7 @@ codeshelf.facilityeditorview = function (websession, facility) {
 		];
 		var className = domainobjects['Facility']['className'];
 		var persistentId = facility_['persistentId'];
-		var newVertexCmd = websession_.createObjectMethodRequest(className,persistentId,'updateAnchor',methodArgs);
+		var newVertexCmd = websession_.createObjectMethodRequest(className,persistentId,'updateAnchorPoint',methodArgs);
 		websession_.sendCommand(newVertexCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_METHOD_RESP), false);
 	}
 
