@@ -195,9 +195,9 @@ codeshelf.windowLauncher = (function() {
 
 		loadTierSlotListView: function(inTier) { // this one cannot be called from window launcher
 			try {
-				var tierListSlotView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), inTier);
+				var tierSlotListView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), inTier);
 				var tierListSlotWindow = codeshelf.window(tierSlotListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
-				tierListWindow.open();
+				tierListSlotWindow.open();
 			}
 			catch (err) {
 				alert(err);
@@ -237,10 +237,19 @@ codeshelf.windowLauncher = (function() {
 			}
 		},
 
-		loadItemsListView: function() {
+		/**
+		 * @param {?Object} location
+		 */
+		loadItemsListView: function(location) {
+			var listView;
+			if (location) {
+				listView = codeshelf.itemListViewForTier(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), location);
+			} else {
+				listView = codeshelf.itemlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+			}
+
 			try {
-				var itemListView = codeshelf.itemlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
-				var itemWindow = codeshelf.window(itemListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				var itemWindow = codeshelf.window(listView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				itemWindow.open();
 			}
 			catch (err) {
@@ -383,7 +392,7 @@ codeshelf.mainpage = function() {
 
 			var getFacilitiesCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_GETTER_REQ, data);
 			*/
-			
+
 			var getFacilitiesCmd = websession_.createObjectGetRequest(organization_['className'],organization_['persistentId'],'getFacilities');
 			websession.sendCommand(getFacilitiesCmd, getFacilitiesCallback(authz), false);
 		},

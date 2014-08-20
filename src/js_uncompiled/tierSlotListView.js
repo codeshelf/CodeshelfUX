@@ -47,9 +47,20 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 		},
 
 		getViewName: function() {
-			return 'Slots in Tier ' + tier_['tierSortName'];
+			return 'Slots in Tier ' + codeshelf.toLocationDescription(inTier);
 		}
 	};
+
+	var contextDefs = [
+		{
+			"label" : "Inventory for this slot",
+			"permission": "inventory:view",
+			"action": function(itemContext) {
+				codeshelf.windowLauncher.loadItemsListView(itemContext);
+			}
+		}
+	];
+
 	// tier parent goes bay->aisle>facility
 	var tierSlotFilter = 'parent.persistentId = :theId';
 
@@ -58,7 +69,7 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['Slot']['className'], "linkProperty": 'parent', "filter" : tierSlotFilter, "filterParams" : tierSlotFilterParams, "properties": domainobjects['Slot']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['Slot']['className'], "linkProperty": 'parent', "filter" : tierSlotFilter, "filterParams" : tierSlotFilterParams, "properties": domainobjects['Slot']['properties'], "contextMenuDefs": contextDefs };
 
 	var viewOptions = {
 		'editable':  true,

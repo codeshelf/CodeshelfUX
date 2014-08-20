@@ -102,13 +102,6 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 
 		setControllerForTiersInAisle: function(item) {
 			self.setControllerForTier(item, true);
-		},
-
-		doLaunchTierSlotList: function(item) {
-			var aTier = item;
-			var tierSlotListView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(),codeshelf.sessionGlobals.getFacility(), aTier);
-			var tierSlotListWindow = codeshelf.window(tierSlotListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
-			tierSlotListWindow.open();
 		}
 	};
 
@@ -135,24 +128,31 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 
 	var contextDefs = [
 		{
-			"label" : "Set controller this tier only</a>",
+			"label" : "Set controller this tier only",
 			"permission": "tier:edit",
 			"action": function(itemContext) {
 				self.setControllerForTierOnly(itemContext);
 			}
 		},
 		{
-			"label" : "Set controller for tiers this aisle</a>",
+			"label" : "Set controller for tiers this aisle",
 			"permission": "tier:edit",
 			"action": function(itemContext) {
 				self.setControllerForTiersInAisle(itemContext);
 			}
 		},
 		{
-			"label" : "Slots for this tier</a>",
+			"label" : "Slots for this tier",
 			"permission": "slot:view",
 			"action": function(itemContext) {
-				self.doLaunchTierSlotList(itemContext);
+				codeshelf.windowLauncher.loadTierSlotListView(itemContext);
+			}
+		},
+		{
+			"label" : "Inventory for this tier",
+			"permission": "inventory:view",
+			"action": function(itemContext) {
+				codeshelf.windowLauncher.loadItemsListView(itemContext);
 			}
 		}
 
