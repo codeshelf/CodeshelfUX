@@ -36,7 +36,7 @@ codeshelfApp.LedControllerService.prototype.getLedControllers = function() {
 	*/
 	var className = domainobjects['LedController']['className'];
 	var propertyNames = Object.keys(domainobjects['LedController']['properties']);
-	
+
 	var setListViewFilterCmd = this.websession_.createRegisterFilterRequest(className,propertyNames,ledControllerFilter,ledControllerFilterParams);
 	this.websession_.sendCommand(setListViewFilterCmd,this.filterResponseCallback_(deferred),true);
 	return deferred.promise;
@@ -46,7 +46,7 @@ codeshelfApp.LedControllerService.prototype.filterResponseCallback_ = function(d
 	var callback = {
 		exec: function(type, command) {
 			if (type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-				deferred.resolve(command['data']['results']);
+				deferred.resolve(command['results']);
 			}
 		}
 	};

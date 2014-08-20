@@ -68,6 +68,11 @@ domainobjects = {
 				'id':    'primaryAliasId',
 				'title': 'Alias',
 				'width': 10
+			},
+			'verticesUi': {
+				'id': 'verticesUi',
+				'title': 'Vertices',
+				'width': 40
 			}
 		}
 	},
@@ -134,6 +139,11 @@ domainobjects = {
 				'id':    'primaryAliasId',
 				'title': 'Alias',
 				'width': 10
+			},
+			'verticesUi': {
+				'id': 'verticesUi',
+				'title': 'Vertices',
+				'width': 40
 			}
 		}
 	},
@@ -348,8 +358,13 @@ domainobjects = {
 				'id':    'itemCmFromLeft',
 				'title': 'CM From Left',
 				'width': 10,
-				'editor': Slick.Editors.Integer,
+				'editor': Slick.Editors.Text,
 				'focusable': true
+			},
+			'uomMasterId':         {
+				'id':    'uomMasterId',
+				'title': 'UOM',
+				'width': 5
 			}
 		}
 	},

@@ -34,8 +34,6 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 	var facility_ = facility;
 	var aisle_ = aisle;
 
-	var contextMenu_;
-
 	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function (command) {
@@ -72,47 +70,6 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 
 		getViewName: function () {
 			return 'Tiers List';
-		},
-
-		setupContextMenu: function () {
-			var contextDefs = [
-				{
-					"label" : "Set controller this tier only</a>",
-					"permission": "tier:edit",
-					"action": function(itemContext) {
-						self.setControllerForTierOnly(itemContext);
-					}
-				},
-				{
-					"label" : "Set controller for tiers this aisle</a>",
-					"permission": "tier:edit",
-					"action": function(itemContext) {
-						self.setControllerForTiersInAisle(itemContext);
-					}
-				},
-				{
-					"label" : "Slots for this tier</a>",
-					"permission": "slot:view",
-					"action": function(itemContext) {
-						self.doLaunchTierSlotList(itemContext);
-					}
-				}
-
-			];
-			var filteredContextDefs = goog.array.filter(contextDefs, function(contextDef) {
-				var permissionNeeded = contextDef["permission"];
-				return websession_.getAuthz().hasPermission(permissionNeeded);
-			});
-			contextMenu_ = new codeshelf.ContextMenu(filteredContextDefs);
-			contextMenu_.setupContextMenu();
-		},
-
-		doContextMenu: function(event, item, column) {
-			contextMenu_.doContextMenu(event, item, column);
-		},
-
-		closeContextMenu: function(item) {
-			contextMenu_.closeContextMenu(item);
 		},
 
 		setControllerForTier: function(item, inAllTiers) {
@@ -176,9 +133,34 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 		];
 	}
 
+	var contextDefs = [
+		{
+			"label" : "Set controller this tier only</a>",
+			"permission": "tier:edit",
+			"action": function(itemContext) {
+				self.setControllerForTierOnly(itemContext);
+			}
+		},
+		{
+			"label" : "Set controller for tiers this aisle</a>",
+			"permission": "tier:edit",
+			"action": function(itemContext) {
+				self.setControllerForTiersInAisle(itemContext);
+			}
+		},
+		{
+			"label" : "Slots for this tier</a>",
+			"permission": "slot:view",
+			"action": function(itemContext) {
+				self.doLaunchTierSlotList(itemContext);
+			}
+		}
+
+	];
+
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['Tier']['className'], "linkProperty": 'parent', "filter" : tierFilter, "filterParams" : tierFilterParams, "properties": domainobjects['Tier']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['Tier']['className'], "linkProperty": 'parent', "filter" : tierFilter, "filterParams" : tierFilterParams, "properties": domainobjects['Tier']['properties'], "contextMenuDefs" : contextDefs };
 
 	var viewOptions = {
 		'editable':  true,

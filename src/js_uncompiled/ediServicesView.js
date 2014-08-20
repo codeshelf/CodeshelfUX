@@ -27,42 +27,10 @@ codeshelf.ediservicesview = function (websession, facility) {
 	var websession_ = websession;
 	var facility_ = facility;
 
-	var contextMenu_;
-
-
 	var self = {
 
 		getViewName: function () {
 			return 'EDI Services';
-		},
-
-		setupContextMenu: function () {
-			var contextDefs = [
-				{
-					"label": "Link Dropbox",
-					"permission": "edit:edit",
-					"action": function(itemContext) {
-						self.linkAccount(itemContext);
-					}
-				}
-			];
-			var filteredContextDefs = goog.array.filter(contextDefs, function(contextDef) {
-				var permissionNeeded = contextDef["permission"];
-				return websession_.getAuthz().hasPermission(permissionNeeded);
-			});
-			contextMenu_ = new codeshelf.ContextMenu(filteredContextDefs);
-			contextMenu_.setupContextMenu();
-		},
-
-		doContextMenu: function (event, item, column) {
-			if (event && event.stopPropagation)
-				event.stopPropagation();
-
-				event.preventDefault();
-
-			if (view.getItemLevel(item) === 0) {
-				contextMenu_.doContextMenu(event, item, column);
-			}
 		},
 
 		linkAccount: function(item) {
@@ -78,6 +46,15 @@ codeshelf.ediservicesview = function (websession, facility) {
 		}
 
 	};
+	var contextDefs = [
+		{
+			"label": "Link Dropbox",
+			"permission": "edit:edit",
+			"action": function(itemContext) {
+				self.linkAccount(itemContext);
+			}
+		}
+	];
 
 	var serviceFilter = 'parent.persistentId = :theId';
 	var serviceFilterParams = [
@@ -85,7 +62,7 @@ codeshelf.ediservicesview = function (websession, facility) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['DropboxService']['className'], "linkProperty": 'parent', "filter": serviceFilter, "filterParams": serviceFilterParams, "properties": domainobjects['DropboxService']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['DropboxService']['className'], "linkProperty": 'parent', "filter": serviceFilter, "filterParams": serviceFilterParams, "properties": domainobjects['DropboxService']['properties'], "contextMenuDefs" : contextDefs };
 	hierarchyMap[1] = { "className": domainobjects['EdiDocumentLocator']['className'], "linkProperty": 'parent', "filter": undefined, "filterParams": undefined, "properties": domainobjects['EdiDocumentLocator']['properties'] };
 
 	var viewOptions = {

@@ -28,9 +28,6 @@ codeshelf.baylistview = function(websession, facility) {
 	var websession_ = websession;
 	var facility_ = facility;
 
-	var contextMenu_;
-
-
 	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function(command) {

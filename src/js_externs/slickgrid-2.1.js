@@ -173,10 +173,16 @@ Slick.Grid.prototype.onSelectedRowsChanged = Slick.Event;
 Slick.Grid.prototype.onCellCssStylesChanged = Slick.Event;
 
 // Methods
-Slick.Grid.prototype.registerPlugin = function() {};
+/**
+ * @param {Object} plugin
+ */
+Slick.Grid.prototype.registerPlugin = function(plugin) {};
 Slick.Grid.prototype.unregisterPlugin = function() {};
 Slick.Grid.prototype.getColumns = function() {};
-Slick.Grid.prototype.setColumns = function() {};
+/**
+ * @param {Object} columns
+ */
+Slick.Grid.prototype.setColumns = function(columns) {};
 Slick.Grid.prototype.getColumnIndex = function() {};
 Slick.Grid.prototype.updateColumnHeader = function() {};
 Slick.Grid.prototype.setSortColumn = function() {};

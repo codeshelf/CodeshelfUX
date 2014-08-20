@@ -99,6 +99,19 @@ describe('hierarchyListView', function() {
 
 	describe("default comparer for level", function() {
 
+		it("returns item with null property first", function() {
+			var itemA = {
+				"first": "A"
+			};
+			var itemB = {
+				"first": null
+			};
+
+
+			var comparer = createComparer(["first"]);
+			expect(comparer(itemA, itemB)).toEqual(1);
+
+		});
 
 
 		it("returns zero if properties have undefined values", function() {
@@ -164,13 +177,13 @@ describe('hierarchyListView', function() {
 
 		});
 
-		it("if property is string sorts localeCompare", function() {
+		it("if property is string sorts alphanumeric", function() {
 			var itemA = {
-				"first": "a",
+				"first": "A9",
 				"second": 1
 			};
 			var itemB = {
-				"first": "b",
+				"first": "A10",
 				"second": 1
 			};
 

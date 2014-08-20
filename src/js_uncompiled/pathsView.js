@@ -29,9 +29,6 @@ codeshelf.pathsview = function(websession, facility) {
 	var websession_ = websession;
 	var facility_ = facility;
 
-	var contextMenu_;
-
-
 	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function(command) {
@@ -60,39 +57,6 @@ codeshelf.pathsview = function(websession, facility) {
 			return 'Paths';
 		},
 
-		setupContextMenu: function() {
-			var contextDefs = [
-				{
-					"label": "Delete Path",
-					"permission": "path:edit",
-					"action": function(itemContext) {
-						self.sendPathDelete(itemContext);
-					}
-				}
-			];
-			var filteredContextDefs = goog.array.filter(contextDefs, function(contextDef) {
-				var permissionNeeded = contextDef["permission"];
-				return websession_.getAuthz().hasPermission(permissionNeeded);
-			});
-			contextMenu_ = new codeshelf.ContextMenu(filteredContextDefs);
-			contextMenu_.setupContextMenu();
-		},
-
-		doContextMenu: function(event, item, column) {
-			if (event && event.stopPropagation)
-				event.stopPropagation();
-
-				event.preventDefault();
-
-			if (view.getItemLevel(item) === 0) {
-				contextMenu_.doContextMenu(event, item, column);
-			}
-		},
-
-		closeContextMenu: function(item) {
-			contextMenu_.closeContextMenu(item);
-		},
-
 		sendPathDelete: function(item) {
 			var theLogger = goog.debug.Logger.getLogger('Paths view');
 			var aString = item['domainId'];
@@ -105,13 +69,24 @@ codeshelf.pathsview = function(websession, facility) {
 		}
 	};
 
+	var contextDefs = [
+		{
+			"label": "Delete Path",
+			"permission": "path:edit",
+			"action": function(itemContext) {
+				self.sendPathDelete(itemContext);
+			}
+		}
+	];
+
+
 	var pathFilter = 'parent.persistentId = :theId';
 	var pathFilterParams = [
 		{ 'name': 'theId', 'value': facility_['persistentId']}
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['Path']['className'], "linkProperty": 'parent', "filter" : pathFilter, "filterParams" : pathFilterParams, "properties": domainobjects['Path']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['Path']['className'], "linkProperty": 'parent', "filter" : pathFilter, "filterParams" : pathFilterParams, "properties": domainobjects['Path']['properties'], "contextMenuDefs" : contextDefs };
 	hierarchyMap[1] = { "className": domainobjects['PathSegment']['className'], "linkProperty": 'parent', "filter" : undefined, "filterParams" : undefined, "properties": domainobjects['PathSegment']['properties'] };
 
 	var viewOptions = {

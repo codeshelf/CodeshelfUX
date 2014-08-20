@@ -32,9 +32,6 @@ codeshelf.itemlistview = function(websession, facility) {
 	var websession_ = websession;
 	var facility_ = facility; // not used here, but the ancestor view wants facility in the constructor
 
-	var contextMenu_;
-
-
 	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function(command) {
@@ -60,6 +57,8 @@ codeshelf.itemlistview = function(websession, facility) {
 			else if (inProperty['id'] ===  'itemQuantityUom')
 				return true;
 			else if (inProperty['id'] ===  'itemCmFromLeft')
+				return true;
+			else if (inProperty['id'] ===  'posAlongPathui')
 				return true;
 			else
 				return false;

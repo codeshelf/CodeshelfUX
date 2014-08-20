@@ -151,7 +151,7 @@ codeshelf.websession = function () {
 				'ObjectGetRequest' : {
 						'className' : className,
 						'persistentId': persistentId,
-						'getterMethod': 'getFacilities'
+						'getterMethod': method
 					}
 				};
 			return command;

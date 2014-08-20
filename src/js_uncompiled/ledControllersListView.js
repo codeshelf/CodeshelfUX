@@ -29,9 +29,6 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 	var websession_ = websession;
 	var facility_ = facility;
 
-	var contextMenu_;
-
-
 	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function(command) {
@@ -61,34 +58,6 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 			return 'LED Controllers List View';
 		},
 
-		setupContextMenu: function() {
-			var contextDefs = [
-				{
-					"label": "Change ID of LED Controller",
-					"permission": "ledcontroller:edit",
-					"action": function(itemContext) {
-						self.changeLedControllerId(itemContext);
-					}
-				}
-			];
-			var filteredContextDefs = goog.array.filter(contextDefs, function(contextDef) {
-				var permissionNeeded = contextDef["permission"];
-				return websession_.getAuthz().hasPermission(permissionNeeded);
-			});
-			contextMenu_ = new codeshelf.ContextMenu(filteredContextDefs);
-			contextMenu_.setupContextMenu();
-
-		},
-
-
-		doContextMenu: function(event, item, column) {
-			contextMenu_.doContextMenu(event, item, column);
-		},
-
-		closeContextMenu: function(item) {
-			contextMenu_.closeContextMenu(item);
-		},
-
 		changeLedControllerId: function(item) {
 			var ledcontroller = item;
 			var data = {
@@ -107,6 +76,17 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 			});
 		}
 	};
+
+	var contextDefs = [
+		{
+			"label": "Change ID of LED Controller",
+			"permission": "ledcontroller:edit",
+			"action": function(itemContext) {
+				self.changeLedControllerId(itemContext);
+			}
+		}
+	];
+
 	// ledController parent is codeshelf_network, whose parent is the facility
 	// Luckily, ebeans can handle this form also.
 	var ledControllerFilter = 'parent.parent.persistentId = :theId';
@@ -116,7 +96,7 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['LedController']['className'], "linkProperty": 'parent', "filter" : ledControllerFilter, "filterParams" : ledControllerFilterParams, "properties": domainobjects['LedController']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['LedController']['className'], "linkProperty": 'parent', "filter" : ledControllerFilter, "filterParams" : ledControllerFilterParams, "properties": domainobjects['LedController']['properties'], "contextMenuDefs" : contextDefs };
 
 	var viewOptions = {
 		'editable':  true,

@@ -117,72 +117,17 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			return callback;
 		}
 
-		/*
- 		var data = {
-			'className': domainobjects['Facility']['className'],
-			'persistentId': facility_['persistentId'],
-			'methodName': 'createPath',
-			'methodArgs': [
-				{name: 'domainId', value: path['domainId'], 'classType': 'java.lang.String'},
-				{name: 'segments', value: path.segments, 'classType': '[Lcom.gadgetworks.codeshelf.model.domain.PathSegment;'}
-			]
-		};
-		var newPath = websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
-		 */
-
-		/*
-
-		Generated: 
-		{"CreatePathRequest":{
-			"facilityId":"fed0d5c0-2273-11e4-a00f-0c4de99ad9d1",
-			"domainId":"F1.1",
-			"pathSegments":[
-				{"segmentOrder":0,"domainId":"F1.1.0","posTypeEnum":"METERS_FROM_PARENT","startPosX":null,"startPosY":null,"startPosZ":null,"endPosX":null,"endPosY":null,"endPosZ":null},
-				{"segmentOrder":1,"domainId":"F1.1.1","posTypeEnum":"METERS_FROM_PARENT","startPosX":null,"startPosY":null,"startPosZ":null,"endPosX":null,"endPosY":null,"endPosZ":null},
-				{"segmentOrder":2,"domainId":"F1.1.2","posTypeEnum":"METERS_FROM_PARENT","startPosX":null,"startPosY":null,"startPosZ":null,"endPosX":null,"endPosY":null,"endPosZ":null}
-			],
-			"messageId":"cid_12"
-		}}
-
-
-		Should-be:
-		{"CreatePathRequest":{
-			"messageId":"5b752530-23ee-11e4-bc68-48d705ccef0f",
-			"facilityId":"5b6bd660-23ee-11e4-bc68-48d705ccef0f",
-			"domainId":"DOMID-2",
-			"pathSegments":[
-				{"className":"PathSegment","domainId":"P.0","persistentId":null,"version":null,"posTypeEnum":"METERS_FROM_PARENT","startPoint":{"className":"Point","posTypeEnum":"METERS_FROM_PARENT","x":0.0,"y":0.0,"z":0.0},"endPoint":{"className":"Point","posTypeEnum":"METERS_FROM_PARENT","x":0.0,"y":0.0,"z":0.0}},
-				{"className":"PathSegment","domainId":"P.1","persistentId":null,"version":null,"posTypeEnum":"METERS_FROM_PARENT","startPoint":{"className":"Point","posTypeEnum":"METERS_FROM_PARENT","x":1.0,"y":1.0,"z":1.0},"endPoint":{"className":"Point","posTypeEnum":"METERS_FROM_PARENT","x":1.0,"y":1.0,"z":1.0}},
-				{"className":"PathSegment","domainId":"P.2","persistentId":null,"version":null,"posTypeEnum":"METERS_FROM_PARENT","startPoint":{"className":"Point","posTypeEnum":"METERS_FROM_PARENT","x":2.0,"y":2.0,"z":2.0},"endPoint":{"className":"Point","posTypeEnum":"METERS_FROM_PARENT","x":2.0,"y":2.0,"z":2.0}}
-			]
-		}}
-		
-		
-		*/
-		
 		var cmd = {
-			CreatePathRequest : {
+			'CreatePathRequest' : {
 				'facilityId' : facility_['persistentId'],
 				'domainId' : path['domainId'],
 				'pathSegments' : path['segments']
 			}
 		};
 		websession_.sendCommand(cmd, callbackForCreatePath(), false);
-		
-		/*
-		var className = domainobjects['Facility']['className'];
-		var persistentId = facility_['persistentId'];
-		var methodArgs = [
-		                  {name: 'domainId', value: path['domainId'], 'classType': 'java.lang.String'},
-		                  {name: 'segments', value: path.segments, 'classType': '[Lcom.gadgetworks.codeshelf.model.domain.PathSegment;'}
-					];
-		var newPath = websession_.createObjectMethodRequest(className,persistentId,'createPath',methodArgs)
-		
-		websession_.sendCommand(newPath, callbackForCreatePath(), false);
-		*/
 
 		var theLogger = goog.debug.Logger.getLogger('Work Area Editor');
-		theLogger.info("saved a new path");
+		theLogger.info("saved a new path" + goog.debug.expose(path['segments']));
 
 	}
 
@@ -819,11 +764,11 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 				});
 
 			self.pathTool.newSegments.onValue(function (segment) {
-				drawPathSegment(segment.startPoint, segment.endPoint, "FORWARD");
+				drawPathSegment(segment['startPoint'], segment['endPoint'], "FORWARD");
 			});
 
 			self.pathTool.newPaths.onValue(function (path) {
-				if ((path.segments !== undefined) && (path.segments.length > 0)) {
+				if ((path['segments'] !== undefined) && (path['segments'].length > 0)) {
 					savePath(path);
 				}
 			});
@@ -831,17 +776,6 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 		open: function () {
 			// Create the filter to listen to all vertex updates for this facility.
-			/*
-			var vertexFilterData = {
-				'className': domainobjects['Vertex']['className'],
-				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder'],
-				'filterClause': 'parent.persistentId = :theId',
-				'filterParams': [
-					{ 'name': 'theId', 'value': facility_['persistentId']}
-				]
-			};
-			var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
-			*/
 			var className = domainobjects['Vertex']['className'];
 			var propertyNames = ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder'];
 			var filterClause = 'parent.persistentId = :theId';
@@ -850,38 +784,16 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			websession_.sendCommand(vertexFilterCmd, websocketCmdCallbackFacility(), true);
 
 			// Create the filter to listen to all aisle updates for this facility.
-			/*
-			var aisleFilterData = {
-				'className': domainobjects['Aisle']['className'],
-				'propertyNames': ['domainId', 'anchorPosX', 'anchorPosY'],
-				'filterClause': 'parent.persistentId = :theId',
-				'filterParams': [
-					{ 'name': 'theId', 'value': facility_['persistentId']}
-				]
-			};
-			var aisleFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, aisleFilterData);
-			*/
-			
+
 			var className = domainobjects['Aisle']['className'];
 			var propertyNames = ['domainId', 'anchorPosX', 'anchorPosY'];
 			var filterClause = 'parent.persistentId = :theId';
-			var filterParams = [{ 'name': 'theId', 'value': facility_['persistentId']}]; 
+			var filterParams = [{ 'name': 'theId', 'value': facility_['persistentId']}];
 			var aisleFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
 			websession_.sendCommand(aisleFilterCmd, websocketCmdCallbackAisle(), true);
 
 			// Create the filter to listen to all path updates for this facility.
-			/*
-			var pathFilterData = {
-				'className': domainobjects['Path']['className'],
-				'propertyNames': ['domainId', 'travelDirEnum'],
-				'filterClause': 'parent.persistentId = :theId',
-				'filterParams': [
-					{ 'name': 'theId', 'value': facility_['persistentId']}
-				]
-			};
-			var pathFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, pathFilterData);
-			*/
-			
+
 			var className = domainobjects['Path']['className'];
 			var propertyNames = ['domainId', 'travelDirEnum'];
 			var filterClause = 'parent.persistentId = :theId';
@@ -1128,6 +1040,10 @@ codeshelfApp.WorkAreaModalCtrl.prototype.convertData = function (aisleForm) {
 		return aisle;
 };
 
+/**
+ * @param {number} pixels
+ * @return {number}
+ */
 codeshelfApp.WorkAreaModalCtrl.prototype.pixelsToMeter = function (pixels) {
 		return (pixels / this.scope_.aisleShape.pixelsPerMeter);
 	};
@@ -1140,7 +1056,7 @@ codeshelfApp.WorkAreaModalCtrl.prototype.sendCreateAisleCommand = function (aisl
 
 		var aisleId = (aisle['aisleId']) ? aisle['aisleId'].toUpperCase() : '';
 		var controllerId = (aisle['controllerId']) ? aisle['controllerId'].toLowerCase() : '';
-		
+
 		/*
 		var data = {
 			'className': this.scope_.facilityContext['className'],
@@ -1159,7 +1075,7 @@ codeshelfApp.WorkAreaModalCtrl.prototype.sendCreateAisleCommand = function (aisl
 		};
 		var createAisleCmd = this.scope_.websession.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
 		*/
-		
+
 		var className = this.scope_.facilityContext['className'];
 		var persistentId = this.scope_.facilityContext['facility']['persistentId'];
 		var methodArgs = [
@@ -1173,7 +1089,7 @@ codeshelfApp.WorkAreaModalCtrl.prototype.sendCreateAisleCommand = function (aisl
 						{ 'name': 'inLeftHandBay', 'value': aisle['isLeftHandBay'], 'classType': 'java.lang.Boolean'}
 					];
 		var createAisleCmd = this.scope_.createObjectMethodRequest(className,persistentId,'createAisle',methodArgs)
-		
+
 		var scope = this.scope_;
 		var callback = {
 			'exec': function (type,response) {

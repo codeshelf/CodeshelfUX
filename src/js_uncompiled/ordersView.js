@@ -28,9 +28,6 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 	var facility_ = facility;
 	var outboundOrders_ = inOutboundOrders;
 
-	var contextMenu_;
-
-
 	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function (type,command) {

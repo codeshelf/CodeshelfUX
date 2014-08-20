@@ -31,9 +31,6 @@ codeshelf.aisleslistview = function(websession, facility) {
 	var websession_ = websession;
 	var facility_ = facility;
 
-	var contextMenu_;
-
-
 	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function(command) {
@@ -69,54 +66,6 @@ codeshelf.aisleslistview = function(websession, facility) {
 
 		getViewName: function() {
 			return 'Aisles List View';
-		},
-
-		setupContextMenu: function() {
-			var contextDefs = [
-				{
-					"label": "Set controller this aisle",
-					"permission": "aisle:edit",
-					"action": function(itemContext) {
-						self.setControllerForAisle(itemContext);
-					}
-				},
-				{
-					"label": "Associate Path Segment",
-					"permission": "aisle:edit",
-					"action": function(itemContext) {
-						self.associatePathSegment(itemContext);
-					}
-				},
-				{
-					"label": "Tiers in this Aisle",
-					"permission": "tier:view",
-					"action": function(itemContext) {
-						self.launchTiersForAisle(itemContext);
-					}
-				}
-			];
-
-			var filteredContextDefs = goog.array.filter(contextDefs, function(contextDef) {
-				var permissionNeeded = contextDef["permission"];
-				return websession_.getAuthz().hasPermission(permissionNeeded);
-			});
-			contextMenu_ = new codeshelf.ContextMenu(filteredContextDefs);
-			contextMenu_.setupContextMenu();
-		},
-
-		doContextMenu: function(event, item, column) {
-			if (event && event.stopPropagation)
-				event.stopPropagation();
-
-				event.preventDefault();
-
-			if (view.getItemLevel(item) === 0) {
-				contextMenu_.doContextMenu(event, item, column);
-			}
-		},
-
-		closeContextMenu: function(item) {
-			contextMenu_.closeContextMenu(item);
 		},
 
 		/**
@@ -155,13 +104,38 @@ codeshelf.aisleslistview = function(websession, facility) {
 		}
 	};
 
+	var contextDefs = [
+		{
+			"label": "Set controller this aisle",
+			"permission": "aisle:edit",
+			"action": function(itemContext) {
+				self.setControllerForAisle(itemContext);
+			}
+		},
+		{
+			"label": "Associate Path Segment",
+			"permission": "aisle:edit",
+			"action": function(itemContext) {
+				self.associatePathSegment(itemContext);
+			}
+		},
+		{
+			"label": "Tiers in this Aisle",
+			"permission": "tier:view",
+			"action": function(itemContext) {
+				self.launchTiersForAisle(itemContext);
+			}
+		}
+	];
+
+
 	var aisleFilter = 'parent.persistentId = :theId';
 	var aisleFilterParams = [
 		{ 'name': 'theId', 'value': facility_['persistentId']}
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['Aisle']['className'], "linkProperty": 'parent', "filter" : aisleFilter, "filterParams" : aisleFilterParams, "properties": domainobjects['Aisle']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['Aisle']['className'], "linkProperty": 'parent', "filter" : aisleFilter, "filterParams" : aisleFilterParams, "properties": domainobjects['Aisle']['properties'], "contextMenuDefs" : contextDefs };
 
 	var viewOptions = {
 		'editable':  true,
@@ -272,8 +246,8 @@ codeshelfApp.AisleLedController.prototype.ok = function(){
 
 		var channelStr = aisle['ledChannel'];
 		var methodArgs = [
-			{ 'name': 'inControllerPersistentIDStr', 'value': cntlrPersistId, 'classType': 'java.lang.String'},
-			{ 'name': 'inChannelStr', 'value': channelStr, 'classType': 'java.lang.String'}
+			{ 'name': 'inControllerPersistentIDStr', 'value': String(cntlrPersistId), 'classType': 'java.lang.String'},
+			{ 'name': 'inChannelStr', 'value': String(channelStr), 'classType': 'java.lang.String'}
 		];
 
 		codeshelf.objectUpdater.callMethod(aisle, 'Aisle', 'setControllerChannel', methodArgs);

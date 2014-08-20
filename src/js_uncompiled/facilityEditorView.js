@@ -62,7 +62,7 @@ codeshelf.facilityeditorview = function (websession, facility) {
 
 				// If the this segment forms an angle of 85-95deg with an imaginary angle back to vertex zero
 				// then extend or shorten this segment to make it exactly 90deg.
-				
+
 				var methodArgs = [
 								{'name': 'domainId', 'value': 'V' + vertexNum, 'classType': 'java.lang.String'},
 								{'name': 'PosTypeByStr', 'value': 'GPS', 'classType': 'java.lang.String'},
@@ -76,19 +76,22 @@ codeshelf.facilityeditorview = function (websession, facility) {
 				websession_.sendCommand(newVertexCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_METHOD_RESP), false);
 
 				// update facility anchor point
-				// If this was the anchor vertex then set the location of the facility as well.				
-				var updateVertexCommand  = {
-					'ObjectUpdateRequest':{
-						'className':'Facility',
-						'persistentId':facility_['persistentId'],
-						'properties':{
-							"anchorPoint":{"posTypeEnum":"GPS","x":event.latLng.lng(),"y":event.latLng.lat(),"z":0.0}
-						}
-					}
-				}
-				websession_.sendCommand(updateVertexCommand, websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP), false);
+				// If this was the anchor vertex then set the location of the facility as well.
+				updateAnchor(event.latLng.lng(), event.latLng.lat(), 0.0);
 			}
 		}, 250);
+	}
+
+	function updateAnchor(x, y, z) {
+		var methodArgs = [
+			{'name': 'x', 'value': x, 'classType': 'java.lang.Double'},
+			{'name': 'y', 'value': y, 'classType': 'java.lang.Double'},
+			{'name': 'z', 'value': z, 'classType': 'java.lang.Double'}
+		];
+		var className = domainobjects['Facility']['className'];
+		var persistentId = facility_['persistentId'];
+		var newVertexCmd = websession_.createObjectMethodRequest(className,persistentId,'updateAnchor',methodArgs);
+		websession_.sendCommand(newVertexCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_METHOD_RESP), false);
 	}
 
 	function doubleClickHandler(event) {
@@ -239,15 +242,15 @@ codeshelf.facilityeditorview = function (websession, facility) {
 					facilityOutlinePath_.setAt(vertexData.Vertex['drawOrder'], marker.getPosition());
 
 					if (canEditOutline_) {
-						var anchorPoint = {'posTypeEnum': 'GPS', 'x': marker.getPosition().lng(), 'y': marker.getPosition().lat(), 'z' : 0.0};
 						var className = domainobjects['Vertex']['className'];
-						var persistentId = vertex['persistentId'];						
-						var properties = {
-							"anchorPoint":anchorPoint
-						};
-						// var properties = {{'name': 'point', 'value': anchorPoint, 'classType' : 'com.gadgetworks.codeshelf.model.domain.Point'}];
-						var moveVertexCmd = websession_.createObjectUpdateRequest(className,persistentId,properties);
-						websession_.sendCommand(moveVertexCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP),false);
+						var persistentId = vertex['persistentId'];
+						var methodArgs = [
+								{'name': 'x', 'value': marker.getPosition().lng(), 'classType': 'java.lang.Double'},
+								{'name': 'y', 'value': marker.getPosition().lat(), 'classType': 'java.lang.Double'},
+								{'name': 'z', 'value': 0.0, 'classType': 'java.lang.Double'}
+						];
+						var updatePointCmd = websession_.createObjectMethodRequest(className,persistentId,"updatePoint", methodArgs);
+						websession_.sendCommand(updatePointCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP),false);
 					}
 				}
 			}
