@@ -9,3 +9,4 @@ bin
 /lib/GoogleClosureLibrary/closure/bin/build/treescan.pyc
 /.projectile
 /.tern-port
+.DS_Store
