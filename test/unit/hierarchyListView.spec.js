@@ -97,124 +97,6 @@ describe('hierarchyListView', function() {
 
 	});
 
-	describe("default comparer for level", function() {
-
-		it("returns item with null property first", function() {
-			var itemA = {
-				"first": "A"
-			};
-			var itemB = {
-				"first": null
-			};
-
-
-			var comparer = createComparer(["first"]);
-			expect(comparer(itemA, itemB)).toEqual(1);
-
-		});
-
-
-		it("returns zero if properties have undefined values", function() {
-			var itemA = {
-				"first": undefined
-			};
-			var itemB = {
-				"first": undefined
-			};
-
-
-			var comparer = createComparer(["first"]);
-			expect(comparer(itemA, itemB)).toEqual(0);
-
-		});
-
-		it("uses next property if first values are undefined", function() {
-			var itemA = {
-				"first": undefined,
-				"second": 1
-			};
-			var itemB = {
-				"first": undefined,
-				"second": 2
-			};
-
-
-			var comparer = createComparer(["first", "second"]);
-			expect(comparer(itemA, itemB)).toEqual(-1);
-
-		});
-
-		it("if first property is equal use second", function() {
-			var itemA = {
-				"first": 1,
-				"second": 1
-			};
-			var itemB = {
-				"first": 1,
-				"second": 2
-			};
-
-
-			var comparer = createComparer(["first", "second"]);
-			expect(comparer(itemA, itemB)).toEqual(-1);
-
-		});
-
-
-		it("if first property sorts first, ignores second", function() {
-			var itemA = {
-				"first": 1,
-				"second": 1
-			};
-			var itemB = {
-				"first": 2,
-				"second": 1
-			};
-
-
-			var comparer = createComparer(["first", "second"]);
-			expect(comparer(itemA, itemB)).toEqual(-1);
-
-		});
-
-		it("if property is string sorts alphanumeric", function() {
-			var itemA = {
-				"first": "A9",
-				"second": 1
-			};
-			var itemB = {
-				"first": "A10",
-				"second": 1
-			};
-
-			var comparer = createComparer(["first", "second"]);
-			expect(comparer(itemA, itemB)).toEqual(-1);
-
-		});
-
-		it("if property is boolean sorts true first", function() {
-			var itemA = {
-				"first": true,
-				"second": 1
-			};
-			var itemB = {
-				"first": false,
-				"second": 1
-			};
-
-
-			var comparer = createComparer(["first", "second"]);
-			expect(comparer(itemA, itemB)).toEqual(-1);
-
-		});
-
-		function createComparer(properties) {
-			return goog.partial(codeshelf.grid.propertyComparer, function() {
-				return properties;
-			});
-		};
-	});
-
 	var createProperty = function(id) {
 		return {
 			'id':   id,
@@ -264,14 +146,14 @@ describe('hierarchyListView', function() {
 		];
 
 		var hierarchyLevel =
-			{
-				className: "testclassname",
-				linkProperty: 'parent',
-				filter : filter,
-				filterParams : filterParams,
-				properties: propertiesObj,
-				actions: actionsObj
-			};
+		  {
+			  className: "testclassname",
+			  linkProperty: 'parent',
+			  filter : filter,
+			  filterParams : filterParams,
+			  properties: propertiesObj,
+			  actions: actionsObj
+		  };
 		return hierarchyLevel;
 	};
 
@@ -284,5 +166,4 @@ describe('hierarchyListView', function() {
 	var getRenderedColumns = function() {
 		return jqPane.find(".slick-header-column");
 	};
-
 });
