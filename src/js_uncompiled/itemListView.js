@@ -105,3 +105,43 @@ codeshelf.buildItemListView = function(websession, itemFilter, itemFilterParams,
 
 	return view;
 };
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.ItemController = function($scope, $modalInstance, data){
+	goog.object.extend($scope, data);
+
+	this.scope_ = $scope;
+	this.modalInstance_ = $modalInstance;
+};
+
+/**
+ * @export
+ */
+codeshelfApp.ItemController.prototype.ok = function(){
+	var item = this.scope_['item'];
+	var facility = this.scope_['facility'];
+	var methodArgs = [
+		{ 'name': 'itemId', 'value': item['sku'], 'classType': 'java.lang.String'},
+		{ 'name': 'locationAlias', 'value': item['locationAlias'], 'classType': 'java.lang.String'},
+		{ 'name': 'cmFromLeft', 'value': item['cmFromLeft'], 'classType': 'java.lang.String'},
+		{ 'name': 'quantity', 'value': "0", 'classType': 'java.lang.String'},
+		{ 'name': 'uom', 'value': item['uom'], 'classType':  'java.lang.String'}
+	];
+	codeshelf.objectUpdater.callMethod(facility, 'Facility', 'upsertItem', methodArgs);
+	//TODO close if successful
+	this.modalInstance_.close();
+};
+
+/**
+ * @export
+ */
+codeshelfApp.ItemController.prototype.cancel = function(){
+	this.modalInstance_['dismiss']();
+};
+angular.module('codeshelfApp').controller('ItemController', ['$scope', '$modalInstance', 'data', codeshelfApp.ItemController]);

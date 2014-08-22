@@ -109,9 +109,33 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 				return false;
 			else
 				return true;
-		}
+		},
 
+		/**
+		 * @param {string} uom
+		 */
+		openItemEdit: function(uom, sku) {
+			var data = {
+				"facility": facility_,
+				"item" : {'sku': sku,'uom': uom}
+			};
+			var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-item.html", "ItemController as controller", data);
+			modalInstance.result.then(function(){
+
+			});
+		}
 	};
+
+	var orderDetailContextDefs = [
+		{
+			"label" : "Edit Item Location",
+			"permission": "item:edit",
+			"action": function(orderDetail) {
+				self.openItemEdit(orderDetail['uomMasterId'], orderDetail['itemMasterId']);
+			}
+		},
+
+	];
 
 	var orderHeaderFilter = "";
 
@@ -131,6 +155,9 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 
 	var orderDetailFilter = "statusEnum <> 'COMPLETE'";
 
+
+	var orderDetailHierarchyMapDef = { "className": domainobjects['OrderDetail']['className'], "linkProperty": 'parent', "filter": orderDetailFilter, "filterParams": undefined, "properties": domainobjects['OrderDetail']['properties'], "comparer": undefined , "contextMenuDefs": orderDetailContextDefs};
+
 	var hierarchyMap = [];
 	var view = null;
 	if (facility_['hasMeaningfulOrderGroups']) {
@@ -142,7 +169,7 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 		// GoodEggs reliably has order groups. So deliver a 3-level view.
 		hierarchyMap[0] = { "className": domainobjects['OrderGroup']['className'], "linkProperty": 'parent', "filter": orderGroupFilter, "filterParams": orderGroupFilterParams, "properties": domainobjects['OrderGroup']['properties'], "comparer": undefined };
 		hierarchyMap[1] = { "className": domainobjects['OrderHeader']['className'], "linkProperty": 'orderGroup', "filter": orderHeaderFilter, "filterParams": undefined, "properties": domainobjects['OrderHeader']['properties'], "comparer": workSequenceComparer };
-		hierarchyMap[2] = { "className": domainobjects['OrderDetail']['className'], "linkProperty": 'parent', "filter": orderDetailFilter, "filterParams": undefined, "properties": domainobjects['OrderDetail']['properties'], "comparer": undefined };
+		hierarchyMap[2] = orderDetailHierarchyMapDef;
 
 		var viewOptions = {
 			'editable':  true,
@@ -159,7 +186,7 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 
 		// Accu-Logistics and many sites have no group at all, or are missing many. Just ignore and do the order headers.
 		hierarchyMap[0] = { "className": domainobjects['OrderHeader']['className'], "linkProperty": 'parent', "filter": orderHeaderFilter, "filterParams": orderHeaderFilterParams, "properties": domainobjects['OrderHeader']['properties'], "comparer": workSequenceComparer };
-		hierarchyMap[1] = { "className": domainobjects['OrderDetail']['className'], "linkProperty": 'parent', "filter": orderDetailFilter, "filterParams": undefined, "properties": domainobjects['OrderDetail']['properties'], "comparer": undefined };
+		hierarchyMap[1] = orderDetailHierarchyMapDef;
 		var viewOptions = {
 			'editable':  true,
 			// -1 for non-dragable. Single level view with normal sort rules
