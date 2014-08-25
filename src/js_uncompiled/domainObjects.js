@@ -5,6 +5,16 @@
 
 goog.provide('domainobjects');
 
+codeshelf.toLocationDescription = function(location) {
+	var primaryAliasId = location['primaryAliasId'];
+	if (goog.string.isEmpty(primaryAliasId)) {
+		return location['nominalLocationId'];
+	} else {
+		return primaryAliasId;
+	}
+};
+
+
 domainobjects = {
 	'Aisle': {
 		'className':  'Aisle',
@@ -365,6 +375,11 @@ domainobjects = {
 				'id':    'uomMasterId',
 				'title': 'UOM',
 				'width': 5
+			},
+			'litLedsForItem':         {
+				'id':    'litLedsForItem',
+				'title': 'LEDs',
+				'width': 8
 			}
 		}
 	},

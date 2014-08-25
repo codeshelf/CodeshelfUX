@@ -12,6 +12,7 @@ goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.string');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
@@ -21,16 +22,37 @@ function doSomethingWithItem() {
 	// 2) Maybe a list of all item/item details for items in this container
 }
 
+codeshelf.itemListViewForTier = function(websession, facility, tier) {
+	// item parent goes itme->itemMaster>facility
+	var	itemFilter = "parent.parent.persistentId = :theId and active = true and storedLocation.persistentId = :theLocationId";
+	var itemFilterParams = [
+			{ 'name': 'theId', 'value': facility['persistentId']},
+			{ 'name': 'theLocationId', 'value': tier['persistentId']}
+		];
+
+	return codeshelf.buildItemListView(websession, itemFilter, itemFilterParams, "Inventory for tier: " + codeshelf.toLocationDescription(tier));
+};
+
+codeshelf.itemlistview = function(websession, facility) {
+	// item parent goes itme->itemMaster>facility
+	var	itemFilter = "parent.parent.persistentId = :theId and active = true";
+	var itemFilterParams = [
+			{ 'name': 'theId', 'value': facility['persistentId']}
+		];
+	return codeshelf.buildItemListView(websession, itemFilter, itemFilterParams, "Inventory");
+
+};
+
 /**
  * The active inventory items for this facility.
  * @param websession The websession used for updates.
  * @param facility The facility to check.
  * @return {Object} The container use list view.
  */
-codeshelf.itemlistview = function(websession, facility) {
+codeshelf.buildItemListView = function(websession, itemFilter, itemFilterParams, viewName) {
 
 	var websession_ = websession;
-	var facility_ = facility; // not used here, but the ancestor view wants facility in the constructor
+	var viewName_ = viewName;
 
 	function websocketCmdCallbackFacility() {
 		var callback = {
@@ -65,22 +87,9 @@ codeshelf.itemlistview = function(websession, facility) {
 		},
 
 		getViewName: function() {
-			var returnStr = "Inventory Items";
-			return returnStr;
+			return viewName_;
 		}
 	};
-
-	// If che_ is null, then all active container uses for this facility. If che passed in, then only container uses on that CHE.
-	var itemFilter;
-	var itemFilterParams;
-
-	// item parent goes itme->itemMaster>facility
-	itemFilter = "parent.parent.persistentId = :theId and active = true";
-
-	itemFilterParams = [
-			{ 'name': 'theId', 'value': facility_['persistentId']}
-		];
-
 
 	var hierarchyMap = [];
 	hierarchyMap[0] = { "className": domainobjects['Item']['className'], "linkProperty": 'parent', "filter" : itemFilter, "filterParams" : itemFilterParams, "properties": domainobjects['Item']['properties'] };
