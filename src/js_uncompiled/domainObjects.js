@@ -376,6 +376,11 @@ domainobjects = {
 				'title': 'UOM',
 				'width': 5
 			}
+			'litLedsForItem':         {
+				'id':    'litLedsForItem',
+				'title': 'LEDs',
+				'width': 8
+			}
 		}
 	},
 
