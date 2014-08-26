@@ -885,6 +885,11 @@ domainobjects = {
 				'title': 'Description',
 				'width': 50
 			},
+			'itemMasterId': {
+				'id': 'itemMasterId',
+				'title': 'SKU',
+				'width': 25
+			},
 			'planQuantity': {
 				'id':    'planQuantity',
 				'title': 'Quant.',
@@ -944,6 +949,11 @@ domainobjects = {
 				'id':    'actualQuantity',
 				'title': 'Actual',
 				'width': 6
+			},
+			'litLedsForWi':         {
+				'id':    'litLedsForWi',
+				'title': 'LEDs',
+				'width': 8
 			}
 		}
 	}
