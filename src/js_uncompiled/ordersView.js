@@ -114,10 +114,10 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 		/**
 		 * @param {string} uom
 		 */
-		openItemEdit: function(uom, sku) {
+		openItemEdit: function(sku, description, uom) {
 			var data = {
 				"facility": facility_,
-				"item" : {'sku': sku,'uom': uom}
+				"item" : {'sku': sku, 'description': description, 'uom': uom}
 			};
 			var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-item.html", "ItemController as controller", data);
 			modalInstance.result.then(function(){
@@ -131,7 +131,7 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 			"label" : "Edit Item Location",
 			"permission": "item:edit",
 			"action": function(orderDetail) {
-				self.openItemEdit(orderDetail['uomMasterId'], orderDetail['itemMasterId']);
+				self.openItemEdit(orderDetail['itemMasterId'], orderDetail['description'], orderDetail['uomMasterId']);
 			}
 		},
 
