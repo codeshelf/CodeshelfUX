@@ -229,18 +229,35 @@ codeshelf.websession = function () {
 			return command;
 		},
 
-		update: function(csDomainObject, selectedFields) {
+		callMethod: function(csDomainObject, inClassName, inMethodName, inMethodArgs) {
+			if (!csDomainObject || !csDomainObject.hasOwnProperty('persistentId')){
+				throw "domainObject with persistentId required";
+			}
+			var methodCallCmd = self_.createObjectMethodRequest(inClassName,csDomainObject['persistentId'], inMethodName, inMethodArgs);
 			var promise = jQuery.Deferred();
+			self_.sendCommand(methodCallCmd,  {
+				exec: function(response) {
+					promise.resolve(response);
+				},
+				fail: function(commandType, response) {
+					promise.reject(response);
+				}
+			}, false);
+			return promise;
+		},
+
+		update: function(csDomainObject, selectedFields) {
 			var objectProperties = {};
 			goog.array.forEach(selectedFields, function(fieldName) {
 				objectProperties[fieldName] = csDomainObject[fieldName];
 			});
 			var command = self_.createObjectUpdateRequest(csDomainObject['className'], csDomainObject['persistentId'], objectProperties);
+			var promise = jQuery.Deferred();
 			self_.sendCommand(command,  {
 					exec: function(response) {
 						promise.resolve(response);
 					},
-					fail: function(response) {
+					fail: function(commandType, response) {
 						promise.reject(response);
 					}
 			}, false);

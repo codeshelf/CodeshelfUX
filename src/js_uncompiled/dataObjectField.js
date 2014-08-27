@@ -177,40 +177,16 @@ codeshelf.objectUpdater = (function() {
 		},
 
 		// This is a trivial single field update. Works for things like CHE description field
+		/**
+         * @return {jqPromise}
+         */
 		callMethod: function(inDomainObject, inClassName, inMethodName, inMethodArgs){
-			if (!inDomainObject || !inDomainObject.hasOwnProperty('persistentId')){
-				var theLogger = goog.debug.Logger.getLogger('objectUpdater');
-				theLogger.info("null object or object that does not have persistentId implemented");
-
-				return;
-			}
-
-			theWebSession = codeshelf.sessionGlobals.getWebsession();
+			var promise = jQuery.Deferred();
+			var theWebSession = codeshelf.sessionGlobals.getWebsession();
 			if (theWebSession) {
-
-				/*
-				var data = {
-						'className':    inClassName,
-						'persistentId': inDomainObject['persistentId'],
-						'methodName': inMethodName,
-						'methodArgs': inMethodArgs
-					};
-				var methodCallCmd = theWebSession.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
-				*/
-
-				var methodCallCmd = theWebSession.createObjectMethodRequest(inClassName,inDomainObject['persistentId'], inMethodName, inMethodArgs);
-
-				// Do we need a callback? Ideally not. General updating mechanism should workl for success.
-				// As for errors returned, would be nice to see something
-				var emptyCallback = {
-					'exec': function (response) {
-					}
-				};
-				theWebSession.sendCommand(methodCallCmd, emptyCallback, true);
-			}
-			else {
-				var theLogger = goog.debug.Logger.getLogger('objectUpdater');
-				theLogger.info("no webSession: failed to update");
+				return theWebSession.callMethod(inDomainObject, inClassName, inMethodName, inMethodArgs);
+			} else {
+				throw "no websession to use";
 			}
 		},
 

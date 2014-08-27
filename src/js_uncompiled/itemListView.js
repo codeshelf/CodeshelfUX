@@ -115,8 +115,8 @@ codeshelf.buildItemListView = function(websession, itemFilter, itemFilterParams,
  */
 codeshelfApp.ItemController = function($scope, $modalInstance, data){
 	goog.object.extend($scope, data);
-
 	this.scope_ = $scope;
+	this.scope_['response'] = {};
 	this.modalInstance_ = $modalInstance;
 };
 
@@ -124,7 +124,9 @@ codeshelfApp.ItemController = function($scope, $modalInstance, data){
  * @export
  */
 codeshelfApp.ItemController.prototype.ok = function(){
-	var item = this.scope_['item'];
+	var scope = this.scope_;
+	var modalInstance = this.modalInstance_;
+	var item = scope['item'];
 	var facility = this.scope_['facility'];
 	var methodArgs = [
 		{ 'name': 'itemId', 'value': item['sku'], 'classType': 'java.lang.String'},
@@ -133,9 +135,15 @@ codeshelfApp.ItemController.prototype.ok = function(){
 		{ 'name': 'quantity', 'value': "0", 'classType': 'java.lang.String'},
 		{ 'name': 'uom', 'value': item['uom'], 'classType':  'java.lang.String'}
 	];
-	codeshelf.objectUpdater.callMethod(facility, 'Facility', 'upsertItem', methodArgs);
-	//TODO close if successful
-	this.modalInstance_.close();
+	codeshelf.objectUpdater.callMethod(facility, 'Facility', 'upsertItem', methodArgs).then(function(response) {
+		modalInstance.close();
+	})
+	.fail(function(response) {
+		scope.$apply(function() {
+			scope['response'] = response;
+		});
+
+	});
 };
 
 /**
