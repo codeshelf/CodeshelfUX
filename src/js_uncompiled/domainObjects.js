@@ -495,6 +495,12 @@ domainobjects = {
 				'title': 'UOM',
 				'width': 5
 			},
+			'itemLocations':         {
+				'id':    'itemLocations',
+				'title': 'Item Locations',
+				'width': 15
+			},
+
 			'wiLocation': {
 				'id':    'wiLocation',
 				'title': 'WI Location',
