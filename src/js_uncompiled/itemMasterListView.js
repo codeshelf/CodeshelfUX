@@ -15,9 +15,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-function doSomethingWithItemMaster() {
-}
-
 /**
  * The active inventory items for this facility.
  * @param websession The websession used for updates.
@@ -27,18 +24,7 @@ function doSomethingWithItemMaster() {
 codeshelf.itemmasterlistview = function(websession, facility) {
 
 	var websession_ = websession;
-	var facility_ = facility; // not used here, but the ancestor view wants facility in the constructor
-	function websocketCmdCallbackFacility() {
-		var callback = {
-			exec: function(command) {
-				/* appears to never be called
-				var theLogger = goog.debug.Logger.getLogger('aislesListView');
-				theLogger.info("callback exec called"); */
-			}
-		};
-
-		return callback;
-	}
+	var facility_ = facility;
 
 	var self = {
 
@@ -65,27 +51,29 @@ codeshelf.itemmasterlistview = function(websession, facility) {
 			var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 			wiListWindow.open();
 		}
-
 	};
 
 	var contextDefs = [
 		{
-			"label" : "Work Instructions for this Item</a>",
+			"label" : "Work Instructions for this Item",
 			"permission": "workInstruction:view",
 			"action": function(itemContext) {
 				self.doLaunchWorkInstructionList(itemContext);
 			}
+		},
+		{
+			"label" : "Edit Item Location",
+			"permission": "item:edit",
+			"action": function(itemMaster) {
+				codeshelf.openItemEditDialog(facility_, itemMaster['domainId'], itemMaster['description'], null, itemMaster['itemLocations']);
+			}
 		}
 	];
 
-	// If che_ is null, then all active container uses for this facility. If che passed in, then only container uses on that CHE.
-	var itemMasterFilter;
-	var itemMasterFilterParams;
+	// item parent goes item->itemMaster>facility
+	var itemMasterFilter = "parent.persistentId = :theId and active = true";
 
-	// item parent goes itme->itemMaster>facility
-	itemMasterFilter = "parent.persistentId = :theId and active = true";
-
-	itemMasterFilterParams = [
+	var itemMasterFilterParams = [
 			{ 'name': 'theId', 'value': facility_['persistentId']}
 		];
 

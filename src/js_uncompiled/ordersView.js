@@ -109,20 +109,6 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 				return false;
 			else
 				return true;
-		},
-
-		/**
-		 * @param {string} uom
-		 */
-		openItemEdit: function(sku, description, uom) {
-			var data = {
-				"facility": facility_,
-				"item" : {'sku': sku, 'description': description, 'uom': uom}
-			};
-			var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-item.html", "ItemController as controller", data);
-			modalInstance.result.then(function(){
-
-			});
 		}
 	};
 
@@ -131,7 +117,7 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 			"label" : "Edit Item Location",
 			"permission": "item:edit",
 			"action": function(orderDetail) {
-				self.openItemEdit(orderDetail['itemMasterId'], orderDetail['description'], orderDetail['uomMasterId']);
+				codeshelf.openItemEditDialog(facility_, orderDetail['itemMasterId'], orderDetail['description'], orderDetail['uomMasterId']);
 			}
 		}
 	];

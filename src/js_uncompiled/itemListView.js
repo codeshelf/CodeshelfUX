@@ -106,6 +106,17 @@ codeshelf.buildItemListView = function(websession, itemFilter, itemFilterParams,
 	return view;
 };
 
+codeshelf.openItemEditDialog = function(facility, sku, description, uom, itemLocations) {
+	var data = {
+		"facility": facility,
+		"item" : {'sku': sku, 'description': description, 'uom': uom, 'itemLocations': itemLocations}
+	};
+	var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-item.html", "ItemController as controller", data);
+	modalInstance.result.then(function(){
+
+	});
+};
+
 /**
  *  @param {!angular.Scope} $scope
  *  @param  $modalInstance

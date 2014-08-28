@@ -5,13 +5,18 @@
 	<div class="modal-body">
 		<div class="alert alert-danger" ng-repeat="globalError in response.errors.globalErrors">{{globalError.message}}</div>
 		<div class="alert alert-danger" ng-repeat="(field, fieldErrors) in response.errors.fieldErrors">
-			{{field}}:
 			<div ng-repeat="fieldError in fieldErrors">{{fieldError.message}}</div>
 		</div>
 		<div id='instructions'>
 			<!-- forcing separate lines on these instructions-->
 			<p>Enter item information.</p>
 		</div>
+        <div class="form-group" ng-show="item.itemLocations">
+            <label for="" class="col-sm-4 control-label">Item Locations:</label>
+            <div class="col-sm-8">
+                <span>{{item.itemLocations}}:</span>
+            </div>
+        </div>
         <div class="form-group">
             <label for="" class="col-sm-4 control-label">Sku: </label>
             <div class="col-sm-8">
