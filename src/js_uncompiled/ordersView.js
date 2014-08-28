@@ -133,8 +133,7 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 			"action": function(orderDetail) {
 				self.openItemEdit(orderDetail['itemMasterId'], orderDetail['description'], orderDetail['uomMasterId']);
 			}
-		},
-
+		}
 	];
 
 	var orderHeaderFilter = "";
