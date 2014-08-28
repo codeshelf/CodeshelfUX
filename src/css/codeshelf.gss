@@ -462,7 +462,6 @@ div.jquery-drag-to-select.active {
 	border: 1px solid #3a5774;
 	color: #000;
 	padding: 4px;
-	position: absolute;
 	z-index: 2;
 }
 
