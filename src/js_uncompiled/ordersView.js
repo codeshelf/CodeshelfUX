@@ -111,19 +111,15 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 				return false;
 			else if (inProperty['id'] === 'active')
 				return false;
+			else if (inProperty['id'] === 'itemLocations' && !outboundOrders_)
+				return false;
 			else
 				return true;
 		}
 	};
 
+
 	var orderDetailContextDefs = [
-		{
-			"label" : "Edit Item Location",
-			"permission": "item:edit",
-			"action": function(orderDetail) {
-				codeshelf.openItemEditDialog(facility_, toSku(orderDetail), orderDetail['description'], orderDetail['uomMasterId'], orderDetail['itemLocations']);
-			}
-		},
 		{
 			"label" : "Inventory for this SKU",
 			"permission": "inventory:view",
@@ -132,6 +128,18 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 			}
 		}
 	];
+
+	if (outboundOrders_) {
+		orderDetailContextDefs.push(
+			{
+				"label" : "Edit Item Location",
+				"permission": "item:edit",
+				"action": function(orderDetail) {
+					codeshelf.openItemEditDialog(facility_, toSku(orderDetail), orderDetail['description'], orderDetail['uomMasterId'], orderDetail['itemLocations']);
+				}
+			}
+		);
+	}
 
 	var orderHeaderFilter = "";
 
