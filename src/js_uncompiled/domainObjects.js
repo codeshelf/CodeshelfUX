@@ -380,6 +380,11 @@ domainobjects = {
 				'id':    'litLedsForItem',
 				'title': 'LEDs',
 				'width': 8
+			},
+			'metersFromAnchor': {
+				'id':    'metersFromAnchor',
+				'title': 'Meters From Anchor',
+				'width': 10
 			}
 		}
 	},
