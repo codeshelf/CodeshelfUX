@@ -197,9 +197,9 @@ codeshelf.websession = function () {
 			return command;
 		},
 
-		createObjectDeleteRequest : function (className,persistentId,properties) {
+		createObjectDeleteRequest : function (className,persistentId) {
 			var command = {
-				'ObjectUpdateRequest' : {
+				'ObjectDeleteRequest' : {
 						'className':    className,
 						'persistentId': persistentId
 					}
@@ -262,6 +262,21 @@ codeshelf.websession = function () {
 					}
 			}, false);
 			return promise;
+		},
+
+		delete: function(csDomainObject) {
+			var command = self_.createObjectDeleteRequest(csDomainObject['className'], csDomainObject['persistentId']);
+			var promise = jQuery.Deferred();
+			self_.sendCommand(command,  {
+					exec: function(response) {
+						promise.resolve(response);
+					},
+					fail: function(commandType, response) {
+						promise.reject(response);
+					}
+			}, false);
+			return promise;
+
 		},
 
 		sendCommand: function (inCommand, inCallback, inRemainActive) {

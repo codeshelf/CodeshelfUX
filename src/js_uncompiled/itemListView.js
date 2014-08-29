@@ -105,6 +105,16 @@ codeshelf.buildItemListView = function(websession, itemFilter, itemFilterParams,
 			"action": function(item) {
 				codeshelf.windowLauncher.loadItemsListViewForSku(item['itemMasterId']);
 			}
+		},
+		{
+			"label" : "Delete item",
+			"permission": "item:edit",
+			"action": function(item) {
+				codeshelf.simpleDlogService.showModalDialog("Confirm", "Delete the inventory item?", {})
+					.then(function() {
+						websession_.delete(item);
+					});
+			}
 		}
 
 	];
