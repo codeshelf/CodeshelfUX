@@ -67,7 +67,15 @@ codeshelf.itemmasterlistview = function(websession, facility) {
 			"action": function(itemMaster) {
 				codeshelf.openItemEditDialog(facility_, itemMaster['domainId'], itemMaster['description'], null, itemMaster['itemLocations']);
 			}
+		},
+		{
+			"label" : "Inventory for this SKU",
+			"permission": "inventory:view",
+			"action": function(itemMaster) {
+				codeshelf.windowLauncher.loadItemsListViewForSku(itemMaster['domainId']);
+			}
 		}
+
 	];
 
 	// item parent goes item->itemMaster>facility

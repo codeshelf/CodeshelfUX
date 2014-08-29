@@ -16,11 +16,18 @@ goog.require('goog.string');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-function doSomethingWithItem() {
-	// What will we do?  Most likely, something like
-	// 1) lights on for all slots where the item in the container is
-	// 2) Maybe a list of all item/item details for items in this container
-}
+
+codeshelf.itemListViewForSku = function(websession, facility, sku) {
+	// item parent goes itme->itemMaster>facility
+	var	itemFilter = "parent.parent.persistentId = :theId and active = true and parent.domainId = :domainId";
+	var itemFilterParams = [
+			{ 'name': 'theId', 'value': facility['persistentId']},
+			{ 'name': 'domainId', 'value': sku}
+		];
+
+	return codeshelf.buildItemListView(websession, itemFilter, itemFilterParams, "Inventory for sku: " + sku);
+};
+
 
 codeshelf.itemListViewForTier = function(websession, facility, tier) {
 	// item parent goes itme->itemMaster>facility
@@ -91,8 +98,19 @@ codeshelf.buildItemListView = function(websession, itemFilter, itemFilterParams,
 		}
 	};
 
+	var contextDefs = [
+		{
+			"label" : "Inventory for this SKU",
+			"permission": "inventory:view",
+			"action": function(item) {
+				codeshelf.windowLauncher.loadItemsListViewForSku(item['itemMasterId']);
+			}
+		}
+
+	];
+
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['Item']['className'], "linkProperty": 'parent', "filter" : itemFilter, "filterParams" : itemFilterParams, "properties": domainobjects['Item']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['Item']['className'], "linkProperty": 'parent', "filter" : itemFilter, "filterParams" : itemFilterParams, "properties": domainobjects['Item']['properties'], "contextMenuDefs": contextDefs };
 
 	var viewOptions = {
 		'editable':  websession_.getAuthz().hasPermission("item:edit"),

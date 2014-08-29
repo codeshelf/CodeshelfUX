@@ -140,6 +140,13 @@ codeshelf.workinstructionlistview = function(websession, facility, inChe, inItem
 			"action": function(itemContext) {
 				self.shortWorkInstruction(itemContext);
 			}
+		},
+		{
+			"label" : "Inventory for this SKU",
+			"permission": "inventory:view",
+			"action": function(itemContext) {
+				codeshelf.windowLauncher.loadItemsListViewForSku(itemContext['itemMasterId']);
+			}
 		}
 	];
 

@@ -74,6 +74,10 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 		}
 	}
 
+	function toSku(orderDetail) {
+		return orderDetail['itemMasterId'];
+	}
+
 	var self = {
 
 		getViewName: function () {
@@ -117,7 +121,14 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 			"label" : "Edit Item Location",
 			"permission": "item:edit",
 			"action": function(orderDetail) {
-				codeshelf.openItemEditDialog(facility_, orderDetail['itemMasterId'], orderDetail['description'], orderDetail['uomMasterId'], orderDetail['itemLocations']);
+				codeshelf.openItemEditDialog(facility_, toSku(orderDetail), orderDetail['description'], orderDetail['uomMasterId'], orderDetail['itemLocations']);
+			}
+		},
+		{
+			"label" : "Inventory for this SKU",
+			"permission": "inventory:view",
+			"action": function(orderDetail) {
+				codeshelf.windowLauncher.loadItemsListViewForSku(toSku(orderDetail));
 			}
 		}
 	];

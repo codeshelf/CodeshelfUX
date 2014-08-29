@@ -257,6 +257,20 @@ codeshelf.windowLauncher = (function() {
 			}
 		},
 
+		/**
+		 * @param {?Object} skub
+		 */
+		loadItemsListViewForSku: function(sku) {
+			var listView = codeshelf.itemListViewForSku(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), sku);
+			try {
+				var itemWindow = codeshelf.window(listView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				itemWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
 		loadFacilityEditor: function () {
 			try {
 				// Load the GMaps API and init() when done.
