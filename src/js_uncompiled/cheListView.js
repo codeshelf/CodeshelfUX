@@ -89,7 +89,7 @@ codeshelf.cheslistview = function(websession, facility) {
 			if (che === null)
 				return;
 			if (che) {
-				var wiListView = codeshelf.workinstructionlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che, "", null);
+				var wiListView = codeshelf.workinstructionsByChe(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che);
 				var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				wiListWindow.open();
 			}
@@ -111,37 +111,54 @@ codeshelf.cheslistview = function(websession, facility) {
 
 			promise.result.then(function(){
 			});
+		},
+		showPreviousCartRun: function(che, summaries) {
+			var data = {
+				"che": che,
+				"summaries": summaries
+			};
+			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/wisummary-che.html", "CheWiSummaryController as controller", data);
+			return promise;
 		}
-
 	};
 
 	var contextDefs = [
 		{
-			"label": "Work Instructions",
+			"label": "Current Work Instructions",
 			"permission": "workinstructions:view",
-			"action": function(itemContext) {
-				self.cheWorkInstructions(itemContext);
+			"action": function(che) {
+				self.cheWorkInstructions(che);
+			}
+		},
+		{
+			"label": "Previous Work Instructions",
+			"permission": "workinstructions:view",
+			"action": function(che) {
+					websession_.callServiceMethod("WorkService", "workSummary", [che ['persistentId'], facility_ ['persistentId']])
+						.then(function(summaries) {
+							return self.showPreviousCartRun(che, summaries);
+						});
 			}
 		},
 		{
 			"label": "Containers",
 			"permission": "containers:view",
-			"action": function(itemContext) {
-				self.cheContainers(itemContext);
+			"action": function(che) {
+				self.cheContainers(che);
 			}
 		},
 		{
 			"label": "Edit CHE",
 			"permission": "che:edit",
-			"action": function(itemContext) {
-				self.editChe(itemContext);
+			"action": function(che) {
+				self.editChe(che);
 			}
 		},
 		{
 			"label": "TESTING ONLY--Simulate cart set up",
 			"permission": "che:simulate",
-			"action": function(itemContext) {
-				self.testOnlySetUpChe(itemContext);
+			"action": function(che) {
+				self.testOnlySetUpChe(che);
 			}
 		}
 
@@ -179,19 +196,74 @@ function isEmptyString(str) {
 	return (!str || 0 === str.length);
 }
 
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @param  data
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.AbstractCheController = function($scope, $modalInstance, data) {
+	this.scope_ = $scope;
+	this.modalInstance_ = $modalInstance;
+	$scope['che'] = data['che'];
+};
+
+/**
+ * @export
+ */
+codeshelfApp.AbstractCheController.prototype.cancel = function(){
+	this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
+};
+
+codeshelfApp.AbstractCheController.prototype.close = function(){
+	this.modalInstance_.close();
+}
+
+
 /**
  *  @param {!angular.Scope} $scope
  *  @param  $modalInstance
  *  @constructor
  *  @ngInject
  *  @export
+ *  @extends {codeshelfApp.AbstractCheController}
+ */
+codeshelfApp.CheWiSummaryController = function($scope, $modalInstance, data){
+	goog.base(this, $scope, $modalInstance, data);
+	$scope['form'] = {
+		"summaries" : data['summaries'],
+		"summary" : data['summaries'][0]
+	};
+};
+goog.inherits(codeshelfApp.CheWiSummaryController, codeshelfApp.AbstractCheController);
+
+/**
+ * @export
+ */
+codeshelfApp.CheWiSummaryController.prototype.ok = function(){
+	var che = this.scope_['che'];
+
+	var summary = this.scope_['form']['summary'];
+	var wiListView = codeshelf.workinstructionsByCheAndAssignedTimestamp(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che, summary['assignedTime']);
+	var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+	wiListWindow.open();
+	this.close();
+};
+	angular.module('codeshelfApp').controller('CheWiSummaryController', ['$scope', '$modalInstance', 'data', codeshelfApp.CheWiSummaryController]);
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ *  @extends {codeshelfApp.AbstractCheController}
  */
 codeshelfApp.CheNgController = function($scope, $modalInstance, data){
-
-	this.scope_ = $scope;
-	this.modalInstance_ = $modalInstance;
-	$scope['che'] = data['che'];
-
+	goog.base(this, $scope, $modalInstance, data);
 	// tweaking separate fields
 	// first has html/angular scope matching js field.
 	$scope['che']['description'] = data['che']['description'];
@@ -200,6 +272,7 @@ codeshelfApp.CheNgController = function($scope, $modalInstance, data){
 	$scope['che']['cntrlrid'] = data['che']['deviceGuidStr'];
 
 };
+goog.inherits(codeshelfApp.CheNgController, codeshelfApp.AbstractCheController);
 
 
 /**
@@ -226,19 +299,13 @@ codeshelfApp.CheNgController.prototype.ok = function(){
 			{ 'name': 'inNewControllerId', 'value': che[jsControllerProperty], 'classType': 'java.lang.String'}
 		];
 
-		codeshelf.objectUpdater.callMethod(che, 'Che', 'changeControllerId', methodArgs);
+		codeshelf.objectUpdater.callMethod(che, 'Che', 'changeControllerId', methodArgs)
+			.then(function() {
+				this.close();
+			});
+
 	}
-
-	this.modalInstance_.close();
 };
-
-/**
- * @export
- */
-codeshelfApp.CheNgController.prototype.cancel = function(){
-	this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
-};
-
 angular.module('codeshelfApp').controller('CheNgController', ['$scope', '$modalInstance', 'data', codeshelfApp.CheNgController]);
 
 
@@ -250,15 +317,13 @@ angular.module('codeshelfApp').controller('CheNgController', ['$scope', '$modalI
  *  @constructor
  *  @ngInject
  *  @export
+ *  @extends {codeshelfApp.AbstractCheController}
  */
 codeshelfApp.SetupCheNgController = function($scope, $modalInstance, data){
-
-	this.scope_ = $scope;
-	this.modalInstance_ = $modalInstance;
-	$scope['che'] = data['che'];
-
+	goog.base(this, $scope, $modalInstance, data);
 	$scope['che']['containersOnChe'] = data['che']['containersOnChe'];
 };
+goog.inherits(codeshelfApp.SetupCheNgController, codeshelfApp.AbstractCheController);
 
 
 /**
@@ -273,17 +338,10 @@ codeshelfApp.SetupCheNgController.prototype.ok = function(){
 			{ 'name': 'inContainerIds', 'value': che[containersProperty], 'classType': 'java.lang.String'}
 		];
 
-		codeshelf.objectUpdater.callMethod(che, 'Che', 'fakeSetupUpContainersOnChe', methodArgs);
+		codeshelf.objectUpdater.callMethod(che, 'Che', 'fakeSetupUpContainersOnChe', methodArgs).
+			then(function() {
+				this.close();
+			});
 	}
-
-	this.modalInstance_.close();
 };
-
-/**
- * @export
- */
-codeshelfApp.SetupCheNgController.prototype.cancel = function(){
-	this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
-};
-
 angular.module('codeshelfApp').controller('SetupCheNgController', ['$scope', '$modalInstance', 'data', codeshelfApp.SetupCheNgController]);

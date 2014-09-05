@@ -47,7 +47,7 @@ codeshelf.itemmasterlistview = function(websession, facility) {
 
 		doLaunchWorkInstructionList: function(item) {
 			var masterPersistentId = item.persistentId;
-			var wiListView = codeshelf.workinstructionlistview(codeshelf.sessionGlobals.getWebsession(),codeshelf.sessionGlobals.getFacility(), null, masterPersistentId, null);
+			var wiListView = codeshelf.workinstructionsByItemMaster(codeshelf.sessionGlobals.getWebsession(),codeshelf.sessionGlobals.getFacility(), masterPersistentId);
 			var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 			wiListWindow.open();
 		}

@@ -169,6 +169,17 @@ codeshelf.websession = function () {
 				};
 			return command;
 		},
+		// new generic function to invoke an object method
+		createServiceMethodRequest : function (className,methodName,methodArgsArray) {
+			var command = {
+				'ServiceMethodRequest' : {
+						'className' : className,
+						'methodName': methodName,
+						'methodArgs': methodArgsArray
+					}
+				};
+			return command;
+		},
 
 		/**
 		 * @param {string} className
@@ -229,6 +240,21 @@ codeshelf.websession = function () {
 			return command;
 		},
 
+		callServiceMethod: function(inClassName, inMethodName, inArgArray) {
+			var methodCallCmd = self_.createServiceMethodRequest(inClassName, inMethodName, inArgArray);
+			var promise = jQuery.Deferred();
+			self_.sendCommand(methodCallCmd,  {
+				exec: function(commandType, response) {
+					promise.resolve(response["results"]);
+				},
+				fail: function(commandType, response) {
+					promise.reject(response);
+				}
+			}, false);
+			return promise;
+		},
+
+
 		callMethod: function(csDomainObject, inClassName, inMethodName, inMethodArgs) {
 			if (!csDomainObject || !csDomainObject.hasOwnProperty('persistentId')){
 				throw "domainObject with persistentId required";
@@ -264,7 +290,7 @@ codeshelf.websession = function () {
 			return promise;
 		},
 
-		delete: function(csDomainObject) {
+		remove: function(csDomainObject) {
 			var command = self_.createObjectDeleteRequest(csDomainObject['className'], csDomainObject['persistentId']);
 			var promise = jQuery.Deferred();
 			self_.sendCommand(command,  {

@@ -112,7 +112,7 @@ codeshelf.buildItemListView = function(websession, itemFilter, itemFilterParams,
 			"action": function(item) {
 				codeshelf.simpleDlogService.showModalDialog("Confirm", "Delete the inventory item?", {})
 					.then(function() {
-						websession_.delete(item);
+						websession_.remove(item);
 					});
 			}
 		}
