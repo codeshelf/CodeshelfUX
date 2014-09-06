@@ -12,11 +12,13 @@ goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.contextmenu');
 goog.require('codeshelf.view');
+goog.require('codeshelf.dateformat');
 
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
+
 
 /**
  * The aisles for this facility.
@@ -196,6 +198,16 @@ function isEmptyString(str) {
 	return (!str || 0 === str.length);
 }
 
+codeshelfApp.filter("currentOrDate", function() {
+	return function(summary) {
+		if (summary['active']) {
+			return "Current";
+		}
+		else {
+			return codeshelf.timeUnitAwareFormat(summary['assignedTime']);
+		}
+	};
+});
 
 /**
  *  @param {!angular.Scope} $scope

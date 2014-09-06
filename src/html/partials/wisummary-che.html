@@ -12,7 +12,7 @@
 		<!-- web examples show adding ng-controller="thisLinkCtrl", but that kills the ok,cancel button action -->
 		<div>
 			Che Runs:
-			<select ng-model="form.summary" ng-options="o as (o.assignedTime | date:'medium') for o in form.summaries"></select>
+			<select ng-model="form.summary" ng-options="o as (o | currentOrDate) for o in form.summaries"></select>
 		</div>
 	</div>
 	<div class="modal-footer">
