@@ -17,7 +17,7 @@ describe('dateformat', function() {
 
 	it("parses epoch later in the day with HH:mm", function() {
 		var epoch = moment("2014-09-23 20:00:00").valueOf();
-		expect(codeshelf.timeUnitAwareFormat(epoch, currentTime)).toEqual("20:00");
+		expect(codeshelf.timeUnitAwareFormat(epoch, currentTime)).toEqual("+20:00");
 	});
 
 	it("parses epoch earlier in the week with EEE HH:mm", function() {

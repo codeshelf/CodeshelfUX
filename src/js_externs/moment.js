@@ -23,6 +23,16 @@ Moment.prototype.isAfter = function(time) {
 
 	};
 
+
+/**
+ * @param {Moment|number} time
+ * @param {string} units
+ * @return {Moment}
+ */
+Moment.prototype.isSame = function(time, units) {
+
+	};
+
 /**
  * @param  {string} format
  * @return {string}

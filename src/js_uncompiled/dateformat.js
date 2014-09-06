@@ -11,15 +11,18 @@ codeshelf.timeUnitAwareFormat = function(momentCompatibleDate, opt_relativetime)
 	}
 
 	var timeMoment  =  moment(momentCompatibleDate);
-	if (moment(timeMoment).add(1, 'days').isAfter(currentTime)) {
+	if (moment(timeMoment).isAfter(currentTime)) {
+		if(moment(timeMoment).isSame(currentTime, 'day')) {
+			return timeMoment.format("+HH:mm");
+		} else {
+			return timeMoment.format('+dd HH:mm');
+		}
+	}
+	else if (moment(timeMoment).add(1, 'days').isAfter(currentTime)) {
 		return timeMoment.format("HH:mm");
 	}
 	else if (moment(timeMoment).add(1, 'weeks').isAfter(currentTime)) {
-		if (moment(timeMoment).isAfter(currentTime)) {
-			return timeMoment.format('+dd HH:mm');
-		} else {
-			return timeMoment.format('dd HH:mm');
-		}
+		return timeMoment.format('dd HH:mm');
 	}
 	else if (moment(timeMoment).add(1, 'years').isAfter(currentTime)) { //within a year
 		return timeMoment.format('MMM_DD');
