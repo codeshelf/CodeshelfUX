@@ -34,6 +34,7 @@
 				<include name="lib/jquery-ui/*.js" />
 				<include name="lib/jquery-ui/**/*.css" />
 				<include name="lib/jquery-ui/**/images/**" />
+				<include name="lib/moment/min/moment.min.js" />
 				<include name="lib/TwitterBootstrap/**" />
 				<include name="lib/UIBootstrap/**" />
 				<include name="lib/angular-*/**" />
@@ -220,6 +221,7 @@
 			<arg value="--compiler_flags=--property_map_output_file=${target.compiled.js.dir}/property.map" />
 			<arg value="--compiler_flags=--variable_map_output_file=${target.compiled.js.dir}/variable.map" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/bacon.js" />
+			<arg value="--compiler_flags=--externs=./src/js_externs/moment.js" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/ui-bootstrap-tpls-0.10.0.js" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/google_maps_api_v3_8.js" />
 			<arg value="--compiler_flags=--externs=./src/js_externs/jquery-1.8.js" />
