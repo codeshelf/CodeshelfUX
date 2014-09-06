@@ -12,6 +12,7 @@ module.exports = function (config) {
 			{pattern: 'lib/GoogleClosureLibrary/closure/goog/deps.js', included: false, served: false},
 			'lib/jquery/jquery.js',
 			'lib/jquery-ui/jquery-ui.js',
+			'lib/moment/min/moment.min.js',
 			'lib/AngularJS/angular.js',
 			'lib/AngularJS/angular-*.js',
 			'lib/UIBootstrap/ui-bootstrap-tpls-0.10.0.js',

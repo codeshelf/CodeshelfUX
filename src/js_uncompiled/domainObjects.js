@@ -871,6 +871,11 @@ domainobjects = {
 				'title': 'Sort',
 				'width': 6
 			},
+			'assignedTimeForUi': {
+				'id':    'assignTimeForUi',
+				'title': 'Assign',
+				'width': 8
+			},
 			'completeTimeForUi': {
 				'id':    'completeTimeForUi',
 				'title': 'Complete',
