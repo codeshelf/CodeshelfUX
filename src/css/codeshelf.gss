@@ -8,13 +8,12 @@
 
 /* Define standard colors (for later use in named styles) */
 
-@def WINDOW_FOREGROUND_LIGHT_COLOR			rgb(200, 200, 250);
-@def WINDOW_FOREGROUND_MED_COLOR			rgb(175, 175, 250);
-@def WINDOW_FOREGROUND_DARK_COLOR			rgb(153, 153, 250);
+@def WINDOW_BAR_FOREGROUND_COLOR			rgb(90,172,188);
+@def WINDOW_BAR_BACKGROUND_COLOR			rgb(53, 116,130);
 
-@def WINDOW_BACKGROUND_LIGHT_COLOR			rgb(187, 187, 250);
-@def WINDOW_BACKGROUND_MED_COLOR			rgb(175, 175, 250);
-@def WINDOW_BACKGROUND_DARK_COLOR			rgb(153, 153, 250);
+@def WINDOW_BACKGROUND_LIGHT_COLOR			#CCCCCC;
+@def WINDOW_BACKGROUND_MED_COLOR			#AAAAAA;
+@def WINDOW_BACKGROUND_DARK_COLOR			#666666;
 
 @def WINDOW_BORDER_LIGHT_COLOR				rgb(221, 221, 221);
 @def WINDOW_BORDER_MED_COLOR				rgb(200, 200, 200);
@@ -249,7 +248,7 @@
 	top:				25px;
 	width:				600px;
 	height:				500px;
-	background-color:	WINDOW_FOREGROUND_MED_COLOR;
+	background-color:	WINDOW_BACKGROUND_MED_COLOR;
 	border:				2px solid WINDOW_BORDER_DARK_COLOR;
 	font:				bold 11px/18px arial;
 	/*text-indent:		10px;*/
@@ -261,14 +260,14 @@
 .windowBar {
 	width:				100%;
 	height:				WINDOWBAR_HEIGHT;
-	background-color:	WINDOW_BACKGROUND_LIGHT_COLOR;
+	background-color:	WINDOW_BAR_BACKGROUND_COLOR;
 	cursor:				default;
 }
 
 .windowBar-selected {
 	width:				100%;
 	height:				WINDOWBAR_HEIGHT;
-	background-color:	WINDOW_BACKGROUND_DARK_COLOR;
+	background-color:	WINDOW_BAR_FOREGROUND_COLOR;
 	cursor:				default;
 }
 
@@ -282,7 +281,7 @@
 .windowFooter {
 	width:				100%;
 	height:				WINDOWFOOTER_HEIGHT;
-	background-color:	rgb(200, 200, 250);
+	background-color:	WINDOW_BACKGROUND_LIGHT_COLOR;
 }
 
 .windowResizer {
@@ -290,7 +289,9 @@
 	float:				right;
 	height:				WINDOWFOOTER_HEIGHT;
 	width:				WINDOWFOOTER_HEIGHT;
-	background-color:	#99F;
+	background-color:	WINDOW_BACKGROUND_LIGHT_COLOR;
+	border:				2px solid WINDOW_BORDER_DARK_COLOR;
+
 }
 
 /* Toolbar classes --------------------------------------------------------------- */
@@ -451,66 +452,11 @@ div.jquery-drag-to-select.active {
 	position:			relative;
 	@mixin				FLEX_BOX(1);
 	@mixin				DISPLAY_BOX(vertical);
-	background-color:	WINDOW_FOREGROUND_LIGHT_COLOR;
+	background-color:	WINDOW_BACKGROUND_LIGHT_COLOR;
 }
 
 /* Modal dialog classes --------------------------------------------------------------- */
 
-.modal-dialog {
-	width: 430px;
-	background: #c1d9ff;
-	border: 1px solid #3a5774;
-	color: #000;
-	padding: 4px;
-	z-index: 2;
-}
-
-.modal-dialog a,
-.modal-dialog a:link,
-.modal-dialog a:visited  {
-	color: #06c;
-	cursor: pointer;
-}
-
-.modal-dialog-bg {
-	background: #666;
-	left: 0;
-	position: absolute;
-	top: 0;
-	z-index: 2;
-}
-
-.modal-dialog-title {
-	background: #e0edfe;
-	color: #000;
-	cursor: pointer;
-	font-size: 120%;
-	font-weight: bold;
-
-	/* Add padding on the right to ensure the close button has room. */
-	padding: 8px 31px 8px 8px;
-
-	position: relative;
-	_zoom: 1; /* Ensures proper width in IE6 RTL. */
-}
-
-.modal-dialog-title-close {
-	/* Client apps may override the URL at which they serve the sprite. */
-	background: #e0edfe url(//ssl.gstatic.com/editor/editortoolbar.png) no-repeat -528px 0;
-	cursor: default;
-	height: 15px;
-	position: absolute;
-	right: 10px;
-	top: 8px;
-	width: 15px;
-	vertical-align: middle;
-}
-
-.modal-dialog-buttons,
-.modal-dialog-content {
-	background-color: #fff;
-	padding: 8px;
-}
 
     .icon {
       height: 16px;
@@ -665,7 +611,7 @@ div.jquery-drag-to-select.active {
  /* Context menu classes --------------------------------------------------------------- */
 
 .contextMenu {
-	background: #e1efc7;
+	background: WINDOW_BACKGROUND_LIGHT_COLOR;
 	border: 1px solid gray;
 	padding: 2px;
 	display: inline-block;
@@ -716,4 +662,16 @@ div.jquery-drag-to-select.active {
 .navbar-inverse .navbar-brand:focus {
   background-color: transparent;
   color: #999999;
+}
+
+/* bootstrap button overrides */
+
+.btn-primary {
+  background-color: WINDOW_BAR_FOREGROUND_COLOR;
+  border-color: WINDOW_BORDER_DARK_COLOR
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
+  background-color: WINDOW_BAR_BACKGROUND_COLOR;
+  border-color: WINDOW_BORDER_DARK_COLOR
 }
