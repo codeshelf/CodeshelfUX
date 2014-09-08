@@ -47,31 +47,8 @@ codeshelf.workinstructionsByCheAndAssignedTimestamp = function(websession, facil
 
 	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
 
-}
-/**
- *
- *
- */
-codeshelf.workinstructionsByChe = function(websession, facility, inChe) {
-	var viewNameSuffix = "for " + inChe['domainId'];
-	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'assignedCheName');
-
-	// all work instructions for this che, including complete. But only active orders. (Not checking active details)
-	var workInstructionFilter = "assignedChe = :theId and statusEnum != 'COMPLETE' and parent.parent.active = true";
-
-	// Experiments
-	// Does not work:  "assignedChePersistentid = :theId";      // seems like it could work, and would if there were a text field
-	// assignedChePersistentid that would persist as assigned_che_persistentid
-
-	// Does work PREFERRED:  "assignedChe = :theId";            // the work instruction java field name is assignedChe
-	// Does work:  "assigned_che_persistentid = :theId";        // the database field is assigned_che_persistentid for field assignedChe
-	var workInstructionFilterParams = [
-		{ 'name': 'theId', 'value': inChe['persistentId']}
-	];
-
-	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
-
 };
+
 
 codeshelf.workinstructionsByItemMaster = function(websession, facility, inItemMasterId) {
 	var viewNameSuffix = "for item";

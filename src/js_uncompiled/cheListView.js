@@ -87,15 +87,6 @@ codeshelf.cheslistview = function(websession, facility) {
 				useListWindow.open();
 			}
 		},
-		cheWorkInstructions: function(che) {
-			if (che === null)
-				return;
-			if (che) {
-				var wiListView = codeshelf.workinstructionsByChe(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che);
-				var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
-				wiListWindow.open();
-			}
-		},
 		testOnlySetUpChe: function(che) {
 			if (che === null)
 				return;
@@ -126,14 +117,7 @@ codeshelf.cheslistview = function(websession, facility) {
 
 	var contextDefs = [
 		{
-			"label": "Current Work Instructions",
-			"permission": "workinstructions:view",
-			"action": function(che) {
-				self.cheWorkInstructions(che);
-			}
-		},
-		{
-			"label": "Previous Work Instructions",
+			"label": "Work Instruction History",
 			"permission": "workinstructions:view",
 			"action": function(che) {
 					websession_.callServiceMethod("WorkService", "workSummary", [che ['persistentId'], facility_ ['persistentId']])
