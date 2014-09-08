@@ -34,21 +34,34 @@ codeshelf.ediservicesview = function (websession, facility) {
 		},
 
 		linkAccount: function(item) {
-			var dropboxServiceId = item['persistentId'];
+			if (item['className'] == 'DropboxService') {
+				var dropboxServiceId = item['persistentId'];
 
-			var modalInstance = codeshelf.simpleDlogService.showCustomDialog(
-				"partials/link-dropbox-dlog.html",
-				"DropboxLinkController as controller",
-				{"dropboxServiceId": dropboxServiceId});
+				var modalInstance = codeshelf.simpleDlogService.showCustomDialog(
+					"partials/link-dropbox-dlog.html",
+					"DropboxLinkController as controller",
+					{"dropboxServiceId": dropboxServiceId});
+					modalInstance.result.then(function(){
+						//then do nothing
+					});
+			} else if (item['className'] == 'IronMqService'){
+				var modalInstance = codeshelf.simpleDlogService.showCustomDialog(
+					"partials/ironmq-credentials.html",
+					"IronMqCredentialsController as controller",
+					{"ironMqService": item});
+
 				modalInstance.result.then(function(){
-					//then do nothing
+
+
 				});
+
+			}
 		}
 
 	};
 	var contextDefs = [
 		{
-			"label": "Link Dropbox",
+			"label": "Link Service",
 			"permission": "edit:edit",
 			"action": function(itemContext) {
 				self.linkAccount(itemContext);
@@ -62,16 +75,15 @@ codeshelf.ediservicesview = function (websession, facility) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['DropboxService']['className'], "linkProperty": 'parent', "filter": serviceFilter, "filterParams": serviceFilterParams, "properties": domainobjects['DropboxService']['properties'], "contextMenuDefs" : contextDefs };
-	hierarchyMap[1] = { "className": domainobjects['EdiDocumentLocator']['className'], "linkProperty": 'parent', "filter": undefined, "filterParams": undefined, "properties": domainobjects['EdiDocumentLocator']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['EdiServiceABC']['className'], "linkProperty": 'parent', "filter": serviceFilter, "filterParams": serviceFilterParams, "properties": domainobjects['EdiServiceABC']['properties'], "contextMenuDefs" : contextDefs };
 
 	var viewOptions = {
 		'editable':  true,
 		// -1 for non-dragable. Single level view with normal sort rules
-		'draggableHierarchyLevel': 0
+		'draggableHierarchyLevel': -1
 	};
 
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['DropboxService'], hierarchyMap,viewOptions);
+	var view = codeshelf.hierarchylistview(websession_, domainobjects['EdiServiceABC'], hierarchyMap,viewOptions);
 	jQuery.extend(view, self);
 	self = view;
 
@@ -101,17 +113,7 @@ codeshelfApp.DropboxLinkController = function($scope, $modalInstance, websession
  */
 codeshelfApp.DropboxLinkController.prototype.link = function(){
 	// Call Facility.startLinkDropbox();
-	/*
-	var data = {
-		'className': domainobjects['DropboxService']['className'],
-		'persistentId': this.scope_['dropboxServiceId'],
-		'methodName': 'startLink',
-		'methodArgs': [
-		]
-	};
-	var startLinkDropboxCmd = this.websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
-	*/
-	var className = domainobjects['DropboxService']['className'];
+	var className = "DropboxService";
 	var persistentId = this.scope_['dropboxServiceId'];
 	var startLinkDropboxCmd = this.websession_.createObjectMethodRequest(className, persistentId,'startLink',[]);
 	this.websession_.sendCommand(startLinkDropboxCmd, this.startLinkCallback_(), true);
@@ -123,18 +125,8 @@ codeshelfApp.DropboxLinkController.prototype.link = function(){
 codeshelfApp.DropboxLinkController.prototype.ok = function(){
 	// Call Facility.finishLinkDropbox();
 	var accessCode = this.scope_['dropbox']['accessCode'];
-	/*
-	var data = {
-		'className': domainobjects['DropboxService']['className'],
-		'persistentId': this.scope_['dropboxServiceId'],
-		'methodName': 'finishLink',
-		'methodArgs': [
-			{'name': 'code', 'value': accessCode, 'classType': 'java.lang.String'}
-		]
-	};
-	var finishLinkDropboxCmd = this.websession_.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
-	*/
-	var className = domainobjects['DropboxService']['className'];
+
+	var className = "DropboxService";
 	var persistentId = this.scope_['dropboxServiceId'];
 	var args = [{'name': 'code', 'value': accessCode, 'classType': 'java.lang.String'}];
 	var finishLinkDropboxCmd = this.websession_.createObjectMethodRequest(className, persistentId,'finishLink',args);
@@ -177,3 +169,46 @@ codeshelfApp.DropboxLinkController.prototype.finishLinkCallback_ = function(moda
 };
 
 angular.module('codeshelfApp').controller('DropboxLinkController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.DropboxLinkController]);
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.IronMqCredentialsController = function($scope, $modalInstance, websession, data){
+
+	$scope['ironMqService'] = data['ironMqService'];
+	$scope['credentials'] = {
+		"projectId" : "",
+		"token" : ""
+	};
+	this.scope_ = $scope;
+	this.modalInstance_ = $modalInstance;
+	this.websession_ = websession;
+};
+
+
+/**
+ * @export
+ */
+codeshelfApp.IronMqCredentialsController.prototype.ok = function(){
+	var ironMqService = this.scope_['ironMqService'];
+	var credentials = this.scope_['credentials'];
+	var args = [{'name': 'projectId', 'value': credentials['projectId'], 'classType': 'java.lang.String'},
+				{'name': 'token', 'value': credentials['token'], 'classType': 'java.lang.String'}
+			   ];
+	var modalInstance = this.modalInstance_;
+	this.websession_.callMethod(ironMqService, "IronMqService", "storeCredentials", args).then(function() {
+		modalInstance.close();
+	});
+};
+
+/**
+ * @export
+ */
+codeshelfApp.IronMqCredentialsController.prototype.cancel = function(){
+	this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
+};
+angular.module('codeshelfApp').controller('IronMqCredentialsController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.IronMqCredentialsController]);

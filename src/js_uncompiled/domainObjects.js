@@ -256,12 +256,12 @@ domainobjects = {
 		}
 	},
 
-	'DropboxService': {
-		'className':  'DropboxService',
+	'EdiServiceABC': {
+		'className':  'EdiServiceABC',
 		'properties': {
 			'domainId':         {
 				'id':    'domainId',
-				'title': 'Parent ID',
+				'title': 'ID',
 				'width': 25
 			},
 			'providerEnum':     {
@@ -273,6 +273,11 @@ domainobjects = {
 				'id':    'serviceStateEnum',
 				'title': 'Service State',
 				'width': 40
+			},
+			'hasCredentials': {
+				'id':    'hasCredentials',
+				'title': 'Stored Credentials',
+				'width': 20
 			}
 		}
 	},
@@ -313,6 +318,8 @@ domainobjects = {
 			}
 		}
 	},
+
+
 
 	'Item': {
 		'className':  'Item',

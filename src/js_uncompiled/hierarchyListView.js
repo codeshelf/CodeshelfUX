@@ -165,12 +165,18 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 		if (item['getLevel'] !== undefined) {
 			return item['getLevel'];
 		}
-
-		for(var i = 0; i < hierarchyMap_.length; i++) {
-			if (item['className'] === hierarchyMap_[i]['className']) {
-				item['getLevel'] = i;
-				return item['getLevel'];
+		if (hierarchyMap_.length == 1) {
+			item['getLevel'] = 0;
+			return 0;
+		}
+		else {
+			for (var i = 0; i < hierarchyMap_.length; i++) {
+				if (item['className'] === hierarchyMap_[i]['className']) {
+					item['getLevel'] = i;
+					return item['getLevel'];
+				}
 			}
+
 		}
 		throw "level not found for: " + item['className'];
 	};
@@ -462,8 +468,11 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 			});
 
 			sortDelay_ = new goog.async.Delay(function() {
-				var firstSortAsc = grid_.getSortColumns()[0]['sortAsc'];
-				sortDataView(dataView_, firstSortAsc);
+				var sortColumn = grid_.getSortColumns()[0];
+				if (sortColumn != null) {
+					var firstSortAsc = sortColumn['sortAsc'];
+					sortDataView(dataView_, firstSortAsc);
+				}
 			}, 500);
 
 			// remove extra columns that are not part of this view's default set
