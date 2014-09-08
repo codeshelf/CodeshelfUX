@@ -311,9 +311,10 @@ codeshelfApp.CheNgController.prototype.ok = function(){
 			{ 'name': 'inNewControllerId', 'value': che[jsControllerProperty], 'classType': 'java.lang.String'}
 		];
 
+		var self = this;
 		codeshelf.objectUpdater.callMethod(che, 'Che', 'changeControllerId', methodArgs)
 			.then(function() {
-				this.close();
+				self.close();
 			});
 
 	}
