@@ -216,7 +216,7 @@ codeshelfApp.AisleLedController = function($scope, $modalInstance, data, ledcont
 	$scope['aisle'] = data['aisle'];
 
 	var channelRange = [];
-	for (var i = 1; i <= 8; i++) {
+	for (var i = 1; i <= 4; i++) {
 		channelRange.push(i);
 	}
 
