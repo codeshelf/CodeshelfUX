@@ -261,14 +261,14 @@
 	width:				100%;
 	height:				WINDOWBAR_HEIGHT;
 	background-color:	WINDOW_BAR_BACKGROUND_COLOR;
-	cursor:				default;
+	cursor:				pointer;
 }
 
 .windowBar-selected {
 	width:				100%;
 	height:				WINDOWBAR_HEIGHT;
 	background-color:	WINDOW_BAR_FOREGROUND_COLOR;
-	cursor:				default;
+	cursor:				pointer;
 }
 
 .windowContent {
@@ -293,6 +293,7 @@
 	border:				1px solid WINDOW_BORDER_DARK_COLOR;
 	margin-bottom: 3px;
 	margin-right: 1px;
+	cursor: se-resize;
 }
 
 /* Toolbar classes --------------------------------------------------------------- */
