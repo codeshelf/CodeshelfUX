@@ -19,25 +19,8 @@
 	</div>
 
 	<div class="modal-footer">
-		<button class="btn" ng-click="controller.link()">Link</button>
+		<button class="btn" ng-click="controller.cancel()">Cancel</button>
+		<button class="btn btn-warning" ng-click="controller.link()">Link</button>
 		<button class="btn btn-primary" ng-click="controller.ok()">Save</button>
-		<button class="btn btn-warning" ng-click="controller.cancel()">Cancel</button>
 </div>
 </form>
-
-
-<!-- from the templates.soy file
-<div class='linkDropboxDialog'>
-    <div id='instructions'>
-        Click OK to link this facility to a Dropbox account.
-        This will open a URL in a new browser window that will make the request to Dropbox.
-        Once you approve the link in Dropbox it will give you a code.
-        Copy the DBX code into the text box and press Save.
-    </div>
-    <div class='dialogFields modal-dialog-content'>
-        <table>
-            <tr><td>Access Code: </td><td><input id='dbxCode' class='dbxCode' label='' autofocus /></td></tr>
-        </table>
-    </div>
-</div>
--->

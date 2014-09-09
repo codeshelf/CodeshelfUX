@@ -8,8 +8,8 @@
 
 /* Define standard colors (for later use in named styles) */
 
-@def WINDOW_BAR_FOREGROUND_COLOR			rgb(90,172,188);
-@def WINDOW_BAR_BACKGROUND_COLOR			rgb(53, 116,130);
+@def WINDOW_BAR_FOREGROUND_COLOR			#428bca; /*rgb(90,172,188);*/
+@def WINDOW_BAR_BACKGROUND_COLOR			#2D5F8A; /*rgb(53, 116,130);*/
 
 @def WINDOW_BACKGROUND_LIGHT_COLOR			#CCCCCC;
 @def WINDOW_BACKGROUND_MED_COLOR			#AAAAAA;
@@ -290,8 +290,9 @@
 	height:				WINDOWFOOTER_HEIGHT;
 	width:				WINDOWFOOTER_HEIGHT;
 	background-color:	WINDOW_BACKGROUND_LIGHT_COLOR;
-	border:				2px solid WINDOW_BORDER_DARK_COLOR;
-
+	border:				1px solid WINDOW_BORDER_DARK_COLOR;
+	margin-bottom: 3px;
+	margin-right: 1px;
 }
 
 /* Toolbar classes --------------------------------------------------------------- */
@@ -457,6 +458,10 @@ div.jquery-drag-to-select.active {
 
 /* Modal dialog classes --------------------------------------------------------------- */
 
+.modal-window-ironmqcredentials .modal-dialog {
+	width: 650px;
+
+}
 
     .icon {
       height: 16px;
@@ -611,7 +616,7 @@ div.jquery-drag-to-select.active {
  /* Context menu classes --------------------------------------------------------------- */
 
 .contextMenu {
-	background: WINDOW_BACKGROUND_LIGHT_COLOR;
+	background: #ffffff;
 	border: 1px solid gray;
 	padding: 2px;
 	display: inline-block;
@@ -629,7 +634,7 @@ div.jquery-drag-to-select.active {
 }
 
 .contextMenu li:hover {
-  background-color: white;
+  background-color: #f5f5f5; /* bootstrap menu hover */
 }
 
 .cell-reorder {
@@ -666,6 +671,7 @@ div.jquery-drag-to-select.active {
 
 /* bootstrap button overrides */
 
+/*
 .btn-primary {
   background-color: WINDOW_BAR_FOREGROUND_COLOR;
   border-color: WINDOW_BORDER_DARK_COLOR
@@ -674,4 +680,4 @@ div.jquery-drag-to-select.active {
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
   background-color: WINDOW_BAR_BACKGROUND_COLOR;
   border-color: WINDOW_BORDER_DARK_COLOR
-}
+}*/

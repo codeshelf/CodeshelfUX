@@ -48,7 +48,8 @@ codeshelf.ediservicesview = function (websession, facility) {
 				var modalInstance = codeshelf.simpleDlogService.showCustomDialog(
 					"partials/ironmq-credentials.html",
 					"IronMqCredentialsController as controller",
-					{"ironMqService": item});
+					{"ironMqService": item},
+					{"windowClass" : "modal-window-ironmqcredentials"});
 
 				modalInstance.result.then(function(){
 
