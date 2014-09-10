@@ -98,13 +98,10 @@ Object.size = function(obj) {
 	return size;
 };
 
-codeshelf.debug = true;
-
-if (codeshelf.debug) {
+function launchDebugWindow() {
 	var debugWindow = new goog.debug.FancyWindow('main');
 	debugWindow.setEnabled(true);
 	debugWindow.init();
-//	Set this to TRUE in goog.Disposable:  goog.Disposable.ENABLE_MONITORING = true;
 }
 
 var gWindowList = [];

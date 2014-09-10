@@ -47,8 +47,7 @@ codeshelf.Navbar = function() {
 		 "menu": [
 			 {"href": "javascript:contactWasSelected()", key: "contact", "label": "Contact Codeshelf" },
 			 {"divider": true},
-			 {"href": "javascript:prototypeAndTest()", key: "prototype", "label": "Prototype and Test", "disabled": true , "permission": "demo"},
-			 {"href": "javascript:launchListViewDemo()", key: "demo.listview", "label": "List View Demo", "permission": "demo" },
+			 {"href": "javascript:launchDebugWindow()", key: "debugWindow", "label": "Show Debug Window" },
 			 {"href": "javascript:launchTestRunner()", key: "debugtests", "label": "Debug Tests", "permission": "demo" }
 		 ]}
 	];
