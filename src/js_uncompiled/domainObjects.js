@@ -822,7 +822,7 @@ domainobjects = {
 			},
 			'slotAliasRange': {
 				'id':    'slotAliasRange',
-				'title': 'Slot Aliases',
+				'title': 'Alias Range',
 				'width': 10
 			},
 			'nominalLocationId': {
