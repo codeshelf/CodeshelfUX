@@ -236,7 +236,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 		editCommand["execute"](); //TODO determine why this gets obfuscated suring compile
 		logger_.fine("item edited:" + goog.debug.expose(item));
 		var $cell = $(grid_.getCellNode(editCommand['row'], editCommand['cell']));
-		$cell.removeClass("cell-updated-success", "cell-updated-fail");
+		$cell.removeClass("cell-updated-success  cell-updated-fail");
 		websession_.update(item, [column['id']])
 			.done(function() {
 				flashCell("cell-updated-success", $cell);
