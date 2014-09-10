@@ -369,11 +369,11 @@ div.jquery-drag-to-select.active {
 }
 
 .cell-updated-success {
-	background:			green;
+	background:			#449d44; /* a shade of green;*/
 }
 
 .cell-updated-fail {
-	background:			red;
+	background:			#c9302c; /*a shade of red;*/
 }
 
 .slick-row.selected .cell-selection {
