@@ -53,7 +53,7 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 
 	var contextDefs = [
 		{
-			"label" : "Inventory for this slot",
+			"label" : "Item Locations  For Slot",
 			"permission": "inventory:view",
 			"action": function(itemContext) {
 				codeshelf.windowLauncher.loadItemsListView(itemContext);

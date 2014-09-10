@@ -121,7 +121,7 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 
 	var orderDetailContextDefs = [
 		{
-			"label" : "Inventory for this SKU",
+			"label" : "Item Locations For SKU",
 			"permission": "inventory:view",
 			"action": function(orderDetail) {
 				codeshelf.windowLauncher.loadItemsListViewForSku(toSku(orderDetail));

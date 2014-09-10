@@ -16,7 +16,7 @@ goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
 /**
- * The active inventory items for this facility.
+ * The active 4inventory items for this facility.
  * @param websession The websession used for updates.
  * @param facility The facility to check.
  * @return {Object} The container use list view.
@@ -55,10 +55,17 @@ codeshelf.itemmasterlistview = function(websession, facility) {
 
 	var contextDefs = [
 		{
-			"label" : "Work Instructions for this Item",
+			"label" : "Work Instructions For SKU",
 			"permission": "workInstruction:view",
-			"action": function(itemContext) {
-				self.doLaunchWorkInstructionList(itemContext);
+			"action": function(itemMaster) {
+				self.doLaunchWorkInstructionList(itemMaster);
+			}
+		},
+		{
+			"label" : "Item Locations For SKU",
+			"permission": "inventory:view",
+			"action": function(itemMaster) {
+				codeshelf.windowLauncher.loadItemsListViewForSku(itemMaster['domainId']);
 			}
 		},
 		{
@@ -66,13 +73,6 @@ codeshelf.itemmasterlistview = function(websession, facility) {
 			"permission": "item:edit",
 			"action": function(itemMaster) {
 				codeshelf.openItemEditDialog(facility_, itemMaster['domainId'], itemMaster['description'], null, itemMaster['itemLocations']);
-			}
-		},
-		{
-			"label" : "Inventory for this SKU",
-			"permission": "inventory:view",
-			"action": function(itemMaster) {
-				codeshelf.windowLauncher.loadItemsListViewForSku(itemMaster['domainId']);
 			}
 		}
 

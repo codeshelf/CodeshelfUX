@@ -131,7 +131,7 @@ codeshelf.workinstructionlistview = function(websession, facility, viewNameSuffi
 			}
 		},
 		{
-			"label" : "Inventory for this SKU",
+			"label" : "Item Locations For SKU",
 			"permission": "inventory:view",
 			"action": function(itemContext) {
 				codeshelf.windowLauncher.loadItemsListViewForSku(itemContext['itemMasterId']);

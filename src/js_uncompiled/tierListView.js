@@ -146,14 +146,14 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 			}
 		},
 		{
-			"label" : "Slots for this tier",
+			"label" : "Slots For Tier",
 			"permission": "slot:view",
 			"action": function(itemContext) {
 				codeshelf.windowLauncher.loadTierSlotListView(itemContext);
 			}
 		},
 		{
-			"label" : "Inventory for this tier",
+			"label" : "Item Locations For Tier",
 			"permission": "inventory:view",
 			"action": function(itemContext) {
 				codeshelf.windowLauncher.loadItemsListView(itemContext);

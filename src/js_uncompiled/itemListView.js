@@ -25,7 +25,7 @@ codeshelf.itemListViewForSku = function(websession, facility, sku) {
 			{ 'name': 'domainId', 'value': sku}
 		];
 
-	return codeshelf.buildItemListView(websession, itemFilter, itemFilterParams, "Inventory for sku: " + sku);
+	return codeshelf.buildItemListView(websession, itemFilter, itemFilterParams, "Item Locations For SKU: " + sku);
 };
 
 
@@ -37,7 +37,7 @@ codeshelf.itemListViewForTier = function(websession, facility, tier) {
 			{ 'name': 'theLocationId', 'value': tier['persistentId']}
 		];
 
-	return codeshelf.buildItemListView(websession, itemFilter, itemFilterParams, "Inventory for tier: " + codeshelf.toLocationDescription(tier));
+	return codeshelf.buildItemListView(websession, itemFilter, itemFilterParams, "Item Locations For Tier: " + codeshelf.toLocationDescription(tier));
 };
 
 codeshelf.itemlistview = function(websession, facility) {
@@ -46,12 +46,12 @@ codeshelf.itemlistview = function(websession, facility) {
 	var itemFilterParams = [
 			{ 'name': 'theId', 'value': facility['persistentId']}
 		];
-	return codeshelf.buildItemListView(websession, itemFilter, itemFilterParams, "Inventory");
+	return codeshelf.buildItemListView(websession, itemFilter, itemFilterParams, "Item Locations");
 
 };
 
 /**
- * The active inventory items for this facility.
+ * The active item locations for this facility.
  * @param websession The websession used for updates.
  * @param facility The facility to check.
  * @return {Object} The container use list view.
@@ -100,17 +100,17 @@ codeshelf.buildItemListView = function(websession, itemFilter, itemFilterParams,
 
 	var contextDefs = [
 		{
-			"label" : "Inventory for this SKU",
+			"label" : "Item Locations For SKU",
 			"permission": "inventory:view",
 			"action": function(item) {
 				codeshelf.windowLauncher.loadItemsListViewForSku(item['itemMasterId']);
 			}
 		},
 		{
-			"label" : "Delete item",
+			"label" : "Delete item location",
 			"permission": "item:edit",
 			"action": function(item) {
-				codeshelf.simpleDlogService.showModalDialog("Confirm", "Delete the inventory item?", {})
+				codeshelf.simpleDlogService.showModalDialog("Confirm", "Delete the item location?", {})
 					.then(function() {
 						websession_.remove(item);
 					});
