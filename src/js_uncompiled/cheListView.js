@@ -335,9 +335,10 @@ codeshelfApp.SetupCheNgController.prototype.ok = function(){
 			{ 'name': 'inContainerIds', 'value': che[containersProperty], 'classType': 'java.lang.String'}
 		];
 
+		var dialog = this;
 		codeshelf.objectUpdater.callMethod(che, 'Che', 'fakeSetupUpContainersOnChe', methodArgs).
 			then(function() {
-				this.close();
+				dialog.close();
 			});
 	}
 };
