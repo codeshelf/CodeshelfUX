@@ -73,36 +73,6 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 	var paths_ = [];
 	var consts = {};
 
-	function createAisle() {
-		//TODO utilize angular but not in this hacky way
-		var facilityContext = {
-			'facility': facility,
-			'className': domainobjects['Facility']['className']
-		};
-		var aisleShape = {
-			pixelsPerMeter: self.getPixelsPerMeter(),
-			dragStartPoint: startDragPoint_,
-			rectangle: currentRect_
-		};
-
-		Object.defineProperty(consts, 'feetInMeters', {value: 0.3048,
-													   writable: false,
-													   enumerable: true,
-													   configurable: true});
-
-		var data = {
-			"facilityContext": facilityContext,
-			"aisleShape": aisleShape
-		};
-		var promise = codeshelf.simpleDlogService.showCustomDialog("partials/aisle-editor.html", "WorkAreaModalCtrl as controller", data);
-
-		promise.result.then(function(){
-
-
-		});
-
-	}
-
 	function savePath(path) {
 
 		function callbackForCreatePath() {
@@ -875,15 +845,12 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 		doDraggerEnd: function (event) {
 			var tool = self.getToolbarTool();
-			switch (tool.getId()) {
-				case 'aisle-tool':
-					createAisle();
-					break;
-				default:
-					break;
-			}
 			graphics_.removeElement(currentDrawRect_);
 			currentDrawRect_.dispose();
+			var theLogger = goog.debug.Logger.getLogger('Work Area Editor');
+			theLogger.info("actions on drag unimplemented");
+
+
 		},
 
 		doResize: function () {
@@ -955,157 +922,3 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 	return self;
 };
-
-
-/**
- *  @param {!angular.Scope} $scope
- *  @param  $modalInstance
- *  @param  {Object} data
- *  @constructor
- *  @ngInject
- *  @export
- */
-codeshelfApp.WorkAreaModalCtrl = function($scope, $modalInstance, $log, websession, data){
-	this.scope_ = $scope;
-	this.modalInstance_ = $modalInstance;
-	this.log_ = $log;
-
-	this.consts = {};
-	Object.defineProperty(this.consts, 'feetInMeters', {'value': 0.3048,
-		'writable': false,
-		'enumerable': true,
-		'configurable': true});
-
-	this.scope_['aisleForm'] = {};
-	this.scope_['aisleForm'] = {
-		messages: []
-	};
-
-	this.scope_.websession = websession;
-	this.scope_.facilityContext = data['facilityContext'];
-	this.scope_.aisleShape = data['aisleShape'];
-
-};
-
-/**
- * @export
- */
-codeshelfApp.WorkAreaModalCtrl.prototype.ok = function () {
-		var aisle = this.convertData(this.scope_['aisleForm']);
-		this.log_.info('aisle obj: ' + angular.toJson(aisle));
-		var modalInstance = this.modalInstance_;
-		var scope = this.scope_;
-		this.sendCreateAisleCommand(aisle,
-			function onSuccess(lastAisleData) {
-				modalInstance.close(lastAisleData);  //communicates to the promise
-			},
-			function onError(errorResult) {
-				var responseMessages = errorResult['messages'];
-				scope.messages = responseMessages;
-			});
-
-		//don't close instance until successful
-		//
-};
-
-/**
- * @export
- */
-codeshelfApp.WorkAreaModalCtrl.prototype.cancel = function () {
-		this.modalInstance_.dismiss('cancel');
-};
-
-/**
- * @export
- */
-codeshelfApp.WorkAreaModalCtrl.prototype.convertData = function (aisleForm) {
-		var aisle = {};
-		//TODO this should be a proper OO method on an aisle shape since the point and the pixelsPerMeter come from outside in the shape
-		aisle['xOriginMeters'] = this.pixelsToMeter(this.scope_.aisleShape.dragStartPoint.x);
-		aisle['yOriginMeters'] = this.pixelsToMeter(this.scope_.aisleShape.dragStartPoint.y);
-
-		aisle['aisleId'] = aisleForm['aisleId'];
-		aisle['bayHeight'] = aisleForm['bayHeight'] * this.consts['feetInMeters'];
-		aisle['bayWidth'] = aisleForm['bayWidth'] * this.consts['feetInMeters'];
-		aisle['bayDepth'] = aisleForm['bayDepth'] * this.consts['feetInMeters'];
-		aisle['baysHigh'] = aisleForm['baysHigh'];
-		aisle['baysLong'] = aisleForm['baysLong'];
-		aisle['controllerId'] = aisleForm['controllerId'];
-		aisle['isLeftHandBay'] = aisleForm['isLeftHandBay'] == "true";
-
-		aisle['runInXDir'] = true;
-		if (this.scope_.aisleShape.rectangle.width < this.scope_.aisleShape.rectangle.height) {
-			aisle['runInXDir'] = false;
-		}
-		return aisle;
-};
-
-/**
- * @param {number} pixels
- * @return {number}
- */
-codeshelfApp.WorkAreaModalCtrl.prototype.pixelsToMeter = function (pixels) {
-		return (pixels / this.scope_.aisleShape.pixelsPerMeter);
-	};
-
-
-codeshelfApp.WorkAreaModalCtrl.prototype.sendCreateAisleCommand = function (aisle, onSuccess, onError) {
-
-		var anchorPoint = {'posTypeEnum': 'METERS_FROM_PARENT', 'x': aisle['xOriginMeters'], 'y': aisle['yOriginMeters'], 'z': 0.0};
-		var protoBayPoint = {'posTypeEnum': 'METERS_FROM_PARENT', 'x': aisle['bayWidth'], 'y': aisle['bayDepth'], 'z': aisle['bayHeight']};
-
-		var aisleId = (aisle['aisleId']) ? aisle['aisleId'].toUpperCase() : '';
-		var controllerId = (aisle['controllerId']) ? aisle['controllerId'].toLowerCase() : '';
-
-		/*
-		var data = {
-			'className': this.scope_.facilityContext['className'],
-			'persistentId': this.scope_.facilityContext['facility']['persistentId'],
-			'methodName': 'createAisle',
-			'methodArgs': [
-				{ 'name': 'inAisleId', 'value': aisleId, 'classType': 'java.lang.String'},
-				{ 'name': 'anchorPoint', 'value': anchorPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'},
-				{ 'name': 'protoBayPoint', 'value': protoBayPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'},
-				{ 'name': 'inProtoBaysHigh', 'value': aisle['baysHigh'], 'classType': 'java.lang.Integer'},
-				{ 'name': 'inProtoBaysLong', 'value': aisle['baysLong'], 'classType': 'java.lang.Integer'},
-				{ 'name': 'inControllerId', 'value': controllerId, 'classType': 'java.lang.String'},
-				{ 'name': 'inRunInXDir', 'value': aisle['runInXDir'], 'classType': 'java.lang.Boolean'},
-				{ 'name': 'inLeftHandBay', 'value': aisle['isLeftHandBay'], 'classType': 'java.lang.Boolean'}
-			]
-		};
-		var createAisleCmd = this.scope_.websession.createCommand(kWebSessionCommandType.OBJECT_METHOD_REQ, data);
-		*/
-
-		var className = this.scope_.facilityContext['className'];
-		var persistentId = this.scope_.facilityContext['facility']['persistentId'];
-		var methodArgs = [
-		  				{ 'name': 'inAisleId', 'value': aisleId, 'classType': 'java.lang.String'},
-						{ 'name': 'anchorPoint', 'value': anchorPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'},
-						{ 'name': 'protoBayPoint', 'value': protoBayPoint, 'classType': 'com.gadgetworks.codeshelf.model.domain.Point'},
-						{ 'name': 'inProtoBaysHigh', 'value': aisle['baysHigh'], 'classType': 'java.lang.Integer'},
-						{ 'name': 'inProtoBaysLong', 'value': aisle['baysLong'], 'classType': 'java.lang.Integer'},
-						{ 'name': 'inControllerId', 'value': controllerId, 'classType': 'java.lang.String'},
-						{ 'name': 'inRunInXDir', 'value': aisle['runInXDir'], 'classType': 'java.lang.Boolean'},
-						{ 'name': 'inLeftHandBay', 'value': aisle['isLeftHandBay'], 'classType': 'java.lang.Boolean'}
-					];
-		var createAisleCmd = this.scope_.createObjectMethodRequest(className,persistentId,'createAisle',methodArgs)
-
-		var scope = this.scope_;
-		var callback = {
-			'exec': function (type,response) {
-				scope.$apply(function () {
-					if (response['status'] == "Fail") {
-						var errorResult = response['results'];
-						onError(errorResult);
-					}
-					else {
-						var dataResult = response['results'];
-						onSuccess(dataResult);
-					}
-				});
-			}
-		};
-		this.scope_.websession.sendCommand(createAisleCmd, callback, true);
-};
-
-angular.module('codeshelfApp').controller('WorkAreaModalCtrl', ['$scope', '$modalInstance', '$log', 'websession', 'data', codeshelfApp.WorkAreaModalCtrl]);
