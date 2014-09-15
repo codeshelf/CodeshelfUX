@@ -14,6 +14,12 @@ codeshelf.toLocationDescription = function(location) {
 	}
 };
 
+function metersFormatter(row, cell, value, columnDef, dataContext) {
+	if (value == null) {
+		return "";
+	}
+	return value.toFixed(2);
+}
 
 domainobjects = {
 	'Aisle': {
@@ -692,7 +698,34 @@ domainobjects = {
 				'id':    'associatedLocationCount',
 				'title': 'Locations',
 				'width': 8
+			},
+			'startPosX': {
+				'id':    'startPosX',
+				'title': 'Start X',
+				'width': 8,
+				'formatter': metersFormatter
+			},
+			'startPosY': {
+				'id':    'startPosY',
+				'title': 'Start Y',
+				'width': 8,
+				'formatter': metersFormatter
+
+			},
+			'endPosX': {
+				'id':    'endPosX',
+				'title': 'End X',
+				'width': 8,
+				'formatter': metersFormatter
+
+			},
+			'endPosY': {
+				'id':    'endPosY',
+				'title': 'End Y',
+				'width': 8,
+				'formatter': metersFormatter
 			}
+
 		}
 	},
 
