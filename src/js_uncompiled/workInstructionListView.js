@@ -32,7 +32,7 @@ codeshelf.workinstructionsByCheAndAssignedTimestamp = function(websession, facil
 	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'assignedCheName');
 
 	// all work instructions for this che, and the given assigned time but only active orders. (Not checking active details)
-	var workInstructionFilter = "assignedChe = :theId and assigned = :assignedTimestamp and orderDetail.parent.active = true";
+	var workInstructionFilter = "assignedChe = :theId and assigned = :assignedTimestamp";
 
 	// Experiments
 	// Does not work:  "assignedChePersistentid = :theId";      // seems like it could work, and would if there were a text field
@@ -68,7 +68,7 @@ codeshelf.workinstructionsAll = function(websession, facility) {
 	// all uncompleted work instructions this facility. Include REVERT though
 	// through V4 parentage goes workInstruction->orderDetail->orderHeader->facility
 	// from V5 work instruction parent is facility.
-	var	workInstructionFilter = "parent.persistentId = :theId and statusEnum != 'COMPLETE' and orderDetail.parent.active = true";
+	var	workInstructionFilter = "parent.persistentId = :theId and statusEnum != 'COMPLETE'";
 
 	var workInstructionFilterParams = [
 		{ 'name': 'theId', 'value': facility['persistentId']}
