@@ -29,7 +29,7 @@ codeshelf.defaultWorkInstructionColumns = [
 
 codeshelf.workinstructionsByCheAndAssignedTimestamp = function(websession, facility, inChe, assignedTimestamp) {
 	var viewNameSuffix = "for " + inChe['domainId'] + " and time: " + codeshelf.timeUnitAwareFormat(assignedTimestamp);
-	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'assignedCheName');
+	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'assignedCheName', 'groupAndSortCode');
 
 	// all work instructions for this che, and the given assigned time but only active orders. (Not checking active details)
 	var workInstructionFilter = "assignedChe = :theId and assigned = :assignedTimestamp";
