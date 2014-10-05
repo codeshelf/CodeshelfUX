@@ -15,6 +15,7 @@ codeshelf.Navbar = function() {
              // Need to do next line conditionally. Do it for GoodEggs. Don't for Accu-Logistics
 			 {"href": "javascript:launchBatchOrdersView()", key: "orders.crossbatch", "label": "Cross Batch Orders", "permission": "order:view:crossbatch"},
 
+			 {"href": "javascript:launchOrderDetailsView()", key: "orders.details", "label": "Order Details", "permission": "order:view:details"},
 			 {"href": "javascript:launchWorkAreaView()", key: "workarea.list", "label": "Work Areas", "permission": "workaread:view" },
 			 {"href": "javascript:launchContainerUseListView()", key: "containers", "label": "Containers", "permission" : "container:view" },
 			 {"href": "javascript:launchWorkInstructionListView()", key: "workinstructions", "label": "All Work Instructions", "permission" : "workinstructions:view" },

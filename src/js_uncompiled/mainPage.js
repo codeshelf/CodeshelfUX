@@ -27,6 +27,7 @@ goog.require('codeshelf.initializenewclient');
 goog.require('codeshelf.listdemoview');
 goog.require('codeshelf.listview');
 goog.require('codeshelf.ordersview');
+goog.require('codeshelf.orderdetailsview');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.window');
 goog.require('codeshelf.workareaeditorview');
@@ -131,6 +132,17 @@ codeshelf.windowLauncher = (function() {
 				var ordersView = codeshelf.ordersview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), inOutboundOrders);
 				var ordersWindow = codeshelf.window(ordersView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				ordersWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadOrderDetailsView: function() {
+			try {
+				var orderDetailsView = codeshelf.orderdetailsview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var orderDetailsWindow = codeshelf.window(orderDetailsView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				orderDetailsWindow.open();
 			}
 			catch (err) {
 				alert(err);
@@ -470,6 +482,11 @@ function launchBatchOrdersView() {
 }
 goog.exportSymbol('launchBatchOrdersView', launchBatchOrdersView);
 
+function launchOrderDetailsView() {
+	codeshelf.windowLauncher.loadOrderDetailsView(false); // non-hierarchical
+}
+goog.exportSymbol('launchOrderDetailsView', launchOrderDetailsView);
+
 function launchWorkAreaView() {
 	codeshelf.windowLauncher.loadWorkAreaView();
 }
@@ -540,6 +557,7 @@ function launchTestRunner() {
 	launchWorkAreaEditor();
 	launchEdiServicesView();
 	launchOrdersView(); // only outbound orders
+	launchOrderDetailsView(); // only outbound orders
 	launchWorkAreaView();
 	launchFacilityEditor();
 	launchAislesListView();
