@@ -581,41 +581,32 @@ goog.exportSymbol('launchTestRunner', launchTestRunner);
  *  @ngInject
  *  @export
  */
-codeshelfApp.FacilityNgController = function($scope, $modalInstance, data){
+codeshelfApp.FacilityNgController = function($scope, $modalInstance, websession, data){
 
 	this.scope_ = $scope;
 	this.modalInstance_ = $modalInstance;
+	this.websession_ = websession;
+
 	$scope['facility'] = data['facility'];
 
 	// tweaking separate fields
 	// first has html/angular scope matching js field.
 	$scope['facility']['description'] = data['facility']['description'];
 	// second could match. Just being different to practice for when we have to be different
-	$scope['facility']['domainid'] = data['facility']['domainId'];
-};
+	$scope['facility']['domainId'] = data['facility']['domainId'];
+	$scope['facility']['primaryChannel'] = data['facility']['primaryChannel'];
 
-// check not-null, and not empty. Does not check for only white space.
-function isEmptyString(str) {
-	return (!str || 0 === str.length);
-}
+};
 
 /**
  * @export
  */
 codeshelfApp.FacilityNgController.prototype.ok = function(){
 	var facility = this.scope_['facility'];
-	var descriptionProperty = "description";
-	var jsDomainProperty = "domainid"; // this matches the partial html
-	var javaDomainProperty = "domainId"; // Passed as the java field
-	// "description is the name used here, and matches the java-side field name. This is a trivial update
-	if (!isEmptyString(facility[descriptionProperty]))
-		codeshelf.objectUpdater.updateOne(facility, "Facility", descriptionProperty, facility[descriptionProperty]);
-
-	// This is a domainID change, which may cause trouble. If there is trouble, might need to change to
-	// objectUpdater.callMethod() to do the change with all necessary cleanup
-	if (!isEmptyString(facility[jsDomainProperty]))
-		codeshelf.objectUpdater.updateOne(facility, "Facility", javaDomainProperty, facility[jsDomainProperty]);
-
+	facility["className"] = "Facility";
+	this.websession_.update(facility, ["domainId", "description", "primaryChannel"]).then(function(newFacility) {
+		codeshelf.sessionGlobals.setFacility(newFacility);
+	});
 	this.modalInstance_.close();
 };
 
@@ -626,4 +617,4 @@ codeshelfApp.FacilityNgController.prototype.cancel = function(){
 	this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
 };
 
-angular.module('codeshelfApp').controller('FacilityNgController', ['$scope', '$modalInstance', 'data', codeshelfApp.FacilityNgController]);
+angular.module('codeshelfApp').controller('FacilityNgController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.FacilityNgController]);

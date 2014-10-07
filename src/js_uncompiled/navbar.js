@@ -35,7 +35,7 @@ codeshelf.Navbar = function() {
 		{"key": "configure",
 		 "label": "Configure",
 		 "menu": [
-			 {"href": "javascript:doFacilityNameDialog()", key: "facility.setname", "label": "Set Facility Name", "permission": "facility:edit"},
+			 {"href": "javascript:doFacilityNameDialog()", key: "facility.setname", "label": "Edit Facility", "permission": "facility:edit"},
 			 {"href": "javascript:launchFacilityEditor()", key: "facility.outline", "label": "Facility Outline", "permission": "facility:edit" },
 			 {"href": "javascript:launchEdiServicesView()", key: "ediservices", "label": "EDI Services", "permission": "edi:edit" },
 			 {"href": "javascript:launchLedControllersListView()", key: "ledControllers.list", "label": "LED Controllers List", "permission": "ledController:view" },

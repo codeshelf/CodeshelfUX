@@ -280,8 +280,8 @@ codeshelf.websession = function () {
 			var command = self_.createObjectUpdateRequest(csDomainObject['className'], csDomainObject['persistentId'], objectProperties);
 			var promise = jQuery.Deferred();
 			self_.sendCommand(command,  {
-					exec: function(response) {
-						promise.resolve(response);
+					exec: function(commandType, response) {
+						promise.resolve(response["results"]);
 					},
 					fail: function(commandType, response) {
 						promise.reject(response);

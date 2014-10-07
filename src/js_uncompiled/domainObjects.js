@@ -321,7 +321,13 @@ domainobjects = {
 				'id':    'description',
 				'title': 'Facility Name',
 				'width': 50
+			},
+			'primaryChannel': {
+				'id':    'primaryChannel',
+				'title': 'Primary Radio Channel',
+				'width': 10
 			}
+
 		}
 	},
 
