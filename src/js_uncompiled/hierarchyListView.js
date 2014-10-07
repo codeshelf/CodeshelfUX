@@ -191,7 +191,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 				   id: "context",
 				   title: "More",
 				   width: 10,
-				   handler: function(event) {
+				   handler: function(event, args, item) {
 					   dispatchContextMenu(event);
 				   }
 			   };
@@ -377,7 +377,9 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 				logger_.fine("register cellClickHandler with grid for column " + column);
 					grid_.onClick.subscribe(function(event, args) {
 						logger_.fine("cellClickHandler executing for " + column);
-						column['cellClickHandler'](event, args);
+						var cell = grid_.getCellFromEvent(event);
+						var item = dataView_.getItem(cell.row);
+						column['cellClickHandler'](event, args, item);
 					});
 				}
 			});
@@ -479,7 +481,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 			if (self_.hasOwnProperty('shouldAddThisColumn')) {
 				var allColumns = grid_.getColumns();
 				var columnsToShow = goog.array.filter(allColumns, function(column) {
-					if (column['id'] == "context") {
+					var columnType = column["type"];
+					if (columnType == "action") {
 						return true;
 					} else {
 						return self_['shouldAddThisColumn'](column);
@@ -595,11 +598,11 @@ codeshelf.grid.toColumns = function(hierarchyLevelDef) {
 		}
 			columns.push(newColumn);
 	}
-	if (!(typeof hierarchyLevelDef.actions == "undefined")) {
+	if (!(typeof hierarchyLevelDef["actions"] == "undefined")) {
 
-		var actions = hierarchyLevelDef.actions;
-		for(var key in actions) {
-			var actionDef = actions[key];
+		var actions = hierarchyLevelDef["actions"];
+		for(var i = 0; i < actions.length; i++) {
+			var actionDef = actions[i];
 			var newActionColumn = codeshelf.grid.toButtonColumn(actionDef);
 			columns.push(newActionColumn);
 		}
@@ -608,29 +611,34 @@ codeshelf.grid.toColumns = function(hierarchyLevelDef) {
 };
 
 codeshelf.grid.toButtonColumn = function(actionDef) {
-	var targetClasses = ["action", actionDef.id];
+	var targetClasses = ["action", actionDef["id"]];
 
-	var cellClickHandler = function(event, args) {
+	var cellClickHandler = function(event, args, item) {
 		for(var i = 0; i < targetClasses.length; i++) {
 			if ($(event.target).closest("." + targetClasses[i]).length == 0) {
 				return;
 			}
 		}
-		actionDef.handler(event, args);
+		actionDef["handler"](event, args, item);
 	};
 
 	var classAttribute = targetClasses.join(' ');
 	var formatter = function(row, cell, value, columnDef, dataContext) {
-		return '<button class="btn ' + classAttribute + '" ><span class="glyphicon glyphicon-chevron-down" style="vertical-align:middle"></span></button>';
+		var iconClass = actionDef["iconClass"];
+		if (iconClass == null) {
+			iconClass = "glyphicon-chevron-down";
+		}
+		return '<button class="btn ' + classAttribute + '" ><span class="glyphicon ' + iconClass + '" style="vertical-align:middle"></span></button>';
 	};
 
 	var newActionColumn = {
-		'id': actionDef.id,
-		'name': actionDef.title,
-		'field': actionDef.id,
+		'id': actionDef["id"],
+		'name': actionDef["title"],
+		'field': actionDef["id"],
+		'type' : "action",
 		'behavior': 'select',
 		'headerCssClass': ' ',
-		'width': actionDef.width,
+		'width': actionDef["width"],
 		'cannotTriggerInsert': true,
 		'resizable': true,
 		'selectable': false,

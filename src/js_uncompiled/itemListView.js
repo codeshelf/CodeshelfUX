@@ -25,7 +25,7 @@ codeshelf.itemListViewForSku = function(websession, facility, sku) {
 			{ 'name': 'domainId', 'value': sku}
 		];
 
-	return codeshelf.buildItemListView(websession, itemFilter, itemFilterParams, "Item Locations For SKU: " + sku);
+	return codeshelf.buildItemListView(websession, facility, itemFilter, itemFilterParams, "Item Locations For SKU: " + sku);
 };
 
 
@@ -37,7 +37,7 @@ codeshelf.itemListViewForTier = function(websession, facility, tier) {
 			{ 'name': 'theLocationId', 'value': tier['persistentId']}
 		];
 
-	return codeshelf.buildItemListView(websession, itemFilter, itemFilterParams, "Item Locations For Tier: " + codeshelf.toLocationDescription(tier));
+	return codeshelf.buildItemListView(websession, facility, itemFilter, itemFilterParams, "Item Locations For Tier: " + codeshelf.toLocationDescription(tier));
 };
 
 codeshelf.itemlistview = function(websession, facility) {
@@ -46,7 +46,7 @@ codeshelf.itemlistview = function(websession, facility) {
 	var itemFilterParams = [
 			{ 'name': 'theId', 'value': facility['persistentId']}
 		];
-	return codeshelf.buildItemListView(websession, itemFilter, itemFilterParams, "Item Locations");
+	return codeshelf.buildItemListView(websession, facility, itemFilter, itemFilterParams, "Item Locations");
 
 };
 
@@ -56,22 +56,12 @@ codeshelf.itemlistview = function(websession, facility) {
  * @param facility The facility to check.
  * @return {Object} The container use list view.
  */
-codeshelf.buildItemListView = function(websession, itemFilter, itemFilterParams, viewName) {
+codeshelf.buildItemListView = function(websession, facility, itemFilter, itemFilterParams, viewName) {
 
 	var websession_ = websession;
 	var viewName_ = viewName;
-
-	function websocketCmdCallbackFacility() {
-		var callback = {
-			exec: function(command) {
-				/* appears to never be called
-				var theLogger = goog.debug.Logger.getLogger('aislesListView');
-				theLogger.info("callback exec called"); */
-			}
-		};
-
-		return callback;
-	}
+	var facility_ = facility;
+	var logger_  = goog.debug.Logger.getLogger("Item List View");
 
 	var self = {
 
@@ -119,8 +109,24 @@ codeshelf.buildItemListView = function(websession, itemFilter, itemFilterParams,
 
 	];
 
+	var actions = [{
+		"id" : "lightLed",
+		"title": "Light Led",
+		"width" : 10,
+		"iconClass" : "glyphicon-flash",
+		"handler" : function(event, args, item) {
+			var methodArgs = [
+				{ 'name': 'color', 'value': "RED", 'classType': 'java.lang.String'},
+				{ 'name': 'inItemPersistentId', 'value': item["persistentId"], 'classType': 'java.lang.String'}
+			];
+			websession_.callMethod(facility_, 'Facility', 'lightOneItem', methodArgs).then(function(response) {
+				logger_.info("Sent light for item:  " + item["persistentId"]);
+			});
+		}
+	}];
+
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['Item']['className'], "linkProperty": 'parent', "filter" : itemFilter, "filterParams" : itemFilterParams, "properties": domainobjects['Item']['properties'], "contextMenuDefs": contextDefs };
+	hierarchyMap[0] = { "className": domainobjects['Item']['className'], "linkProperty": 'parent', "filter" : itemFilter, "filterParams" : itemFilterParams, "properties": domainobjects['Item']['properties'], "contextMenuDefs": contextDefs, "actions" : actions };
 
 	var viewOptions = {
 		'editable':  websession_.getAuthz().hasPermission("item:edit"),
