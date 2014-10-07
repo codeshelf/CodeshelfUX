@@ -191,7 +191,7 @@ codeshelf.facilityeditorview = function (websession, facility) {
 			}
 
 			facilityOutline_.setMap(map_);
-			facilityOutline_.setPath(new google.maps.MVCArray([facilityOutlinePath_]));
+			facilityOutline_.setPath(facilityOutlinePath_);
 		}
 	}
 
