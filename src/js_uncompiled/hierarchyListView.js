@@ -188,13 +188,13 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 
 	function createContextMenuColumn() {
 		var actionDef = {
-				   id: "context",
-				   title: "More",
-				   width: 10,
-				   handler: function(event, args, item) {
-					   dispatchContextMenu(event);
-				   }
-			   };
+			"id": "context",
+			"title": "More",
+			"width": 10,
+			"handler": function(event, args, item) {
+				dispatchContextMenu(event);
+			}
+		};
 		var column = codeshelf.grid.toButtonColumn(actionDef);
 		return column;
 	}
