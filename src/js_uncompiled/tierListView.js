@@ -116,14 +116,14 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 
 	if (null === aisle_) {
 		// tier parent goes bay->aisle>facility
-		tierFilter = 'parent.parent.parent.persistentId = :theId';
+		tierFilter = 'parent.parent.parent.persistentId = :theId and active = true';
 
 		tierFilterParams = [
 			{ 'name': 'theId', 'value': facility_['persistentId']}
 		];
 	}
 	else {
-		tierFilter = 'parent.parent.persistentId = :theId';
+		tierFilter = 'parent.parent.persistentId = :theId and active = true';
 
 		tierFilterParams = [
 			{ 'name': 'theId', 'value': aisle_['persistentId']}

@@ -129,7 +129,7 @@ codeshelf.aisleslistview = function(websession, facility) {
 	];
 
 
-	var aisleFilter = 'parent.persistentId = :theId';
+	var aisleFilter = 'parent.persistentId = :theId and active = true';
 	var aisleFilterParams = [
 		{ 'name': 'theId', 'value': facility_['persistentId']}
 	];
