@@ -28,6 +28,8 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 	var websession_ = websession;
 	var facility_ = facility; // not used here, but the ancestor view wants facility in the constructor
 	var tier_ = inTier;
+	var logger_  = goog.debug.Logger.getLogger("Item List View");
+
 
 	var self = {
 		// following psuedo-inheritance
@@ -61,6 +63,24 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 		}
 	];
 
+	var actions = [{
+		"id" : "lightLed",
+		"title": "Light Led",
+		"width" : 10,
+		"iconClass" : "glyphicon-flash",
+		"handler" : function(event, args, item) {
+			var locationId = item["nominalLocationId"];
+
+			var methodArgs = [
+				{ 'name': 'color', 'value': "RED", 'classType': 'java.lang.String'},
+				{ 'name': 'locationId', 'value': locationId, 'classType': 'java.lang.String'}
+			];
+			websession_.callMethod(facility_, 'Facility', 'lightOneLocation', methodArgs).then(function(response) {
+				logger_.info("Sent light for location:  " + locationId);
+			});
+		}
+	}];
+
 	// tier parent goes bay->aisle>facility
 	var tierSlotFilter = 'parent.persistentId = :theId';
 
@@ -69,7 +89,7 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['Slot']['className'], "linkProperty": 'parent', "filter" : tierSlotFilter, "filterParams" : tierSlotFilterParams, "properties": domainobjects['Slot']['properties'], "contextMenuDefs": contextDefs };
+	hierarchyMap[0] = { "className": domainobjects['Slot']['className'], "linkProperty": 'parent', "filter" : tierSlotFilter, "filterParams" : tierSlotFilterParams, "properties": domainobjects['Slot']['properties'], "contextMenuDefs": contextDefs, "actions" : actions };
 
 	var viewOptions = {
 		'editable':  true,

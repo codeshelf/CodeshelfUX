@@ -162,9 +162,26 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 
 	];
 
+	var actions = [{
+		"id" : "lightLed",
+		"title": "Light Led",
+		"width" : 10,
+		"iconClass" : "glyphicon-flash",
+		"handler" : function(event, args, item) {
+			var locationId = item["nominalLocationId"];
+
+			var methodArgs = [
+				{ 'name': 'color', 'value': "RED", 'classType': 'java.lang.String'},
+				{ 'name': 'locationId', 'value': locationId, 'classType': 'java.lang.String'}
+			];
+			websession_.callMethod(facility_, 'Facility', 'lightOneLocation', methodArgs).then(function(response) {
+				logger_.info("Sent light for location:  " + locationId);
+			});
+		}
+	}];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['Tier']['className'], "linkProperty": 'parent', "filter" : tierFilter, "filterParams" : tierFilterParams, "properties": domainobjects['Tier']['properties'], "contextMenuDefs" : contextDefs };
+	hierarchyMap[0] = { "className": domainobjects['Tier']['className'], "linkProperty": 'parent', "filter" : tierFilter, "filterParams" : tierFilterParams, "properties": domainobjects['Tier']['properties'], "contextMenuDefs" : contextDefs, actions: actions };
 
 	var viewOptions = {
 		'editable':  true,
