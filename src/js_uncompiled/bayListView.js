@@ -27,6 +27,7 @@ codeshelf.baylistview = function(websession, facility) {
 
 	var websession_ = websession;
 	var facility_ = facility;
+	var logger_  = goog.debug.Logger.getLogger("BayList View");
 
 	function websocketCmdCallbackFacility() {
 		var callback = {
@@ -60,6 +61,20 @@ codeshelf.baylistview = function(websession, facility) {
 			return 'Bays List';
 		}
 	};
+
+	var actions = [{
+		"id" : "lightLed",
+		"title": "Light Led",
+		"width" : 10,
+		"iconClass" : "glyphicon-flash",
+		"handler" : function(event, args, item) {
+			websession_.callServiceMethod("LightService", 'lightAllControllers', ["RED",
+																				  facility_["persistentId"],
+																				  item["nominalLocationId"]]).then(function(response) {
+				logger_.info("Sent lightAllControllers for location:  " + item["nominalLocationId"]);
+			});
+		}
+	}];
 	// tier parent goes bay->aisle>facility
 	var bayFilter = 'parent.parent.persistentId = :theId';
 
@@ -68,7 +83,7 @@ codeshelf.baylistview = function(websession, facility) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['Bay']['className'], "linkProperty": 'parent', "filter" : bayFilter, "filterParams" : bayFilterParams, "properties": domainobjects['Bay']['properties'] };
+	hierarchyMap[0] = { "className": domainobjects['Bay']['className'], "linkProperty": 'parent', "filter" : bayFilter, "filterParams" : bayFilterParams, "properties": domainobjects['Bay']['properties'], "actions": actions };
 
 	var viewOptions = {
 		'editable':  true,

@@ -70,12 +70,10 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 		"iconClass" : "glyphicon-flash",
 		"handler" : function(event, args, item) {
 			var locationId = item["nominalLocationId"];
-
-			var methodArgs = [
-				{ 'name': 'color', 'value': "RED", 'classType': 'java.lang.String'},
-				{ 'name': 'locationId', 'value': locationId, 'classType': 'java.lang.String'}
-			];
-			websession_.callMethod(facility_, 'Facility', 'lightOneLocation', methodArgs).then(function(response) {
+			websession_.callServiceMethod("LightService", 'lightOneLocation', ["RED",
+																		   facility_['persistentId'],
+																		   locationId
+			]).then(function(response) {
 				logger_.info("Sent light for location:  " + locationId);
 			});
 		}
