@@ -172,15 +172,14 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 			var locationId = item["nominalLocationId"];
 			websession_.callServiceMethod("LightService", 'lightOneLocation', ["RED",
 																		   facility_['persistentId'],
-																		   locationId
-			]).then(function(response) {
+																		   locationId]).then(function(response) {
 				logger_.info("Sent light for location:  " + locationId);
 			});
 		}
 	}];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['Tier']['className'], "linkProperty": 'parent', "filter" : tierFilter, "filterParams" : tierFilterParams, "properties": domainobjects['Tier']['properties'], "contextMenuDefs" : contextDefs, actions: actions };
+	hierarchyMap[0] = { "className": domainobjects['Tier']['className'], "linkProperty": 'parent', "filter" : tierFilter, "filterParams" : tierFilterParams, "properties": domainobjects['Tier']['properties'], "contextMenuDefs" : contextDefs, "actions": actions };
 
 	var viewOptions = {
 		'editable':  true,
