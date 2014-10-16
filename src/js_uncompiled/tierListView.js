@@ -33,6 +33,8 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 	var websession_ = websession;
 	var facility_ = facility;
 	var aisle_ = aisle;
+	var logger_  = goog.debug.Logger.getLogger("Tier List View");
+
 
 	function websocketCmdCallbackFacility() {
 		var callback = {

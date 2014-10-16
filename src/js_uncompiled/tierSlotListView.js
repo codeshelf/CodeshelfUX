@@ -28,7 +28,7 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 	var websession_ = websession;
 	var facility_ = facility; // not used here, but the ancestor view wants facility in the constructor
 	var tier_ = inTier;
-	var logger_  = goog.debug.Logger.getLogger("Item List View");
+	var logger_  = goog.debug.Logger.getLogger("Tier Slot List View");
 
 
 	var self = {
