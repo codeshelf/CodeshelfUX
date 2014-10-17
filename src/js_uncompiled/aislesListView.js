@@ -30,6 +30,7 @@ codeshelf.aisleslistview = function(websession, facility) {
 
 	var websession_ = websession;
 	var facility_ = facility;
+	var logger_  = goog.debug.Logger.getLogger("AisleList View");
 
 	function websocketCmdCallbackFacility() {
 		var callback = {
@@ -128,6 +129,19 @@ codeshelf.aisleslistview = function(websession, facility) {
 		}
 	];
 
+	var actions = [{
+		"id" : "lightLed",
+		"title": "Light Led",
+		"width" : 10,
+		"iconClass" : "glyphicon-flash",
+		"handler" : function(event, args, item) {
+			websession_.callServiceMethod("LightService", 'lightAllControllers', ["RED",
+																				  facility_["persistentId"],
+																				  item["nominalLocationId"]]).then(function(response) {
+				logger_.info("Sent lightAllControllers for location:  " + item["domainId"]);
+			});
+		}
+	}];
 
 	var aisleFilter = 'parent.persistentId = :theId and active = true';
 	var aisleFilterParams = [
@@ -135,7 +149,7 @@ codeshelf.aisleslistview = function(websession, facility) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['Aisle']['className'], "linkProperty": 'parent', "filter" : aisleFilter, "filterParams" : aisleFilterParams, "properties": domainobjects['Aisle']['properties'], "contextMenuDefs" : contextDefs };
+	hierarchyMap[0] = { "className": domainobjects['Aisle']['className'], "linkProperty": 'parent', "filter" : aisleFilter, "filterParams" : aisleFilterParams, "properties": domainobjects['Aisle']['properties'], "contextMenuDefs" : contextDefs, "actions" : actions };
 
 	var viewOptions = {
 		'editable':  true,

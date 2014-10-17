@@ -115,11 +115,10 @@ codeshelf.buildItemListView = function(websession, facility, itemFilter, itemFil
 		"width" : 10,
 		"iconClass" : "glyphicon-flash",
 		"handler" : function(event, args, item) {
-			var methodArgs = [
-				{ 'name': 'color', 'value': "RED", 'classType': 'java.lang.String'},
-				{ 'name': 'inItemPersistentId', 'value': item["persistentId"], 'classType': 'java.lang.String'}
-			];
-			websession_.callMethod(facility_, 'Facility', 'lightOneItem', methodArgs).then(function(response) {
+			websession_.callServiceMethod("LightService", 'lightOneItem', ["RED",
+																		   facility_['persistentId'],
+																		   item["persistentId"]
+			]).then(function(response) {
 				logger_.info("Sent light for item:  " + item["persistentId"]);
 			});
 		}

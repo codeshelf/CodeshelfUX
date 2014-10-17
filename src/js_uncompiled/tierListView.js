@@ -35,7 +35,6 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 	var aisle_ = aisle;
 	var logger_  = goog.debug.Logger.getLogger("Tier List View");
 
-
 	function websocketCmdCallbackFacility() {
 		var callback = {
 			exec: function (command) {
@@ -171,12 +170,9 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 		"iconClass" : "glyphicon-flash",
 		"handler" : function(event, args, item) {
 			var locationId = item["nominalLocationId"];
-
-			var methodArgs = [
-				{ 'name': 'color', 'value': "RED", 'classType': 'java.lang.String'},
-				{ 'name': 'locationId', 'value': locationId, 'classType': 'java.lang.String'}
-			];
-			websession_.callMethod(facility_, 'Facility', 'lightOneLocation', methodArgs).then(function(response) {
+			websession_.callServiceMethod("LightService", 'lightOneLocation', ["RED",
+																		   facility_['persistentId'],
+																		   locationId]).then(function(response) {
 				logger_.info("Sent light for location:  " + locationId);
 			});
 		}
