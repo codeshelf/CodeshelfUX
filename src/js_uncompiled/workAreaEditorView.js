@@ -757,7 +757,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 			var className = domainobjects['Aisle']['className'];
 			var propertyNames = ['domainId', 'anchorPosX', 'anchorPosY'];
-			var filterClause = 'parent.persistentId = :theId';
+			var filterClause = 'parent.persistentId = :theId and active = true';
 			var filterParams = [{ 'name': 'theId', 'value': facility_['persistentId']}];
 			var aisleFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
 			websession_.sendCommand(aisleFilterCmd, websocketCmdCallbackAisle(), true);
