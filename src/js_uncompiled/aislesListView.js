@@ -83,8 +83,17 @@ codeshelf.aisleslistview = function(websession, facility) {
 			});
 		},
 
+		/**
+		 * Delete the aisle
+		 */
+		deleteOneAisle: function(item) {
+			var theAisle = item;
+			var methodArgs = [
+			];
+			codeshelf.objectUpdater.callMethod(theAisle, 'Aisle', 'makeInactiveAndAllChildren', methodArgs);
+		},
 
-	associatePathSegment: function(item) {
+		associatePathSegment: function(item) {
 		var theAisle = item;
 		if (theAisle) {
 			var data = {
@@ -113,6 +122,28 @@ codeshelf.aisleslistview = function(websession, facility) {
 				self.setControllerForAisle(itemContext);
 			}
 		},
+		{
+			"label": "Delete one aisle",
+			"permission": "aisle:edit",
+			"action": function(itemContext) {
+				// the dialogOptions appear to have no effect. Would be nice to change the names of the buttons
+				var dialogOptions = {};
+				dialogOptions ['cancelButtonVisibility'] = "";
+				dialogOptions ['cancelButtonText'] = "Cancel";
+				dialogOptions ['actionButtonText'] = "Delete";
+				dialogOptions ['headerText'] = "Delete this aisle?";
+				dialogOptions ['bodyText'] = "You would have to redrop an aisles file to restore it.";
+				dialogOptions ['callback'] = function () {};
+				var aisleName = itemContext.domainId;
+				var headerTitle = "Delete aisle " + aisleName + "?";
+				codeshelf.simpleDlogService.showModalDialog(headerTitle, "You would have to redrop an aisles file to restore it.", dialogOptions)
+					.then(function() {
+
+						self.deleteOneAisle(itemContext);
+					});
+			}
+		},
+
 		{
 			"label": "Associate Path Segment",
 			"permission": "aisle:edit",
