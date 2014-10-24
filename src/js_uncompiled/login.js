@@ -23,7 +23,6 @@ codeshelf.loginWindow = function() {
 	function loginCheck() {
 		var loginCommand = {
 				'LoginRequest' : {
-					'organizationId' : goog.dom.getElement('organizationIdInput').value,
 					'userId': goog.dom.getElement('userIdInput').value,
 					'password': goog.dom.getElement('passwordInput').value
 				}
