@@ -35,13 +35,13 @@ domainobjects = {
 				'title': 'Path Segment',
 				'width': 25
 			},
-			'ledChannel': {
-				'id':    'ledChannel',
+			'ledChannelUi': {
+				'id':    'ledChannelUi',
 				'title': 'Channel',
 				'width': 8
 			},
-			'ledControllerId': {
-				'id':    'ledControllerId',
+			'ledControllerIdUi': {
+				'id':    'ledControllerIdUi',
 				'title': 'Controller',
 				'width': 25
 			},
@@ -109,16 +109,6 @@ domainobjects = {
 			'baySortName': {
 				'id':    'baySortName',
 				'title': 'Bay Sort',
-				'width': 25
-			},
-			'ledChannel': {
-				'id':    'ledChannel',
-				'title': 'Channel',
-				'width': 8
-			},
-			'ledControllerId': {
-				'id':    'ledControllerId',
-				'title': 'Controller',
 				'width': 25
 			},
 			'anchorPosXui': {
@@ -819,13 +809,13 @@ domainobjects = {
 				'title': 'Persistent ID',
 				'width': 40
 			},
-			'ledChannel': {
-				'id':    'ledChannel',
+			'ledChannelUi': {
+				'id':    'ledChannelUi',
 				'title': 'Channel',
 				'width': 8
 			},
-			'ledControllerId': {
-				'id':    'ledControllerId',
+			'ledControllerIdUi': {
+				'id':    'ledControllerIdUi',
 				'title': 'Controller',
 				'width': 25
 			},
