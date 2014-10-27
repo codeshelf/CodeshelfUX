@@ -76,7 +76,6 @@ codeshelf.loginWindow = function() {
 			websession_.setCurrentPage(self);
 
 			goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.loginDialog));
-			var organizationIdInput = goog.dom.getElement('organizationIdInput');
 			var userIdInput = goog.dom.getElement('userIdInput');
 			var passwordInput = goog.dom.getElement('passwordInput');
 
@@ -96,8 +95,8 @@ codeshelf.loginWindow = function() {
 					loginCheck();
 				}
 			};
-			organizationIdInput.focus();
-			organizationIdInput.select();
+			userIdInput.focus();
+			userIdInput.select();
 		},
 
 		exit: function() {
