@@ -917,8 +917,8 @@ domainobjects = {
 				'title': 'Complete',
 				'width': 8
 			},
-			'pickInstruction': {
-				'id':    'pickInstruction',
+			'pickInstructionUi': {
+				'id':    'pickInstructionUi',
 				'title': 'Where',
 				'width': 10
 			},

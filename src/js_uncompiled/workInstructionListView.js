@@ -21,7 +21,7 @@ goog.require('goog.ui.tree.TreeControl');
 codeshelf.defaultWorkInstructionColumns = [
  'description',
  'containerId',
- 'pickInstruction',
+ 'pickInstructionUi',
  'statusEnum',
  'planQuantity',
  'uomMasterId'
