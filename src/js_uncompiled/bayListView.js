@@ -68,7 +68,7 @@ codeshelf.baylistview = function(websession, facility) {
 		"width" : 10,
 		"iconClass" : "glyphicon-flash",
 		"handler" : function(event, args, item) {
-			websession_.callServiceMethod("LightService", 'lightAllControllers', ["RED",
+			websession_.callServiceMethod("LightService", 'lightChildLocations', ["RED",
 																				  facility_["persistentId"],
 																				  item["nominalLocationId"]]).then(function(response) {
 				logger_.info("Sent lightAllControllers for location:  " + item["nominalLocationId"]);

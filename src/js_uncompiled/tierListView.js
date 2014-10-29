@@ -170,7 +170,7 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 		"iconClass" : "glyphicon-flash",
 		"handler" : function(event, args, item) {
 			var locationId = item["nominalLocationId"];
-			websession_.callServiceMethod("LightService", 'lightOneLocation', ["RED",
+			websession_.callServiceMethod("LightService", 'lightChildLocations', ["RED",
 																		   facility_['persistentId'],
 																		   locationId]).then(function(response) {
 				logger_.info("Sent light for location:  " + locationId);
