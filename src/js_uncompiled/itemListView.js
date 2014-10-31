@@ -29,15 +29,23 @@ codeshelf.itemListViewForSku = function(websession, facility, sku) {
 };
 
 
-codeshelf.itemListViewForTier = function(websession, facility, tier) {
+// Try for a general one that works both for tier and aisle. Misnamed. I did not want to change to itemListViewForLocation yet in case this had to merge.
+codeshelf.itemListViewForTier = function(websession, facility, location) {
 	// item parent goes itme->itemMaster>facility
-	var	itemFilter = "parent.parent.persistentId = :theId and active = true and storedLocation.persistentId = :theLocationId";
-	var itemFilterParams = [
-			{ 'name': 'theId', 'value': facility['persistentId']},
-			{ 'name': 'theLocationId', 'value': tier['persistentId']}
-		];
+	// This should pick up in tiers item location list: items in the tier
+	// Also pick up in aisles item location list: item in aisle, or item in tier. Does not pick up item in slots for aisle.
 
-	return codeshelf.buildItemListView(websession, facility, itemFilter, itemFilterParams, "Item Locations For Tier: " + codeshelf.toLocationDescription(tier));
+	// This one works to narrowly satisfy Accu requirements
+	// var	itemFilter = "parent.parent.persistentId = :theId and active = true and ((storedLocation.persistentId = :theLocationId) or (storedLocation.parent is not null and (storedLocation.parent.parent is not null and (storedLocation.parent.parent.persistentId = :theLocationId))))";
+
+	/// Can we improve it to pick up item in slot for tier list? And therefore work for bay item locations list, picking up tiers or slots.
+	var	itemFilter = "parent.parent.persistentId = :theId and active = true and ((storedLocation.persistentId = :theLocationId) or (storedLocation.parent is not null and ((storedLocation.parent.persistentId = :theLocationId) or (storedLocation.parent.parent is not null and (storedLocation.parent.parent.persistentId = :theLocationId)))))";
+	var itemFilterParams = [
+		{ 'name': 'theId', 'value': facility['persistentId']},
+		{ 'name': 'theLocationId', 'value': location['persistentId']}
+	];
+
+	return codeshelf.buildItemListView(websession, facility, itemFilter, itemFilterParams, "Item Locations in: " + codeshelf.toLocationDescription(location));
 };
 
 codeshelf.itemlistview = function(websession, facility) {
@@ -111,7 +119,7 @@ codeshelf.buildItemListView = function(websession, facility, itemFilter, itemFil
 
 	var actions = [{
 		"id" : "lightLed",
-		"title": "Light Led",
+		"title": "Light Item",
 		"width" : 10,
 		"iconClass" : ["glyphicon-flash", "glyphicon-barcode"],
 		"handler" : function(event, args, item) {

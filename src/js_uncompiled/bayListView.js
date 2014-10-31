@@ -62,6 +62,16 @@ codeshelf.baylistview = function(websession, facility) {
 		}
 	};
 
+	var contextDefs = [
+		{
+			"label" : "Item Locations For Bay",
+			"permission": "inventory:view",
+			"action": function(itemContext) {
+				codeshelf.windowLauncher.loadItemsListView(itemContext);
+			}
+		}
+
+	];
 
 	var actions = [{
 		"id" : "lightLocation",
@@ -97,7 +107,7 @@ codeshelf.baylistview = function(websession, facility) {
 	];
 
 	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['Bay']['className'], "linkProperty": 'parent', "filter" : bayFilter, "filterParams" : bayFilterParams, "properties": domainobjects['Bay']['properties'], "actions": actions };
+	hierarchyMap[0] = { "className": domainobjects['Bay']['className'], "linkProperty": 'parent', "filter" : bayFilter, "filterParams" : bayFilterParams, "properties": domainobjects['Bay']['properties'], "contextMenuDefs" : contextDefs, "actions": actions };
 
 	var viewOptions = {
 		'editable':  true,

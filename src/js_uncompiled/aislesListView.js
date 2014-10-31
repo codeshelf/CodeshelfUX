@@ -157,6 +157,13 @@ codeshelf.aisleslistview = function(websession, facility) {
 			"action": function(itemContext) {
 				self.launchTiersForAisle(itemContext);
 			}
+		},
+		{
+			"label" : "Item Locations in Aisle",
+			"permission": "inventory:view",
+			"action": function(itemContext) {
+				codeshelf.windowLauncher.loadItemsListView(itemContext);
+			}
 		}
 	];
 
