@@ -172,18 +172,6 @@ codeshelf.aisleslistview = function(websession, facility) {
 				logger_.info("Sent lightLocation for location:  " + item["domainId"]);
 			});
 		}}
-		,{
-		"id" : "lightItems",
-		"title": "Light Items",
-		"width" : 10,
-		"iconClass" : ["glyphicon-flash", "glyphicon-barcode"],
-		"handler" : function(event, args, item) {
-			websession_.callServiceMethod("LightService", 'lightInventory', [facility_["persistentId"],
-																				  item["nominalLocationId"]]
-			).then(function(response) {
-				logger_.info("Sent lightInventory for location:  " + item["domainId"]);
-			});
-		}}
 	];
 
 	var aisleFilter = 'parent.persistentId = :theId and active = true';
