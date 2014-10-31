@@ -62,19 +62,33 @@ codeshelf.baylistview = function(websession, facility) {
 		}
 	};
 
+
 	var actions = [{
-		"id" : "lightLed",
-		"title": "Light Led",
+		"id" : "lightLocation",
+		"title": "Light Location",
 		"width" : 10,
-		"iconClass" : "glyphicon-flash",
+		"iconClass" : ["glyphicon-flash", "glyphicon-download-alt"],
 		"handler" : function(event, args, item) {
-			websession_.callServiceMethod("LightService", 'lightAllControllers', ["RED",
-																				  facility_["persistentId"],
-																				  item["nominalLocationId"]]).then(function(response) {
-				logger_.info("Sent lightAllControllers for location:  " + item["nominalLocationId"]);
+			websession_.callServiceMethod("LightService", 'lightLocation', [facility_["persistentId"],
+																				  item["nominalLocationId"]]
+			).then(function(response) {
+				logger_.info("Sent lightChildLocations for location:  " + item["domainId"]);
 			});
-		}
-	}];
+		}}
+		,{
+		"id" : "lightItems",
+		"title": "Light Items",
+		"width" : 10,
+		"iconClass" : ["glyphicon-flash", "glyphicon-barcode"],
+		"handler" : function(event, args, item) {
+			websession_.callServiceMethod("LightService", 'lightInventory', [facility_["persistentId"],
+																				  item["nominalLocationId"]]
+			).then(function(response) {
+				logger_.info("Sent lightInventory for location:  " + item["domainId"]);
+			});
+		}}
+	];
+
 	// tier parent goes bay->aisle>facility
 	var bayFilter = 'parent.parent.persistentId = :theId and active = true';
 
