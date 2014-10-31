@@ -626,9 +626,13 @@ codeshelf.grid.toButtonColumn = function(actionDef) {
 	var formatter = function(row, cell, value, columnDef, dataContext) {
 		var iconClass = actionDef["iconClass"];
 		if (iconClass == null) {
-			iconClass = "glyphicon-chevron-down";
+			iconClass = ["glyphicon-chevron-down"];
 		}
-		return '<button class="btn ' + classAttribute + '" ><span class="glyphicon ' + iconClass + '" style="vertical-align:middle"></span></button>';
+		var iconHtml = "";
+		for(var i = 0; i < iconClass.length; i++) {
+			iconHtml += '<span class="glyphicon '  + iconClass[i] + '"  style="  vertical-align:middle"></span>';
+		}
+		return '<button class="btn ' + classAttribute + '" > ' + iconHtml + '</button>';
 	};
 
 	var newActionColumn = {
