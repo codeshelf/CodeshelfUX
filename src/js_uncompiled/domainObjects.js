@@ -177,6 +177,11 @@ domainobjects = {
 				'title': 'Work Area',
 				'width': 16
 			},
+			'color': {
+				'id': 'color',
+				'title': 'Color',
+				'width': 16
+			},
 			'currentUser': {
 				'id': 'currentUser',
 				'title': 'User',

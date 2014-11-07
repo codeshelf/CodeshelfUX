@@ -263,9 +263,11 @@ codeshelfApp.CheNgController = function($scope, $modalInstance, data){
 	// tweaking separate fields
 	// first has html/angular scope matching js field.
 	$scope['che']['description'] = data['che']['description'];
+	$scope['che']['color'] = data['che']['color'];
 	// second could match. Just being different to practice for when we have to be different
 	$scope['che']['domainid'] = data['che']['domainId'];
 	$scope['che']['cntrlrid'] = data['che']['deviceGuidStr'];
+
 
 };
 goog.inherits(codeshelfApp.CheNgController, codeshelfApp.AbstractCheController);
@@ -281,6 +283,11 @@ codeshelfApp.CheNgController.prototype.ok = function(){
 	var javaDomainProperty = "domainId"; // Passed as the java field
 	var jsControllerProperty = "cntrlrid"; // this matches the partial html
 	var javaControllerProperty = "deviceGuid"; // Passed as the java field
+
+	// "description is the name used here, and matches the java-side field name. This is a trivial update
+	if (!isEmptyString(che["color"]))
+		codeshelf.objectUpdater.updateOne(che, "Che", "color", che["color"]);
+
 	// "description is the name used here, and matches the java-side field name. This is a trivial update
 	if (!isEmptyString(che[descriptionProperty]))
 		codeshelf.objectUpdater.updateOne(che, "Che", descriptionProperty, che[descriptionProperty]);
