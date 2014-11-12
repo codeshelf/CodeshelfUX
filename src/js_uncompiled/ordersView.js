@@ -97,6 +97,8 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 				return false;
 			else if (inProperty['id'] === 'readableOrderDate')
 				return false;
+			else if (inProperty['id'] === 'willProduceWiUi')
+				return false;
 			else if (inProperty['id'] === 'readableDueDate')
 				return false;
 			else if (inProperty['id'] === 'shipmentId')

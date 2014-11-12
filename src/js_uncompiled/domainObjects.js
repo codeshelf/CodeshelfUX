@@ -489,6 +489,11 @@ domainobjects = {
 				'title': 'Detail ID',
 				'width': 15
 			},
+			'willProduceWiUi':    {
+				'id':    'willProduceWiUi',
+				'title': 'OK',
+				'width': 5
+			},
 			'statusEnum':      {
 				'id':    'statusEnum',
 				'title': 'Status',
