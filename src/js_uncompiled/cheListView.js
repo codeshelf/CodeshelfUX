@@ -52,7 +52,9 @@ codeshelf.cheslistview = function(websession, facility) {
 				return true;
 			else if (inProperty['id'] ===  'activeContainers')
 				return true;
-			else if (inProperty['id'] ===  'description')
+			else if (inProperty['id'] ===  'color')
+				return true;
+			else if (inProperty['id'] ===  'deviceGuidStr')
 				return true;
 			else
 				return false;
