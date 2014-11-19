@@ -265,13 +265,13 @@ domainobjects = {
 				'title': 'ID',
 				'width': 25
 			},
-			'providerEnum':     {
-				'id':    'providerEnum',
+			'provider':     {
+				'id':    'provider',
 				'title': 'Provider',
 				'width': 40
 			},
-			'serviceStateEnum': {
-				'id':    'serviceStateEnum',
+			'serviceState': {
+				'id':    'serviceState',
 				'title': 'Service State',
 				'width': 40
 			},
@@ -291,8 +291,8 @@ domainobjects = {
 				'title': 'Parent ID',
 				'width': 25
 			},
-			'documentStateEnum': {
-				'id':    'documentStateEnum',
+			'documentState': {
+				'id':    'documentState',
 				'title': 'Doc State',
 				'width': 40
 			},
@@ -494,8 +494,8 @@ domainobjects = {
 				'title': 'OK',
 				'width': 5
 			},
-			'statusEnum':      {
-				'id':    'statusEnum',
+			'status':      {
+				'id':    'status',
 				'title': 'Status',
 				'width': 25
 			},
@@ -551,8 +551,8 @@ domainobjects = {
 				'title': 'ID',
 				'width': 25
 			},
-			'statusEnum':       {
-				'id':    'statusEnum',
+			'status':       {
+				'id':    'status',
 				'title': 'Status',
 				'width': 15
 			},
@@ -602,8 +602,8 @@ domainobjects = {
 				'title': 'Due Date',
 				'width': 15
 			},
-			'statusEnum':       {
-				'id':    'statusEnum',
+			'status':       {
+				'id':    'status',
 				'title': 'Status',
 				'width': 15
 			},
@@ -637,8 +637,8 @@ domainobjects = {
 				'title': 'Active',
 				'width': 8
 			},
-			'orderTypeEnum': {
-				'id':    'orderTypeEnum',
+			'orderType': {
+				'id':    'orderType',
 				'title': 'Order Type',
 				'width': 10
 			}
@@ -992,8 +992,8 @@ domainobjects = {
 				'title': 'Persistent ID',
 				'width': 40
 			},
-			'statusEnum': {
-				'id':    'statusEnum',
+			'status': {
+				'id':    'status',
 				'title': 'Status',
 				'width': 10
 			},

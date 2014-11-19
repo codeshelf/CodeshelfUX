@@ -109,7 +109,7 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 				return false;
 			else if (inProperty['id'] === 'orderDetailId')
 				return false;
-			else if (inProperty['id'] === 'statusEnum')
+			else if (inProperty['id'] === 'status')
 				return false;
 			else if (inProperty['id'] === 'active')
 				return false;
@@ -148,18 +148,18 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 	// Rather complicated. 4 significantly different view types
 	if (facility_['hasMeaningfulOrderGroups']) {
 		if (outboundOrders_)
-			orderHeaderFilter = "statusEnum <> 'COMPLETE' and active = true and orderTypeEnum = 'OUTBOUND' ";
+			orderHeaderFilter = "status <> 'COMPLETE' and active = true and orderType = 'OUTBOUND' ";
 		else
-			orderHeaderFilter = "statusEnum <> 'COMPLETE' and active = true and orderTypeEnum = 'CROSS' ";
+			orderHeaderFilter = "status <> 'COMPLETE' and active = true and orderType = 'CROSS' ";
 	}
 	else {
 		if (outboundOrders_)
-			orderHeaderFilter = "parent.persistentId = :theId and statusEnum <> 'COMPLETE' and active = true and orderTypeEnum = 'OUTBOUND' ";
+			orderHeaderFilter = "parent.persistentId = :theId and status <> 'COMPLETE' and active = true and orderType = 'OUTBOUND' ";
 		else
-			orderHeaderFilter = "parent.persistentId = :theId and statusEnum <> 'COMPLETE' and active = true and orderTypeEnum = 'CROSS' ";
+			orderHeaderFilter = "parent.persistentId = :theId and status <> 'COMPLETE' and active = true and orderType = 'CROSS' ";
 	}
 
-	var orderDetailFilter = "statusEnum <> 'COMPLETE'";
+	var orderDetailFilter = "status <> 'COMPLETE'";
 
 
 	var orderDetailHierarchyMapDef = { "className": domainobjects['OrderDetail']['className'], "linkProperty": 'parent', "filter": orderDetailFilter, "filterParams": undefined, "properties": domainobjects['OrderDetail']['properties'], "comparer": undefined , "contextMenuDefs": orderDetailContextDefs};
@@ -185,7 +185,7 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 		view = codeshelf.hierarchylistview(websession_, domainobjects['OrderGroup'], hierarchyMap,viewOptions);
 	} else {
 		// This is only used if NOT getHasOrderGroups(). See below. undefined used for orderGroups as there is no parameter to substitute.
-		// Probably would be good to parameterize much more: orderTypeEnum in particular.
+		// Probably would be good to parameterize much more: orderType in particular.
 		var orderHeaderFilterParams = [
 			{ 'name': 'theId', 'value': facility_['persistentId']}
 		];
