@@ -22,7 +22,7 @@ codeshelf.defaultWorkInstructionColumns = [
  'description',
  'containerId',
  'pickInstructionUi',
- 'statusEnum',
+ 'status',
  'planQuantity',
  'uomMasterId'
 ];
@@ -68,7 +68,7 @@ codeshelf.workinstructionsAll = function(websession, facility) {
 	// all uncompleted work instructions this facility. Include REVERT though
 	// through V4 parentage goes workInstruction->orderDetail->orderHeader->facility
 	// from V5 work instruction parent is facility.
-	var	workInstructionFilter = "parent.persistentId = :theId and statusEnum != 'COMPLETE'";
+	var	workInstructionFilter = "parent.persistentId = :theId and status != 'COMPLETE'";
 
 	var workInstructionFilterParams = [
 		{ 'name': 'theId', 'value': facility['persistentId']}

@@ -71,7 +71,7 @@ codeshelf.orderdetailsview = function(websession, facility) {
 				return false;
 			else if (inProperty['id'] === 'orderDetailId')
 				return false;
-			else if (inProperty['id'] === 'statusEnum')
+			else if (inProperty['id'] === 'status')
 				return false;
 			else if (inProperty['id'] === 'active')
 				return false;
@@ -107,7 +107,7 @@ codeshelf.orderdetailsview = function(websession, facility) {
 		{ 'name': 'theId', 'value': facility_['persistentId']}
 	];
 
-	var orderDetailFilter = "statusEnum <> 'COMPLETE' and parent.parent.persistentId = :theId";
+	var orderDetailFilter = "status <> 'COMPLETE' and parent.parent.persistentId = :theId";
 
 	var orderDetailHierarchyMapDef = { "className": domainobjects['OrderDetail']['className'], "linkProperty": 'parent', "filter": orderDetailFilter, "filterParams": orderDetailFilterParams, "properties": domainobjects['OrderDetail']['properties'], "comparer": undefined , "contextMenuDefs": orderDetailContextDefs};
 
