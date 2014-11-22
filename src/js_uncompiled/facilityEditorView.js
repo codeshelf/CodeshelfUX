@@ -18,6 +18,8 @@ goog.require('goog.events.EventType');
 
 codeshelf.facilityeditorview = function (websession, facility) {
 // organization not used, so no longer passed as parameter
+	var logger_ = goog.debug.Logger.getLogger('facilityeditorview');
+
 	var websession_ = websession;
 	var facility_ = facility;
 
@@ -250,6 +252,7 @@ codeshelf.facilityeditorview = function (websession, facility) {
 								{'name': 'z', 'value': 0.0, 'classType': 'java.lang.Double'}
 						];
 						var updatePointCmd = websession_.createObjectMethodRequest(className,persistentId,"updatePoint", methodArgs);
+						logger_.info("sending lat lng" + marker.getPosition());
 						websession_.sendCommand(updatePointCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP),false);
 					}
 				}
@@ -293,6 +296,7 @@ codeshelf.facilityeditorview = function (websession, facility) {
 			facilityOutlinePath_.setAt(vertex['drawOrder'], latLng);
 			var vertexData = facilityOutlineVertices_[vertex['drawOrder']];
 			vertexData.marker.setPosition(latLng);
+			logger_.info("updated lat lng" + latLng);
 		}
 		setBounds();
 	}
@@ -660,7 +664,7 @@ codeshelf.facilityeditorview = function (websession, facility) {
 			/*
 			var data = {
 				'className': domainobjects['Vertex']['className'],
-				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder'],
+				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder'],
 				'filterClause': 'parent.persistentId = :theId',
 				'filterParams': [
 					{ 'name': 'theId', 'value': facility_['persistentId']}
@@ -669,7 +673,7 @@ codeshelf.facilityeditorview = function (websession, facility) {
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			*/
 			var className = domainobjects['Vertex']['className'];
-			var propertyNames = ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder'];
+			var propertyNames = ['domainId', 'posType', 'posX', 'posY', 'drawOrder'];
 			var filterClause = 'parent.persistentId = :theId';
 			var filterParams = [{ 'name': 'theId', 'value': facility_['persistentId']}];
 			var setListViewFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
@@ -699,5 +703,4 @@ codeshelf.facilityeditorview = function (websession, facility) {
 
 
 	return self;
-}
-;
+};

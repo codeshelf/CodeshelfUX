@@ -332,16 +332,16 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 		graphics_.drawPath(path, stroke, fill);
 	}
 
-	function drawPathSegment(startPoint, endPoint, travelDirEnum) {
+	function drawPathSegment(startPoint, endPoint, travelDir) {
 		var startArrow = 0.0;
 		var endArrow = 0.0;
 
 
-		if (travelDirEnum == null || travelDirEnum === 'FORWARD' || travelDirEnum === 'BOTH') {
+		if (travelDir == null || travelDir === 'FORWARD' || travelDir === 'BOTH') {
 			endArrow = 7.5;
 		}
 
-		if (travelDirEnum != null && (travelDirEnum === 'REVERSE' || travelDirEnum === 'BOTH')) {
+		if (travelDir != null && (travelDir === 'REVERSE' || travelDir === 'BOTH')) {
 			endArrow = 7.5;
 		}
 
@@ -392,7 +392,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			/*
 			var vertexFilterData = {
 				'className': domainobjects['Vertex']['className'],
-				'propertyNames': ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
+				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
 				'filterClause': 'parent.persistentId = :theId',
 				'filterParams': [
 					{ 'name': 'theId', 'value': aisle['persistentId']}
@@ -401,7 +401,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
 			*/
 			var className = domainobjects['Vertex']['className'];
-			var propertyNames = ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder', 'parentPersistentId'];
+			var propertyNames = ['domainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId'];
 			var filterClause = 'parent.persistentId = :theId';
 			var filterParams = [{ 'name': 'theId', 'value': aisle['persistentId']}];
 			var vertexFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
@@ -447,7 +447,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			/*
 			var pathSegmentFilterData = {
 				'className': domainobjects['PathSegment']['className'],
-				'propertyNames': ['domainId', 'posTypeEnum', 'startPosX', 'startPosY', 'endPosX', 'endPosY', 'parentPersistentId'],
+				'propertyNames': ['domainId', 'posType', 'startPosX', 'startPosY', 'endPosX', 'endPosY', 'parentPersistentId'],
 				'filterClause': 'parent.persistentId = :theId',
 				'filterParams': [
 					{ 'name': 'theId', 'value': path['persistentId']}
@@ -456,7 +456,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			var pathSegmentFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, pathSegmentFilterData);
 			*/
 			var className = domainobjects['PathSegment']['className'];
-			var propertyNames = ['domainId', 'posTypeEnum', 'startPosX', 'startPosY', 'endPosX', 'endPosY', 'parentPersistentId'];
+			var propertyNames = ['domainId', 'posType', 'startPosX', 'startPosY', 'endPosX', 'endPosY', 'parentPersistentId'];
 			var filterClause = 'parent.persistentId = :theId';
 			var filterParams = [{ 'name': 'theId', 'value': path['persistentId']}];
 			var pathSegmentFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
@@ -747,7 +747,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 		open: function () {
 			// Create the filter to listen to all vertex updates for this facility.
 			var className = domainobjects['Vertex']['className'];
-			var propertyNames = ['domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder'];
+			var propertyNames = ['domainId', 'posType', 'posX', 'posY', 'drawOrder'];
 			var filterClause = 'parent.persistentId = :theId';
 			var filterParams = [{'name': 'theId', 'value': facility_['persistentId']}];
 			var vertexFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
@@ -765,7 +765,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			// Create the filter to listen to all path updates for this facility.
 
 			var className = domainobjects['Path']['className'];
-			var propertyNames = ['domainId', 'travelDirEnum'];
+			var propertyNames = ['domainId', 'travelDir'];
 			var filterClause = 'parent.persistentId = :theId';
 			var filterParams = [{ 'name': 'theId', 'value': facility_['persistentId']}];
 			var pathFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
@@ -899,7 +899,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 							end.x = /*facilityPoints_[0]['x'] + */(pathSegmentData['endPosX'] * self.getPixelsPerMeter());
 							end.y = /*facilityPoints_[0]['y'] + */(pathSegmentData['endPosY'] * self.getPixelsPerMeter());
 
-							drawPathSegment(start, end, pathData['path']['travelDirEnum']);
+							drawPathSegment(start, end, pathData['path']['travelDir']);
 						}
 					}
 				}
