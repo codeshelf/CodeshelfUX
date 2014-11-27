@@ -133,7 +133,7 @@ codeshelf.aisleview = function(websession, aisle) {
 			/*
 			var vertexFilterData = {
 				'className':     domainobjects['Vertex']['className'],
-				'propertyNames': [ 'domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder', 'parentPersistentId' ],
+				'propertyNames': [ 'domainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId' ],
 				'filterClause':  'parent.persistentId = :theId',
 				'filterParams':  [
 					{
@@ -145,7 +145,7 @@ codeshelf.aisleview = function(websession, aisle) {
 			var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
 			*/
 			var className = domainobjects['Vertex']['className'];
-			var propertyNames = [ 'domainId', 'posTypeEnum', 'posX', 'posY', 'drawOrder', 'parentPersistentId' ];
+			var propertyNames = [ 'domainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId' ];
 			var clause = "parent.persistentId = :theId";
 			var params = [{ 'name':  'theId','value': bay['persistentId']}];
 			var vertexFilterCmd =  websession_.createRegisterFilterRequest(className,propertyNames,clause,params);
@@ -259,7 +259,7 @@ codeshelf.aisleview = function(websession, aisle) {
 				/*
 				var data = {
 					'className':     domainobjects['Bay']['className'],
-					'propertyNames': [ 'domainId', 'anchorPosTypeEnum', 'anchorPosX', 'anchorPosY', 'anchorPosZ' ],
+					'propertyNames': [ 'domainId', 'anchorPosType', 'anchorPosX', 'anchorPosY', 'anchorPosZ' ],
 					'filterClause':  'parent.persistentId = :theId AND anchorPosZ = 0',
 					'filterParams':  [
 						{
@@ -271,7 +271,7 @@ codeshelf.aisleview = function(websession, aisle) {
 				var bayFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 				*/
 				var className = domainobjects['Bay']['className'];
-				var propertyNames = [ 'domainId', 'anchorPosTypeEnum', 'anchorPosX', 'anchorPosY', 'anchorPosZ' ];
+				var propertyNames = [ 'domainId', 'anchorPosType', 'anchorPosX', 'anchorPosY', 'anchorPosZ' ];
 				var clause = 'parent.persistentId = :theId AND anchorPosZ = 0';
 				var params =  [{'name':  'theId','value': aisle_['persistentId']}];
 				var bayFilterCmd =  websession_.createRegisterFilterRequest(className,propertyNames,clause,params);
