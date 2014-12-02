@@ -91,7 +91,7 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 	var ledControllerFilter = 'ledControllersByFacility';
 
 	var ledControllerFilterParams = [
-		{ 'name': 'parentId', 'value': facility_['persistentId']}
+		{ 'name': 'facilityId', 'value': facility_['persistentId']}
 	];
 
 	var hierarchyMap = [];
