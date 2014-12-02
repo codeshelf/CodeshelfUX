@@ -127,7 +127,7 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 		tierFilter = 'tiersByAisle';
 
 		tierFilterParams = [
-			{ 'name': 'theId', 'value': aisle_['persistentId']}
+			{ 'name': 'aisleId', 'value': aisle_['persistentId']}
 		];
 	}
 
