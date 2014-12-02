@@ -80,14 +80,14 @@ codeshelf.pathsview = function(websession, facility) {
 	];
 
 
-	var pathFilter = 'parent.persistentId = :theId';
+	var pathFilter = 'allByParent';
 	var pathFilterParams = [
-		{ 'name': 'theId', 'value': facility_['persistentId']}
+		{ 'name': 'parentId', 'value': facility_['persistentId']}
 	];
 
 	var hierarchyMap = [];
 	hierarchyMap[0] = { "className": domainobjects['Path']['className'], "linkProperty": 'parent', "filter" : pathFilter, "filterParams" : pathFilterParams, "properties": domainobjects['Path']['properties'], "contextMenuDefs" : contextDefs };
-	hierarchyMap[1] = { "className": domainobjects['PathSegment']['className'], "linkProperty": 'parent', "filter" : undefined, "filterParams" : undefined, "properties": domainobjects['PathSegment']['properties'] };
+	hierarchyMap[1] = { "className": domainobjects['PathSegment']['className'], "linkProperty": 'parent', "filter" : "pathSegmentsByPath", "filterParams" : undefined, "properties": domainobjects['PathSegment']['properties'] };
 
 	var viewOptions = {
 		'editable':  true,

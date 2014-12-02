@@ -5,7 +5,6 @@
  *******************************************************************************/
 
 goog.provide('codeshelf.ediservicesview');
-goog.require('codeshelf.aisleview');
 goog.require('codeshelf.dataentrydialog');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.templates');
@@ -70,9 +69,9 @@ codeshelf.ediservicesview = function (websession, facility) {
 		}
 	];
 
-	var serviceFilter = 'parent.persistentId = :theId';
+	var serviceFilter = 'allByParent';
 	var serviceFilterParams = [
-		{ 'name': 'theId', 'value': facility_['persistentId']}
+		{ 'name': 'parentId', 'value': facility_['persistentId']}
 	];
 
 	var hierarchyMap = [];

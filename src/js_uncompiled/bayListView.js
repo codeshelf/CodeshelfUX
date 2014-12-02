@@ -100,10 +100,10 @@ codeshelf.baylistview = function(websession, facility) {
 	];
 
 	// tier parent goes bay->aisle>facility
-	var bayFilter = 'parent.parent.persistentId = :theId and active = true';
+	var bayFilter = 'baysByFacility';
 
 	var bayFilterParams = [
-		{ 'name': 'theId', 'value': facility_['persistentId']}
+		{ 'name': 'facilityId', 'value': facility_['persistentId']}
 	];
 
 	var hierarchyMap = [];

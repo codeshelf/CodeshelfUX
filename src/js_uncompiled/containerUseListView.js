@@ -97,18 +97,18 @@ codeshelf.containeruselistview = function(websession, facility, inChe) {
 
 	if (null === che_) {
 		// containerUse parent goes containerUse->container>facility
-		containerUseFilter = "parent.parent.persistentId = :theId and active = true";
+		containerUseFilter = "containerUsesByFacility";
 
 		containerUseFilterParams = [
-			{ 'name': 'theId', 'value': facility_['persistentId']}
+			{ 'name': 'facilityId', 'value': facility_['persistentId']}
 		];
 	}
 	else {
 		// containerUse has currentChe field. Need a metafield?
-		containerUseFilter = "current_che_persistentid = :theId  and active = true";
+		containerUseFilter = "containerUseByChe";
 
 		containerUseFilterParams = [
-			{ 'name': 'theId', 'value': che_['persistentId']}
+			{ 'name': 'cheId', 'value': che_['persistentId']}
 		];
 	}
 

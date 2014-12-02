@@ -89,10 +89,10 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 	];
 
 	// tier parent goes bay->aisle>facility
-	var tierSlotFilter = 'parent.persistentId = :theId and active = true';
+	var tierSlotFilter = 'allActiveByParent';
 
 	var tierSlotFilterParams = [
-		{ 'name': 'theId', 'value': tier_['persistentId']}
+		{ 'name': 'parentId', 'value': tier_['persistentId']}
 	];
 
 	var hierarchyMap = [];

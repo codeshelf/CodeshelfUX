@@ -79,10 +79,10 @@ codeshelf.itemmasterlistview = function(websession, facility) {
 	];
 
 	// item parent goes item->itemMaster>facility
-	var itemMasterFilter = "parent.persistentId = :theId and active = true";
+	var itemMasterFilter = "allActiveByParent";
 
 	var itemMasterFilterParams = [
-			{ 'name': 'theId', 'value': facility_['persistentId']}
+			{ 'name': 'parentId', 'value': facility_['persistentId']}
 		];
 
 

@@ -18,22 +18,11 @@ codeshelfApp.PathSegmentService = function($q, websession) {
 codeshelfApp.PathSegmentService.prototype.getPathSegments = function() {
 	var deferred = this.q_.defer();
 	// ledController parent is codeshelf_network, whose parent is the facility
-	// Luckily, ebeans can handle this form also.
-	var filter = 'parent.parent.persistentId = :theId';
+	var filter = 'pathSegmentsByFacility';
 
 	var filterParams = [
-		{ 'name': 'theId', 'value': this.facility_["persistentId"] }
+		{ 'name': 'facilityId', 'value': this.facility_["persistentId"] }
 	];
-
-	/*
-	var data = {
-		'className':     domainobjects['PathSegment']['className'],
-		'propertyNames': Object.keys(domainobjects['PathSegment']['properties']),
-		'filterClause':  filter,
-		'filterParams':  filterParams
-	};
-	var setListViewFilterCmd = this.websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-	*/
 
 	var className = domainobjects['PathSegment']['className'];
 	var propertyNames = Object.keys(domainobjects['PathSegment']['properties']);

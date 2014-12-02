@@ -32,17 +32,11 @@ codeshelf.workinstructionsByCheAndAssignedTimestamp = function(websession, facil
 	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'assignedCheName', 'groupAndSortCode');
 
 	// all work instructions for this che, and the given assigned time but only active orders. (Not checking active details)
-	var workInstructionFilter = "assignedChe = :theId and assigned = :assignedTimestamp";
+	var workInstructionFilter = "workInstructionByCheAndAssignedTime";
 
-	// Experiments
-	// Does not work:  "assignedChePersistentid = :theId";      // seems like it could work, and would if there were a text field
-	// assignedChePersistentid that would persist as assigned_che_persistentid
-
-	// Does work PREFERRED:  "assignedChe = :theId";            // the work instruction java field name is assignedChe
-	// Does work:  "assigned_che_persistentid = :theId";        // the database field is assigned_che_persistentid for field assignedChe
 	var workInstructionFilterParams = [
-		{ 'name': 'theId', 'value': inChe['persistentId']},
-		{ 'name': 'assignedTimestamp', 'value': assignedTimestamp, 'type': 'java.sql.Timestamp'} //TODO work out a named filter strategy
+		{ 'name': 'cheId', 'value': inChe['persistentId']},
+		{ 'name': 'assignedTimestamp', 'value': assignedTimestamp, 'type': 'java.sql.Timestamp'}
 	];
 
 	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
@@ -55,10 +49,10 @@ codeshelf.workinstructionsByItemMaster = function(websession, facility, inItemMa
 	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'groupAndSortCode', 'completeTimeForUi');
 
 	// all work instructions for this item, including complete.
-	var workInstructionFilter = "itemMaster = :theId";
+	var workInstructionFilter = "workInstructionBySku";
 
 	var	workInstructionFilterParams = [
-		{ 'name': 'theId', 'value': inItemMasterId}
+		{ 'name': 'sku', 'value': inItemMasterId}
 	];
 
 	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
@@ -68,10 +62,10 @@ codeshelf.workinstructionsAll = function(websession, facility) {
 	// all uncompleted work instructions this facility. Include REVERT though
 	// through V4 parentage goes workInstruction->orderDetail->orderHeader->facility
 	// from V5 work instruction parent is facility.
-	var	workInstructionFilter = "parent.persistentId = :theId and status != 'COMPLETE'";
+	var	workInstructionFilter = "workInstructionsByFacility";
 
 	var workInstructionFilterParams = [
-		{ 'name': 'theId', 'value': facility['persistentId']}
+		{ 'name': 'facilityId', 'value': facility['persistentId']}
 	];
 	return codeshelf.workinstructionlistview(websession, facility, "", codeshelf.defaultWorkInstructionColumns, workInstructionFilter, workInstructionFilterParams);
 };

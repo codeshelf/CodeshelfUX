@@ -103,11 +103,10 @@ codeshelf.orderdetailsview = function(websession, facility) {
 		}
 	);
 
+	var orderDetailFilter = "orderDetailsByFacility";
 	var orderDetailFilterParams = [
-		{ 'name': 'theId', 'value': facility_['persistentId']}
+		{ 'name': 'facilityId', 'value': facility_['persistentId']}
 	];
-
-	var orderDetailFilter = "status <> 'COMPLETE' and parent.parent.persistentId = :theId";
 
 	var orderDetailHierarchyMapDef = { "className": domainobjects['OrderDetail']['className'], "linkProperty": 'parent', "filter": orderDetailFilter, "filterParams": orderDetailFilterParams, "properties": domainobjects['OrderDetail']['properties'], "comparer": undefined , "contextMenuDefs": orderDetailContextDefs};
 

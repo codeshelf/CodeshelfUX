@@ -673,9 +673,10 @@ codeshelf.facilityeditorview = function (websession, facility) {
 			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 			*/
 			var className = domainobjects['Vertex']['className'];
+
 			var propertyNames = ['domainId', 'posType', 'posX', 'posY', 'drawOrder'];
-			var filterClause = 'parent.persistentId = :theId';
-			var filterParams = [{ 'name': 'theId', 'value': facility_['persistentId']}];
+			var filterClause = 'allByParent';
+			var filterParams = [{ 'name': 'parentId', 'value': facility_['persistentId']}];
 			var setListViewFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
 			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP),true);
 		},

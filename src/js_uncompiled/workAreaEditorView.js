@@ -402,8 +402,8 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			*/
 			var className = domainobjects['Vertex']['className'];
 			var propertyNames = ['domainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId'];
-			var filterClause = 'parent.persistentId = :theId';
-			var filterParams = [{ 'name': 'theId', 'value': aisle['persistentId']}];
+			var filterClause = 'allByParent';
+			var filterParams = [{ 'name': 'parentId', 'value': aisle['persistentId']}];
 			var vertexFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
 			websession_.sendCommand(vertexFilterCmd, websocketCmdCallbackAisle(), true);
 		}
@@ -457,8 +457,9 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			*/
 			var className = domainobjects['PathSegment']['className'];
 			var propertyNames = ['domainId', 'posType', 'startPosX', 'startPosY', 'endPosX', 'endPosY', 'parentPersistentId'];
-			var filterClause = 'parent.persistentId = :theId';
-			var filterParams = [{ 'name': 'theId', 'value': path['persistentId']}];
+			var filterClause = 'allByParent';
+			var filterParams = [{ 'name': 'parentId', 'value': path['persistentId']}];
+
 			var pathSegmentFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
 			websession_.sendCommand(pathSegmentFilterCmd, websocketCmdCallbackPath(),true);
 		}
@@ -748,8 +749,8 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			// Create the filter to listen to all vertex updates for this facility.
 			var className = domainobjects['Vertex']['className'];
 			var propertyNames = ['domainId', 'posType', 'posX', 'posY', 'drawOrder'];
-			var filterClause = 'parent.persistentId = :theId';
-			var filterParams = [{'name': 'theId', 'value': facility_['persistentId']}];
+			var filterClause = 'allByParent';
+			var filterParams = [{'name': 'parentId', 'value': facility_['persistentId']}];
 			var vertexFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
 			websession_.sendCommand(vertexFilterCmd, websocketCmdCallbackFacility(), true);
 
@@ -757,8 +758,8 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 			var className = domainobjects['Aisle']['className'];
 			var propertyNames = ['domainId', 'anchorPosX', 'anchorPosY'];
-			var filterClause = 'parent.persistentId = :theId and active = true';
-			var filterParams = [{ 'name': 'theId', 'value': facility_['persistentId']}];
+			var filterClause = 'allActiveByParent';
+			var filterParams = [{ 'name': 'parentId', 'value': facility_['persistentId']}];
 			var aisleFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
 			websession_.sendCommand(aisleFilterCmd, websocketCmdCallbackAisle(), true);
 
@@ -766,8 +767,9 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 			var className = domainobjects['Path']['className'];
 			var propertyNames = ['domainId', 'travelDir'];
-			var filterClause = 'parent.persistentId = :theId';
-			var filterParams = [{ 'name': 'theId', 'value': facility_['persistentId']}];
+			var filterClause = 'allByParent';
+			var filterParams = [{ 'name': 'parentId', 'value': facility_['persistentId']}];
+
 			var pathFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
 			websession_.sendCommand(pathFilterCmd, websocketCmdCallbackPath(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 		},

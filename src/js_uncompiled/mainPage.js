@@ -25,13 +25,11 @@ goog.require('codeshelf.facilityeditorview');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.initializenewclient');
 goog.require('codeshelf.listdemoview');
-goog.require('codeshelf.listview');
 goog.require('codeshelf.ordersview');
 goog.require('codeshelf.orderdetailsview');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.window');
 goog.require('codeshelf.workareaeditorview');
-goog.require('codeshelf.workareaview');
 goog.require('domainobjects');
 goog.require('goog.Disposable');
 goog.require('goog.debug');
@@ -110,17 +108,6 @@ codeshelf.windowLauncher = (function() {
 				var ediServicesView_ = codeshelf.ediservicesview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
 				var ediServicesWindow = codeshelf.window(ediServicesView_, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				ediServicesWindow.open();
-			}
-			catch (err) {
-				alert(err);
-			}
-		},
-
-		loadWorkAreaView: function() {
-			try {
-				var workAreaView = codeshelf.workareaview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
-				var workAreaWindow = codeshelf.window(workAreaView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
-				workAreaWindow.open();
 			}
 			catch (err) {
 				alert(err);

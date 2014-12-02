@@ -143,38 +143,37 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 		);
 	}
 
-	var orderHeaderFilter = "";
-
-	// Rather complicated. 4 significantly different view types
-	if (facility_['hasMeaningfulOrderGroups']) {
-		if (outboundOrders_)
-			orderHeaderFilter = "status <> 'COMPLETE' and active = true and orderType = 'OUTBOUND' ";
-		else
-			orderHeaderFilter = "status <> 'COMPLETE' and active = true and orderType = 'CROSS' ";
-	}
-	else {
-		if (outboundOrders_)
-			orderHeaderFilter = "parent.persistentId = :theId and status <> 'COMPLETE' and active = true and orderType = 'OUTBOUND' ";
-		else
-			orderHeaderFilter = "parent.persistentId = :theId and status <> 'COMPLETE' and active = true and orderType = 'CROSS' ";
+	var orderTypeEnum = 'CROSS';
+	if (outboundOrders_) {
+		orderTypeEnum = 'OUTBOUND';
 	}
 
-	var orderDetailFilter = "status <> 'COMPLETE'";
-
-
-	var orderDetailHierarchyMapDef = { "className": domainobjects['OrderDetail']['className'], "linkProperty": 'parent', "filter": orderDetailFilter, "filterParams": undefined, "properties": domainobjects['OrderDetail']['properties'], "comparer": undefined , "contextMenuDefs": orderDetailContextDefs};
+	var orderDetailHierarchyMapDef = {
+		"className": domainobjects['OrderDetail']['className'],
+		"linkProperty": 'parent',
+		"filter": "orderDetailsByHeader",
+		"filterParams": undefined,
+		"properties": domainobjects['OrderDetail']['properties'],
+		"comparer": undefined ,
+		"contextMenuDefs": orderDetailContextDefs
+	};
 
 	var hierarchyMap = [];
 	var view = null;
 	if (facility_['hasMeaningfulOrderGroups']) {
-		var orderGroupFilter = "parent.persistentId = :theId  and active = true ";
+		var orderGroupFilter = "allActiveByParent";
 		var orderGroupFilterParams = [
-			{ 'name': 'theId', 'value': facility_['persistentId']}
+			{ 'name': 'parentId', 'value': facility_['persistentId']}
+		];
+
+		var orderHeaderFilter = "orderHeadersByGroupAndType";
+		var orderHeaderFilterParams = [
+			{ 'name': 'orderType', 'value': orderTypeEnum }
 		];
 
 		// GoodEggs reliably has order groups. So deliver a 3-level view.
 		hierarchyMap[0] = { "className": domainobjects['OrderGroup']['className'], "linkProperty": 'parent', "filter": orderGroupFilter, "filterParams": orderGroupFilterParams, "properties": domainobjects['OrderGroup']['properties'], "comparer": undefined };
-		hierarchyMap[1] = { "className": domainobjects['OrderHeader']['className'], "linkProperty": 'orderGroup', "filter": orderHeaderFilter, "filterParams": undefined, "properties": domainobjects['OrderHeader']['properties'], "comparer": workSequenceComparer };
+		hierarchyMap[1] = { "className": domainobjects['OrderHeader']['className'], "linkProperty": 'orderGroup', "filter": orderHeaderFilter, "filterParams": orderHeaderFilterParams, "properties": domainobjects['OrderHeader']['properties'], "comparer": workSequenceComparer };
 		hierarchyMap[2] = orderDetailHierarchyMapDef;
 
 		var viewOptions = {
@@ -185,9 +184,14 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 		view = codeshelf.hierarchylistview(websession_, domainobjects['OrderGroup'], hierarchyMap,viewOptions);
 	} else {
 		// This is only used if NOT getHasOrderGroups(). See below. undefined used for orderGroups as there is no parameter to substitute.
-		// Probably would be good to parameterize much more: orderType in particular.
+		// Probably would be good to parameterize much more: orderTypeEnum in particular.
+
+
+		var orderHeaderFilter = "orderHeadersByFacilityAndType";
+
 		var orderHeaderFilterParams = [
-			{ 'name': 'theId', 'value': facility_['persistentId']}
+			{ 'name': 'facilityId', 'value': facility_['persistentId']},
+			{ 'name': 'orderType', 'value': orderTypeEnum }
 		];
 
 		// Accu-Logistics and many sites have no group at all, or are missing many. Just ignore and do the order headers.

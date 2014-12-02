@@ -88,11 +88,10 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 	];
 
 	// ledController parent is codeshelf_network, whose parent is the facility
-	// Luckily, ebeans can handle this form also.
-	var ledControllerFilter = 'parent.parent.persistentId = :theId';
+	var ledControllerFilter = 'ledControllersByFacility';
 
 	var ledControllerFilterParams = [
-		{ 'name': 'theId', 'value': facility_['persistentId']}
+		{ 'name': 'parentId', 'value': facility_['persistentId']}
 	];
 
 	var hierarchyMap = [];

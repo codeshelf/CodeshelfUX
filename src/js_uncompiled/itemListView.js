@@ -19,10 +19,10 @@ goog.require('goog.ui.tree.TreeControl');
 
 codeshelf.itemListViewForSku = function(websession, facility, sku) {
 	// item parent goes itme->itemMaster>facility
-	var	itemFilter = "parent.parent.persistentId = :theId and active = true and parent.domainId = :domainId";
+	var	itemFilter = "itemsByFacilityAndSku";
 	var itemFilterParams = [
-			{ 'name': 'theId', 'value': facility['persistentId']},
-			{ 'name': 'domainId', 'value': sku}
+			{ 'name': 'facilityId', 'value': facility['persistentId']},
+			{ 'name': 'sku', 'value': sku}
 		];
 
 	return codeshelf.buildItemListView(websession, facility, itemFilter, itemFilterParams, "Item Locations For SKU: " + sku);
@@ -39,10 +39,10 @@ codeshelf.itemListViewForTier = function(websession, facility, location) {
 	// var	itemFilter = "parent.parent.persistentId = :theId and active = true and ((storedLocation.persistentId = :theLocationId) or (storedLocation.parent is not null and (storedLocation.parent.parent is not null and (storedLocation.parent.parent.persistentId = :theLocationId))))";
 
 	/// Can we improve it to pick up item in slot for tier list? And therefore work for bay item locations list, picking up tiers or slots.
-	var	itemFilter = "parent.parent.persistentId = :theId and active = true and ((storedLocation.persistentId = :theLocationId) or (storedLocation.parent is not null and ((storedLocation.parent.persistentId = :theLocationId) or (storedLocation.parent.parent is not null and (storedLocation.parent.parent.persistentId = :theLocationId)))))";
+	var	itemFilter = "itemsByFacilityAndLocation";
 	var itemFilterParams = [
-		{ 'name': 'theId', 'value': facility['persistentId']},
-		{ 'name': 'theLocationId', 'value': location['persistentId']}
+		{ 'name': 'facilityId', 'value': facility['persistentId']},
+		{ 'name': 'locationId', 'value': location['persistentId']}
 	];
 
 	return codeshelf.buildItemListView(websession, facility, itemFilter, itemFilterParams, "Item Locations in: " + codeshelf.toLocationDescription(location));
@@ -50,9 +50,9 @@ codeshelf.itemListViewForTier = function(websession, facility, location) {
 
 codeshelf.itemlistview = function(websession, facility) {
 	// item parent goes itme->itemMaster>facility
-	var	itemFilter = "parent.parent.persistentId = :theId and active = true";
+	var	itemFilter = "itemsByFacility";
 	var itemFilterParams = [
-			{ 'name': 'theId', 'value': facility['persistentId']}
+			{ 'name': 'facilityId', 'value': facility['persistentId']}
 		];
 	return codeshelf.buildItemListView(websession, facility, itemFilter, itemFilterParams, "Item Locations");
 

@@ -128,26 +128,10 @@ codeshelf.aisleview = function(websession, aisle) {
 
 			bays_[bay['persistentId']] = bayData;
 
-			// Create the filter to listen to all vertex updates for this
-			// facility.
-			/*
-			var vertexFilterData = {
-				'className':     domainobjects['Vertex']['className'],
-				'propertyNames': [ 'domainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId' ],
-				'filterClause':  'parent.persistentId = :theId',
-				'filterParams':  [
-					{
-						'name':  'theId',
-						'value': bay['persistentId']
-					}
-				]
-			};
-			var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
-			*/
 			var className = domainobjects['Vertex']['className'];
 			var propertyNames = [ 'domainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId' ];
-			var clause = "parent.persistentId = :theId";
-			var params = [{ 'name':  'theId','value': bay['persistentId']}];
+			var clause = "allByParent";
+			var params = [{ 'name':  'parentId','value': bay['persistentId']}];
 			var vertexFilterCmd =  websession_.createRegisterFilterRequest(className,propertyNames,clause,params);
 			websession_.sendCommand(vertexFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 		}
@@ -255,25 +239,10 @@ codeshelf.aisleview = function(websession, aisle) {
 				graphics_ = goog.graphics.createGraphics(self.getMainPaneElement().clientWidth, self.getMainPaneElement().clientHeight);
 				graphics_.render(self.getMainPaneElement());
 
-				// Create the filter to listen to all bay updates for this aisle.
-				/*
-				var data = {
-					'className':     domainobjects['Bay']['className'],
-					'propertyNames': [ 'domainId', 'anchorPosType', 'anchorPosX', 'anchorPosY', 'anchorPosZ' ],
-					'filterClause':  'parent.persistentId = :theId AND anchorPosZ = 0',
-					'filterParams':  [
-						{
-							'name':  'theId',
-							'value': aisle_['persistentId']
-						}
-					]
-				};
-				var bayFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-				*/
 				var className = domainobjects['Bay']['className'];
 				var propertyNames = [ 'domainId', 'anchorPosType', 'anchorPosX', 'anchorPosY', 'anchorPosZ' ];
-				var clause = 'parent.persistentId = :theId AND anchorPosZ = 0';
-				var params =  [{'name':  'theId','value': aisle_['persistentId']}];
+				var clause = 'baysByZeroPosition';
+				var params =  [{'name':  'parentId','value': aisle_['persistentId']}];
 				var bayFilterCmd =  websession_.createRegisterFilterRequest(className,propertyNames,clause,params);
 				websession_.sendCommand(bayFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 			},

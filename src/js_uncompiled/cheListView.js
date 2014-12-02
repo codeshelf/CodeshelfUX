@@ -153,10 +153,10 @@ codeshelf.cheslistview = function(websession, facility) {
 	];
 
 	// che parent is codeshelf_network, whose parent is the facility
-	var cheFilter = 'parent.parent.persistentId = :theId';
+	var cheFilter = 'cheByFacility';
 
 	var cheFilterParams = [
-		{ 'name': 'theId', 'value': facility_['persistentId']}
+		{ 'name': 'facilityId', 'value': facility_['persistentId']}
 	];
 
 	var hierarchyMap = [];

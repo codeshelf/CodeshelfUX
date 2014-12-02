@@ -18,22 +18,12 @@ codeshelfApp.LedControllerService = function($q, websession) {
 codeshelfApp.LedControllerService.prototype.getLedControllers = function() {
 	var deferred = this.q_.defer();
 	// ledController parent is codeshelf_network, whose parent is the facility
-	// Luckily, ebeans can handle this form also.
-	var ledControllerFilter = 'parent.parent.persistentId = :theId';
+	var ledControllerFilter = 'ledControllersByFacility';
 
 	var ledControllerFilterParams = [
-		{ 'name': 'theId', 'value': this.facility_["persistentId"] }
+		{ 'name': 'facilityId', 'value': this.facility_["persistentId"] }
 	];
 
-	/*
-	var data = {
-		'className':     domainobjects['LedController']['className'],
-		'propertyNames': Object.keys(domainobjects['LedController']['properties']),
-		'filterClause':  ledControllerFilter,
-		'filterParams':  ledControllerFilterParams
-	};
-	var setListViewFilterCmd = this.websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-	*/
 	var className = domainobjects['LedController']['className'];
 	var propertyNames = Object.keys(domainobjects['LedController']['properties']);
 

@@ -181,9 +181,9 @@ codeshelf.aisleslistview = function(websession, facility) {
 		}}
 	];
 
-	var aisleFilter = 'parent.persistentId = :theId and active = true';
+	var aisleFilter = 'allActiveByParent';
 	var aisleFilterParams = [
-		{ 'name': 'theId', 'value': facility_['persistentId']}
+		{ 'name': 'parentId', 'value': facility_['persistentId']}
 	];
 
 	var hierarchyMap = [];

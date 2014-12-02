@@ -79,26 +79,23 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 								if (hierarchyMap_[j]["className"] === object['className']) {
 									var item = dataView_.getItemById(object['persistentId']);
 									if (item === undefined) {
-
-										var filter = hierarchyMap_[j + 1]["linkProperty"] + '.persistentId = :theId';
-										if (hierarchyMap_[j + 1]["filter"] !== undefined) {
-											filter += ' and ' + hierarchyMap_[j + 1]["filter"];
-										}
-
+										var childDef = hierarchyMap_[j + 1];
+										var filter = childDef["filter"];
+										//Dynamically add the "parent" parameter
 										var filterParams = [
 											{ 'name': 'theId', 'value': object['persistentId']}
 										];
-										if (hierarchyMap_[j + 1]["filterParams"] !== undefined) {
-											filterParams.push(hierarchyMap_[j + 1]["filterParams"]);
+										if (childDef["filterParams"] !== undefined) {
+											filterParams.push(childDef["filterParams"]);
 										}
 
 										var computedProperties = [];
-										for (var property in hierarchyMap_[j + 1]["properties"]) {
-											if (hierarchyMap_[j + 1]["properties"].hasOwnProperty(property)) {
-												computedProperties.push(hierarchyMap_[j + 1]["properties"][property].id);
+										for (var property in childDef["properties"]) {
+											if (childDef["properties"].hasOwnProperty(property)) {
+												computedProperties.push(childDef["properties"][property].id);
 											}
 										}
-										computedProperties.push(hierarchyMap_[j + 1]["linkProperty"] + 'PersistentId');
+										computedProperties.push(childDef["linkProperty"] + 'PersistentId');
 
 										/*
 										var data = {
@@ -109,7 +106,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 										};
 										var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
 										*/
-										var className = hierarchyMap_[j + 1]["className"];
+										var className = childDef["className"];
 										var setListViewFilterCmd = websession_.createRegisterFilterRequest(className,computedProperties,filter,filterParams);
 										websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
 									}
