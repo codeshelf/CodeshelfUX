@@ -103,6 +103,7 @@ function launchDebugWindow() {
 	debugWindow.setEnabled(true);
 	debugWindow.init();
 }
+goog.exportSymbol('launchDebugWindow', launchDebugWindow);
 
 var gWindowList = [];
 var gXPosOffset = 0;
