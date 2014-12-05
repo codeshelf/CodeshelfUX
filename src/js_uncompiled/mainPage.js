@@ -545,7 +545,7 @@ function launchTestRunner() {
 	launchEdiServicesView();
 	launchOrdersView(); // only outbound orders
 	launchOrderDetailsView(); // only outbound orders
-	launchWorkAreaView();
+	// launchWorkAreaView();
 	launchFacilityEditor();
 	launchAislesListView();
 	launchLedControllersListView();
