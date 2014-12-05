@@ -86,7 +86,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 											{ 'name': 'theId', 'value': object['persistentId']}
 										];
 										if (childDef["filterParams"] !== undefined) {
-											filterParams.push(childDef["filterParams"]);
+											filterParams = filterParams.concat(childDef["filterParams"]);
 										}
 
 										var computedProperties = [];
