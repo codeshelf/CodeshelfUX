@@ -26,9 +26,6 @@ goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.ui.Dialog');
 goog.require('raphael');
-//goog.require('uibootstrap');
-//goog.require('angular');
-//goog.require('angular.route');
 
 /**
  * Just snap to nearby grid value
@@ -69,10 +66,10 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 	var startDragPoint_;
 	var currentRect_;
 	var currentDrawRect_;
-	var aisles_ = [];
+	var aisles_ = {};
 	var paths_ = [];
 	var consts = {};
-
+	var logger_ = goog.debug.Logger.getLogger('codeshelf.workareaeditor');
 	function savePath(path) {
 
 		function callbackForCreatePath() {
@@ -95,9 +92,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			}
 		};
 		websession_.sendCommand(cmd, callbackForCreatePath(), false);
-
-		var theLogger = goog.debug.Logger.getLogger('Work Area Editor');
-		theLogger.info("saved a new path" + goog.debug.expose(path['segments']));
+		logger_.info("saved a new path" + goog.debug.expose(path['segments']));
 
 	}
 
@@ -288,15 +283,18 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 	}
 
 	function computeAislePath(aisleData) {
-		var path = new goog.graphics.Path();
 
 		if (Object.size(aisleData.vertices) > 0) {
+			var path = new goog.graphics.Path();
+
 			var start = {};
 			var width = 0;
 			var height = 0;
 			for (var i = 0; i < Object.size(aisleData.vertices); i++) {
 				var vertex = aisleData.vertices[i];
 				var point = convertAisleVertexToPoint(aisleData.aisle, vertex);
+				logger_.fine("Path point : " + i + ", " + goog.debug.expose(point));
+
 				if (i === 0) {
 					path.moveTo(point.x, point.y);
 					start.x = point.x;
@@ -316,9 +314,11 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			path.lineTo(start.x, start.y);
 			aisleData.aisleElement.style.width = width + 'px';
 			aisleData.aisleElement.style.height = height + 'px';
+			return path;
 		}
-
-		return path;
+		else {
+			return null;
+		}
 	}
 
 	function convertAisleVertexToPoint(aisle, vertex) {
@@ -389,17 +389,6 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			aisles_[aisle['persistentId']] = aisleData;
 
 			// Create the filter to listen to all vertex updates for this aisle.
-			/*
-			var vertexFilterData = {
-				'className': domainobjects['Vertex']['className'],
-				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId'],
-				'filterClause': 'parent.persistentId = :theId',
-				'filterParams': [
-					{ 'name': 'theId', 'value': aisle['persistentId']}
-				]
-			};
-			var vertexFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, vertexFilterData);
-			*/
 			var className = domainobjects['Vertex']['className'];
 			var propertyNames = ['domainId', 'posType', 'posX', 'posY', 'drawOrder', 'parentPersistentId'];
 			var filterClause = 'allByParent';
@@ -413,7 +402,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 	function handleDeleteAisleCmd(aisle) {
 		if (aisles_[aisle['persistentId']] !== undefined) {
 			self.removeSubview(aisles_[aisle['persistentId']['aisleView']]);
-			aisles_.splice(aisle['persistentId'], 1);
+			delete aisles_[aisle['persistentId']];
 			self.invalidate();
 		}
 	}
@@ -443,18 +432,6 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 			paths_[path['persistentId']] = pathData;
 
-			// Create the filter to listen to all vertex updates for this aisle.
-			/*
-			var pathSegmentFilterData = {
-				'className': domainobjects['PathSegment']['className'],
-				'propertyNames': ['domainId', 'posType', 'startPosX', 'startPosY', 'endPosX', 'endPosY', 'parentPersistentId'],
-				'filterClause': 'parent.persistentId = :theId',
-				'filterParams': [
-					{ 'name': 'theId', 'value': path['persistentId']}
-				]
-			};
-			var pathSegmentFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, pathSegmentFilterData);
-			*/
 			var className = domainobjects['PathSegment']['className'];
 			var propertyNames = ['domainId', 'posType', 'startPosX', 'startPosY', 'endPosX', 'endPosY', 'parentPersistentId'];
 			var filterClause = 'allByParent';
@@ -493,7 +470,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 
 	function logWorkAreaEditorResponse(inStringToLog) {
 		//uncomment to really see the updates on work area editor
-		if (false) {
+		if (true) {
 			var theLogger = goog.debug.Logger.getLogger('WorkAreaEditorWebsocket');
 			theLogger.info(inStringToLog);
 		}
@@ -849,8 +826,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			var tool = self.getToolbarTool();
 			graphics_.removeElement(currentDrawRect_);
 			currentDrawRect_.dispose();
-			var theLogger = goog.debug.Logger.getLogger('Work Area Editor');
-			theLogger.info("actions on drag unimplemented");
+			logger_.info("actions on drag unimplemented");
 
 
 		},
@@ -864,26 +840,35 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			startDraw();
 
 			// Draw the facility path.
+
 			facilityPath_ = computeFacilityPath();
 			var stroke = new goog.graphics.Stroke(1.5, 'grey');
 			var fill = new goog.graphics.SolidFill('white');
 			drawPath(facilityPath_, stroke, fill);
+			logger_.fine("Drew facility outline");
 
 			// Draw the aisles
-			for (var aisleKey in aisles_) {
-				if (aisles_.hasOwnProperty(aisleKey)) {
-					var aisleData = aisles_[aisleKey];
-
+			var aisleCount = 0;
+			for(var persistentId in aisles_) {
+				if (aisles_.hasOwnProperty(persistentId)) {
+					aisleCount++;
+					var aisleData = aisles_[persistentId];
 					var aislePath = computeAislePath(aisleData);
-					var stroke = new goog.graphics.Stroke(1, 'black');
-					var fill = new goog.graphics.SolidFill('green', 0.75);
-					drawPath(aislePath, stroke, fill);
+					if (aislePath != null) {
+						var aisleStroke = new goog.graphics.Stroke(1, 'black');
+						var aisleFill = new goog.graphics.SolidFill('green', 0.75);
+						logger_.fine("aisle path: " + goog.debug.expose(aislePath));
+						drawPath(aislePath, aisleStroke, aisleFill);
+						logger_.fine("drew aisle path: " + goog.debug.expose(aislePath));
+					}
+
 
 					aisleData.aisleElement.style.left = Math.round(aisleData.aisle['anchorPosX'] * self.getPixelsPerMeter()) + 'px';
 					aisleData.aisleElement.style.top = Math.round(aisleData.aisle['anchorPosY'] * self.getPixelsPerMeter()) + 'px';
+
 				}
 			}
-
+			logger_.fine("Drew " + aisleCount + " aisles");
 			// Draw the paths
 			for (var pathKey in paths_) {
 				if (paths_.hasOwnProperty(pathKey)) {
