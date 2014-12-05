@@ -32,18 +32,6 @@ codeshelf.aisleslistview = function(websession, facility) {
 	var facility_ = facility;
 	var logger_  = goog.debug.Logger.getLogger("AisleList View");
 
-	function websocketCmdCallbackFacility() {
-		var callback = {
-			exec: function(command) {
-				/* appears to never be called
-				var theLogger = goog.debug.Logger.getLogger('aislesListView');
-				theLogger.info("callback exec called"); */
-			}
-		};
-
-		return callback;
-	}
-
 	var self = {
 
 		// following psuedo-inheritance

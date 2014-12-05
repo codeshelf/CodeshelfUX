@@ -97,15 +97,6 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 										}
 										computedProperties.push(childDef["linkProperty"] + 'PersistentId');
 
-										/*
-										var data = {
-											'className':     hierarchyMap_[j + 1]["className"],
-											'propertyNames': computedProperties,
-											'filterClause':  filter,
-											'filterParams':  filterParams
-										};
-										var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-										*/
 										var className = childDef["className"];
 										var setListViewFilterCmd = websession_.createRegisterFilterRequest(className,computedProperties,filter,filterParams);
 										websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
