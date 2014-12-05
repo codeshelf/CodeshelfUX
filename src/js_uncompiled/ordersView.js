@@ -28,20 +28,6 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 	var facility_ = facility;
 	var outboundOrders_ = inOutboundOrders;
 
-	function websocketCmdCallbackFacility() {
-		var callback = {
-			exec: function (type,command) {
-				if (type == kWebSessionCommandType.OBJECT_METHOD_RESP) {
-					var url = command['results'];
-					window.open(url, '_blank');
-					window.focus();
-				}
-			}
-		};
-
-		return callback;
-	}
-
 	function workSequenceComparer(orderHeaderA, orderHeaderB) {
 		if (orderHeaderA["workSequence"] < orderHeaderB["workSequence"]) {
 			return -1;
