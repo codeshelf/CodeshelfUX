@@ -37,6 +37,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 	var selectedRowIds_ = [];
 	var contextMenusByLevel_ = [];
 
+	var registeredCommands_ = [];
 	// Compute the columns we need for this domain object.
 	var columns_ = [];
 
@@ -99,7 +100,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 
 										var className = childDef["className"];
 										var setListViewFilterCmd = websession_.createRegisterFilterRequest(className,computedProperties,filter,filterParams);
-										websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
+										var sent = websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
+										registeredCommands_.push(sent);
 									}
 								}
 							}
@@ -356,7 +358,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
 			var setListViewFilterCmd = websession_.createRegisterFilterRequest(domainObject_['className'],computedProperties,hierarchyMap_[0]["filter"],hierarchyMap_[0]["filterParams"]);
-			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
+			var sent = websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
+			registeredCommands_.push(sent);
 
 			//Add click handlers from the columns
 			goog.array.forEach(columns_, function(column) {
@@ -519,8 +522,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 		},
 
 		close: function() {
-			var theLogger = goog.debug.Logger.getLogger('hierarch list view');
-			theLogger.info("Called this close");
+			for(var i = 0; i < registeredCommands_.length; i++) {
+				websession_.cancelCommand(registeredCommands_[i]);
+			}
+			logger_.info("removing websession listeners");
 		},
 
 		doResize: function() {

@@ -328,11 +328,13 @@ codeshelf.websession = function () {
 						pendingCommands_[messageId] = commandWrapper;
 
 						websocket_.send(goog.json.serialize(inCommand));
+						return messageId;
 					}
 				}
 			} catch (e) {
 				logger_.severe("Error sending message: "+e);
 			}
+			return null;
 		},
 
 		sendMessage: function (inCommand) {
@@ -370,8 +372,10 @@ codeshelf.websession = function () {
 			return messageId;
 		},
 
-		cancelCommand: function (inCommand) {
-			delete pendingCommands_[inCommand.id];
+		cancelCommand: function (commandToken) {
+			if (commandToken != null) {
+				delete pendingCommands_[commandToken];
+			}
 		},
 
 		setCurrentPage: function (currentPage) {
