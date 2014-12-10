@@ -252,7 +252,6 @@
 	border:				2px solid WINDOW_BORDER_DARK_COLOR;
 	font:				bold 11px/18px arial;
 	/*text-indent:		10px;*/
-	color:				#FFF;
 	overflow:			hide;
 	@mixin				DISPLAY_BOX(vertical);
 }
@@ -262,6 +261,7 @@
 	height:				WINDOWBAR_HEIGHT;
 	background-color:	WINDOW_BAR_BACKGROUND_COLOR;
 	cursor:				pointer;
+	color:				#FFF;
 }
 
 .windowBar-selected {

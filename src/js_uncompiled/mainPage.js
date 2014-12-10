@@ -335,7 +335,7 @@ codeshelf.mainpage = function() {
 							codeshelf.sessionGlobals.setWebsession(websession_);
 							codeshelf.sessionGlobals.setFacility(lastFacility);
 
-							loadFacilityWindows();
+							//loadFacilityWindows();
 						}
 						if (lastFacility != null) {
 							setupNavbar(lastFacility, authz);

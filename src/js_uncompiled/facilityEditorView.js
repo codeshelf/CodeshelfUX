@@ -315,7 +315,8 @@ codeshelf.facilityeditorview = function (websession, facility) {
 		}
 		
 		if (vertex !== undefined) {
-			facilityOutlineVertices_[vertex.Vertex['drawOrder']] = undefined;
+			//facilityOutlineVertices_[vertex.Vertex['drawOrder']] = undefined;
+			facilityOutlineVertices_.splice(vertex.Vertex['drawOrder'], 1);
 			vertex.marker.setMap(null);
 			facilityOutlinePath_.setAt(vertex.Vertex['drawOrder'], undefined);
 
