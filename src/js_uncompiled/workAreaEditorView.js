@@ -365,9 +365,14 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 		self.invalidate();
 	}
 
-	function handleDeleteFacilityVertexCmd(lat, lon, facilityVertex) {
-		vertices_.splice(facilityVertex['drawOrder'], 1);
-		self.invalidate();
+	function handleDeleteFacilityVertexCmd(lat, lon, persistentId) {
+		for (var drawOrder in vertices_) {
+			if (vertices_[drawOrder]['persistentId'] === persistentId){
+				vertices_.splice(drawOrder, 1);
+				self.invalidate();		
+				break;
+			}
+		}
 	}
 
 	function handleUpdateAisleCmd(aisle) {
@@ -491,8 +496,8 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 							} else if (object['op'] === 'upd') {
 								handleUpdateFacilityVertexCmd(object['posY'], object['posX'], object);
 
-							} else if (object['op'] === 'dl') {
-								handleDeleteFacilityVertexCmd(object['posY'], object['posX'], object);
+							} else if (object['op'] === 'del') {
+								handleDeleteFacilityVertexCmd(object['posY'], object['posX'], object['persistentId']);
 
 							}
 						}
@@ -521,7 +526,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 							} else if (object['op'] === 'upd') {
 								handleUpdateAisleCmd(object);
 								logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update aisle from backend');
-							} else if (object['op'] === 'dl') {
+							} else if (object['op'] === 'del') {
 								handleDeleteAisleCmd(object);
 							}
 						} else if (object['className'] === domainobjects['Vertex']['className']) {
@@ -531,7 +536,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 							} else if (object['op'] === 'upd') {
 								handleUpdateAisleVertexCmd(object);
 								logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update aisle vertex from backend');
-							} else if (object['op'] === 'dl') {
+							} else if (object['op'] === 'del') {
 								handleDeleteAisleVertexCmd(object);
 							}
 						}
@@ -562,7 +567,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 							} else if (object['op'] === 'upd') {
 								handleUpdatePathCmd(object);
 								logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update path from backend');
-							} else if (object['op'] === 'dl') {
+							} else if (object['op'] === 'del') {
 								handleDeletePathCmd(object);
 							}
 						} else if (object['className'] === domainobjects['PathSegment']['className']) {
@@ -572,7 +577,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 							} else if (object['op'] === 'upd') {
 								handleUpdatePathSegmentCmd(object);
 								logWorkAreaEditorResponse('FILTER_RESP:upd -- init or update path segment from backend');
-							} else if (object['op'] === 'dl') {
+							} else if (object['op'] === 'del') {
 								handleDeletePathSegmentCmd(object);
 							}
 						}

@@ -97,10 +97,14 @@ codeshelf.facilityeditorview = function (websession, facility) {
 	}
 
 	function doubleClickHandler(event) {
+		deleteFacilityOutlineWrapper()
+	}
+	
+	function deleteFacilityOutlineWrapper(){
 		clearTimeout(clickTimeout_);
 		if (canEditOutline_) {
 			deleteFacilityOutline();
-		}
+		}	
 	}
 
 	function checkSquareness(event, latLngA, latLngB) {
@@ -301,15 +305,21 @@ codeshelf.facilityeditorview = function (websession, facility) {
 		setBounds();
 	}
 
-	function handleDeleteFacilityVertexCmd(latLng, vertex) {
-		var vertexData = facilityOutlineVertices_[vertex['drawOrder']];
-		facilityOutlineVertices_[vertex['drawOrder']] = undefined;
+	function handleDeleteFacilityVertexCmd(latLng, persistentId) {
+		for (var drawOrder in facilityOutlineVertices_) {
+			var vertexCheck = facilityOutlineVertices_[drawOrder]
+			if (vertexCheck.Vertex !== undefined && vertexCheck.Vertex['persistentId'] === persistentId) {
+				var vertex = vertexCheck;
+				break
+			}
+		}
+		
+		if (vertex !== undefined) {
+			facilityOutlineVertices_[vertex.Vertex['drawOrder']] = undefined;
+			vertex.marker.setMap(null);
+			facilityOutlinePath_.setAt(vertex.Vertex['drawOrder'], undefined);
 
-		if (vertexData !== undefined) {
-			vertexData.marker.setMap(null);
-			facilityOutlinePath_.setAt(vertex['drawOrder'], undefined);
-
-			if (vertex['drawOrder'] === 0) {
+			if (vertex.Vertex['drawOrder'] === 0) {
 				facilityAnchorMarker_ = undefined;
 			}
 		}
@@ -532,9 +542,9 @@ codeshelf.facilityeditorview = function (websession, facility) {
 							} else if (object['op'] === 'upd') {
 								logFacilityResponse('FILTER_RESP:upd -- init or update vertex from backend');
 								handleUpdateFacilityVertexCmd(latLng, object);
-							} else if (object['op'] === 'dl') {
-								logFacilityResponse('FILTER_RESP:dl -- delete vertex from backend');
-								handleDeleteFacilityVertexCmd(latLng, object);
+							} else if (object['op'] === 'del') {
+								logFacilityResponse('FILTER_RESP:del -- delete vertex from backend');
+								handleDeleteFacilityVertexCmd(latLng, object['persistentId']);
 							}
 						}
 					}
@@ -636,7 +646,12 @@ codeshelf.facilityeditorview = function (websession, facility) {
 			googleField_ = new goog.ui.LabelInput('Search for address');
 			googleField_.decorate(inputElement);
 
-
+			var buttonElementDelete = new goog.ui.Button('Delete Vertices');
+			buttonElementDelete.render(self.getMainPaneElement())
+			goog.events.listen(buttonElementDelete, goog.ui.Component.EventType.ACTION, function (event) {			
+				deleteFacilityOutlineWrapper()
+			}); 
+			
 			goog.events.listen(inputElement, goog.editor.Field.EventType.CHANGE, function (event) {
 				var text = googleField_.getValue();
 				geocoder_.geocode({'address': text}, computeGeoCodeResults);

@@ -194,7 +194,7 @@ codeshelf.aisleview = function(websession, aisle) {
 								handleUpdateBayCmd(object);
 							} else if (object['op'] === 'upd') {
 								handleUpdateBayCmd(object);
-							} else if (object['op'] === 'dl') {
+							} else if (object['op'] === 'del') {
 								handleDeleteBayCmd(object);
 							}
 						} else if (object['className'] === domainobjects['Vertex']['className']) {
@@ -203,7 +203,7 @@ codeshelf.aisleview = function(websession, aisle) {
 								handleUpdateBayVertexCmd(object);
 							} else if (object['op'] === 'upd') {
 								handleUpdateBayVertexCmd(object);
-							} else if (object['op'] === 'dl') {
+							} else if (object['op'] === 'del') {
 								handleDeleteBayVertexCmd(object);
 							}
 						}
