@@ -379,7 +379,7 @@ domainobjects = {
 				'focusable': true
 			},
 			itemCmFromLeft: {
-				'id':    'itemCmFromLeft',
+				'id':    'cmFromLeftui',
 				'title': 'CM From Left',
 				'width': 10,
 				'editor': Slick.Editors.Text,

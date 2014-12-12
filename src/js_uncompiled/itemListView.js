@@ -83,7 +83,7 @@ codeshelf.buildItemListView = function(websession, facility, itemFilter, itemFil
 				return true;
 			else if (inProperty['id'] ===  'itemQuantityUom')
 				return true;
-			else if (inProperty['id'] ===  'itemCmFromLeft')
+			else if (inProperty['id'] ===  'cmFromLeftui')
 				return true;
 			else if (inProperty['id'] ===  'posAlongPathui')
 				return true;
