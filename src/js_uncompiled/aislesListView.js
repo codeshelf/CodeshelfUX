@@ -11,7 +11,6 @@ goog.require('codeshelf.simpleDlogService');
 goog.require('codeshelf.ledcontrollers.service');
 goog.require('codeshelf.pathsegment.service');
 goog.require('codeshelf.hierarchylistview');
-goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
 
@@ -78,7 +77,7 @@ codeshelf.aisleslistview = function(websession, facility) {
 			var theAisle = item;
 			var methodArgs = [
 			];
-			codeshelf.objectUpdater.callMethod(theAisle, 'Aisle', 'makeInactiveAndAllChildren', methodArgs);
+			websession_.callMethod(theAisle, 'Aisle', 'makeInactiveAndAllChildren', methodArgs);
 		},
 
 		associatePathSegment: function(item) {
@@ -196,9 +195,10 @@ codeshelf.aisleslistview = function(websession, facility) {
  *  @ngInject
  *  @export
  */
-codeshelfApp.AislePathSegmentsController = function($scope, $modalInstance, data, pathsegmentservice){
+codeshelfApp.AislePathSegmentsController = function($scope, $modalInstance, websession,  data, pathsegmentservice){
 	this.scope_ = $scope;
 	this.modalInstance_ = $modalInstance;
+	this.websession_ = websession;
 	$scope['aisle'] = data['aisle'];
 
 	pathsegmentservice.getPathSegments().then(function(pathSegments) {
@@ -228,8 +228,10 @@ codeshelfApp.AislePathSegmentsController.prototype.ok = function(){
 			{ 'name': 'inPathSegmentPersistentIDStr', 'value': pathSegmentPersistId, 'classType': 'java.lang.String'}
 		];
 
-		codeshelf.objectUpdater.callMethod(aisle, 'Aisle', 'associatePathSegment', methodArgs);
-		this.modalInstance_.close();
+		var dialog = this.modalInstance_;
+		this.websession_.callMethod(aisle, 'Aisle', 'associatePathSegment', methodArgs).then(function() {
+			dialog.close();
+		});
 	}
 };
 
@@ -239,7 +241,7 @@ codeshelfApp.AislePathSegmentsController.prototype.ok = function(){
 codeshelfApp.AislePathSegmentsController.prototype.cancel = function(){
 	this.modalInstance_['dismiss']();
 };
-angular.module('codeshelfApp').controller('AislePathSegmentsController', ['$scope', '$modalInstance', 'data', 'pathsegmentservice', codeshelfApp.AislePathSegmentsController]);
+angular.module('codeshelfApp').controller('AislePathSegmentsController', ['$scope', '$modalInstance', 'websession', 'data', 'pathsegmentservice', codeshelfApp.AislePathSegmentsController]);
 
 
 
@@ -250,9 +252,11 @@ angular.module('codeshelfApp').controller('AislePathSegmentsController', ['$scop
  *  @ngInject
  *  @export
  */
-codeshelfApp.AisleLedController = function($scope, $modalInstance, data, ledcontrollers){
+codeshelfApp.AisleLedController = function($scope, $modalInstance, websession, data, ledcontrollers){
 	this.scope_ = $scope;
 	this.modalInstance_ = $modalInstance;
+	this.websession_ = websession;
+
 	$scope['aisle'] = data['aisle'];
 
 	var channelRange = [];
@@ -290,8 +294,10 @@ codeshelfApp.AisleLedController.prototype.ok = function(){
 			{ 'name': 'inChannelStr', 'value': String(channelStr), 'classType': 'java.lang.String'}
 		];
 
-		codeshelf.objectUpdater.callMethod(aisle, 'Aisle', 'setControllerChannel', methodArgs);
-		this.modalInstance_.close();
+		var dialog = this.modalInstance_;
+		this.websession_.callMethod(aisle, 'Aisle', 'setControllerChannel', methodArgs).then(function() {
+			dialog.close();
+		});
 	}
 };
 
@@ -301,4 +307,4 @@ codeshelfApp.AisleLedController.prototype.ok = function(){
 codeshelfApp.AisleLedController.prototype.cancel = function(){
 	this.modalInstance_['dismiss']();
 };
-angular.module('codeshelfApp').controller('AisleLedController', ['$scope', '$modalInstance', 'data', 'ledcontrollers', codeshelfApp.AisleLedController]);
+angular.module('codeshelfApp').controller('AisleLedController', ['$scope', '$modalInstance', 'websession', 'data', 'ledcontrollers', codeshelfApp.AisleLedController]);

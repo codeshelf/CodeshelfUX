@@ -197,17 +197,6 @@ codeshelf.websession = function () {
 			return command;
 		},
 
-		createObjectListenerRequest : function (className,persistentIds,properties) {
-			var command = {
-				'RegisterListenerRequest' : {
-						'className':    className,
-						'objectIds': persistentIds,
-						'propertyNames': properties
-					}
-				};
-			return command;
-		},
-
 		createObjectDeleteRequest : function (className,persistentId) {
 			var command = {
 				'ObjectDeleteRequest' : {

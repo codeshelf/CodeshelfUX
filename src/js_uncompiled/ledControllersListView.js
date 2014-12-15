@@ -8,7 +8,6 @@ file ledControllersListView.js author jon ranstrom
  */
 goog.provide('codeshelf.ledcontrollerslistview');
 goog.require('codeshelf.hierarchylistview');
-goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
 
@@ -116,10 +115,11 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
  *  @ngInject
  *  @export
  */
-codeshelfApp.LedNgController = function($scope, $modalInstance, data){
+codeshelfApp.LedNgController = function($scope, $modalInstance, websession, data){
 
 	this.scope_ = $scope;
 	this.modalInstance_ = $modalInstance;
+	this.websession_ = websession;
 	$scope['ledcontroller'] = data['ledcontroller'];
 
 	$scope['ledcontroller']['led_controller_id'] = data['ledcontroller']['deviceGuidStr'];
@@ -145,7 +145,7 @@ codeshelfApp.LedNgController.prototype.ok = function(){
 			{ 'name': 'inNewControllerId', 'value': ledcontroller[jsControllerProperty], 'classType': 'java.lang.String'}
 		];
 
-		codeshelf.objectUpdater.callMethod(ledcontroller, 'LedController', 'changeLedControllerId', methodArgs);
+		this.websession_.callMethod(ledcontroller, 'LedController', 'changeLedControllerId', methodArgs);
 	}
 
 	this.modalInstance_.close();
@@ -158,4 +158,4 @@ codeshelfApp.LedNgController.prototype.cancel = function(){
 	this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
 };
 
-angular.module('codeshelfApp').controller('LedNgController', ['$scope', '$modalInstance', 'data', codeshelfApp.LedNgController]);
+angular.module('codeshelfApp').controller('LedNgController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.LedNgController]);

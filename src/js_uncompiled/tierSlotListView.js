@@ -8,7 +8,6 @@ file tierSlotListView.js author jon ranstrom
  */
 goog.provide('codeshelf.tierslotlistview');
 goog.require('codeshelf.hierarchylistview');
-goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
 

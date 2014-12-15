@@ -65,7 +65,7 @@ codeshelf.pathsview = function(websession, facility) {
 			var thePath = item;
 			var methodArgs = [
 			];
-			codeshelf.objectUpdater.callMethod(thePath, 'Path', 'deleteThisPath', methodArgs);
+			websession_.callMethod(thePath, 'Path', 'deleteThisPath', methodArgs);
 		}
 	};
 

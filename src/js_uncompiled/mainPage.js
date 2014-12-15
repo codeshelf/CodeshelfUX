@@ -8,7 +8,6 @@ goog.provide('codeshelf.windowLauncher'); // Better way? Only for use inside thi
 goog.require('codeshelf.authz');
 goog.require('codeshelf.navbar');
 goog.require('codeshelf.sessionGlobals');
-goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.aisleslistview');
 goog.require('codeshelf.chelistview');
 goog.require('codeshelf.baylistview');

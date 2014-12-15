@@ -4,8 +4,6 @@
  *  $Id: facilityEditorView.js,v 1.42 2013/05/26 21:52:20 jeffw Exp $
  *******************************************************************************/
 goog.provide('codeshelf.facilityeditorview');
-goog.require('codeshelf.dataobjectfield');
-//goog.require('codeshelf.facilityeditorviewgmapsoverlay');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.websession');
 goog.require('codeshelf.workareaeditorview');
@@ -13,6 +11,7 @@ goog.require('domainobjects');
 goog.require('extern.jquery.css.rotate');
 goog.require('extern.jquery.css.transform');
 goog.require('goog.dom.query');
+goog.require('goog.editor.Field');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 
@@ -99,12 +98,12 @@ codeshelf.facilityeditorview = function (websession, facility) {
 	function doubleClickHandler(event) {
 		deleteFacilityOutlineWrapper()
 	}
-	
+
 	function deleteFacilityOutlineWrapper(){
 		clearTimeout(clickTimeout_);
 		if (canEditOutline_) {
 			deleteFacilityOutline();
-		}	
+		}
 	}
 
 	function checkSquareness(event, latLngA, latLngB) {
@@ -313,7 +312,7 @@ codeshelf.facilityeditorview = function (websession, facility) {
 				break
 			}
 		}
-		
+
 		if (vertex !== undefined) {
 			//facilityOutlineVertices_[vertex.Vertex['drawOrder']] = undefined;
 			facilityOutlineVertices_.splice(vertex.Vertex['drawOrder'], 1);
@@ -625,15 +624,6 @@ codeshelf.facilityeditorview = function (websession, facility) {
 
 			infoWindow_ = new google.maps.InfoWindow();
 			totalBounds_ = new google.maps.LatLngBounds();
-
-			// Add the facility descriptor field.
-			var facilityDescField = codeshelf.dataobjectfield(websession_, self.getMainPaneElement(),
-				domainobjects['Facility']['className'],
-				domainobjects['Facility']['properties']['description']['id'],
-				facility_['persistentId'],
-				'windowField', 'Facility name');
-			facilityDescField.start();
-
 			// Setup GMaps geocoding to locate places for the user (if needed).
 			geocoder_ = new google.maps.Geocoder();
 			geocoder_.responseIndex = 0;
@@ -649,10 +639,10 @@ codeshelf.facilityeditorview = function (websession, facility) {
 
 			var buttonElementDelete = new goog.ui.Button('Delete Vertices');
 			buttonElementDelete.render(self.getMainPaneElement())
-			goog.events.listen(buttonElementDelete, goog.ui.Component.EventType.ACTION, function (event) {			
+			goog.events.listen(buttonElementDelete, goog.ui.Component.EventType.ACTION, function (event) {
 				deleteFacilityOutlineWrapper()
-			}); 
-			
+			});
+
 			goog.events.listen(inputElement, goog.editor.Field.EventType.CHANGE, function (event) {
 				var text = googleField_.getValue();
 				geocoder_.geocode({'address': text}, computeGeoCodeResults);
@@ -667,9 +657,6 @@ codeshelf.facilityeditorview = function (websession, facility) {
 			map_.mapTypes.set('codeshelfMapStyle', new google.maps.StyledMapType(codeshelfMapStyle, { name: 'Codeshelf' }));
 			map_.setMapTypeId('codeshelfMapStyle');
 
-
-//			facilityEditorOverlay_ = codeshelf.facilityeditorviewgmapsoverlay(map_);
-//			facilityEditorOverlay_.init();
 
 			clickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.CLICK, clickHandler);
 			doubleClickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.DBLCLICK, doubleClickHandler);

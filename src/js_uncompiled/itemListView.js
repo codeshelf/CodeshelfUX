@@ -164,11 +164,12 @@ codeshelf.openItemEditDialog = function(facility, sku, description, uom, itemLoc
  *  @ngInject
  *  @export
  */
-codeshelfApp.ItemController = function($scope, $modalInstance, data){
+codeshelfApp.ItemController = function($scope, $modalInstance, websession, data){
 	goog.object.extend($scope, data);
 	this.scope_ = $scope;
 	this.scope_['response'] = {};
 	this.modalInstance_ = $modalInstance;
+	this.websession_ = websession;
 };
 
 /**
@@ -186,7 +187,7 @@ codeshelfApp.ItemController.prototype.ok = function(){
 		{ 'name': 'quantity', 'value': "0", 'classType': 'java.lang.String'},
 		{ 'name': 'uom', 'value': item['uom'], 'classType':  'java.lang.String'}
 	];
-	codeshelf.objectUpdater.callMethod(facility, 'Facility', 'upsertItem', methodArgs).then(function(response) {
+	this.websession_.callMethod(facility, 'Facility', 'upsertItem', methodArgs).then(function(response) {
 		modalInstance.close();
 	})
 	.fail(function(response) {
@@ -203,4 +204,4 @@ codeshelfApp.ItemController.prototype.ok = function(){
 codeshelfApp.ItemController.prototype.cancel = function(){
 	this.modalInstance_['dismiss']();
 };
-angular.module('codeshelfApp').controller('ItemController', ['$scope', '$modalInstance', 'data', codeshelfApp.ItemController]);
+angular.module('codeshelfApp').controller('ItemController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.ItemController]);

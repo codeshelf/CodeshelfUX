@@ -8,7 +8,6 @@ file cheListView.js author jon ranstrom
  */
 goog.provide('codeshelf.chelistview');
 goog.require('codeshelf.hierarchylistview');
-goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.contextmenu');
 goog.require('codeshelf.view');
@@ -203,9 +202,10 @@ codeshelfApp.filter("currentOrDate", function() {
  *  @ngInject
  *  @export
  */
-codeshelfApp.AbstractCheController = function($scope, $modalInstance, data) {
+codeshelfApp.AbstractCheController = function($scope, $modalInstance, websession, data) {
 	this.scope_ = $scope;
 	this.modalInstance_ = $modalInstance;
+	this.websession_ = websession;
 	$scope['che'] = data['che'];
 };
 
@@ -229,8 +229,8 @@ codeshelfApp.AbstractCheController.prototype.close = function(){
  *  @export
  *  @extends {codeshelfApp.AbstractCheController}
  */
-codeshelfApp.CheWiSummaryController = function($scope, $modalInstance, data){
-	goog.base(this, $scope, $modalInstance, data);
+codeshelfApp.CheWiSummaryController = function($scope, $modalInstance, websession, data){
+	goog.base(this, $scope, $modalInstance, websession, data);
 	$scope['form'] = {
 		"summaries" : data['summaries'],
 		"summary" : data['summaries'][0]
@@ -243,14 +243,13 @@ goog.inherits(codeshelfApp.CheWiSummaryController, codeshelfApp.AbstractCheContr
  */
 codeshelfApp.CheWiSummaryController.prototype.ok = function(){
 	var che = this.scope_['che'];
-
 	var summary = this.scope_['form']['summary'];
 	var wiListView = codeshelf.workinstructionsByCheAndAssignedTimestamp(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che, summary['assignedTime']);
 	var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 	wiListWindow.open();
 	this.close();
 };
-	angular.module('codeshelfApp').controller('CheWiSummaryController', ['$scope', '$modalInstance', 'data', codeshelfApp.CheWiSummaryController]);
+	angular.module('codeshelfApp').controller('CheWiSummaryController', ['$scope', '$modalInstance',  'websession','data', codeshelfApp.CheWiSummaryController]);
 
 /**
  *  @param {!angular.Scope} $scope
@@ -260,8 +259,9 @@ codeshelfApp.CheWiSummaryController.prototype.ok = function(){
  *  @export
  *  @extends {codeshelfApp.AbstractCheController}
  */
-codeshelfApp.CheNgController = function($scope, $modalInstance, data){
-	goog.base(this, $scope, $modalInstance, data);
+codeshelfApp.CheNgController = function($scope, $modalInstance, websession, data){
+	goog.base(this, $scope, $modalInstance, websession, data);
+
 	// tweaking separate fields
 	// first has html/angular scope matching js field.
 	$scope['che']['description'] = data['che']['description'];
@@ -286,18 +286,29 @@ codeshelfApp.CheNgController.prototype.ok = function(){
 	var jsControllerProperty = "cntrlrid"; // this matches the partial html
 	var javaControllerProperty = "deviceGuid"; // Passed as the java field
 
+
+	var propertiesToUpdate = [];
 	// "description is the name used here, and matches the java-side field name. This is a trivial update
-	if (!isEmptyString(che["color"]))
-		codeshelf.objectUpdater.updateOne(che, "Che", "color", che["color"]);
+	if (!isEmptyString(che["color"])) {
+		propertiesToUpdate.push("color");
+	}
 
 	// "description is the name used here, and matches the java-side field name. This is a trivial update
-	if (!isEmptyString(che[descriptionProperty]))
-		codeshelf.objectUpdater.updateOne(che, "Che", descriptionProperty, che[descriptionProperty]);
+	if (!isEmptyString(che[descriptionProperty])) {
+		propertiesToUpdate.push(descriptionProperty);
+	}
 
 	// This is a domainID change, which may cause trouble. If there is trouble, might need to change to
-	// objectUpdater.callMethod() to do the change with all necessary cleanup
-	if (!isEmptyString(che[jsDomainProperty]))
-		codeshelf.objectUpdater.updateOne(che, "Che", javaDomainProperty, che[jsDomainProperty]);
+	// callMethod() to do the change with all necessary cleanup
+	if (!isEmptyString(che[jsDomainProperty])) {
+		var domainId = che[jsDomainProperty]; //HACKY due to case differences
+		che[javaDomainProperty] = domainId;
+		propertiesToUpdate.push(javaDomainProperty);
+	}
+
+	if (propertiesToUpdate.length > 0) {
+		this.websession_.update(che, propertiesToUpdate);
+	}
 
 	if (!isEmptyString(che[jsControllerProperty])) {
 		var methodArgs = [
@@ -305,14 +316,14 @@ codeshelfApp.CheNgController.prototype.ok = function(){
 		];
 
 		var self = this;
-		codeshelf.objectUpdater.callMethod(che, 'Che', 'changeControllerId', methodArgs)
+		this.websession_.callMethod(che, 'Che', 'changeControllerId', methodArgs)
 			.then(function() {
 				self.close();
 			});
 
 	}
 };
-angular.module('codeshelfApp').controller('CheNgController', ['$scope', '$modalInstance', 'data', codeshelfApp.CheNgController]);
+angular.module('codeshelfApp').controller('CheNgController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.CheNgController]);
 
 
 //**************** Different dialog for simulating cart setup *****************
@@ -325,8 +336,8 @@ angular.module('codeshelfApp').controller('CheNgController', ['$scope', '$modalI
  *  @export
  *  @extends {codeshelfApp.AbstractCheController}
  */
-codeshelfApp.SetupCheNgController = function($scope, $modalInstance, data){
-	goog.base(this, $scope, $modalInstance, data);
+codeshelfApp.SetupCheNgController = function($scope, $modalInstance, websession, data){
+	goog.base(this, $scope, $modalInstance, websession, data);
 	$scope['che']['containersOnChe'] = data['che']['containersOnChe'];
 };
 goog.inherits(codeshelfApp.SetupCheNgController, codeshelfApp.AbstractCheController);
@@ -345,10 +356,10 @@ codeshelfApp.SetupCheNgController.prototype.ok = function(){
 		];
 
 		var dialog = this;
-		codeshelf.objectUpdater.callMethod(che, 'Che', 'fakeSetupUpContainersOnChe', methodArgs).
+		this.websession_.callMethod(che, 'Che', 'fakeSetupUpContainersOnChe', methodArgs).
 			then(function() {
 				dialog.close();
 			});
 	}
 };
-angular.module('codeshelfApp').controller('SetupCheNgController', ['$scope', '$modalInstance', 'data', codeshelfApp.SetupCheNgController]);
+angular.module('codeshelfApp').controller('SetupCheNgController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.SetupCheNgController]);

@@ -7,7 +7,6 @@
 file workInstructionListView.js author jon ranstrom
  */
 goog.provide('codeshelf.workinstructionlistview');
-goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
@@ -98,7 +97,7 @@ codeshelf.workinstructionlistview = function(websession, facility, viewNameSuffi
 			var methodArgs = [
 				{ 'name': 'inCompleteStr', 'value': inUpdateKind, 'classType': 'java.lang.String'}
 			];
-			codeshelf.objectUpdater.callMethod(wi, 'WorkInstruction', 'fakeCompleteWi', methodArgs);
+			websession_.callMethod(wi, 'WorkInstruction', 'fakeCompleteWi', methodArgs);
 		},
 
 		completeWorkInstruction: function(item) {

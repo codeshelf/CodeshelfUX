@@ -11,7 +11,6 @@ goog.require('codeshelf.simpleDlogService');
 goog.require('codeshelf.ledcontrollers.service');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.tierslotlistview');
-goog.require('codeshelf.objectUpdater');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
 
@@ -213,9 +212,10 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
  *  @ngInject
  *  @export
  */
-codeshelfApp.TierController = function($scope, $modalInstance, data, ledcontrollers){
+codeshelfApp.TierController = function($scope, $modalInstance, websession, data, ledcontrollers){
 	this.scope_ = $scope;
 	this.modalInstance_ = $modalInstance;
+	this.websession_ = websession;
 	$scope['tierAisleValue'] = data['tierAisleValue'];
 	$scope['tier'] = data['tier'];
 
@@ -257,7 +257,7 @@ codeshelfApp.TierController.prototype.ok = function(){
 			{ 'name': 'inTiersStr', 'value': tierAisleValue, 'classType':  'java.lang.String'}
 		];
 
-		codeshelf.objectUpdater.callMethod(tier, 'Tier', 'setControllerChannel', methodArgs);
+		this.websession_.callMethod(tier, 'Tier', 'setControllerChannel', methodArgs);
 		this.modalInstance_.close();
 	}
 
@@ -270,4 +270,4 @@ codeshelfApp.TierController.prototype.ok = function(){
 codeshelfApp.TierController.prototype.cancel = function(){
 	this.modalInstance_['dismiss']();
 };
-angular.module('codeshelfApp').controller('TierController', ['$scope', '$modalInstance', 'data', 'ledcontrollers', codeshelfApp.TierController]);
+angular.module('codeshelfApp').controller('TierController', ['$scope', '$modalInstance', 'websession', 'data', 'ledcontrollers', codeshelfApp.TierController]);
