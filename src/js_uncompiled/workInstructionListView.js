@@ -94,10 +94,8 @@ codeshelf.workinstructionlistview = function(websession, facility, viewNameSuffi
 
 		doFakeCompleteWorkInstruction: function(item, inUpdateKind) {
 			var wi = item;
-			var methodArgs = [
-				{ 'name': 'inCompleteStr', 'value': inUpdateKind, 'classType': 'java.lang.String'}
-			];
-			websession_.callMethod(wi, 'WorkInstruction', 'fakeCompleteWi', methodArgs);
+			var methodArgs = [item['persistentId'], inUpdateKind];
+			websession_.callServiceMethod("WorkService", 'fakeCompleteWi', methodArgs);
 		},
 
 		completeWorkInstruction: function(item) {
