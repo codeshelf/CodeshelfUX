@@ -1,0 +1,19 @@
+{
+  "name": "csManager",
+  "version": "0.0.0",
+  "authors": [
+    "Paul Monteiro <paul.monteiro@codeshelf.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "chartjs": "nnnick/Chart.js#1cfa42bc24e152cfef79523c310fae7d4c458635"
+  }
+}
