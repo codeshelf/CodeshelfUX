@@ -748,6 +748,16 @@ domainobjects = {
 				'title': 'Persistent ID',
 				'width': 40
 			},
+			'ledChannelUi': {
+				'id':    'ledChannelUi',
+				'title': 'Channel',
+				'width': 8
+			},
+			'ledControllerIdUi': {
+				'id':    'ledControllerIdUi',
+				'title': 'Controller',
+				'width': 25
+			},
 			'firstLedNumAlongPath': {
 				'id':    'firstLedNumAlongPath',
 				'title': 'First LED',
