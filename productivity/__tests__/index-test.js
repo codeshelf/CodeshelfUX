@@ -20,34 +20,36 @@ describe('OrderDetailIBox', function() {
 
 	});
 
-	it('shows group name', function() {
-		var orderDetailIBox = renderDetails('#test', groupName, keyedData);
-		var componentText = testDiv.text();
-		expect(componentText).toMatch(groupName);
-	});
+	describe("when initializes", function() {
+		it('shows group name', function() {
+			var orderDetailIBox = renderDetails('#test', groupName, keyedData);
+			var componentText = testDiv.text();
+			expect(componentText).toMatch(groupName);
+		});
 
-	it('shows shorts name', function() {
-		var numShorts = 98765;
-		keyedData["short"] = numShorts;
-		var orderDetailIBox = renderDetails('#test', groupName, keyedData);
-		var componentText = testDiv.text();
-		expect(componentText).toMatch(numShorts);
-	});
+		it('shows shorts name', function() {
+			var numShorts = 98765;
+			keyedData["short"] = numShorts;
+			var orderDetailIBox = renderDetails('#test', groupName, keyedData);
+			var componentText = testDiv.text();
+			expect(componentText).toMatch(numShorts);
+		});
 
-	it('shows chart', function() {
-		var orderDetailIBox = renderDetails('#test', groupName, keyedData);
-		var detailsDoughnut = TestUtils.findRenderedComponentWithType(orderDetailIBox, DoughnutChart);
-		expect(detailsDoughnut.getSegments().length).toBe(4);
+		it('shows chart', function() {
+			var orderDetailIBox = renderDetails('#test', groupName, keyedData);
+			var detailsDoughnut = TestUtils.findRenderedComponentWithType(orderDetailIBox, DoughnutChart);
+			expect(detailsDoughnut.getSegments().length).toBe(4);
 
-		var canvas = TestUtils.findRenderedDOMComponentWithTag(orderDetailIBox, 'canvas');
+			var canvas = TestUtils.findRenderedDOMComponentWithTag(orderDetailIBox, 'canvas');
 
-		expect(canvas).not.toBeNull();
-	});
+			expect(canvas).not.toBeNull();
+		});
 
-	it('shows pickRate', function() {
-		var pickRate = "10101";
-		var orderDetailIBox = renderDetails('#test', groupName, keyedData, pickRate);
-		var componentText = testDiv.text();
+		it('shows pickRate', function() {
+			var pickRate = "10101";
+			var orderDetailIBox = renderDetails('#test', groupName, keyedData, pickRate);
+			var componentText = testDiv.text();
+		});
 	});
 
 });
