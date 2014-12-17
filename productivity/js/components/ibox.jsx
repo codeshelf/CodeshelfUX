@@ -3,6 +3,12 @@
 var React = require("react");
 var RClass = require("../helpers/react-helper");
 
+var IBoxData = RClass(function() {
+		return (<span>
+				  <span className="m-xs" style={{fontSize: 49}}>{this.props.dataValue}</span>
+				  <span style={{fontSize: 35}}>{this.props.dataLabel}</span>
+				</span>);
+	});
 
 var IBoxTitleText = RClass(function() {
 		return (<h5>{this.props.children}</h5>);
@@ -39,6 +45,7 @@ var IBox = RClass(function() {
 
 module.exports = {
 	IBox: IBox,
+	IBoxData: IBoxData,
 	IBoxTitleBar: IBoxTitleBar,
 	IBoxTitleText: IBoxTitleText,
 	IBoxTitleTools: IBoxTitleTools,

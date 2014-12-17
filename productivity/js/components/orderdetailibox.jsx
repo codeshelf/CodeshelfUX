@@ -4,6 +4,7 @@ var React = require("react");
 var _ = require("lodash");
 var ibox = require("./ibox.jsx");
 var IBox = ibox.IBox;
+var IBoxData = ibox.IBoxData;
 var IBoxTitleBar = ibox.IBoxTitleBar;
 var IBoxTitleText = ibox.IBoxTitleText;
 var IBoxSection = ibox.IBoxSection;
@@ -41,10 +42,10 @@ var OrderDetailIBox = React.createClass({
 					  <DoughnutChart chartData={chartData}/>
 				  </IBoxSection>
 				  <IBoxSection className="shortSummary">
-					  {shorts} Shorts &gt;
+					  <IBoxData dataValue={shorts} dataLabel="Shorts" />
 				  </IBoxSection>
                   <IBoxSection className="pickRate">
-					  {pickRate} / hour
+					  <IBoxData dataValue={pickRate} dataLabel="/ hour" />
                   </IBoxSection>
                   <IBoxSection>
 					  Active Runs
