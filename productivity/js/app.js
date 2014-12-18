@@ -7,7 +7,7 @@ var $ = require('jquery');
 
 function productivity() {
 	//https://localhost:8089/productivity/summary?facilityId=081a2d7a-7e12-4560-8351-dd4d07ccb4de;
-	var el = document.getElementById('orderdetail');
+	var el = $('.orderdetails').get(0);
 	var serverEntryPoint = "https://localhost:8089";
 	var productivityPath = "/productivity/summary";
 	var facilityId = "081a2d7a-7e12-4560-8351-dd4d07ccb4de";
@@ -19,6 +19,7 @@ function productivity() {
 		console.log("received productivity data", data);
 		var groups = data["groups"];
 		//only the first for now
+		var orderDetailComponents = [];
 		for(var groupName in groups) {
 			var orderDetailSummaryData = groups[groupName];
 
@@ -30,17 +31,16 @@ function productivity() {
 				orderDetailSummaryData: orderDetailSummaryData,
 				pickRate: 999
 			};
-
-			React.render(React.createElement(OrderDetailIBox, props), el);
-			break;
+			orderDetailComponents.push(React.createElement(OrderDetailIBox, props));
 		}
-
+		var div = React.createElement("div", {}, orderDetailComponents);
+		React.render(div, el);
 	});
 
 }
 
 var poll = function() {
 	productivity();
-	setTimeout(poll, 3000);
+	window.setTimeout(poll, 3000);
 };
 poll();
