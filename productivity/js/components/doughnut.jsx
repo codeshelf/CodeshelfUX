@@ -5,7 +5,7 @@ var RClass = require("../helpers/react-helper");
 var Doughnut = require("./doughnut.js");
 
 var DoughnutChart = RClass(function() {
-		return (<canvas style={{'height': 400, 'width': 350}} />);
+		return (<canvas height="240" width="240" />);
 	},
 	{
 		componentDidMount: function() {

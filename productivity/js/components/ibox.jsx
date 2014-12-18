@@ -4,7 +4,7 @@ var React = require("react");
 var RClass = require("../helpers/react-helper");
 
 var IBoxData = RClass(function() {
-		return (<span>
+	return (<span>
 				  <span className="m-xs" style={{fontSize: 49}}>{this.props.dataValue}</span>
 				  <span style={{fontSize: 35}}>{this.props.dataLabel}</span>
 				</span>);
@@ -26,13 +26,13 @@ var IBoxTitleTools = RClass(function() {
 	});
 
 var IBoxTitleBar = RClass(function() {
-		return (<div className="ibox-title">
-				{this.props.children}
-				</div>);
+	return (<div className="ibox-title">
+			{this.props.children}
+		</div>);
 	});
 
 var IBoxSection = RClass(function() {
-    return (<div className="ibox-content">
+    return (<div className="ibox-content text-center">
 				{this.props.children}
             </div>);
 	});

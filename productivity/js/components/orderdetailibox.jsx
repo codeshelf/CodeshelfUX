@@ -32,6 +32,8 @@ var OrderDetailIBox = React.createClass({
 		var groupName    = this.props.groupName;
 		var orderDetailSummaryData  = this.props.orderDetailSummaryData;
 		var shorts       = orderDetailSummaryData["short"];
+		var remaining       = orderDetailSummaryData["released"];
+		var total = orderDetailSummaryData["released"] + orderDetailSummaryData["inprogress"] + orderDetailSummaryData["complete"] + orderDetailSummaryData["short"];
 		var pickRate     = this.props.pickRate;
 		var chartData = toChartData(segmentTemplates, orderDetailSummaryData);
 		return (<IBox>
@@ -39,14 +41,31 @@ var OrderDetailIBox = React.createClass({
                     <IBoxTitleText>Order Group {groupName} Burn Down</IBoxTitleText>
                   </IBoxTitleBar>
 				  <IBoxSection>
-					  <DoughnutChart chartData={chartData}/>
+					  <div style={{position: "relative", width: "100%", height: 270}}>
+						  <div style={{position:"absolute", zIndex:1, left: 0, right:0, top: 0, bottom: 0, width: "100%", height: "100%"}}>
+							  <div style={{position:"absolute", left: 0, right:0, top: 0, bottom: 0, margin: "auto", height: 240}}>
+								  <DoughnutChart chartData={chartData} />
+							  </div>
+						  </div>
+						  <div style={{position:"absolute", zIndex:3, left: 0, right:0, top: 0, bottom: 0, width: "100%", height: "100%"}}>
+							  <div style={{position:"absolute", left: 0, right:0, top: 0, bottom: 0, margin: "auto", height: 240, display: "table", width: "100%"}}>
+								  <div style={{display: "table-cell", verticalAlign: "middle"}}>
+									  <div>
+										  <div style={{fontSize: 85, margin: 0 }}>{remaining}</div>
+										  <div>OF <span style={{fontSize: 23}}>{total}</span> ITEMS</div>
+									  </div>
+								  </div>
+							  </div>
+						  </div>
+					  </div>
 				  </IBoxSection>
 				  <IBoxSection className="shortSummary">
 					  <IBoxData dataValue={shorts} dataLabel="Shorts" />
 				  </IBoxSection>
                   <IBoxSection className="pickRate">
-					  <IBoxData dataValue={pickRate} dataLabel="/ hour" />
+					  <IBoxData dataValue={pickRate} dataLabel="/ Hour" />
                   </IBoxSection>
+{/*
                   <IBoxSection>
 					  Active Runs
                   </IBoxSection>
@@ -59,6 +78,7 @@ var OrderDetailIBox = React.createClass({
                   <IBoxSection>
 					  Show all complete runs &gt;
                   </IBoxSection>
+*/}
                </IBox>);
 
 	}
