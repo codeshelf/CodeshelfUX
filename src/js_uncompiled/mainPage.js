@@ -12,6 +12,7 @@ goog.require('codeshelf.aisleslistview');
 goog.require('codeshelf.chelistview');
 goog.require('codeshelf.baylistview');
 goog.require('codeshelf.containeruselistview');
+goog.require('codeshelf.domainobjectpropertiesview');
 goog.require('codeshelf.itemlistview');
 goog.require('codeshelf.itemmasterlistview');
 goog.require('codeshelf.workinstructionlistview');
@@ -234,6 +235,18 @@ codeshelf.windowLauncher = (function() {
 				alert(err);
 			}
 		},
+
+		loadDomainObjectPropertiesView: function() {
+			try {
+				var domainObjectPropertiesView = codeshelf.domainobjectpropertiesview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var domainObjectPropertiesWindow = codeshelf.window(domainObjectPropertiesView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				domainObjectPropertiesWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
 
 		/**
 		 * @param {?Object} location
@@ -533,6 +546,12 @@ function launchItemMastersView() {
 }
 goog.exportSymbol('launchItemMastersView', launchItemMastersView);
 
+function launchDomainObjectPropertiesView() {
+	codeshelf.windowLauncher.loadDomainObjectPropertiesView();
+}
+goog.exportSymbol('launchDomainObjectPropertiesView', launchDomainObjectPropertiesView);
+
+
 function launchTestRunner() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');
 	theLogger.info("Opening all windows available from navbar");
@@ -555,6 +574,7 @@ function launchTestRunner() {
 	launchWorkInstructionListView();
 	launchInventoryView();
 	launchItemMastersView();
+	launchDomainObjectPropertiesView();
 
 }
 goog.exportSymbol('launchTestRunner', launchTestRunner);

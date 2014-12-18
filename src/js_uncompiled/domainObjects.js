@@ -257,6 +257,43 @@ domainobjects = {
 		}
 	},
 
+	'DomainObjectProperty': {
+		'className':  'DomainObjectProperty',
+		'properties': {
+			'persistentId': {
+				'id': 'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			},
+			'name': {
+				'id':    'name',
+				'title': 'Name',
+				'width': 10
+			},
+			'value':     {
+				'id':    'value',
+				'title': 'Value',
+				'width': 10
+			},
+			'description': {
+				'id':    'description',
+				'title': 'Description',
+				'width': 40
+			},
+			'objectType': {
+				'id':    'objectType',
+				'title': 'Type',
+				'width': 12
+			},
+			// not so much a UI field, as we need the persistent ID for the feature to show all WIs for this item
+			'defaultValue': {
+				'id':    'defaultValue',
+				'title': 'Default Value',
+				'width': 25
+			}
+		}
+	},
+
 	'EdiServiceABC': {
 		'className':  'EdiServiceABC',
 		'properties': {
