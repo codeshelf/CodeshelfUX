@@ -1,0 +1,21 @@
+<!-- change-config.html file
+-->
+<form name="config-form">
+	<div class="modal-header">
+		<h3>Change Config Parameter</h3>
+	</div>
+	<div class="modal-body">
+		<div id='instructions'>
+			<h4>Parameter Name: {{domainobjectproperty.name}}</h4>
+			<h4>   Description: {{domainobjectproperty.description}}</h4>
+			<!-- forcing separate lines on these instructions-->
+			<p>Enter new value</p>
+		</div>
+
+		<p>Value: <input type="text" name="value" ng-model="domainobjectproperty.value"></p>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" ng-click="controller.cancel()">Cancel</button>
+		<button class="btn btn-primary" ng-click="controller.ok()">Save</button>
+	</div>
+</form>

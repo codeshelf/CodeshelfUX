@@ -48,6 +48,19 @@ codeshelf.domainobjectpropertiesview = function(websession, facility) {
 				return 'Configuration Parameters';
 		},
 
+		openConfigurationEditDialog:  function(domainobjectproperty){
+			var data = {
+				'domainobjectproperty': domainobjectproperty
+			};
+
+			// See codeshelfApp.ConfigNgController defined below. And then referenced in angular.module
+			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-config.html", "ConfigNgController as controller", data);
+
+			promise.result.then(function(){
+
+			});
+		},
+
 		// following psuedo-inheritance pattern
 		'shouldAddThisColumn': function (inProperty) {
 			// exclude these fields. (Includ qty, UOM, container ID, order ID, SKU, Description.
@@ -98,3 +111,67 @@ codeshelf.domainobjectpropertiesview = function(websession, facility) {
 
 	return view;
 };
+
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.ConfigNgController = function($scope, $modalInstance, websession, data){
+
+	// tweaking separate fields
+	// first has html/angular scope matching js field.
+	$scope['domainobjectproperty']['description'] = data['domainobjectproperty']['description'];
+	$scope['domainobjectproperty']['name'] = data['domainobjectproperty']['name'];
+	$scope['domainobjectproperty']['value'] = data['domainobjectproperty']['value'];
+
+
+};
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.ConfigNgController = function($scope, $modalInstance, websession, data){
+	goog.object.extend($scope, data);
+	this.scope_ = $scope;
+	this.scope_['response'] = {};
+	this.modalInstance_ = $modalInstance;
+	this.websession_ = websession;
+};
+
+/**
+ * @export
+ */
+codeshelfApp.ConfigNgController.prototype.ok = function(){
+	var scope = this.scope_;
+	var modalInstance = this.modalInstance_;
+	var domainobjectproperty = scope['domainobjectproperty'];
+	var facility = this.scope_['facility'];
+
+	this.websession_.callServiceMethod("PropertyService", 'changePropertyValue', domainobjectproperty['name'], domainobjectproperty['value']).then(function(response) {
+		modalInstance.close();
+	})
+		.fail(function(response) {
+			scope.$apply(function() {
+				scope['response'] = response;
+			});
+
+		});
+};
+
+/**
+ * @export
+ */
+codeshelfApp.ConfigNgController.prototype.cancel = function(){
+	this.modalInstance_['dismiss']();
+};
+
+angular.module('codeshelfApp').controller('ConfigNgController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.ConfigNgController]);
+
