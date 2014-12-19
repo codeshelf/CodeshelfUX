@@ -32,8 +32,8 @@ function selectedFaclity(endpoint, facility) {
 	csapi.getProductivity(endpoint, facilityId)
 		.then(function(productivityUpdate) {
 			var orderDetailComponents = toOrderDetailComponents(productivityUpdate);
-			var div = React.createElement("div", {className: "col-lg-3"}, orderDetailComponents);
-			var el = $('.orderdetails').get(0);
+			var div = React.createElement("div", {className: "row orderdetails"}, orderDetailComponents);
+			var el = $('.wrapper-content').get(0);
 			React.render(div, el);
 
 		});
@@ -60,7 +60,11 @@ function toOrderDetailComponents(productivityUpdate) {
 			orderDetailSummaryData: orderDetailSummaryData,
 			pickRate: orderDetailSummaryData["picksPerHour"]
 		};
-		orderDetailComponents.push(React.createElement(OrderDetailIBox, props));
+
+		var orderDetailIBox = React.createElement(OrderDetailIBox, props);
+		var div = React.createElement("div", {className: "col-lg-3"}, orderDetailIBox);
+
+		orderDetailComponents.push(div);
 	}
 	return orderDetailComponents;
 }
