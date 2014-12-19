@@ -19,7 +19,18 @@ function getProductivity(endpoint , facilityId) {
 	});
 }
 
+function getCheRuns(endpoint , facilityId) {
+	var cheSummaryPath  = "/productivity/chesummary";
+	return $.ajax(endpoint + cheSummaryPath, {
+		data: {
+			"facilityId": facilityId
+		}
+	});
+}
+
+
 module.exports = {
 	getFacilities: getFacilities,
-	getProductivity: getProductivity
+	getProductivity: getProductivity,
+	getCheRuns: getCheRuns
 };

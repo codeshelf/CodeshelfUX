@@ -23,6 +23,12 @@ function selectedFaclity(endpoint, facility) {
 	React.render(React.createElement(NavHeader, props), $("li.nav-header").get(0));
 
 	var facilityId = facility.persistentId;
+
+	csapi.getCheRuns(endpoint, facilityId).then(function(runs) {
+		console.log("The che runs", runs);
+	});
+
+
 	csapi.getProductivity(endpoint, facilityId)
 		.then(function(productivityUpdate) {
 			var orderDetailComponents = toOrderDetailComponents(productivityUpdate);
