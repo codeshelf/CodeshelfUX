@@ -13,7 +13,7 @@ var DoughnutChart = RClass(function() {
 
 			var el = this.getDOMNode();
 			var chart = new Doughnut(el, chartData, {
-							percentageInnerCutout: 80,
+							percentageInnerCutout: 75,
 							animateRotate : false
 						});
 			chart.render();
