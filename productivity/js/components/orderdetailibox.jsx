@@ -34,7 +34,7 @@ var OrderDetailIBox = React.createClass({
 		var shorts       = orderDetailSummaryData["short"];
 		var remaining       = orderDetailSummaryData["released"];
 		var total = orderDetailSummaryData["released"] + orderDetailSummaryData["inprogress"] + orderDetailSummaryData["complete"] + orderDetailSummaryData["short"];
-		var pickRate     = this.props.pickRate;
+		var pickRate     = (this.props.pickRate ? this.props.pickRate : 0);
 		var chartData = toChartData(segmentTemplates, orderDetailSummaryData);
 		return (<IBox>
 	              <IBoxTitleBar>

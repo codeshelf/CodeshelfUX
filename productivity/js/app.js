@@ -48,10 +48,11 @@ function toOrderDetailComponents(productivityUpdate) {
 		//add created to released
 		var combined = orderDetailSummaryData["created"] + orderDetailSummaryData["released"];
 		orderDetailSummaryData["released"] = combined;
+
 		var props = {
-			"groupName": "12/15/2014",
+			"groupName": groupName,
 			orderDetailSummaryData: orderDetailSummaryData,
-			pickRate: 999
+			pickRate: orderDetailSummaryData["picksPerHour"]
 		};
 		orderDetailComponents.push(React.createElement(OrderDetailIBox, props));
 	}
