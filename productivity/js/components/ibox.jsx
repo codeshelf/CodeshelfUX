@@ -11,7 +11,8 @@ var IBoxData = RClass(function() {
 	});
 
 var IBoxTitleText = RClass(function() {
-		return (<h5>{this.props.children}</h5>);
+	/* Note that we are turning off float when no tools but when there are tools we will need to let it float left */
+		return (<h5 style={{float:"none"}}>{this.props.children}</h5>);
 	});
 
 var IBoxTitleTools = RClass(function() {
@@ -26,7 +27,7 @@ var IBoxTitleTools = RClass(function() {
 	});
 
 var IBoxTitleBar = RClass(function() {
-	return (<div className="ibox-title">
+	return (<div className="ibox-title text-center">
 			{this.props.children}
 		</div>);
 	});
