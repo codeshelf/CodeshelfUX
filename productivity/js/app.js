@@ -1,23 +1,18 @@
 var React = require('react');
-var OrderDetailIBox = require('orderdetailibox');
+var OrderDetailIBox = require('components/orderdetailibox');
 var $ = require('jquery');
 
+var csapi = require('data/csapi');
 
+var endpoint = "https://localhost:8089";
 
-
-function productivity() {
-	//https://localhost:8089/productivity/summary?facilityId=081a2d7a-7e12-4560-8351-dd4d07ccb4de;
-	var el = $('.orderdetails').get(0);
-	var serverEntryPoint = "https://localhost:8089";
-	var productivityPath = "/productivity/summary";
-	var facilityId = "081a2d7a-7e12-4560-8351-dd4d07ccb4de";
-	$.ajax(serverEntryPoint + productivityPath, {
-		data: {
-			"facilityId": facilityId
-		}
-	}).done(function(data) {
-		console.log("received productivity data", data);
-		var groups = data["groups"];
+csapi.getFacilities(endpoint)
+	.then(function(facilities) {
+		var facilityId = facilities[0].persistentId;
+		return csapi.getProductivity(endpoint, facilityId);
+	})
+	.then(function(productivityUpdate) {
+		var groups = productivityUpdate["groups"];
 		//only the first for now
 		var orderDetailComponents = [];
 		for(var groupName in groups) {
@@ -34,13 +29,16 @@ function productivity() {
 			orderDetailComponents.push(React.createElement(OrderDetailIBox, props));
 		}
 		var div = React.createElement("div", {}, orderDetailComponents);
+
+		var el = $('.orderdetails').get(0);
 		React.render(div, el);
+
 	});
 
-}
+
+
 
 var poll = function() {
-	productivity();
 	window.setTimeout(poll, 3000);
 };
-poll();
+//poll();

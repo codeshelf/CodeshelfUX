@@ -21,13 +21,13 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-		'__tests__/index-test.js'
+		'__tests__/index.js'
     ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-		'__tests__/index-test.js': ['webpack']
+		'__tests__/index.js': ['webpack']
     },
 
     // test results reporter to use
@@ -73,8 +73,7 @@ module.exports = function(config) {
 			// Allow to omit extensions when requiring these files
 			extensions: ['', '.js', '.jsx'],
 			//Look for files in these locations
-			root: [basePath + '/js/components',
-				  basePath + '/js/helpers',
+			root: [basePath + '/js',
 				  basePath]
 		},
 		module: {

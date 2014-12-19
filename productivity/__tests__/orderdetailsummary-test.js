@@ -5,9 +5,11 @@ var $ = require('jquery');
 var Addons = require('react/addons');
 var React = require('react');
 var TestUtils = Addons.addons.TestUtils;
-var OrderDetailIBox = require('orderdetailibox');
-var DoughnutChart = require('doughnut.jsx');
+var OrderDetailIBox = require('components/orderdetailibox');
+var DoughnutChart = require('components/doughnut.jsx');
 
+var testsContext = require.context(".", true, /-test$/);
+testsContext.keys().forEach(testsContext);
 
 describe('OrderDetailIBox', function() {
 	$(document.body).append('<div id="test"/>');

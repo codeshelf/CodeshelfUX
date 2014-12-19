@@ -22,8 +22,7 @@ module.exports = function(options) {
 			// Allow to omit extensions when requiring these files
 			extensions: ['', '.js', '.jsx'],
 			//Look for files in these locations
-			root: [basePath + '/js/components',
-				  basePath + '/js/helpers',
+			root: [basePath + '/js',
 				  basePath]
 		},
 		module: {
