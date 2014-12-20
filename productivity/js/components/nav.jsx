@@ -7,6 +7,7 @@ var NavHeader = RClass(function() {
 	var facilityName = this.props.facility["domainId"];
 	return (<div>
               <div className="profile-element">
+			      <h1 className="block"> -- Org Here -- </h1>
 			    <span className="block m-t-xs">
 				  <strong className="font-bold">&lt; {facilityName} </strong>
                 </span>
