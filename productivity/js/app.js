@@ -2,6 +2,7 @@
 
 var React = require('react');
 var $ = require('jquery');
+var Rx = require('rx');
 
 var OrderDetailIBox = require('components/orderdetailibox');
 var NavHeader = require('components/nav').NavHeader;
@@ -9,6 +10,7 @@ var NavHeader = require('components/nav').NavHeader;
 var csapi = require('data/csapi');
 
 var endpoint = "http://localhost:8088";
+
 csapi.getFacilities(endpoint).then(function(facilities) {
 	//Hack to select first found facility
 	selectedFaclity(endpoint, facilities[0]);
@@ -25,17 +27,19 @@ function selectedFaclity(endpoint, facility) {
 		console.log("The che runs", runs);
 	});
 
-	//Render Productivity for facility
-	csapi.getProductivity(endpoint, facilityId)
-		.then(function(productivityUpdate) {
 
+	//Create strean of productivity updates for the facility
+	var productivityStream = Rx.Observable.interval(5000 /*ms*/).flatMapLatest(function() {
+		return csapi.getProductivity(endpoint, facilityId);
+	});
+
+	//Render updates of productivity
+	productivityStream.subscribe(function(productivityUpdate) {
+			console.log("received productivityupdate", productivityUpdate);
 			var orderDetailComponents = toOrderDetailComponents(productivityUpdate);
-
-
 			var div = React.createElement("div", {className: "row orderdetails"}, orderDetailComponents);
 			React.render(div, $('.wrapper-content').get(0));
-
-		});
+	});
 }
 
 function toOrderDetailComponents(productivityUpdate) {
