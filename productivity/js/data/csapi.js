@@ -2,7 +2,7 @@
 var $ = require('jquery');
 
 var getFacilities = function(endpoint) {
-	var facilitiesPath = "/facilities";
+	var facilitiesPath = "/api/facilities";
 	return $.ajax(endpoint + facilitiesPath, {
 
 		}
@@ -10,21 +10,14 @@ var getFacilities = function(endpoint) {
 };
 
 function getProductivity(endpoint , facilityId) {
-	//https://localhost:8089/productivity/summary?facilityId=081a2d7a-7e12-4560-8351-dd4d07ccb4de;
-	var productivityPath = "/productivity/summary";
+	var productivityPath = "/api/facilities/" + facilityId + "/productivity";
 	return $.ajax(endpoint + productivityPath, {
-		data: {
-			"facilityId": facilityId
-		}
 	});
 }
 
 function getCheRuns(endpoint , facilityId) {
-	var cheSummaryPath  = "/productivity/chesummary";
+	var cheSummaryPath  = "/api/facilities/" + facilityId + "/chesummary";
 	return $.ajax(endpoint + cheSummaryPath, {
-		data: {
-			"facilityId": facilityId
-		}
 	});
 }
 

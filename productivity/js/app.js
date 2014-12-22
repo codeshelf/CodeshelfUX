@@ -11,7 +11,7 @@ var csapi = require('data/csapi');
 
 
 
-var endpoint = "https://localhost:8089";
+var endpoint = "http://localhost:8088";
 csapi.getFacilities(endpoint).then(function(facilities) {
 			selectedFaclity(endpoint, facilities[0]);
 });
