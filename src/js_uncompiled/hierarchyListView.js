@@ -1,6 +1,7 @@
 goog.provide('codeshelf.hierarchylistview');
 goog.require('codeshelf.multilevelcomparer');
 goog.require('codeshelf.view');
+goog.require('codeshelf.sessionGlobals');
 goog.require('goog.array');
 goog.require('goog.debug');
 goog.require('goog.debug.Logger');
@@ -265,6 +266,38 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 		dataView.sort(newMultilevelCompareFunction(sortAsc), true);
 	}
 
+	// cookie functions
+	function saveJsonColumnFormat() {
+		logger_.info("saving file format");
+		var columnsToSave = grid_.getColumns();
+		var formatString = JSON.stringify(columnsToSave);
+		var viewName = view.getViewName();
+		if (!isEmptyString(viewName))
+			codeshelf.sessionGlobals.addWindowFormat(viewName, formatString);
+	}
+
+	function getSavedColumnFormat() {
+		// This converts from the JSON, giving the way the column object looked at the time and version it was saved in.
+		// May not be consistent with current code.
+		var viewName = view.getViewName();
+		var formatString = "";
+		if (!isEmptyString(viewName)) {
+			formatString = codeshelf.sessionGlobals.getWindowFormat(viewName);
+			if (isEmptyString(formatString))
+				return null;
+			else
+				try { // let's not fail to open the window if there is a bad cookie
+					return JSON.parse(formatString);
+				}
+				catch (e) {
+					return null;
+				}
+		}
+		else
+			return null;
+	}
+
+
 	function setSortColumn(grid, column, sortAsc) {
 		/* Setting sortable false after the render removes the sort indicator whenever reordering is done
 		 var allColumns = grid.getColumns();
@@ -283,206 +316,243 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 	var self_ = {
 		logger: goog.debug.Logger.getLogger('hierarch list view'),
 
+
 		doSetupView: function() {
 
-			columns_ = codeshelf.grid.toColumnsForHierarchy(hierarchyMap_);
+				columns_ = codeshelf.grid.toColumnsForHierarchy(hierarchyMap_);
 
-			var computedProperties = goog.array.reduce(columns_, function(ids, column) {
-				ids.push(column.id);
-				return ids;
-			}, []);
+				var computedProperties = goog.array.reduce(columns_, function(ids, column) {
+					ids.push(column.id);
+					return ids;
+				}, []);
 
 
-			// If we've specified drag-ordering then present a drag-ordering column.
-			if (viewOptions_["draggableHierarchyLevel"] != -1) {
-				var selectAndMove = {
-					'id':                  'id',
-					'name':                '',
-					'field':               '',
-					'behavior':            'selectAndMove',
-					'headerCssClass':      '',
-					'width':               40,
-					'cannotTriggerInsert': true,
-					'resizable':           false,
-					'selectable':          false,
-					'sortable':            false,
-					'cssClass':            'cell-reorder dnd'
+				// If we've specified drag-ordering then present a drag-ordering column.
+				if (viewOptions_["draggableHierarchyLevel"] != -1) {
+					var selectAndMove = {
+						'id':                  'id',
+						'name':                '',
+						'field':               '',
+						'behavior':            'selectAndMove',
+						'headerCssClass':      '',
+						'width':               40,
+						'cannotTriggerInsert': true,
+						'resizable':           false,
+						'selectable':          false,
+						'sortable':            false,
+						'cssClass':            'cell-reorder dnd'
+					};
+					columns_.unshift(selectAndMove);
+				}
+
+				options_ = {
+					'editable':             viewOptions_['editable'],
+					'enableAddRow':         true,
+					'enableCellNavigation': true,
+					'asyncEditorLoading':   true,
+					'enableColumnReorder':   true,
+					'forceFitColumns':      true,
+					'topPanelHeight':       25,
+					'autoEdit':             true,
+					'multiColumnSort': false,
+					'cellHighlightCssClass': "cell-changed",
+
+					'editCommandHandler': editCommandHandler
 				};
-				columns_.unshift(selectAndMove);
-			}
 
-			options_ = {
-				'editable':             viewOptions_['editable'],
-				'enableAddRow':         true,
-				'enableCellNavigation': true,
-				'asyncEditorLoading':   true,
-				'enableColumnReorder':   true,
-				'forceFitColumns':      true,
-				'topPanelHeight':       25,
-				'autoEdit':             true,
-				'multiColumnSort': false,
-				'cellHighlightCssClass': "cell-changed",
-
-				'editCommandHandler': editCommandHandler
-			};
-
-			goog.dom.appendChild(self_.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
+				goog.dom.appendChild(self_.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
 
-			setupContextMenus(hierarchyMap_);
-			// setupContextMenu is another psuedo-inheritance pattern thing. No base class method. Just assume it is probably there.
-			// If not there, the view will not open correctly. There is no way to check from here whether the descended class has property 'setupContextMenu'.
-			if (hasContextMenu()) {
-				columns_.push(createContextMenuColumn());
-			}
-
-			dataView_ = new Slick.Data.DataView();
-			grid_ = new Slick.Grid(self_.getMainPaneElement(), dataView_, columns_, options_);
-
-			if (hasContextMenu()) {
-				grid_.onContextMenu.subscribe (dispatchContextMenu);
-			}
-
-			// Setup the selection model.
-			grid_.setSelectionModel(new Slick.CellSelectionModel());
-
-			// Setup the copy manager.
-			var copyManager = new Slick.CellCopyManager();
-			grid_.registerPlugin(copyManager);
-
-			// Setup the row move manager (in case a view can move rows).
-			var rowMoveManager = new Slick.RowMoveManager({cancelEditOnDrag: true});
-			grid_.registerPlugin(rowMoveManager);
-
-			// Setup the column picker, so the user can change the visible columns.
-			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
-
-			var setListViewFilterCmd = websession_.createRegisterFilterRequest(domainObject_['className'],computedProperties,hierarchyMap_[0]["filter"],hierarchyMap_[0]["filterParams"]);
-			var sent = websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
-			registeredCommands_.push(sent);
-
-			//Add click handlers from the columns
-			goog.array.forEach(columns_, function(column) {
-
-				if(typeof column['cellClickHandler'] === 'function') {
-				logger_.fine("register cellClickHandler with grid for column " + column);
-					grid_.onClick.subscribe(function(event, args) {
-						logger_.fine("cellClickHandler executing for " + column);
-						var cell = grid_.getCellFromEvent(event);
-						var item = dataView_.getItem(cell.row);
-						column['cellClickHandler'](event, args, item);
-					});
-				}
-			});
-
-			grid_.onKeyDown.subscribe(function(event) {
-				// select all rows on ctrl-a
-				if (event.which == 65 && event.ctrlKey) {
-					var rows = [];
-					selectedRowIds_ = [];
-
-					for (var i = 0; i < dataView_.getLength(); i++) {
-						rows.push(i);
-						selectedRowIds_.push(dataView_.getItem(i).id);
-					}
-
-					grid_.setSelectedRows(rows);
-					event.preventDefault();
+				setupContextMenus(hierarchyMap_);
+				// setupContextMenu is another psuedo-inheritance pattern thing. No base class method. Just assume it is probably there.
+				// If not there, the view will not open correctly. There is no way to check from here whether the descended class has property 'setupContextMenu'.
+				if (hasContextMenu()) {
+					columns_.push(createContextMenuColumn());
 				}
 
-			});
+				dataView_ = new Slick.Data.DataView();
+				grid_ = new Slick.Grid(self_.getMainPaneElement(), dataView_, columns_, options_);
 
-			grid_.onColumnsReordered.subscribe(function(event) {
-				var sortCols = grid_.getSortColumns();
-				var firstSortAsc = sortCols[0]['sortAsc'];
-				var firstColumn = grid_.getColumns()[0];
-				setSortColumn(grid_, firstColumn, firstSortAsc);
-				sortDataView(dataView_, firstSortAsc);
-			});
-
-			grid_.onSelectedRowsChanged.subscribe(function(event) {
-				selectedRowIds_ = [];
-				var rows = grid_.getSelectedRows();
-				for (var i = 0, l = rows.length; i < l; i++) {
-					var item = dataView_.getItem(rows[i]);
-					if (item)
-						selectedRowIds_.push(item.id);
-				}
-			});
-
-			grid_.onSort.subscribe(function(event, args) {
-				if (!args['multiColumnSort']) {
-					var sortAsc = args.sortAsc;
-				}
-				sortDataView(dataView_, sortAsc);
-			});
-
-			// wire up model events to drive the grid
-			dataView_.onRowCountChanged.subscribe(function(event, args) {
-				grid_.updateRowCount();
-				grid_.render();
-			});
-
-			dataView_.onRowsChanged.subscribe(function(event, args) {
-				var rows = args.rows;
-				for(var i = 0; i < rows.length; i++) {
-					var row = rows[i];
-					grid_.updateRow(row);
-
+				if (hasContextMenu()) {
+					grid_.onContextMenu.subscribe (dispatchContextMenu);
 				}
 
-				if (selectedRowIds_.length > 0) {
-					// since how the original data maps onto rows has changed,
-					// the selected rows in the grid need to be updated
-					var selRows = [];
-					for (var i = 0; i < selectedRowIds_.length; i++) {
-						var idx = dataView_.getRowById(selectedRowIds_[i]);
-						if (idx != undefined)
-							selRows.push(idx);
-					}
+				// Setup the selection model.
+				grid_.setSelectionModel(new Slick.CellSelectionModel());
 
-					grid_.setSelectedRows(selRows);
-				}
-			});
+				// Setup the copy manager.
+				var copyManager = new Slick.CellCopyManager();
+				grid_.registerPlugin(copyManager);
 
-			dataView_.onPagingInfoChanged.subscribe(function(event, pagingInfo) {
-				var isLastPage = pagingInfo.pageSize * (pagingInfo.pageNum + 1) - 1 >= pagingInfo.totalRows;
-				var enableAddRow = isLastPage || pagingInfo.pageSize == 0;
-				var options = grid_.getOptions();
+				// Setup the row move manager (in case a view can move rows).
+				var rowMoveManager = new Slick.RowMoveManager({cancelEditOnDrag: true});
+				grid_.registerPlugin(rowMoveManager);
 
-				if (options['enableAddRow'] != enableAddRow)
-					grid_.setOptions({
-						                 enableAddRow: enableAddRow
-					                 });
-			});
+				// Setup the column picker, so the user can change the visible columns.
+				var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
-			grid_.onCellChange.subscribe(function(e, args) {
-				logger_.fine("Cell changed" + goog.debug.expose(args));
-			});
+				var setListViewFilterCmd = websession_.createRegisterFilterRequest(domainObject_['className'],computedProperties,hierarchyMap_[0]["filter"],hierarchyMap_[0]["filterParams"]);
+				var sent = websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
+				registeredCommands_.push(sent);
 
-			sortDelay_ = new goog.async.Delay(function() {
-				var sortColumn = grid_.getSortColumns()[0];
-				if (sortColumn != null) {
-					var firstSortAsc = sortColumn['sortAsc'];
-					sortDataView(dataView_, firstSortAsc);
-				}
-			}, 500);
+				//Add click handlers from the columns
+				goog.array.forEach(columns_, function(column) {
 
-			// remove extra columns that are not part of this view's default set
-			if (self_.hasOwnProperty('shouldAddThisColumn')) {
-				var allColumns = grid_.getColumns();
-				var columnsToShow = goog.array.filter(allColumns, function(column) {
-					var columnType = column["type"];
-					if (columnType == "action") {
-						return true;
-					} else {
-						return self_['shouldAddThisColumn'](column);
+					if(typeof column['cellClickHandler'] === 'function') {
+						logger_.fine("register cellClickHandler with grid for column " + column);
+						grid_.onClick.subscribe(function(event, args) {
+							logger_.fine("cellClickHandler executing for " + column);
+							var cell = grid_.getCellFromEvent(event);
+							var item = dataView_.getItem(cell.row);
+							column['cellClickHandler'](event, args, item);
+						});
 					}
 				});
-				grid_.setColumns(columnsToShow);
-				var sortAsc = true;
-				setSortColumn(grid_, columnsToShow[0], sortAsc);
-			}
+
+				grid_.onKeyDown.subscribe(function(event) {
+					// select all rows on ctrl-a
+					if (event.which == 65 && event.ctrlKey) {
+						var rows = [];
+						selectedRowIds_ = [];
+
+						for (var i = 0; i < dataView_.getLength(); i++) {
+							rows.push(i);
+							selectedRowIds_.push(dataView_.getItem(i).id);
+						}
+
+						grid_.setSelectedRows(rows);
+						event.preventDefault();
+					}
+
+				});
+
+				grid_.onColumnsReordered.subscribe(function(event) {
+					var sortCols = grid_.getSortColumns();
+					var firstSortAsc = sortCols[0]['sortAsc'];
+					var firstColumn = grid_.getColumns()[0];
+					setSortColumn(grid_, firstColumn, firstSortAsc);
+					sortDataView(dataView_, firstSortAsc);
+					saveJsonColumnFormat();
+				});
+
+				grid_.onSelectedRowsChanged.subscribe(function(event) {
+					selectedRowIds_ = [];
+					var rows = grid_.getSelectedRows();
+					for (var i = 0, l = rows.length; i < l; i++) {
+						var item = dataView_.getItem(rows[i]);
+						if (item)
+							selectedRowIds_.push(item.id);
+					}
+				});
+
+				grid_.onSort.subscribe(function(event, args) {
+					if (!args['multiColumnSort']) {
+						var sortAsc = args.sortAsc;
+					}
+					sortDataView(dataView_, sortAsc);
+				});
+
+				// wire up model events to drive the grid
+				dataView_.onRowCountChanged.subscribe(function(event, args) {
+					grid_.updateRowCount();
+					grid_.render();
+				});
+
+				dataView_.onRowsChanged.subscribe(function(event, args) {
+					var rows = args.rows;
+					for(var i = 0; i < rows.length; i++) {
+						var row = rows[i];
+						grid_.updateRow(row);
+
+					}
+
+					if (selectedRowIds_.length > 0) {
+						// since how the original data maps onto rows has changed,
+						// the selected rows in the grid need to be updated
+						var selRows = [];
+						for (var i = 0; i < selectedRowIds_.length; i++) {
+							var idx = dataView_.getRowById(selectedRowIds_[i]);
+							if (idx != undefined)
+								selRows.push(idx);
+						}
+
+						grid_.setSelectedRows(selRows);
+					}
+				});
+
+				dataView_.onPagingInfoChanged.subscribe(function(event, pagingInfo) {
+					var isLastPage = pagingInfo.pageSize * (pagingInfo.pageNum + 1) - 1 >= pagingInfo.totalRows;
+					var enableAddRow = isLastPage || pagingInfo.pageSize == 0;
+					var options = grid_.getOptions();
+
+					if (options['enableAddRow'] != enableAddRow)
+						grid_.setOptions({
+							enableAddRow: enableAddRow
+						});
+				});
+
+				grid_.onCellChange.subscribe(function(e, args) {
+					logger_.fine("Cell changed" + goog.debug.expose(args));
+				});
+
+				sortDelay_ = new goog.async.Delay(function() {
+					var sortColumn = grid_.getSortColumns()[0];
+					if (sortColumn != null) {
+						var firstSortAsc = sortColumn['sortAsc'];
+						sortDataView(dataView_, firstSortAsc);
+					}
+				}, 500);
+
+				// New work supports "cookie" as a JSON version of columns structure. We will want to enhance but it is a start.
+				var savedColumns = getSavedColumnFormat();
+				var didCookieFormat = false;
+				if (savedColumns != null) {
+					// as formats and information may change, we want to do what may look pretty wasteful rather than assume it matches fully.
+					// iterate over the saved, then find the corresponding one from all columns, and add to our final answer.
+					var allColumnsX = grid_.getColumns();
+					var columnsToShowX = [];
+					// warning: javascript for-in iterates over keys, not the objects
+					// for (var aColumn in savedColumns) // this would not work.
+					for (var i=0, lll=savedColumns.length; i<lll; i++) {
+						var aColumn = savedColumns[i];
+						var columRecordWeWant = null;
+						var fieldNameWeWant = aColumn['id'];
+						for (var j=0, mmm=allColumnsX.length; j<mmm; j++) {
+							var bColumn = allColumnsX[j];
+							if (bColumn['id'] === fieldNameWeWant) {
+								columRecordWeWant = bColumn;
+								break;
+							}
+						}
+						if (columRecordWeWant != null)
+							columnsToShowX.push(columRecordWeWant);
+					}
+					if (columnsToShowX.length > 0) {
+						// finally, we may save what we have
+						grid_.setColumns(columnsToShowX);
+						var sortAsc = true;
+						setSortColumn(grid_, columnsToShowX[0], sortAsc);
+						didCookieFormat = true;
+					}
+				}
+
+
+				// remove extra columns that are not part of this view's default set
+				if (!didCookieFormat && self_.hasOwnProperty('shouldAddThisColumn')) {
+					var allColumns = grid_.getColumns();
+					var columnsToShow = goog.array.filter(allColumns, function(column) {
+						var columnType = column["type"];
+						if (columnType == "action") {
+							return true;
+						} else {
+							return self_['shouldAddThisColumn'](column);
+						}
+					});
+					grid_.setColumns(columnsToShow);
+					var sortAsc = true;
+					setSortColumn(grid_, columnsToShow[0], sortAsc);
+				}
+
 		},
 
 		open: function() {

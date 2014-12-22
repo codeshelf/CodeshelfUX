@@ -19,6 +19,10 @@ codeshelf.sessionGlobals = (function() {
 	var hasOrderGroups;
 	var hasCrossBatchOrders;
 
+	// start just with columns in list views. Ultimately, we also want window placement and sizing.
+	var viewFormats = new Map();
+	// Also load existing cookies from disk?
+
 	return {
 	// public methods
 	setFacility: function(inFacility){
@@ -35,6 +39,25 @@ codeshelf.sessionGlobals = (function() {
 	getWebsession: function(){
 		return websession;
 	},
+
+	// windowFormat (cookie) functions
+	addWindowFormat: function(inViewName, inFormatJson){
+		viewFormats.set(inViewName, inFormatJson);
+		// Also save a cookie to disk?
+		//Did it add?
+		var count = viewFormats.size;
+		if (viewFormats.has(inViewName)){
+			var newCount = count; // just a debug place
+		}
+	},
+
+	getWindowFormat: function(inViewName){
+		if (!inViewName.isEmpty && viewFormats.has(inViewName))
+			return viewFormats.get(inViewName);
+		else
+			return "";
+	},
+
 
 	// For window launching
 	// Perhaps not "session" globals, but global functions anyway. A place to avoid cloning
