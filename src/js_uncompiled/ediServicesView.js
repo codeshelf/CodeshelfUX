@@ -28,7 +28,7 @@ codeshelf.ediservicesview = function (websession, facility) {
 
 	var self = {
 
-		getViewName: function () {
+		'getViewName': function () {
 			return 'EDI Services';
 		},
 

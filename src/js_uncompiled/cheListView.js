@@ -59,7 +59,7 @@ codeshelf.cheslistview = function(websession, facility) {
 				return false;
 		},
 
-		getViewName: function() {
+		'getViewName': function() {
 			return 'CHE List View';
 		},
 

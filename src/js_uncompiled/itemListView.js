@@ -91,7 +91,7 @@ codeshelf.buildItemListView = function(websession, facility, itemFilter, itemFil
 				return false;
 		},
 
-		getViewName: function() {
+		'getViewName': function() {
 			return viewName_;
 		}
 	};

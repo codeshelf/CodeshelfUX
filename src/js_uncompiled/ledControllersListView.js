@@ -53,7 +53,7 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 				return true;
 		},
 
-		getViewName: function() {
+		'getViewName': function() {
 			return 'LED Controllers List View';
 		},
 

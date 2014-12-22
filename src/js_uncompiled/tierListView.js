@@ -68,7 +68,7 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 				return false;
 		},
 
-		getViewName: function () {
+		'getViewName': function () {
 			var viewName = 'Tiers List';
 			if (aisle_) {
 				viewName = 'Tiers for Aisle: ' + codeshelf.toLocationDescription(aisle_);

@@ -44,7 +44,7 @@ codeshelf.domainobjectpropertiesview = function(websession, facility) {
 	var self = {
 
 		// view of "DomainObjectProperty", flattened to include fields from DomainObjectDefaultProperty
-		getViewName: function () {
+		'getViewName': function () {
 				return 'Configuration Parameters';
 		},
 

@@ -272,7 +272,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 		var columnsToSave = grid_.getColumns();
 		var formatString = JSON.stringify(columnsToSave);
 		if (view.hasOwnProperty('getViewName')) {
-			var viewName = view.getViewName();
+			var viewName = view['getViewName']();
 			if (!isEmptyString(viewName))
 				codeshelf.sessionGlobals.addWindowFormat(viewName, formatString);
 		}
@@ -284,7 +284,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 		if (!view.hasOwnProperty('getViewName')) {
 			return null;
 		}
-		var viewName = view.getViewName();
+		var viewName = view['getViewName']();
 		var formatString = "";
 		if (!isEmptyString(viewName)) {
 			formatString = codeshelf.sessionGlobals.getWindowFormat(viewName);

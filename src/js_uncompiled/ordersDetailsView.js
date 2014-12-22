@@ -47,7 +47,7 @@ codeshelf.orderdetailsview = function(websession, facility) {
 
 	var self = {
 
-		getViewName: function () {
+		'getViewName': function () {
 				return 'Order Details';
 		},
 

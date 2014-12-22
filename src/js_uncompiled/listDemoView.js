@@ -38,7 +38,7 @@ codeshelf.listdemoview = function() {
 
 	self = {
 
-		getViewName: function() {
+		'getViewName': function() {
 			return 'List Demo';
 		},
 

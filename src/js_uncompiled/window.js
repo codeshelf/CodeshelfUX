@@ -59,7 +59,11 @@ codeshelf.window = function(view, parent, limits) {
 			windowElement_.style.left = parentLeftPosition + 25 + 'px';
 
 			var label = goog.dom.query('.windowTitle', windowElement_)[0];
-			label.innerHTML = view_.getViewName();
+			if (view.hasOwnProperty('getViewName')) {
+				label.innerHTML = view_['getViewName']();
+			}
+			else
+				label.innerHTML = "getViewName ???";
 
 			windowBar_ = goog.dom.query('.windowBar', windowElement_)[0];
 			var windowResizer = goog.dom.query('.windowResizer', windowElement_)[0];

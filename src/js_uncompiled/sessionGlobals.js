@@ -20,7 +20,8 @@ codeshelf.sessionGlobals = (function() {
 	var hasCrossBatchOrders;
 
 	// start just with columns in list views. Ultimately, we also want window placement and sizing.
-	// var viewFormats = new Map();
+	// Map is in javascript 6. Currently, safari and phantomjs do not support it.
+	var viewFormats = {};
 	// Also load existing cookies from disk?
 
 	return {
@@ -42,23 +43,17 @@ codeshelf.sessionGlobals = (function() {
 
 	// windowFormat (cookie) functions
 	addWindowFormat: function(inViewName, inFormatJson){
-		/*
-		viewFormats.set(inViewName, inFormatJson);
+
+		viewFormats[inViewName] = inFormatJson;
 		// Also save a cookie to disk?
-		//Did it add?
-		var count = viewFormats.size;
-		if (viewFormats.has(inViewName)){
-			var newCount = count; // just a debug place
-		}
-		*/
 	},
 
 	getWindowFormat: function(inViewName){
-		/*
-		if (!inViewName.isEmpty && viewFormats.has(inViewName))
-			return viewFormats.get(inViewName);
+		if (inViewName.isEmpty)
+			return "";
+		if (inViewName in viewFormats)
+			return viewFormats[inViewName];
 		else
-		*/
 			return "";
 	},
 

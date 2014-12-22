@@ -87,7 +87,7 @@ codeshelf.workinstructionlistview = function(websession, facility, viewNameSuffi
 			return goog.array.contains(defaultColumns, inProperty['id']);
 		},
 
-		getViewName: function() {
+		'getViewName': function() {
 			var returnStr = "Work Instructions " + viewNameSuffix;
 			return returnStr;
 		},

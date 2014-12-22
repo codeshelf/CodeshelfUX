@@ -62,7 +62,7 @@ codeshelf.containeruselistview = function(websession, facility, inChe) {
 				return false;
 		},
 
-		getViewName: function() {
+		'getViewName': function() {
 			var returnStr = "Containers";
 			if (che_ != null){
 				returnStr = returnStr + " on " + che_['domainId'];

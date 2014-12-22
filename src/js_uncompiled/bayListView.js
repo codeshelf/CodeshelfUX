@@ -56,7 +56,7 @@ codeshelf.baylistview = function(websession, facility) {
 				return false;
 		},
 
-		getViewName: function() {
+		'getViewName': function() {
 			return 'Bays List';
 		}
 	};

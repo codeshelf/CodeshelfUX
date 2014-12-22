@@ -53,7 +53,7 @@ codeshelf.pathsview = function(websession, facility) {
 				return false;
 		},
 
-		getViewName: function() {
+		'getViewName': function() {
 			return 'Paths';
 		},
 

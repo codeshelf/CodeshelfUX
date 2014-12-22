@@ -66,7 +66,7 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 
 	var self = {
 
-		getViewName: function () {
+		'getViewName': function () {
 			if (outboundOrders_)
 				return 'Outbound Orders';
 			else

@@ -565,7 +565,7 @@ codeshelf.facilityeditorview = function (websession, facility) {
 	 */
 	var self = {
 
-		getViewName: function () {
+		'getViewName': function () {
 			return 'Facility Outline';
 		},
 

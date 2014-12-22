@@ -40,7 +40,7 @@ codeshelf.itemmasterlistview = function(websession, facility) {
 				return false;
 		},
 
-		getViewName: function() {
+		'getViewName': function() {
 			var returnStr = "Item Masters (SKUs)";
 			return returnStr;
 		},

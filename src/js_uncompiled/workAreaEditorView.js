@@ -688,7 +688,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 	 */
 	var self = {
 
-		getViewName: function () {
+		'getViewName': function () {
 			return 'Work Area Editor';
 		},
 

@@ -52,7 +52,7 @@ codeshelf.aisleslistview = function(websession, facility) {
 				return false;
 		},
 
-		getViewName: function() {
+		'getViewName': function() {
 			return 'Aisles List View';
 		},
 
