@@ -20,7 +20,7 @@ codeshelf.sessionGlobals = (function() {
 	var hasCrossBatchOrders;
 
 	// start just with columns in list views. Ultimately, we also want window placement and sizing.
-	var viewFormats = new Map();
+	// var viewFormats = new Map();
 	// Also load existing cookies from disk?
 
 	return {
@@ -42,6 +42,7 @@ codeshelf.sessionGlobals = (function() {
 
 	// windowFormat (cookie) functions
 	addWindowFormat: function(inViewName, inFormatJson){
+		/*
 		viewFormats.set(inViewName, inFormatJson);
 		// Also save a cookie to disk?
 		//Did it add?
@@ -49,12 +50,15 @@ codeshelf.sessionGlobals = (function() {
 		if (viewFormats.has(inViewName)){
 			var newCount = count; // just a debug place
 		}
+		*/
 	},
 
 	getWindowFormat: function(inViewName){
+		/*
 		if (!inViewName.isEmpty && viewFormats.has(inViewName))
 			return viewFormats.get(inViewName);
 		else
+		*/
 			return "";
 	},
 

@@ -271,14 +271,19 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 		logger_.info("saving file format");
 		var columnsToSave = grid_.getColumns();
 		var formatString = JSON.stringify(columnsToSave);
-		var viewName = view.getViewName();
-		if (!isEmptyString(viewName))
-			codeshelf.sessionGlobals.addWindowFormat(viewName, formatString);
+		if (view.hasOwnProperty('getViewName')) {
+			var viewName = view.getViewName();
+			if (!isEmptyString(viewName))
+				codeshelf.sessionGlobals.addWindowFormat(viewName, formatString);
+		}
 	}
 
 	function getSavedColumnFormat() {
 		// This converts from the JSON, giving the way the column object looked at the time and version it was saved in.
 		// May not be consistent with current code.
+		if (!view.hasOwnProperty('getViewName')) {
+			return null;
+		}
 		var viewName = view.getViewName();
 		var formatString = "";
 		if (!isEmptyString(viewName)) {
