@@ -9,7 +9,7 @@ var Nav = require('components/nav');
 var Breadcrumbs = require('components/breadcrumb');
 var csapi = require('data/csapi');
 
-var endpoint = "http://localhost:8088";
+var endpoint = "https://admin.codeshelf.com/test";
 var el = React.createElement;
 
 csapi.getFacilities(endpoint).then(function(facilities) {
@@ -54,16 +54,18 @@ function selectedFaclity(endpoint, facility) {
 
 	//Create strean of productivity updates for the facility
 	var productivityStream = Rx.Observable.interval(5000 /*ms*/).flatMapLatest(function() {
-		return csapi.getProductivity(endpoint, facilityId);
+		return Rx.Observable.fromPromise(csapi.getProductivity (endpoint, facilityId)).catch(Rx.Observable.empty());
 	});
 
 	//Render updates of productivity
-	productivityStream.subscribe(function(productivityUpdate) {
+	var subscription = productivityStream.subscribe(function(productivityUpdate) {
 			console.log("received productivityupdate", productivityUpdate);
 			var orderDetailComponents = toOrderDetailComponents(productivityUpdate);
 			var div = React.createElement("div", {className: "row orderdetails"}, orderDetailComponents);
 			React.render(div, $('.wrapper-content').get(0));
 	});
+
+	//TODO hook subscription disposal
 }
 
 function toOrderDetailComponents(productivityUpdate) {
