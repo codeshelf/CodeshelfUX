@@ -37,7 +37,9 @@ var kWebSessionCommandType = {
 	OBJECT_FILTER_RESP: 'ObjectChangeResponse',
 	OBJECT_METHOD_REQ: 'OBJ_METH_RQ',
 	// OBJECT_METHOD_RESP: 'OBJ_METH_RS',
-	OBJECT_METHOD_RESP: 'ObjectMethodResponse'
+	OBJECT_METHOD_RESP: 'ObjectMethodResponse',
+	DOMAIN_PROPERTIES_RESP: 'DomainPropertiesResponse'
+
 };
 
 var kResponseStatus = {
@@ -217,6 +219,17 @@ codeshelf.websession = function () {
 						'filterParams': params
 					}
 				};
+			return command;
+		},
+
+		// from v10, the objectPropertiesRequest
+		createObjectPropertiesRequest : function (className,facilityPersistentId) {
+			var command = {
+				'ObjectPropertiesRequest' : {
+					'className':    className,
+					'persistentId': facilityPersistentId
+				}
+			};
 			return command;
 		},
 

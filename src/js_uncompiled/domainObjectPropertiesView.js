@@ -48,6 +48,13 @@ codeshelf.domainobjectpropertiesview = function(websession, facility) {
 				return 'Configuration Parameters';
 		},
 
+		// New objectPropererties mechanism. This is not a generic mechanism.
+		// Somewhat goofy, but this returns the string form of the facility persistentId.
+		'doObjectProperitiesRequest': function () {
+			return facility_['persistentId'];
+		},
+
+
 		openConfigurationEditDialog:  function(domainobjectproperty){
 			var data = {
 				'domainobjectproperty': domainobjectproperty

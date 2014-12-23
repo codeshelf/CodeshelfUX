@@ -131,6 +131,39 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 		return callback;
 	}
 
+	// Simpler call back. We know domainObjectProperties are only one level.
+	function domainPropertiesCallback() {
+		var callback2 = {
+			exec: function(type,command) {
+				if (type == kWebSessionCommandType.DOMAIN_PROPERTIES_RESP) {
+					for (var i = 0; i < command['results'].length; i++) {
+						var object = command['results'][i];
+
+						if (object['op'] === 'cre') {
+							dataView_.addItem(object);
+						} else if (object['op'] === 'upd') {
+							var item = dataView_.getItemById(object['persistentId']);
+							if (item === undefined) {
+								dataView_.addItem(object);
+							} else {
+								dataView_.updateItem(object['persistentId'], object);
+							}
+						} else if (object['op'] === 'del') {
+							dataView_.deleteItem(object['persistentId']);
+
+						}
+					}
+					// We don't want to sort right away, because we might be getting a lot of updates.
+					// The delay timer gets reset each time we call start - only after updates are quite for 500ms do we sort.
+					sortDelay_.start();
+				}
+			}
+		};
+
+		return callback2;
+	}
+
+
 	function dispatchContextMenu(event) {
 		if (event && event.stopPropagation) {
 			event.stopPropagation();
@@ -324,81 +357,95 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 
 		doSetupView: function() {
 
-				columns_ = codeshelf.grid.toColumnsForHierarchy(hierarchyMap_);
+			columns_ = codeshelf.grid.toColumnsForHierarchy(hierarchyMap_);
 
-				var computedProperties = goog.array.reduce(columns_, function(ids, column) {
-					ids.push(column.id);
-					return ids;
-				}, []);
+			var computedProperties = goog.array.reduce(columns_, function (ids, column) {
+				ids.push(column.id);
+				return ids;
+			}, []);
 
 
-				// If we've specified drag-ordering then present a drag-ordering column.
-				if (viewOptions_["draggableHierarchyLevel"] != -1) {
-					var selectAndMove = {
-						'id':                  'id',
-						'name':                '',
-						'field':               '',
-						'behavior':            'selectAndMove',
-						'headerCssClass':      '',
-						'width':               40,
-						'cannotTriggerInsert': true,
-						'resizable':           false,
-						'selectable':          false,
-						'sortable':            false,
-						'cssClass':            'cell-reorder dnd'
-					};
-					columns_.unshift(selectAndMove);
-				}
-
-				options_ = {
-					'editable':             viewOptions_['editable'],
-					'enableAddRow':         true,
-					'enableCellNavigation': true,
-					'asyncEditorLoading':   true,
-					'enableColumnReorder':   true,
-					'forceFitColumns':      true,
-					'topPanelHeight':       25,
-					'autoEdit':             true,
-					'multiColumnSort': false,
-					'cellHighlightCssClass': "cell-changed",
-
-					'editCommandHandler': editCommandHandler
+			// If we've specified drag-ordering then present a drag-ordering column.
+			if (viewOptions_["draggableHierarchyLevel"] != -1) {
+				var selectAndMove = {
+					'id': 'id',
+					'name': '',
+					'field': '',
+					'behavior': 'selectAndMove',
+					'headerCssClass': '',
+					'width': 40,
+					'cannotTriggerInsert': true,
+					'resizable': false,
+					'selectable': false,
+					'sortable': false,
+					'cssClass': 'cell-reorder dnd'
 				};
+				columns_.unshift(selectAndMove);
+			}
 
-				goog.dom.appendChild(self_.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
+			options_ = {
+				'editable': viewOptions_['editable'],
+				'enableAddRow': true,
+				'enableCellNavigation': true,
+				'asyncEditorLoading': true,
+				'enableColumnReorder': true,
+				'forceFitColumns': true,
+				'topPanelHeight': 25,
+				'autoEdit': true,
+				'multiColumnSort': false,
+				'cellHighlightCssClass': "cell-changed",
+
+				'editCommandHandler': editCommandHandler
+			};
+
+			goog.dom.appendChild(self_.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
 
 
-				setupContextMenus(hierarchyMap_);
-				// setupContextMenu is another psuedo-inheritance pattern thing. No base class method. Just assume it is probably there.
-				// If not there, the view will not open correctly. There is no way to check from here whether the descended class has property 'setupContextMenu'.
-				if (hasContextMenu()) {
-					columns_.push(createContextMenuColumn());
-				}
+			setupContextMenus(hierarchyMap_);
+			// setupContextMenu is another psuedo-inheritance pattern thing. No base class method. Just assume it is probably there.
+			// If not there, the view will not open correctly. There is no way to check from here whether the descended class has property 'setupContextMenu'.
+			if (hasContextMenu()) {
+				columns_.push(createContextMenuColumn());
+			}
 
-				dataView_ = new Slick.Data.DataView();
-				grid_ = new Slick.Grid(self_.getMainPaneElement(), dataView_, columns_, options_);
+			dataView_ = new Slick.Data.DataView();
+			grid_ = new Slick.Grid(self_.getMainPaneElement(), dataView_, columns_, options_);
 
-				if (hasContextMenu()) {
-					grid_.onContextMenu.subscribe (dispatchContextMenu);
-				}
+			if (hasContextMenu()) {
+				grid_.onContextMenu.subscribe(dispatchContextMenu);
+			}
 
-				// Setup the selection model.
-				grid_.setSelectionModel(new Slick.CellSelectionModel());
+			// Setup the selection model.
+			grid_.setSelectionModel(new Slick.CellSelectionModel());
 
-				// Setup the copy manager.
-				var copyManager = new Slick.CellCopyManager();
-				grid_.registerPlugin(copyManager);
+			// Setup the copy manager.
+			var copyManager = new Slick.CellCopyManager();
+			grid_.registerPlugin(copyManager);
 
-				// Setup the row move manager (in case a view can move rows).
-				var rowMoveManager = new Slick.RowMoveManager({cancelEditOnDrag: true});
-				grid_.registerPlugin(rowMoveManager);
+			// Setup the row move manager (in case a view can move rows).
+			var rowMoveManager = new Slick.RowMoveManager({cancelEditOnDrag: true});
+			grid_.registerPlugin(rowMoveManager);
 
-				// Setup the column picker, so the user can change the visible columns.
-				var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
+			// Setup the column picker, so the user can change the visible columns.
+			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
-				var setListViewFilterCmd = websession_.createRegisterFilterRequest(domainObject_['className'],computedProperties,hierarchyMap_[0]["filter"],hierarchyMap_[0]["filterParams"]);
+
+			// New objectPropererties mechanism. This is not generic.
+			if (this.hasOwnProperty('doObjectProperitiesRequest')) {
+				var facilityPersistentIdStr = this['doObjectProperitiesRequest']();
+				var theDomainPropertiesCmd = websession_.createObjectPropertiesRequest('Organization', facilityPersistentIdStr);
+				var sent2 = websession_.sendCommand(theDomainPropertiesCmd, domainPropertiesCallback(), true);
+				registeredCommands_.push(sent2);
+			}
+			else {
+				// Normal domain object and filter works like this
+				var setListViewFilterCmd = websession_.createRegisterFilterRequest(domainObject_['className'], computedProperties, hierarchyMap_[0]["filter"], hierarchyMap_[0]["filterParams"]);
 				var sent = websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
 				registeredCommands_.push(sent);
+			}
+
+
+
 
 				//Add click handlers from the columns
 				goog.array.forEach(columns_, function(column) {
