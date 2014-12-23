@@ -54,20 +54,6 @@ codeshelf.domainobjectpropertiesview = function(websession, facility) {
 			return facility_['persistentId'];
 		},
 
-
-		openConfigurationEditDialog:  function(domainobjectproperty){
-			var data = {
-				'domainobjectproperty': domainobjectproperty
-			};
-
-			// See codeshelfApp.ConfigNgController defined below. And then referenced in angular.module
-			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-config.html", "ConfigNgController as controller", data);
-
-			promise.result.then(function(){
-
-			});
-		},
-
 		// following psuedo-inheritance pattern
 		'shouldAddThisColumn': function (inProperty) {
 			// exclude these fields. (Includ qty, UOM, container ID, order ID, SKU, Description.
@@ -88,7 +74,7 @@ codeshelf.domainobjectpropertiesview = function(websession, facility) {
 			"label" : "Edit Configuration",
 			"permission": "configuration:edit",
 			"action": function(domainobjectproperty) {
-				codeshelf.openConfigurationEditDialog(domainobjectproperty['description'], domainobjectproperty['name'], domainobjectproperty['value']);
+				codeshelf.openConfigurationEditDialog(domainobjectproperty['name'], domainobjectproperty['description'], domainobjectproperty['value']);
 			}
 		}
 	);
@@ -118,6 +104,20 @@ codeshelf.domainobjectpropertiesview = function(websession, facility) {
 
 	return view;
 };
+
+
+ codeshelf.openConfigurationEditDialog = function(name, description, value){
+ var data = {
+ 'domainobjectproperty': {'name': name, 'description': description, 'value': value}
+ };
+
+ // See codeshelfApp.ConfigNgController defined below. And then referenced in angular.module
+ var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-config.html", "ConfigNgController as controller", data);
+
+ promise.result.then(function(){
+
+ });
+ },
 
 
 /**
