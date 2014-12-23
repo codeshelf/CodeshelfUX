@@ -9,7 +9,21 @@ var Nav = require('components/nav');
 var Breadcrumbs = require('components/breadcrumb');
 var csapi = require('data/csapi');
 
-var endpoint = "https://admin.codeshelf.com/test";
+//synchronous call to get hosts.json
+var config = (function(){
+	var config = {};
+	$.ajax({
+		url: "/config/hosts.json",
+		success: function(data) {
+			config = data;
+		},
+		async:false
+	});
+	return config;})();
+
+
+var primaryHost = config['primaryHost'];
+var endpoint = config["endpoint"].replace(/%host%/, primaryHost);
 var el = React.createElement;
 
 csapi.getFacilities(endpoint).then(function(facilities) {

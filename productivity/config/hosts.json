@@ -1,0 +1,40 @@
+{
+ "doc": "Set endpoint to your localhost CSServer in development without a replacement variable",
+ "endpoint": "https://admin.codeshelf.com/%host%",
+ "primaryHost": "test",
+ "hosts": [{
+            "host": "aldebaran",
+	        "description": "dedicated GoodEggs server",
+            "roles": [ "appserver" ]
+           },
+		   {
+			   "host": "betelgeuse",
+			   "description": "dedicated Accu server",
+			   "roles": [ "appserver" ]
+		   },
+		   {
+			   "host": "sc10000",
+			   "description": "GoodEggs site controller",
+			   "roles": [ "sitecontroller" ]
+		   },
+		   {
+			   "host": "sc10004",
+			   "description": "Accu site controller",
+			   "roles": [ "sitecontroller" ]
+		   },
+		   {
+			   "host": "elastic1",
+			   "description": "",
+			   "roles": [ "elasticsearch" ]
+		   },
+		   {
+			   "host": "elastic2",
+			   "description": "",
+			   "roles": [ "elasticsearch" ]
+		   },
+		   {
+			   "host": "elastic3",
+			   "description": "",
+			   "roles": [ "elasticsearch" ]
+		   }]
+}
