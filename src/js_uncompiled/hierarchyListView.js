@@ -135,22 +135,12 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 	function domainPropertiesCallback() {
 		var callback2 = {
 			exec: function(type,command) {
-				if (type == kWebSessionCommandType.DOMAIN_PROPERTIES_RESP) {
-					for (var i = 0; i < command['results'].length; i++) {
-						var object = command['results'][i];
+				if (type == kWebSessionCommandType.OBJECT_PROPERTIES_RESP) {
+					for (var i = 0; i < command['properties'].length; i++) {
+						var object = command['properties'][i];
 
-						if (object['op'] === 'cre') {
+						if (object !=  null) {
 							dataView_.addItem(object);
-						} else if (object['op'] === 'upd') {
-							var item = dataView_.getItemById(object['persistentId']);
-							if (item === undefined) {
-								dataView_.addItem(object);
-							} else {
-								dataView_.updateItem(object['persistentId'], object);
-							}
-						} else if (object['op'] === 'del') {
-							dataView_.deleteItem(object['persistentId']);
-
 						}
 					}
 					// We don't want to sort right away, because we might be getting a lot of updates.
@@ -311,7 +301,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 		}
 	}
 
-	function getSavedColumnFormat() {
+	function loadSavedColumnFormat() {
 		// This converts from the JSON, giving the way the column object looked at the time and version it was saved in.
 		// May not be consistent with current code.
 		if (!view.hasOwnProperty('getViewName')) {
@@ -433,7 +423,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 			// New objectPropererties mechanism. This is not generic.
 			if (this.hasOwnProperty('doObjectProperitiesRequest')) {
 				var facilityPersistentIdStr = this['doObjectProperitiesRequest']();
-				var theDomainPropertiesCmd = websession_.createObjectPropertiesRequest('Organization', facilityPersistentIdStr);
+				var theDomainPropertiesCmd = websession_.createObjectPropertiesRequest('Facility', facilityPersistentIdStr);
 				var sent2 = websession_.sendCommand(theDomainPropertiesCmd, domainPropertiesCallback(), true);
 				registeredCommands_.push(sent2);
 			}
@@ -556,7 +546,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 				}, 500);
 
 				// New work supports "cookie" as a JSON version of columns structure. We will want to enhance but it is a start.
-				var savedColumns = getSavedColumnFormat();
+				var savedColumns = loadSavedColumnFormat();
 				var didCookieFormat = false;
 				if (savedColumns != null) {
 					// as formats and information may change, we want to do what may look pretty wasteful rather than assume it matches fully.
