@@ -136,8 +136,8 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 		var callback2 = {
 			exec: function(type,command) {
 				if (type == kWebSessionCommandType.OBJECT_PROPERTIES_RESP) {
-					for (var i = 0; i < command['properties'].length; i++) {
-						var object = command['properties'][i];
+					for (var i = 0; i < command['results'].length; i++) {
+						var object = command['results'][i];
 
 						if (object !=  null) {
 							dataView_.addItem(object);
