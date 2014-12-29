@@ -17,7 +17,8 @@ var Nav = RClass(function() {
 });
 
 var NavHeader = RClass(function() {
-	var facilityName = this.props.facility["domainId"];
+	var facility = this.props.facility;
+	var facilityName = (facility) ? facility["domainId"] : "";
 	return (<div className="nav-header">
               <div className="profile-element">
 			      <h1 className="block"> -- Org Here -- </h1>
@@ -33,24 +34,19 @@ var NavHeader = RClass(function() {
 
 var NavMenu = RClass(function() {
 	var navMenu = this.props.navMenu;
+	var menuItems = navMenu["menuItems"] ? navMenu["menuItems"] : [];
 	var iconClassNames = "fa " + navMenu.icon;
 	return (
 		<li className="active">
             <a href="#"><i className={iconClassNames}></i><span className="nav-label">{navMenu.label}</span><span className="fa arrow"></span></a>
-			<NavMenuItems menuItems={navMenu.menuItems} />
+			<ul className="nav nav-second-level">
+				{
+				 menuItems.map(function(menuItem) {
+					 return <li key={menuItem.key}><a href={menuItem.href}>{menuItem.label}</a></li>
+				 })
+				}
+			</ul>
         </li>
-	);
-});
-
-var NavMenuItems = RClass(function(){
-	return (
-		<ul className="nav nav-second-level">
-			{
-			 this.props.menuItems.map(function(menuItem) {
-				 return <li key={menuItem.key}><a href={menuItem.href}>{menuItem.label}</a></li>
-			 })
-			 }
-        </ul>
 	);
 });
 

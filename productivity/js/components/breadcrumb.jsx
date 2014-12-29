@@ -7,6 +7,7 @@ var Breadcrumb = RClass(function() {
 	var crumbs = this.props.crumbs;
 
 	var renderedChildren = [];
+	var lastLabel = "";
 	for(var i=0; i < crumbs.length; i++) {
 		var crumb = crumbs[i];
 		var node = null;
@@ -21,9 +22,15 @@ var Breadcrumb = RClass(function() {
                        <a href={crumb.href}>{crumb.label}</a>
                     </li>);
 		}
+		lastLabel = crumb.label;
      	renderedChildren.push(node);
 	}
-    return (<ol className="breadcrumb">{ renderedChildren }</ol>);
+    return (
+		<div>
+			<h2>{lastLabel}</h2>
+			<ol className="breadcrumb">{ renderedChildren }</ol>
+		</div>
+	);
 });
 
 module.exports = Breadcrumb;

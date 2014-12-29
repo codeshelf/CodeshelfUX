@@ -2,7 +2,6 @@ var webpack = require('webpack');
 var basePath = __dirname;
 
 module.exports = function(options) {
-	var entry = ['./js/app.js'];
 	if (options['development']) {
 		//add hot deploy module under development
 		entry.unshift('webpack/hot/dev-server');
@@ -10,7 +9,10 @@ module.exports = function(options) {
 
 	return {
 		// Entry point for static analyzer to include all required modules:
-		entry: entry,
+		entry: {
+			app: './js/app.js',
+			admin: './js/admin.js'
+		},
 
 		output: {
 			// Where to put build results when doing production builds:
@@ -18,7 +20,7 @@ module.exports = function(options) {
 			path: __dirname,
 
 			// JS filename you're going to use in HTML
-			filename: 'bundle.js'
+			filename: '[name].bundle.js'
 
 			// Path you're going to use in HTML
 			//publicPath: '/js/'

@@ -22,8 +22,7 @@ var config = (function(){
 	return config;})();
 
 
-var primaryHost = config['primaryHost'];
-var endpoint = config["endpoint"].replace(/%host%/, primaryHost);
+var endpoint = config["endpoint"];
 var el = React.createElement;
 
 csapi.getFacilities(endpoint).then(function(facilities) {
@@ -41,10 +40,10 @@ function selectedFaclity(endpoint, facility) {
 					 "label": "Activity",
 					 "icon": "fa-bar-chart-o",
 					 "menuItems": [
-						 {"href": "javascript:contactWasSelected()", key: "all", "label": "All" },
-						 {"href": "javascript:launchDebugWindow()", key: "chill", "label": "Chill" },
-						 {"href": "javascript:launchTestRunner()", key: "dry", "label": "Dry" },
-						 {"href": "javascript:launchTestRunner()", key: "produce", "label": "Produce" }
+						 {"href": "#", key: "all", "label": "All" },
+						 {"href": "#", key: "chill", "label": "Chill" },
+						 {"href": "#", key: "dry", "label": "Dry" },
+						 {"href": "#", key: "produce", "label": "Produce" }
 						 ]
 					 }]
 				 };
@@ -64,10 +63,10 @@ function selectedFaclity(endpoint, facility) {
 		console.log("The che runs", runs);
 	});
 
-
+x
 
 	//Create strean of productivity updates for the facility
-	var productivityStream = Rx.Observable.interval(5000 /*ms*/).flatMapLatest(function() {
+	var productivityStream = Rx.Observable.timer(0, 5000 /*ms*/).flatMapLatest(function() {
 		return Rx.Observable.fromPromise(csapi.getProductivity (endpoint, facilityId)).catch(Rx.Observable.empty());
 	});
 

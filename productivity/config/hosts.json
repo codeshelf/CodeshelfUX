@@ -1,7 +1,6 @@
 {
- "doc": "Set endpoint to your localhost CSServer in development without a replacement variable",
- "endpoint": "https://admin.codeshelf.com/%host%",
- "primaryHost": "test",
+ "doc": "Set endpoint to your admin to hit a test system: https://admin.codeshelf.com/stage",
+ "endpoint": "http://localhost:8088",
  "hosts": [{
             "host": "aldebaran",
 	        "description": "dedicated GoodEggs server",
@@ -34,6 +33,11 @@
 		   },
 		   {
 			   "host": "elastic3",
+			   "description": "",
+			   "roles": [ "elasticsearch" ]
+		   },
+		   {
+			   "host": "elastic4",
 			   "description": "",
 			   "roles": [ "elasticsearch" ]
 		   }]
