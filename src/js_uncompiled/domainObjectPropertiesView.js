@@ -74,7 +74,7 @@ codeshelf.domainobjectpropertiesview = function(websession, facility) {
 			"label" : "Edit Configuration",
 			"permission": "configuration:edit",
 			"action": function(domainobjectproperty) {
-				codeshelf.openConfigurationEditDialog(domainobjectproperty['name'], domainobjectproperty['description'], domainobjectproperty['value']);
+				codeshelf.openConfigurationEditDialog(facility_['persistentId'], domainobjectproperty['name'], domainobjectproperty['description'], domainobjectproperty['value']);
 			}
 		}
 	);
@@ -106,9 +106,9 @@ codeshelf.domainobjectpropertiesview = function(websession, facility) {
 };
 
 
- codeshelf.openConfigurationEditDialog = function(name, description, value){
+ codeshelf.openConfigurationEditDialog = function(facilityId, name, description, value){
  var data = {
- 'domainobjectproperty': {'name': name, 'description': description, 'value': value}
+ 'domainobjectproperty': {'facilityId': facilityId, 'name': name, 'description': description, 'value': value}
  };
 
  // See codeshelfApp.ConfigNgController defined below. And then referenced in angular.module
@@ -131,6 +131,7 @@ codeshelfApp.ConfigNgController = function($scope, $modalInstance, websession, d
 
 	// tweaking separate fields
 	// first has html/angular scope matching js field.
+	$scope['domainobjectproperty']['facilityId'] = data['domainobjectproperty']['facilityId'];
 	$scope['domainobjectproperty']['description'] = data['domainobjectproperty']['description'];
 	$scope['domainobjectproperty']['name'] = data['domainobjectproperty']['name'];
 	$scope['domainobjectproperty']['value'] = data['domainobjectproperty']['value'];
@@ -162,7 +163,7 @@ codeshelfApp.ConfigNgController.prototype.ok = function(){
 	var domainobjectproperty = scope['domainobjectproperty'];
 	var facility = this.scope_['facility'];
 
-	this.websession_.callServiceMethod("PropertyService", 'changePropertyValue', [domainobjectproperty['name'], domainobjectproperty['value']]).then(function(response) {
+	this.websession_.callServiceMethod("PropertyService", 'changePropertyValue', [domainobjectproperty['facilityId'], domainobjectproperty['name'], domainobjectproperty['value']]).then(function(response) {
 		modalInstance.close();
 	})
 		.fail(function(response) {
