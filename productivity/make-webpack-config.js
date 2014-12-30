@@ -2,9 +2,16 @@ var webpack = require('webpack');
 var basePath = __dirname;
 
 module.exports = function(options) {
+	var entry = {
+		app: ['./js/app.js'],
+		admin: ['./js/admin.js']
+		};
 	if (options['development']) {
 		//add hot deploy module under development
-		entry.unshift('webpack/hot/dev-server');
+		for(var key in entry) {
+			entry[key].unshift('webpack/hot/dev-server');
+		}
+
 	}
 
 	return {
