@@ -106,7 +106,7 @@ codeshelf.domainobjectpropertiesview = function(websession, facility) {
 };
 
 
- codeshelf.openConfigurationEditDialog = function(facilityId, name, description, value){
+codeshelf.openConfigurationEditDialog = function(facilityId, name, description, value){
  var data = {
  'domainobjectproperty': {'facilityId': facilityId, 'name': name, 'description': description, 'value': value}
  };
@@ -117,7 +117,7 @@ codeshelf.domainobjectpropertiesview = function(websession, facility) {
  promise.result.then(function(){
 
  });
- },
+};
 
 
 /**
