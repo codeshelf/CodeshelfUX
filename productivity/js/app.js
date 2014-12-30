@@ -63,8 +63,6 @@ function selectedFaclity(endpoint, facility) {
 		console.log("The che runs", runs);
 	});
 
-x
-
 	//Create strean of productivity updates for the facility
 	var productivityStream = Rx.Observable.timer(0, 5000 /*ms*/).flatMapLatest(function() {
 		return Rx.Observable.fromPromise(csapi.getProductivity (endpoint, facilityId)).catch(Rx.Observable.empty());
