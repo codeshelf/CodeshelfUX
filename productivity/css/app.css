@@ -1,0 +1,13 @@
+.burndown .progress-bar.progress-bar-completed {
+	background-color: #D3D3D3;
+}
+
+.burndown .progress-bar.progress-bar-shorted {
+	background-color: #7B0793;
+}
+
+
+.burndown {
+	background-color: #CC78DE;
+	height: 30px;
+}

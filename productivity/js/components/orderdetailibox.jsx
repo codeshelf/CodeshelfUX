@@ -36,6 +36,24 @@ var OrderDetailIBox = React.createClass({
 		var total = orderDetailSummaryData["released"] + orderDetailSummaryData["inprogress"] + orderDetailSummaryData["complete"] + orderDetailSummaryData["short"];
 		var pickRate     = (this.props.pickRate ? this.props.pickRate : 0);
 		var chartData = toChartData(segmentTemplates, orderDetailSummaryData);
+
+		var activeRuns = [
+			{ label: "1",
+			  summary: {
+				"complete": 20,
+				"short": 5,
+				"remaining": 4
+			   }
+			},
+
+			{ label: "2",
+			  summary: {
+				"complete": 1,
+				"short": 0,
+				"remaining": 5
+			   }
+			}
+		];
 		return (<IBox>
 	              <IBoxTitleBar>
                     <IBoxTitleText>Order Group {groupName} Burn Down</IBoxTitleText>
@@ -65,20 +83,36 @@ var OrderDetailIBox = React.createClass({
                   <IBoxSection className="pickRate">
 					  <IBoxData dataValue={pickRate} dataLabel="/ Hour" />
                   </IBoxSection>
-{/*
                   <IBoxSection>
-					  Active Runs
+                    <IBoxTitleText>Active Runs</IBoxTitleText>
                   </IBoxSection>
-                  <IBoxSection>
-					  # [ | ]
-                  </IBoxSection>
-                  <IBoxSection>
-					  # [ | ]
-                  </IBoxSection>
-                  <IBoxSection>
-					  Show all complete runs &gt;
-                  </IBoxSection>
-*/}
+					  {
+					   activeRuns.map(function(run) {
+						   var label = run["label"]
+						   var runSummary = run["summary"];
+						   var numCompleted = runSummary["complete"];
+						   var numShorted = runSummary["short"];
+						   var numRemaining = runSummary["remaining"];
+						   var total = numCompleted + numShorted + numRemaining;
+						   var percentCompleted = (numCompleted/total * 100).toFixed(2);
+						   var percentShorted = (numShorted/total * 100).toFixed(2);
+						   return (
+							   <IBoxSection >
+							   <div style={{display: "table", width: "100%"}} >
+							   <div style={{display: "table-cell", width: 32}}>{label}</div>
+  							     <div className="progress burndown" style={{display: "table-cell"}}>
+							       <div className="progress-bar progress-bar-completed" role="progressbar" aria-valuenow={numShorted} aria-valuemin="0" aria-valuemax="100" style={{width: percentCompleted+"%"}}>
+							         <span className="sr-only">{percentCompleted+"%"} Complete</span>
+								   </div>
+							       <div className="progress-bar progress-bar-shorted" role="progressbar" aria-valuenow={numShorted} aria-valuemin="0" aria-valuemax="100" style={{width: percentShorted+"%"}}>
+							         <span className="sr-only">{percentShorted+"%"} Complete</span>
+  								   </div>
+							     </div>
+							   </div>
+							   </IBoxSection>
+						   );
+					   })
+					   }
                </IBox>);
 
 	}
