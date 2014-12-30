@@ -19,8 +19,8 @@ goog.require('adhocDialogService');
 /**
  * The current orders for this facility.
  * @param websession The websession used for updates.
- * @param facility The facility to check.
- * @return {Object} The orders view.
+ * @param facility get config parameters for this facility.
+ * @return {Object} The view.
  */
 codeshelf.domainobjectpropertiesview = function(websession, facility) {
 
@@ -117,26 +117,6 @@ codeshelf.openConfigurationEditDialog = function(facilityId, name, description, 
  promise.result.then(function(){
 
  });
-};
-
-
-/**
- *  @param {!angular.Scope} $scope
- *  @param  $modalInstance
- *  @constructor
- *  @ngInject
- *  @export
- */
-codeshelfApp.ConfigNgController = function($scope, $modalInstance, websession, data){
-
-	// tweaking separate fields
-	// first has html/angular scope matching js field.
-	$scope['domainobjectproperty']['facilityId'] = data['domainobjectproperty']['facilityId'];
-	$scope['domainobjectproperty']['description'] = data['domainobjectproperty']['description'];
-	$scope['domainobjectproperty']['name'] = data['domainobjectproperty']['name'];
-	$scope['domainobjectproperty']['value'] = data['domainobjectproperty']['value'];
-
-
 };
 
 /**
