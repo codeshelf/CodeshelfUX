@@ -21,13 +21,13 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-		'__tests__/index.js'
+                '__tests__/index.js'
     ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-		'__tests__/index.js': ['webpack']
+                '__tests__/index.js': ['webpack']
     },
 
     // test results reporter to use
@@ -52,50 +52,52 @@ module.exports = function(config) {
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: [
-		'Chrome'
-	//	,PhantomJS'
-	],
+        'Firefox'
+        //       , 'Chrome'
+        //      ,PhantomJS'
+        ],
 
-	plugins: [
-		require("karma-jasmine"),
-		require("karma-webpack"),
-		require("karma-chrome-launcher")
-	],
+        plugins: [
+            require("karma-jasmine"),
+            require("karma-webpack"),
+            require("karma-chrome-launcher"),
+            require("karma-firefox-launcher")
+        ],
 
-	webpack: {
-		// karma watches the test entry points
+        webpack: {
+                // karma watches the test entry points
         // (you don't need to specify the entry option typical for webpack)
         // webpack watches other dependencies and regenerates the root test entry file causing karma to then reload
 
-		// webpack configuration
-		watch: true,
-		resolve: {
-			// Allow to omit extensions when requiring these files
-			extensions: ['', '.js', '.jsx'],
-			//Look for files in these locations
-			root: [basePath + '/js',
-				  basePath]
-		},
-		module: {
-			loaders: [
-				// Pass *.jsx files through jsx-loader transform
-				{ test: /\.jsx$/, loader: 'jsx' }
-			]
-		},
-		plugins: [
-			new webpack.ResolverPlugin(
-				new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"]))
-		]
-	},
+                // webpack configuration
+                watch: true,
+                resolve: {
+                        // Allow to omit extensions when requiring these files
+                        extensions: ['', '.js', '.jsx'],
+                        //Look for files in these locations
+                        root: [basePath + '/js',
+                                  basePath]
+                },
+                module: {
+                        loaders: [
+                                // Pass *.jsx files through jsx-loader transform
+                                { test: /\.jsx$/, loader: 'jsx' }
+                        ]
+                },
+                plugins: [
+                        new webpack.ResolverPlugin(
+                                new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"]))
+                ]
+        },
 
-	webpackServer: {
+        webpackServer: {
             // webpack-dev-server configuration
             // webpack-dev-middleware configuration
             // i. e.
-		noInfo: true //quieter karma output
-		/* or stats: {
-			colors: true
-		}*/
+                noInfo: true //quieter karma output
+                /* or stats: {
+                        colors: true
+                }*/
     }
   });
 };
