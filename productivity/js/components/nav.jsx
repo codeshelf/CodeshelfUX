@@ -8,7 +8,8 @@ var Navbar = RClass(function() {
             <nav className="navbar-default navbar-static-side" role="navigation">
               <div id="nav-container" className="sidebar-collapse">
                 <ul className="nav" id="side-menu">
-                  <NavbarHeader facility={this.props.facility} />
+                  <NavbarHeader facility={this.props.facility}
+                                organization={this.props.organization} />
                   {
                     this.props.navMenus.map(function(navMenu) {
                        return (<NavbarMenu navMenu={navMenu} key={navMenu.label}/>);
@@ -21,10 +22,12 @@ var Navbar = RClass(function() {
 
 var NavbarHeader = RClass(function() {
     var facility = this.props.facility;
+    var organization = this.props.organization;
     var facilityName = (facility) ? facility["domainId"] : "";
+    var orgName = (organization) ? organization["domainId"] : "";
     return (<div className="nav-header">
             <div className="profile-element">
-            <h1 className="block"> -- Org Here -- </h1>
+            <h1 className="block"> {orgName} </h1>
             <span className="block m-t-xs">
             <strong className="font-bold">&lt; {facilityName} </strong>
             </span>

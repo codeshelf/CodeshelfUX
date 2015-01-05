@@ -1,4 +1,5 @@
 var React = require('react');
+var _ = require('lodash');
 var Navbar = require('components/nav').Navbar;
 var NavbarTop = require('components/nav').NavbarTop;
 var Breadcrumbs = require('components/breadcrumb');
@@ -10,43 +11,61 @@ var csapi = require('data/csapi');
 var el = React.createElement;
 
 var ActivityPage = React.createClass({
-    getCheRuns : function() {
-        //Render Che Runs
-        var facilityId = facility['persistentId'];
-        csapi.getCheRuns(endpoint, facilityId).then(function(runs) {
-            console.log("The che runs", runs);
-        });
-
-    },
 
     getInitialState: function() {
         return {
-            "productivity" : {}
+            "productivity" : {},
+            "activeRuns": {}
         };
     },
 
     componentWillMount: function () {
         //Render updates of productivity
-        var subscription = this.props.productivityStream.subscribe(function(productivityUpdate) {
+        var productivitySubscription = this.props.productivityStream.subscribe(function(productivityUpdate) {
             console.log("received productivityupdate", productivityUpdate);
             this.setState({"productivity": productivityUpdate});
         }.bind(this));
 
+        var activeRunsSubscription = this.props.activeRunsStream.subscribe(function(activeRunsUpdate) {
+            /*var activeRuns = [
+                { label: "1",
+                  summary: {
+                      "complete": 20,
+                      "short": 5,
+                      "remaining": 4
+                  }
+                },
+                { label: "2",
+                  summary: {
+                      "complete": 1,
+                      "short": 0,
+                      "remaining": 5
+                  }
+                }
+            ];*/
+            console.log("received active Runs updated", activeRunsUpdate);
+            this.setState({"activeRuns": activeRunsUpdate});
+        }.bind(this));
+
+
     },
 
-    renderOrderDetailComponents: function(productivityUpdate) {
-        var groups = productivityUpdate["groups"];
+    renderOrderDetailComponents: function(productivityUpdate, activeRunsUpdate) {
+        var productivityByGroup = productivityUpdate["groups"];
+        var runsByGroup = activeRunsUpdate["runsByGroup"];
         //Render an order detail component fro each group
         var orderDetailComponents = [];
-        for(var groupName in groups) {
-            var orderDetailSummaryData = groups[groupName];
+        for(var groupName in productivityByGroup) {
+            var orderDetailSummaryData = productivityByGroup[groupName];
+            var activeRuns = (_.has(runsByGroup, groupName)) ? runsByGroup[groupName] : [];
 
             //Render Order Detail for order group
             orderDetailComponents.push(
                 <div className="col-lg-3" key={groupName}>
-                  <OrderDetailIBox groupName={groupName} 
+                  <OrderDetailIBox groupName={groupName}
                                    orderDetailSummaryData={orderDetailSummaryData}
-                                   pickRate={orderDetailSummaryData["picksPerHour"]} />
+                                   pickRate={orderDetailSummaryData["picksPerHour"]}
+                                   activeRuns={activeRuns}/>
                 </div>
             );
         }
@@ -54,7 +73,7 @@ var ActivityPage = React.createClass({
     },
 
     render: function() {
-
+        var organization = this.props.organization;
         var facility = this.props.facility;
         var navMenus = [
             {"key": "activity",
@@ -77,7 +96,7 @@ var ActivityPage = React.createClass({
 
         return (
             <div id="wrapper">
-              <Navbar facility={facility} navMenus={navMenus} />
+              <Navbar facility={facility} organization={organization} navMenus={navMenus} />
               <div id="page-wrapper" className="gray-bg dashboard-1">
                 <NavbarTop />
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -85,7 +104,7 @@ var ActivityPage = React.createClass({
                   <div className="col-lg-12">
                     <div className="wrapper wrapper-content">
                        <div className="row orderdetails">
-                         {this.renderOrderDetailComponents(this.state.productivity)}
+                         {this.renderOrderDetailComponents(this.state.productivity, this.state.activeRuns)}
                        </div>
                     </div>
                     <div className="footer">

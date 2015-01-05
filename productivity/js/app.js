@@ -31,19 +31,30 @@ csapi.getFacilities(endpoint).then(function(facilities) {
 
 
 function selectedFaclity(endpoint, facility) {
+    var endpointParser = document.createElement('a');
+    endpointParser.href = endpoint;
+
 
     //Render Che Runs
     var facilityId = facility['persistentId'];
-    csapi.getCheRuns(endpoint, facilityId).then(function(runs) {
-        console.log("The che runs", runs);
-    });
-
-    //Create strean of productivity updates for the facility
-    var productivityStream = Rx.Observable.timer(0, 5000 /*ms*/).flatMapLatest(function() {
+    var organization = {"domainId": endpointParser.hostname};
+    var pollerStream = Rx.Observable.timer(0, 5000 /*ms*/);
+    //Create stream of productivity updates for the facility
+    var productivityStream = pollerStream.flatMapLatest(function() {
         return Rx.Observable.fromPromise(csapi.getProductivity (endpoint, facilityId)).catch(Rx.Observable.empty());
     });
 
-    React.render(React.createElement(ActivityPage, {facility: facility,
-                                                    productivityStream: productivityStream}),
+    //Create stream of productivity updates for the facility
+    var activeRunsStream = pollerStream.flatMapLatest(function() {
+        return Rx.Observable.fromPromise(csapi.getCheRuns(endpoint, facilityId)).catch(Rx.Observable.empty());
+    });
+
+
+    React.render(React.createElement(ActivityPage, {
+        organization: organization,
+        facility: facility,
+        productivityStream: productivityStream,
+        activeRunsStream: activeRunsStream
+    }),
                  $('#page').get(0));
 }
