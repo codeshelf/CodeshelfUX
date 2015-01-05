@@ -35,7 +35,7 @@ var ServerHealth =  React.createClass({
                                                 <tbody>
                                                         {
                                                          healthchecks.map(function(healthcheck) {
-                                                                 return (<tr className="gradeX">
+                                                                 return (<tr className="gradeX" key={healthcheck.name}>
                                                                                    <td>{healthcheck.name}</td>
                                                                                    <td>{renderStatus(healthcheck)}</td>
                                                                            <td>{healthcheck.message}</td>
