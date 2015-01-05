@@ -27,7 +27,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-                '__tests__/index.js': ['webpack']
+        '__tests__/index.js': ['webpack', 'sourcemap']
     },
 
     // test results reporter to use
@@ -52,14 +52,15 @@ module.exports = function(config) {
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: [
-        'Firefox'
-        //       , 'Chrome'
+        //'Firefox'
+                'Chrome'
         //      ,PhantomJS'
         ],
 
         plugins: [
             require("karma-jasmine"),
             require("karma-webpack"),
+            require("karma-sourcemap-loader"),
             require("karma-chrome-launcher"),
             require("karma-firefox-launcher")
         ],
@@ -87,7 +88,8 @@ module.exports = function(config) {
                 plugins: [
                         new webpack.ResolverPlugin(
                                 new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"]))
-                ]
+                ],
+                 devtool: 'inline-source-map'
         },
 
         webpackServer: {
