@@ -11,21 +11,21 @@ var IBoxSection = ibox.IBoxSection;
 var DoughnutChart = require("./doughnut.jsx");
 
 var segmentTemplates = [{key: "released",
-                                                 color: "#CC78DE",
-                                                 label: "Remaining",
-                                                 value: 0},
-                                                {key: "short",
-                                                 color: "#7B0793",
-                                                 label: "Shorts",
-                                                 value: 0},
-                                                {key: "inprogress",
-                                                 color: "#D3D3D3",
-                                                 label: "In Progress",
-                                                 value: 0},
-                                                {key: "complete",
-                                                 color: "#F1F1F1",
-                                                 label: "In Progress",
-                                                 value: 0}];
+                         color: "#CC78DE",
+                         label: "Remaining",
+                         value: 0},
+                        {key: "short",
+                         color: "#7B0793",
+                         label: "Shorts",
+                         value: 0},
+                        {key: "inprogress",
+                         color: "#D3D3D3",
+                         label: "In Progress",
+                         value: 0},
+                        {key: "complete",
+                         color: "#F1F1F1",
+                         label: "In Progress",
+                         value: 0}];
 
 var OrderDetailIBox = React.createClass({
         render: function() {
