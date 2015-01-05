@@ -49,7 +49,7 @@ var OrderDetailIBox = React.createClass({
                                                                   <DoughnutChart chartData={chartData} />
                                                           </div>
                                                   </div>
-                                                  <div style={{position:"absolute", zIndex:3, left: 0, right:0, top: 0, bottom: 0, width: "100%", height: "100%"}}>
+                                                  <div style={{position:"absolute", zIndex:3, left: 0, right:0, top: 0, bottom: 0, width: "100%", height: "100%", pointerEvents: "none"}}>
                                                           <div style={{position:"absolute", left: 0, right:0, top: 0, bottom: 0, margin: "auto", height: 240, display: "table", width: "100%"}}>
                                                                   <div style={{display: "table-cell", verticalAlign: "middle"}}>
                                                                           <div>
