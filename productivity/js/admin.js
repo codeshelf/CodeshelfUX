@@ -5,7 +5,7 @@ var Rx = require('rx');
 var ServerHealthCheck = require('components/serverhealthcheck');
 var Breadcrumbs = require('components/breadcrumb');
 
-var Nav = require('components/nav');
+var Navbar = require('components/nav').Navbar;
 var el = React.createElement;
 
 //synchronous call to get hosts.json
@@ -26,13 +26,13 @@ var  navMenus =  [
 	"label": "Hosts",
 	"icon": "fa-laptop"}
 ];
-React.render(el(Nav, {navMenus:navMenus}), $("#nav-container").get(0));
+React.render(el(Navbar, {navMenus:navMenus}), $("#nav-container").get(0));
 
 var breadcrumbs = [
 	{"label": "Home", "href":"#"	},
 	{"label": "Hosts", "href": "#"}
 ];
-React.render(el(Breadcrumbs, {crumbs: breadcrumbs}), $("#pageBreadcrumb").get(0));
+React.render(el(Breadcrumbs, {breadcrumbs: breadcrumbs}), $("#pageBreadcrumb").get(0));
 
 
 var statusStream = Rx.Observable.timer(0, 10000 /*ms*/).flatMapLatest(function() {
