@@ -10,7 +10,17 @@ module.exports = {
             "short" : numShorts
         };
         return groupData;
+    },
+    "RunSummary": function(groupName, runLabel, numComplete, numInProgress, numShorts ) {
+        var runSummary = {
+            runsByGroup: {}
+        };
+        runSummary['runsByGroup'][groupName] = [{
+            "id": runLabel,
+            "complete": numComplete,
+            "inprogress": numInProgress,
+            "short": numShorts
+        }];
+        return runSummary;
     }
-
-
 };
