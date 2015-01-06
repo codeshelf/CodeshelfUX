@@ -1,1 +1,3 @@
-./node_modules/.bin/webpack --config webpack.build.config.js
+./build.sh
+mkdir -p target
+tar zcvf target/CodeshelfWebApp.tar.gz --exclude=./node_modules --exclude=./.git .

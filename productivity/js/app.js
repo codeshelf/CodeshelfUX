@@ -11,7 +11,7 @@ var ActivityPage = require('pages/activity');
 var config = (function(){
     var config = {};
     $.ajax({
-        url: "/config/hosts.json",
+        url: "config/hosts.json",
         success: function(data) {
             config = data;
         },
