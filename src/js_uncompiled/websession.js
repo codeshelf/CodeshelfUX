@@ -66,7 +66,7 @@ codeshelf.websession = function () {
 	var websocket_;
 	var currentPage_;
 	var uniqueIdFunc_ = goog.events.getUniqueId;
-	var websocketAddr_ = "wss://localhost:8444";
+	var websocketAddr_ = "ws://localhost:8181/ws/";
 
 	function privateOpen_() {
 		try {
