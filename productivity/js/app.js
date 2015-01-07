@@ -55,6 +55,5 @@ function selectedFaclity(endpoint, facility) {
         facility: facility,
         productivityStream: productivityStream,
         activeRunsStream: activeRunsStream
-    }),
-                 $('#page').get(0));
+    }), $('#page').get(0));
 }

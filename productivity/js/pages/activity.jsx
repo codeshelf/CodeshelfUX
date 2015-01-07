@@ -27,22 +27,6 @@ var ActivityPage = React.createClass({
         }.bind(this));
 
         var activeRunsSubscription = this.props.activeRunsStream.subscribe(function(activeRunsUpdate) {
-            /*var activeRuns = [
-                { label: "1",
-                  summary: {
-                      "complete": 20,
-                      "short": 5,
-                      "remaining": 4
-                  }
-                },
-                { label: "2",
-                  summary: {
-                      "complete": 1,
-                      "short": 0,
-                      "remaining": 5
-                  }
-                }
-            ];*/
             console.log("received active Runs updated", activeRunsUpdate);
             this.setState({"activeRuns": activeRunsUpdate});
         }.bind(this));
@@ -79,26 +63,19 @@ var ActivityPage = React.createClass({
             {"key": "activity",
              "label": "Activity",
              "icon": "fa-bar-chart-o",
-             "menuItems": [
-                 {"href": "#", key: "all", "label": "All" },
-                 {"href": "#", key: "chill", "label": "Chill" },
-                 {"href": "#", key: "dry", "label": "Dry" },
-                 {"href": "#", key: "produce", "label": "Produce" }
-             ]
+             "menuItems": []
             }];
 
         var breadcrumbs = [
             {"label": facility['domainId'], "href": "#"     },
-            {"label": "Activity", "href": "#"},
-            {"label": "Chill", "href": "#"}
-
+            {"label": "Activity", "href": "#"}
         ];
 
         return (
             <div id="wrapper">
               <Navbar facility={facility} organization={organization} navMenus={navMenus} />
               <div id="page-wrapper" className="gray-bg dashboard-1">
-                <NavbarTop />
+                {/** <NavbarTop /> **/}
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
                 <div className="row">
                   <div className="col-lg-12">

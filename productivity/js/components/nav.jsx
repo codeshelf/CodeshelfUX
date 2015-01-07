@@ -2,6 +2,7 @@
 
 var React = require("react");
 var RClass = require("../helpers/react-helper");
+var _ = require("lodash");
 
 var Navbar = RClass(function() {
     return (
@@ -44,7 +45,9 @@ var NavbarMenu = RClass(function() {
     var iconClassNames = "fa " + navMenu.icon;
     return (
             <li className="active">
-            <a href="#"><i className={iconClassNames}></i><span className="nav-label">{navMenu.label}</span><span className="fa arrow"></span></a>
+            <a href="#"><i className={iconClassNames}></i><span className="nav-label">{navMenu.label}</span>
+               {(!_.isEmpty(menuItems)) ? <span className="fa arrow"></span> : "" }
+            </a>
             <ul className="nav nav-second-level">
             {
                 menuItems.map(function(menuItem) {
@@ -56,6 +59,8 @@ var NavbarMenu = RClass(function() {
     );
 });
 
+
+/* */
 var NavbarTop = React.createClass({
     render: function() {
         return (
