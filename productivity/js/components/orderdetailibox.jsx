@@ -9,6 +9,7 @@ var IBoxTitleBar = ibox.IBoxTitleBar;
 var IBoxTitleText = ibox.IBoxTitleText;
 var IBoxSection = ibox.IBoxSection;
 var DoughnutChart = require("./doughnut.jsx");
+var timeformat = require("helpers/timeformat");
 
 var segmentTemplates = [{key: "released",
                          color: "#CC78DE",
@@ -80,7 +81,7 @@ var OrderDetailIBox = React.createClass({
                     {
                         _.map(activeRuns, function(run) {
                             console.log("Rendering run", run);
-                            var label = run["id"];
+                            var label = timeformat(run["id"]);
                             var numCompleted = run["complete"];
                             var numShorted = run["short"];
                             var numNew = run["new"];
@@ -91,7 +92,7 @@ var OrderDetailIBox = React.createClass({
                             return (
                                     <IBoxSection key={label}>
                                       <div style={{display: "table", width: "100%"}} >
-                                         <div style={{display: "table-cell", width: 32}}>{label}</div>
+                                         <div style={{display: "table-cell", width: 32, padding:10, whiteSpace: "nowrap"}}>{label}</div>
                                           <div className="progress burndown" style={{display: "table-cell"}}>
                                          <div className="progress-bar progress-bar-completed" role="progressbar" aria-valuenow={numCompleted} aria-valuemin="0" aria-valuemax="100" style={{width: percentCompleted+"%"}}>                                   <span className="sr-only">{percentCompleted+"%"} Complete</span>
                                          </div>
