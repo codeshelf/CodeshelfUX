@@ -73,7 +73,7 @@ var ActivityPage = React.createClass({
 
         return (
             <div id="wrapper">
-              <Navbar facility={facility} organization={organization} navMenus={navMenus} />
+              <Navbar title={facility['domainId']} navMenus={navMenus} />
               <div id="page-wrapper" className="gray-bg dashboard-1">
                 {/** <NavbarTop /> **/}
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
