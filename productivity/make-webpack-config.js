@@ -4,7 +4,6 @@ var basePath = __dirname;
 module.exports = function(options) {
     var entry = {
         app: ['./js/app.js'],
-        admin: ['./js/admin.js'],
         components: ['./js/components-display.jsx']
     };
     if (options['development']) {
