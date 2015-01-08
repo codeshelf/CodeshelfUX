@@ -3,6 +3,7 @@ var React = require('react');
 var ActivityPage = require('pages/activity');
 var ProductivitySummary = require('data/types').ProductivitySummary;
 var RunSummary = require('data/types').RunSummary;
+var timeformat = require('helpers/timeformat');
 
 describe('Activity', function() {
     $(document.body).append('<div id="page"/>');
@@ -48,15 +49,16 @@ describe('Activity', function() {
 
         it('renders che runs', function() {
             var groupName = "TEST_GROUP_CHE";
+            var assignedTime = Date.now();
             var productivityStream  = Rx.Observable.just(
                 ProductivitySummary(groupName, 4, 5, 10,1)
             );
             var activeRunsStream  = Rx.Observable.just(
-                RunSummary(groupName, "RUNLABEL", 4,2,1)
+                RunSummary(groupName, assignedTime, 4,2,1)
             );
             var activityPage = renderDetails(testDiv, facility, productivityStream, activeRunsStream);
             var componentText = testDiv.text();
-            expect(componentText).toMatch("RUNLABEL");
+            expect(componentText).toMatch(timeformat(assignedTime));
             unmount(testDiv);
 
 

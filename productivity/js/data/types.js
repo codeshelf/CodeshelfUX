@@ -11,16 +11,24 @@ module.exports = {
         };
         return groupData;
     },
-    "RunSummary": function(groupName, runLabel, numComplete, numInProgress, numShorts ) {
+    "RunSummary": function(groupName, assignedTime, numComplete, numNew, numShorts ) {
         var runSummary = {
             runsByGroup: {}
         };
-        runSummary['runsByGroup'][groupName] = [{
-            "id": runLabel,
-            "complete": numComplete,
-            "inprogress": numInProgress,
-            "short": numShorts
-        }];
+
+        var runData = {"cheId":"38a87216-73b6-47cb-a126-aa8e434488b3",
+                       "cheDomainId":"CHE6",
+                       "assignedTime":assignedTime,
+                       "formattedAssignedTime":"Jan_06",
+                       "shortCount":numShorts,
+                       "invalidCount":0,
+                       "newCount":numNew,
+                       "inprogressCount":0,
+                       "completeCount": numComplete,
+                       "revertCount":0,
+                       "activeCount":0,
+                       "active":false};
+        runSummary['runsByGroup'][groupName] = [runData];
         return runSummary;
     }
 };

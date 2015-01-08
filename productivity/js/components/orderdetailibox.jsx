@@ -81,16 +81,17 @@ var OrderDetailIBox = React.createClass({
                     {
                         _.map(activeRuns, function(run) {
                             console.log("Rendering run", run);
-                            var label = timeformat(run["id"]);
-                            var numCompleted = run["complete"];
-                            var numShorted = run["short"];
-                            var numNew = run["new"];
+                            var id = run['assignedTime'] + ":" + run['cheId'];;
+                            var label = timeformat(run["assignedTime"]);
+                            var numCompleted = run["completeCount"];
+                            var numShorted = run["shortCount"];
+                            var numNew = run["newCount"];
                             var total = numCompleted + numShorted + numNew;
                             var percentCompleted = (numCompleted/total * 100).toFixed(0);
                             var percentShorted = (numShorted/total * 100).toFixed(0);
                             var percentNew = (numNew/total * 100).toFixed(0);
                             return (
-                                    <IBoxSection key={label}>
+                                    <IBoxSection key={id}>
                                       <div style={{display: "table", width: "100%"}} >
                                          <div style={{display: "table-cell", width: 32, padding:10, whiteSpace: "nowrap"}}>{label}</div>
                                           <div className="progress burndown" style={{display: "table-cell"}}>
