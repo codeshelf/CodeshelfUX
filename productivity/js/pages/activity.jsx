@@ -45,7 +45,7 @@ var ActivityPage = React.createClass({
 
             //Render Order Detail for order group
             orderDetailComponents.push(
-                <div className="col-lg-3" key={groupName}>
+                <div className="col-lg-4" key={groupName}>
                   <OrderDetailIBox groupName={groupName}
                                    orderDetailSummaryData={orderDetailSummaryData}
                                    pickRate={orderDetailSummaryData["picksPerHour"]}

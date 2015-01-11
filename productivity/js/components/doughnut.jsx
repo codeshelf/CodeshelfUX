@@ -5,7 +5,7 @@ var RClass = require("../helpers/react-helper");
 var Doughnut = require("./doughnut.js");
 
 var DoughnutChart = RClass(function() {
-    return (<canvas height="240" width="240" />);
+    return (<canvas />);
 },
                            {
                                componentDidMount: function() {
@@ -14,7 +14,9 @@ var DoughnutChart = RClass(function() {
                                    var el = this.getDOMNode();
                                    var chart = new Doughnut(el, chartData, {
                                        percentageInnerCutout: 75,
-                                       animateRotate : false
+                                       animation: false,
+                                       animateRotate : false,
+                                       responsive: true
                                    });
                                    chart.render();
                                    this.setState({chart: chart});

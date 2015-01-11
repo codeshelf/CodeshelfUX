@@ -45,39 +45,32 @@ var OrderDetailIBox = React.createClass({
         var pickRate     = this.props.pickRate;
         var chartData = toChartData(segmentTemplates, orderDetailSummaryData);
         var activeRuns = this.props.activeRuns;
-
+        var remainingDisplay = remaining + "/" + total;
         return (<IBox>
-                      <IBoxTitleBar>
+                  <IBoxTitleBar>
                     <IBoxTitleText>Order Group {groupName} Burn Down</IBoxTitleText>
                   </IBoxTitleBar>
-                                  <IBoxSection>
-                                          <div style={{position: "relative", width: "100%", height: 270}}>
-                                                  <div style={{position:"absolute", zIndex:1, left: 0, right:0, top: 0, bottom: 0, width: "100%", height: "100%"}}>
-                                                          <div style={{position:"absolute", left: 0, right:0, top: 0, bottom: 0, margin: "auto", height: 240}}>
-                                                                  <DoughnutChart chartData={chartData} />
-                                                          </div>
-                                                  </div>
-                                                  <div style={{position:"absolute", zIndex:3, left: 0, right:0, top: 0, bottom: 0, width: "100%", height: "100%", pointerEvents: "none"}}>
-                                                          <div style={{position:"absolute", left: 0, right:0, top: 0, bottom: 0, margin: "auto", height: 240, display: "table", width: "100%"}}>
-                                                                  <div style={{display: "table-cell", verticalAlign: "middle"}}>
-                                                                          <div>
-                                                                                  <div style={{fontSize: 85, margin: 0 }}>{remaining}</div>
-                                                                                  <div>OF <span style={{fontSize: 23}}>{total}</span> ITEMS</div>
-                                                                          </div>
-                                                                  </div>
-                                                          </div>
-                                                  </div>
-                                          </div>
-                                  </IBoxSection>
-                                  <IBoxSection className="shortSummary">
-                                          <IBoxData dataValue={shorts} dataLabel="Shorts" />
-                                  </IBoxSection>
-                  <IBoxSection className="pickRate">
-                                          <IBoxData dataValue={pickRate} dataLabel="/ Hour" />
-                  </IBoxSection>
-                  <IBoxSection>
+                <IBoxSection>
+
+                    {{/* The first div provides the proper box dimensions for the chart resize calculations */}}
+                    <div style={{position: "relative", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                        <DoughnutChart chartData={chartData} />
+                        <div style={{position: "absolute", top: 0, bottom: 0, left:0, right:0, display: "flex", flexDirection: "column",  justifyContent: "center", alignItems: "center"}}>
+                            <div style={{fontSize: "6vmax"}}>{{remaining}}</div>
+                        </div>
+                    </div>
+                    <div style={{marginTop: "2vmax", fontSize: "2vmax"}}>Of {{total}} Items</div>
+                </IBoxSection>
+
+                <IBoxSection className="shortSummary">
+                    <IBoxData dataValue={shorts} dataLabel="Shorts" />
+                </IBoxSection>
+                <IBoxSection className="pickRate">
+                    <IBoxData dataValue={Math.round(pickRate)} dataLabel="/ Hour" />
+                </IBoxSection>
+                <IBoxSection>
                     <IBoxTitleText>Active Runs</IBoxTitleText>
-                  </IBoxSection>
+                </IBoxSection>
                     {
                         _.map(activeRuns, function(run) {
                             console.log("Rendering run", run);
@@ -113,7 +106,7 @@ var OrderDetailIBox = React.createClass({
 function toChartData(segmentTemplates, keyedValues) {
         var chartValues = _.map(segmentTemplates, function(segmentTemplate) {
                 var key = segmentTemplate["key"];
-                var data  = {value: keyedValues[key]}
+                var data  = {value: keyedValues[key]};
                 var chartSegment =  _.merge({}, segmentTemplate, data);
                 return chartSegment;
         });

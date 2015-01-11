@@ -5,8 +5,8 @@ var RClass = require("../helpers/react-helper");
 
 var IBoxData = RClass(function() {
 	return (<span>
-				  <span className="m-xs" style={{fontSize: 49}}>{this.props.dataValue}</span>
-				  <span style={{fontSize: 35}}>{this.props.dataLabel}</span>
+				  <span className="m-xs" style={{fontSize: "6vmax"}}>{this.props.dataValue}</span>
+				  <span style={{fontSize: "3vmax"}}>{this.props.dataLabel}</span>
 				</span>);
 	});
 
