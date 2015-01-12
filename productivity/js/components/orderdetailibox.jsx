@@ -48,7 +48,9 @@ var OrderDetailIBox = React.createClass({
         var remainingDisplay = remaining + "/" + total;
         return (<IBox>
                   <IBoxTitleBar>
-                    <IBoxTitleText>Order Group {groupName} Burn Down</IBoxTitleText>
+                    <IBoxTitleText>
+                        Order Group {groupName} Burn Down
+                    </IBoxTitleText>
                   </IBoxTitleBar>
                 <IBoxSection>
 
@@ -56,10 +58,10 @@ var OrderDetailIBox = React.createClass({
                     <div style={{position: "relative", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                         <DoughnutChart chartData={chartData} />
                         <div style={{position: "absolute", top: 0, bottom: 0, left:0, right:0, display: "flex", flexDirection: "column",  justifyContent: "center", alignItems: "center"}}>
-                            <div style={{fontSize: "6vmax"}}>{{remaining}}</div>
+                            <div style={{fontSize: "6vmax"}}>{remaining}</div>
                         </div>
                     </div>
-                    <div style={{marginTop: "2vmax", fontSize: "2vmax"}}>Of {{total}} Items</div>
+                    <div style={{marginTop: "2vmax", fontSize: "2vmax"}}>Of {total} Items</div>
                 </IBoxSection>
 
                 <IBoxSection className="shortSummary">
