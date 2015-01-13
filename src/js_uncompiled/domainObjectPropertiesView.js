@@ -60,6 +60,8 @@ codeshelf.domainobjectpropertiesview = function(websession, facility) {
 			// A combination of fields from each of 3 levels.
 			if (inProperty['id'] === 'persistentId')
 				return false;
+			else if (inProperty['id'] === 'defaultValue')
+				return false;
 			else
 				return true;
 		}

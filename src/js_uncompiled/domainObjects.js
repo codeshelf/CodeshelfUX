@@ -561,7 +561,11 @@ domainobjects = {
 				'title': 'Item Locations',
 				'width': 15
 			},
-
+			'preferredLocationUi':         {
+				'id':    'preferredLocationUi',
+				'title': 'Pick Location',
+				'width': 15
+			},
 			'wiLocation': {
 				'id':    'wiLocation',
 				'title': 'WI Location',
