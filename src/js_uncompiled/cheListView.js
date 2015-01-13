@@ -280,48 +280,19 @@ goog.inherits(codeshelfApp.CheNgController, codeshelfApp.AbstractCheController);
  */
 codeshelfApp.CheNgController.prototype.ok = function(){
 	var che = this.scope_['che'];
-	var descriptionProperty = "description";
-	var jsDomainProperty = "domainid"; // this matches the partial html
-	var javaDomainProperty = "domainId"; // Passed as the java field
-	var jsControllerProperty = "cntrlrid"; // this matches the partial html
-	var javaControllerProperty = "deviceGuid"; // Passed as the java field
-
-
-	var propertiesToUpdate = [];
-	// "description is the name used here, and matches the java-side field name. This is a trivial update
-	if (!isEmptyString(che["color"])) {
-		propertiesToUpdate.push("color");
-	}
-
-	// "description is the name used here, and matches the java-side field name. This is a trivial update
-	if (!isEmptyString(che[descriptionProperty])) {
-		propertiesToUpdate.push(descriptionProperty);
-	}
-
-	// This is a domainID change, which may cause trouble. If there is trouble, might need to change to
-	// callMethod() to do the change with all necessary cleanup
-	if (!isEmptyString(che[jsDomainProperty])) {
-		var domainId = che[jsDomainProperty]; //HACKY due to case differences
-		che[javaDomainProperty] = domainId;
-		propertiesToUpdate.push(javaDomainProperty);
-	}
-
-	if (propertiesToUpdate.length > 0) {
-		this.websession_.update(che, propertiesToUpdate);
-	}
-
-	if (!isEmptyString(che[jsControllerProperty])) {
-		var methodArgs = [
-			{ 'name': 'inNewControllerId', 'value': che[jsControllerProperty], 'classType': 'java.lang.String'}
-		];
-
-		var self = this;
-		this.websession_.callMethod(che, 'Che', 'changeControllerId', methodArgs)
-			.then(function() {
-				self.close();
-			});
-
-	}
+	
+	var methodArgs = [
+		{ 'name': 'domainId', 'value': che["domainid"], 'classType': 'java.lang.String'},
+		{ 'name': 'description', 'value': che["description"], 'classType': 'java.lang.String'},
+		{ 'name': 'color', 'value': che["color"], 'classType': 'java.lang.String'},
+		{ 'name': 'inNewControllerId', 'value': che["cntrlrid"], 'classType': 'java.lang.String'}
+	];
+	var self = this;
+	this.websession_.callMethod(che, 'Che', 'updateCheFromUI', methodArgs)
+		.then(function() {
+			self.close();
+		});
+	
 };
 angular.module('codeshelfApp').controller('CheNgController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.CheNgController]);
 
