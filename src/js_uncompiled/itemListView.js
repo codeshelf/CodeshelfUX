@@ -93,7 +93,12 @@ codeshelf.buildItemListView = function(websession, facility, itemFilter, itemFil
 
 		'getViewName': function() {
 			return viewName_;
+		},
+
+		'getViewTypeName': function() {
+			return 'Item List View';
 		}
+
 	};
 
 	var contextDefs = [
