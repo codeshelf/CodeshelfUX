@@ -1,3 +1,0 @@
-load:
-  - ../src/js_uncompiled/Greeter.js
-  - ../src-test/GreeterTest.js
