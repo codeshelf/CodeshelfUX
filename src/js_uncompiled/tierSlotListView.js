@@ -48,6 +48,10 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 
 		'getViewName': function() {
 			return 'Slots in Tier ' + codeshelf.toLocationDescription(inTier);
+		},
+
+		'getViewTypeName': function() {
+			return 'Slots List';
 		}
 	};
 

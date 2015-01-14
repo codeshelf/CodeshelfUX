@@ -289,27 +289,38 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 		dataView.sort(newMultilevelCompareFunction(sortAsc), true);
 	}
 
+	function getViewCookieName() {
+		// The idea is to use the generally available getViewName. However, if a view customizes its name with context
+		// then the view should implement getViewTypeName. So, this has to check both.
+		var viewNameToUse = "";
+		if (view.hasOwnProperty('getViewTypeName')) {
+			viewNameToUse = view['getViewTypeName']();
+		}
+		if (isEmptyString(viewNameToUse)) {
+			if (view.hasOwnProperty('getViewName')) {
+				viewNameToUse = view['getViewName']();
+			}
+		}
+		return viewNameToUse;
+	}
+
 	// cookie functions
 	function saveJsonColumnFormat() {
-		logger_.info("saving file format");
-		var columnsToSave = grid_.getColumns();
-		var formatString = JSON.stringify(columnsToSave);
-		if (view.hasOwnProperty('getViewName')) {
-			var viewName = view['getViewName']();
-			if (!isEmptyString(viewName))
-				codeshelf.sessionGlobals.addWindowFormat(viewName, formatString);
+		var viewName = getViewCookieName();
+		if (!isEmptyString(viewName)) {
+			logger_.info("saving file format");
+			var columnsToSave = grid_.getColumns();
+			var formatString = JSON.stringify(columnsToSave);
+			codeshelf.sessionGlobals.addWindowFormat(viewName, formatString);
 		}
 	}
 
 	function loadSavedColumnFormat() {
 		// This converts from the JSON, giving the way the column object looked at the time and version it was saved in.
 		// May not be consistent with current code.
-		if (!view.hasOwnProperty('getViewName')) {
-			return null;
-		}
-		var viewName = view['getViewName']();
-		var formatString = "";
+		var viewName = getViewCookieName();
 		if (!isEmptyString(viewName)) {
+			var formatString = "";
 			formatString = codeshelf.sessionGlobals.getWindowFormat(viewName);
 			if (isEmptyString(formatString))
 				return null;

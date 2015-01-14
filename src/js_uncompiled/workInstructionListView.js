@@ -92,6 +92,11 @@ codeshelf.workinstructionlistview = function(websession, facility, viewNameSuffi
 			return returnStr;
 		},
 
+		'getViewTypeName': function() {
+			var returnStr = "Work Instructions";
+			return returnStr;
+		},
+
 		doFakeCompleteWorkInstruction: function(item, inUpdateKind) {
 			var wi = item;
 			var methodArgs = [item['persistentId'], inUpdateKind];

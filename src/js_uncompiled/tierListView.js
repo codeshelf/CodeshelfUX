@@ -76,6 +76,11 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 			return viewName;
 		},
 
+		'getViewTypeName': function () {
+			var viewName = 'Tiers List';
+			return viewName;
+		},
+
 		setControllerForTier: function(item, inAllTiers) {
 			var theLogger = goog.debug.Logger.getLogger('Tier view');
 			var theTier = item;
