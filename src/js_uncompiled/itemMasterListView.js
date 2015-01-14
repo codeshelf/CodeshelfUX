@@ -72,7 +72,7 @@ codeshelf.itemmasterlistview = function(websession, facility) {
 			"label" : "Edit Item Location",
 			"permission": "item:edit",
 			"action": function(itemMaster) {
-				codeshelf.openItemEditDialog(facility_, itemMaster['domainId'], itemMaster['description'], null, itemMaster['itemLocations']);
+				codeshelf.openItemEditDialog(facility_, itemMaster['domainId'], itemMaster['description'], null, itemMaster['itemLocations'], null);
 			}
 		}
 

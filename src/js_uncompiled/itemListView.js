@@ -146,10 +146,10 @@ codeshelf.buildItemListView = function(websession, facility, itemFilter, itemFil
 	return view;
 };
 
-codeshelf.openItemEditDialog = function(facility, sku, description, uom, itemLocations) {
+codeshelf.openItemEditDialog = function(facility, sku, description, uom, itemLocations, orderDetailId) {
 	var data = {
 		"facility": facility,
-		"item" : {'sku': sku, 'description': description, 'uom': uom, 'itemLocations': itemLocations}
+		"item" : {'sku': sku, 'description': description, 'uom': uom, 'itemLocations': itemLocations, 'orderDetailId': orderDetailId}
 	};
 	var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-item.html", "ItemController as controller", data);
 	modalInstance.result.then(function(){
@@ -185,7 +185,8 @@ codeshelfApp.ItemController.prototype.ok = function(){
 		{ 'name': 'locationAlias', 'value': item['locationAlias'], 'classType': 'java.lang.String'},
 		{ 'name': 'cmFromLeft', 'value': item['cmFromLeft'], 'classType': 'java.lang.String'},
 		{ 'name': 'quantity', 'value': "0", 'classType': 'java.lang.String'},
-		{ 'name': 'uom', 'value': item['uom'], 'classType':  'java.lang.String'}
+		{ 'name': 'uom', 'value': item['uom'], 'classType':  'java.lang.String'},
+		{ 'name': 'orderDetailId', 'value': item['orderDetailId'], 'classType':  'java.lang.String'}
 	];
 	this.websession_.callMethod(facility, 'Facility', 'upsertItem', methodArgs).then(function(response) {
 		modalInstance.close();

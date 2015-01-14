@@ -123,7 +123,7 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 				"label" : "Edit Item Location",
 				"permission": "item:edit",
 				"action": function(orderDetail) {
-					codeshelf.openItemEditDialog(facility_, toSku(orderDetail), orderDetail['description'], orderDetail['uomMasterId'], orderDetail['itemLocations']);
+					codeshelf.openItemEditDialog(facility_, toSku(orderDetail), orderDetail['description'], orderDetail['uomMasterId'], orderDetail['itemLocations'], orderDetail['persistentId']);
 				}
 			}
 		);
