@@ -185,23 +185,18 @@ codeshelfApp.ItemController.prototype.ok = function(){
 	var modalInstance = this.modalInstance_;
 	var item = scope['item'];
 	var facility = this.scope_['facility'];
-	var methodArgs = [
-		{ 'name': 'itemId', 'value': item['sku'], 'classType': 'java.lang.String'},
-		{ 'name': 'locationAlias', 'value': item['locationAlias'], 'classType': 'java.lang.String'},
-		{ 'name': 'cmFromLeft', 'value': item['cmFromLeft'], 'classType': 'java.lang.String'},
-		{ 'name': 'quantity', 'value': "0", 'classType': 'java.lang.String'},
-		{ 'name': 'uom', 'value': item['uom'], 'classType':  'java.lang.String'},
-		{ 'name': 'orderDetailId', 'value': item['orderDetailId'], 'classType':  'java.lang.String'}
-	];
-	this.websession_.callMethod(facility, 'Facility', 'upsertItem', methodArgs).then(function(response) {
-		modalInstance.close();
-	})
-	.fail(function(response) {
-		scope.$apply(function() {
-			scope['response'] = response;
+	
+	var methodArgs = [facility['persistentId'], item['sku'], item['locationAlias'], item['cmFromLeft'], "0", item['uom'], item['orderDetailId']];
+	
+	this.websession_.callServiceMethod("UiUpdateService", 'upsertItem', methodArgs)
+		.then(function(response) {
+			modalInstance.close();
+		})
+		.fail(function(response) {
+			scope.$apply(function() {
+				scope['response'] = response;
+			});
 		});
-
-	});
 };
 
 /**

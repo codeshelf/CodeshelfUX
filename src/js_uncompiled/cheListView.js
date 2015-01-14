@@ -280,19 +280,12 @@ goog.inherits(codeshelfApp.CheNgController, codeshelfApp.AbstractCheController);
  */
 codeshelfApp.CheNgController.prototype.ok = function(){
 	var che = this.scope_['che'];
-	
-	var methodArgs = [
-		{ 'name': 'domainId', 'value': che["domainid"], 'classType': 'java.lang.String'},
-		{ 'name': 'description', 'value': che["description"], 'classType': 'java.lang.String'},
-		{ 'name': 'color', 'value': che["color"], 'classType': 'java.lang.String'},
-		{ 'name': 'inNewControllerId', 'value': che["cntrlrid"], 'classType': 'java.lang.String'}
-	];
+	var methodArgs = [che["persistentId"], che["domainid"], che["description"], che["color"], che["cntrlrid"]];
 	var self = this;
-	this.websession_.callMethod(che, 'Che', 'updateCheFromUI', methodArgs)
-		.then(function() {
+	this.websession_.callServiceMethod("UiUpdateService", 'updateCheEdits', methodArgs)
+		.then(function(response) {
 			self.close();
-		});
-	
+		});	
 };
 angular.module('codeshelfApp').controller('CheNgController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.CheNgController]);
 
