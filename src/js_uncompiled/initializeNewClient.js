@@ -39,6 +39,8 @@ codeshelf.initializenewclient = function() {
 	function posFail(error) {
 		switch (error.code) {
 			case error.PERMISSION_DENIED:
+				// At least on MacOS, if user denied Codeshelf permission to use the location, let's not refuse to start. Go with Codeshelf Headquarters location.
+				createFacility(-122.2741133, 37.8004643);
 				break;
 			case error.POSITION_UNAVAILABLE:
 				break;
@@ -58,7 +60,7 @@ codeshelf.initializenewclient = function() {
 						{'name': 'x', 'value': longitude, 'classType': 'java.lang.Double'},
 						{'name': 'y', 'value': latitude, 'classType': 'java.lang.Double'}
 					];
-		var newFacilityCmd = websession_.createObjectMethodRequest(domainobjects['Organization']['className'],organization_['persistentId'],'createFacility',methodArgs);
+		var newFacilityCmd = websession_.createObjectMethodRequest(domainobjects['Organization']['className'],organization_['persistentId'],'createFacilityUi',methodArgs);
 		websession_.sendCommand(newFacilityCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_METHOD_RESP), false);
 	}
 
