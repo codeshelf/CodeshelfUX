@@ -99,6 +99,10 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 				return false;
 			else if (inProperty['id'] === 'active')
 				return false;
+			else if (inProperty['id'] === 'orderLocationAliasIds')
+				return false;
+			else if (inProperty['id'] === 'orderType')
+				return false;
 			else if (inProperty['id'] === 'itemLocations' && !outboundOrders_)
 				return false;
 			else

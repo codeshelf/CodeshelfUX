@@ -670,7 +670,7 @@ domainobjects = {
 			},
 			'orderLocationAliasIds': {
 				'id':    'orderLocationAliasIds',
-				'title': 'Location',
+				'title': 'Order Location',
 				'width': 10
 			},
 			'active': {
