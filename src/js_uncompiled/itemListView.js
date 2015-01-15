@@ -81,7 +81,7 @@ codeshelf.buildItemListView = function(websession, facility, itemFilter, itemFil
 				return true;
 			else if (inProperty['id'] ===  'itemMasterId')
 				return true;
-			else if (inProperty['id'] ===  'itemQuantityUom')
+			else if (inProperty['id'] ===  'uomMasterId')
 				return true;
 			else if (inProperty['id'] ===  'cmFromLeftui')
 				return true;
