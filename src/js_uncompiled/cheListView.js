@@ -285,7 +285,7 @@ codeshelfApp.CheNgController.prototype.ok = function(){
 	this.websession_.callServiceMethod("UiUpdateService", 'updateCheEdits', methodArgs)
 		.then(function(response) {
 			self.close();
-		});	
+		});
 };
 angular.module('codeshelfApp').controller('CheNgController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.CheNgController]);
 
@@ -315,12 +315,9 @@ codeshelfApp.SetupCheNgController.prototype.ok = function(){
 	var containersProperty = "containersOnChe";
 
 	if (!isEmptyString(che[containersProperty])) {
-		var methodArgs = [
-			{ 'name': 'inContainerIds', 'value': che[containersProperty], 'classType': 'java.lang.String'}
-		];
-
 		var dialog = this;
-		this.websession_.callMethod(che, 'Che', 'fakeSetupUpContainersOnChe', methodArgs).
+		this.websession_.callServiceMethod('WorkService', 'fakeSetupUpContainersOnChe', [che['persistentId'],
+                                                                                         che[containersProperty]]).
 			then(function() {
 				dialog.close();
 			});
