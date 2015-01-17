@@ -14,6 +14,7 @@
 	<property name="images.dir" value="${basedir}/src/images" />
 	<property name="icons.dir" value="${basedir}/src/icons" />
 	<property name="libs.dir" value="${basedir}/lib" />
+	<property name="productivity.dir" value="${basedir}/productivity" />
 
 	<property name="target.dir" value="${basedir}/target" />
 	<property name="target.web.dir" location="${target.dir}/web" />
@@ -117,6 +118,10 @@
 			<arg value="--nojsdoc" />
 		</exec>
 	</target>
+
+    <target name="update.productivity.libs">
+        <exec dir="${productivity.dir}" executable="./update-dependencies.sh" failonerror="true"/>
+    </target>
 
 	<target name="generate.templates" depends="prep.dirs">
 		<!-- if we're calling generate templates directly then create the (safer) production version. -->
@@ -257,6 +262,16 @@
 //# sourceMappingURL=/js/codeshelf.map</echo>
 	</target>
 
+
+
+    <target name="build.productivity" depends="update.productivity.libs">
+		<exec dir="${productivity.dir}" executable="./build.sh" failonerror="true" />
+        <copy todir="${target.web.dir}/productivity">
+            <fileset dir="${productivity.dir}">
+                <exclude name="node_modules/**" />
+            </fileset>
+        </copy>
+    </target>
 	<!-- Build the web app from the compiled pieces. /-->
 	<target name="build.webapp" depends="clean, generate.templates, generate.css, generate.deps, compile">
 
@@ -361,6 +376,9 @@
 		<property name="deploy.globals" value="${basedir}/src/templates/globals.testing" />
 
 		<antcall target="build.webapp">
+		</antcall>
+
+		<antcall target="build.productivity">
 		</antcall>
 
 		<copy todir="${target.web.dir}">
