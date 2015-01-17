@@ -185,10 +185,10 @@ codeshelfApp.ItemController.prototype.ok = function(){
 	var modalInstance = this.modalInstance_;
 	var item = scope['item'];
 	var facility = this.scope_['facility'];
-	
+
 	var methodArgs = [facility['persistentId'], item['sku'], item['locationAlias'], item['cmFromLeft'], "0", item['uom'], item['orderDetailId']];
-	
-	this.websession_.callServiceMethod("UiUpdateService", 'upsertItem', methodArgs)
+
+	this.websession_.callServiceMethod("UiUpdateService", 'storeItem', methodArgs)
 		.then(function(response) {
 			modalInstance.close();
 		})
