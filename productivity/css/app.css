@@ -1,15 +1,19 @@
 .burndown .progress-bar.progress-bar-completed {
-	background-color: #D3D3D3;
+	background-color: #F1F1F1;
 }
 
 .burndown .progress-bar.progress-bar-shorted {
-	background-color: #7B0793;
+	background-color: #D3D3D3;
 }
 
 
 .burndown {
 	background-color: #CC78DE;
 	height: 30px;
+}
+
+.burndown .progress-bar[aria-valuenow="0"] {
+    min-width: 0px;
 }
 
 .nav-header { 

@@ -4,11 +4,10 @@ var React = require("react");
 var RClass = require("../helpers/react-helper");
 
 var IBoxData = RClass(function() {
-	return (<span>
-				  <span className="m-xs" style={{fontSize: "6vmax"}}>{this.props.dataValue}</span>
-				  <span style={{fontSize: "3vmax"}}>{this.props.dataLabel}</span>
-				</span>);
-	});
+	return (<h1>
+				 {this.props.dataValue} {this.props.dataLabel}
+			</h1>);
+});
 
 var IBoxTitleText = RClass(function() {
 	/* Note that we are turning off float when no tools but when there are tools we will need to let it float left */
