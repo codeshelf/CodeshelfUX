@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-NPM_CMD=$(which npm 2> /dev/null)
-YUM_CMD=$(which yum 2> /dev/null)
-APT_GET_CMD=$(which apt-get 2> /dev/null)
-BREW_CMD=$(which brew 2> /dev/null)
+NPM_CMD=$(type -P  npm &>  /dev/null && echo "Found")
+YUM_CMD=$(type -P yum &> /dev/null && echo "Found")
+APT_GET_CMD=$(type -P apt-get &> /dev/null && echo "Found")
+BREW_CMD=$(type brew &> /dev/null && echo "Found")
 
 #make sure npm is installed
 
