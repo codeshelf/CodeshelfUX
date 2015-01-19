@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
+type -P  npm
+type -P  npm &>  /dev/null && echo "NPM Found"
 NPM_CMD=$(type -P  npm &>  /dev/null && echo "NPM Found")
 YUM_CMD=$(type -P yum &> /dev/null && echo "Found")
 APT_GET_CMD=$(type -P apt-get &> /dev/null && echo "Found")
 BREW_CMD=$(type brew &> /dev/null && echo "Found")
 
+echo $NPM_CMD
+echo "$NPM_CMD"
 #make sure npm is installed
 if [ -z "$NPM_CMD" ]; then
     if [ ! -z "$YUM_CMD" ]; then
