@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="test-jstr"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="build/lib/jstestrunner-junit-1.0.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="build/lib/plexus-utils-3.0.9.jar"/>
 	<classpathentry kind="lib" path="build/lib/jackson-core-asl-1.8.2.jar"/>
@@ -17,6 +15,5 @@
 	<classpathentry kind="lib" path="build/lib/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="build/lib/slf4j-jcl-1.6.1.jar"/>
 	<classpathentry kind="lib" path="build/lib/coverage-1.3.5.jar" sourcepath="/jstestdriver/src"/>
-	<classpathentry kind="lib" path="build/lib/JsTestDriver-1.3.5.jar" sourcepath="/jstestdriver/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
