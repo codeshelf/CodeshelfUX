@@ -9,7 +9,7 @@ var IBoxTitleBar = ibox.IBoxTitleBar;
 var IBoxTitleText = ibox.IBoxTitleText;
 var IBoxSection = ibox.IBoxSection;
 var DoughnutChart = require("./doughnut.jsx");
-var timeformat = require("helpers/timeformat");
+var ActiveRun = require("./activerun.jsx");
 
 var segmentTemplates = [{key: "released",
                          color: "#CC78DE",
@@ -75,35 +75,18 @@ var OrderDetailIBox = React.createClass({
                 </IBoxSection>
                     {
                         _.map(activeRuns, function(run) {
-                            console.log("Rendering run", run);
-                            var id = run['assignedTime'] + ":" + run['cheId'];;
-                            var label = timeformat(run["assignedTime"]);
-                            var numCompleted = run["completeCount"];
-                            var numShorted = run["shortCount"];
-                            var numNew = run["newCount"];
-                            var total = numCompleted + numShorted + numNew;
-                            var percentCompleted = (numCompleted/total * 100).toFixed(0);
-                            var percentShorted = (numShorted/total * 100).toFixed(0);
-                            var percentNew = (numNew/total * 100).toFixed(0);
-                            var completeTitle = numCompleted + ' Complete';
-                            var shortTitle = numShorted + ' Short';
-                            var remainingTitle = numNew + ' Remaining';
-                            return (
-                                    <IBoxSection key={id}>
-                                      <div style={{display: "table", width: "100%"}} >
-                                         <div style={{display: "table-cell", width: 32, padding:10, whiteSpace: "nowrap"}}>{label}</div>
-                                    <div className="progress burndown" title={remainingTitle} style={{display: "table-cell"}}>
-                                    <div className="progress-bar progress-bar-completed" title={completeTitle} role="progressbar" aria-valuenow={numCompleted} aria-valuemin="0" aria-valuemax="100" style={{width: percentCompleted+"%"}}>                                   <span className="sr-only">{completeTitle}</span>
-                                              </div>
-                                              <div className="progress-bar progress-bar-shorted" title={shortTitle} role="progressbar" aria-valuenow={numShorted} aria-valuemin="0" aria-valuemax="100" style={{width: percentShorted+"%"}}>
-                                                <span className="sr-only">{shortTitle}</span>
-                                              </div>
-                                         </div>
-                                      </div>
-                                    </IBoxSection>
-                                                   );
-                                           })
-                                           }
+                            if (ActiveRun.isActive(run)) {
+                                var id = ActiveRun.getId(run);
+                                return (
+                                        <IBoxSection key={id}>
+                                            <ActiveRun key={id} run={run} />
+                                        </IBoxSection>);
+                            }
+                            else {
+                                return null;
+                            }
+                        })
+                    }
                </IBox>);
 
         }
