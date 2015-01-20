@@ -120,9 +120,7 @@
 	</target>
 
     <target name="update.productivity.libs">
-        <exec dir="${productivity.dir}" executable="./update-dependencies.sh" osfamily="unix" failonerror="true"
-        	vmlauncher="false"
-        	/>
+        <exec dir="${productivity.dir}" executable="./update-dependencies.sh" osfamily="unix" failonerror="true" />
     </target>
 
 	<target name="generate.templates" depends="prep.dirs">
