@@ -11,17 +11,18 @@ var IBoxSection = ibox.IBoxSection;
 var DoughnutChart = require("./doughnut.jsx");
 var ActiveRun = require("./activerun.jsx");
 
+//Clockwise order
 var segmentTemplates = [{key: "released",
                          color: "#CC78DE",
                          label: "Remaining",
                          value: 0},
-                        {key: "short",
-                         color: "#D3D3D3",
-                         label: "Shorts",
-                         value: 0},
                         {key: "inprogress",
                          color: "#7B0793",
                          label: "In Progress",
+                         value: 0},
+                        {key: "short",
+                         color: "#D3D3D3",
+                         label: "Shorts",
                          value: 0},
                         {key: "complete",
                          color: "#F1F1F1",
