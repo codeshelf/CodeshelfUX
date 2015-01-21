@@ -6,22 +6,32 @@ var Rx = require('rx');
 
 var csapi = require('data/csapi');
 var ActivityPage = require('pages/activity');
+var urlparse = require('helpers/urlparse');
 
-//synchronous call to get hosts.json
-var config = (function(){
-    var config = {};
-    $.ajax({
-        url: "config/hosts.json",
-        success: function(data) {
-            config = data;
-        },
-        dataType: "json",
-        async:false
-    });
-    return config;})();
+var params = urlparse.parseParameters(window.location);
+var endpoint = params['endpoint'];
+if (endpoint !== undefined) {
+    if (endpoint.indexOf("http") < 0 && endpoint.indexOf("//") < 0) {
+        endpoint = "//admin.codeshelf.com/" + endpoint;
+    }
+} else {
+    //synchronous call to get hosts.json
+    var config = (function(){
+        var config = {};
+        $.ajax({
+            url: "config/hosts.json",
+            success: function(data) {
+                config = data;
+            },
+            dataType: "json",
+            async:false
+        });
+        return config;})();
 
 
-var endpoint = config["endpoint"];
+    endpoint = config["endpoint"];
+}
+
 var el = React.createElement;
 
 csapi.getFacilities(endpoint).then(function(facilities) {
