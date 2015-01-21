@@ -15,6 +15,7 @@ var config = (function(){
         success: function(data) {
             config = data;
         },
+        dataType: "json",
         async:false
     });
     return config;})();
