@@ -58,7 +58,7 @@ codeshelf.workinstructionsByItemMaster = function(websession, facility, inItemMa
 };
 
 codeshelf.workinstructionsByOrderDetail = function(websession, facility, inDetailPersistentId) {
-	var viewNameSuffix = "for detail";
+	var viewNameSuffix = "for Order Detail";
 	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'groupAndSortCode', 'completeTimeForUi');
 
 	// all work instructions for this item, including complete.
@@ -70,6 +70,21 @@ codeshelf.workinstructionsByOrderDetail = function(websession, facility, inDetai
 
 	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
 };
+
+codeshelf.workinstructionsByOrderHeader = function(websession, facility, inHeaderPersistentId) {
+	var viewNameSuffix = "for Order";
+	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'groupAndSortCode', 'completeTimeForUi');
+
+	// all work instructions for this item, including complete.
+	var workInstructionFilter = "workInstructionsByHeader";
+
+	var	workInstructionFilterParams = [
+		{ 'name': 'orderHeader', 'value': inHeaderPersistentId}
+	];
+
+	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
+};
+
 
 codeshelf.workinstructionsAll = function(websession, facility) {
 	// all uncompleted work instructions this facility. Include REVERT though

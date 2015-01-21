@@ -113,6 +113,16 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 	};
 
 
+	var orderHeaderContextDefs = [
+		{
+			"label" : "Work Instructions for Order",
+			"permission": "inventory:view",
+			"action": function(orderHeader) {
+				codeshelf.windowLauncher.loadWorkInstructionsForHeader(orderHeader['persistentId']);
+			}
+		}
+	];
+
 	var orderDetailContextDefs = [
 		{
 			"label" : "Item Locations For SKU",
@@ -176,7 +186,7 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 
 		// GoodEggs reliably has order groups. So deliver a 3-level view.
 		hierarchyMap[0] = { "className": domainobjects['OrderGroup']['className'], "linkProperty": 'parent', "filter": orderGroupFilter, "filterParams": orderGroupFilterParams, "properties": domainobjects['OrderGroup']['properties'], "comparer": undefined };
-		hierarchyMap[1] = { "className": domainobjects['OrderHeader']['className'], "linkProperty": 'orderGroup', "filter": orderHeaderFilter, "filterParams": orderHeaderFilterParams, "properties": domainobjects['OrderHeader']['properties'], "comparer": workSequenceComparer };
+		hierarchyMap[1] = { "className": domainobjects['OrderHeader']['className'], "linkProperty": 'orderGroup', "filter": orderHeaderFilter, "filterParams": orderHeaderFilterParams, "properties": domainobjects['OrderHeader']['properties'], "comparer": workSequenceComparer, "contextMenuDefs": orderHeaderContextDefs };
 		hierarchyMap[2] = orderDetailHierarchyMapDef;
 
 		var viewOptions = {
@@ -198,7 +208,7 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 		];
 
 		// Accu-Logistics and many sites have no group at all, or are missing many. Just ignore and do the order headers.
-		hierarchyMap[0] = { "className": domainobjects['OrderHeader']['className'], "linkProperty": 'parent', "filter": orderHeaderFilter, "filterParams": orderHeaderFilterParams, "properties": domainobjects['OrderHeader']['properties'], "comparer": workSequenceComparer };
+		hierarchyMap[0] = { "className": domainobjects['OrderHeader']['className'], "linkProperty": 'parent', "filter": orderHeaderFilter, "filterParams": orderHeaderFilterParams, "properties": domainobjects['OrderHeader']['properties'], "comparer": workSequenceComparer, "contextMenuDefs": orderHeaderContextDefs };
 		hierarchyMap[1] = orderDetailHierarchyMapDef;
 		var viewOptions = {
 			'editable':  true,

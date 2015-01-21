@@ -293,6 +293,17 @@ codeshelf.windowLauncher = (function() {
 			}
 		},
 
+		loadWorkInstructionsForHeader: function(headerPersistentId) {
+			var listView = codeshelf.workinstructionsByOrderHeader(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), headerPersistentId);
+			try {
+				var wiWindow = codeshelf.window(listView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				wiWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
 		loadFacilityEditor: function () {
 			try {
 				// Load the GMaps API and init() when done.
