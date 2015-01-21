@@ -17,7 +17,7 @@ codeshelf.Navbar = function() {
 
 			 {"href": "javascript:launchOrderDetailsView()", key: "orders.details", "label": "Order Details", "permission": "order:view:details"},
 			 {"href": "javascript:launchContainerUseListView()", key: "containers", "label": "Containers", "permission" : "container:view" },
-			 {"href": "javascript:launchWorkInstructionListView()", key: "workinstructions", "label": "All Work Instructions", "permission" : "workinstructions:view" },
+			 {"href": "javascript:launchWorkInstructionListView()", key: "workinstructions", "label": "Uncompleted Work Instructions", "permission" : "workinstructions:view" },
 			 {"href": "javascript:launchInventoryView()", key: "inventory", "label": "Item Locations", "permission":"inventory:view"},
 			 {"href": "javascript:launchItemMastersView()", key: "itemmasters", "label": "Item Masters", "permission":"itemmasters:view"}		 ]
 		},

@@ -72,7 +72,7 @@ codeshelf.orderdetailsview = function(websession, facility) {
 			else if (inProperty['id'] === 'orderDetailId')
 				return false;
 			else if (inProperty['id'] === 'status')
-				return false;
+				return true;
 			else if (inProperty['id'] === 'active')
 				return false;
 			else if (inProperty['id'] === 'itemLocations')
