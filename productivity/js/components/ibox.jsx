@@ -2,10 +2,12 @@
 
 var React = require("react");
 var RClass = require("../helpers/react-helper");
+var pluralize = require("../helpers/pluralize");
 
 var IBoxData = RClass(function() {
+    var label = pluralize(this.props.dataValue, this.props.dataLabelSingular, this.props.dataLabel);
 	return (<h1>
-				 {this.props.dataValue} {this.props.dataLabel}
+				 {this.props.dataValue} {label}
 			</h1>);
 });
 

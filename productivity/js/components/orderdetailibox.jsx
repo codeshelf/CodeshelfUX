@@ -65,7 +65,7 @@ var OrderDetailIBox = React.createClass({
                 </IBoxSection>
 
                 <IBoxSection className="shortSummary">
-                    <IBoxData dataValue={shorts} dataLabel="Shorts" />
+                    <IBoxData dataValue={shorts} dataLabelSingular="Short" dataLabel="Shorts" />
                 </IBoxSection>
                 <IBoxSection className="pickRate">
                     <IBoxData dataValue={Math.round(pickRate)} dataLabel="/ Hour" />
