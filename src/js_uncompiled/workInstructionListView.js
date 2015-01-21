@@ -57,6 +57,20 @@ codeshelf.workinstructionsByItemMaster = function(websession, facility, inItemMa
 	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
 };
 
+codeshelf.workinstructionsByOrderDetail = function(websession, facility, inDetailPersistentId) {
+	var viewNameSuffix = "for detail";
+	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'groupAndSortCode', 'completeTimeForUi');
+
+	// all work instructions for this item, including complete.
+	var workInstructionFilter = "workInstructionsByDetail";
+
+	var	workInstructionFilterParams = [
+		{ 'name': 'orderDetail', 'value': inDetailPersistentId}
+	];
+
+	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
+};
+
 codeshelf.workinstructionsAll = function(websession, facility) {
 	// all uncompleted work instructions this facility. Include REVERT though
 	// through V4 parentage goes workInstruction->orderDetail->orderHeader->facility

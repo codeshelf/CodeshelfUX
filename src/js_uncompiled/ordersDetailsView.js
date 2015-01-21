@@ -77,6 +77,8 @@ codeshelf.orderdetailsview = function(websession, facility) {
 				return false;
 			else if (inProperty['id'] === 'itemLocations')
 				return false;
+			else if (inProperty['id'] === 'groupUi')
+				return false;
 			else
 				return true;
 		}
@@ -102,6 +104,17 @@ codeshelf.orderdetailsview = function(websession, facility) {
 			}
 		}
 	);
+
+	orderDetailContextDefs.push(
+		{
+			"label" : "Work Instructions for Order Detail",
+			"permission": "inventory:view",
+			"action": function(orderDetail) {
+				codeshelf.windowLauncher.loadWorkInstructionsForDetail(orderDetail['persistentId']);
+			}
+		}
+	);
+
 
 	var orderDetailFilter = "orderDetailsByFacility";
 	var orderDetailFilterParams = [

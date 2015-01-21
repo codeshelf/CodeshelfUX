@@ -103,6 +103,8 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 				return false;
 			else if (inProperty['id'] === 'orderType')
 				return false;
+			else if (inProperty['id'] === 'groupUi')
+				return false;
 			else if (inProperty['id'] === 'itemLocations' && !outboundOrders_)
 				return false;
 			else
@@ -131,7 +133,18 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 				}
 			}
 		);
-	}
+	};
+
+	orderDetailContextDefs.push(
+		{
+			"label" : "Work Instructions for Order Detail",
+			"permission": "inventory:view",
+			"action": function(orderDetail) {
+				codeshelf.windowLauncher.loadWorkInstructionsForDetail(orderDetail['persistentId']);
+			}
+		}
+	);
+
 
 	var orderTypeEnum = 'CROSS';
 	if (outboundOrders_) {

@@ -580,6 +580,11 @@ domainobjects = {
 				'id':    'active',
 				'title': 'Active',
 				'width': 8
+			},
+			'groupUi': {
+				'id':    'groupUi',
+				'title': 'Order Group',
+				'width': 10
 			}
 		}
 	},
@@ -681,6 +686,11 @@ domainobjects = {
 			'orderType': {
 				'id':    'orderType',
 				'title': 'Order Type',
+				'width': 10
+			},
+			'groupUi': {
+				'id':    'groupUi',
+				'title': 'Order Group',
 				'width': 10
 			}
 		}
