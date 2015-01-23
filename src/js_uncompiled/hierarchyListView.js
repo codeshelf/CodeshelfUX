@@ -611,7 +611,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 
 		},
 		
-        generateCSV: function(){            
+        generateCSV: function(){
             var columns = grid_.getColumns();
             var numRows = grid_.getDataLength();
             //Shouldn''t happen, as UI doesn't let users remove all columns'
@@ -628,7 +628,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
                 if (fieldName == 'More'){
                     continue;
                 }
-                csv += "\"" + fieldName + "\",";
+                csv += "\"" + fieldName.replace("\"", "\"\"") + "\",";
             }
             csv += "\n";
             
@@ -645,7 +645,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
                     if (fieldValue == undefined){
                         fieldValue = "";
                     }
-                    csv += "\"" + fieldValue + "\",";
+                    csv += "\"" + fieldValue.replace("\"", "\"\"") + "\",";
                 }
                 csv += "\n";
             }
