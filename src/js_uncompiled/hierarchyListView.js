@@ -399,7 +399,9 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 				'editCommandHandler': editCommandHandler
 			};
 
-			goog.dom.appendChild(self_.getMainPaneElement(), soy.renderAsElement(codeshelf.templates.listviewContentPane));
+            $(self_.getMainPaneElement()).parent(".window").find("button.export").on("click", function(){
+                self_.generateCSV();
+            });
 
 
 			setupContextMenus(hierarchyMap_);
@@ -444,12 +446,6 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 				var sent = websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
 				registeredCommands_.push(sent);
 			}
-
-            var buttonElementDelete = new goog.ui.Button('Test');
-            buttonElementDelete.render(self_.getMainPaneElement())
-            goog.events.listen(buttonElementDelete, goog.ui.Component.EventType.ACTION, function (event) {
-                self_.generateCSV();
-            })
 
 				//Add click handlers from the columns
 				goog.array.forEach(columns_, function(column) {
@@ -610,7 +606,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 				}
 
 		},
-		
+
         generateCSV: function(){
             var columns = grid_.getColumns();
             var numRows = grid_.getDataLength();
@@ -619,7 +615,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
                 alert("There are no columns in the table.");
                 return;
             }
-            
+
             //Iterate over column names and build the CSV header
             var csv = "";
             for (var columnId in columns) {
@@ -631,9 +627,9 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
                 csv += "\"" + fieldName.replace("\"", "\"\"") + "\",";
             }
             csv += "\n";
-            
+
             //Iterate over cell values and complete the CSV
-            for (rowId = 0; rowId < numRows; rowId++) { 
+            for (rowId = 0; rowId < numRows; rowId++) {
                 var rowData = grid_.getDataItem(rowId);
                 for (var columnId in columns) {
                     var column = columns[columnId];
@@ -649,7 +645,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
                 }
                 csv += "\n";
             }
-            
+
             var contentType = 'text/csv';
             var csvFile = new Blob([csv], {type: contentType});
             var a = document.createElement('a');
@@ -657,10 +653,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
             a.download = getViewCookieName() + ".csv";
             a.href = window.URL.createObjectURL(csvFile);
             var url = window.URL.createObjectURL(csvFile);
-            a.dataset.downloadurl = [contentType, a.download, a.href].join(':');            
+            a.dataset.downloadurl = [contentType, a.download, a.href].join(':');
             a.click()
         },
-        
+
 		open: function() {
 			var h_runfilters = null;
 

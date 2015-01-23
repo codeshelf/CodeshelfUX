@@ -278,6 +278,19 @@
 	@mixin				FLEX_BOX(1);
 }
 
+.window button.export {
+    float: right;
+    border-width: 0px;
+    margin-right: 5px;
+    margin-bottom: 2px;
+    margin-top: 1px;
+    font-size: 10px;
+}
+
+.window button.close {
+    font-size: 18px;     
+}
+
 .windowFooter {
 	width:				100%;
 	height:				WINDOWFOOTER_HEIGHT;

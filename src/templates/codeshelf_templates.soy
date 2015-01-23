@@ -63,11 +63,13 @@
 {template .window}
 <div class='window'>
 	<div class='windowBar'>
-	/* funky! If label is first, the 'x' button does not show except in facility window.
-	class=btn has an outline, but does not go right. Class=close goes right with no outline.
-	this appears to be from "bootstrap" library*/
-		 <button type="button" class="close" data-dismiss="alert" id="closeme"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+
 		<label class='windowTitle'>Window</label>
+        <span class="text-right">
+              <!-- these are floated right so the order is reversed -->
+		      <button type="button" class="btn btn-xs close" id="closeme"><span class="glyphicon glyphicon-remove"></span></button>
+              <button type="button" class="btn btn-xs export"><span class="glyphicon glyphicon-download-alt"></span ></button>
+        </span>
 	</div>
 	<div class='windowContent'>
 	</div>
@@ -216,14 +218,6 @@
 <div class='ediServicesView'>
 	<div class='toolbarPane'></div>
 	<div class='ediServicesPane windowContent'></div>
-</div>
-{/template}
-
-/**
- * Listview content pane
- */
-{template .listviewContentPane}
-<div id='listViewGrid' class='windowContent'>
 </div>
 {/template}
 
