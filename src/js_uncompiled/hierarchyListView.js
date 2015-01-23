@@ -608,6 +608,10 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 		},
 
         generateCSV: function(){
+            function formatField(val) {
+                return "\"" + String(val).replace("\"", "\"\"") + "\","
+            }
+            
             var columns = grid_.getColumns();
             var numRows = grid_.getDataLength();
             //Shouldn''t happen, as UI doesn't let users remove all columns'
@@ -624,7 +628,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
                 if (fieldName == 'More'){
                     continue;
                 }
-                csv += "\"" + fieldName.replace("\"", "\"\"") + "\",";
+                csv += formatField(fieldName);
             }
             csv += "\n";
 
@@ -641,7 +645,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
                     if (fieldValue == undefined){
                         fieldValue = "";
                     }
-                    csv += "\"" + fieldValue.replace("\"", "\"\"") + "\",";
+                    csv += formatField(fieldValue);
                 }
                 csv += "\n";
             }
