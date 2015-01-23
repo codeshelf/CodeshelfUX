@@ -445,8 +445,11 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 				registeredCommands_.push(sent);
 			}
 
-
-
+            var buttonElementDelete = new goog.ui.Button('Test');
+            buttonElementDelete.render(self_.getMainPaneElement())
+            goog.events.listen(buttonElementDelete, goog.ui.Component.EventType.ACTION, function (event) {
+                self_.generateCSV();
+            })
 
 				//Add click handlers from the columns
 				goog.array.forEach(columns_, function(column) {
@@ -607,7 +610,57 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 				}
 
 		},
-
+		
+        generateCSV: function(){            
+            var columns = grid_.getColumns();
+            var numRows = grid_.getDataLength();
+            //Shouldn''t happen, as UI doesn't let users remove all columns'
+            if (columns.length == 0){
+                alert("There are no columns in the table.");
+                return;
+            }
+            
+            //Iterate over column names and build the CSV header
+            var csv = "";
+            for (var columnId in columns) {
+                var column = columns[columnId];
+                var fieldName = column["name"];
+                if (fieldName == 'More'){
+                    continue;
+                }
+                csv += "\"" + fieldName + "\",";
+            }
+            csv += "\n";
+            
+            //Iterate over cell values and complete the CSV
+            for (rowId = 0; rowId < numRows; rowId++) { 
+                var rowData = grid_.getDataItem(rowId);
+                for (var columnId in columns) {
+                    var column = columns[columnId];
+                    var fieldName = column["field"];
+                    if (fieldName == 'More'){
+                        continue;
+                    }
+                    var fieldValue = rowData[fieldName];
+                    if (fieldValue == undefined){
+                        fieldValue = "";
+                    }
+                    csv += "\"" + fieldValue + "\",";
+                }
+                csv += "\n";
+            }
+            
+            var contentType = 'text/csv';
+            var csvFile = new Blob([csv], {type: contentType});
+            var a = document.createElement('a');
+            //Set filename
+            a.download = getViewCookieName() + ".csv";
+            a.href = window.URL.createObjectURL(csvFile);
+            var url = window.URL.createObjectURL(csvFile);
+            a.dataset.downloadurl = [contentType, a.download, a.href].join(':');            
+            a.click()
+        },
+        
 		open: function() {
 			var h_runfilters = null;
 
