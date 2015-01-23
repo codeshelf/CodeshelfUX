@@ -361,6 +361,9 @@
                 <antcall target="build.webapp">
                 </antcall>
 
+		<antcall target="build.productivity">
+		</antcall>
+
 				<copy-libraries-for-deployment />
 	</target>
 
