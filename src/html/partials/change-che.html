@@ -24,6 +24,11 @@
 				<option value="WHITE">WHITE</option>
 		</select></p>
 		<p>Controller ID: <input type="text" name="cntrlrid" ng-model="che.cntrlrid"></p>
+        <p>Process Mode: <select name="processMode" ng-model="che.processMode">
+                <option value="SETUP_ORDERS">SETUP ORDERS</option>
+                <option value="LINE_SCAN">LINE SCAN</option>
+        </select></p>
+		
 	</div>
 	<div class="modal-footer">
 		<button class="btn" ng-click="controller.cancel()">Cancel</button>

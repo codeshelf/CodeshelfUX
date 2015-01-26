@@ -201,7 +201,12 @@ domainobjects = {
 				'id': 'activeContainers',
 				'title': 'Containers',
 				'width': 40
-			}
+			},
+	        'processMode': {
+                'id': 'processMode',
+                'title': 'Process Mode',
+                'width': 40
+            }		
 		}
 	},
 
