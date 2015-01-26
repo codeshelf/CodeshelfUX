@@ -611,7 +611,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
             function formatField(val) {
                 return "\"" + String(val).replace("\"", "\"\"") + "\","
             }
-            
+
             var columns = grid_.getColumns();
             var numRows = grid_.getDataLength();
             //Shouldn''t happen, as UI doesn't let users remove all columns'
@@ -654,11 +654,11 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
             var csvFile = new Blob([csv], {type: contentType});
             var a = document.createElement('a');
             //Set filename
-            a.download = getViewCookieName() + ".csv";
-            a.href = window.URL.createObjectURL(csvFile);
+            a['download'] = getViewCookieName() + ".csv";
+            a['href'] = window.URL.createObjectURL(csvFile);
             var url = window.URL.createObjectURL(csvFile);
-            a.dataset.downloadurl = [contentType, a.download, a.href].join(':');
-            a.click()
+            a['dataset']['downloadurl'] = [contentType, a['download'], a['href']].join(':');
+            a.click();
         },
 
 		open: function() {
