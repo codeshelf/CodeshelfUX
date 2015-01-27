@@ -269,10 +269,16 @@ codeshelfApp.CheNgController = function($scope, $modalInstance, websession, data
 	// second could match. Just being different to practice for when we have to be different
 	$scope['che']['domainid'] = data['che']['domainId'];
 	$scope['che']['cntrlrid'] = data['che']['deviceGuidStr'];
+	//Set Process Mode
 	var processMode = data['che']['processMode'];
 	$scope['che']['processMode'] = (processMode == undefined)?"LINE_SCAN" : processMode;
-
-
+	if (processMode == undefined) {
+	    var methodArgs = [data['che']['parentPersistentId']];
+	    websession.callServiceMethod("UiUpdateService", 'getDefaultProcessMode', methodArgs)
+	        .then(function(response) {
+	            $scope['che']['processMode'] = response;
+	        });
+    }
 };
 goog.inherits(codeshelfApp.CheNgController, codeshelfApp.AbstractCheController);
 
