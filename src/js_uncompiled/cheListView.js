@@ -273,10 +273,11 @@ codeshelfApp.CheNgController = function($scope, $modalInstance, websession, data
 	var processMode = data['che']['processMode'];
 	$scope['che']['processMode'] = (processMode == undefined)?"LINE_SCAN" : processMode;
 	if (processMode == undefined) {
-	    var methodArgs = [data['che']['parentPersistentId']];
+	    var methodArgs = [data['che']['persistentId']];
 	    websession.callServiceMethod("UiUpdateService", 'getDefaultProcessMode', methodArgs)
 	        .then(function(response) {
 	            $scope['che']['processMode'] = response;
+	            $scope.$apply();
 	        });
     }
 };
