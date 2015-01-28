@@ -22,12 +22,14 @@ var ActivityPage = React.createClass({
     componentWillMount: function () {
         //Render updates of productivity
         var productivitySubscription = this.props.productivityStream.subscribe(function(productivityUpdate) {
-            console.log("received productivityupdate", productivityUpdate);
+            console.debug("received productivityupdate", productivityUpdate);
             this.setState({"productivity": productivityUpdate});
         }.bind(this));
 
+
+
         var activeRunsSubscription = this.props.activeRunsStream.subscribe(function(activeRunsUpdate) {
-            console.log("received active Runs updated", activeRunsUpdate);
+            console.debug("received active Runs updated", activeRunsUpdate);
             this.setState({"activeRuns": activeRunsUpdate});
         }.bind(this));
 
