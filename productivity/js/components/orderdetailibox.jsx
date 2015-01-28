@@ -62,7 +62,7 @@ var OrderDetailIBox = React.createClass({
                             <div style={{fontSize: "4vmax"}}>{remaining}</div>
                         </div>
                     </div>
-                    <h1>Of {total} Items</h1>
+                    <h1>Of {total} Lines</h1>
                 </IBoxSection>
 
                 <IBoxSection className="shortSummary">
