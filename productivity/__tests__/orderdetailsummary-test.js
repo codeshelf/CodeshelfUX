@@ -49,6 +49,14 @@ describe('OrderDetailIBox', function() {
             expect(canvas).not.toBeNull();
         });
 
+        it('shows total label', function() {
+            var orderDetailIBox = renderDetails('#test', groupName, keyedData);
+            var orderDetailIBox = renderDetails('#test', groupName, keyedData);
+            var componentText = testDiv.text();
+            expect(componentText).toMatch("Lines");
+        });
+
+
         it('shows pickRate', function() {
             var pickRate = "10101";
             var orderDetailIBox = renderDetails('#test', groupName, keyedData, pickRate);
