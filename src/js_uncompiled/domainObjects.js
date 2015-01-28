@@ -502,6 +502,32 @@ domainobjects = {
 		}
 	},
 
+	'LocationAlias': {
+		'className':  'LocationAlias',
+		'properties': {
+			'domainId': {
+				'id': 'domainId',
+				'title': 'locationAlias',
+				'width': 10
+			},
+			'persistentId': {
+				'id': 'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			},
+			'nominalLocationId': {
+				'id': 'nominalLocationId',
+				'title': 'mappedLocationId',
+				'width': 16
+			},
+			'updated': {
+				'id': 'updated',
+				'title': 'Time Updated',
+				'width': 16
+			}
+		}
+	},
+
 	'LocationABC': {
 		'className':  'Location',
 		'properties': {

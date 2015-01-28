@@ -19,6 +19,7 @@ goog.require('codeshelf.workinstructionlistview');
 goog.require('codeshelf.tierlistview');
 goog.require('codeshelf.tierslotlistview');
 goog.require('codeshelf.ledcontrollerslistview');
+goog.require('codeshelf.locationaliaseslistview');
 goog.require('codeshelf.pathsview');
 goog.require('codeshelf.ediservicesview');
 goog.require('codeshelf.facilityeditorview');
@@ -152,6 +153,17 @@ codeshelf.windowLauncher = (function() {
 				var ledControllersListView = codeshelf.ledcontrollerslistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
 				var ledControllersListWindow = codeshelf.window(ledControllersListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				ledControllersListWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadLocationAliasesListView: function() {
+			try {
+				var locationAliasesListView = codeshelf.locationaliaseslistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var locationAliasesListWindow = codeshelf.window(locationAliasesListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				locationAliasesListWindow.open();
 			}
 			catch (err) {
 				alert(err);
@@ -528,6 +540,11 @@ function launchLedControllersListView() {
 }
 goog.exportSymbol('launchLedControllersListView', launchLedControllersListView);
 
+function launchLocationAliasesListView() {
+	codeshelf.windowLauncher.loadLocationAliasesListView();
+}
+goog.exportSymbol('launchLedControllersListView', launchLedControllersListView);
+
 function launchCheListView() {
 	codeshelf.windowLauncher.loadCheListView();
 }
@@ -577,7 +594,7 @@ goog.exportSymbol('launchDomainObjectPropertiesView', launchDomainObjectProperti
 function launchTestRunner() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');
 	theLogger.info("Opening all windows available from navbar");
-	// But not the about dialog.  15 windows now.
+	// But not the about dialog.  18 windows now.
 	// But not the tier/slot window, which needs a tier reference to start.
 	launchListViewDemo();
 	launchPathsView();
@@ -589,6 +606,7 @@ function launchTestRunner() {
 	launchFacilityEditor();
 	launchAislesListView();
 	launchLedControllersListView();
+	launchLocationAliasesListView();
 	launchCheListView();
 	launchBayListView();
 	launchTierListView();

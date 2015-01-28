@@ -40,6 +40,7 @@ codeshelf.Navbar = function() {
 			 {"href": "javascript:launchLedControllersListView()", key: "ledControllers.list", "label": "LED Controllers List", "permission": "ledController:view" },
 			 {"href": "javascript:launchWorkAreaEditor()", key: "workarea.editor", "label": "Work Area Editor",  "permission": "workArea:edit"},
 			 {"href": "javascript:launchPathsView()", key: "paths.list", "label": "Paths List", "permission": "path:view" },
+			 {"href": "javascript:launchLocationAliasesListView()", key: "locationAlias.list", "label": "Location Aliases", "permission": "locationAliases:view" },
 			 {"href": "javascript:launchDomainObjectPropertiesView()", key: "configs.list", "label": "Config Parameters", "permission": "config:edit" }
 		 ]},
 
