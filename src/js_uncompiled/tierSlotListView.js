@@ -40,14 +40,17 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 				return true;
 			else if (inProperty['id'] ===  'posAlongPathui')
 				return true;
-			else if (inProperty['id'] ===  'domainId')
+			else if (inProperty['id'] ===  'nominalLocationId')
 				return true;
 			else
 				return false;
 		},
 
 		'getViewName': function() {
-			return 'Slots in Tier ' + codeshelf.toLocationDescription(inTier);
+			if (tier_ == null)
+				return 'All Slots';
+			else
+				return 'Slots in Tier ' + codeshelf.toLocationDescription(inTier);
 		},
 
 		'getViewTypeName': function() {
@@ -93,10 +96,19 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 
 	// tier parent goes bay->aisle>facility
 	var tierSlotFilter = 'allActiveByParent';
+	if (tier_ === null)
+		tierSlotFilter = 'slotsByFacility';
 
-	var tierSlotFilterParams = [
-		{ 'name': 'parentId', 'value': tier_['persistentId']}
-	];
+	var tierSlotFilterParams = [];
+	if (tier_ !== null)
+		tierSlotFilterParams = [
+			{ 'name': 'parentId', 'value': tier_['persistentId']}
+		];
+	else
+		tierSlotFilterParams = [
+			{ 'name': 'facilityId', 'value': facility_['persistentId']}
+		];
+
 
 	var hierarchyMap = [];
 	hierarchyMap[0] = { "className": domainobjects['Slot']['className'], "linkProperty": 'parent', "filter" : tierSlotFilter, "filterParams" : tierSlotFilterParams, "properties": domainobjects['Slot']['properties'], "contextMenuDefs": contextDefs, "actions" : actions };

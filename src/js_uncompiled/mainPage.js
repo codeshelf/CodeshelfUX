@@ -204,9 +204,20 @@ codeshelf.windowLauncher = (function() {
 			}
 		},
 
-		loadTierSlotListView: function(inTier) { // this one cannot be called from window launcher
+		loadTierSlotListView: function(inTier) { // inTier specified. Only slots for this tier. Navbar would not call this directly.
 			try {
 				var tierSlotListView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), inTier);
+				var tierListSlotWindow = codeshelf.window(tierSlotListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				tierListSlotWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+
+		loadSlotListView: function() { // null tier parameter in the tierslotlistview means all slots for the facility
+			try {
+				var tierSlotListView = codeshelf.tierslotlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), null);
 				var tierListSlotWindow = codeshelf.window(tierSlotListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				tierListSlotWindow.open();
 			}
@@ -552,6 +563,11 @@ goog.exportSymbol('launchCheListView', launchCheListView);
 
 function launchTierListView() {
 	codeshelf.windowLauncher.loadTierListView();
+}
+goog.exportSymbol('launchTierListView', launchTierListView);
+
+function launchSlotListView() {
+	codeshelf.windowLauncher.loadSlotListView();
 }
 goog.exportSymbol('launchTierListView', launchTierListView);
 

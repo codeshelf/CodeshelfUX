@@ -27,8 +27,8 @@ codeshelf.Navbar = function() {
 			 {"href": "javascript:launchCheListView()", key: "che", "label": "CHE",  "permission": "che:view" },
 			 {"href": "javascript:launchAislesListView()", key: "aisles.list", "label": "Aisles List", "permission": "aisle:view"  },
 			 {"href": "javascript:launchBayListView()", key: "bays.list", "label": "Bays List", "permission": "bay:view" },
-			 {"href": "javascript:launchTierListView()", key: "tiers.list", "label": "Tiers List", "permission": "tier:view"}
-
+			 {"href": "javascript:launchTierListView()", key: "tiers.list", "label": "Tiers List", "permission": "tier:view"},
+			 {"href": "javascript:launchSlotListView()", key: "slots.list", "label": "Slots List", "permission": "slot:view"}
 		 ]},
 
 		{"key": "configure",
