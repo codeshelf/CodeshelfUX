@@ -4,6 +4,7 @@ var Navbar = require('components/nav').Navbar;
 var NavbarTop = require('components/nav').NavbarTop;
 var Breadcrumbs = require('components/breadcrumb');
 var OrderDetailIBox = require('components/orderdetailibox');
+var OrderSummaryIBox = require('components/ordersummaryibox');
 var $ = require('jquery');
 var Rx = require('rx');
 var csapi = require('data/csapi');
@@ -12,10 +13,17 @@ var el = React.createElement;
 
 var ActivityPage = React.createClass({
 
+    getDefaultProps:function(){
+        return {
+            "orderSummaryStream" : Rx.Observable.empty()
+        };
+    },
+
     getInitialState: function() {
         return {
             "productivity" : {},
-            "activeRuns": {}
+            "activeRuns": {},
+            "orderSummary": {}
         };
     },
 
@@ -34,6 +42,10 @@ var ActivityPage = React.createClass({
         }.bind(this));
 
 
+        var orderSummarySubscription  = this.props.orderSummaryStream.subscribe(function(orderSummary) {
+            console.debug("received orderSummary update", orderSummary);
+            this.setState({"orderSummary": orderSummary});
+        }.bind(this));
     },
 
     renderOrderDetailComponents: function(productivityUpdate, activeRunsUpdate) {
@@ -83,6 +95,9 @@ var ActivityPage = React.createClass({
                   <div className="col-lg-12">
                     <div className="wrapper wrapper-content">
                        <div className="row orderdetails">
+                           <div className="col-sm-6 col-md-4">
+                             <OrderSummaryIBox orderSummary={this.state.orderSummary} />
+                           </div>
                          {this.renderOrderDetailComponents(this.state.productivity, this.state.activeRuns)}
                        </div>
                     </div>

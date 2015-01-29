@@ -21,7 +21,7 @@ var segmentTemplates = [{key: "released",
                         {key: "complete",
                          color: "#F1F1F1",
                          label: "Complete",
-                         value: 0}];
+                         value: 1}]; //to draw something
 
 var DoughnutSummary = React.createClass({
 
