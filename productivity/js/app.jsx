@@ -90,6 +90,7 @@ var App = React.createClass({
             {"label": "Activity", "href": "#"}
         ];
 
+        var apiContext = csapi.getFacilityContext(endpoint, facility);
         return (
             <div id="wrapper">
                 <Navbar title={facility['domainId']} navMenus={navMenus} />
@@ -99,9 +100,10 @@ var App = React.createClass({
                     <div className="row">
                         <div className="col-lg-12">
                             <div className="wrapper wrapper-content">
-                                <RouteHandler
+                                <RouteHandler 
                                     endpoint={endpoint}
-                                    facility={facility} />
+                                    facility={facility}
+                                    apiContext={apiContext} />
                             </div>
                             <div className="footer">
                                 <div className="pull-right"> </div>

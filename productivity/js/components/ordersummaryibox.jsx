@@ -6,6 +6,7 @@ var IBox = ibox.IBox;
 var IBoxTitleBar = ibox.IBoxTitleBar;
 var IBoxTitleText = ibox.IBoxTitleText;
 var IBoxSection = ibox.IBoxSection;
+var IBoxData = ibox.IBoxData;
 var DoughnutSummary = require("./doughnutsummary.jsx");
 
 var OrderSummaryIBox = React.createClass({
@@ -17,16 +18,21 @@ var OrderSummaryIBox = React.createClass({
     },
     render: function() {
         var orderSummary = this.props.orderSummary;
+        var shorts = orderSummary["short"];
         return (<IBox>
                   <IBoxTitleBar>
                     <IBoxTitleText>
-                        Orders Burn Down
+                        {this.props.title}
                     </IBoxTitleText>
                   </IBoxTitleBar>
                 <IBoxSection>
                     <DoughnutSummary summaryData={orderSummary}
                                      totalLabelSingular="Order"
                                      totalLabel="Orders" />
+                </IBoxSection>
+                <IBoxSection>
+                    <IBoxData dataValue={shorts} dataLabelSingular="Short" dataLabel="Shorts" />
+
                 </IBoxSection>
                </IBox>);
 

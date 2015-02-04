@@ -7,6 +7,7 @@ var el = React.createElement;
 
 var OrderSummaryIBox = require('components/ordersummaryibox');
 
+var filterNames = ["All", "UPS/Fedex", "Trucking"];
 var OrdersPage = React.createClass({
 
     getDefaultProps:function(){
@@ -22,29 +23,48 @@ var OrdersPage = React.createClass({
     },
 
     componentWillReceiveProps: function (nextProps) {
-        var orderSummaryStream = Rx.Observable.just({"released": 1,
-                                                     "inprogress": 4,
-                                                     "complete": 5,
-                                                     "short": 3}); //test data
-
-
-        var orderSummarySubscription  = orderSummaryStream.subscribe(function(orderSummary) {
-            console.debug("received orderSummary update", orderSummary);
-            this.setState({"orderSummary": orderSummary});
+        var apiContext = nextProps.apiContext;
+        _.forEach(filterNames, function(filterName) {
+            this.setupViewStream(apiContext, filterName);
         }.bind(this));
     },
 
     render: function() {
 
-        return (
-                <div className="row orders">
-                <div className="col-sm-6 col-md-4">
-                     <OrderSummaryIBox orderSummary={this.state.orderSummary} />
-                </div>
-            </div>
-);
+        return (<div className="row orders">
+                  {
+                      _.map(filterNames, function(filterName){
+                          var title = `${filterName} Order Burn Down`;
+                          return (<div className="col-sm-6 col-md-4" key={filterName}>
+                                      <OrderSummaryIBox title={title} orderSummary={this.state[filterName]}/>
+                                  </div>);
+                      }.bind(this))
+                  }
+                </div>);
+    },
+
+    setupViewStream: function(apiContext, filterName){
+        viewStream(apiContext, {"aggregate": "OrderHeader", "filterName": filterName}).subscribe(
+            function(orderSummary) {
+                var newPartialState = {};
+                newPartialState[filterName] = orderSummary;
+                this.setState(newPartialState);
+            }.bind(this),
+            function(error) {
+                console.log(error);
+            });
     }
 });
 
+function viewStream(apiContext, viewSpec) {
+    return pollPromiseProducer(function() { return apiContext.getViewSnapshot(viewSpec);}, 5000);
+}
+
+function pollPromiseProducer(promiseProducer, period /*ms*/) {
+    return Rx.Observable.timer(0, period)
+        .flatMapLatest(function(){
+                return Rx.Observable.fromPromise(promiseProducer()).catch(Rx.Observable.empty());
+        });
+}
 
 module.exports = OrdersPage;
