@@ -88,6 +88,18 @@ codeshelf.cheslistview = function(websession, facility) {
 				useListWindow.open();
 			}
 		},
+
+		// need to modify this a little. Add timestamp or some sort of day parameter to pass through to the filter and the title
+		cheWorkInstructions: function(che) {
+			if (che === null)
+				return;
+			if (che) {
+				var wiListView = codeshelf.workinstructionsByCheAndDay(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che);
+				var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				wiListWindow.open();
+			}
+		},
+
 		testOnlySetUpChe: function(che) {
 			if (che === null)
 				return;
@@ -118,13 +130,21 @@ codeshelf.cheslistview = function(websession, facility) {
 
 	var contextDefs = [
 		{
-			"label": "Work Instruction History",
+			"label": "Work Instructions (CHE runs)",
 			"permission": "workinstructions:view",
 			"action": function(che) {
 					websession_.callServiceMethod("WorkService", "workSummary", [che ['persistentId'], facility_ ['persistentId']])
 						.then(function(summaries) {
 							return self.showPreviousCartRun(che, summaries);
 						});
+			}
+		},
+		{   // Change to a model similar to CHE runs. Initially a simple filter of all WI for the CHE
+			// Rename the label "Work Instruction (by day)"
+			"label": "Work Instructions (all)",
+			"permission": "workinstructions:view",
+			"action": function(che) {
+				self.cheWorkInstructions(che);
 			}
 		},
 		{

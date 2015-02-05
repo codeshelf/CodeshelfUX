@@ -42,6 +42,21 @@ codeshelf.workinstructionsByCheAndAssignedTimestamp = function(websession, facil
 
 };
 
+codeshelf.workinstructionsByCheAndDay = function(websession, facility, inChe) {
+	var viewNameSuffix = "for " + inChe['domainId'];
+	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'assignedCheName', 'groupAndSortCode');
+
+	// all work instructions for this che, and the given assigned time but only active orders. (Not checking active details)
+	var workInstructionFilter = "workInstructionByCheAndDay";
+
+	var workInstructionFilterParams = [
+		{ 'name': 'cheId', 'value': inChe['persistentId']},
+	];
+
+	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
+
+};
+
 
 codeshelf.workinstructionsByItemMaster = function(websession, facility, inItemMasterId) {
 	var viewNameSuffix = "for item";
