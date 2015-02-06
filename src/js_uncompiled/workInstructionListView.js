@@ -50,7 +50,7 @@ codeshelf.workinstructionsByCheAndDay = function(websession, facility, inChe) {
 	var workInstructionFilter = "workInstructionByCheAndDay";
 
 	var workInstructionFilterParams = [
-		{ 'name': 'cheId', 'value': inChe['persistentId']},
+		{ 'name': 'cheId', 'value': inChe['persistentId']}
 	];
 
 	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
