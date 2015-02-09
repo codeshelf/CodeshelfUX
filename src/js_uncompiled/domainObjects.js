@@ -4,6 +4,7 @@
  ******************************************************************************/
 
 goog.provide('domainobjects');
+goog.require('codeshelf.dateformat');
 
 codeshelf.toLocationDescription = function(location) {
 	var primaryAliasId = location['primaryAliasId'];
@@ -13,6 +14,14 @@ codeshelf.toLocationDescription = function(location) {
 		return primaryAliasId;
 	}
 };
+
+function timestampFormatter(row, cell, value, columnDef, dataContext) {
+    if (value == null) {
+		return "";
+	} else {
+        return '<span title="' + codeshelf.toJSDate(value) + '">' + codeshelf.conciseDateTimeFormat(value) + '</span>';
+    }
+}
 
 function metersFormatter(row, cell, value, columnDef, dataContext) {
 	if (value == null) {
@@ -206,7 +215,7 @@ domainobjects = {
                 'id': 'processMode',
                 'title': 'Process Mode',
                 'width': 40
-            }		
+            }
 		}
 	},
 
@@ -1009,15 +1018,17 @@ domainobjects = {
 				'title': 'Sort',
 				'width': 6
 			},
-			'assignedTimeForUi': {
-				'id':    'assignTimeForUi',
+			'assigned': {
+				'id':    'assigned',
 				'title': 'Assign',
-				'width': 8
+				'width': 8,
+                'formatter': timestampFormatter
 			},
-			'completeTimeForUi': {
-				'id':    'completeTimeForUi',
+			'completed': {
+				'id':    'completed',
 				'title': 'Complete',
-				'width': 8
+				'width': 8,
+                'formatter': timestampFormatter
 			},
 			'pickInstructionUi': {
 				'id':    'pickInstructionUi',

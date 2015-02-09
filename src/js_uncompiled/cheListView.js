@@ -209,7 +209,7 @@ codeshelfApp.filter("currentOrDate", function() {
 			return "Current";
 		}
 		else {
-			return codeshelf.timeUnitAwareFormat(summary['assignedTime']);
+			return codeshelf.conciseDateTimeFormat(summary['assignedTime']);
 		}
 	};
 });

@@ -10,6 +10,7 @@ goog.provide('codeshelf.workinstructionlistview');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
+goog.require('codeshelf.dateformat');
 
 goog.require('goog.array');
 goog.require('goog.dom');
@@ -27,7 +28,7 @@ codeshelf.defaultWorkInstructionColumns = [
 ];
 
 codeshelf.workinstructionsByCheAndAssignedTimestamp = function(websession, facility, inChe, assignedTimestamp) {
-	var viewNameSuffix = "for " + inChe['domainId'] + " and time: " + codeshelf.timeUnitAwareFormat(assignedTimestamp);
+	var viewNameSuffix = "for " + inChe['domainId'] + " and time: " + codeshelf.conciseDateTimeFormat(assignedTimestamp);
 	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'assignedCheName', 'groupAndSortCode');
 
 	// all work instructions for this che, and the given assigned time but only active orders. (Not checking active details)
