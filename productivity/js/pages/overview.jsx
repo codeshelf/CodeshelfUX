@@ -7,26 +7,6 @@ var el = React.createElement;
 
 var StatusSummaryIBox = require('components/statussummaryibox');
 
-var views = [
-    {
-        totalLabel: "Orders",
-        totalLabelSingular: "Order",
-        filterName: "All",
-        aggregate: "OrderHeader"
-    },
-   {
-        totalLabel: "Lines",
-        totalLabelSingular: "Line",
-        filterName: "All",
-        aggregate: "OrderDetail"
-    },
-    {
-        totalLabel: "Cases",
-        totalLabelSingular: "Case",
-        filterName: "All",
-        aggregate: "Case"
-    }
-];
 var OverviewPage = React.createClass({
 
     getInitialState: function() {
@@ -35,8 +15,35 @@ var OverviewPage = React.createClass({
 
     componentWillReceiveProps: function (nextProps) {
         var apiContext = nextProps.apiContext;
-        _.forEach(views, function(view) {
-            this.setupViewStream(apiContext, view);
+        var promise = apiContext.getFilters();
+        promise.then(function(filterOptions){
+            var views = [
+                {
+                    totalLabel: "Orders",
+                    totalLabelSingular: "Order",
+                    filterName: filterOptions[0],
+                    aggregate: "OrderHeader"
+                },
+                {
+                    totalLabel: "Lines",
+                    totalLabelSingular: "Line",
+                    filterName: filterOptions[0],
+                    aggregate: "OrderDetail"
+                },
+                {
+                    totalLabel: "Cases",
+                    totalLabelSingular: "Case",
+                    filterName: filterOptions[0],
+                    aggregate: "Case"
+                }
+            ];
+            this.setState({
+                "filterOptions" : filterOptions,
+                "views": views
+            });
+            _.forEach(views, function(view) {
+                this.setupViewStream(apiContext, view);
+            }.bind(this));
         }.bind(this));
     },
 
@@ -44,7 +51,7 @@ var OverviewPage = React.createClass({
 
         return (<div className="row orders">
                   {
-                      _.map(views, function(view){
+                      _.map(this.state.views, function(view){
                           var {
                               filterName,
                               totalLabel,
@@ -54,7 +61,7 @@ var OverviewPage = React.createClass({
                           var title = `${filterName} ${totalLabel} Burn Down`;
                           var stateKey = view["filterName"] + view["aggregate"];
                           return (<div className="col-sm-6 col-md-4" key={title}>
-                                      <StatusSummaryIBox title={title} statusSummary={this.state[stateKey]} totalLabel={totalLabel} totalLabelSingular={totalLabelSingular}/>
+                                      <StatusSummaryIBox title={title} statusSummary={this.state[stateKey]} totalLabel={totalLabel} totalLabelSingular={totalLabelSingular} filterOptions={this.state.filterOptions}/>
                                   </div>);
                       }.bind(this))
                   }

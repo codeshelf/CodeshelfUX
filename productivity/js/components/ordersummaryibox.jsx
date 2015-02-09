@@ -18,7 +18,6 @@ var OrderSummaryIBox = React.createClass({
     },
     render: function() {
         var orderSummary = this.props.orderSummary;
-        var shorts = orderSummary["short"];
         return (<IBox>
                   <IBoxTitleBar>
                     <IBoxTitleText>
@@ -29,10 +28,6 @@ var OrderSummaryIBox = React.createClass({
                     <DoughnutSummary summaryData={orderSummary}
                                      totalLabelSingular="Order"
                                      totalLabel="Orders" />
-                </IBoxSection>
-                <IBoxSection>
-                    <IBoxData dataValue={shorts} dataLabelSingular="Short" dataLabel="Shorts" />
-
                 </IBoxSection>
                </IBox>);
 

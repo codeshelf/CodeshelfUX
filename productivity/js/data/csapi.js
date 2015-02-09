@@ -38,8 +38,12 @@ function getFacilityContext(endpoint, facility) {
     return {
         getProductivity : _.partial(getProductivity, endpoint, facilityId),
         getCheRuns: _.partial(getCheRuns, endpoint, facilityId),
-        getSummarySnapshot: _.partial(getSummarySnapshot, endpoint, facilityId)
-    };
+        getSummarySnapshot: _.partial(getSummarySnapshot, endpoint, facilityId),
+        getFilters: function() {
+            var filtersUrl = "/api/facilities/" + facilityId + "/filters";
+            return $.ajax(endpoint + filtersUrl, {});
+        }
+};
 
 }
 

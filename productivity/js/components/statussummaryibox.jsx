@@ -7,43 +7,40 @@ var IBoxTitleBar = ibox.IBoxTitleBar;
 var IBoxTitleText = ibox.IBoxTitleText;
 var IBoxSection = ibox.IBoxSection;
 var IBoxData = ibox.IBoxData;
+var SummaryFilter = require("./summaryfilter.jsx");
 var DoughnutSummary = require("./doughnutsummary.jsx");
 
 var StatusSummaryIBox = React.createClass({
 
     getDefaultProps: function() {
         return {
+            "title": "",
             "statusSummary": {},
             "totalLabelSingular": "",
-            "totalLabel":""
+            "totalLabel":"",
+            "filterOptions": []
         };
     },
     render: function() {
         var {
+            title,
             statusSummary,
             totalLabel,
-            totalLabelSingular }      = this.props;
+            totalLabelSingular,
+            filterOptions}      = this.props;
         return (<IBox>
                   <IBoxTitleBar>
                     <IBoxTitleText>
-                        {this.props.title}
+                        {title}
                     </IBoxTitleText>
-                    <div className="ibox-tools">
-                        <a aria-expanded="false" className="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i className="fa fa-wrench"></i>
-                        </a>
-                        <ul className="dropdown-menu dropdown-menu-right dropdown-user ">
-                            <li><a href="#">All</a> </li>
-                            <li><a href="#">UPS/Fedex</a></li>
-                            <li><a href="#">Trucking</a></li>
-                        </ul>
-                    </div>
+                    <SummaryFilter filters={filterOptions}
+                                   selectedFilter={function(filterName){console.log(filterName);}}/>
                   </IBoxTitleBar>
                 <IBoxSection>
                     <DoughnutSummary summaryData={statusSummary}
-
                                      totalLabelSingular={totalLabelSingular}
-                                     totalLabel={totalLabel} />
+                                     totalLabel={totalLabel}
+                                     />
                 </IBoxSection>
                </IBox>);
 
