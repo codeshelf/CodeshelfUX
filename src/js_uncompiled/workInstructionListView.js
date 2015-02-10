@@ -52,7 +52,6 @@ It would be ok for different cookie types to share a common default, but for now
 // This is the main CHE run history
 codeshelf.workinstructionByCheAndAssignedTimestamp = function(websession, facility, inChe, assignedTimestamp) {
 	var viewNameSuffix = "for " + inChe['domainId'] + " and time: " + codeshelf.conciseDateTimeFormat(assignedTimestamp);
-	var defaultColumns  = goog.array.concat(codeshelf.defaultWiColumnsWithSort, 'assignedCheName', 'groupAndSortCode');
 
 	// all work instructions for this che, and the given assigned time but only active orders. (Not checking active details)
 	var workInstructionFilter = "workInstructionByCheAndAssignedTime";
@@ -62,13 +61,12 @@ codeshelf.workinstructionByCheAndAssignedTimestamp = function(websession, facili
 		{ 'name': 'assignedTimestamp', 'value': assignedTimestamp, 'type': 'java.sql.Timestamp'}
 	];
 
-	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
+	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, codeshelf.defaultWiColumnsWithSort, workInstructionFilter, workInstructionFilterParams);
 
 };
 
 codeshelf.workinstructionByCheAndDay = function(websession, facility, inChe, assignedTimestamp) {
 	var viewNameSuffix = "for " + inChe['domainId'] + " on: " + codeshelf.conciseDateFormat(assignedTimestamp);
-	var defaultColumns  = goog.array.concat(codeshelf.defaultWiColumnsNoSort, 'assignedCheName', 'groupAndSortCode');
 
 	// all work instructions for this che, and the given assigned time but only active orders. (Not checking active details)
 	var workInstructionFilter = "workInstructionByCheAndDay";
@@ -78,13 +76,12 @@ codeshelf.workinstructionByCheAndDay = function(websession, facility, inChe, ass
 		{ 'name': 'assignedTimestamp', 'value': assignedTimestamp, 'type': 'java.sql.Timestamp'}
 	];
 
-	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
+	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, codeshelf.defaultWiColumnsNoSort, workInstructionFilter, workInstructionFilterParams);
 
 };
 
 codeshelf.workinstructionByCheAll = function(websession, facility, inChe) {
 	var viewNameSuffix = "for " + inChe['domainId'];
-	var defaultColumns  = goog.array.concat(codeshelf.defaultWiColumnsNoSort, 'assignedCheName', 'groupAndSortCode');
 
 	// all work instructions for this che, and the given assigned time but only active orders. (Not checking active details)
 	var workInstructionFilter = "workInstructionByCheAll";
@@ -93,14 +90,13 @@ codeshelf.workinstructionByCheAll = function(websession, facility, inChe) {
 		{ 'name': 'cheId', 'value': inChe['persistentId']}
 	];
 
-	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
+	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, codeshelf.defaultWiColumnsNoSort, workInstructionFilter, workInstructionFilterParams);
 
 };
 
 
 codeshelf.workinstructionsByItemMaster = function(websession, facility, inItemMasterId) {
 	var viewNameSuffix = "for item";
-	var defaultColumns  = goog.array.concat(codeshelf.defaultWiColumnsNoSort, 'groupAndSortCode', 'completeTimeForUi');
 
 	// all work instructions for this item, including complete.
 	var workInstructionFilter = "workInstructionBySku";
@@ -109,12 +105,11 @@ codeshelf.workinstructionsByItemMaster = function(websession, facility, inItemMa
 		{ 'name': 'sku', 'value': inItemMasterId}
 	];
 
-	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
+	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, codeshelf.defaultWiColumnsNoSort, workInstructionFilter, workInstructionFilterParams);
 };
 
 codeshelf.workinstructionsByOrderDetail = function(websession, facility, inDetailPersistentId) {
 	var viewNameSuffix = "for Order Detail";
-	var defaultColumns  = goog.array.concat(codeshelf.defaultWiColumnsNoSort, 'groupAndSortCode', 'completeTimeForUi');
 
 	// all work instructions for this item, including complete.
 	var workInstructionFilter = "workInstructionsByDetail";
@@ -123,12 +118,11 @@ codeshelf.workinstructionsByOrderDetail = function(websession, facility, inDetai
 		{ 'name': 'orderDetail', 'value': inDetailPersistentId}
 	];
 
-	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
+	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, codeshelf.defaultWiColumnsNoSort, workInstructionFilter, workInstructionFilterParams);
 };
 
 codeshelf.workinstructionsByOrderHeader = function(websession, facility, inHeaderPersistentId) {
 	var viewNameSuffix = "for Order";
-	var defaultColumns  = goog.array.concat(codeshelf.defaultWiColumnsNoSort, 'groupAndSortCode', 'completeTimeForUi');
 
 	// all work instructions for this item, including complete.
 	var workInstructionFilter = "workInstructionsByHeader";
@@ -137,7 +131,7 @@ codeshelf.workinstructionsByOrderHeader = function(websession, facility, inHeade
 		{ 'name': 'orderHeader', 'value': inHeaderPersistentId}
 	];
 
-	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
+	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, codeshelf.defaultWiColumnsNoSort, workInstructionFilter, workInstructionFilterParams);
 };
 
 

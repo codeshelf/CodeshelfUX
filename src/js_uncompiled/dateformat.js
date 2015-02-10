@@ -54,13 +54,13 @@ codeshelf.conciseDateFormat = function(momentCompatibleDate, opt_relativetime) {
 	var timeMoment  =  moment(momentCompatibleDate);
 	if (moment(timeMoment).isAfter(currentTime)) {
 		if(moment(timeMoment).isSame(currentTime, 'day')) {
-			return timeMoment.format("Today");
+			return "Today";
 		} else {
 			return timeMoment.format('+dd');
 		}
 	}
 	else if (moment(timeMoment).add(1, 'days').isAfter(currentTime)) {
-		return timeMoment.format("Today");
+		return "Today";
 	}
 	else if (moment(timeMoment).add(1, 'weeks').isAfter(currentTime)) {
 		return timeMoment.format('dd');
