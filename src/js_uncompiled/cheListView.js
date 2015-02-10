@@ -233,7 +233,7 @@ codeshelfApp.filter("currentOrDate", function() {
 	};
 });
 
-codeshelfApp.filter("byDateFormat", function() {
+codeshelfApp.filter("byDayFormat", function() {
 	return function(summary) {
 		return codeshelf.conciseDateFormat(summary['assignedTime']);
 	};
