@@ -3,8 +3,8 @@ var basePath = __dirname;
 
 module.exports = function(options) {
     var entry = {
-        app: ['./js/app.js'],
-        components: ['./js/components-display.jsx']
+        components: ['./js/components-display.jsx'],
+        router: ['./js/router.jsx']
     };
     if (options['development']) {
         //add hot deploy module under development
