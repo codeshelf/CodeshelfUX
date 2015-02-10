@@ -1,0 +1,22 @@
+<!-- change-aisle-description.html file
+-->
+<form name="aisle-form">
+	<div class="modal-header">
+		<h3>Work Instructions for this CHE by Day</h3>
+	</div>
+	<div class="modal-body">
+		<div id='instructions'>
+			<!-- forcing separate lines on these instructions-->
+			<p>Select a Day</p>
+		</div>
+		<!-- web examples show adding ng-controller="thisLinkCtrl", but that kills the ok,cancel button action -->
+		<div>
+			Days:
+			<select ng-model="form.summary" ng-options="o as (o | byDayFormat) for o in form.summaries"></select>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" ng-click="controller.cancel()">Cancel</button>
+		<button class="btn btn-primary" ng-click="controller.ok()">Show</button>
+	</div>
+</form>

@@ -27,7 +27,7 @@ codeshelf.defaultWorkInstructionColumns = [
  'uomMasterId'
 ];
 
-codeshelf.workinstructionsByCheAndAssignedTimestamp = function(websession, facility, inChe, assignedTimestamp) {
+codeshelf.workinstructionByCheAndAssignedTimestamp = function(websession, facility, inChe, assignedTimestamp) {
 	var viewNameSuffix = "for " + inChe['domainId'] + " and time: " + codeshelf.conciseDateTimeFormat(assignedTimestamp);
 	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'assignedCheName', 'groupAndSortCode');
 
@@ -43,12 +43,28 @@ codeshelf.workinstructionsByCheAndAssignedTimestamp = function(websession, facil
 
 };
 
-codeshelf.workinstructionsByCheAndDay = function(websession, facility, inChe) {
-	var viewNameSuffix = "for " + inChe['domainId'];
+codeshelf.workinstructionByCheAndDay = function(websession, facility, inChe, assignedTimestamp) {
+	var viewNameSuffix = "for " + inChe['domainId'] + " and day: " + codeshelf.conciseDateFormat(assignedTimestamp);
 	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'assignedCheName', 'groupAndSortCode');
 
 	// all work instructions for this che, and the given assigned time but only active orders. (Not checking active details)
 	var workInstructionFilter = "workInstructionByCheAndDay";
+
+	var workInstructionFilterParams = [
+		{ 'name': 'cheId', 'value': inChe['persistentId']},
+		{ 'name': 'assignedTimestamp', 'value': assignedTimestamp, 'type': 'java.sql.Timestamp'}
+	];
+
+	return codeshelf.workinstructionlistview(websession, facility, viewNameSuffix, defaultColumns, workInstructionFilter, workInstructionFilterParams);
+
+};
+
+codeshelf.workinstructionByCheAll = function(websession, facility, inChe) {
+	var viewNameSuffix = "for " + inChe['domainId'];
+	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'assignedCheName', 'groupAndSortCode');
+
+	// all work instructions for this che, and the given assigned time but only active orders. (Not checking active details)
+	var workInstructionFilter = "workInstructionByCheAll";
 
 	var workInstructionFilterParams = [
 		{ 'name': 'cheId', 'value': inChe['persistentId']}

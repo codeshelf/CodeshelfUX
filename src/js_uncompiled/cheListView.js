@@ -89,12 +89,12 @@ codeshelf.cheslistview = function(websession, facility) {
 			}
 		},
 
-		// need to modify this a little. Add timestamp or some sort of day parameter to pass through to the filter and the title
+		// This is the ALL work instructions for CHE item
 		cheWorkInstructions: function(che) {
 			if (che === null)
 				return;
 			if (che) {
-				var wiListView = codeshelf.workinstructionsByCheAndDay(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che);
+				var wiListView = codeshelf.workinstructionByCheAll(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che);
 				var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				wiListWindow.open();
 			}
@@ -125,7 +125,16 @@ codeshelf.cheslistview = function(websession, facility) {
 			};
 			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/wisummary-che.html", "CheWiSummaryController as controller", data);
 			return promise;
+		},
+		showWisForDay: function(che, summaries) {
+			var data = {
+				"che": che,
+				"summaries": summaries
+			};
+			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/wibyday-che.html", "CheWiByDayController as controller", data);
+			return promise;
 		}
+
 	};
 
 	var contextDefs = [
@@ -133,10 +142,20 @@ codeshelf.cheslistview = function(websession, facility) {
 			"label": "Work Instructions (CHE runs)",
 			"permission": "workinstructions:view",
 			"action": function(che) {
-					websession_.callServiceMethod("WorkService", "workSummary", [che ['persistentId'], facility_ ['persistentId']])
-						.then(function(summaries) {
-							return self.showPreviousCartRun(che, summaries);
-						});
+				websession_.callServiceMethod("WorkService", "workAssignedSummary", [che ['persistentId'], facility_ ['persistentId']])
+					.then(function(summaries) {
+						return self.showPreviousCartRun(che, summaries);
+					});
+			}
+		},
+		{
+			"label": "Work Instructions (by day)",
+			"permission": "workinstructions:view",
+			"action": function(che) {
+				websession_.callServiceMethod("WorkService", "workCompletedSummary", [che ['persistentId'], facility_ ['persistentId']])
+					.then(function(summaries) {
+						return self.showWisForDay(che, summaries);
+					});
 			}
 		},
 		{   // Change to a model similar to CHE runs. Initially a simple filter of all WI for the CHE
@@ -214,6 +233,12 @@ codeshelfApp.filter("currentOrDate", function() {
 	};
 });
 
+codeshelfApp.filter("byDateFormat", function() {
+	return function(summary) {
+		return codeshelf.conciseDateFormat(summary['assignedTime']);
+	};
+});
+
 /**
  *  @param {!angular.Scope} $scope
  *  @param  $modalInstance
@@ -264,12 +289,44 @@ goog.inherits(codeshelfApp.CheWiSummaryController, codeshelfApp.AbstractCheContr
 codeshelfApp.CheWiSummaryController.prototype.ok = function(){
 	var che = this.scope_['che'];
 	var summary = this.scope_['form']['summary'];
-	var wiListView = codeshelf.workinstructionsByCheAndAssignedTimestamp(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che, summary['assignedTime']);
+	var wiListView = codeshelf.workinstructionByCheAndAssignedTimestamp(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che, summary['assignedTime']);
 	var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 	wiListWindow.open();
 	this.close();
 };
-	angular.module('codeshelfApp').controller('CheWiSummaryController', ['$scope', '$modalInstance',  'websession','data', codeshelfApp.CheWiSummaryController]);
+angular.module('codeshelfApp').controller('CheWiSummaryController', ['$scope', '$modalInstance',  'websession','data', codeshelfApp.CheWiSummaryController]);
+
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ *  @extends {codeshelfApp.AbstractCheController}
+ */
+codeshelfApp.CheWiByDayController = function($scope, $modalInstance, websession, data){
+	goog.base(this, $scope, $modalInstance, websession, data);
+	$scope['form'] = {
+		"summaries" : data['summaries'],
+		"summary" : data['summaries'][0]
+	};
+};
+goog.inherits(codeshelfApp.CheWiByDayController, codeshelfApp.AbstractCheController);
+
+/**
+ * @export
+ */
+codeshelfApp.CheWiByDayController.prototype.ok = function(){
+	var che = this.scope_['che'];
+	var summary = this.scope_['form']['summary'];
+	var wiListView = codeshelf.workinstructionByCheAndDay(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che, summary['assignedTime']);
+	var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+	wiListWindow.open();
+	this.close();
+};
+angular.module('codeshelfApp').controller('CheWiByDayController', ['$scope', '$modalInstance',  'websession','data', codeshelfApp.CheWiByDayController]);
+
 
 /**
  *  @param {!angular.Scope} $scope
