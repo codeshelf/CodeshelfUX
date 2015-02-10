@@ -18,18 +18,41 @@ goog.require('goog.string');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-codeshelf.defaultWorkInstructionColumns = [
- 'description',
- 'containerId',
- 'pickInstructionUi',
- 'status',
- 'planQuantity',
- 'uomMasterId'
+codeshelf.defaultWiColumnsWithSort = [
+	'groupAndSortCode',
+	'description',
+	'containerId',
+	'pickInstructionUi',
+	'status',
+	'planQuantity',
+	'uomMasterId'
+];
+codeshelf.defaultWiColumnsNoSort = [
+	'completed',
+	'description',
+	'containerId',
+	'pickInstructionUi',
+	'status',
+	'planQuantity',
+	'uomMasterId'
 ];
 
+
+/*
+7 variations of work instruction list view. How many default formats do we want?
+Sort is very relevant for CHE run. Not so much otherwise.
+Complete time is usually relevant.
+Is CHE needed? Might be in the views that do not come from CHE list.
+
+See getViewSubType() below. "1" corresponds to defaultWiColumnsWithSort, and "2" to defaultWiColumnsNoSort.
+It would be ok for different cookie types to share a common default, but for now they match up.
+*/
+
+
+// This is the main CHE run history
 codeshelf.workinstructionByCheAndAssignedTimestamp = function(websession, facility, inChe, assignedTimestamp) {
 	var viewNameSuffix = "for " + inChe['domainId'] + " and time: " + codeshelf.conciseDateTimeFormat(assignedTimestamp);
-	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'assignedCheName', 'groupAndSortCode');
+	var defaultColumns  = goog.array.concat(codeshelf.defaultWiColumnsWithSort, 'assignedCheName', 'groupAndSortCode');
 
 	// all work instructions for this che, and the given assigned time but only active orders. (Not checking active details)
 	var workInstructionFilter = "workInstructionByCheAndAssignedTime";
@@ -44,8 +67,8 @@ codeshelf.workinstructionByCheAndAssignedTimestamp = function(websession, facili
 };
 
 codeshelf.workinstructionByCheAndDay = function(websession, facility, inChe, assignedTimestamp) {
-	var viewNameSuffix = "for " + inChe['domainId'] + " and day: " + codeshelf.conciseDateFormat(assignedTimestamp);
-	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'assignedCheName', 'groupAndSortCode');
+	var viewNameSuffix = "for " + inChe['domainId'] + " on: " + codeshelf.conciseDateFormat(assignedTimestamp);
+	var defaultColumns  = goog.array.concat(codeshelf.defaultWiColumnsNoSort, 'assignedCheName', 'groupAndSortCode');
 
 	// all work instructions for this che, and the given assigned time but only active orders. (Not checking active details)
 	var workInstructionFilter = "workInstructionByCheAndDay";
@@ -61,7 +84,7 @@ codeshelf.workinstructionByCheAndDay = function(websession, facility, inChe, ass
 
 codeshelf.workinstructionByCheAll = function(websession, facility, inChe) {
 	var viewNameSuffix = "for " + inChe['domainId'];
-	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'assignedCheName', 'groupAndSortCode');
+	var defaultColumns  = goog.array.concat(codeshelf.defaultWiColumnsNoSort, 'assignedCheName', 'groupAndSortCode');
 
 	// all work instructions for this che, and the given assigned time but only active orders. (Not checking active details)
 	var workInstructionFilter = "workInstructionByCheAll";
@@ -77,7 +100,7 @@ codeshelf.workinstructionByCheAll = function(websession, facility, inChe) {
 
 codeshelf.workinstructionsByItemMaster = function(websession, facility, inItemMasterId) {
 	var viewNameSuffix = "for item";
-	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'groupAndSortCode', 'completeTimeForUi');
+	var defaultColumns  = goog.array.concat(codeshelf.defaultWiColumnsNoSort, 'groupAndSortCode', 'completeTimeForUi');
 
 	// all work instructions for this item, including complete.
 	var workInstructionFilter = "workInstructionBySku";
@@ -91,7 +114,7 @@ codeshelf.workinstructionsByItemMaster = function(websession, facility, inItemMa
 
 codeshelf.workinstructionsByOrderDetail = function(websession, facility, inDetailPersistentId) {
 	var viewNameSuffix = "for Order Detail";
-	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'groupAndSortCode', 'completeTimeForUi');
+	var defaultColumns  = goog.array.concat(codeshelf.defaultWiColumnsNoSort, 'groupAndSortCode', 'completeTimeForUi');
 
 	// all work instructions for this item, including complete.
 	var workInstructionFilter = "workInstructionsByDetail";
@@ -105,7 +128,7 @@ codeshelf.workinstructionsByOrderDetail = function(websession, facility, inDetai
 
 codeshelf.workinstructionsByOrderHeader = function(websession, facility, inHeaderPersistentId) {
 	var viewNameSuffix = "for Order";
-	var defaultColumns  = goog.array.concat(codeshelf.defaultWorkInstructionColumns, 'groupAndSortCode', 'completeTimeForUi');
+	var defaultColumns  = goog.array.concat(codeshelf.defaultWiColumnsNoSort, 'groupAndSortCode', 'completeTimeForUi');
 
 	// all work instructions for this item, including complete.
 	var workInstructionFilter = "workInstructionsByHeader";
@@ -127,7 +150,7 @@ codeshelf.workinstructionsAll = function(websession, facility) {
 	var workInstructionFilterParams = [
 		{ 'name': 'facilityId', 'value': facility['persistentId']}
 	];
-	return codeshelf.workinstructionlistview(websession, facility, "", codeshelf.defaultWorkInstructionColumns, workInstructionFilter, workInstructionFilterParams);
+	return codeshelf.workinstructionlistview(websession, facility, "", codeshelf.defaultWiColumnsNoSort, workInstructionFilter, workInstructionFilterParams);
 };
 
 /**
@@ -140,6 +163,14 @@ codeshelf.workinstructionlistview = function(websession, facility, viewNameSuffi
 
 	var websession_ = websession;
 	var facility_ = facility; // not used here, but the ancestor view wants facility in the constructor
+
+	// kludgy. 7 kinds of work instructions views. Primarily distiguishable by the viewNameSuffix. How many different cookies for the 7 views?
+	function getViewSubType() {
+		if (viewNameSuffix.indexOf("and time: ") > -1 )
+			return "1";
+		else
+			return "2";
+	};
 
 	var self = {
 
@@ -154,7 +185,7 @@ codeshelf.workinstructionlistview = function(websession, facility, viewNameSuffi
 		},
 
 		'getViewTypeName': function() {
-			var returnStr = "Work Instructions";
+			var returnStr = "Work Instructions" + getViewSubType();
 			return returnStr;
 		},
 
