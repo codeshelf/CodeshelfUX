@@ -36,11 +36,19 @@ var DoughnutSummary = React.createClass({
     render: function() {
         var summaryData  = this.props.summaryData;
         var totalLabel = pluralize(total, this.props.totalLabelSingular, this.props.totalLabel);
-        var chartData = toChartData(segmentTemplates, summaryData);
         var total = sumByKeys(summaryData, ["released", "inprogress", "complete", "short"]);
-        var remaining = total - sumByKeys(summaryData, ["complete", "short"]);
-        return (<div>
+        if (total > 0) {
+           return this.renderSummaryChart(summaryData, total, totalLabel);
+        } else {
+            return (<h1>{total} {totalLabel}</h1>);
 
+        }
+   },
+
+   renderSummaryChart : function(summaryData, total, totalLabel) {
+       var chartData = toChartData(segmentTemplates, summaryData);
+       var remaining = total - sumByKeys(summaryData, ["complete", "short"]);
+       return (<div>
                     {{/* The first div provides the proper box dimensions for the chart resize calculations */}}
                     <div style={{position: "relative", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                         <DoughnutChart chartData={chartData} />
