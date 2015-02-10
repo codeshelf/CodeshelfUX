@@ -37,7 +37,7 @@ codeshelf.loginWindow = function() {
 					websession_.setState(kWebsessionState.VALIDATED);
 					application_.setOrganization(command['organization']);
 					var user = command['user'];
-					var email = user['domainId'];
+					var email = user['username'];
 					var authz = new codeshelf.Authz();
 					if (email.indexOf('configure') == 0) {
 						authz.setPermissions(["*"]);
