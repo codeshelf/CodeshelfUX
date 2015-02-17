@@ -566,6 +566,11 @@ domainobjects = {
 				'title': 'Detail ID',
 				'width': 15
 			},
+			'shipperId': {
+				'id': 'shipperId',
+				'title': 'Shipper Id',
+				'width': 15
+			},
 			'willProduceWiUi':    {
 				'id':    'willProduceWiUi',
 				'title': 'OK',
@@ -698,11 +703,11 @@ domainobjects = {
 				'title': 'Container ID',
 				'width': 15
 			},
-			'shipmentId':   {
-				'id':    'shipmentId',
-				'title': 'Shipment ID',
+			'shipperId': {
+				'id': 'shipperId',
+				'title': 'Shipper Id',
 				'width': 15
-			},
+			},	
 			'customerId':   {
 				'id':    'customerId',
 				'title': 'Customer ID',
