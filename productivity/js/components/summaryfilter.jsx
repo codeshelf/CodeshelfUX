@@ -6,7 +6,7 @@ var SummaryFilter = React.createClass({
         var onChangeHandler = this.props.onChange;
             return (<div className="ibox-tools">
                 <a aria-expanded="false" className="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i className="fa fa-wrench"></i>
+                    <i className="fa fa-filter"></i>
                 </a>
                 <ul className="dropdown-menu dropdown-menu-right dropdown-user ">
                     {

@@ -41,6 +41,19 @@ Moment.prototype.format = function(format) {
 
 	};
 
+/**
+ * @return {string}
+ */
+Moment.prototype.toISOString = function() {
+
+};
+
+/**
+ * @return {Date}
+ */
+Moment.prototype.toDate = function() {
+
+};
 
 
 /**
