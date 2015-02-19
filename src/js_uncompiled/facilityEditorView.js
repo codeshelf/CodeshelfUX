@@ -569,6 +569,8 @@ codeshelf.facilityeditorview = function (websession, facility) {
 			return 'Facility Outline';
 		},
 
+        'getViewMenu' : null,
+
 		doSetupView: function () {
 
 			// Starting latlng is either the facility's origin point or the browser's current location (if we can get it).

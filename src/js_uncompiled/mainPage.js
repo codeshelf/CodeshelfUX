@@ -178,7 +178,7 @@ codeshelf.windowLauncher = (function() {
 				cheListWindow.open();
 			}
 			catch (err) {
-				alert(err);
+                console.log(err);
 			}
 		},
 

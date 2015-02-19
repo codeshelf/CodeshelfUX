@@ -63,6 +63,13 @@ codeshelf.cheslistview = function(websession, facility) {
 			return 'CHE List View';
 		},
 
+        'getViewMenu': function() {
+            return [
+                {"label": 'Export CSV', "action": function() {self.generateCSV();} }
+    //            ,{"label": 'Add CHE', "action": function() {alert("TODO Add Che");} }
+            ];
+        },
+
 		editChe:  function(che){
 			var data = {
 				'che': che
