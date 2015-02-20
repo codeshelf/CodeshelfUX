@@ -625,6 +625,11 @@ domainobjects = {
 				'id':    'groupUi',
 				'title': 'Order Group',
 				'width': 10
+			},
+			'workSequence': {
+				'id':    'workSequence',
+				'title': 'Work Seq',
+				'width': 15
 			}
 		}
 	},
