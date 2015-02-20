@@ -27,238 +27,251 @@ goog.require('goog.ui.tree.TreeControl');
  */
 codeshelf.cheslistview = function(websession, facility) {
 
-	var websession_ = websession;
-	var facility_ = facility; // defined above so it available to testOnlySetUpChe
+    var websession_ = websession;
+    var facility_ = facility; // defined above so it available to testOnlySetUpChe
 
-	function websocketCmdCallbackFacility() {
-		var callback = {
-			exec: function(command) {
-				/* appears to never be called
-				var theLogger = goog.debug.Logger.getLogger('aislesListView');
-				theLogger.info("callback exec called"); */
-			}
-		};
+    function websocketCmdCallbackFacility() {
+        var callback = {
+            exec: function(command) {
+                /* appears to never be called
+                var theLogger = goog.debug.Logger.getLogger('aislesListView');
+                theLogger.info("callback exec called"); */
+            }
+        };
 
-		return callback;
-	}
+        return callback;
+    }
 
-	var self = {
+    var self = {
 
-		// following psuedo-inheritance
-		'shouldAddThisColumn': function(inProperty){
-			// only fields in domainObjects for aisle will be asked for. We want to exclude persistent Id
-			if (inProperty['id'] ===  'domainId')
-				return true;
-			else if (inProperty['id'] ===  'activeContainers')
-				return true;
-			else if (inProperty['id'] ===  'color')
-				return true;
-			else if (inProperty['id'] ===  'deviceGuidStr')
-				return true;
-			else
-				return false;
-		},
+        // following psuedo-inheritance
+        'shouldAddThisColumn': function(inProperty){
+            // only fields in domainObjects for aisle will be asked for. We want to exclude persistent Id
+            if (inProperty['id'] ===  'domainId')
+                return true;
+            else if (inProperty['id'] ===  'activeContainers')
+                return true;
+            else if (inProperty['id'] ===  'color')
+                return true;
+            else if (inProperty['id'] ===  'deviceGuidStr')
+                return true;
+            else
+                return false;
+        },
 
-		'getViewName': function() {
-			return 'CHE List View';
-		},
+        'getViewName': function() {
+            return 'CHE List View';
+        },
 
         'getViewMenu': function() {
             return [
                 {"label": 'Export CSV', "action": function() {self.generateCSV();} }
-                ,{"label": 'Add CHE', "action": function() {self.addChe({});} }
+                ,{"label": 'Add CHE', "action": function() {self.addChe({});}, "permission": "che: edit" }
             ];
         },
-		addChe:  function(){
-			var data = {
-				'che': {},
+        addChe:  function(){
+            var data = {
+                'che': {},
                 'facility':facility,
                 'mode': "add"
-			};
+            };
 
-			// See codeshelfApp.CheController defined below. And then referenced in angular.module
-			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-che.html", "CheNgController as controller", data);
+            // See codeshelfApp.CheController defined below. And then referenced in angular.module
+            var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-che.html", "CheNgController as controller", data);
 
-			promise.result.then(function(){
+            promise.result.then(function(){
 
-			});
-		},
+            });
+        },
 
-		editChe:  function(che){
-			var data = {
-				'che': che,
+        editChe:  function(che){
+            var data = {
+                'che': che,
                 'mode': "edit"
-			};
+            };
 
-			var theLogger = goog.debug.Logger.getLogger('CHE view');
-			theLogger.info("about to call dialog for selected CHE: " + che['domainId']);
+            var theLogger = goog.debug.Logger.getLogger('CHE view');
+            theLogger.info("about to call dialog for selected CHE: " + che['domainId']);
 
 
-			// See codeshelfApp.CheController defined below. And then referenced in angular.module
-			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-che.html", "CheNgController as controller", data);
+            // See codeshelfApp.CheController defined below. And then referenced in angular.module
+            var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-che.html", "CheNgController as controller", data);
 
-			promise.result.then(function(){
+            promise.result.then(function(){
 
-			});
-		},
-		cheContainers: function(che) {
-			if (che === null)
-				return;
-			if (che) {
-				var useListView = codeshelf.containeruselistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che);
-				var useListWindow = codeshelf.window(useListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
-				useListWindow.open();
-			}
-		},
+            });
+        },
 
-		// This is the ALL work instructions for CHE item
-		cheWorkInstructions: function(che) {
-			if (che === null)
-				return;
-			if (che) {
-				var wiListView = codeshelf.workinstructionByCheAll(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che);
-				var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
-				wiListWindow.open();
-			}
-		},
+       deleteChe: function(che) {
+           codeshelf.simpleDlogService.showModalDialog("Confirm", "Delete the che?", {})
+               .then(function() {
+                   websession_.remove(che);
+               });
+       },
 
-		testOnlySetUpChe: function(che) {
-			if (che === null)
-				return;
+       cheContainers: function(che) {
+            if (che === null)
+                return;
+            if (che) {
+                var useListView = codeshelf.containeruselistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che);
+                var useListWindow = codeshelf.window(useListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+                useListWindow.open();
+            }
+        },
 
-			var data = {
-				'che': che
-			};
+        // This is the ALL work instructions for CHE item
+        cheWorkInstructions: function(che) {
+            if (che === null)
+                return;
+            if (che) {
+                var wiListView = codeshelf.workinstructionByCheAll(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che);
+                var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+                wiListWindow.open();
+            }
+        },
 
-			var cheDomainId = che['domainId'];
-			var theLogger = goog.debug.Logger.getLogger('CHE view');
-			theLogger.info("about do a fake GoodEggs setup for CHE: " + cheDomainId);
+        testOnlySetUpChe: function(che) {
+            if (che === null)
+                return;
 
-			// See codeshelfApp.CheController defined below. And then referenced in angular.module
-			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/setup-che.html", "SetupCheNgController as controller", data);
+            var data = {
+                'che': che
+            };
 
-			promise.result.then(function(){
-			});
-		},
-		showPreviousCartRun: function(che, summaries) {
-			var data = {
-				"che": che,
-				"summaries": summaries
-			};
-			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/wisummary-che.html", "CheWiSummaryController as controller", data);
-			return promise;
-		},
-		showWisForDay: function(che, summaries) {
-			var data = {
-				"che": che,
-				"summaries": summaries
-			};
-			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/wibyday-che.html", "CheWiByDayController as controller", data);
-			return promise;
-		}
+            var cheDomainId = che['domainId'];
+            var theLogger = goog.debug.Logger.getLogger('CHE view');
+            theLogger.info("about do a fake GoodEggs setup for CHE: " + cheDomainId);
 
-	};
+            // See codeshelfApp.CheController defined below. And then referenced in angular.module
+            var promise = codeshelf.simpleDlogService.showCustomDialog("partials/setup-che.html", "SetupCheNgController as controller", data);
 
-	var contextDefs = [
-		{
-			"label": "Work Instructions (CHE runs)",
-			"permission": "workinstructions:view",
-			"action": function(che) {
-				websession_.callServiceMethod("WorkService", "workAssignedSummary", [che ['persistentId'], facility_ ['persistentId']])
-					.then(function(summaries) {
-						return self.showPreviousCartRun(che, summaries);
-					});
-			}
-		},
-		{
-			"label": "Work Instructions (by day)",
-			"permission": "workinstructions:view",
-			"action": function(che) {
-				websession_.callServiceMethod("WorkService", "workCompletedSummary", [che ['persistentId'], facility_ ['persistentId']])
-					.then(function(summaries) {
-						return self.showWisForDay(che, summaries);
-					});
-			}
-		},
-		{   // Change to a model similar to CHE runs. Initially a simple filter of all WI for the CHE
-			// Rename the label "Work Instruction (by day)"
-			"label": "Work Instructions (all)",
-			"permission": "workinstructions:view",
-			"action": function(che) {
-				self.cheWorkInstructions(che);
-			}
-		},
-		{
-			"label": "Containers",
-			"permission": "containers:view",
-			"action": function(che) {
-				self.cheContainers(che);
-			}
-		},
-		{
-			"label": "Edit CHE",
-			"permission": "che:edit",
-			"action": function(che) {
-				self.editChe(che);
-			}
-		},
-		{
-			"label": "TESTING ONLY--Simulate cart set up",
-			"permission": "che:simulate",
-			"action": function(che) {
-				self.testOnlySetUpChe(che);
-			}
-		}
+            promise.result.then(function(){
+            });
+        },
+        showPreviousCartRun: function(che, summaries) {
+            var data = {
+                "che": che,
+                "summaries": summaries
+            };
+            var promise = codeshelf.simpleDlogService.showCustomDialog("partials/wisummary-che.html", "CheWiSummaryController as controller", data);
+            return promise;
+        },
+        showWisForDay: function(che, summaries) {
+            var data = {
+                "che": che,
+                "summaries": summaries
+            };
+            var promise = codeshelf.simpleDlogService.showCustomDialog("partials/wibyday-che.html", "CheWiByDayController as controller", data);
+            return promise;
+        }
 
-	];
+    };
 
-	// che parent is codeshelf_network, whose parent is the facility
-	var cheFilter = 'cheByFacility';
+    var contextDefs = [
+        {
+            "label": "Work Instructions (CHE runs)",
+            "permission": "workinstructions:view",
+            "action": function(che) {
+                websession_.callServiceMethod("WorkService", "workAssignedSummary", [che ['persistentId'], facility_ ['persistentId']])
+                    .then(function(summaries) {
+                        return self.showPreviousCartRun(che, summaries);
+                    });
+            }
+        },
+        {
+            "label": "Work Instructions (by day)",
+            "permission": "workinstructions:view",
+            "action": function(che) {
+                websession_.callServiceMethod("WorkService", "workCompletedSummary", [che ['persistentId'], facility_ ['persistentId']])
+                    .then(function(summaries) {
+                        return self.showWisForDay(che, summaries);
+                    });
+            }
+        },
+        {   // Change to a model similar to CHE runs. Initially a simple filter of all WI for the CHE
+            // Rename the label "Work Instruction (by day)"
+            "label": "Work Instructions (all)",
+            "permission": "workinstructions:view",
+            "action": function(che) {
+                self.cheWorkInstructions(che);
+            }
+        },
+        {
+            "label": "Containers",
+            "permission": "containers:view",
+            "action": function(che) {
+                self.cheContainers(che);
+            }
+        },
+        {
+            "label": "Edit CHE",
+            "permission": "che:edit",
+            "action": function(che) {
+                self.editChe(che);
+            }
+        },
+        {
+            "label": "Delete CHE",
+            "permission": "che:edit",
+            "action": self.deleteChe
+        },
+        {
+            "label": "TESTING ONLY--Simulate cart set up",
+            "permission": "che:simulate",
+            "action": function(che) {
+                self.testOnlySetUpChe(che);
+            }
+        }
 
-	var cheFilterParams = [
-		{ 'name': 'facilityId', 'value': facility_['persistentId']}
-	];
+    ];
 
-	var hierarchyMap = [];
-	hierarchyMap[0] = { "className": domainobjects['Che']['className'],
-						"linkProperty": 'parent',
-						"filter" : cheFilter,
-						"filterParams" : cheFilterParams,
-						"properties": domainobjects['Che']['properties'],
-						"contextMenuDefs": contextDefs};
+    // che parent is codeshelf_network, whose parent is the facility
+    var cheFilter = 'cheByFacility';
 
-	var viewOptions = {
-		'editable':  true,
-		// -1 for non-dragable. Single level view with normal sort rules
-		'draggableHierarchyLevel': -1
-	};
+    var cheFilterParams = [
+        { 'name': 'facilityId', 'value': facility_['persistentId']}
+    ];
 
-	var view = codeshelf.hierarchylistview(websession_, domainobjects['Che'], hierarchyMap, viewOptions);
-	jQuery.extend(view, self);
-	self = view;
-	return view;
+    var hierarchyMap = [];
+    hierarchyMap[0] = { "className": domainobjects['Che']['className'],
+                        "linkProperty": 'parent',
+                        "filter" : cheFilter,
+                        "filterParams" : cheFilterParams,
+                        "properties": domainobjects['Che']['properties'],
+                        "contextMenuDefs": contextDefs};
+
+    var viewOptions = {
+        'editable':  true,
+        // -1 for non-dragable. Single level view with normal sort rules
+        'draggableHierarchyLevel': -1
+    };
+
+    var view = codeshelf.hierarchylistview(websession_, domainobjects['Che'], hierarchyMap, viewOptions);
+    jQuery.extend(view, self);
+    self = view;
+    return view;
 };
 
 // check not-null, and not empty. Does not check for only white space.
 function isEmptyString(str) {
-	return (!str || 0 === str.length);
+    return (!str || 0 === str.length);
 }
 
 codeshelfApp.filter("currentOrDate", function() {
-	return function(summary) {
-		if (summary['active']) {
-			return "Current";
-		}
-		else {
-			return codeshelf.conciseDateTimeFormat(summary['assignedTime']);
-		}
-	};
+    return function(summary) {
+        if (summary['active']) {
+            return "Current";
+        }
+        else {
+            return codeshelf.conciseDateTimeFormat(summary['assignedTime']);
+        }
+    };
 });
 
 codeshelfApp.filter("byDayFormat", function() {
-	return function(summary) {
-		return codeshelf.conciseDateFormat(summary['assignedTime']);
-	};
+    return function(summary) {
+        return codeshelf.conciseDateFormat(summary['assignedTime']);
+    };
 });
 
 /**
@@ -270,21 +283,21 @@ codeshelfApp.filter("byDayFormat", function() {
  *  @export
  */
 codeshelfApp.AbstractCheController = function($scope, $modalInstance, websession, data) {
-	this.scope_ = $scope;
-	this.modalInstance_ = $modalInstance;
-	this.websession_ = websession;
-	$scope['che'] = data['che'];
+    this.scope_ = $scope;
+    this.modalInstance_ = $modalInstance;
+    this.websession_ = websession;
+    $scope['che'] = data['che'];
 };
 
 /**
  * @export
  */
 codeshelfApp.AbstractCheController.prototype.cancel = function(){
-	this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
+    this.modalInstance_['dismiss'](); //not sure why this minifies but close() does not
 };
 
 codeshelfApp.AbstractCheController.prototype.close = function(){
-	this.modalInstance_.close();
+    this.modalInstance_.close();
 }
 
 
@@ -297,11 +310,11 @@ codeshelfApp.AbstractCheController.prototype.close = function(){
  *  @extends {codeshelfApp.AbstractCheController}
  */
 codeshelfApp.CheWiSummaryController = function($scope, $modalInstance, websession, data){
-	goog.base(this, $scope, $modalInstance, websession, data);
-	$scope['form'] = {
-		"summaries" : data['summaries'],
-		"summary" : data['summaries'][0]
-	};
+    goog.base(this, $scope, $modalInstance, websession, data);
+    $scope['form'] = {
+        "summaries" : data['summaries'],
+        "summary" : data['summaries'][0]
+    };
 };
 goog.inherits(codeshelfApp.CheWiSummaryController, codeshelfApp.AbstractCheController);
 
@@ -309,12 +322,12 @@ goog.inherits(codeshelfApp.CheWiSummaryController, codeshelfApp.AbstractCheContr
  * @export
  */
 codeshelfApp.CheWiSummaryController.prototype.ok = function(){
-	var che = this.scope_['che'];
-	var summary = this.scope_['form']['summary'];
-	var wiListView = codeshelf.workinstructionByCheAndAssignedTimestamp(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che, summary['assignedTime']);
-	var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
-	wiListWindow.open();
-	this.close();
+    var che = this.scope_['che'];
+    var summary = this.scope_['form']['summary'];
+    var wiListView = codeshelf.workinstructionByCheAndAssignedTimestamp(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che, summary['assignedTime']);
+    var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+    wiListWindow.open();
+    this.close();
 };
 angular.module('codeshelfApp').controller('CheWiSummaryController', ['$scope', '$modalInstance',  'websession','data', codeshelfApp.CheWiSummaryController]);
 
@@ -328,11 +341,11 @@ angular.module('codeshelfApp').controller('CheWiSummaryController', ['$scope', '
  *  @extends {codeshelfApp.AbstractCheController}
  */
 codeshelfApp.CheWiByDayController = function($scope, $modalInstance, websession, data){
-	goog.base(this, $scope, $modalInstance, websession, data);
-	$scope['form'] = {
-		"summaries" : data['summaries'],
-		"summary" : data['summaries'][0]
-	};
+    goog.base(this, $scope, $modalInstance, websession, data);
+    $scope['form'] = {
+        "summaries" : data['summaries'],
+        "summary" : data['summaries'][0]
+    };
 };
 goog.inherits(codeshelfApp.CheWiByDayController, codeshelfApp.AbstractCheController);
 
@@ -340,12 +353,12 @@ goog.inherits(codeshelfApp.CheWiByDayController, codeshelfApp.AbstractCheControl
  * @export
  */
 codeshelfApp.CheWiByDayController.prototype.ok = function(){
-	var che = this.scope_['che'];
-	var summary = this.scope_['form']['summary'];
-	var wiListView = codeshelf.workinstructionByCheAndDay(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che, summary['assignedTime']);
-	var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
-	wiListWindow.open();
-	this.close();
+    var che = this.scope_['che'];
+    var summary = this.scope_['form']['summary'];
+    var wiListView = codeshelf.workinstructionByCheAndDay(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), che, summary['assignedTime']);
+    var wiListWindow = codeshelf.window(wiListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+    wiListWindow.open();
+    this.close();
 };
 angular.module('codeshelfApp').controller('CheWiByDayController', ['$scope', '$modalInstance',  'websession','data', codeshelfApp.CheWiByDayController]);
 
@@ -359,26 +372,26 @@ angular.module('codeshelfApp').controller('CheWiByDayController', ['$scope', '$m
  *  @extends {codeshelfApp.AbstractCheController}
  */
 codeshelfApp.CheNgController = function($scope, $modalInstance, websession, data){
-	goog.base(this, $scope, $modalInstance, websession, data);
+    goog.base(this, $scope, $modalInstance, websession, data);
     $scope['mode'] = data["mode"];
     $scope['facility'] = data['facility'];
-	// tweaking separate fields
-	// first has html/angular scope matching js field.
-	$scope['che']['description'] = data['che']['description'];
-	$scope['che']['color'] = data['che']['color'];
-	// second could match. Just being different to practice for when we have to be different
-	$scope['che']['domainid'] = data['che']['domainId'];
-	$scope['che']['cntrlrid'] = data['che']['deviceGuidStr'];
-	//Set Process Mode
-	var processMode = data['che']['processMode'];
-	$scope['che']['processMode'] = (processMode == undefined)?"LINE_SCAN" : processMode;
-	if (processMode == undefined) {
-	    var methodArgs = [data['che']['persistentId']];
-	    websession.callServiceMethod("UiUpdateService", 'getDefaultProcessMode', methodArgs)
-	        .then(function(response) {
-	            $scope['che']['processMode'] = response;
-	            $scope.$apply();
-	        });
+    // tweaking separate fields
+    // first has html/angular scope matching js field.
+    $scope['che']['description'] = data['che']['description'];
+    $scope['che']['color'] = data['che']['color'];
+    // second could match. Just being different to practice for when we have to be different
+    $scope['che']['domainid'] = data['che']['domainId'];
+    $scope['che']['cntrlrid'] = data['che']['deviceGuidStr'];
+    //Set Process Mode
+    var processMode = data['che']['processMode'];
+    $scope['che']['processMode'] = (processMode == undefined)?"LINE_SCAN" : processMode;
+    if (processMode == undefined) {
+        var methodArgs = [data['che']['persistentId']];
+        websession.callServiceMethod("UiUpdateService", 'getDefaultProcessMode', methodArgs)
+            .then(function(response) {
+                $scope['che']['processMode'] = response;
+                $scope.$apply();
+            });
     }
 };
 goog.inherits(codeshelfApp.CheNgController, codeshelfApp.AbstractCheController);
@@ -388,13 +401,13 @@ goog.inherits(codeshelfApp.CheNgController, codeshelfApp.AbstractCheController);
  * @export
  */
 codeshelfApp.CheNgController.prototype.edit = function(){
-	var che = this.scope_['che'];
-	var methodArgs = [che["persistentId"], che["domainid"], che["description"], che["color"], che["cntrlrid"], che["processMode"]];
-	var self = this;
-	this.websession_.callServiceMethod("UiUpdateService", 'updateChe', methodArgs)
-		.then(function(response) {
-			self.close();
-		}, function(error) {
+    var che = this.scope_['che'];
+    var methodArgs = [che["persistentId"], che["domainid"], che["description"], che["color"], che["cntrlrid"], che["processMode"]];
+    var self = this;
+    this.websession_.callServiceMethod("UiUpdateService", 'updateChe', methodArgs)
+        .then(function(response) {
+            self.close();
+        }, function(error) {
             console.error(error);
         });
 };
@@ -403,14 +416,14 @@ codeshelfApp.CheNgController.prototype.edit = function(){
  * @export
  */
 codeshelfApp.CheNgController.prototype.add = function(){
-	var che = this.scope_['che'];
+    var che = this.scope_['che'];
     var facilityPersistentId =  this.scope_['facility']['persistentId'];
-	var methodArgs = [ facilityPersistentId, che["domainid"], che["description"], che["color"], che["cntrlrid"], che["processMode"]];
-	var self = this;
-	this.websession_.callServiceMethod("UiUpdateService", 'addChe', methodArgs)
-		.then(function(response) { //onsuccess
-			self.close();
-		}, function(error) {
+    var methodArgs = [ facilityPersistentId, che["domainid"], che["description"], che["color"], che["cntrlrid"], che["processMode"]];
+    var self = this;
+    this.websession_.callServiceMethod("UiUpdateService", 'addChe', methodArgs)
+        .then(function(response) { //onsuccess
+            self.close();
+        }, function(error) {
             console.error(error);
         });
 };
@@ -431,8 +444,8 @@ angular.module('codeshelfApp').controller('CheNgController', ['$scope', '$modalI
  *  @extends {codeshelfApp.AbstractCheController}
  */
 codeshelfApp.SetupCheNgController = function($scope, $modalInstance, websession, data){
-	goog.base(this, $scope, $modalInstance, websession, data);
-	$scope['che']['containersOnChe'] = data['che']['containersOnChe'];
+    goog.base(this, $scope, $modalInstance, websession, data);
+    $scope['che']['containersOnChe'] = data['che']['containersOnChe'];
 };
 goog.inherits(codeshelfApp.SetupCheNgController, codeshelfApp.AbstractCheController);
 
@@ -441,16 +454,18 @@ goog.inherits(codeshelfApp.SetupCheNgController, codeshelfApp.AbstractCheControl
  * @export
  */
 codeshelfApp.SetupCheNgController.prototype.ok = function(){
-	var che = this.scope_['che'];
-	var containersProperty = "containersOnChe";
+    var che = this.scope_['che'];
+    var containersProperty = "containersOnChe";
 
-	if (!isEmptyString(che[containersProperty])) {
-		var dialog = this;
-		this.websession_.callServiceMethod('WorkService', 'fakeSetupUpContainersOnChe', [che['persistentId'],
+    if (!isEmptyString(che[containersProperty])) {
+        var dialog = this;
+        this.websession_.callServiceMethod('WorkService', 'fakeSetupUpContainersOnChe', [che['persistentId'],
                                                                                          che[containersProperty]]).
-			then(function() {
-				dialog.close();
-			});
-	}
+            then(function() {
+                dialog.close();
+            });
+    }
 };
 angular.module('codeshelfApp').controller('SetupCheNgController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.SetupCheNgController]);
+
+//  LocalWords:  deleteChe
