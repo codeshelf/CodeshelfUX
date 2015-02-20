@@ -369,7 +369,7 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 		for (var drawOrder in vertices_) {
 			if (vertices_[drawOrder]['persistentId'] === persistentId){
 				vertices_.splice(drawOrder, 1);
-				self.invalidate();		
+				self.invalidate();
 				break;
 			}
 		}
@@ -691,6 +691,8 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 		'getViewName': function () {
 			return 'Work Area Editor';
 		},
+
+        'getViewMenu': null,
 
 		doSetupView: function () {
 

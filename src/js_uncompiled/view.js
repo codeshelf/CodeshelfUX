@@ -183,6 +183,12 @@ codeshelf.view = function(options) {
 		parentWindow_ = inWindow;
 		},
 
+        getViewMenu: function() {
+            return [
+                {"label": 'Export CSV', "action": function() {self.generateCSV();} }
+
+            ];
+        },
 
 		setupView: function(mainPaneElement) {
 

@@ -66,6 +66,23 @@ codeshelf.window = function(view, parent, limits) {
 				label.innerHTML = "getViewName ???";
 
 			windowBar_ = goog.dom.query('.windowBar', windowElement_)[0];
+			if (view.hasOwnProperty('getViewMenu')) {
+                var getViewMenu = view_['getViewMenu'];
+                if (getViewMenu != null) {
+				    var menuItems  = getViewMenu();
+			        var menuElements = soy.renderAsElement(codeshelf.templates.windowmenu, {menuItems: menuItems});
+                    var dropdown = goog.dom.query('.windowButtons', windowBar_)[0];
+                    goog.dom.appendChild(dropdown, menuElements);
+                    for (var i = 0; i < menuItems.length; i++) {
+                        var id  = menuItems[i]["label"];
+                        var action = menuItems[i]["action"];
+                        var linkElement = goog.dom.query('[role="menuitem"][data-id="'+ id +'"]', menuElements)[0];
+                        goog.events.listen(linkElement, goog.events.EventType.CLICK, action);
+
+                    }
+                }
+			}
+
 			var windowResizer = goog.dom.query('.windowResizer', windowElement_)[0];
 
 			dragger_ = new goog.fx.Dragger(windowElement_, windowBar_, limits_);

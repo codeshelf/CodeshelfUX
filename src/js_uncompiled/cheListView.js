@@ -63,9 +63,31 @@ codeshelf.cheslistview = function(websession, facility) {
 			return 'CHE List View';
 		},
 
+        'getViewMenu': function() {
+            return [
+                {"label": 'Export CSV', "action": function() {self.generateCSV();} }
+                ,{"label": 'Add CHE', "action": function() {self.addChe({});} }
+            ];
+        },
+		addChe:  function(){
+			var data = {
+				'che': {},
+                'facility':facility,
+                'mode': "add"
+			};
+
+			// See codeshelfApp.CheController defined below. And then referenced in angular.module
+			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-che.html", "CheNgController as controller", data);
+
+			promise.result.then(function(){
+
+			});
+		},
+
 		editChe:  function(che){
 			var data = {
-				'che': che
+				'che': che,
+                'mode': "edit"
 			};
 
 			var theLogger = goog.debug.Logger.getLogger('CHE view');
@@ -338,7 +360,8 @@ angular.module('codeshelfApp').controller('CheWiByDayController', ['$scope', '$m
  */
 codeshelfApp.CheNgController = function($scope, $modalInstance, websession, data){
 	goog.base(this, $scope, $modalInstance, websession, data);
-
+    $scope['mode'] = data["mode"];
+    $scope['facility'] = data['facility'];
 	// tweaking separate fields
 	// first has html/angular scope matching js field.
 	$scope['che']['description'] = data['che']['description'];
@@ -364,15 +387,36 @@ goog.inherits(codeshelfApp.CheNgController, codeshelfApp.AbstractCheController);
 /**
  * @export
  */
-codeshelfApp.CheNgController.prototype.ok = function(){
+codeshelfApp.CheNgController.prototype.edit = function(){
 	var che = this.scope_['che'];
 	var methodArgs = [che["persistentId"], che["domainid"], che["description"], che["color"], che["cntrlrid"], che["processMode"]];
 	var self = this;
-	this.websession_.callServiceMethod("UiUpdateService", 'updateCheEdits', methodArgs)
+	this.websession_.callServiceMethod("UiUpdateService", 'updateChe', methodArgs)
 		.then(function(response) {
 			self.close();
-		});
+		}, function(error) {
+            console.error(error);
+        });
 };
+
+/**
+ * @export
+ */
+codeshelfApp.CheNgController.prototype.add = function(){
+	var che = this.scope_['che'];
+    var facilityPersistentId =  this.scope_['facility']['persistentId'];
+	var methodArgs = [ facilityPersistentId, che["domainid"], che["description"], che["color"], che["cntrlrid"], che["processMode"]];
+	var self = this;
+	this.websession_.callServiceMethod("UiUpdateService", 'addChe', methodArgs)
+		.then(function(response) { //onsuccess
+			self.close();
+		}, function(error) {
+            console.error(error);
+        });
+};
+
+
+
 angular.module('codeshelfApp').controller('CheNgController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.CheNgController]);
 
 

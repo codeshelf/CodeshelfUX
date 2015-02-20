@@ -65,10 +65,9 @@
 	<div class='windowBar'>
 
 		<label class='windowTitle'>Window</label>
-        <span class="text-right">
+        <span class="windowButtons">
               <!-- these are floated right so the order is reversed -->
 		      <button type="button" class="btn btn-xs close" id="closeme" title="Close"><span class="glyphicon glyphicon-remove"></span></button>
-              <button type="button" class="btn btn-xs export" title="Export CSV"><span class="glyphicon glyphicon-download-alt"></span ></button>
         </span>
 	</div>
 	<div class='windowContent'>
@@ -78,6 +77,24 @@
 		</div>
 	</div>
 </div>
+{/template}
+
+/**
+ * Template for the dropdown menu
+ * @param menuItems
+ */
+{template .windowmenu}
+              <div class="dropdown" style="float: right; display: inline; padding-right: 5px; padding-left: 5px;">
+                   <button class="btn btn-xs close dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >
+                       <span class="caret"></span>
+                   </button>
+<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+  {foreach $item in $menuItems}
+     <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-id="{$item.label}">{$item.label}</a></li>
+  {/foreach}
+</ul>
+              </div>
+
 {/template}
 
 /**
