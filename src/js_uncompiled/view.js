@@ -183,7 +183,7 @@ codeshelf.view = function(options) {
 		parentWindow_ = inWindow;
 		},
 
-        getViewMenu: function() {
+        "getViewMenu": function() {
             return [
                 {"label": 'Export CSV', "action": function() {self.generateCSV();} }
 
