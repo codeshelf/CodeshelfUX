@@ -408,6 +408,8 @@ codeshelfApp.CheNgController.prototype.edit = function(){
         .then(function(response) {
             self.close();
         }, function(error) {
+            self.scope_['cheForm'] = {"messages":[error["statusMessage"]]};
+            self.scope_.$apply();
             console.error(error);
         });
 };
@@ -424,6 +426,8 @@ codeshelfApp.CheNgController.prototype.add = function(){
         .then(function(response) { //onsuccess
             self.close();
         }, function(error) {
+            self.scope_['cheForm'] = {"messages":[error["statusMessage"]]};
+            self.scope_.$apply();
             console.error(error);
         });
 };

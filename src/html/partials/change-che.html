@@ -5,6 +5,7 @@
 		<h3>Change Che</h3>
 	</div>
 	<div class="modal-body">
+      <div class="alert alert-danger" ng-repeat="msg in cheForm.messages">{{msg}}</div>
 		<div id='instructions'>
 			<!-- forcing separate lines on these instructions-->
 			<p>Enter Che information.</p>
