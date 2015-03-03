@@ -507,6 +507,11 @@ domainobjects = {
 				'id': 'deviceGuidStr',
 				'title': 'Device GUID',
 				'width': 16
+			},
+			'deviceType': {
+				'id': 'deviceType',
+				'title': 'Device Type',
+				'width': 12
 			}
 		}
 	},

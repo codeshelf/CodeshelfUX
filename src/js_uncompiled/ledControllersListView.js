@@ -54,7 +54,7 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 		},
 
 		'getViewName': function() {
-			return 'LED Controllers List View';
+			return 'LED Controllers';
 		},
 
 		changeLedControllerId: function(item) {
@@ -63,12 +63,8 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 				'ledcontroller': ledcontroller
 			};
 
-			var theLogger = goog.debug.Logger.getLogger('Led controller view');
-			theLogger.info("change ID dialog for LED Controller: " + ledcontroller['domainId']);
-
-
 			// See codeshelfApp.LedNgController defined below. And then referenced in angular.module
-			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-led-id.html", "LedNgController as controller", data);
+			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-ledcontroller.html", "LedNgController as controller", data);
 
 			promise.result.then(function(){
 
@@ -78,7 +74,7 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 
 	var contextDefs = [
 		{
-			"label": "Change ID of LED Controller",
+			"label": "Edit LED Controller",
 			"permission": "ledcontroller:edit",
 			"action": function(itemContext) {
 				self.changeLedControllerId(itemContext);
@@ -123,6 +119,7 @@ codeshelfApp.LedNgController = function($scope, $modalInstance, websession, data
 	$scope['ledcontroller'] = data['ledcontroller'];
 
 	$scope['ledcontroller']['led_controller_id'] = data['ledcontroller']['deviceGuidStr'];
+	$scope['ledcontroller']['deviceType'] = data['ledcontroller']['deviceType'];
 
 };
 
@@ -139,14 +136,12 @@ codeshelfApp.LedNgController.prototype.ok = function(){
 		return (!str || 0 === str.length);
 	}
 
+	var methodArgs = [
+		{ 'name': 'inNewControllerId', 'value': ledcontroller[jsControllerProperty], 'classType': 'java.lang.String'},
+		{ 'name': 'inNewDeviceType', 'value': ledcontroller['deviceType'], 'classType': 'java.lang.String'}
+	];
 
-	if (!thisIsEmptyString(ledcontroller[jsControllerProperty])) {
-		var methodArgs = [
-			{ 'name': 'inNewControllerId', 'value': ledcontroller[jsControllerProperty], 'classType': 'java.lang.String'}
-		];
-
-		this.websession_.callMethod(ledcontroller, 'LedController', 'changeLedControllerId', methodArgs);
-	}
+	this.websession_.callMethod(ledcontroller, 'LedController', 'updateFromUI', methodArgs);
 
 	this.modalInstance_.close();
 };
