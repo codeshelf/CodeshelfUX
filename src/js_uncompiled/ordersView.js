@@ -73,6 +73,22 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 				return 'Cross Batch Orders';
 		},
 
+        'getViewMenu': function() {
+            return [
+                {"label": 'Export CSV', "action": function() {self.generateCSV();} }
+                ,{"label": 'Archive All Orders', "action": function() {self.archiveAllOrders(facility_);}, "permission": "order: edit" }
+            ];
+        },
+
+        archiveAllOrders: function(facility) {
+            var uuid = facility['persistentId'];
+            codeshelf.simpleDlogService.showModalDialog("Confirm", "Archive all orders,ordergroups and orderdetails?", {})
+                .then(function() {
+                    websession_.callServiceMethod("OrderService", "archiveAllOrders", [uuid]).then();
+                });
+
+
+        },
 		// following psuedo-inheritance pattern
 		'shouldAddThisColumn': function (inProperty) {
 			// exclude these fields. (Includ qty, UOM, container ID, order ID, SKU, Description.
