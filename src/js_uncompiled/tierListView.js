@@ -121,8 +121,8 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 
 			var data = {
 				"tier" : theTier,
-				"startIndex" : 1,
-				"reverse" : false
+				"poscon": {"startIndex" : 1,
+				           "reverse" : false}
 			};
 			var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/tier-set-poscons.html", "TierController as controller", data);
 			modalInstance.result.then(function(){
@@ -253,8 +253,7 @@ codeshelfApp.TierController = function($scope, $modalInstance, websession, data,
 	this.websession_ = websession;
 	$scope['tierAisleValue'] = data['tierAisleValue'];
 	$scope['tier'] = data['tier'];
-	$scope['startIndex'] = 1;
-	$scope['reverse'] = false;
+	$scope['poscon'] = data['poscon'];
 
 	var channelRange = [];
 	for (var i = 1; i <= 8; i++) {
@@ -303,9 +302,9 @@ codeshelfApp.TierController.prototype.setPoscons = function(){
 
 	var tier = this.scope_['tier'];
 	var tierName = tier['domainId'];
-	var startIndex = this.scope_['startIndex'];
-	var reverse = this.scope_['reverse'];
-		
+	var startIndex = this.scope_['poscon']['startIndex'];
+	var reverse = this.scope_['poscon']['reverse'];
+
 	var methodArgs = [
 		{ 'name': 'startIndex', 'value': startIndex, 'classType': 'int'},
 		{ 'name': 'reverse', 'value': reverse, 'classType': 'boolean'}
