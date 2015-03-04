@@ -42,6 +42,8 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 				return true;
 			else if (inProperty['id'] ===  'nominalLocationId')
 				return true;
+			else if (inProperty['id'] ===  'posconIndex')
+				return true;
 			else
 				return false;
 		},
@@ -60,7 +62,7 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 
 	var contextDefs = [
 		{
-			"label" : "Item Locations  For Slot",
+			"label" : "Item Locations For Slot",
 			"permission": "inventory:view",
 			"action": function(itemContext) {
 				codeshelf.windowLauncher.loadItemsListView(itemContext);

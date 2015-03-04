@@ -1,0 +1,35 @@
+<div class="modal-header">
+    <h3>Set Position Controllers</h3>
+</div>
+<div class="modal-body">
+     <div id='instructions' style="padding-bottom: 10px">
+         <!-- forcing separate lines on these instructions-->
+         <p>
+         Assign position controller IDs to all slots of tier {{tier.nominalLocationId}}.
+         Position Controller IDs start with specified <i>start index</i> and are increased by one.
+         If <i>reverse</i> is enabled, the order of the slots is reversed when assigning IDs.
+         </p>
+      </div>
+    <!-- web examples show adding ng-controller="thisLinkCtrl", but that kills the ok,cancel button action -->
+	<form class="form-horizontal" role="form" name="set_poscons">
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Start Index:</label>
+            <div class="col-sm-4">
+                <input type="text" class='form-control' ng-model="startIndex"/>
+            </div>
+            <div class="col-sm-4 control-label"></div>
+        </div>    
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Reverse Order:</label>
+            <div class="col-sm-4">
+            	<input type="checkbox" name="reverse" ng-model="reverse"/>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+	<button class="btn" ng-click="controller.cancel()">Cancel</button>
+	<button class="btn btn-primary" ng-click="controller.setPoscons()">Save</button>
+</div>

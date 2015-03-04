@@ -874,6 +874,11 @@ domainobjects = {
 				'title': 'Last LED',
 				'width': 10
 			},
+			'posconIndex': {
+				'id':    'posconIndex',
+				'title': 'Poscon',
+				'width': 8
+			},
 			'primaryAliasId': {
 				'id':    'primaryAliasId',
 				'title': 'Alias',

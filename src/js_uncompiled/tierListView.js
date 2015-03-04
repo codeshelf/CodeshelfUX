@@ -105,6 +105,31 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 			});
 		},
 
+		setPosconsForTier: function(tier, inAllTiers) {
+			var theLogger = goog.debug.Logger.getLogger('Tier view');
+			var theTier = tier;
+			if (theTier === null){
+				theLogger.info("null tier in context menu choice"); //why? saw this.
+			}
+			var tierName = theTier['domainId'];
+			theLogger.info("setting controller for selected Tier: " + tierName);
+
+			var tierAisleValue = "";
+			if (inAllTiers === true){
+				tierAisleValue = "aisle";
+			}
+
+			var data = {
+				"tier" : theTier,
+				"startIndex" : 1,
+				"reverse" : false
+			};
+			var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/tier-set-poscons.html", "TierController as controller", data);
+			modalInstance.result.then(function(){
+
+			});
+		},
+
 		setControllerForTierOnly: function(item) {
 			self.setControllerForTier(item, false);
 		},
@@ -158,6 +183,13 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 			}
 		},
 		{
+			"label" : "Set Poscons",
+			"permission": "slot:view",
+			"action": function(itemContext) {
+				self.setPosconsForTier(itemContext);
+			}
+		},
+		{
 			"label" : "Item Locations For Tier",
 			"permission": "inventory:view",
 			"action": function(itemContext) {
@@ -208,8 +240,6 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 	return view;
 };
 
-
-
 /**
  *  @param {!angular.Scope} $scope
  *  @param  $modalInstance
@@ -223,6 +253,8 @@ codeshelfApp.TierController = function($scope, $modalInstance, websession, data,
 	this.websession_ = websession;
 	$scope['tierAisleValue'] = data['tierAisleValue'];
 	$scope['tier'] = data['tier'];
+	$scope['startIndex'] = 1;
+	$scope['reverse'] = false;
 
 	var channelRange = [];
 	for (var i = 1; i <= 8; i++) {
@@ -265,7 +297,22 @@ codeshelfApp.TierController.prototype.ok = function(){
 		this.websession_.callMethod(tier, 'Tier', 'setControllerChannel', methodArgs);
 		this.modalInstance_.close();
 	}
+};
 
+codeshelfApp.TierController.prototype.setPoscons = function(){
+
+	var tier = this.scope_['tier'];
+	var tierName = tier['domainId'];
+	var startIndex = this.scope_['startIndex'];
+	var reverse = this.scope_['reverse'];
+		
+	var methodArgs = [
+		{ 'name': 'startIndex', 'value': startIndex, 'classType': 'int'},
+		{ 'name': 'reverse', 'value': reverse, 'classType': 'boolean'}
+	];
+
+	this.websession_.callMethod(tier, 'Tier', 'setPoscons', methodArgs);
+	this.modalInstance_.close();
 
 };
 
