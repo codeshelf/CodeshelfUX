@@ -7,6 +7,11 @@ var el = React.createElement;
 var StatusSummaryIBox = require('components/statussummaryibox');
 
 var OverviewPage = React.createClass({
+    statics: {
+        getTitle: function() {
+            return "Order Overview";
+        }
+    },
 
     getInitialState: function() {
         return {

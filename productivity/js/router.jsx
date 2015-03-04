@@ -10,12 +10,17 @@ var App = require('app');
 var OrdersPage = require('pages/orders');
 var OrderDetailsPage = require('pages/orderdetails');
 var OverviewPage = require('pages/overview');
+var ItemsNoLocationPage = require('pages/itemsnolocation');
+var BlockedWorkPage = require('pages/blockedwork');
+var SuspectGTINPage = require('pages/suspectgtin');
 
 var routes = (
         <Route name="app" path="/" handler={App}>
-            <Route name="orderdetail" path="orderdetails" handler={OrderDetailsPage} />
-            <Route name="orders" path="cases" handler={OrdersPage} />
-            <DefaultRoute handler={OverviewPage}/>
+            <Route name="orderdetails" path="orderdetails" handler={OrderDetailsPage} />
+            <Route name="blockedwork" path="blockedwork" handler={BlockedWorkPage} />
+            <Route name="itemsnolocation" path="itemsnolocation" handler={ItemsNoLocationPage} />
+            <Route name="suspectgtin" path="suspectgtin" handler={SuspectGTINPage} />
+            <DefaultRoute name="overview" handler={OverviewPage}/>
         </Route>
 );
 

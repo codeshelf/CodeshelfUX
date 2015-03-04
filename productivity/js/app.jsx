@@ -17,8 +17,9 @@ var NavbarTop = require('components/nav').NavbarTop;
 var Breadcrumbs = require('components/breadcrumb');
 var ActivityPage = require('pages/activity');
 
-var App = React.createClass({
 
+var App = React.createClass({
+    mixins: [ Router.State ],
     getInitialState: function() {
         return {
             "endpoint": "",
@@ -72,6 +73,17 @@ var App = React.createClass({
 
         }.bind(this));
     },
+
+    getLeafTitle: function() {
+        var route = _.last(this.getRoutes());
+        var handlerClass = route.handler;
+        if (handlerClass.getTitle) {
+            return handlerClass.getTitle();
+        } else {
+            return  "";
+        }
+    },
+
     render: function() {
         var {
             organization,
@@ -95,12 +107,14 @@ var App = React.createClass({
             <div id="wrapper">
                 <Navbar title={facility['domainId']} navMenus={navMenus} />
                 <div id="page-wrapper" className="gray-bg dashboard-1">
-                    {/** <NavbarTop /> **/}
+                <NavbarTop title={this.getLeafTitle()}/>
+                {/**
                     <Breadcrumbs breadcrumbs={breadcrumbs} />
+                    **/}
                     <div className="row">
                         <div className="col-lg-12">
                             <div className="wrapper wrapper-content">
-                                <RouteHandler 
+                                <RouteHandler
                                     endpoint={endpoint}
                                     facility={facility}
                                     apiContext={apiContext} />

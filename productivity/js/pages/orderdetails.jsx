@@ -12,6 +12,11 @@ var OrderSummaryIBox = require('components/ordersummaryibox');
 var pollingPeriod = 20000;
 
 var OrderDetailsPage = React.createClass({
+    statics: {
+        getTitle: function() {
+            return "Activity";
+        }
+    },
 
     getDefaultProps:function(){
         return {

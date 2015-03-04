@@ -4,20 +4,22 @@ var React = require("react");
 var RClass = require("../helpers/react-helper");
 var _ = require("lodash");
 
+var { NavItemLink } = require('react-router-bootstrap');
+
+
 var Navbar = RClass(function() {
     return (
             <nav className="navbar-default navbar-static-side" role="navigation">
               <div id="nav-container" className="sidebar-collapse">
                 <ul className="nav" id="side-menu">
                   <NavbarHeader title={this.props.title} />
-                  {
-                    this.props.navMenus.map(function(navMenu) {
-                       return (<NavbarMenu navMenu={navMenu} key={navMenu.label}/>);
-                    })
-                  }
+                  <NavItemLink to="overview"><i className="fa fa-bar-chart-o"></i>Order Overview</NavItemLink>
+                  <NavItemLink to="blockedwork"><i className="fa fa-exclamation-circle"></i>Blocked Work</NavItemLink>
+                  <NavItemLink to="orderdetails"><i className="fa fa-shopping-cart"></i>Activity</NavItemLink>
                 </ul>
               </div>
-            </nav>);
+            </nav>
+);
 });
 
 var NavbarHeader = RClass(function() {
@@ -59,10 +61,6 @@ var NavbarMenu = RClass(function() {
 
 /* */
 var NavbarTop = React.createClass({
-    handleNavbarMinimalize: function() {
-        $("body").toggleClass("mini-navbar");
-        SmoothlyMenu(); //from inspinia
-    },
 
     render: function() {
         return (
@@ -70,9 +68,17 @@ var NavbarTop = React.createClass({
                 <nav style={{marginBottom: 0}} role="navigation" className="navbar navbar-static-top">
                     <div className="navbar-header">
                         <a href="#" className="navbar-minimalize minimalize-styl-2 btn btn-primary " onClick={this.handleNavbarMinimalize} ><i className="fa fa-bars" /> </a>
+
                     </div>
+                    <ul className="nav navbar-top-links">
+                        <li>
+                        <a href="">{this.props.title}</a>
+
+                        </li>
+                    </ul>
                 </nav>
-                </div>
+
+            </div>
         );
     }
 });
