@@ -124,7 +124,7 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 				"poscon": {"startIndex" : 1,
 				           "reverse" : false}
 			};
-			var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/tier-set-poscons.html", "TierController as controller", data);
+			var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/set-poscons-tier.html", "TierController as controller", data);
 			modalInstance.result.then(function(){
 
 			});
@@ -184,7 +184,7 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 		},
 		{
 			"label" : "Set Poscons",
-			"permission": "slot:view",
+			"permission": "slot:edit",
 			"action": function(itemContext) {
 				self.setPosconsForTier(itemContext);
 			}
