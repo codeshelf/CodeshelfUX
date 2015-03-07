@@ -336,7 +336,7 @@ codeshelfApp.AisleLedController.prototype.setPoscons = function(){
 	var reverse = this.scope_['poscon']['reverse'];
 
 	var methodArgs = [
-		{ 'name': 'startIndex', 'value': startIndex, 'classType': 'int'},
+		{ 'name': 'startIndex', 'value': startIndex, 'classType': 'int'}
 //		{ 'name': 'reverse', 'value': reverse, 'classType': 'boolean'}
 	];
 
