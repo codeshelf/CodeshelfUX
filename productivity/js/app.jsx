@@ -105,6 +105,8 @@ var App = React.createClass({
         var apiContext = csapi.getFacilityContext(endpoint, facility);
         return (
             <div id="wrapper">
+                <div className="row">
+                <div className="col-md-12"                >
                 <Navbar title={facility['domainId']} navMenus={navMenus} />
                 <div id="page-wrapper" className="gray-bg dashboard-1">
                 <NavbarTop title={this.getLeafTitle()}/>
@@ -121,13 +123,17 @@ var App = React.createClass({
                             </div>
                             <div className="footer">
                                 <div className="pull-right"> </div>
+                                <strong>Copyright</strong> Codeshelf &copy; 2014-2015
                             <div>
-                            <strong>Copyright</strong> Codeshelf &copy; 2014-2015
+
                         </div>
                     </div>
                 </div>
             </div>
            </div>
+
+                </div>
+                </div>
            </div>);
     }
 
