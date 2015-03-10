@@ -9,6 +9,8 @@ var el = React.createElement;
 var OrderDetailIBox = require('components/orderdetailibox');
 var OrderSummaryIBox = require('components/ordersummaryibox');
 
+var pollingPeriod = 20000;
+
 var OrderDetailsPage = React.createClass({
 
     getDefaultProps:function(){
@@ -29,7 +31,7 @@ var OrderDetailsPage = React.createClass({
         var {endpoint, facility} = nextProps;
         var facilityId = facility['persistentId'];
 
-        var pollerStream = Rx.Observable.timer(0, 5000 /*ms*/);
+        var pollerStream = Rx.Observable.timer(0, pollingPeriod /*ms*/);
         //Create stream of productivity updates for the facility
         var productivityStream = pollerStream.flatMapLatest(function() {
             return Rx.Observable.fromPromise(csapi.getProductivity (endpoint, facilityId)).catch(Rx.Observable.empty());
