@@ -12,6 +12,7 @@ var IBoxData = ibox.IBoxData;
 var SummaryFilter = require("./summaryfilter.jsx");
 var DoughnutSummary = require("./doughnutsummary.jsx");
 
+var pollingPeriod = 20000;
 
 var StatusSummaryIBox = React.createClass({
 
@@ -53,7 +54,7 @@ var StatusSummaryIBox = React.createClass({
 
         pollPromiseProducer(function() {
             //produce promise on every tick of poller
-            return apiContext.getSummarySnapshot(view);}, 5000)
+            return apiContext.getSummarySnapshot(view);}, pollingPeriod)
         .subscribe(
             function(statusSummary) {
                 this.setState({statusSummary: statusSummary});
