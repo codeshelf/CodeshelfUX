@@ -33,7 +33,12 @@ var OrderDetailsPage = React.createClass({
     },
 
     componentWillReceiveProps: function (nextProps) {
-        var {endpoint, facility} = nextProps;
+
+    },
+
+    componentDidMount: function() {
+        console.log("mounting od");
+        var {endpoint, facility} = this.props;
         var facilityId = facility['persistentId'];
 
         var pollerStream = Rx.Observable.timer(0, pollingPeriod /*ms*/);
@@ -46,11 +51,19 @@ var OrderDetailsPage = React.createClass({
         var activeRunsStream = pollerStream.flatMapLatest(function() {
             return Rx.Observable.fromPromise(csapi.getCheRuns(endpoint, facilityId)).catch(Rx.Observable.empty());
         });
-
+        this.setState(
+            {
+                productivityStream: productivityStream,
+                activeRunsStream: activeRunsStream
+            }
+        );
 
         //Render updates of productivity
         var productivitySubscription = productivityStream.subscribe(function(productivityUpdate) {
             console.debug("received productivityupdate", productivityUpdate);
+            if (!this.isMounted()) {
+                return;
+            }
             this.setState({"productivity": productivityUpdate});
         }.bind(this));
 
@@ -58,10 +71,30 @@ var OrderDetailsPage = React.createClass({
 
         var activeRunsSubscription = activeRunsStream.subscribe(function(activeRunsUpdate) {
             console.debug("received active Runs updated", activeRunsUpdate);
+            if (!this.isMounted()) {
+                return;
+            }
             this.setState({"activeRuns": activeRunsUpdate});
         }.bind(this));
 
+        this.setState({
+            "productivitySubscription" : productivitySubscription,
+            "activeRunsSubscription": activeRunsSubscription
+        });
+
     },
+    componentWillUnmount: function() {
+        console.log("unmounting od");
+        var {productivitySubscription, activeRunsSubscription}  = this.state;
+        if (productivitySubscription) {
+            productivitySubscription.dispose();
+        }
+
+        if(activeRunsSubscription) {
+            activeRunsSubscription.dispose();
+        }
+    },
+
 
     renderOrderDetailComponents: function(productivityUpdate, activeRunsUpdate) {
         var productivityByGroup = productivityUpdate["groups"];
@@ -74,24 +107,24 @@ var OrderDetailsPage = React.createClass({
 
             //Render Order Detail for order group
             orderDetailComponents.push(
-                <div className="col-sm-6 col-md-4" key={groupName}>
-                  <OrderDetailIBox groupName={groupName}
-                                   orderDetailSummaryData={orderDetailSummaryData}
-                                   pickRate={orderDetailSummaryData["picksPerHour"]}
-                                   activeRuns={activeRuns}/>
-                </div>
+                    <div className="col-sm-6 col-md-4" key={groupName}>
+                    <OrderDetailIBox groupName={groupName}
+                orderDetailSummaryData={orderDetailSummaryData}
+                pickRate={orderDetailSummaryData["picksPerHour"]}
+                activeRuns={activeRuns}/>
+                    </div>
             );
         }
         return orderDetailComponents;
     },
 
     render: function() {
-
+        var {productivity, activeRuns} = this.state;
         return (
                 <div className="row orderdetails">
-                {this.renderOrderDetailComponents(this.state.productivity, this.state.activeRuns)}
+                {this.renderOrderDetailComponents(productivity, activeRuns)}
             </div>
-);
+        );
     }
 });
 

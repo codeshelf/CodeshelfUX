@@ -53,8 +53,8 @@ var BlockedWorkPage = React.createClass({
         };
     },
 
-    componentWillReceiveProps: function(nextProps) {
-        var {apiContext} = nextProps;
+    componentDidMount: function() {
+        var {apiContext} = this.props;
         apiContext.getBlockedWorkNoLocation().then(
             function(workDetails) {
                 if (this.isMounted()) {
@@ -67,6 +67,9 @@ var BlockedWorkPage = React.createClass({
                 }
             }.bind(this)
         );
+    },
+    componentWillUnmount: function() {},
+    componentWillReceiveProps: function(nextProps) {
     },
 
     show: function(type) {

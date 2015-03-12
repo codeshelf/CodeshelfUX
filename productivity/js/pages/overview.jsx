@@ -20,10 +20,14 @@ var OverviewPage = React.createClass({
         };
     },
 
-    componentWillReceiveProps: function (nextProps) {
-        var apiContext = nextProps.apiContext;
+    componentDidMount: function () {
+
+        var {apiContext} = this.props;
         var promise = apiContext.getFilters();
         promise.then(function(filterOptions){
+            if (!this.isMounted()) {
+                return;
+            }
             var views = [
                 {
                     totalLabel: "Orders",
@@ -53,15 +57,16 @@ var OverviewPage = React.createClass({
     },
 
     render: function() {
+        var {views, apiContext, filterOptions} = this.state;
         return (<div className="row orders">
-                  {
-                      _.map(this.state.views, function(view){
-                          var stateKey = view["filterName"] + view["aggregate"];
-                          return (<div className="col-sm-6 col-md-4" key={stateKey}>
-                                      <StatusSummaryIBox apiContext={this.state.apiContext} view={view} filterOptions={this.state.filterOptions}/>
-                                  </div>);
-                      }.bind(this))
-                  }
+                {
+                    _.map(views, function(view){
+                        var stateKey = view["filterName"] + view["aggregate"];
+                        return (<div className="col-sm-6 col-md-4" key={stateKey}>
+                                <StatusSummaryIBox apiContext={apiContext} view={view} filterOptions={filterOptions}/>
+                                </div>);
+                    }.bind(this))
+                }
                 </div>);
     }
 });
