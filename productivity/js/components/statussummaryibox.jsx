@@ -37,7 +37,9 @@ var StatusSummaryIBox = React.createClass({
     },
 
     componentWillUnmount: function() {
-        this.state.subscription.dispose();
+        if (this.state.subscription) {
+            this.state.subscription.dispose();    
+        }
     },
 
     handleFilterChange: function(filter){
