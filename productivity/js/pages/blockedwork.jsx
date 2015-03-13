@@ -36,17 +36,19 @@ var BlockedWorkPage = React.createClass({
                 "type": "SHORT",
                 "description": "Shorted Order Lines",
                 "total": 0
-            },
+            }/*,
+              FOR LATER
             "SUSPECTORDER": {
                 "type": "SUSPECTORDER",
                 "description": "Suspect Order Lines Imports",
                 "total": 0
             },
+              SHOULD MOVE TO AN ALERTS AREA
             "SKIPPEDVERIFICATION": {
                 "type" : "SKIPPEDVERIFICATION",
                 "description": "Skipped Verification Scans",
                 "total": 0
-            }
+            }*/
         };
         return {
             "selectedtype" : "NOLOC",
