@@ -33,11 +33,6 @@ function getSummarySnapshot(endpoint, facilityId, viewSpec) {
     });
 }
 
-function getBlockedWorkNoLocation(endpoint, facilityId) {
-	var blockedWorkNoLocationPath = "/api/facilities/" + facilityId + "/blockedwork/nolocation";
-	return $.ajax(endpoint + blockedWorkNoLocationPath, {
-	});
-}
 
 function getBlockedWork(endpoint, facilityId, type) {
     var blockedWorkByType = {
@@ -84,8 +79,15 @@ function getFacilityContext(endpoint, facility) {
         getProductivity : _.partial(getProductivity, endpoint, facilityId),
         getCheRuns: _.partial(getCheRuns, endpoint, facilityId),
         getSummarySnapshot: _.partial(getSummarySnapshot, endpoint, facilityId),
-        getBlockedWorkNoLocation: _.partial(getBlockedWorkNoLocation, endpoint, facilityId),
         getBlockedWork: _.partial(getBlockedWork, endpoint, facilityId),
+        getBlockedWorkNoLocation: function () {
+	        var blockedWorkNoLocationPath = "/api/facilities/" + facilityId + "/blockedwork/nolocation";
+	        return $.ajax(endpoint + blockedWorkNoLocationPath, {});
+        },
+        getBlockedWorkShorts: function () {
+	        var blockedWorkNoLocationPath = "/api/facilities/" + facilityId + "/blockedwork/shorts";
+	        return $.ajax(endpoint + blockedWorkNoLocationPath, {});
+        },
         getFilters: function() {
             var filtersUrl = "/api/facilities/" + facilityId + "/filters";
             return $.ajax(endpoint + filtersUrl, {});

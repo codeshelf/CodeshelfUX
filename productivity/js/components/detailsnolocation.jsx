@@ -92,7 +92,7 @@ var ItemNoLocationPage = React.createClass({
 
                               grouped.map(function(workDetail) {
 
-                                  return <BlockedWorkItem key={workDetail["sku"]} {...workDetail} />;
+                                  return <BlockedWorkItem key={workDetail["key"]} {...workDetail} />;
                               })
                           }
                       </div>
@@ -107,6 +107,7 @@ var ItemNoLocationPage = React.createClass({
             var sameItems = groupedDetails[key];
             var first = sameItems[0];
             return {
+                key: key,
                 sku: first["sku"],
                 uom: first["uom"],
                 description: first["description"] ? first["description"]: "",

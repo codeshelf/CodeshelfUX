@@ -25,6 +25,12 @@ var ShortedWork = React.createClass({
             "251584,251584.23,15,3/2/2015 12:00:00,3/2/2015 12:00:00,LANDB,Libero Morbi Accumsan Company"
         ];
     },
+    getDefaultProps: function() {
+        return {
+            "actualQuantity": 0
+        };
+    },
+
     render: function() {
         var {
             index,
@@ -35,7 +41,7 @@ var ShortedWork = React.createClass({
             actualQuantity,
             planQuantity,
             location,
-            lines,
+            lineCount,
             total
         } = this.props;
         var ref = "faq" + sku;
@@ -46,7 +52,7 @@ var ShortedWork = React.createClass({
                 <div className="row">
                 <div className="col-md-4">
                 <a data-toggle="collapse" href={href} className="faq-question">
-                <div>{actualQuantity} of {planQuantity} {sku} {uom}</div>
+                <div>{actualQuantity} of {total} {sku} {uom}</div>
                 <div>{orderId}</div>
                 </a>
                 <small>{description}</small>
@@ -54,10 +60,17 @@ var ShortedWork = React.createClass({
                 <div className="col-md-4">
                 {location}
             </div>
-                <div className="col-md-4 text-right">
-                Lines: <span className="badge">{lines}</span>
-                Total: <span className="badge">{total}</span>
-                </div>
+<div className="col-md-4 text-right">
+                            <div className="row">
+                                <div className="col-sm-6">
+                Line Count:  <span className="badge">{lineCount}</span>
+
+                                </div>
+                                <div className="col-sm-6">
+                Total Quantity: <span className="badge">{total}</span>
+                                </div>
+                            </div>
+                        </div>
                 </div>
                 <div className="row">
                 <div className="col-lg-12">
@@ -73,41 +86,51 @@ var ShortedWork = React.createClass({
 
 
 var ShortedWorkList = React.createClass({
-    getInitialState: function() {
-        return {
-            "shortedworklist": []
-        };
-    },
     componentDidMount: function() {
-        var {apiContext, type} = this.props;
-        apiContext.getBlockedWork(type).then(
-            function(items) {
-                if (this.isMounted()) {
-                    this.setState({
-                        "shortedworklist" : items
-                    });
-                }
-            }.bind(this)
-        );
     },
     render: function() {
-        var {shortedworklist} = this.state;
+        var {workDetails} = this.props;
+        var grouped = this.groupByItem(workDetails);
         return (
                    <IBox>
                       <IBoxTitleBar>
                       <IBoxTitleText>
-                         Shorted Work
+                         Shorted Order Lines By Item
                       </IBoxTitleText>
                       </IBoxTitleBar>
                       <div className="ibox-content">
                       {
-                          shortedworklist.map(function(shortedwork){
-                              return (<ShortedWork key={shortedwork["sku"]}{...shortedwork} />);
+                          grouped.map(function(workDetail){
+                              return (<ShortedWork key={workDetail["key"]}{...workDetail} />);
                           })
                       }
                       </div>
                       </IBox>
-);}});
+                      );
+    },
+    groupByItem: function(workDetails) {
+        var groupedDetails = _.groupBy(workDetails, function(workDetail) {
+            return (workDetail["sku"] + ":" + workDetail["uom"]);
+        });
+        var list = _.keys(groupedDetails).map(function(key) {
+            var sameItems = groupedDetails[key];
+            var first = sameItems[0];
+            return {
+                key: key,
+                sku: first["sku"],
+                uom: first["uom"],
+                description: first["description"] ? first["description"]: "",
+                lineCount: sameItems.length,
+                total: _.reduce(sameItems, function(sum, orderDetail) {
+                    return sum + orderDetail["planQuantity"];
+                }, 0)
+
+            };
+        });
+
+        return list;
+    }
+});
 
 
 

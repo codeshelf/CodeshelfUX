@@ -2,6 +2,7 @@
 
 var React = require("react");
 var _ = require("lodash");
+var {StatusSummary} = require("data/types");
 var DoughnutChart = require("./doughnut.jsx");
 var pluralize = require("../helpers/pluralize");
 
@@ -36,7 +37,7 @@ var DoughnutSummary = React.createClass({
     render: function() {
         var summaryData  = this.props.summaryData;
         var totalLabel = pluralize(total, this.props.totalLabelSingular, this.props.totalLabel);
-        var total = sumByKeys(summaryData, ["released", "inprogress", "complete", "short"]);
+        var total = StatusSummary.sumByKeys(summaryData, ["released", "inprogress", "complete", "short"]);
         if (total > 0) {
            return this.renderSummaryChart(summaryData, total, totalLabel);
         } else {
@@ -47,7 +48,7 @@ var DoughnutSummary = React.createClass({
 
    renderSummaryChart : function(summaryData, total, totalLabel) {
        var chartData = toChartData(segmentTemplates, summaryData);
-       var remaining = total - sumByKeys(summaryData, ["complete", "short"]);
+       var remaining = total - StatusSummary.sumByKeys(summaryData, ["complete", "short"]);
        return (<div>
                     {{/* The first div provides the proper box dimensions for the chart resize calculations */}}
                     <div style={{position: "relative", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
@@ -61,12 +62,6 @@ var DoughnutSummary = React.createClass({
 
    }
 });
-
-function sumByKeys(summaryData, keys) {
-    return _.reduce(keys, function(sum, key){
-        return sum + summaryData[key];
-    }, 0);
-}
 
 function toChartData(segmentTemplates, keyedValues) {
         var chartValues = _.map(segmentTemplates, function(segmentTemplate) {

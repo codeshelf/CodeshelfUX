@@ -4,6 +4,7 @@ var $ = require('jquery');
 var Rx = require('rx');
 
 var csapi = require('data/csapi');
+var {StatusSummary} = require('data/types');
 var el = React.createElement;
 
 var ibox = require('components/ibox');
@@ -67,6 +68,21 @@ var BlockedWorkPage = React.createClass({
                 }
             }.bind(this)
         );
+        apiContext.getBlockedWorkShorts().then(
+            function(workDetails) {
+                if (this.isMounted()) {
+                    this.state.blockedworksummary["SHORT"]["total"] = workDetails.length;
+                    this.state.blockedworksummary["SHORT"]["workDetails"] = workDetails;
+
+                    this.setState({
+                        "blockedworksummary": this.state.blockedworksummary
+                    });
+                }
+            }.bind(this)
+        );
+
+
+
     },
     componentWillUnmount: function() {},
     componentWillReceiveProps: function(nextProps) {
@@ -79,7 +95,7 @@ var BlockedWorkPage = React.createClass({
     render: function() {
         var {selectedtype, blockedworksummary} = this.state;
         var {apiContext} = this.props;
-        var workDetails = blockedworksummary["NOLOC"]["workDetails"];
+        var workDetails = blockedworksummary[selectedtype]["workDetails"];
         return (
 
         <div>
@@ -115,7 +131,7 @@ var BlockedWorkPage = React.createClass({
 
             <div className="col-sm-6 col-md-8">
             {
-                (selectedtype == "NOLOC") ? <DetailsNoLocation type="NOLOC" workDetails={workDetails}/> : <ShortedWorkList type={selectedtype} apiContext={apiContext}/>
+                (selectedtype == "NOLOC") ? <DetailsNoLocation type="NOLOC" workDetails={workDetails}/> : <ShortedWorkList type={selectedtype} workDetails={workDetails}/>
             }
             </div>
             </div>

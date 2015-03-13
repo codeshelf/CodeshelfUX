@@ -1,4 +1,7 @@
+var _ = require("lodash");
+
 module.exports = {
+
     "ProductivitySummary": function (groupName, numComplete, numReleased, numInProgress, numShorts) {
         var groupData = {
             "groups": {}
@@ -30,5 +33,17 @@ module.exports = {
                        "active":false};
         runSummary['runsByGroup'][groupName] = [runData];
         return runSummary;
+    },
+    "StatusSummary" : {
+        "StatusEnum": ["released", "inprogress", "complete", "short"],
+        "shortCount" : function(statusSummary) {
+            return statusSummary["short"];
+        },
+        "sumByKeys" : function(statusSummary, keys) {
+            //todo validate keys with StatusEnum
+            return _.reduce(keys, function(sum, key){
+                return sum + statusSummary[key];
+            }, 0);
+        }
     }
 };
