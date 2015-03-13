@@ -38,7 +38,7 @@ var StatusSummaryIBox = React.createClass({
 
     componentWillUnmount: function() {
         if (this.state.subscription) {
-            this.state.subscription.dispose();    
+            this.state.subscription.dispose();
         }
     },
 
@@ -59,7 +59,9 @@ var StatusSummaryIBox = React.createClass({
             return apiContext.getSummarySnapshot(view);}, pollingPeriod)
         .subscribe(
             function(statusSummary) {
-                this.setState({statusSummary: statusSummary});
+                if (this.isMounted()) {
+                    this.setState({statusSummary: statusSummary});
+                }
             }.bind(this),
             function(error) {
                 console.log(error);
