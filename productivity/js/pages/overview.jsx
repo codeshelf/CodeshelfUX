@@ -20,9 +20,8 @@ var OverviewPage = React.createClass({
         };
     },
 
-    componentDidMount: function () {
-
-        var {apiContext} = this.props;
+    updateViews: function(props) {
+        var {apiContext} = props;
         var promise = apiContext.getFilters();
         promise.then(function(filterOptions){
             if (!this.isMounted()) {
@@ -54,6 +53,13 @@ var OverviewPage = React.createClass({
                 "views": views
             });
         }.bind(this));
+
+    },
+    componentWillReceiveProps: function(nextProps) {
+        this.updateViews(nextProps);
+    },
+    componentDidMount: function () {
+        this.updateViews(this.props);
     },
 
     render: function() {

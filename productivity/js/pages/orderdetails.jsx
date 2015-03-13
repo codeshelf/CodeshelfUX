@@ -32,13 +32,8 @@ var OrderDetailsPage = React.createClass({
         };
     },
 
-    componentWillReceiveProps: function (nextProps) {
-
-    },
-
-    componentDidMount: function() {
-        console.log("mounting od");
-        var {endpoint, facility} = this.props;
+    updateViews: function(props) {
+        var {endpoint, facility} = props;
         var facilityId = facility['persistentId'];
 
         var pollerStream = Rx.Observable.timer(0, pollingPeriod /*ms*/);
@@ -81,6 +76,15 @@ var OrderDetailsPage = React.createClass({
             "productivitySubscription" : productivitySubscription,
             "activeRunsSubscription": activeRunsSubscription
         });
+
+    },
+    componentWillReceiveProps: function (nextProps) {
+        this.updateViews(nextProps);
+    },
+
+    componentDidMount: function() {
+        console.log("mounting od");
+        this.updateViews(this.props);
 
     },
     componentWillUnmount: function() {
