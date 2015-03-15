@@ -5,22 +5,24 @@ var _ = require('lodash');
 //var $ = require('jquery');
 //var tablesaw = require('tablesaw/dist/tablesaw');
 
+var HeaderTitle = {
+    "orderId" : "Order Id",
+    "orderDetailId" : "Detail Id",
+    "planQuantity" : "Qty."
+};
+
 var Row = React.createClass({
     render: function() {
-        var {data} = this.props;
-        var cells = data.split(",");
-        var i = 0;
+        var {headers, data} = this.props;
         return (
-                            <tr>
-                                {
-
-                                    cells.map(function(value) {
-                                        var key=i++;
-                                        return (<td key={key}>{value}</td>);
-                                    })
-
-                                }
-                            </tr>
+                <tr>
+                {
+                    _.keys(headers).map(function(key){
+                        var value = data[key];
+                        return (<td key={key}>{value}</td>);
+                    })
+                }
+                </tr>
 
         );
     }
@@ -29,27 +31,31 @@ var Row = React.createClass({
 var Header = React.createClass({
     render: function() {
         var {data} = this.props;
-        var cells = data.split(",");
         var i = 0;
         return (
                 <thead>
                     <tr>
                 {
-
-                    cells.map(function(value) {
-                        var key = i++;
-                        return (<th key={key} scope="col" data-tablesaw-sortable-col data-tablesaw-priority={key == 0 ? "persist" : 0} >{value}</th>);
+                    _.keys(data).map(function(key){
+                        var title = data[key];
+                        var priority = i++;
+                        return (<th key={key} scope="col" data-tablesaw-sortable-col data-tablesaw-priority={priority == 0 ? "persist" : priority} >{title}</th>);
                     })
-
                 }
-            </tr>
-            </thead>
+                    </tr>
+                </thead>
 
         );
     }
 });
 
 var Table =  React.createClass({
+    getDefaultProps: function(){
+        return {
+            "caption": "",
+            "rows": []
+        };
+    },
     componentDidMount: function() {
         var node = this.getDOMNode();
         var jqNode = $(node);
@@ -58,17 +64,17 @@ var Table =  React.createClass({
     render: function() {
         var {caption , rows} = this.props;
         return (
-                                <table className="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
-                <caption>{caption}</caption>
-                            <Header data="Order Id, Order Detail Id, Quantity, Order Date, Due Date, Shipper, Customer" />
-                            <tbody>
+                <table className="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                    <caption>{caption}</caption>
+                    <Header data={HeaderTitle} />
+                    <tbody>
                             {
                                rows.map(function(row) {
-                                       return (<Row data={row} />);
+                                       return (<Row headers={HeaderTitle} data={row} />);
                                })
                             }
-                             </tbody>
-                        </table>
+                    </tbody>
+                </table>
         );
     }
 });

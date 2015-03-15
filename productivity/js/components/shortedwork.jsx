@@ -123,8 +123,8 @@ var ShortedWorkList = React.createClass({
                 lineCount: sameItems.length,
                 total: _.reduce(sameItems, function(sum, orderDetail) {
                     return sum + orderDetail["planQuantity"];
-                }, 0)
-
+                    }, 0),
+                details: sameItems
             };
         });
 

@@ -32,7 +32,8 @@ var BlockedWorkItem = React.createClass({
             uom,
             description,
             lineCount,
-            total
+            total,
+            details
         } = this.props;
         var ref = "faq" + sku;
         var href = "#" + ref;
@@ -60,7 +61,7 @@ var BlockedWorkItem = React.createClass({
                     <div className="row">
                         <div className="col-lg-12">
                             <div id={ref} className="panel-collapse faq-answer collapse">
-                                <Table caption="Orders with item" rows={rows}/>
+                                <Table caption="Orders with item" rows={details}/>
 
                             </div>
                         </div>
@@ -114,7 +115,8 @@ var ItemNoLocationPage = React.createClass({
                 lineCount: sameItems.length,
                 total: _.reduce(sameItems, function(sum, orderDetail) {
                     return sum + orderDetail["planQuantity"];
-                }, 0)
+                }, 0),
+                "details" : sameItems
 
             };
         });
