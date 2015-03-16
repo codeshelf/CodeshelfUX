@@ -80,6 +80,10 @@ function getFacilityContext(endpoint, facility) {
         getCheRuns: _.partial(getCheRuns, endpoint, facilityId),
         getSummarySnapshot: _.partial(getSummarySnapshot, endpoint, facilityId),
         getBlockedWork: _.partial(getBlockedWork, endpoint, facilityId),
+        getTopItems: function() {
+	        var topItems = "/api/facilities/" + facilityId + "/work/topitems";
+	        return $.ajax(endpoint + topItems, {});
+        },
         getBlockedWorkNoLocation: function () {
 	        var blockedWorkNoLocationPath = "/api/facilities/" + facilityId + "/blockedwork/nolocation";
 	        return $.ajax(endpoint + blockedWorkNoLocationPath, {});

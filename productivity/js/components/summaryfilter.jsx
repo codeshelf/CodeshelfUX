@@ -1,8 +1,9 @@
 var React = require('react');
+var _ = require('lodash');
 
 var SummaryFilter = React.createClass({
     render: function() {
-        var filterNames = this.props.filters;
+        var filterNames = _.compact(this.props.filters);
         var onChangeHandler = this.props.onChange;
             return (<div className="ibox-tools">
                 <a aria-expanded="false" className="dropdown-toggle" data-toggle="dropdown" href="#">
