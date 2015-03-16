@@ -110,36 +110,32 @@ var App = React.createClass({
         return (
             <div id="wrapper">
                 <div className="row">
-                <div className="col-md-12"                >
-                <Navbar title={facility['domainId']} navMenus={navMenus} />
-                <div id="page-wrapper" className="gray-bg dashboard-1">
-                <NavbarTop title={this.getLeafTitle()}/>
-                {/**
-                    <Breadcrumbs breadcrumbs={breadcrumbs} />
-                    **/}
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="wrapper wrapper-content">
-                                {
-                                   (apiContext) ?
-                                       <RouteHandler
-                                           endpoint={endpoint}
-                                           facility={facility}
-                                           apiContext={apiContext} /> : null
-                                }
+                     <div className="col-md-12">
+                          <Navbar title={facility['domainId']} navMenus={navMenus} />
+                          <div id="page-wrapper" className="gray-bg dashboard-1">
+                               <NavbarTop title={this.getLeafTitle()}/>
+                               {/**
+                               <Breadcrumbs breadcrumbs={breadcrumbs} />
+                               **/}
+                               <div className="row">
+                                    <div className="col-lg-12">
+                                         <div className="wrapper wrapper-content">
+                                         {
+                                         (apiContext) ?
+                                                 <RouteHandler
+                                                     endpoint={endpoint}
+                                                     facility={facility}
+                                                     apiContext={apiContext} /> : null
+                                         }
+                                         </div>
+                                         <div className="footer">
+                                             <div className="pull-right"> </div>
+                                             <div> <strong>Copyright</strong> Codeshelf &copy; 2014-2015 </div>
+                                         </div>
+                                    </div>
+                              </div>
 
-                            </div>
-                            <div className="footer">
-                                <div className="pull-right"> </div>
-                                <strong>Copyright</strong> Codeshelf &copy; 2014-2015
-                            <div>
-
-                        </div>
-                    </div>
                 </div>
-            </div>
-           </div>
-
                 </div>
                 </div>
            </div>);
