@@ -8,7 +8,8 @@ var _ = require('lodash');
 var HeaderTitle = {
     "orderId" : "Order Id",
     "orderDetailId" : "Detail Id",
-    "planQuantity" : "Qty."
+    "planQuantity" : "Qty.",
+    "status" : "Status"
 };
 
 var Row = React.createClass({
@@ -39,7 +40,7 @@ var Header = React.createClass({
                     _.keys(data).map(function(key){
                         var title = data[key];
                         var priority = i++;
-                        return (<th key={key} scope="col" data-tablesaw-sortable-col data-tablesaw-priority={priority == 0 ? "persist" : priority} >{title}</th>);
+                        return (<th key={key} scope="col"  data-tablesaw-priority={priority == 0 ? "persist" : priority} >{title}</th>);
                     })
                 }
                     </tr>
@@ -64,7 +65,7 @@ var Table =  React.createClass({
     render: function() {
         var {caption , rows} = this.props;
         return (
-                <table className="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                <table className="tablesaw" data-tablesaw-minimap data-tablesaw-mode="swipe">
                     <caption>{caption}</caption>
                     <Header data={HeaderTitle} />
                     <tbody>

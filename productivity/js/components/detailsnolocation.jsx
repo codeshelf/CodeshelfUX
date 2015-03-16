@@ -16,15 +16,6 @@ var IBoxSection = ibox.IBoxSection;
 var Table = require('components/table').Table;
 
 var BlockedWorkItem = React.createClass({
-    orderDetailsWithItem: function(sku, uom) {
-        return [
-                 "251935,251935.2,1,3/2/2015 12:00:00,3/2/2015 12:00:00,FEDEX,Arcu Eu Odio Corp.",
-
-                "251970,251970.3,1,3/2/2015 12:00:00,3/2/2015 12:00:00,UPS,Placerat Eget Inc.",
-                "251969,251969.2,1,3/2/2015 12:00:00,3/2/2015 12:00:00,ENVCO,Est Nunc Ullamcorper Corporation",
-                "251584,251584.23,15,3/2/2015 12:00:00,3/2/2015 12:00:00,LANDB,Libero Morbi Accumsan Company"
-        ];
-    },
     render: function() {
         var {
             index,
@@ -37,7 +28,6 @@ var BlockedWorkItem = React.createClass({
         } = this.props;
         var ref = "faq" + sku;
         var href = "#" + ref;
-        var rows = this.orderDetailsWithItem(sku, uom);
         return (
 
                 <div className="faq-item">

@@ -16,15 +16,6 @@ var IBoxSection = ibox.IBoxSection;
 var {Table} = require('components/table');
 
 var ShortedWork = React.createClass({
-    orderDetailsWithItem: function(sku, uom) {
-        return [
-            "251935,251935.2,1,3/2/2015 12:00:00,3/2/2015 12:00:00,FEDEX,Arcu Eu Odio Corp.",
-
-            "251970,251970.3,1,3/2/2015 12:00:00,3/2/2015 12:00:00,UPS,Placerat Eget Inc.",
-            "251969,251969.2,1,3/2/2015 12:00:00,3/2/2015 12:00:00,ENVCO,Est Nunc Ullamcorper Corporation",
-            "251584,251584.23,15,3/2/2015 12:00:00,3/2/2015 12:00:00,LANDB,Libero Morbi Accumsan Company"
-        ];
-    },
     getDefaultProps: function() {
         return {
             "actualQuantity": 0
@@ -42,18 +33,17 @@ var ShortedWork = React.createClass({
             planQuantity,
             location,
             lineCount,
-            total
+            total,
+            details
         } = this.props;
         var ref = "faq" + sku;
         var href = "#" + ref;
-        var rows = this.orderDetailsWithItem(sku, uom);
         return (
                 <div className="faq-item">
                 <div className="row">
                 <div className="col-md-4">
                 <a data-toggle="collapse" href={href} className="faq-question">
                 <div>{actualQuantity} of {total} {sku} {uom}</div>
-                <div>{orderId}</div>
                 </a>
                 <small>{description}</small>
                 </div>
@@ -75,7 +65,7 @@ var ShortedWork = React.createClass({
                 <div className="row">
                 <div className="col-lg-12">
                 <div id={ref} className="panel-collapse faq-answer collapse">
-                <Table caption="Other orders with item" rows={rows}/>
+                    <Table caption="Other orders with item" rows={details}/>
                 </div>
                 </div>
                 </div>
