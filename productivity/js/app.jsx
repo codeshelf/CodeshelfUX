@@ -85,6 +85,7 @@ var App = React.createClass({
     },
 
     render: function() {
+        var apiContext = null;
         var {
             organization,
             facility,
@@ -102,7 +103,10 @@ var App = React.createClass({
             {"label": "Activity", "href": "#"}
         ];
 
-        var apiContext = csapi.getFacilityContext(endpoint, facility);
+        if (facility && endpoint) {
+           apiContext = csapi.getFacilityContext(endpoint, facility);
+        }
+
         return (
             <div id="wrapper">
                 <div className="row">
@@ -116,10 +120,14 @@ var App = React.createClass({
                     <div className="row">
                         <div className="col-lg-12">
                             <div className="wrapper wrapper-content">
-                                <RouteHandler
-                                    endpoint={endpoint}
-                                    facility={facility}
-                                    apiContext={apiContext} />
+                                {
+                                   (apiContext) ?
+                                       <RouteHandler
+                                           endpoint={endpoint}
+                                           facility={facility}
+                                           apiContext={apiContext} /> : null
+                                }
+
                             </div>
                             <div className="footer">
                                 <div className="pull-right"> </div>
