@@ -1,9 +1,11 @@
 var React = require('react');
 var _ = require('lodash');
-//relies on jquery and tablesaw but just make sure it is included globally
 
-//var $ = require('jquery');
-//var tablesaw = require('tablesaw/dist/tablesaw');
+//relies on jquery and tablesaw 
+//but just make sure it is included globally
+require("style!css!tablesaw/dist/tablesaw.css");
+require("imports?jQuery=jquery!tablesaw/dist/tablesaw");
+var $ = require("jquery");
 
 var HeaderTitle = {
     "orderId" : "Order Id",
