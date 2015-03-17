@@ -115,9 +115,9 @@ codeshelf.windowLauncher = (function() {
 			}
 		},
 
-		loadOrdersView: function(inOutboundOrders) {
+		loadOrdersView: function(partialOrderIdQuery, inOutboundOrders) {
 			try {
-				var ordersView = codeshelf.ordersview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), inOutboundOrders);
+				var ordersView = codeshelf.ordersview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), inOutboundOrders, partialOrderIdQuery);
 				var ordersWindow = codeshelf.window(ordersView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				ordersWindow.open();
 			}
@@ -516,13 +516,13 @@ function launchEdiServicesView() {
 }
 goog.exportSymbol('launchEdiServicesView', launchEdiServicesView);
 
-function launchOrdersView() {
-	codeshelf.windowLauncher.loadOrdersView(true); // OUTBOUND orders
+function launchOrdersView(partialOrderIdQuery) {
+	codeshelf.windowLauncher.loadOrdersView(partialOrderIdQuery, true); // OUTBOUND orders
 }
 goog.exportSymbol('launchOrdersView', launchOrdersView);
 
-function launchBatchOrdersView() {
-	codeshelf.windowLauncher.loadOrdersView(false); // CROSS orders, no outbound
+function launchBatchOrdersView(partialOrderIdQuery) {
+	codeshelf.windowLauncher.loadOrdersView(partialOrderIdQuery, false); // CROSS orders, no outbound
 }
 goog.exportSymbol('launchBatchOrdersView', launchBatchOrdersView);
 
@@ -616,7 +616,7 @@ function launchTestRunner() {
 	launchPathsView();
 	launchWorkAreaEditor();
 	launchEdiServicesView();
-	launchOrdersView(); // only outbound orders
+	launchOrdersView(''); // only outbound orders
 	launchOrderDetailsView(); // only outbound orders
 	// launchWorkAreaView();
 	launchFacilityEditor();

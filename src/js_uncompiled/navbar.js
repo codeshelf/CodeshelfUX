@@ -12,8 +12,7 @@ codeshelf.Navbar = function() {
          "menu": [
          /**
           *   Orders views no long allowed. Not efficient enough when there are thousands of orders
-             {"href": "javascript:launchOrdersView()", key: "orders.outbound", "label": "Outbound Orders", "permission": "order:view:outbound"},
-
+             {"href": "javascript:launchOrdersView('27')", key: "orders.outbound", "label": "Outbound Orders", "permission": "order:view:outbound"},
              // Need to do next line conditionally. Do it for GoodEggs. Don't for Accu-Logistics
              {"href": "javascript:launchBatchOrdersView()", key: "orders.crossbatch", "label": "Cross Batch Orders", "permission": "order:view:crossbatch"},
           */

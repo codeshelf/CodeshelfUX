@@ -22,11 +22,12 @@ goog.require('adhocDialogService');
  * @param facility The facility to check.
  * @return {Object} The orders view.
  */
-codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
+codeshelf.ordersview = function(websession, facility, inOutboundOrders, partialOrderIdQuery) {
 
 	var websession_ = websession;
 	var facility_ = facility;
 	var outboundOrders_ = inOutboundOrders;
+    var partialOrderIdQuery_ = partialOrderIdQuery;
 
 	function workSequenceComparer(orderHeaderA, orderHeaderB) {
 		if (orderHeaderA["workSequence"] < orderHeaderB["workSequence"]) {
@@ -216,11 +217,11 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders) {
 		// Probably would be good to parameterize much more: orderTypeEnum in particular.
 
 
-		var orderHeaderFilter = "orderHeadersByFacilityAndType";
+		var orderHeaderFilter = "orderHeadersByFacilityAndPartialDomainId";
 
 		var orderHeaderFilterParams = [
 			{ 'name': 'facilityId', 'value': facility_['persistentId']},
-			{ 'name': 'orderType', 'value': orderTypeEnum }
+			{ 'name': 'partialDomainId', 'value': '%' + partialOrderIdQuery_ + '%'}
 		];
 
 		// Accu-Logistics and many sites have no group at all, or are missing many. Just ignore and do the order headers.
