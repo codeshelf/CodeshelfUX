@@ -24,3 +24,6 @@
     right:0;left:auto
 }
 
+body.mini-navbar .footer {
+  margin: 0 0 0 0px;
+}

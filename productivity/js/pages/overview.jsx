@@ -5,6 +5,7 @@ var $ = require('jquery');
 var el = React.createElement;
 
 var StatusSummaryIBox = require('components/statussummaryibox');
+var TopItems = require('components/topitems');
 
 var OverviewPage = React.createClass({
     statics: {
@@ -64,15 +65,24 @@ var OverviewPage = React.createClass({
 
     render: function() {
         var {views, apiContext, filterOptions} = this.state;
-        return (<div className="row orders">
-                {
-                    _.map(views, function(view){
-                        var stateKey = view["filterName"] + view["aggregate"];
-                        return (<div className="col-sm-6 col-md-4" key={stateKey}>
-                                <StatusSummaryIBox apiContext={apiContext} view={view} filterOptions={filterOptions}/>
-                                </div>);
-                    }.bind(this))
-                }
+        return (<div className="wrapper wrapper-content">
+
+                    <div className="row orders">
+                    {
+                        _.map(views, function(view){
+                            var stateKey = view["filterName"] + view["aggregate"];
+                            return (<div className="col-sm-6 col-md-4" key={stateKey}>
+                                    <StatusSummaryIBox apiContext={apiContext} view={view} filterOptions={filterOptions}/>
+                                    </div>);
+                        }.bind(this))
+                    }
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-6 col-md-4" key="topitems">
+                            <TopItems apiContext={apiContext} />
+                        </div>
+                    </div>
+
                 </div>);
     }
 });
