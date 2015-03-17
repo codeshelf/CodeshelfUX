@@ -569,7 +569,7 @@ goog.exportSymbol('launchTierListView', launchTierListView);
 function launchSlotListView() {
 	codeshelf.windowLauncher.loadSlotListView();
 }
-goog.exportSymbol('launchTierListView', launchTierListView);
+goog.exportSymbol('launchSlotListView', launchSlotListView);
 
 function launchBayListView() {
 	codeshelf.windowLauncher.loadBayListView();
