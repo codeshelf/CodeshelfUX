@@ -25,6 +25,8 @@ fi
 
 # Download development and app dependencies
 
+npm install bower
+
 npm install
 
 #Download additional app  dependencies only available from bower
