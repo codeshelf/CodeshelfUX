@@ -191,9 +191,13 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders, partialO
 	var hierarchyMap = [];
 	var view = null;
 	if (facility_['hasMeaningfulOrderGroups']) {
-		var orderGroupFilter = "allActiveByParent";
+        //By limiting to at least order groups that have the order we largely reduce the load
+        // until better solution
+
+		var orderGroupFilter = "orderGroupsByOrderHeaderId";
 		var orderGroupFilterParams = [
-			{ 'name': 'parentId', 'value': facility_['persistentId']}
+			{ 'name': 'parentId', 'value': facility_['persistentId']},
+			{ 'name': 'partialDomainId', 'value': '%' + partialOrderIdQuery + '%'}
 		];
 
 		var orderHeaderFilter = "orderHeadersByGroupAndType";
