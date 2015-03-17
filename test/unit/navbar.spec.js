@@ -11,6 +11,8 @@ describe('navbar', function() {
 
 	});
 
+	/**
+	 * Remove orders menu choices, so this test invalid
 	describe("when user has all permissions", function() {
 		beforeEach(function() {
 			authz = new codeshelf.Authz();
@@ -29,6 +31,7 @@ describe('navbar', function() {
 			expect(hasMenuItem(facilityNavbar, 'orders.crossbatch')).toBe(true);
 		});
 	});
+	*/
 
 	describe("when view-only user",function() {
 		var filteredNavbar;
