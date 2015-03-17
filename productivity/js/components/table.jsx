@@ -3,8 +3,9 @@ var _ = require('lodash');
 
 //relies on jquery and tablesaw 
 //but just make sure it is included globally
-require("style!css!tablesaw/dist/tablesaw.css");
-require("imports?jQuery=jquery!tablesaw/dist/tablesaw");
+
+require("style!css!bower_components/tablesaw/dist/tablesaw.css");
+require("imports?jQuery=jquery!bower_components/tablesaw/dist/tablesaw.js");
 var $ = require("jquery");
 
 var HeaderTitle = {

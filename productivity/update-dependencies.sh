@@ -24,6 +24,9 @@ if [ -z "$NPM_CMD" ]; then
 fi
 
 # Download development and app dependencies
+npm cache clean
+
+npm install bower
 
 npm install
 
