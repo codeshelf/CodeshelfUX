@@ -73,20 +73,18 @@ codeshelf.Navbar.prototype.getNavbarItems = function(facility, authz, configValu
 };
 
 codeshelf.Navbar.prototype.getMenuItems = function(navbarMenus, facility, configValues) {
-	return this.filterNavbarMenus(navbarMenus, function(menu) {
+	var showInvMenu;
+	for(var i=0; i<configValues.length; i++){
 
-		var invtParam;
-		for(var i=0; i<configValues.length; i++){
-
-			if (configValues[i].name == 'INVTMENU'){
-				invtParam = configValues[i].value;
-				break;
-			}
-
+		if (configValues[i].name == 'INVTMENU'){
+			showInvMenu = configValues[i].value;
+			break;
 		}
+	}
 
+	return this.filterNavbarMenus(navbarMenus, function(menu) {
 		if (menu['key'] == 'inventory') {
-			if ( invtParam == 'false') {
+			if (!showInvMenu) {
 				return false;
 			}
 		}
