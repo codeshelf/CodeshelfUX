@@ -450,6 +450,11 @@ domainobjects = {
 				'id':    'metersFromAnchor',
 				'title': 'Meters From Anchor',
 				'width': 10
+			},
+			gtinId: {
+				'id':		'gtinId',
+				'title':	'GTIN',
+				'width':	10
 			}
 		}
 	},
@@ -486,6 +491,11 @@ domainobjects = {
 				'id':    'itemLocations',
 				'title': 'Item Locations',
 				'width': 10
+			},
+			itemGtins: {
+				'id':		'itemGtins',
+				'title':	'Item GTINs',
+				'width':	20
 			}
 		}
 	},
@@ -681,6 +691,11 @@ domainobjects = {
 				'id':    'workSequence',
 				'title': 'Work Seq',
 				'width': 15
+			},
+			'gtinId': {
+				'id':	 'gtinId',
+				'title': 'GTIN',
+				'width': 10
 			}
 		}
 	},
@@ -1176,10 +1191,15 @@ domainobjects = {
 				'title': 'Actual',
 				'width': 6
 			},
-			'litLedsForWi':         {
+			'litLedsForWi':	{
 				'id':    'litLedsForWi',
 				'title': 'LEDs',
 				'width': 8
+			},
+			'gtinId': {
+				'id':	'gtinId',
+				'title': 'GTIN',
+				'width': 10
 			}
 		}
 	}
