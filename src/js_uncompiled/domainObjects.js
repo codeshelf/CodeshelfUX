@@ -450,6 +450,11 @@ domainobjects = {
 				'id':    'metersFromAnchor',
 				'title': 'Meters From Anchor',
 				'width': 10
+			},
+			gtinId: {
+				'id':		'gtinId',
+				'title':	'GTIN',
+				'width':	10
 			}
 		}
 	},
@@ -486,6 +491,52 @@ domainobjects = {
 				'id':    'itemLocations',
 				'title': 'Item Locations',
 				'width': 10
+			},
+			itemGtins: {
+				'id':		'itemGtins',
+				'title':	'Item GTINs',
+				'width':	20
+			}
+		}
+	},
+	
+	'Gtin': {
+		'className':  'Gtin',
+		'properties': {
+			'domainId': {
+				'id': 'domainId',
+				'title': 'GTIN',
+				'width': 25
+			},
+			'persistentId': {
+				'id': 'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			},
+			'itemMasterPersistentId': {
+				'id': 'itemMasterPersistentId',
+				'title': 'ItemMasterPersistentId',
+				'width': 40
+			},
+			'itemMasterId': {
+				'id': 'itemMasterId',
+				'title': 'SKU',
+				'width': 25
+			},
+			itemDescription: {
+				'id':    'itemDescription',
+				'title': 'Description',
+				'width': 10
+			},
+			'uomMasterId':         {
+				'id':    'uomMasterId',
+				'title': 'UOM',
+				'width': 5
+			},
+			'uomMasterPersistentId':         {
+				'id':    'uomMasterPersistentId',
+				'title': 'UOM PersistentId',
+				'width': 40
 			}
 		}
 	},
@@ -640,6 +691,11 @@ domainobjects = {
 				'id':    'workSequence',
 				'title': 'Work Seq',
 				'width': 15
+			},
+			'gtinId': {
+				'id':	 'gtinId',
+				'title': 'GTIN',
+				'width': 10
 			}
 		}
 	},
@@ -1135,10 +1191,15 @@ domainobjects = {
 				'title': 'Actual',
 				'width': 6
 			},
-			'litLedsForWi':         {
+			'litLedsForWi':	{
 				'id':    'litLedsForWi',
 				'title': 'LEDs',
 				'width': 8
+			},
+			'gtinId': {
+				'id':	'gtinId',
+				'title': 'GTIN',
+				'width': 10
 			}
 		}
 	}
