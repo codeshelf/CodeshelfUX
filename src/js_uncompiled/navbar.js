@@ -73,11 +73,15 @@ codeshelf.Navbar.prototype.getNavbarItems = function(facility, authz, configValu
 };
 
 codeshelf.Navbar.prototype.getMenuItems = function(navbarMenus, facility, configValues) {
-	var showInvMenu;
+	var showInvMenu = false;
 	for(var i=0; i<configValues.length; i++){
 
-		if (configValues[i].name == 'INVTMENU'){
-			showInvMenu = configValues[i].value;
+		if (configValues[i].name == 'INVTMENU') {
+			if (configValues[i].value == "false") {
+				showInvMenu = false;
+			} else {
+				showInvMenu = true;
+			}
 			break;
 		}
 	}
