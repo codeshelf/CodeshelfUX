@@ -21,7 +21,7 @@ codeshelf.Navbar = function() {
              {"href": "javascript:launchContainerUseListView()", key: "containers", "label": "Containers", "permission" : "container:view" },
              {"href": "javascript:launchWorkInstructionListView()", key: "workinstructions", "label": "Uncompleted Work Instructions", "permission" : "workinstructions:view" }
         ]},
-        
+
         {"key": "inventory",
          "label": "Inventory",
          "menu": [
@@ -29,7 +29,7 @@ codeshelf.Navbar = function() {
              {"href": "javascript:launchItemMastersView()", key: "itemmasters", "label": "Item Masters", "permission":"itemmasters:view"},
              {"href": "javascript:launchGtinView()", key: "gtins", "label": "Items by GTIN", "permission":"gtins:view"}
          ]},
-         
+
         {"key": "places",
          "label": "Places",
          "menu": [
@@ -65,6 +65,7 @@ codeshelf.Navbar = function() {
 };
 
 codeshelf.Navbar.prototype.getNavbarItems = function(facility, authz, configValues) {
+    if (typeof(configValues)=== 'undefined') configValues = [];
 	var navbarMenus = this.getMenuItems(this.navbar_, facility, configValues);
     var navbarItems = this.toFacilityNavbar(navbarMenus, facility);
     navbarItems = this.toUserNavbar(navbarItems, authz);
@@ -73,7 +74,7 @@ codeshelf.Navbar.prototype.getNavbarItems = function(facility, authz, configValu
 
 codeshelf.Navbar.prototype.getMenuItems = function(navbarMenus, facility, configValues) {
 	return this.filterNavbarMenus(navbarMenus, function(menu) {
-	
+
 		var invtParam;
 		for(var i=0; i<configValues.length; i++){
 
