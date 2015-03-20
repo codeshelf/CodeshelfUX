@@ -489,6 +489,47 @@ domainobjects = {
 			}
 		}
 	},
+	
+	'Gtin': {
+		'className':  'Gtin',
+		'properties': {
+			'domainId': {
+				'id': 'domainId',
+				'title': 'GTIN',
+				'width': 25
+			},
+			'persistentId': {
+				'id': 'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			},
+			'itemMasterPersistentId': {
+				'id': 'itemMasterPersistentId',
+				'title': 'ItemMasterPersistentId',
+				'width': 40
+			},
+			'itemMasterId': {
+				'id': 'itemMasterId',
+				'title': 'SKU',
+				'width': 25
+			},
+			itemDescription: {
+				'id':    'itemDescription',
+				'title': 'Description',
+				'width': 10
+			},
+			'uomMasterId':         {
+				'id':    'uomMasterId',
+				'title': 'UOM',
+				'width': 5
+			},
+			'uomMasterPersistentId':         {
+				'id':    'uomMasterPersistentId',
+				'title': 'UOM PersistentId',
+				'width': 40
+			}
+		}
+	},
 
 	'LedController': {
 		'className':  'LedController',

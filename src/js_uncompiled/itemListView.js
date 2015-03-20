@@ -17,6 +17,17 @@ goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
 
+codeshelf.itemListViewForGtin = function(websession, facility, gtin, itemMaster, uomMaster) {
+	var	itemFilter = "itemsByFacilityAndGtin";
+	var itemFilterParams = [
+			{ 'name': 'facilityId', 'value': facility['persistentId']},
+			{ 'name': 'itemMaster', 'value': itemMaster},
+			{ 'name': 'uomMaster', 'value': uomMaster}
+		];
+
+	return codeshelf.buildItemListView(websession, facility, itemFilter, itemFilterParams, "Items For GTIN: " + gtin);
+};
+
 codeshelf.itemListViewForSku = function(websession, facility, sku) {
 	// item parent goes itme->itemMaster>facility
 	var	itemFilter = "itemsByFacilityAndSku";

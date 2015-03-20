@@ -19,10 +19,17 @@ codeshelf.Navbar = function() {
 
              {"href": "javascript:launchOrderDetailsView()", key: "orders.details", "label": "Order Details", "permission": "order:view:details"},
              {"href": "javascript:launchContainerUseListView()", key: "containers", "label": "Containers", "permission" : "container:view" },
-             {"href": "javascript:launchWorkInstructionListView()", key: "workinstructions", "label": "Uncompleted Work Instructions", "permission" : "workinstructions:view" },
-             {"href": "javascript:launchInventoryView()", key: "inventory", "label": "Item Locations", "permission":"inventory:view"},
-             {"href": "javascript:launchItemMastersView()", key: "itemmasters", "label": "Item Masters", "permission":"itemmasters:view"}        ]
-        },
+             {"href": "javascript:launchWorkInstructionListView()", key: "workinstructions", "label": "Uncompleted Work Instructions", "permission" : "workinstructions:view" }
+        ]},
+        
+        {"key": "inventory",
+         "label": "Inventory",
+         "menu": [
+        	 {"href": "javascript:launchInventoryView()", key: "inventory", "label": "Item Locations", "permission":"inventory:view"},
+             {"href": "javascript:launchItemMastersView()", key: "itemmasters", "label": "Item Masters", "permission":"itemmasters:view"},
+             {"href": "javascript:launchGtinView()", key: "gtins", "label": "Items by GTIN", "permission":"gtins:view"}
+         ]},
+         
         {"key": "places",
          "label": "Places",
          "menu": [
@@ -57,10 +64,34 @@ codeshelf.Navbar = function() {
     ];
 };
 
-codeshelf.Navbar.prototype.getNavbarItems = function(facility, authz) {
-    var navbarItems = this.toFacilityNavbar(this.navbar_, facility);
+codeshelf.Navbar.prototype.getNavbarItems = function(facility, authz, configValues) {
+	var navbarMenus = this.getMenuItems(this.navbar_, facility, configValues);
+    var navbarItems = this.toFacilityNavbar(navbarMenus, facility);
     navbarItems = this.toUserNavbar(navbarItems, authz);
     return navbarItems;
+};
+
+codeshelf.Navbar.prototype.getMenuItems = function(navbarMenus, facility, configValues) {
+	return this.filterNavbarMenus(navbarMenus, function(menu) {
+	
+		var invtParam;
+		for(var i=0; i<configValues.length; i++){
+
+			if (configValues[i].name == 'INVTMENU'){
+				invtParam = configValues[i].value;
+				break;
+			}
+
+		}
+
+		if (menu['key'] == 'inventory') {
+			if ( invtParam == 'false') {
+				return false;
+			}
+		}
+		return true;
+
+	});
 };
 
 codeshelf.Navbar.prototype.toFacilityNavbar = function(navbarItems, facility) {
@@ -73,8 +104,7 @@ codeshelf.Navbar.prototype.toFacilityNavbar = function(navbarItems, facility) {
             else {
                 return true;
             }
-        }
-        else {
+        } else {
             return true;
         }
 
@@ -97,6 +127,12 @@ codeshelf.Navbar.prototype.toUserNavbar = function(navbarItems, authz) {
             }
             return permitted;
         });
+};
+
+codeshelf.Navbar.prototype.filterNavbarMenus = function(navbarMenus, filterFunc) {
+	var userNavbar = goog.array.clone(navbarMenus);
+	userNavbar  = goog.array.filter(navbarMenus, filterFunc);
+    return userNavbar;
 };
 
 codeshelf.Navbar.prototype.filterNavbar = function(navbarItems, filterFunc) {

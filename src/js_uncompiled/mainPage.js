@@ -13,6 +13,7 @@ goog.require('codeshelf.chelistview');
 goog.require('codeshelf.baylistview');
 goog.require('codeshelf.containeruselistview');
 goog.require('codeshelf.domainobjectpropertiesview');
+goog.require('codeshelf.gtinlistview');
 goog.require('codeshelf.itemlistview');
 goog.require('codeshelf.itemmasterlistview');
 goog.require('codeshelf.workinstructionlistview');
@@ -269,6 +270,17 @@ codeshelf.windowLauncher = (function() {
 				alert(err);
 			}
 		},
+		
+		loadGtinListView: function() {
+			try {
+				var gtinListView = codeshelf.gtinlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var gtinListViewWindow = codeshelf.window(gtinListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				gtinListViewWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
 
 
 		/**
@@ -296,6 +308,17 @@ codeshelf.windowLauncher = (function() {
 		 */
 		loadItemsListViewForSku: function(sku) {
 			var listView = codeshelf.itemListViewForSku(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), sku);
+			try {
+				var itemWindow = codeshelf.window(listView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				itemWindow.open();
+			}
+			catch (err) {
+				alert(err);
+			}
+		},
+		
+		loadItemsListViewForGtin: function(gtin, itemMaster, uomMaster) {
+			var listView = codeshelf.itemListViewForGtin(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), gtin, itemMaster, uomMaster);
 			try {
 				var itemWindow = codeshelf.window(listView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				itemWindow.open();
@@ -365,12 +388,29 @@ codeshelf.mainpage = function() {
 		// frame_.style.height = size.height - 5 + 'px';
 	}
 
-	function setupNavbar(facility, authz) {
+	function setupNavbar(facility, authz, configValues) {
 		goog.dom.setProperties(goog.dom.getDocument()['body'], {'class': 'main_body'});
-		var navbar = new codeshelf.Navbar();
+		var navbar = new this.codeshelf.Navbar();
 
-		var filteredNavbar = navbar.getNavbarItems(facility, authz);
+		var filteredNavbar = navbar.getNavbarItems(facility, authz, configValues);
 		goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.mainPage, {navbar: filteredNavbar}));
+	}
+	
+	function domainPropertiesCallback(websession, facility, authz) {
+		var domainPropertiesCallbackObj = {
+			exec: function(type,command) {
+				if (type == kWebSessionCommandType.OBJECT_PROPERTIES_RESP) {
+                    var configValues = command['results'];
+                    //this needs to go in the callback
+					if (facility != null) {
+						setupNavbar(facility, authz, configValues);
+					}
+
+				}
+			}
+		};
+
+		return domainPropertiesCallbackObj;
 	}
 
 	function getFacilitiesCallback(authz) {
@@ -387,16 +427,13 @@ codeshelf.mainpage = function() {
 						var lastFacility = null;
 						for (var i = 0; i < command['results'].length; i++) {
 							var lastFacility = command['results'][i];
-
-							// save the websession and facility so we can launch windows at any time.
-							codeshelf.sessionGlobals.setWebsession(websession_);
-							codeshelf.sessionGlobals.setFacility(lastFacility);
-
-							//loadFacilityWindows();
 						}
-						if (lastFacility != null) {
-							setupNavbar(lastFacility, authz);
-						}
+						// save the websession and facility so we can launch windows at any time.
+						codeshelf.sessionGlobals.setWebsession(websession_);
+						codeshelf.sessionGlobals.setFacility(lastFacility);
+						
+						var theDomainPropertiesCmd = websession_.createObjectPropertiesRequest('Facility', lastFacility['persistentId']);
+				        websession_.sendCommand(theDomainPropertiesCmd, domainPropertiesCallback(websession_, lastFacility, authz), true);
 					}
 				}
 			}
@@ -600,6 +637,11 @@ function launchItemMastersView() {
 	codeshelf.windowLauncher.loadItemMastersListView();
 }
 goog.exportSymbol('launchItemMastersView', launchItemMastersView);
+
+function launchGtinView() {
+	codeshelf.windowLauncher.loadGtinListView();
+}
+goog.exportSymbol('launchGtinView', launchGtinView);
 
 function launchDomainObjectPropertiesView() {
 	codeshelf.windowLauncher.loadDomainObjectPropertiesView();
