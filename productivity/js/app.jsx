@@ -103,7 +103,7 @@ var App = React.createClass({
             {"label": "Activity", "href": "#"}
         ];
 
-        if (facility && endpoint) {
+        if (facility != null && endpoint != null) {
            apiContext = csapi.getFacilityContext(endpoint, facility);
         }
 
