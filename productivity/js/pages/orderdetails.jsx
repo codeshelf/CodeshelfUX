@@ -1,50 +1,46 @@
-var React = require('react');
+var React = require('react/addons');
 var _ = require('lodash');
 var $ = require('jquery');
 var Rx = require('rx');
 
-var csapi = require('data/csapi');
 var el = React.createElement;
 
 var OrderDetailIBox = require('components/orderdetailibox');
-var OrderSummaryIBox = require('components/ordersummaryibox');
+
+var PickerEventsChart = require('components/pickereventschart');
+var {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} = require("components/ibox");
 
 var pollingPeriod = 20000;
 
 var OrderDetailsPage = React.createClass({
+    mixins: [React.addons.LinkedStateMixin],
     statics: {
         getTitle: function() {
             return "Activity";
         }
     },
 
-    getDefaultProps:function(){
-        return {
-            "endpoint" : "",
-            "facility" : {}
-        };
-    },
-
     getInitialState: function() {
         return {
             "productivity" : {},
-            "activeRuns": {}
+            "activeRuns": {},
+            "startTimestamp" : "today",
+            "endTimestamp" : "today"
         };
     },
 
     updateViews: function(props) {
-        var {endpoint, facility} = props;
-        var facilityId = facility['persistentId'];
+        var {apiContext} = props;
 
         var pollerStream = Rx.Observable.timer(0, pollingPeriod /*ms*/);
         //Create stream of productivity updates for the facility
         var productivityStream = pollerStream.flatMapLatest(function() {
-            return Rx.Observable.fromPromise(csapi.getProductivity (endpoint, facilityId)).catch(Rx.Observable.empty());
+            return Rx.Observable.fromPromise(apiContext.getProductivity()).catch(Rx.Observable.empty());
         });
 
         //Create stream of productivity updates for the facility
         var activeRunsStream = pollerStream.flatMapLatest(function() {
-            return Rx.Observable.fromPromise(csapi.getCheRuns(endpoint, facilityId)).catch(Rx.Observable.empty());
+            return Rx.Observable.fromPromise(apiContext.getCheRuns()).catch(Rx.Observable.empty());
         });
         this.setState(
             {
@@ -123,11 +119,40 @@ var OrderDetailsPage = React.createClass({
     },
 
     render: function() {
-        var {productivity, activeRuns} = this.state;
-        return (
-                <div className="row orderdetails">
-                {this.renderOrderDetailComponents(productivity, activeRuns)}
-            </div>
+        var {productivity, activeRuns, startTimestamp, endTimestamp} = this.state;
+        var {apiContext} = this.props;
+        return (<div>
+                    <div className="row orderdetails">
+                        <div className="col-sm-12">
+                            <IBox>
+                                <IBoxTitleBar>
+                                    <IBoxTitleText>
+                                        Pick Events
+                                    </IBoxTitleText>
+                                </IBoxTitleBar>
+                            <IBoxSection>
+                                <div className="text-left">
+                                <form>
+                                <label for="startTimestamp">Start</label>
+                                <input className="form-control" id="startTimestamp" name="startTimestamp"type="datetime" valueLink={this.linkState('startTimestamp')} size="15"/>
+                                <label for="endTimestamp">End</label>
+                                <input className="form-control" id="endTimestamp" name="endTimestamp" type="datetime" valueLink={this.linkState('endTimestamp')} size="15"/>
+                                </form>
+                                </div>
+                            </IBoxSection>
+                            <IBoxSection>
+                                <PickerEventsChart style={{width: '100%', height: '400px'}}
+                                                   apiContext={apiContext}
+                                                   startTimestamp={startTimestamp}
+                                                   endTimestamp={endTimestamp}/>
+                            </IBoxSection>
+                            </IBox>
+                        </div>
+                    </div>
+                    <div className="row orderdetails">
+                        {this.renderOrderDetailComponents(productivity, activeRuns)}
+                    </div>
+                </div>
         );
     }
 });

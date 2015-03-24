@@ -9,19 +9,6 @@ var getFacilities = function(endpoint) {
 	             );
 };
 
-
-function getProductivity(endpoint , facilityId) {
-	var productivityPath = "/api/facilities/" + facilityId + "/productivity";
-	return $.ajax(endpoint + productivityPath, {
-	});
-}
-
-function getCheRuns(endpoint , facilityId) {
-	var cheSummaryPath  = "/api/facilities/" + facilityId + "/chesummary";
-	return $.ajax(endpoint + cheSummaryPath, {
-	});
-}
-
 function getSummarySnapshot(endpoint, facilityId, viewSpec) {
     var filterName =  viewSpec["filterName"];
     var aggregate = viewSpec["aggregate"];
@@ -76,10 +63,28 @@ function getFacilityContext(endpoint, facility) {
     return {
         facilityId: facilityId,
         endpoint: endpoint,
-        getProductivity : _.partial(getProductivity, endpoint, facilityId),
-        getCheRuns: _.partial(getCheRuns, endpoint, facilityId),
+        getProductivity : function() {
+	        var productivityPath = "/api/facilities/" + facilityId + "/productivity";
+	        return $.ajax(endpoint + productivityPath, {
+	        });
+        },
+        getCheRuns: function() {
+            var cheSummaryPath  = "/api/facilities/" + facilityId + "/chesummary";
+	        return $.ajax(endpoint + cheSummaryPath, {
+	        });
+        },
         getSummarySnapshot: _.partial(getSummarySnapshot, endpoint, facilityId),
         getBlockedWork: _.partial(getBlockedWork, endpoint, facilityId),
+        getWorkResults: function(startTimestamp, endTimestamp) {
+	        var workResults = "/api/facilities/" + facilityId + "/work/results";
+	        return $.ajax(endpoint + workResults, {
+                data: {
+                    "startTimestamp": startTimestamp,
+                    "endTimestamp": endTimestamp
+                }
+            });
+
+        },
         getTopItems: function() {
 	        var topItems = "/api/facilities/" + facilityId + "/work/topitems";
 	        return $.ajax(endpoint + topItems, {});
@@ -102,7 +107,4 @@ function getFacilityContext(endpoint, facility) {
 module.exports = {
     getFacilities: getFacilities,
     getFacilityContext: getFacilityContext,
-    //deprecated below
-    getProductivity: getProductivity,
-    getCheRuns: getCheRuns
 };
