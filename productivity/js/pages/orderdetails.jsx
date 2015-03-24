@@ -141,10 +141,14 @@ var OrderDetailsPage = React.createClass({
                                 </div>
                             </IBoxSection>
                             <IBoxSection>
-                                <PickerEventsChart style={{width: '100%', height: '400px'}}
+                                <PickerEventsChart style={{width: '100%', height: '300px'}}
                                                    apiContext={apiContext}
                                                    startTimestamp={startTimestamp}
                                                    endTimestamp={endTimestamp}/>
+                                <PickerEventsChart style={{width: '100%', height: '100px'}}
+                                                   apiContext={apiContext}
+                                                   startTimestamp="today"
+                                                   endTimestamp="today"/>
                             </IBoxSection>
                             </IBox>
                         </div>
