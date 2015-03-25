@@ -1,4 +1,5 @@
 var React = require('react/addons');
+var {ButtonGroup, Button} = require('react-bootstrap');
 var _ = require('lodash');
 var $ = require('jquery');
 var Rx = require('rx');
@@ -117,7 +118,9 @@ var OrderDetailsPage = React.createClass({
         }
         return orderDetailComponents;
     },
-
+    setStartTimestamp: function(startTimestamp) {
+        this.setState({startTimestamp: startTimestamp});
+    },
     render: function() {
         var {productivity, activeRuns, startTimestamp, endTimestamp} = this.state;
         var {apiContext} = this.props;
@@ -131,6 +134,12 @@ var OrderDetailsPage = React.createClass({
                                     </IBoxTitleText>
                                 </IBoxTitleBar>
                             <IBoxSection>
+                                <ButtonGroup>
+                                    <Button bsStyle="primary" onClick={this.setStartTimestamp.bind(this, "today")}>Today</Button>
+                                    <Button bsStyle="primary"  onClick={this.setStartTimestamp.bind(this, "4 hours ago")}>Last 4 Hours</Button>
+                                    <Button bsStyle="primary" onClick={this.setStartTimestamp.bind(this, "1 hour ago")}>Last Hour</Button>
+                                </ButtonGroup>
+                                {/*}
                                 <div className="text-left">
                                 <form>
                                 <label for="startTimestamp">Start</label>
@@ -138,7 +147,7 @@ var OrderDetailsPage = React.createClass({
                                 <label for="endTimestamp">End</label>
                                 <input className="form-control" id="endTimestamp" name="endTimestamp" type="datetime" valueLink={this.linkState('endTimestamp')} size="15"/>
                                 </form>
-                                </div>
+                                </div>*/}
                             </IBoxSection>
                             <IBoxSection>
                                 <PickerEventsChart style={{width: '100%', height: '300px'}}
@@ -147,7 +156,7 @@ var OrderDetailsPage = React.createClass({
                                                    endTimestamp={endTimestamp}/>
                                 <PickerEventsChart style={{width: '100%', height: '100px'}}
                                                    apiContext={apiContext}
-                                                   startTimestamp="today"
+                                                   startTimestamp="1 week ago"
                                                    endTimestamp="today"/>
                             </IBoxSection>
                             </IBox>
