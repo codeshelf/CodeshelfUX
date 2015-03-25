@@ -69,10 +69,13 @@ var PickerEventsChart = React.createClass({
             chart.tooltipContent(function (key, x, y, e, data) {
                 return _.template("<h3>${key}</h3>"
                                   +"<p>${x}</p>"
-                                  + "<p>${status}</p>")(
+                                  + "<p>${status}</p>"
+                                  + "<p>Qty: ${actualQuantity}")(
                     {key: key,
                      x: d3.time.format("%x %-I:%M:%S%p")( new Date(data.point.x)),
-                     status: data.point.status}
+                     status: data.point.status,
+                     actualQuantity: data.point.actualQuantity
+                    }
                 );
             });
 /*
@@ -108,6 +111,7 @@ var PickerEventsChart = React.createClass({
                       x: row["completed"]
                     , y: groupData.segment
                     , size: row["actualQuantity"]
+                    , actualQuantity: row["actualQuantity"]
                     , status: row["status"]
                 });
 
