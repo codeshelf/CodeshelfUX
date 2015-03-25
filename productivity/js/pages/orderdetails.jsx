@@ -1,20 +1,13 @@
-var React = require('react/addons');
-var {ButtonGroup, Button} = require('react-bootstrap');
+var React = require('react');
 var _ = require('lodash');
-var $ = require('jquery');
 var Rx = require('rx');
 
-var el = React.createElement;
-
+var PickerEventsIBox = require('components/pickereventsibox');
 var OrderDetailIBox = require('components/orderdetailibox');
-
-var PickerEventsChart = require('components/pickereventschart');
-var {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} = require("components/ibox");
 
 var pollingPeriod = 20000;
 
 var OrderDetailsPage = React.createClass({
-    mixins: [React.addons.LinkedStateMixin],
     statics: {
         getTitle: function() {
             return "Activity";
@@ -24,9 +17,7 @@ var OrderDetailsPage = React.createClass({
     getInitialState: function() {
         return {
             "productivity" : {},
-            "activeRuns": {},
-            "startTimestamp" : "today",
-            "endTimestamp" : "today"
+            "activeRuns": {}
         };
     },
 
@@ -127,39 +118,7 @@ var OrderDetailsPage = React.createClass({
         return (<div>
                     <div className="row orderdetails">
                         <div className="col-sm-12">
-                            <IBox>
-                                <IBoxTitleBar>
-                                    <IBoxTitleText>
-                                        Pick Events
-                                    </IBoxTitleText>
-                                </IBoxTitleBar>
-                            <IBoxSection>
-                                <ButtonGroup>
-                                    <Button bsStyle="primary" onClick={this.setStartTimestamp.bind(this, "today")}>Today</Button>
-                                    <Button bsStyle="primary"  onClick={this.setStartTimestamp.bind(this, "4 hours ago")}>Last 4 Hours</Button>
-                                    <Button bsStyle="primary" onClick={this.setStartTimestamp.bind(this, "1 hour ago")}>Last Hour</Button>
-                                </ButtonGroup>
-                                {/*}
-                                <div className="text-left">
-                                <form>
-                                <label for="startTimestamp">Start</label>
-                                <input className="form-control" id="startTimestamp" name="startTimestamp"type="datetime" valueLink={this.linkState('startTimestamp')} size="15"/>
-                                <label for="endTimestamp">End</label>
-                                <input className="form-control" id="endTimestamp" name="endTimestamp" type="datetime" valueLink={this.linkState('endTimestamp')} size="15"/>
-                                </form>
-                                </div>*/}
-                            </IBoxSection>
-                            <IBoxSection>
-                                <PickerEventsChart style={{width: '100%', height: '300px'}}
-                                                   apiContext={apiContext}
-                                                   startTimestamp={startTimestamp}
-                                                   endTimestamp={endTimestamp}/>
-                                <PickerEventsChart style={{width: '100%', height: '100px'}}
-                                                   apiContext={apiContext}
-                                                   startTimestamp="1 week ago"
-                                                   endTimestamp="today"/>
-                            </IBoxSection>
-                            </IBox>
+                            <PickerEventsIBox apiContext={apiContext} />
                         </div>
                     </div>
                     <div className="row orderdetails">
