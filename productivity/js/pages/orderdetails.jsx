@@ -1,13 +1,9 @@
 var React = require('react');
 var _ = require('lodash');
-var $ = require('jquery');
 var Rx = require('rx');
 
-var csapi = require('data/csapi');
-var el = React.createElement;
-
+var PickerEventsIBox = require('components/pickereventsibox');
 var OrderDetailIBox = require('components/orderdetailibox');
-var OrderSummaryIBox = require('components/ordersummaryibox');
 
 var pollingPeriod = 20000;
 
@@ -18,13 +14,6 @@ var OrderDetailsPage = React.createClass({
         }
     },
 
-    getDefaultProps:function(){
-        return {
-            "endpoint" : "",
-            "facility" : {}
-        };
-    },
-
     getInitialState: function() {
         return {
             "productivity" : {},
@@ -33,18 +22,17 @@ var OrderDetailsPage = React.createClass({
     },
 
     updateViews: function(props) {
-        var {endpoint, facility} = props;
-        var facilityId = facility['persistentId'];
+        var {apiContext} = props;
 
         var pollerStream = Rx.Observable.timer(0, pollingPeriod /*ms*/);
         //Create stream of productivity updates for the facility
         var productivityStream = pollerStream.flatMapLatest(function() {
-            return Rx.Observable.fromPromise(csapi.getProductivity (endpoint, facilityId)).catch(Rx.Observable.empty());
+            return Rx.Observable.fromPromise(apiContext.getProductivity()).catch(Rx.Observable.empty());
         });
 
         //Create stream of productivity updates for the facility
         var activeRunsStream = pollerStream.flatMapLatest(function() {
-            return Rx.Observable.fromPromise(csapi.getCheRuns(endpoint, facilityId)).catch(Rx.Observable.empty());
+            return Rx.Observable.fromPromise(apiContext.getCheRuns()).catch(Rx.Observable.empty());
         });
         this.setState(
             {
@@ -121,13 +109,22 @@ var OrderDetailsPage = React.createClass({
         }
         return orderDetailComponents;
     },
-
+    setStartTimestamp: function(startTimestamp) {
+        this.setState({startTimestamp: startTimestamp});
+    },
     render: function() {
-        var {productivity, activeRuns} = this.state;
-        return (
-                <div className="row orderdetails">
-                {this.renderOrderDetailComponents(productivity, activeRuns)}
-            </div>
+        var {productivity, activeRuns, startTimestamp, endTimestamp} = this.state;
+        var {apiContext} = this.props;
+        return (<div>
+                    <div className="row orderdetails">
+                        <div className="col-sm-12">
+                            <PickerEventsIBox apiContext={apiContext} />
+                        </div>
+                    </div>
+                    <div className="row orderdetails">
+                        {this.renderOrderDetailComponents(productivity, activeRuns)}
+                    </div>
+                </div>
         );
     }
 });

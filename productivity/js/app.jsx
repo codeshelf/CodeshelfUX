@@ -24,7 +24,7 @@ var App = React.createClass({
         return {
             "endpoint": "",
             "organization": {},
-            "facility": {}
+            "facility": null
         };
     },
 
@@ -91,6 +91,7 @@ var App = React.createClass({
             facility,
             endpoint} = this.state;
 
+        var facilityLabel = (facility) ? facility["domainId"] : "";
         var navMenus = [
             {"key": "activity",
              "label": "Activity",
@@ -99,7 +100,7 @@ var App = React.createClass({
             }];
 
         var breadcrumbs = [
-            {"label": facility['domainId'], "href": "#"     },
+            {"label": facilityLabel, "href": "#"     },
             {"label": "Activity", "href": "#"}
         ];
 
@@ -111,7 +112,7 @@ var App = React.createClass({
             <div id="wrapper">
                 <div className="row">
                      <div className="col-md-12">
-                          <Navbar title={facility['domainId']} navMenus={navMenus} />
+                          <Navbar title={facilityLabel} navMenus={navMenus} />
                           <div id="page-wrapper" className="gray-bg dashboard-1">
                                <NavbarTop title={this.getLeafTitle()}/>
                                {/**

@@ -15,6 +15,8 @@
   ],
   "dependencies": {
     "chartjs": "nnnick/Chart.js#1cfa42bc24e152cfef79523c310fae7d4c458635",
-    "tablesaw": "~1.0.4"
+    "tablesaw": "~1.0.4",
+    "d3": "~3.5.5",
+    "nvd3": "~1.7.1"
   }
 }
