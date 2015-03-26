@@ -390,7 +390,7 @@ codeshelf.mainpage = function() {
 
 	function setupNavbar(facility, authz, configValues) {
 		goog.dom.setProperties(goog.dom.getDocument()['body'], {'class': 'main_body'});
-		var navbar = new this.codeshelf.Navbar();
+		var navbar = new codeshelf.Navbar();
 
 		var filteredNavbar = navbar.getNavbarItems(facility, authz, configValues);
 		goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.mainPage, {navbar: filteredNavbar}));
