@@ -382,8 +382,8 @@ domainobjects = {
 				'id':    'primaryChannel',
 				'title': 'Primary Radio Channel',
 				'width': 10
-			}
-			'primaryChannel': {
+			},
+			'primarySiteControllerId': {
 				'id':    'primarySiteControllerId',
 				'title': 'Primary Site Controller Serial Number',
 				'width': 10
