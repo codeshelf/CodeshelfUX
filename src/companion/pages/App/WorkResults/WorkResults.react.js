@@ -7,6 +7,7 @@ var Rx = require('rx');
 
 var PickerEventsIBox = require('./PickerEventsIBox');
 var OrderDetailIBox = require('./OrderDetailsIBox');
+var PickRateIBox = require('./PickRateIBox');
 
 var pollingPeriod = 20000;
 
@@ -123,6 +124,11 @@ module.exports = React.createClass({
                     <div className="row orderdetails">
                         <div className="col-sm-12">
                             <PickerEventsIBox apiContext={apiContext} />
+                        </div>
+                    </div>
+                    <div className="row orderdetails">
+                        <div className="col-sm-12">
+                            <PickRateIBox apiContext={apiContext} />
                         </div>
                     </div>
                     <div className="row orderdetails">
