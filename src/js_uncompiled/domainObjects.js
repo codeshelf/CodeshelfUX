@@ -383,6 +383,11 @@ domainobjects = {
 				'title': 'Primary Radio Channel',
 				'width': 10
 			}
+			'primaryChannel': {
+				'id':    'primarySiteControllerId',
+				'title': 'Primary Site Controller Serial Number',
+				'width': 10
+			}
 
 		}
 	},
@@ -509,7 +514,7 @@ domainobjects = {
 			}
 		}
 	},
-	
+
 	'Gtin': {
 		'className':  'Gtin',
 		'properties': {
@@ -783,7 +788,7 @@ domainobjects = {
 				'id': 'shipperId',
 				'title': 'Shipper Id',
 				'width': 15
-			},	
+			},
 			'customerId':   {
 				'id':    'customerId',
 				'title': 'Customer ID',

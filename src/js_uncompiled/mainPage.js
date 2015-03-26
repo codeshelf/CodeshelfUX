@@ -270,7 +270,7 @@ codeshelf.windowLauncher = (function() {
 				alert(err);
 			}
 		},
-		
+
 		loadGtinListView: function() {
 			try {
 				var gtinListView = codeshelf.gtinlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
@@ -316,7 +316,7 @@ codeshelf.windowLauncher = (function() {
 				alert(err);
 			}
 		},
-		
+
 		loadItemsListViewForGtin: function(gtin, itemMaster, uomMaster) {
 			var listView = codeshelf.itemListViewForGtin(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), gtin, itemMaster, uomMaster);
 			try {
@@ -395,7 +395,7 @@ codeshelf.mainpage = function() {
 		var filteredNavbar = navbar.getNavbarItems(facility, authz, configValues);
 		goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.mainPage, {navbar: filteredNavbar}));
 	}
-	
+
 	function domainPropertiesCallback(websession, facility, authz) {
 		var domainPropertiesCallbackObj = {
 			exec: function(type,command) {
@@ -431,7 +431,7 @@ codeshelf.mainpage = function() {
 						// save the websession and facility so we can launch windows at any time.
 						codeshelf.sessionGlobals.setWebsession(websession_);
 						codeshelf.sessionGlobals.setFacility(lastFacility);
-						
+
 						var theDomainPropertiesCmd = websession_.createObjectPropertiesRequest('Facility', lastFacility['persistentId']);
 				        websession_.sendCommand(theDomainPropertiesCmd, domainPropertiesCallback(websession_, lastFacility, authz), true);
 					}
@@ -699,6 +699,7 @@ codeshelfApp.FacilityNgController = function($scope, $modalInstance, websession,
 	// second could match. Just being different to practice for when we have to be different
 	$scope['facility']['domainId'] = data['facility']['domainId'];
 	$scope['facility']['primaryChannel'] = data['facility']['primaryChannel'];
+	$scope['facility']['primarySiteControllerId'] = data['facility']['primarySiteControllerId'];
 
 };
 
@@ -708,7 +709,7 @@ codeshelfApp.FacilityNgController = function($scope, $modalInstance, websession,
 codeshelfApp.FacilityNgController.prototype.ok = function(){
 	var facility = this.scope_['facility'];
 	facility["className"] = "Facility";
-	this.websession_.update(facility, ["domainId", "description", "primaryChannel"]).then(function(newFacility) {
+	this.websession_.update(facility, ["domainId", "description", "primaryChannel", "primarySiteControllerId"]).then(function(newFacility) {
 		codeshelf.sessionGlobals.setFacility(newFacility);
 	});
 	this.modalInstance_.close();
