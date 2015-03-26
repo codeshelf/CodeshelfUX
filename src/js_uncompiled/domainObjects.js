@@ -98,6 +98,11 @@ domainobjects = {
 				'id': 'verticesUi',
 				'title': 'Vertices',
 				'width': 40
+			},
+			'putWall': {
+				'id': 'putWallUi',
+				'title': 'Put Wall',
+				'width': 40
 			}
 		}
 	},
@@ -158,6 +163,11 @@ domainobjects = {
 			'verticesUi': {
 				'id': 'verticesUi',
 				'title': 'Vertices',
+				'width': 40
+			},
+			'putWall': {
+				'id': 'putWallUi',
+				'title': 'Put Wall',
 				'width': 40
 			}
 		}
@@ -969,6 +979,11 @@ domainobjects = {
 				'id':    'pickFaceEndPosYui',
 				'title': 'Pick End Y',
 				'width': 40
+			},
+			'putWall': {
+				'id': 'putWallUi',
+				'title': 'Put Wall',
+				'width': 40
 			}
 		}
 	},
@@ -1055,6 +1070,11 @@ domainobjects = {
 				'id':    'primaryAliasId',
 				'title': 'Alias',
 				'width': 10
+			},
+			'putWall': {
+				'id': 'putWallUi',
+				'title': 'Put Wall',
+				'width': 40
 			}
 		}
 	},
