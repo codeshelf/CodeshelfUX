@@ -13,9 +13,9 @@ var Navbar = RClass(function() {
               <div id="nav-container" className="sidebar-collapse">
                 <ul className="nav" id="side-menu">
                   <NavbarHeader title={this.props.title} />
-                  <NavItemLink to="overview"><i className="fa fa-bar-chart-o"></i>Order Overview</NavItemLink>
+                  <NavItemLink to="overview"><i className="fa fa-clock-o"></i>Work Overview</NavItemLink>
                   <NavItemLink to="blockedwork"><i className="fa fa-exclamation-circle"></i>Blocked Work</NavItemLink>
-                  <NavItemLink to="orderdetails"><i className="fa fa-shopping-cart"></i>Activity</NavItemLink>
+                  <NavItemLink to="orderdetails"><i className="fa fa-pie-chart"></i>Work Results</NavItemLink>
                 </ul>
               </div>
             </nav>

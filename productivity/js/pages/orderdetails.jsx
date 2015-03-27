@@ -10,7 +10,7 @@ var pollingPeriod = 20000;
 var OrderDetailsPage = React.createClass({
     statics: {
         getTitle: function() {
-            return "Activity";
+            return "Work Results";
         }
     },
 

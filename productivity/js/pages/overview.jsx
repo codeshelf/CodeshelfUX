@@ -10,7 +10,7 @@ var TopItems = require('components/topitems');
 var OverviewPage = React.createClass({
     statics: {
         getTitle: function() {
-            return "Order Overview";
+            return "Work Overview";
         }
     },
 
