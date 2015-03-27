@@ -23,14 +23,19 @@ if [ -z "$NPM_CMD" ]; then
     fi
 fi
 
+echo "Removing node_modules/"
 rm -rf node_modules/
 
+echo "Cleaning NPM cache"
 npm cache clean
 
+echo "Installing Bower"
 npm install bower
 
+echo "Installing npm dependencies"
 npm install
 
+echo "Installing bower dependencies"
 #Download additional app  dependencies only available from bower
 ./node_modules/.bin/bower install
 
