@@ -71,7 +71,12 @@ var App = React.createClass({
         csapi.getFacilities(endpoint).then(function(facilities) {
             this.selectedFacility(endpoint, facilities[0]);
 
-        }.bind(this));
+        }.bind(this),
+        function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status) {
+                window.location = "login.html"; //TODO hack
+            }
+        });
     },
 
     getLeafTitle: function() {

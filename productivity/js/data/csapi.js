@@ -1,23 +1,29 @@
 var $ = require('jquery');
 var _ = require('lodash');
 
-var getFacilities = function(endpoint) {
-	var facilitiesPath = "/api/facilities";
-	return $.ajax(endpoint + facilitiesPath, {
+var globalOptions = {
+    crossDomain: true,
+    xhrFields: {
+        withCredentials: true
+    }
+};
 
-	}
-	             );
+var getFacilities = function(endpoint) {
+    var ajaxOptions = globalOptions;
+	var facilitiesPath = "/api/facilities";
+
+	return $.ajax(endpoint + facilitiesPath, ajaxOptions);
 };
 
 function getSummarySnapshot(endpoint, facilityId, viewSpec) {
     var filterName =  viewSpec["filterName"];
     var aggregate = viewSpec["aggregate"];
     var orderstatussummary = "/api/facilities/" + facilityId + "/statussummary/" + aggregate;
-    return $.ajax(endpoint + orderstatussummary, {
+    return $.ajax(endpoint + orderstatussummary, _.merge(globalOptions, {
         data: {
             filterName: filterName
         }
-    });
+    }));
 }
 
 
@@ -65,46 +71,44 @@ function getFacilityContext(endpoint, facility) {
         endpoint: endpoint,
         getProductivity : function() {
 	        var productivityPath = "/api/facilities/" + facilityId + "/productivity";
-	        return $.ajax(endpoint + productivityPath, {
-	        });
+	        return $.ajax(endpoint + productivityPath, globalOptions);
         },
         getCheRuns: function() {
             var cheSummaryPath  = "/api/facilities/" + facilityId + "/chesummary";
-	        return $.ajax(endpoint + cheSummaryPath, {
-	        });
+	        return $.ajax(endpoint + cheSummaryPath, globalOptions);
         },
         getSummarySnapshot: _.partial(getSummarySnapshot, endpoint, facilityId),
         getBlockedWork: _.partial(getBlockedWork, endpoint, facilityId),
         getWorkResults: function(startTimestamp, endTimestamp) {
 	        var workResults = "/api/facilities/" + facilityId + "/work/results";
-	        return $.ajax(endpoint + workResults, {
+	        return $.ajax(endpoint + workResults, _.merge(globalOptions, {
                 data: {
                     "startTimestamp": startTimestamp,
                     "endTimestamp": endTimestamp
                 }
-            });
+            }));
 
         },
         getTopItems: function() {
 	        var topItems = "/api/facilities/" + facilityId + "/work/topitems";
-	        return $.ajax(endpoint + topItems, {});
+	        return $.ajax(endpoint + topItems, globalOptions);
         },
         getBlockedWorkNoLocation: function () {
 	        var blockedWorkNoLocationPath = "/api/facilities/" + facilityId + "/blockedwork/nolocation";
-	        return $.ajax(endpoint + blockedWorkNoLocationPath, {});
+	        return $.ajax(endpoint + blockedWorkNoLocationPath, globalOptions);
         },
         getBlockedWorkShorts: function () {
 	        var blockedWorkNoLocationPath = "/api/facilities/" + facilityId + "/blockedwork/shorts";
-	        return $.ajax(endpoint + blockedWorkNoLocationPath, {});
+	        return $.ajax(endpoint + blockedWorkNoLocationPath, globalOptions);
         },
         getFilters: function() {
             var filtersUrl = "/api/facilities/" + facilityId + "/filters";
-            return $.ajax(endpoint + filtersUrl, {});
+            return $.ajax(endpoint + filtersUrl, globalOptions);
         }
     };
 }
 
 module.exports = {
     getFacilities: getFacilities,
-    getFacilityContext: getFacilityContext,
+    getFacilityContext: getFacilityContext
 };
