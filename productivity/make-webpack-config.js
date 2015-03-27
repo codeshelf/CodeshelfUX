@@ -39,7 +39,8 @@ module.exports = function(options) {
         module: {
             loaders: [
                 // Pass *.jsx files through jsx-loader transform
-                { test: /\.jsx$/, loader: 'jsx-loader?harmony' }
+                { test: /\.jsx$/, loader: 'jsx-loader?harmony' },
+                { test: /\.css$/, loader: 'style-loader!css-loader' },
             ]
         },
         plugins: [

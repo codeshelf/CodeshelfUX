@@ -2,7 +2,7 @@
 
 var React = require("react");
 require("script!bower_components/d3/d3.min.js");
-require("style!css!bower_components/nvd3/build/nv.d3.min.css");
+require("bower_components/nvd3/build/nv.d3.min.css");
 require("script!bower_components/nvd3/build/nv.d3.min.js");
 //var d3 and nv are now global
 

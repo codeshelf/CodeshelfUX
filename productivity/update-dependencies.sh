@@ -23,7 +23,8 @@ if [ -z "$NPM_CMD" ]; then
     fi
 fi
 
-# Download development and app dependencies
+rm -rf node_modules/
+
 npm cache clean
 
 npm install bower
@@ -32,3 +33,5 @@ npm install
 
 #Download additional app  dependencies only available from bower
 ./node_modules/.bin/bower install
+
+npm ls
