@@ -53,10 +53,37 @@ var kWebsessionState = {
 	VALIDATED: 'VALIDATED'
 };
 
+var pollFrequency = 1000 * 60 * 4; //4 minutes;
+
+function setPollInterval(func, delay) {
+    if (!(this instanceof setPollInterval)) {
+        return new setPollInterval(func, delay);
+    }
+
+    var that = this;
+    function tick() {
+        if (that.stopped) return;
+        func().always(function(){
+            that.token = setTimeout(tick, delay);
+        });
+    };
+
+    this.token = setTimeout(tick, delay);
+}
+
+function clearPollInterval(instance) {
+    if (instance != null) {
+        instance.stopped = true;
+        if (instance.token) {
+            clearTimeout(instance.token);
+        }
+    }
+}
 
 codeshelf.websession = function () {
 	var logger_ = goog.debug.Logger.getLogger('codeshelf.websession');
 
+    var apiPoller_;
 	var state_;
 	var authz_;
 	var websocketStarted_ = false;
@@ -105,9 +132,9 @@ codeshelf.websession = function () {
 
 			websocket_ = websocket;
 			var webSocketEventHandler = new goog.events.EventHandler();
-			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.ERROR, self_.onError);
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.ERROR, self_.onEnd.bind(self_, "websocket error"));
 			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.OPENED, self_.onOpen);
-			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.CLOSED, self_.onClose);
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.CLOSED, self_.onEnd.bind(self_, "websocket closed"));
 			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.MESSAGE, self_.onMessage);
 
 			self_.openWebSocket();
@@ -242,6 +269,10 @@ codeshelf.websession = function () {
 			return command;
 		},
 
+        ping: function(interval) {
+            return jQuery.get("/api/facilities");
+        },
+
         login: function(username, password) {
             //concurrently set auth cookie
             // and setup websocket with login request
@@ -293,6 +324,7 @@ codeshelf.websession = function () {
 					    }
 					    authz = Object.freeze(authz); //ECMAScript 5 prevent changes from this point
 					    self_.setAuthz(authz);
+                        self_.onAuthenticated();
 					    promise.resolve(response);
                     }
                     else {
@@ -448,31 +480,27 @@ codeshelf.websession = function () {
 			currentPage_ = currentPage;
 		},
 
-		onError: function () {
+        onEnd: function(reason) {
+            clearPollInterval(apiPoller_);
 			state_ = kWebsessionState.UNVALIDATED;
 			currentPage_.exit();
-			var reason;
 			if (websocketStarted_) {
-				reason = 'websocket error';
 				websocketStarted_ = false;
-			}
+			} else {
+                //ignore reason
+                reason = null ;
+            }
 			application_.restartApplication(reason);
-		},
+        },
 
 		onOpen: function () {
 			websocketStarted_ = true;
 		},
 
-		onClose: function () {
-			state_ = kWebsessionState.UNVALIDATED;
-			currentPage_.exit();
-			var reason;
-			if (websocketStarted_) {
-				reason = 'websocket closed unexpectedly';
-				websocketStarted_ = false;
-			}
-			application_.restartApplication(reason);
-		},
+        onAuthenticated: function() {
+            if (apiPoller_ != null) {clearPollInterval(apiPoller_);}
+            apiPoller_ = setPollInterval(self_.ping, pollFrequency);
+        },
 
 		onMessage: function (messageEvent) {
 			var command = goog.json.parse(messageEvent.message);

@@ -80,7 +80,7 @@ codeshelf.application = function() {
 		},
 
 		restartApplication: function(reason) {
-			if (reason !== undefined) {
+			if (reason != null) {
 				alert('Application restarted: ' + reason + '.');
 			}
 			initApplication();
