@@ -458,12 +458,12 @@ codeshelf.mainpage = function() {
 	 */
 	var self = {
 
-	enter: function(application, websession, authz) {
+	enter: function(application, websession) {
 
 			application_ = application;
 			websession_ = websession;
 			organization_ = application_.getOrganization();
-
+            var authz = websession_.getAuthz();
 			websession_.setCurrentPage(this);
 
 			limits_ = new goog.math.Rect(0, 0, 750, 600);

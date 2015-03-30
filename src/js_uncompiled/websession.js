@@ -5,6 +5,7 @@
  *******************************************************************************/
 goog.provide('codeshelf.websession');
 
+goog.require('codeshelf.authz');
 goog.require('goog.array');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
@@ -56,7 +57,6 @@ var kWebsessionState = {
 codeshelf.websession = function () {
 	var logger_ = goog.debug.Logger.getLogger('codeshelf.websession');
 
-	var logger_ = goog.debug.Logger.getLogger("codeshelf.websession");
 	var state_;
 	var authz_;
 	var websocketStarted_ = false;
@@ -241,6 +241,70 @@ codeshelf.websession = function () {
 			};
 			return command;
 		},
+
+        login: function(username, password) {
+            //concurrently set auth cookie
+            // and setup websocket with login request
+            self_.loginHTTP(username, password);
+
+            return self_.loginCSWebSocket(username, password);
+        },
+
+        loginHTTP: function(username, password) {
+            jQuery.post("/auth/", {
+                "u": username,
+                "p": password
+            }).done(function() {
+                logger_.info("setting auth cookie");
+            }).fail(function() {
+                logger_.info("login failed did not set auth cookie");
+            });
+        },
+        loginCSWebSocket: function(username, password) {
+            var loginCommand = {
+				'LoginRequest' : {
+					'userId': username,
+					'password': password
+				}
+			};
+
+			var promise = jQuery.Deferred();
+			self_.sendCommand(loginCommand,  {
+				exec: function(commandType, response) {
+                    if (response.status == 'Success') {
+					    self_.setState(kWebsessionState.VALIDATED);
+					    application_.setOrganization(response['organization']);
+					    var user = response['user'];
+					    var email = user['username'];
+					    var authz = new codeshelf.Authz();
+					    if (email.indexOf('configure') == 0) {
+						    authz.setPermissions(["*"]);
+					    } else if (email.indexOf('view') == 0
+							       || email == 'a@example.com') {
+						    authz.setPermissions(["*:view"]);
+					    } else if (email.indexOf('simulate') == 0) {
+						    authz.setPermissions(["*"]);
+					    } else if (email.indexOf('che') == 0) {
+						    authz.setPermissions(["*:view", "che:simulate"]);
+					    } else if (email.indexOf('work') == 0) {
+						    authz.setPermissions(["*:view", "item:edit"]);
+					    } else {
+						    authz.setPermissions([]); // no permissions by default
+					    }
+					    authz = Object.freeze(authz); //ECMAScript 5 prevent changes from this point
+					    self_.setAuthz(authz);
+					    promise.resolve(response);
+                    }
+                    else {
+                        promise.reject(response);
+                    }
+				},
+				fail: function(commandType, response) {
+					promise.reject(response);
+				}
+			}, false);
+			return promise;
+        },
 
 		callServiceMethod: function(inClassName, inMethodName, inArgArray) {
 			var methodCallCmd = self_.createServiceMethodRequest(inClassName, inMethodName, inArgArray);
