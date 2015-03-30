@@ -1,6 +1,13 @@
 goog.require('codeshelf.websession');
 goog.require('goog.array');
 goog.require('goog.object');
+// PhantomJS doesn't support bind yet
+Function.prototype.bind = Function.prototype.bind || function (thisp) {
+    var fn = this;
+    return function () {
+        return fn.apply(thisp, arguments);
+    };
+};
 
 describe('websession', function() {
 	var websocketStub;
