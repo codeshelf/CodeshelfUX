@@ -34,7 +34,8 @@
 	<div class="modal-footer">
 		<button class="btn" ng-click="controller.cancel()">Cancel</button>
         <span ng-switch="mode">
-		  <button ng-switch-when="edit" class="btn btn-primary" ng-click="controller.edit()">Save</button>		  <button ng-switch-when="add" class="btn btn-primary" ng-click="controller.add()">Add</button>
+		  <button ng-switch-when="edit" class="btn btn-primary" ng-click="controller.edit()">Save</button>		  
+		  <button ng-switch-when="add" class="btn btn-primary" ng-click="controller.add()">Add</button>
         </ngSwitch>
 	</div>
 </form>

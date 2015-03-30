@@ -56,11 +56,35 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 		'getViewName': function() {
 			return 'LED Controllers';
 		},
+		
+        'getViewMenu': function() {
+            return [
+                {"label": 'Export CSV', "action": function() {self.generateCSV();} }
+                ,{"label": 'Add Controller', "action": function() {self.addController({});}, "permission": "ledcontroller:edit" }
+            ];
+        },
+        
+        addController:  function(){
+            var data = {
+                'ledcontroller': {},
+                'facility':facility,
+                'mode': "add"
+            };
+
+            // See codeshelfApp.LedNgController defined below. And then referenced in angular.module
+            var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-ledcontroller.html", "LedNgController as controller", data);
+
+            promise.result.then(function(){
+
+            });
+        },
+        
 
 		changeLedControllerId: function(item) {
 			var ledcontroller = item;
 			var data = {
-				'ledcontroller': ledcontroller
+				'ledcontroller': ledcontroller,
+				'mode': "edit"
 			};
 
 			// See codeshelfApp.LedNgController defined below. And then referenced in angular.module
@@ -69,7 +93,16 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 			promise.result.then(function(){
 
 			});
-		}
+		},
+		
+       deleteController: function(item) {
+       
+           codeshelf.simpleDlogService.showModalDialog("Confirm", "Delete the controller?", {})
+               .then(function() {
+					var methodArgs = [item['persistentId']];
+					websession_.callServiceMethod('UiUpdateService', 'deleteController', methodArgs);
+               });
+       }
 	};
 
 	var contextDefs = [
@@ -78,6 +111,13 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 			"permission": "ledcontroller:edit",
 			"action": function(itemContext) {
 				self.changeLedControllerId(itemContext);
+			}
+		},
+		{
+			"label": "Delete LED Controller",
+			"permission": "ledcontroller:edit",
+			"action": function(itemContext) {
+				self.deleteController(itemContext);
 			}
 		}
 	];
@@ -114,19 +154,21 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 codeshelfApp.LedNgController = function($scope, $modalInstance, websession, data){
 
 	this.scope_ = $scope;
+	
 	this.modalInstance_ = $modalInstance;
 	this.websession_ = websession;
+	$scope['mode'] = data["mode"];
+	$scope['facility'] = data['facility'];
 	$scope['ledcontroller'] = data['ledcontroller'];
-
 	$scope['ledcontroller']['led_controller_id'] = data['ledcontroller']['deviceGuidStr'];
-	$scope['ledcontroller']['deviceType'] = data['ledcontroller']['deviceType'];
-
+	var deviceType = data['ledcontroller']['deviceType'];	
+	$scope['ledcontroller']['deviceType'] = (deviceType == undefined) ? "Lights" : deviceType;
 };
 
 /**
  * @export
  */
-codeshelfApp.LedNgController.prototype.ok = function(){
+codeshelfApp.LedNgController.prototype.edit = function(){
 	var ledcontroller = this.scope_['ledcontroller'];
 	var jsControllerProperty = "led_controller_id"; // this matches the partial html
 	var javaControllerProperty = "deviceGuid"; // Passed as the java field
@@ -145,6 +187,19 @@ codeshelfApp.LedNgController.prototype.ok = function(){
 
 	this.modalInstance_.close();
 };
+
+/**
+ * @export
+ */
+codeshelfApp.LedNgController.prototype.add = function(){
+	var ledcontroller = this.scope_['ledcontroller'];
+	var jsControllerProperty = "led_controller_id"; // this matches the partial html
+	var facilityPersistentId = this.scope_['facility']['persistentId'];
+	var methodArgs = [facilityPersistentId, ledcontroller[jsControllerProperty], ledcontroller['deviceType']];
+	this.websession_.callServiceMethod('UiUpdateService', 'addController', methodArgs);
+	this.modalInstance_.close();
+};
+
 
 /**
  * @export
