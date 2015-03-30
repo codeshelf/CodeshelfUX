@@ -20,16 +20,6 @@ codeshelf.loginWindow = function() {
 	var websession_;
 	var application_;
 
-	function loginCheck() {
-		var loginCommand = {
-				'LoginRequest' : {
-					'userId': goog.dom.getElement('userIdInput').value,
-					'password': goog.dom.getElement('passwordInput').value
-				}
-			};
-		websession_.sendCommand(loginCommand, websocketCmdCallback(kWebSessionCommandType.LOGIN_RESP), false);
-	}
-
 	function websocketCmdCallback(expectedResponseType) {
 		var callback = {
 			exec: function(type,command) {
@@ -92,9 +82,17 @@ codeshelf.loginWindow = function() {
 			passwordInput.onkeydown = function(event) {
 				//logger_.info('Key ' + event.keyCode);
 				if ((event.keyCode == 13) || (event == 10)) {
-					loginCheck();
+                    websession_.login(userIdInput.value, passwordInput.value).done(function(response){
+					    self.exit();
+					    var mainpage = codeshelf.mainpage();
+					    mainpage.enter(application_, websession_);
+                    }).fail(function(response){
+                        logger_.info("Login failed");
+                        console.log("login failed: ", response);
+                    });
 				}
 			};
+
 			userIdInput.focus();
 			userIdInput.select();
 		},
