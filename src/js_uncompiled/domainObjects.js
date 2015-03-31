@@ -103,6 +103,11 @@ domainobjects = {
 				'id': 'putWallUi',
 				'title': 'Put Wall',
 				'width': 40
+			},
+			'tapeId': {
+				'id': 'tapeId',
+				'title': 'Tape Id',
+				'width': 40
 			}
 		}
 	},
@@ -168,6 +173,11 @@ domainobjects = {
 			'putWall': {
 				'id': 'putWallUi',
 				'title': 'Put Wall',
+				'width': 40
+			},
+			'tapeId': {
+				'id': 'tapeId',
+				'title': 'Tape Id',
 				'width': 40
 			}
 		}
@@ -989,6 +999,11 @@ domainobjects = {
 				'id': 'putWallUi',
 				'title': 'Put Wall',
 				'width': 40
+			},
+			'tapeId': {
+				'id': 'tapeId',
+				'title': 'Tape Id',
+				'width': 40
 			}
 		}
 	},
@@ -1079,6 +1094,11 @@ domainobjects = {
 			'putWall': {
 				'id': 'putWallUi',
 				'title': 'Put Wall',
+				'width': 40
+			},
+			'tapeId': {
+				'id': 'tapeId',
+				'title': 'Tape Id',
 				'width': 40
 			}
 		}
