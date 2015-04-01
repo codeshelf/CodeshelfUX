@@ -234,8 +234,18 @@ domainobjects = {
 	        'processMode': {
                 'id': 'processMode',
                 'title': 'Process Mode',
-                'width': 40
-            }
+                'width': 12
+            },
+			'activePathUi': {
+				'id': 'activePathUi',
+				'title': 'Path',
+				'width': 16
+			},
+			'lastScannedLocation': {
+				'id': 'lastScannedLocation',
+				'title': 'Loc Scan',
+				'width': 16
+			}
 		}
 	},
 
