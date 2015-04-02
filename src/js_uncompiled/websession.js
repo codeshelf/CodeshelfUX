@@ -131,13 +131,22 @@ codeshelf.websession = function () {
 			pendingCommands_ = new Object();
 
 			websocket_ = websocket;
+			var promise = jQuery.Deferred();
+
 			var webSocketEventHandler = new goog.events.EventHandler();
-			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.ERROR, self_.onEnd.bind(self_, "websocket error"));
 			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.OPENED, self_.onOpen);
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.OPENED, function() {
+                promise.resolve();
+            });
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.ERROR, self_.onEnd.bind(self_, "websocket error"));
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.ERROR, function(){
+                promise.reject();
+            });
 			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.CLOSED, self_.onEnd.bind(self_, "websocket closed"));
 			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.MESSAGE, self_.onMessage);
 
 			self_.openWebSocket();
+            return promise;
 		},
 
 		openWebSocket: function () {
@@ -281,6 +290,17 @@ codeshelf.websession = function () {
             return self_.loginCSWebSocket(username, password);
         },
 
+        loginWSToken: function(cstoken) {
+            var loginCommand = {
+				'LoginRequest' : {
+                    'cstoken': cstoken,
+					'userId': '',
+					'password': ''
+				}
+			};
+            return self_.handleLoginCommand(loginCommand);
+        },
+
         loginHTTP: function(username, password) {
             jQuery.post("/auth/", {
                 "u": username,
@@ -298,7 +318,9 @@ codeshelf.websession = function () {
 					'password': password
 				}
 			};
-
+            return self_.handleLoginCommand(loginCommand);
+        },
+        handleLoginCommand: function(loginCommand) {
 			var promise = jQuery.Deferred();
 			self_.sendCommand(loginCommand,  {
 				exec: function(commandType, response) {

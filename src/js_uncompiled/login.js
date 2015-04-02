@@ -12,6 +12,7 @@ goog.require('goog.dom.query');
 goog.require('goog.style');
 goog.require('goog.ui.RoundedPanel');
 goog.require('goog.window');
+goog.require('goog.net.Cookies');
 
 codeshelf.loginWindow = function() {
 
@@ -20,43 +21,13 @@ codeshelf.loginWindow = function() {
 	var websession_;
 	var application_;
 
-	function websocketCmdCallback(expectedResponseType) {
-		var callback = {
-			exec: function(type,command) {
-				if (command.status == 'Success') {
-					websession_.setState(kWebsessionState.VALIDATED);
-					application_.setOrganization(command['organization']);
-					var user = command['user'];
-					var email = user['username'];
-					var authz = new codeshelf.Authz();
-					if (email.indexOf('configure') == 0) {
-						authz.setPermissions(["*"]);
-					} else if (email.indexOf('view') == 0
-							   || email == 'a@example.com') {
-						authz.setPermissions(["*:view"]);
-					} else if (email.indexOf('simulate') == 0) {
-						authz.setPermissions(["*"]);
-					} else if (email.indexOf('che') == 0) {
-						authz.setPermissions(["*:view", "che:simulate"]);
-					} else if (email.indexOf('work') == 0) {
-						authz.setPermissions(["*:view", "item:edit"]);
-					} else {
-						authz.setPermissions([]); // no permissions by default
-					}
-					authz = Object.freeze(authz); //ECMAScript 5 prevent changes from this point
-					websession_.setAuthz(authz);
-					self.exit();
-					var mainpage = codeshelf.mainpage();
-
-					mainpage.enter(application_, websession_, authz);
-				}
-			}
-		};
-
-		return callback;
-	}
-
 	var self = {
+
+        handleLoginSuccessful: function() {
+			self.exit();
+			var mainpage = codeshelf.mainpage();
+			mainpage.enter(application_, websession_);
+        },
 
 		enter: function(application, websession) {
 
@@ -64,6 +35,19 @@ codeshelf.loginWindow = function() {
 			websession_ = websession;
 
 			websession_.setCurrentPage(self);
+
+            var cookies_ = new goog.net.Cookies(document);
+            var cstoken = cookies_.get("CSTOK");
+            websession_.loginWSToken(cstoken).done(function() {
+                self.handleLoginSuccessful();
+            }).fail(function() {
+                logger_.info("cookie ws login failed");
+                if (location.port == '8000') {
+                    console.log("redirecting to cs companion login");
+                    location.replace("/login?nextPath=" + encodeURIComponent(location.href));
+                }
+            });
+
 
 			goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.loginDialog));
 			var userIdInput = goog.dom.getElement('userIdInput');
@@ -83,9 +67,7 @@ codeshelf.loginWindow = function() {
 				//logger_.info('Key ' + event.keyCode);
 				if ((event.keyCode == 13) || (event == 10)) {
                     websession_.login(userIdInput.value, passwordInput.value).done(function(response){
-					    self.exit();
-					    var mainpage = codeshelf.mainpage();
-					    mainpage.enter(application_, websession_);
+                        self.handleLoginSuccessful();
                     }).fail(function(response){
                         logger_.info("Login failed");
                         console.log("login failed: ", response);

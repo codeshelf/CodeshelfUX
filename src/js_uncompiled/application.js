@@ -75,8 +75,9 @@ codeshelf.application = function() {
 
 		startApplication: function() {
 			webSession_ = codeshelf.websession();
-			webSession_.initWebSocket(self, createWebSocket());
-			initApplication();
+			webSession_.initWebSocket(self, createWebSocket()).then(function() {
+			    initApplication();
+            });
 		},
 
 		restartApplication: function(reason) {
