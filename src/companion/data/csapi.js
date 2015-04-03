@@ -90,11 +90,11 @@ export function getFacilityContext() {
         endpoint: endpoint,
         getProductivity : function() {
 	        var productivityPath = "/api/facilities/" + facilityId + "/productivity";
-	        return $.ajax(endpoint + productivityPath, globalOptions);
+	        return ajax(productivityPath);
         },
         getCheRuns: function() {
             var cheSummaryPath  = "/api/facilities/" + facilityId + "/chesummary";
-	        return $.ajax(endpoint + cheSummaryPath, globalOptions);
+	        return ajax(cheSummaryPath);
         },
         getBlockedWork: _.partial(getBlockedWork, endpoint, facilityId),
         getSummarySnapshot: function(viewSpec) {

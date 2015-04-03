@@ -1,5 +1,5 @@
 var React = require("react");
-//var pluralize = require("../helpers/pluralize");
+var pluralize = require("lib/pluralize");
 function RClass(renderFunction, otherMethods) {
 	return React.createClass({
         render: renderFunction

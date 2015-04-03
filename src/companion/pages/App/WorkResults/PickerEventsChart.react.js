@@ -1,11 +1,9 @@
-/** @jsx React.DOM */
-
 var React = require("react");
-require("script!bower_components/d3/d3.min.js");
-require("bower_components/nvd3/build/nv.d3.min.css");
-require("script!bower_components/nvd3/build/nv.d3.min.js");
-//var d3 and nv are now global
+var d3 = require("d3");
+require("nvd3/build/nv.d3.min.css");
+var nv = require("exports?nv!nvd3/build/nv.d3");
 
+import {getFacilityContext} from 'data/csapi';
 
 var PickerEventsChart = React.createClass({
     render: function() {
@@ -23,7 +21,8 @@ var PickerEventsChart = React.createClass({
         this.updateViews(this.props, el);
     },
     updateViews: function(props, el) {
-        var {apiContext, startTimestamp, endTimestamp} = props;
+        var {startTimestamp, endTimestamp} = props;
+        var apiContext = getFacilityContext();
         this.pickerData(apiContext, startTimestamp, endTimestamp, function(data) {
             var groups = _.keys(data);
             var values = _.values(data);

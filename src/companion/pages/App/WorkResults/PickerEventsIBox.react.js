@@ -1,7 +1,7 @@
 var React = require('react');
 var {ButtonGroup, Button} = require('react-bootstrap');
-var {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} = require("components/ibox");
-var PickerEventsChart = require('components/pickereventschart');
+var {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} = require("components/common/IBox");
+var PickerEventsChart = require('./PickerEventsChart');
 
 var ButtonFilter = React.createClass({
     render: function() {

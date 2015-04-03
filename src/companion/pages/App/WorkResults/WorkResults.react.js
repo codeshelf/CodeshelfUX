@@ -1,16 +1,16 @@
 import DocumentTitle from 'react-document-title';
-
+import {getFacilityContext} from 'data/csapi';
 var React = require('react');
 
 var _ = require('lodash');
 var Rx = require('rx');
 
-var PickerEventsIBox = require('components/pickereventsibox');
-var OrderDetailIBox = require('components/orderdetailibox');
+var PickerEventsIBox = require('./PickerEventsIBox');
+var OrderDetailIBox = require('./OrderDetailsIBox');
 
 var pollingPeriod = 20000;
 
-var OrderDetailsPage = React.createClass({
+module.exports = React.createClass({
     statics: {
         getTitle: function() {
             return "Work Results";
@@ -25,7 +25,7 @@ var OrderDetailsPage = React.createClass({
     },
 
     updateViews: function(props) {
-        var {apiContext} = props;
+        var apiContext = getFacilityContext();
 
         var pollerStream = Rx.Observable.timer(0, pollingPeriod /*ms*/);
         //Create stream of productivity updates for the facility
@@ -133,6 +133,3 @@ var OrderDetailsPage = React.createClass({
         );
     }
 });
-
-
-module.exports = OrderDetailsPage;

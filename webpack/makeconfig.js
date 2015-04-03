@@ -122,7 +122,8 @@ module.exports = function(isDevelopment) {
       return plugins;
     })(),
     resolve: {
-        root: [ path.resolve(process.cwd(), './src/companion')],
+        root: [ path.resolve(process.cwd(), './src/companion'),
+                path.resolve(process.cwd(), './lib')],
         extensions: ['', '.js', '.json', '.react.js']
     }
   };

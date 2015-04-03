@@ -1,15 +1,13 @@
-/** @jsx React.DOM */
-
 var React = require("react");
 var _ = require("lodash");
-var ibox = require("./ibox.jsx");
+var ibox = require("components/common/IBox");
 var IBox = ibox.IBox;
 var IBoxData = ibox.IBoxData;
 var IBoxTitleBar = ibox.IBoxTitleBar;
 var IBoxTitleText = ibox.IBoxTitleText;
 var IBoxSection = ibox.IBoxSection;
-var DoughnutSummary = require("./doughnutsummary.jsx");
-var ActiveRun = require("./activerun.jsx");
+var DoughnutSummary = require("components/common/DoughnutSummary");
+var ActiveRun = require("./ActiveRun");
 
 var OrderDetailIBox = React.createClass({
 
