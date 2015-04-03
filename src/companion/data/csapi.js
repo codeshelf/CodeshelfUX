@@ -1,19 +1,16 @@
-var $ = require('jquery');
-var _ = require('lodash');
+import $ from 'jquery';
+import _ from 'lodash';
+import {Map} from 'immutable';
+var {state} = require('data/state.js');
 
-var globalOptions = {
+var globalOptions = new Map({
     crossDomain: true,
     xhrFields: {
         withCredentials: true
     }
-};
+});
 
-var getFacilities = function(endpoint) {
-    var ajaxOptions = globalOptions;
-	var facilitiesPath = "/api/facilities";
 
-	return $.ajax(endpoint + facilitiesPath, ajaxOptions);
-};
 
 function getSummarySnapshot(endpoint, facilityId, viewSpec) {
     var filterName =  viewSpec["filterName"];
@@ -63,8 +60,41 @@ function getBlockedWork(endpoint, facilityId, type) {
     return promise;
 }
 
+function ajax(path, options) {
+    if (options == null) options = {};
+    var ajaxOptions = globalOptions.merge(options).toJS();
+    return $.ajax(toAbsoluteURL(path), ajaxOptions);
 
-function getFacilityContext(endpoint, facility) {
+}
+
+function toAbsoluteURL(path) {
+    var endpoint = state.cursor(["endpoint"])();
+    return endpoint + path;
+}
+
+export function authenticate(username, password) {
+    var options = {
+        method: 'POST',
+        data: {
+            "u": username,
+            "p": password
+        }
+    };
+    return ajax("/auth/", options);
+};
+
+export function getUser() {
+    return ajax("/mgr/security");
+};
+
+export function getFacilities() {
+    return ajax("/api/facilities");
+};
+
+export function getFacilityContext() {
+    var endpoint = state.get("endpoint");
+    var facility = state.get("selectedFacility");
+
     var facilityId = facility["persistentId"];
     return {
         facilityId: facilityId,
@@ -106,9 +136,4 @@ function getFacilityContext(endpoint, facility) {
             return $.ajax(endpoint + filtersUrl, globalOptions);
         }
     };
-}
-
-module.exports = {
-    getFacilities: getFacilities,
-    getFacilityContext: getFacilityContext
 };
