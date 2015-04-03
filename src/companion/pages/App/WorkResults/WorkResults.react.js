@@ -1,4 +1,7 @@
+import DocumentTitle from 'react-document-title';
+
 var React = require('react');
+
 var _ = require('lodash');
 var Rx = require('rx');
 
@@ -115,7 +118,8 @@ var OrderDetailsPage = React.createClass({
     render: function() {
         var {productivity, activeRuns, startTimestamp, endTimestamp} = this.state;
         var {apiContext} = this.props;
-        return (<div>
+        return (<DocumentTitle title="Work Results">
+                <div>
                     <div className="row orderdetails">
                         <div className="col-sm-12">
                             <PickerEventsIBox apiContext={apiContext} />
@@ -125,6 +129,7 @@ var OrderDetailsPage = React.createClass({
                         {this.renderOrderDetailComponents(productivity, activeRuns)}
                     </div>
                 </div>
+                </DocumentTitle>
         );
     }
 });
