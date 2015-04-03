@@ -27,7 +27,7 @@ export default {
         {type: "shorted", description: 'relax', total: 3}
     ],
     selectedFacility: {
-        id: "uuuuuuiiiiiddd",
+        persistentId: "df03bec3-d2b1-450a-8b31-ccbad23ecc67",
         domainId: "F1"
     },
     blockedwork: {

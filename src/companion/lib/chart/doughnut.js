@@ -1,5 +1,5 @@
 var $ = require("jquery");
-var Chart = require('bower_components/chartjs/Chart.js');
+var Chart = require("chart.js");
 /** Monkey Patch ChartJs when turning off animation but enabling reactive resizing */
 var Type, cancelAnimFrame, name, _ref;
 

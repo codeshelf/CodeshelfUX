@@ -1,10 +1,8 @@
-/** @jsx React.DOM */
-
 var React = require("react");
 var _ = require("lodash");
 var {StatusSummary} = require("data/types");
-var DoughnutChart = require("./doughnut.jsx");
-var pluralize = require("../helpers/pluralize");
+var DoughnutChart = require("./Doughnut");
+var pluralize = require("lib/pluralize");
 
 //Clockwise order
 var segmentTemplates = [{key: "released",

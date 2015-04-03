@@ -2,12 +2,12 @@ import DocumentTitle from 'react-document-title';
 
 var React = require('react');
 var _ = require('lodash');
-var $ = require('jquery');
 
 var el = React.createElement;
 
-var StatusSummaryIBox = require('components/statussummaryibox');
-var TopItems = require('components/topitems');
+var StatusSummaryIBox = require('./StatusSummaryIBox');
+var TopItems = require('./TopItems');
+import  {getFacilityContext} from 'data/csapi';
 
 var OverviewPage = React.createClass({
     statics: {
@@ -24,7 +24,7 @@ var OverviewPage = React.createClass({
     },
 
     updateViews: function(props) {
-        var {apiContext} = props;
+        var apiContext = getFacilityContext();
         var promise = apiContext.getFilters();
         promise.then(function(filterOptions){
             if (!this.isMounted()) {

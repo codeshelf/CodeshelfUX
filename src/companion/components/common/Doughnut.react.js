@@ -1,7 +1,5 @@
-/** @jsx React.DOM */
-
 var React = require("react");
-var Doughnut = require("./doughnut.js");
+var Doughnut = require("lib/chart/doughnut.js");
 
 var DoughnutChart = React.createClass({
     render: function() {

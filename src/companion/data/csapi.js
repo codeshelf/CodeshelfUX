@@ -12,16 +12,6 @@ var globalOptions = new Map({
 
 
 
-function getSummarySnapshot(endpoint, facilityId, viewSpec) {
-    var filterName =  viewSpec["filterName"];
-    var aggregate = viewSpec["aggregate"];
-    var orderstatussummary = "/api/facilities/" + facilityId + "/statussummary/" + aggregate;
-    return $.ajax(endpoint + orderstatussummary, _.merge(globalOptions, {
-        data: {
-            filterName: filterName
-        }
-    }));
-}
 
 
 function getBlockedWork(endpoint, facilityId, type) {
@@ -92,10 +82,9 @@ export function getFacilities() {
 };
 
 export function getFacilityContext() {
-    var endpoint = state.get("endpoint");
-    var facility = state.get("selectedFacility");
-
-    var facilityId = facility["persistentId"];
+    var endpoint = state.cursor(["endpoint"])();
+    var facility = state.cursor(["selectedFacility"])();
+    var facilityId = facility.get("persistentId");
     return {
         facilityId: facilityId,
         endpoint: endpoint,
@@ -107,33 +96,43 @@ export function getFacilityContext() {
             var cheSummaryPath  = "/api/facilities/" + facilityId + "/chesummary";
 	        return $.ajax(endpoint + cheSummaryPath, globalOptions);
         },
-        getSummarySnapshot: _.partial(getSummarySnapshot, endpoint, facilityId),
         getBlockedWork: _.partial(getBlockedWork, endpoint, facilityId),
+        getSummarySnapshot: function(viewSpec) {
+            var filterName =  viewSpec["filterName"];
+            var aggregate = viewSpec["aggregate"];
+            var orderstatussummary = "/api/facilities/" + facilityId + "/statussummary/" + aggregate;
+            return ajax(orderstatussummary, {
+                data: {
+                    filterName: filterName
+                }
+            });
+        },
+
         getWorkResults: function(startTimestamp, endTimestamp) {
 	        var workResults = "/api/facilities/" + facilityId + "/work/results";
-	        return $.ajax(endpoint + workResults, _.merge(globalOptions, {
+	        return ajax(workResults, {
                 data: {
                     "startTimestamp": startTimestamp,
                     "endTimestamp": endTimestamp
                 }
-            }));
+            });
 
         },
         getTopItems: function() {
 	        var topItems = "/api/facilities/" + facilityId + "/work/topitems";
-	        return $.ajax(endpoint + topItems, globalOptions);
+	        return ajax(topItems);
         },
         getBlockedWorkNoLocation: function () {
 	        var blockedWorkNoLocationPath = "/api/facilities/" + facilityId + "/blockedwork/nolocation";
-	        return $.ajax(endpoint + blockedWorkNoLocationPath, globalOptions);
+	        return ajax(blockedWorkNoLocationPath);
         },
         getBlockedWorkShorts: function () {
 	        var blockedWorkNoLocationPath = "/api/facilities/" + facilityId + "/blockedwork/shorts";
-	        return $.ajax(endpoint + blockedWorkNoLocationPath, globalOptions);
+	        return ajax(blockedWorkNoLocationPath);
         },
         getFilters: function() {
             var filtersUrl = "/api/facilities/" + facilityId + "/filters";
-            return $.ajax(endpoint + filtersUrl, globalOptions);
+            return ajax(filtersUrl);
         }
     };
 };
