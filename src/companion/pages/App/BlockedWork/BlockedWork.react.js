@@ -1,48 +1,148 @@
-import React from 'react';
-import {RouteHandler} from 'react-router';
-import DocumentTitle from 'react-document-title';
-import {Grid, Row, Col} from 'react-bootstrap';
-import {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} from 'components/common/IBox';
-import BlockedWorkSummary from './BlockedWorkSummary';
-import {blockedWorkCursor} from 'data/state';
+var React = require('react');
+var _ = require('lodash');
+var $ = require('jquery');
+var Rx = require('rx');
 
-export default class BlockedWork extends React.Component {
+var csapi = require('data/csapi');
+var {StatusSummary} = require('data/types');
+var el = React.createElement;
 
-  componentDidMount() {
-      console.log("mounted", this);
+var ibox = require('components/ibox');
+var IBox = ibox.IBox;
+var IBoxData = ibox.IBoxData;
+var IBoxTitleBar = ibox.IBoxTitleBar;
+var IBoxTitleText = ibox.IBoxTitleText;
+var IBoxSection = ibox.IBoxSection;
+var DetailsNoLocation = require('components/detailsnolocation');
+var ShortedWorkList = require('components/shortedwork');
 
-  }
+var {ListGroup, ListGroupItem, Badge} = require('react-bootstrap');
 
-  render() {
-    // This is composite component. It load its data from store, and passes them
-    // through props, so children  can leverage PureComponent.
-    const blockedWork = blockedWorkCursor();
+var BlockedWorkPage = React.createClass({
+    statics: {
+        getTitle: function() {
+            return "Blocked Work";
+        }
+    },
+    getInitialState: function() {
+        var types = {
+            "NOLOC" : {
+                "type" : "NOLOC",
+                "description": "Order Lines w/o Location",
+                "total": 0,
+                "workDetails": []
+            },
+            "SHORT" : {
+                "type": "SHORT",
+                "description": "Shorted Order Lines",
+                "total": 0
+            }/*,
+              FOR LATER
+            "SUSPECTORDER": {
+                "type": "SUSPECTORDER",
+                "description": "Suspect Order Lines Imports",
+                "total": 0
+            },
+              SHOULD MOVE TO AN ALERTS AREA
+            "SKIPPEDVERIFICATION": {
+                "type" : "SKIPPEDVERIFICATION",
+                "description": "Skipped Verification Scans",
+                "total": 0
+            }*/
+        };
+        return {
+            "selectedtype" : "NOLOC",
+            "blockedworksummary": types
+        };
+    },
 
-    return (
-      <DocumentTitle title="Blocked Work">
-            <Grid className="wrapper wrapper-content">
-                <Row>
-                    <Col xs={6} md={4}>
-                        <IBox>
-                            <IBoxTitleBar>
-                                <IBoxTitleText>
-                                    Blocked Work
-                                </IBoxTitleText>
-                            </IBoxTitleBar>
-                            <IBoxSection>
-                                <BlockedWorkSummary summaries={blockedWork.get('summaries')} />
-                            </IBoxSection>
-                        </IBox>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={6} md={8}>
-                        <RouteHandler />
-                    </Col>
-                </Row>
-            </Grid>
-      </DocumentTitle>
-    );
-  }
+    updateViews: function(props) {
+        var {apiContext} = props;
+        apiContext.getBlockedWorkNoLocation().then(
+            function(workDetails) {
+                if (this.isMounted()) {
+                    this.state.blockedworksummary["NOLOC"]["total"] = workDetails.length;
+                    this.state.blockedworksummary["NOLOC"]["workDetails"] = workDetails;
 
-};
+                    this.setState({
+                        "blockedworksummary": this.state.blockedworksummary
+                    });
+                }
+            }.bind(this)
+        );
+        apiContext.getBlockedWorkShorts().then(
+            function(workDetails) {
+                if (this.isMounted()) {
+                    this.state.blockedworksummary["SHORT"]["total"] = workDetails.length;
+                    this.state.blockedworksummary["SHORT"]["workDetails"] = workDetails;
+
+                    this.setState({
+                        "blockedworksummary": this.state.blockedworksummary
+                    });
+                }
+            }.bind(this)
+        );
+    },
+    componentWillReceiveProps: function(nextProps) {
+        this.updateViews(nextProps);
+    },
+    componentDidMount: function() {
+        this.updateViews(this.props);
+    },
+    componentWillUnmount: function() {},
+    show: function(type) {
+        this.setState({"selectedtype" : type});
+    },
+
+    render: function() {
+        var {selectedtype, blockedworksummary} = this.state;
+        var {apiContext} = this.props;
+        var workDetails = blockedworksummary[selectedtype]["workDetails"];
+        return (
+
+        <div>
+            <div className="row orderdetails">
+                <div className="col-sm-6 col-md-4">
+                <IBox>
+                    <IBoxTitleBar>
+                        <IBoxTitleText>
+                            Blocked Work
+                        </IBoxTitleText>
+                    </IBoxTitleBar>
+                    <div className="ibox-content">
+                    <ListGroup>
+                    {
+                        _.values(blockedworksummary).map(function(blockedworktype) {
+                            var type = blockedworktype.type;
+                            return <ListGroupItem
+                                        key={type}
+                                        onClick={this.show.bind(this, type)}
+                                        active={selectedtype == type} >
+
+                                        {blockedworktype.description}
+                                        <Badge>{blockedworktype.total}</Badge>
+                                   </ListGroupItem>;
+                        }.bind(this))
+                    }
+                    </ListGroup>
+                </div>
+                </IBox>
+                </div>
+                </div>
+            <div className="row orderdetails">
+
+            <div className="col-sm-6 col-md-8">
+            {
+                (selectedtype == "NOLOC") ? <DetailsNoLocation type="NOLOC" workDetails={workDetails}/> : <ShortedWorkList type={selectedtype} workDetails={workDetails}/>
+            }
+            </div>
+            </div>
+</div>
+);}});
+
+
+
+
+
+
+module.exports = BlockedWorkPage;
