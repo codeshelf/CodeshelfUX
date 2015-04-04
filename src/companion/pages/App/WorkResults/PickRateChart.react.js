@@ -2,7 +2,7 @@ var React = require("react");
 var moment = require("moment");
 var d3 = require("d3");
 require("nvd3/build/nv.d3.min.css");
-var nv = require("exports?nv!nvd3/build/nv.d3");
+var nv = require("exports?nv!nvd3/build/nv.d3.min.js");
 
 
 import {getFacilityContext} from 'data/csapi';
