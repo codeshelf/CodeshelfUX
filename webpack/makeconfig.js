@@ -35,7 +35,6 @@ module.exports = function(isDevelopment) {
   var config = {
     cache: isDevelopment,
     debug: isDevelopment,
-    verbose: true,
     devtool: isDevelopment ? 'eval-source-map' : '',
     entry: {
       app: isDevelopment ? [
@@ -71,7 +70,7 @@ module.exports = function(isDevelopment) {
           { test: /\.svg([\?]?.*)$/,  loader: "url-loader?limit=10000&mimetype=image/svg+xml" },
           { test: /\.(gif|jpg|png)$/, loader: 'url-loader?limit=100000' },
         {
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /lib\/tablesaw/],
         loaders: isDevelopment ? [
           'react-hot', 'babel-loader'
         ] : [

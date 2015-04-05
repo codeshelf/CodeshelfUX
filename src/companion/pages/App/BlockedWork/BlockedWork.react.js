@@ -1,21 +1,20 @@
 var React = require('react');
 var _ = require('lodash');
 var $ = require('jquery');
-var Rx = require('rx');
 
 var csapi = require('data/csapi');
 var {StatusSummary} = require('data/types');
 var el = React.createElement;
 
-var ibox = require('components/ibox');
+var ibox = require('components/common/IBox');
 var IBox = ibox.IBox;
 var IBoxData = ibox.IBoxData;
 var IBoxTitleBar = ibox.IBoxTitleBar;
 var IBoxTitleText = ibox.IBoxTitleText;
 var IBoxSection = ibox.IBoxSection;
-var DetailsNoLocation = require('components/detailsnolocation');
-var ShortedWorkList = require('components/shortedwork');
-
+var DetailsNoLocation = require('./NoLocation');
+var ShortedWorkList = require('./Shorted');
+var {getFacilityContext} = require('data/csapi');
 var {ListGroup, ListGroupItem, Badge} = require('react-bootstrap');
 
 var BlockedWorkPage = React.createClass({
@@ -57,7 +56,7 @@ var BlockedWorkPage = React.createClass({
     },
 
     updateViews: function(props) {
-        var {apiContext} = props;
+        var apiContext = getFacilityContext();
         apiContext.getBlockedWorkNoLocation().then(
             function(workDetails) {
                 if (this.isMounted()) {

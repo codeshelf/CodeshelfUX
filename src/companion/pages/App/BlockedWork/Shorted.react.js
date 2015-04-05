@@ -6,14 +6,14 @@ var Rx = require('rx');
 var csapi = require('data/csapi');
 var el = React.createElement;
 
-var ibox = require('components/ibox');
+var ibox = require('components/common/IBox');
 var IBox = ibox.IBox;
 var IBoxData = ibox.IBoxData;
 var IBoxTitleBar = ibox.IBoxTitleBar;
 var IBoxTitleText = ibox.IBoxTitleText;
 var IBoxSection = ibox.IBoxSection;
 
-var {Table} = require('components/table');
+var {Table} = require('components/common/Table');
 
 var ShortedWork = React.createClass({
     getDefaultProps: function() {
