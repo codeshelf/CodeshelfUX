@@ -731,6 +731,11 @@ domainobjects = {
 				'id':	 'gtinId',
 				'title': 'GTIN',
 				'width': 10
+			},
+			'orderLocationAliasIds': {
+				'id':    'orderLocationAliasIds',
+				'title': 'Order Location',
+				'width': 10
 			}
 		}
 	},

@@ -79,6 +79,8 @@ codeshelf.orderdetailsview = function(websession, facility) {
 				return false;
 			else if (inProperty['id'] === 'groupUi')
 				return false;
+			else if (inProperty['id'] === 'orderLocationAliasIds')
+				return false;
 			else
 				return true;
 		}
