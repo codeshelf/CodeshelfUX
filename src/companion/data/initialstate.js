@@ -2,8 +2,15 @@ import messages from './messages';
 
 const initialLocale = 'en';
 
+var endpoint = "";
+if (process.env.IS_BROWSER) {
+    if (window.location.hostname == 'localhost' && window.location.port == '8000') {
+        endpoint = "http://localhost:8181";
+    }
+}
+
 export default {
-    endpoint: "http://localhost:8181",
+    endpoint: endpoint,
     $pendingActions: {},
     auth: {
         form: {
