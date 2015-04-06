@@ -36,7 +36,7 @@ function renderPage(res, appState, path) {
 
 function getPageHtml(Handler, appState) {
     //  const appHtml = `<div id="app">${React.renderToString(<Handler />)}</div>`;
-    const appHtml = `<div id="app">Not Rendered Server Side</div>`;
+    const appHtml = `<div id="app">Loading...</div>`;
   const appScriptSrc = config.isProduction
     ? '/build/app.js?v=' + config.version
     : '//localhost:8888/build/app.js';
