@@ -2,6 +2,8 @@ import React from 'react';
 import { NavItemLink } from 'react-router-bootstrap';
 import Icon from 'react-fa';
 
+require('./navigation.styl');
+
 class NavbarHeader extends React.Component {
     render() {
         var title = this.props.title;
