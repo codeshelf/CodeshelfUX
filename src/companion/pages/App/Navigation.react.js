@@ -33,6 +33,7 @@ export default class Navigation extends React.Component {
             <NavItemLink to="overview"><Icon name="clock-o"></Icon>Work Overview</NavItemLink>
             <NavItemLink to="blockedwork"><Icon name="exclamation-circle"></Icon>Blocked Work</NavItemLink>
             <NavItemLink to="workresults"><Icon name="pie-chart"></Icon>Work Results</NavItemLink>
+            <NavItemLink to="import"><Icon name="upload"></Icon>Import</NavItemLink>
             </ul>
             </div>
         </nav>
