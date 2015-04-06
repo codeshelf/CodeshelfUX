@@ -119,10 +119,6 @@
 		</exec>
 	</target>
 
-    <target name="update.productivity.libs">
-        <exec dir="${productivity.dir}" executable="./update-dependencies.sh" osfamily="unix" failonerror="true" />
-    </target>
-
 	<target name="generate.templates" depends="prep.dirs">
 		<!-- if we're calling generate templates directly then create the (safer) production version. -->
 		<condition property="deploy.globals" value="${basedir}/src/templates/globals.testing" >
@@ -263,15 +259,6 @@
 	</target>
 
 
-
-    <target name="build.productivity" depends="update.productivity.libs">
-		<exec dir="${productivity.dir}" executable="./build.sh" failonerror="true" />
-        <copy todir="${target.web.dir}/productivity">
-            <fileset dir="${productivity.dir}">
-                <exclude name="node_modules/**" />
-            </fileset>
-        </copy>
-    </target>
 	<!-- Build the web app from the compiled pieces. /-->
 	<target name="build.webapp" depends="clean, generate.templates, generate.css, generate.deps, compile">
 
@@ -361,9 +348,6 @@
                 <antcall target="build.webapp">
                 </antcall>
 
-		<antcall target="build.productivity">
-		</antcall>
-
 				<copy-libraries-for-deployment />
 	</target>
 
@@ -379,9 +363,6 @@
 		<property name="deploy.globals" value="${basedir}/src/templates/globals.testing" />
 
 		<antcall target="build.webapp">
-		</antcall>
-
-		<antcall target="build.productivity">
 		</antcall>
 
 		<copy todir="${target.web.dir}">

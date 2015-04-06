@@ -17,6 +17,7 @@ var loaders = {
 module.exports = function(isDevelopment) {
 
   var mainFile = './src/companion/main.js';
+  var outputDir = './target/web/build';
 
   function stylesLoaders() {
     return Object.keys(loaders).map(function(ext) {
@@ -79,14 +80,14 @@ module.exports = function(isDevelopment) {
         test: /\.js$/
       }].concat(stylesLoaders())
     },
-      output: isDevelopment ? {
-          path: path.join(__dirname, '/build/'),
-          filename: '[name].js',
-          publicPath: 'http://localhost:8888/build/'
+    output: isDevelopment ? {
+        path: path.join(__dirname, outputDir),
+        filename: '[name].js',
+        publicPath: 'http://localhost:8888/build/'
       } : {
-          path: 'build/',
+          path: outputDir,
           filename: '[name].js'
-      },
+    },
     plugins: (function() {
       var plugins = [
         new webpack.DefinePlugin({

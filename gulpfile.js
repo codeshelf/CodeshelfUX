@@ -27,14 +27,19 @@ gulp.task('env', function() {
   console.log("Node path changed to: ", process.env.NODE_PATH);
 });
 
-gulp.task('build-webpack-production', webpackBuild(makeWebpackConfig(false)));
+gulp.task('build-webpack-production', function(done) {
+    var outputDir = 'target/web';
+    gulp.src(['src/companion/index.html']).pipe(gulp.dest(outputDir));
+    webpackBuild(makeWebpackConfig(false))(done);
+
+});
 gulp.task('build-webpack-dev', webpackDevServer(makeWebpackConfig(true)));
 gulp.task('build-webpack', [args.production ? 'build-webpack-production' : 'build-webpack-dev']);
 gulp.task('build', ['build-webpack']);
 
 gulp.task('eslint', function() {
   return gulp.src([
-      'gulpfile.js',
+//      'gulpfile.js',
       'src/**/*.js',
       'webpack/*.js'
     ])
