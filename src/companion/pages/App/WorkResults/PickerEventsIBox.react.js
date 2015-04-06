@@ -1,22 +1,10 @@
-var React = require('react');
-var {ButtonGroup, Button} = require('react-bootstrap');
-var {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} = require("components/common/IBox");
-var PickerEventsChart = require('./PickerEventsChart');
-
-var ButtonFilter = React.createClass({
-    render: function() {
-        var {onClick, currentFilter, value} = this.props;
-        var wrapperCallback = function() {
-            onClick(value);
-        };
-        return (<Button bsStyle="primary"
-                        onClick={wrapperCallback}
-                        active={currentFilter == value}>
-                    {this.props.children}
-                </Button>);
-    }
-
-});
+import React from 'react';
+import {ButtonGroup, Button} from 'react-bootstrap';
+import {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} from "components/common/IBox";
+import PickerEventsChart from './PickerEventsChart';
+import PickRateChart from './PickRateChart';
+import moment from 'moment';
+import DayOfWeekFilter from './DayOfWeekFilter';
 
 var PickerEventsIBox = React.createClass({
     getInitialState: function() {
@@ -25,31 +13,23 @@ var PickerEventsIBox = React.createClass({
             "endTimestamp" : "today"
         };
     },
-    setStartTimestamp: function(startTimestamp) {
-        this.setState({startTimestamp: startTimestamp});
+    handleClick: function(dayOfWeek) {
+        this.setState({startTimestamp: dayOfWeek,
+                       endTimestamp: dayOfWeek});
     },
+
     render: function() {
         var {startTimestamp, endTimestamp} = this.state;
         var {apiContext} = this.props;
-        var TODAY = "today";
-        var ONEHOUR = "1 hour ago";
-        var FOURHOURS = "4 hours ago";
-        var ONEWEEK = "1 week ago";
-        var buttonFilterProps = {
-            onClick: this.setStartTimestamp,
-            currentFilter:startTimestamp
-        };
         return (<IBox>
                    <IBoxTitleBar>
                      <IBoxTitleText>
-                         Pick Events
+                         Pick Summary
                      </IBoxTitleText>
                    </IBoxTitleBar>
                    <IBoxSection>
                        <ButtonGroup>
-                           <ButtonFilter {...buttonFilterProps} value={TODAY}>Today</ButtonFilter>
-                           <ButtonFilter {...buttonFilterProps} value={FOURHOURS}>Last 4 Hours</ButtonFilter>
-                           <ButtonFilter {...buttonFilterProps}  value={ONEHOUR}>Last Hour</ButtonFilter>
+                           <DayOfWeekFilter numDays={4} onClick={this.handleClick}/>
                        </ButtonGroup>
                    </IBoxSection>
                    <IBoxSection>
@@ -57,10 +37,12 @@ var PickerEventsIBox = React.createClass({
                                                    apiContext={apiContext}
                                                    startTimestamp={startTimestamp}
                                                    endTimestamp={endTimestamp}/>
-                       <PickerEventsChart style={{width: '100%', height: '100px'}}
-                                                   apiContext={apiContext}
-                                                   startTimestamp="1 week ago"
-                                                   endTimestamp={TODAY}/>
+                   </IBoxSection>
+                   <IBoxSection>
+                       <PickRateChart style={{width: '100%', height: '300px'}}
+                           apiContext={apiContext}
+                           startTimestamp={startTimestamp}
+                           endTimestamp={endTimestamp}/>
                    </IBoxSection>
                 </IBox>
         );
