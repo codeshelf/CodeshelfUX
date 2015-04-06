@@ -19,12 +19,6 @@
     "tests"
   ],
   "dependencies": {
-    "angular-dialog-service": "~5.0.0",
-    "angular-i18n": "~1.2.18",
-    "angular-route": "~1.2.18",
-    "jquery": "~1.8.1",
-    "jquery-ui": "1.8.23",
-    "SlickGrid": "mleibman/SlickGrid#2.1",
     "moment": "~2.8.3",
     "nvd3": "~1.7.1",
     "tablesaw": "~1.0.4"

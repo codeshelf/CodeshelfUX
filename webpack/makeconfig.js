@@ -71,7 +71,7 @@ module.exports = function(isDevelopment) {
           { test: /\.svg([\?]?.*)$/,  loader: "url-loader?limit=10000&mimetype=image/svg+xml" },
           { test: /\.(gif|jpg|png)$/, loader: 'url-loader?limit=100000' },
         {
-        exclude: [/node_modules/, /lib\/tablesaw/],
+        exclude: [/node_modules/, /bower_components/],
         loaders: isDevelopment ? [
           'react-hot', 'babel-loader'
         ] : [
@@ -123,7 +123,7 @@ module.exports = function(isDevelopment) {
     })(),
     resolve: {
         root: [ path.resolve(process.cwd(), './src/companion'),
-                path.resolve(process.cwd(), './lib')],
+                path.resolve(process.cwd(), './bower_components')],
         extensions: ['', '.js', '.json', '.react.js']
     }
   };
