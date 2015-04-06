@@ -13,7 +13,7 @@ var PickerEventsIBox = React.createClass({
             "endTimestamp" : "today"
         };
     },
-    handleClick: function(dayOfWeek) {
+    handleChange: function(dayOfWeek) {
         this.setState({startTimestamp: dayOfWeek,
                        endTimestamp: dayOfWeek});
     },
@@ -29,7 +29,7 @@ var PickerEventsIBox = React.createClass({
                    </IBoxTitleBar>
                    <IBoxSection>
                        <ButtonGroup>
-                           <DayOfWeekFilter numDays={4} onClick={this.handleClick}/>
+                           <DayOfWeekFilter numDays={4} onChange={this.handleChange}/>
                        </ButtonGroup>
                    </IBoxSection>
                    <IBoxSection>
