@@ -3,7 +3,7 @@
   "contributors": [],
   "scripts": {
     "postinstall": "./node_modules/.bin/bower install; ./node_modules/.bin/gulp build --production",
-    "start": "node src/server",
+    "dev": "./node_modules/.bin/gulp",
     "test": "./node_modules/.bin/gulp test"
   },
   "engines": {
