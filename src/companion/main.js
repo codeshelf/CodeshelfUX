@@ -6,7 +6,7 @@ import routes from './routes';
 // https://medium.com/@dan_abramov/two-weird-tricks-that-fix-react-7cf9bbdef375
 const app = document.getElementById('app');
 
-Router.run(routes, Router.HistoryLocation, (Handler) => {
+    Router.run(routes, /*Router.HistoryLocation, use 'regular' urls instead of hash'*/ (Handler) => {
   React.render(<Handler />, app);
 });
 
