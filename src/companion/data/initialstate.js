@@ -33,10 +33,7 @@ export default {
         {type: "nolocation", description: 'consider ‘stop doing’ app', total: 4},
         {type: "shorted", description: 'relax', total: 3}
     ],
-    selectedFacility: {
-        persistentId: "df03bec3-d2b1-450a-8b31-ccbad23ecc67",
-        domainId: "F1"
-    },
+    selectedFacility: null,
     blockedwork: {
         summaries:
         [

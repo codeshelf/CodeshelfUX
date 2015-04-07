@@ -1,10 +1,11 @@
 import React from 'react';
 import { NavItemLink } from 'react-router-bootstrap';
 import Icon from 'react-fa';
+import PureComponent from 'lib/purecomponent';
 
 require('./navigation.styl');
 
-class NavbarHeader extends React.Component {
+class NavbarHeader extends PureComponent {
     render() {
         var title = this.props.title;
         var facilityName = (title) ? title : "";
@@ -22,7 +23,7 @@ class NavbarHeader extends React.Component {
     }
 }
 
-export default class Navigation extends React.Component {
+export default class Navigation extends PureComponent {
 
   render() {
     return (
