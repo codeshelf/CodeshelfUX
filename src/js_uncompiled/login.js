@@ -29,20 +29,22 @@ codeshelf.loginWindow = function() {
 					var user = command['user'];
 					var email = user['username'];
 					var authz = new codeshelf.Authz();
-					if (email.indexOf('configure') == 0) {
-						authz.setPermissions(["*"]);
-					} else if (email.indexOf('view') == 0
-							   || email == 'a@example.com') {
-						authz.setPermissions(["*:view"]);
-					} else if (email.indexOf('simulate') == 0) {
-						authz.setPermissions(["*"]);
-					} else if (email.indexOf('che') == 0) {
-						authz.setPermissions(["*:view", "che:simulate"]);
-					} else if (email.indexOf('work') == 0) {
-						authz.setPermissions(["*:view", "item:edit"]);
-					} else {
-						authz.setPermissions([]); // no permissions by default
+					var permissions = command['permissions'];
+
+					authz.setPermissions(permissions);
+					// translate permissions (could also change existing checks)
+					if(authz.hasPermission("facility:edit")) {
+						permissions.push("*"); // "configure@" or "simulate@" user
 					}
+					else if(authz.hasPermission("inventory:edit")) {
+						permissions.push(["*:view"]); 
+						permissions.push("item:edit"); // "work@" user  
+					}
+					else if(authz.hasPermission("ux")) {
+						permissions.push(["*:view"]); // all logged in users
+					}
+					// no special translation for "che@" user ("che:simulate" permission exists on app server)
+					authz.setPermissions(permissions);
 					authz = Object.freeze(authz); //ECMAScript 5 prevent changes from this point
 					websession_.setAuthz(authz);
 					self.exit();
