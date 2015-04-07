@@ -131,13 +131,22 @@ codeshelf.websession = function () {
 			pendingCommands_ = new Object();
 
 			websocket_ = websocket;
+			var promise = jQuery.Deferred();
+
 			var webSocketEventHandler = new goog.events.EventHandler();
-			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.ERROR, self_.onEnd.bind(self_, "websocket error"));
 			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.OPENED, self_.onOpen);
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.OPENED, function() {
+                promise.resolve();
+            });
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.ERROR, self_.onEnd.bind(self_, "websocket error"));
+			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.ERROR, function(){
+                promise.reject();
+            });
 			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.CLOSED, self_.onEnd.bind(self_, "websocket closed"));
 			webSocketEventHandler.listen(websocket_, goog.net.WebSocket.EventType.MESSAGE, self_.onMessage);
 
 			self_.openWebSocket();
+            return promise;
 		},
 
 		openWebSocket: function () {
@@ -281,6 +290,17 @@ codeshelf.websession = function () {
             return self_.loginCSWebSocket(username, password);
         },
 
+        loginWSToken: function(cstoken) {
+            var loginCommand = {
+				'LoginRequest' : {
+                    'cstoken': cstoken,
+					'userId': '',
+					'password': ''
+				}
+			};
+            return self_.handleLoginCommand(loginCommand);
+        },
+
         loginHTTP: function(username, password) {
             jQuery.post("/auth/", {
                 "u": username,
@@ -298,7 +318,9 @@ codeshelf.websession = function () {
 					'password': password
 				}
 			};
-
+            return self_.handleLoginCommand(loginCommand);
+        },
+        handleLoginCommand: function(loginCommand) {
 			var promise = jQuery.Deferred();
 			self_.sendCommand(loginCommand,  {
 				exec: function(commandType, response) {
@@ -308,20 +330,22 @@ codeshelf.websession = function () {
 					    var user = response['user'];
 					    var email = user['username'];
 					    var authz = new codeshelf.Authz();
-					    if (email.indexOf('configure') == 0) {
-						    authz.setPermissions(["*"]);
-					    } else if (email.indexOf('view') == 0
-							       || email == 'a@example.com') {
-						    authz.setPermissions(["*:view"]);
-					    } else if (email.indexOf('simulate') == 0) {
-						    authz.setPermissions(["*"]);
-					    } else if (email.indexOf('che') == 0) {
-						    authz.setPermissions(["*:view", "che:simulate"]);
-					    } else if (email.indexOf('work') == 0) {
-						    authz.setPermissions(["*:view", "item:edit"]);
-					    } else {
-						    authz.setPermissions([]); // no permissions by default
+					    var permissions = command['permissions'];
+
+					    authz.setPermissions(permissions);
+					    // translate permissions (could also change existing checks)
+					    if(authz.hasPermission("facility:edit")) {
+						    permissions.push("*"); // "configure@" or "simulate@" user
 					    }
+					    else if(authz.hasPermission("inventory:edit")) {
+						    permissions.push(["*:view"]);
+						    permissions.push("item:edit"); // "work@" user
+					    }
+					    else if(authz.hasPermission("ux")) {
+						    permissions.push(["*:view"]); // all logged in users
+					    }
+					    // no special translation for "che@" user ("che:simulate" permission exists on app server)
+					    authz.setPermissions(permissions);
 					    authz = Object.freeze(authz); //ECMAScript 5 prevent changes from this point
 					    self_.setAuthz(authz);
                         self_.onAuthenticated();

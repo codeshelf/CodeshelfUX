@@ -17,7 +17,9 @@
 	<property name="productivity.dir" value="${basedir}/productivity" />
 
 	<property name="target.dir" value="${basedir}/target" />
-	<property name="target.web.dir" location="${target.dir}/web" />
+	<property name="target.web.dir" location="${target.dir}/web/ux" />
+	<property name="target.images.dir" location="${target.dir}/web/images" />
+
 	<property name="target.coverage.dir" location="${target.dir}/coverage" />
 
 	<property name="target.compiled.js.dir" value="${target.dir}/js_compiled" />
@@ -100,7 +102,7 @@
 		<mkdir dir="${target.web.dir}" />
 		<mkdir dir="${target.web.dir}/js" />
 		<mkdir dir="${target.web.dir}/icons" />
-		<mkdir dir="${target.web.dir}/images" />
+		<mkdir dir="${target.images.dir}" />
 	</target>
 
 	<target name="lint">
@@ -118,10 +120,6 @@
 			<arg value="--nojsdoc" />
 		</exec>
 	</target>
-
-    <target name="update.productivity.libs">
-        <exec dir="${productivity.dir}" executable="./update-dependencies.sh" osfamily="unix" failonerror="true" />
-    </target>
 
 	<target name="generate.templates" depends="prep.dirs">
 		<!-- if we're calling generate templates directly then create the (safer) production version. -->
@@ -259,19 +257,10 @@
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/SlickGrid" value="../lib/SlickGrid" />
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/TwitterBootstrap" value="../lib/TwitterBootstrap" />
 		<echo file="${target.compiled.js.dir}/codeshelf.js" append="true">
-//# sourceMappingURL=/js/codeshelf.map</echo>
+//# sourceMappingURL=codeshelf.map</echo>
 	</target>
 
 
-
-    <target name="build.productivity" depends="update.productivity.libs">
-		<exec dir="${productivity.dir}" executable="./build.sh" failonerror="true" />
-        <copy todir="${target.web.dir}/productivity">
-            <fileset dir="${productivity.dir}">
-                <exclude name="node_modules/**" />
-            </fileset>
-        </copy>
-    </target>
 	<!-- Build the web app from the compiled pieces. /-->
 	<target name="build.webapp" depends="clean, generate.templates, generate.css, generate.deps, compile">
 
@@ -302,7 +291,7 @@
 			</fileset>
 		</copy>
 
-		<copy todir="${target.web.dir}/images">
+		<copy todir="${target.images.dir}">
 			<fileset dir="${images.dir}">
 				<include name="*.**" />
 			</fileset>
@@ -361,9 +350,6 @@
                 <antcall target="build.webapp">
                 </antcall>
 
-		<antcall target="build.productivity">
-		</antcall>
-
 				<copy-libraries-for-deployment />
 	</target>
 
@@ -379,9 +365,6 @@
 		<property name="deploy.globals" value="${basedir}/src/templates/globals.testing" />
 
 		<antcall target="build.webapp">
-		</antcall>
-
-		<antcall target="build.productivity">
 		</antcall>
 
 		<copy todir="${target.web.dir}">
