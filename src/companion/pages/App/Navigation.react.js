@@ -23,7 +23,7 @@ class NavbarHeader extends PureComponent {
     }
 }
 
-export default class Navigation extends PureComponent {
+export default class Navigation extends React.Component {
 
   render() {
     return (
