@@ -29,7 +29,7 @@ export default class DayOfWeekFilter extends React.Component {
         };
     }
 
-    handleButtonClick(value) {
+    handleButtonClick(value, e) {
         this.setState({value: value});
         var {onChange} = this.props;
         onChange(value);
@@ -43,11 +43,12 @@ export default class DayOfWeekFilter extends React.Component {
                 {
                     _.range(1,numDays+1).reverse().map(function(index){
                         var dayOfWeek = moment().subtract(index, 'days').format('dd');
-                        return (<ButtonFilter key={dayOfWeek} onClick={this.handleButtonClick.bind(this)} selectedValue={value} value={index + " days ago"}>{dayOfWeek}</ButtonFilter>);
+                        var buttonValue = index + " days ago";
+                        return (<ButtonFilter key={dayOfWeek} onClick={this.handleButtonClick.bind(this, buttonValue)} selectedValue={value} value={buttonValue}>{dayOfWeek}</ButtonFilter>);
                     }.bind(this))
 
                 }
-                <ButtonFilter key="today" onClick={this.handleButtonClick.bind(this)} selectedValue={value} value="today">Today</ButtonFilter>
+                <ButtonFilter key="today" onClick={this.handleButtonClick.bind(this, "today")} selectedValue={value} value="today">Today</ButtonFilter>
             </div>
         );
 

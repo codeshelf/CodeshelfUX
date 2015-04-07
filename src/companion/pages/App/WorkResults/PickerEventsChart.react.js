@@ -16,9 +16,9 @@ var PickerEventsChart = React.createClass({
     componentWillUnmount: function() {
 
     },
-    componentWillUpdate: function(prevProps, prevState) {
+    componentWillUpdate: function(nextProps, nextState) {
         var el = this.getDOMNode();
-        this.updateViews(this.props, el);
+        this.updateViews(nextProps, el);
     },
     updateViews: function(props, el) {
         var {startTimestamp, endTimestamp} = props;
