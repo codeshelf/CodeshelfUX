@@ -330,7 +330,7 @@ codeshelf.websession = function () {
 					    var user = response['user'];
 					    var email = user['username'];
 					    var authz = new codeshelf.Authz();
-					    var permissions = command['permissions'];
+					    var permissions = response['permissions'];
 
 					    authz.setPermissions(permissions);
 					    // translate permissions (could also change existing checks)
@@ -338,11 +338,11 @@ codeshelf.websession = function () {
 						    permissions.push("*"); // "configure@" or "simulate@" user
 					    }
 					    else if(authz.hasPermission("inventory:edit")) {
-						    permissions.push(["*:view"]);
+						    permissions.push("*:view");
 						    permissions.push("item:edit"); // "work@" user
 					    }
 					    else if(authz.hasPermission("ux")) {
-						    permissions.push(["*:view"]); // all logged in users
+						    permissions.push("*:view"); // all logged in users
 					    }
 					    // no special translation for "che@" user ("che:simulate" permission exists on app server)
 					    authz.setPermissions(permissions);
