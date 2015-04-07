@@ -17,7 +17,9 @@
 	<property name="productivity.dir" value="${basedir}/productivity" />
 
 	<property name="target.dir" value="${basedir}/target" />
-	<property name="target.web.dir" location="${target.dir}/web" />
+	<property name="target.web.dir" location="${target.dir}/web/ux" />
+	<property name="target.images.dir" location="${target.dir}/web/images" />
+
 	<property name="target.coverage.dir" location="${target.dir}/coverage" />
 
 	<property name="target.compiled.js.dir" value="${target.dir}/js_compiled" />
@@ -100,7 +102,7 @@
 		<mkdir dir="${target.web.dir}" />
 		<mkdir dir="${target.web.dir}/js" />
 		<mkdir dir="${target.web.dir}/icons" />
-		<mkdir dir="${target.web.dir}/images" />
+		<mkdir dir="${target.images.dir}" />
 	</target>
 
 	<target name="lint">
@@ -255,7 +257,7 @@
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/SlickGrid" value="../lib/SlickGrid" />
 		<replace file="${target.compiled.js.dir}/codeshelf.map" token="lib/TwitterBootstrap" value="../lib/TwitterBootstrap" />
 		<echo file="${target.compiled.js.dir}/codeshelf.js" append="true">
-//# sourceMappingURL=/js/codeshelf.map</echo>
+//# sourceMappingURL=codeshelf.map</echo>
 	</target>
 
 
@@ -289,7 +291,7 @@
 			</fileset>
 		</copy>
 
-		<copy todir="${target.web.dir}/images">
+		<copy todir="${target.images.dir}">
 			<fileset dir="${images.dir}">
 				<include name="*.**" />
 			</fileset>
