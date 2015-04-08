@@ -5,20 +5,14 @@ require("tablesaw/dist/tablesaw.css");
 require("imports?jQuery=jquery,this=>window!tablesaw/dist/tablesaw.js");
 var $ = require("jquery");
 
-var HeaderTitle = {
-    "orderId" : "Order Id",
-    "orderDetailId" : "Detail Id",
-    "planQuantity" : "Qty.",
-    "status" : "Status"
-};
-
 var Row = React.createClass({
     render: function() {
         var {headers, data} = this.props;
         return (
                 <tr>
                 {
-                    _.keys(headers).map(function(key){
+                    _.map(headers, function(header){
+                        var key = header.key;
                         var value = data[key];
                         return (<td key={key}>{value}</td>);
                     })
@@ -31,14 +25,15 @@ var Row = React.createClass({
 
 var Header = React.createClass({
     render: function() {
-        var {data} = this.props;
+        var {headers} = this.props;
         var i = 0;
         return (
                 <thead>
                     <tr>
                 {
-                    _.keys(data).map(function(key){
-                        var title = data[key];
+                    _.map(headers, function(header){
+                        var key = header.key;
+                        var title = header.title;
                         var priority = i++;
                         return (<th key={key} scope="col" data-tablesaw-priority={priority === 0 ? "persist" : priority} >{title}</th>);
                     })
@@ -64,14 +59,24 @@ var Table = React.createClass({
     },
     render: function() {
         var {caption , rows} = this.props;
+        var headers = [];
+        if (rows && rows.length > 0) {
+            headers = _.keys(rows[0]).map((key) => {
+                var ret = {
+                    key: key,
+                    title: key
+                };
+                return ret;
+            });
+        }
         return (
                 <table className="tablesaw" data-tablesaw-minimap data-tablesaw-mode="swipe">
                     <caption>{caption}</caption>
-                    <Header data={HeaderTitle} />
+                    <Header headers={headers} />
                     <tbody>
                             {
-                               rows.map(function(row) {
-                                       return (<Row headers={HeaderTitle} data={row} />);
+                               rows.map(function(row, i) {
+                                       return (<Row key={i} headers={headers} data={row} />);
                                })
                             }
                     </tbody>

@@ -4,11 +4,13 @@ import  React from 'react';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
 import {Input, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
+import {Table} from 'components/common/Table';
 
 export default class WorkResults extends React.Component{
 
     constructor() {
-        this.state = {loading: false};
+        this.state = {loading: false,
+                      documents: []};
     }
 
     handleClick(e) {
@@ -17,7 +19,14 @@ export default class WorkResults extends React.Component{
 
         //var apiContext = getFacilityContext();
         setTimeout(() => {
-            this.setState({loading: false});
+            this.setState({loading: false,
+                           documents:[
+                               {name: "a",
+                                totalLines: 5},
+                               {name: "b",
+                                totalLines: 6}
+
+                           ]});
         },3000);
     }
 
@@ -47,6 +56,9 @@ export default class WorkResults extends React.Component{
                                 </Button>
 
                             </form>
+                            <Table rows={this.state.documents}>
+
+                            </Table>
                         </Col>
                     </Row>
                 </PageGrid>
