@@ -15,7 +15,7 @@ import Login from './pages/Login/Login.react.js';
 export default (
   <Route handler={Root} path="/">
       <Redirect from="/" to="/app" />
-      <Route handler={auth(App)} path="app">
+        <Route  handler={auth(App)} path="app">
         <DefaultRoute handler={Overview} name="overview" />
         <NotFoundRoute handler={NotFound} name="not-found" />
         <Route handler={BlockedWork} name="blockedwork">
@@ -25,6 +25,6 @@ export default (
         <Route handler={WorkResults} name="workresults" />
         <Route handler={Import} name="import" />
      </Route>
-    <Route handler={Login} path="login" />
+    <Route handler={Login} name="login" />
   </Route>
 );
