@@ -40,7 +40,7 @@ var Header = React.createClass({
                     _.keys(data).map(function(key){
                         var title = data[key];
                         var priority = i++;
-                        return (<th key={key} scope="col"  data-tablesaw-priority={priority == 0 ? "persist" : priority} >{title}</th>);
+                        return (<th key={key} scope="col" data-tablesaw-priority={priority === 0 ? "persist" : priority} >{title}</th>);
                     })
                 }
                     </tr>
@@ -50,7 +50,7 @@ var Header = React.createClass({
     }
 });
 
-var Table =  React.createClass({
+var Table = React.createClass({
     getDefaultProps: function(){
         return {
             "caption": "",
@@ -85,4 +85,4 @@ module.exports = {
     "Table": Table,
     "Header": Header,
     "Row": Row
-}
+};

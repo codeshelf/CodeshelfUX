@@ -1,3 +1,5 @@
+/*eslint strict:0 */
+
 import DocumentTitle from 'react-document-title';
 import React from 'react';
 import {RouteHandler} from 'react-router';
@@ -5,31 +7,31 @@ import {state} from './data/state';
 
 export default class Root extends React.Component {
 
-  componentDidMount() {
-      document.addEventListener('keypress', this.onDocumentKeypress);
+    componentDidMount() {
+        document.addEventListener('keypress', this.onDocumentKeypress);
 
-    // Must be required here because there is no DOM in Node.js. Remember,
-    // mocking DOM in Node.js is an anti-pattern, because it can confuse
-    // isomorphic libraries. TODO: Wait for iOS fix, then remove.
-    // http://developer.telerik.com/featured/300-ms-click-delay-ios-8/
-    require('fastclick').attach(document.body);
+        // Must be required here because there is no DOM in Node.js. Remember,
+        // mocking DOM in Node.js is an anti-pattern, because it can confuse
+        // isomorphic libraries. TODO: Wait for iOS fix, then remove.
+        // http://developer.telerik.com/featured/300-ms-click-delay-ios-8/
+        require('fastclick').attach(document.body);
 
-    state.on('change', () => {
-        /*eslint-disable no-console */
-        console.time('whole app rerender');
-        this.forceUpdate(() => {
-            console.timeEnd('whole app rerender');
-        });
+        state.on('change', () => {
+            /*eslint-disable no-console */
+            console.time('whole app rerender');
+            this.forceUpdate(() => {
+                console.timeEnd('whole app rerender');
+            });
         /*eslint-enable */
     });
 
-  }
+}
 
-  componentWillUnmount() {
-      document.removeEventListener('keypress', this.onDocumentKeypress);
-  }
+componentWillUnmount() {
+    document.removeEventListener('keypress', this.onDocumentKeypress);
+}
 
-  onDocumentKeypress(e) {
+onDocumentKeypress(e) {
     // Press shift+ctrl+s to save app state and shift+ctrl+l to load.
     if (!e.shiftKey || !e.ctrlKey) return;
     switch (e.keyCode) {
@@ -49,10 +51,10 @@ export default class Root extends React.Component {
         state.load(newState);
         break;
     }
-  }
+}
 
-  render() {
-      return (<RouteHandler />);
+render() {
+    return (<RouteHandler />);
 
-  }
+}
 };

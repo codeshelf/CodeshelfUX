@@ -6,7 +6,7 @@ module.exports = {
         var groupData = {
             "groups": {}
         };
-        groupData["groups"][groupName] = {
+        groupData.groups[groupName] = {
             "complete" : numComplete,
             "released" : numReleased,
             "inprogress" : numInProgress,
@@ -31,13 +31,13 @@ module.exports = {
                        "revertCount":0,
                        "activeCount":0,
                        "active":false};
-        runSummary['runsByGroup'][groupName] = [runData];
+        runSummary.runsByGroup[groupName] = [runData];
         return runSummary;
     },
     "StatusSummary" : {
         "StatusEnum": ["released", "inprogress", "complete", "short"],
         "shortCount" : function(statusSummary) {
-            return statusSummary["short"];
+            return statusSummary.short;
         },
         "sumByKeys" : function(statusSummary, keys) {
             //todo validate keys with StatusEnum

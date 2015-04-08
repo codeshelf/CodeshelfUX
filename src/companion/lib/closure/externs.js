@@ -11,4 +11,4 @@ var exports;
 /**
  * @type {Object.<string,*>}
  */
-module.exports;
+module.exports = {};

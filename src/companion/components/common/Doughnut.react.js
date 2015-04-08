@@ -19,7 +19,7 @@ var DoughnutChart = React.createClass({
         console.log("doughnut component mounted at", el);
     },
     componentWillUnmount: function() {
-        var chart =  this.state.chart;
+        var chart = this.state.chart;
         if (chart) {
             chart.destroy();
         }

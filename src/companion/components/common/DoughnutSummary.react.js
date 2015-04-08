@@ -33,7 +33,7 @@ var DoughnutSummary = React.createClass({
     },
 
     render: function() {
-        var summaryData  = this.props.summaryData;
+        var summaryData = this.props.summaryData;
         var totalLabel = pluralize(total, this.props.totalLabelSingular, this.props.totalLabel);
         var total = StatusSummary.sumByKeys(summaryData, ["released", "inprogress", "complete", "short"]);
         if (total > 0) {
@@ -51,7 +51,7 @@ var DoughnutSummary = React.createClass({
                     {{/* The first div provides the proper box dimensions for the chart resize calculations */}}
                     <div style={{position: "relative", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                         <DoughnutChart chartData={chartData} />
-                        <div style={{position: "absolute", top: 0, bottom: 0, left:0, right:0, display: "flex", flexDirection: "column",  justifyContent: "center", alignItems: "center", pointerEvents: "none"}}>
+                        <div style={{position: "absolute", top: 0, bottom: 0, left:0, right:0, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", pointerEvents: "none"}}>
                             <div style={{fontSize: "4vmax"}}>{remaining}</div>
                         </div>
                     </div>
@@ -63,9 +63,9 @@ var DoughnutSummary = React.createClass({
 
 function toChartData(segmentTemplates, keyedValues) {
         var chartValues = _.map(segmentTemplates, function(segmentTemplate) {
-                var key = segmentTemplate["key"];
-                var data  = {value: keyedValues[key]};
-                var chartSegment =  _.merge({}, segmentTemplate, data);
+                var key = segmentTemplate.key;
+                var data = {value: keyedValues[key]};
+                var chartSegment = _.merge({}, segmentTemplate, data);
                 return chartSegment;
         });
         return chartValues;

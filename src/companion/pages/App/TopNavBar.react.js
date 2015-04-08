@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from 'react-fa';
 
 //TODO show logout if logged in
-export default class TopNavBar  extends React.Component {
+export default class TopNavBar extends React.Component {
 
     render() {
         return (

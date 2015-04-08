@@ -17,11 +17,11 @@ function formatTimestamp(momentCompatibleDate, opt_relativetime) {
         referenceTime = moment(opt_relativetime);
     }
 
-    if (momentCompatibleDate === null || momentCompatibleDate == "") {
+    if (momentCompatibleDate === null || momentCompatibleDate === "") {
         return "";
     }
 
-    var timeMoment  =  moment(momentCompatibleDate);
+    var timeMoment = moment(momentCompatibleDate);
     return timeMoment.calendar(referenceTime);
 }
 
