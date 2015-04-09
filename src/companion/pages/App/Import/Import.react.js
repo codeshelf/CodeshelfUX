@@ -1,6 +1,6 @@
 import DocumentTitle from 'react-document-title';
 import {getFacilityContext} from 'data/csapi';
-import  React from 'react';
+import React from 'react';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
 import {Input, Button} from 'react-bootstrap';
 import Icon from 'react-fa';

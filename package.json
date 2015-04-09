@@ -12,6 +12,7 @@
   "dependencies": {
     "bluebird": "^2.9.9",
     "bootstrap": "^3.3.4",
+    "chance": "^0.7.3",
     "chart.js": "^1.0.2",
     "classnames": "^1.1.4",
     "compression": "^1.4.0",
@@ -21,6 +22,7 @@
     "express": "^4.11.2",
     "fastclick": "^1.0.6",
     "flux": "^2.0.1",
+    "griddle-react": "^0.2.12",
     "immutable": "^3.6.4",
     "intl": "^0.1.4",
     "intl-messageformat": "^1.1.0",
