@@ -6,6 +6,22 @@ import {Modal, Button, Input} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {selectedWorkerCursor, workersCursor} from 'data/state';
 
+import Immutable from 'immutable';
+import uuid from 'node-uuid';
+
+const NEWID = "new";
+
+var WorkerForm = Immutable.Record(
+    {
+        "_id": NEWID,
+        "middleInitial": null,
+        "lastName": null,
+        "firstName": null,
+        "badgeId": null,
+        "workerId": null,
+        "groupId": null
+    }
+);
 
 class WorkerDisplay extends React.Component {
 
@@ -16,23 +32,29 @@ class WorkerDisplay extends React.Component {
         };
 
     }
-    componentDidMount() {
-        var workerId = this.props.router.getCurrentParams().workerId;
-        var workerForm = workersCursor().find((worker) => worker.get("_id") === workerId);
-    selectedWorkerCursor((oldWorkerForm) => workerForm);
-
+    componentWillMount() {
+        this.findSelectedWorkerForm(this.props);
     }
-    componentWillReceiveProps() {
-        var workerId = this.props.router.getCurrentParams().workerId;
+    componentWillReceiveProps(newProps) {
+        this.findSelectedWorkerForm(newProps);
+    }
+
+    findSelectedWorkerForm(props) {
+        var workerId = props.router.getCurrentParams().workerId;
         var workerForm = this.getSelectedWorkerForm();
-        if (workerForm && workerForm.get("_id") !== workerId) {
-            workerForm = workersCursor().find((worker) => worker.get("_id") === workerId);
-            selectedWorkerCursor((oldWorkerForm) => workerForm);
+        if (!workerForm || workerForm.get("_id") !== workerId) {
+            if (workerId === "new") {
+                workerForm = WorkerForm();
+                this.storeSelectedWorkerForm(workerForm);
+            } else {
+                workerForm = workersCursor().find((worker) => worker.get("_id") === workerId);
+                this.storeSelectedWorkerForm(workerForm);
+            }
         }
     }
 
     getLabel(key) {
-        return _.result(_.find(this.props.formMetadata, "column Name", key), "displayName", "");
+        return _.result(_.find(this.props.formMetadata, "columnName", key), "displayName", "");
     }
 
     getSelectedWorkerForm() {
@@ -58,17 +80,35 @@ class WorkerDisplay extends React.Component {
         var selectedWorkerForm = this.getSelectedWorkerForm();
         var id = selectedWorkerForm.get("_id");
         var token = setTimeout(() => {
+            if (id === NEWID) {
+                this.addWorker(selectedWorkerForm);
+            } else {
+                this.updateWorker(selectedWorkerForm);
+            }
 
-            workersCursor((workerList) => {
-                var i = workerList.findIndex((worker) => worker.get("_id") === id);
-                console.log("Saving ", selectedWorkerForm, " to ", i);
-                return workerList.set(i, selectedWorkerForm);
-            });
             console.log("clearing form");
             this.setState({"savePending": null});
             this.handleClose();
         }, 3000);
         this.setState({"savePending": token});
+    }
+
+    addWorker(selectedWorkerForm) {
+        workersCursor((workerList) => {
+            var newWorker = selectedWorkerForm.set("_id", uuid.v1());
+            console.log("Saving ", newWorker);
+            return workerList.push(newWorker);
+});
+}
+
+
+    updateWorker(selectedWorkerForm) {
+        var id = selectedWorkerForm.get("_id");
+        workersCursor((workerList) => {
+            var i = workerList.findIndex((worker) => worker.get("_id") === id);
+            console.log("Saving ", selectedWorkerForm, " to ", i);
+            return workerList.set(i, selectedWorkerForm);
+        });
     }
 
     handleClose() {
@@ -77,7 +117,7 @@ class WorkerDisplay extends React.Component {
             clearTimeout(token);
         }
         this.setState({"savePending": null});
-
+        this.storeSelectedWorkerForm(null);
         this.props.router.transitionTo("workermgmt");
     }
 
@@ -102,7 +142,10 @@ class WorkerDisplay extends React.Component {
                                 <div className='modal-body'>
                                 {
                                     ["firstName", "middleInitial", "lastName",  "badgeId", "workerId", "groupId"].map((objField, i) =>{
-                                        return this.renderCustomInput(formData, objField) || this.renderTextInput(formData, objField, i);
+
+                                        var value= formData.get(objField);
+                                        var label= this.getLabel(objField);
+                                        return this.renderCustomInput(objField, i, label, value) || this.renderTextInput(objField, i, label, value);
 
                                     })
                }
@@ -120,27 +163,30 @@ class WorkerDisplay extends React.Component {
 
 
 
-    renderTextInput(formData, objField, index) {
-        return <Input key={objField} type="text"
+    renderTextInput(objField, index, label, value) {
+        return <Input key={objField} ref={objField}
+                type="text"
                 autoFocus={index == 0}
-                disabled={this.state.savePending}
+                disabled={this.state.savePending == null}
                 name={objField}
-                label={this.getLabel(objField)}
-                value={formData.get(objField)}
+                label={label}
+                value={value}
                 onChange={this.handleChange.bind(this, objField)}
                 />;
     }
 
-    renderCustomInput(formData, objField, index) {
+    renderCustomInput(objField, index, label, value) {
         if (objField === "badgeId") {
-            return <Input key={objField} type="text"
-                    value={formData.get(objField)}
+            return <Input key={objField} ref={objField}
+                    type="text"
+
                     autoFocus={index == 0}
-                    disabled={this.state.savePending}
+                    disabled={this.state.savePending == null}
                     name={objField}
-                    label={this.getLabel(objField)}
+                    label={label}
+                    value={value}
                     onChange={this.handleChange.bind(this, objField)}
-                    buttonAfter={this.renderBarcodeGeneratorComponent(this.generateBarcode.bind(this, this.handleChange.bind(this)), objField)}
+                    buttonAfter={this.renderBarcodeGeneratorComponent(objField, value)}
                     />;
         }
         else {
@@ -158,23 +204,24 @@ class WorkerDisplay extends React.Component {
     }
 
 
-    renderBarcodeGeneratorComponent (callback, objField) {
+    renderBarcodeGeneratorComponent (objField, value) {
         var setBadgeId = function() {
             var barCode = this.generateBarcode();
             selectedWorkerCursor((oldWorker) => {
                 var newWorker =  oldWorker.set(objField,barCode);
                 return newWorker;
             });
+            this.refs[objField].getInputDOMNode().focus();
 
-        }
+        };
 
-        return <Button bsStyle="primary" onClick={setBadgeId.bind(this)}><Icon name="barcode" /></Button>;
+        return <Button bsStyle="primary" disabled={(value) ? true : false} onClick={setBadgeId.bind(this)}><Icon name="barcode" /></Button>;
     }
 
     generateBarcode() {
         var length = 12;
         var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-        var code = _.sample(chars, length).join('');
+        var code = "U%" + _.sample(chars, length).join('');
         return code;
     }
 };

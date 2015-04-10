@@ -65,6 +65,7 @@ export default class WorkerMgmt extends React.Component{
                 <PageGrid>
                     <Row>
                         <Col sm={12}>
+                            <ButtonLink bsStyle="primary" to="workerdisplay" params={{workerId: "new"}} ><Icon name="plus" /></ButtonLink>
                             <Griddle results={rows}
                                      showFilter={true}
                                      columns={this.columns}
