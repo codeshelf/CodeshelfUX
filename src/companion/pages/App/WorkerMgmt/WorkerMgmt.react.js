@@ -11,6 +11,7 @@ import Immutable from 'immutable';
 import {RouteHandler} from 'react-router';
 
 import {selectedWorkerCursor, workersCursor} from 'data/state';
+import formatTimestamp from 'lib/timeformat';
 
 export default class WorkerMgmt extends React.Component{
 
@@ -42,12 +43,15 @@ export default class WorkerMgmt extends React.Component{
                 displayName: "Group"
             },
             {
+                columnName: "lastUpdatedTime",
+                displayName: "Updated",
+                customComponent: DateDisplay
+            },
+            {
                 columnName: "action",
                 displayName: "",
                 customComponent: Edit
             }
-
-
         ];
         this.columns = _.map(this.columnMetadata, (column) => column.columnName);
     }
@@ -82,6 +86,12 @@ export default class WorkerMgmt extends React.Component{
 
 
 };
+
+class DateDisplay extends React.Component {
+    render() {
+        return (<span>{formatTimestamp(this.props.data)}</span>);
+    }
+}
 
 class Edit extends React.Component {
     handleClick(rowData, e) {

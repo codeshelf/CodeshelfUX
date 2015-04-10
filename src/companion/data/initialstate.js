@@ -61,7 +61,8 @@ function generateWorker() {
         "firstName": chance.first(),
         "badgeId": chance.hash({length: 12}),
         "workerId": chance.hash({length: 12}),
-        "groupId": chance.hash({length: 12})
+        "groupId": chance.hash({length: 12}),
+        "lastUpdatedTime": chance.timestamp()
     };
 }
 data.workers = _.range(120).map(() => generateWorker());

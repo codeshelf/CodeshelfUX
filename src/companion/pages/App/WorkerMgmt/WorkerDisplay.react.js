@@ -19,7 +19,9 @@ var WorkerForm = Immutable.Record(
         "firstName": null,
         "badgeId": null,
         "workerId": null,
-        "groupId": null
+        "groupId": null,
+        "lastUpdatedTime": new Date().getTime()
+
     }
 );
 
