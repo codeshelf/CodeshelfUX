@@ -74,7 +74,7 @@ export function authenticate(username, password) {
 };
 
 export function getUser() {
-    return ajax("/mgr/security");
+    return ajax("/auth/");
 };
 
 export function getFacilities() {

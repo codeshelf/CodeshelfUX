@@ -25,7 +25,7 @@ export function login(fields) {
 };
 
 export function loginCookies() {
-    return getUser().then((email) => logged({"email" : email}));
+    return getUser().then((user) => logged(user));
 };
 
 function validateForm(fields) {
@@ -40,7 +40,7 @@ function validateCredentials(fields) {
         var email = fields.email;
         var password = fields.password;
         return authenticate(email, password)
-            .done(() => resolve({"email" : email}))
+            .done((user) => resolve(user))
         .fail(() => {
             reject(new ValidationError ('Wrong password', 'password'));
         });
