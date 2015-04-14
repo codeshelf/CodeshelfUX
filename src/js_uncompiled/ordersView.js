@@ -122,6 +122,8 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders, partialO
 				return false;
 			else if (inProperty['id'] === 'groupUi')
 				return false;
+			else if (inProperty['id'] === 'putWallUi')
+				return false;
 			else if (inProperty['id'] === 'itemLocations' && !outboundOrders_)
 				return false;
 			else

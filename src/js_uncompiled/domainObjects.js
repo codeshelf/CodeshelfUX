@@ -717,6 +717,11 @@ domainobjects = {
 				'title': 'Active',
 				'width': 8
 			},
+			'putWall': {
+				'id': 'putWallUi',
+				'title': 'Put Wall',
+				'width': 40
+			},
 			'groupUi': {
 				'id':    'groupUi',
 				'title': 'Order Group',
@@ -838,6 +843,11 @@ domainobjects = {
 				'id':    'orderType',
 				'title': 'Order Type',
 				'width': 10
+			},
+			'putWall': {
+				'id': 'putWallUi',
+				'title': 'Put Wall',
+				'width': 40
 			},
 			'groupUi': {
 				'id':    'groupUi',
