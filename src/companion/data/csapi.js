@@ -71,7 +71,12 @@ export function authenticate(username, password) {
         }
     };
     return ajax("/auth/", options);
+
 };
+
+export function logout() {
+    return ajax("/auth/logout");
+}
 
 export function getUser() {
     return ajax("/auth/");

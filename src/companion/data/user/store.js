@@ -1,5 +1,5 @@
 import {Map} from 'immutable';
-import {logged} from 'data/auth/actions';
+import {logged, loggedout} from 'data/auth/actions';
 import {register} from 'dispatcher';
 import {userCursor} from 'data/state';
 
@@ -11,6 +11,11 @@ export const dispatchToken = register(({action, data}) => {
     case logged:
       userCursor(user => {
         return user.setIn(['authData'], Map(data));
+      });
+      break;
+    case loggedout:
+      userCursor(user => {
+          return user.setIn(['authData'], null);
       });
       break;
   }

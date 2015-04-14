@@ -3,13 +3,15 @@ import setToString from 'lib/settostring';
 import {ValidationError} from 'lib/validation';
 import {dispatch} from 'dispatcher';
 import {validate} from 'validation';
-import {authenticate, getUser} from 'data/csapi';
+import {authenticate, getUser, logout} from 'data/csapi';
 
 export function updateFormField({target: {name, value}}) {
   // Both email and password max length is 100.
   value = value.slice(0, 100);
   dispatch(updateFormField, {name, value});
 };
+
+
 
 export function login(fields) {
   return dispatch(login, validateForm(fields)
@@ -55,11 +57,13 @@ export function logged(authData) {
   dispatch(logged, authData);
 }
 
-export function logout() {
-  // Always reload app on logout for security reasons.
-  location.href = '/';
+export function loggedout() {
+    logout().done(() => {
+        dispatch(loggedout);
+    });
+
 }
 
 setToString('auth', {
-  updateFormField, login, loginError, logged, logout
+  updateFormField, login, loginError, logged, loggedout
 });
