@@ -1,39 +1,52 @@
 import DocumentTitle from 'react-document-title';
 import React from 'react';
 import {Link, RouteHandler} from 'react-router';
-import Navigation from './Navigation.react.js';
-import TopNavBar from './TopNavBar.react';
-import Footer from './Footer.react.js';
-import {fetchFacilities} from 'data/facilities/actions';
+import {selectFirstFacility, selectFacilityByName} from 'data/facilities/actions';
 import {getSelectedFacility} from 'data/facilities/store';
+import {isLoggedIn} from 'data/user/store';
+import exposeRouter from 'components/common/exposerouter';
 
-// Leverage webpack require goodness for feature toggle based dead code removal.
-require('assets/css/app.styl');
+class App extends React.Component {
 
-export default class App extends React.Component {
+    componentWillMount() {
+        this.handleRouting(this.props);
+    }
 
-  componentDidMount() {
-    fetchFacilities();
-  }
+    componentWillReceiveProps(nextProps) {
+        this.handleRouting(nextProps);
+    }
 
+    handleRouting(props) {
+        var router = props.router;
+        var currentPath = router.getCurrentPath();
+        var params = router.getCurrentParams();
+        var facilityName = params.facilityName;
+        const facility = getSelectedFacility();
+        if (!isLoggedIn()) {
+            var nextPath = currentPath;
+            console.log("not authenticated to reach " + nextPath);
+            router.transitionTo("login", {}, {nextPath: nextPath});
+        } else if (facilityName != null) {
+            if (!facility || (facility && facility.domainId !== facilityName)) {
+                selectFacilityByName(facilityName);
+            }
+        } else {
+            if (facility != null) {
+                router.transitionTo("facility", {facilityName: facility.domainId});
+            } else {
+                selectFirstFacility();
+            }
+        }
+    }
 
-
-  render() {
-      const facility = getSelectedFacility();
-      return (<DocumentTitle title='CS Companion'>
-                  {
-                    facility ?
-                          <div id="wrapper">
-                          <Navigation title={facility.get("domainId")}/>
-                          <div id="page-wrapper" className="gray-bg">
-                          <TopNavBar />
-                          <RouteHandler />
-                          <Footer />
-                          </div>
-                           </div>
-                      :
-                          <span>Selecting Facility...</span>
-                  }
-              </DocumentTitle>);
-  }
+    render() {
+        console.log("Rendering App");
+        const facility = getSelectedFacility();
+        return (facility) ?
+            <RouteHandler />
+            :
+            <span>Retrieving Facilities...</span>;
+    }
 };
+
+export default exposeRouter(App);

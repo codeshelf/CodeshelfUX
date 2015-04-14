@@ -10,10 +10,10 @@ var Facility = Record({domainId: null, persistentId: null});
 export const dispatchToken = register(({action, data}) => {
 
   switch (action) {
-    case actions.fetchFacilities:
-        if (data && data.length > 0) {
-                selectedFacilityCursor((selectedFacility) => Facility(data[0]));
-        }
+    case actions.facilitySelected:
+      if (data) {
+          selectedFacilityCursor((selectedFacility) => Facility(data));
+      }
       break;
   }
 

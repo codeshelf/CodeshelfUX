@@ -1,5 +1,6 @@
 import Root from './Root.react.js';
 import App from './pages/App/App.react.js';
+import Facility from './pages/App/Facility/Facility.react.js';
 import NotFound from 'pages/NotFound';
 import React from 'react';
 import Overview from './pages/App/Overview/Overview.react.js';
@@ -16,20 +17,22 @@ import Login from './pages/Login/Login.react.js';
 
 export default (
   <Route handler={Root} path="/">
-      <Redirect from="/" to="/app" />
-        <Route  handler={auth(App)} path="app">
-        <DefaultRoute handler={Overview} name="overview" />
-        <NotFoundRoute handler={NotFound} name="not-found" />
-        <Route handler={BlockedWork} name="blockedwork">
-            <Route handler={NoLocation} name="nolocation" />
-            <Route handler={Shorted} name="shorted" />
-        </Route>
-        <Route handler={WorkResults} name="workresults" />
-        <Route handler={Import} name="import" />
-        <Route handler={WorkerMgmt} name="workermgmt">
-            <Route handler={WorkerDisplay} name="workerdisplay" path=":workerId" />
-        </Route>
-     </Route>
+    <Redirect from="/" to="/app" />
+    <Route handler={App} name="app"> //ensure auth and default facility
+        <Route  handler={Facility} name="facility" path=":facilityName">
+	        <DefaultRoute handler={Overview} name="overview" />
+	        <NotFoundRoute handler={NotFound} name="not-found" />
+	        <Route handler={BlockedWork} name="blockedwork">
+	            <Route handler={NoLocation} name="nolocation" />
+	            <Route handler={Shorted} name="shorted" />
+	        </Route>
+	        <Route handler={WorkResults} name="workresults" />
+	        <Route handler={Import} name="import" />
+	        <Route handler={WorkerMgmt} name="workermgmt">
+	            <Route handler={WorkerDisplay} name="workerdisplay" path=":workerId" />
+	        </Route>
+	     </Route>
+       </Route>
     <Route handler={Login} name="login" />
   </Route>
 );

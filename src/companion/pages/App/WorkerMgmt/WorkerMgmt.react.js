@@ -5,13 +5,15 @@ import {PageGrid, Row, Col} from 'components/common/pagelayout';
 
 import Griddle from 'griddle-react';
 import {Modal} from 'react-bootstrap';
-import {ButtonLink} from 'react-router-bootstrap';
+import {ButtonLink} from 'components/common/bootstrap';
 import Icon from 'react-fa';
 import Immutable from 'immutable';
 import {RouteHandler} from 'react-router';
 
 import {selectedWorkerCursor, workersCursor} from 'data/state';
 import formatTimestamp from 'lib/timeformat';
+import exposeRouter from 'components/common/exposerouter';
+
 
 export default class WorkerMgmt extends React.Component{
 
@@ -103,7 +105,6 @@ class Edit extends React.Component {
     }
 
     render() {
-
         var formData = this.props.rowData;
         return (<ButtonLink bsStyle="primary" to="workerdisplay" params={{workerId: formData._id}} ><Icon name="edit" /></ButtonLink>);
     }

@@ -15,18 +15,11 @@ export default function auth(Component) {
             }
         }
 
-        componentWillUpdate() {
-            if (!isLoggedIn()) {
-                console.log("no longer authenticated transition to login");
-                this.props.router.transitionTo("login");
-            }
-        }
-
         render() {
             return <Component {...this.props} />;
         }
     };
 
-  return exposeRouter(Auth);
+    return Auth;
 
 }

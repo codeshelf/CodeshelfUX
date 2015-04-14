@@ -11,6 +11,11 @@ export default class TopNavBar extends React.Component {
         loggedout();
     }
 
+    handleNavbarMinimalize(e) {
+        e.preventDefault();
+        document.body.classList.toggle("mini-navbar");
+    }
+
     render() {
         return (
                 <div className="row border-bottom">
