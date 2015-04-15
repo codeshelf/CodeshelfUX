@@ -91,7 +91,7 @@ codeshelf.aisleslistview = function(websession, facility) {
 
 			});
 		},
-		
+
 		/**
 		 * Delete the aisle
 		 */
@@ -105,7 +105,7 @@ codeshelf.aisleslistview = function(websession, facility) {
 		togglePutWall: function(item) {
 			websession_.callMethod(item, 'Aisle', 'togglePutWallLocation', []);
 		},
-		
+
 		associatePathSegment: function(item) {
 		var theAisle = item;
 		if (theAisle) {
@@ -141,7 +141,7 @@ codeshelf.aisleslistview = function(websession, facility) {
 			"action": function(itemContext) {
 				self.setPoscons(itemContext);
 			}
-		},		
+		},
 		{
 			"label": "Delete one aisle",
 			"permission": "aisle:edit",
@@ -340,6 +340,9 @@ codeshelfApp.AisleLedController.prototype.ok = function(){
 	}
 };
 
+/**
+ * @export
+ */
 codeshelfApp.AisleLedController.prototype.setPoscons = function(){
 	var aisle = this.scope_['aisle'];
 	var aisleName = aisle['domainId'];
@@ -351,10 +354,15 @@ codeshelfApp.AisleLedController.prototype.setPoscons = function(){
 //		{ 'name': 'reverse', 'value': reverse, 'classType': 'boolean'}
 	];
 
-	this.websession_.callMethod(aisle, 'Aisle', 'setPoscons', methodArgs);
-	this.modalInstance_.close();
+	this.websession_.callMethod(aisle, 'Aisle', 'setPoscons', methodArgs).then(function() {
+	    this.modalInstance_.close();
+    }.bind(this));
 };
 
+
+/**
+ * @export
+ */
 codeshelfApp.AisleLedController.prototype.resetPoscons = function(){
 	var aisle = this.scope_['aisle'];
 	var aisleName = aisle['domainId'];
@@ -364,8 +372,11 @@ codeshelfApp.AisleLedController.prototype.resetPoscons = function(){
 	var methodArgs = [
 	];
 
-	this.websession_.callMethod(aisle, 'Aisle', 'resetPoscons', methodArgs);
-	this.modalInstance_.close();
+
+	this.websession_.callMethod(aisle, 'Aisle', 'resetPoscons', methodArgs).then(function() {
+	    this.modalInstance_.close();
+    }.bind(this));
+
 };
 
 /**
