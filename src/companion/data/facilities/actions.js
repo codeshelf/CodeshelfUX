@@ -3,6 +3,11 @@ import {dispatch} from 'dispatcher';
 import {getFacilities} from 'data/csapi';
 import _ from 'lodash';
 
+export function fetchFacilities() {
+    dispatch(fetchFacilities, getFacilities());
+}
+
+
 export function facilitySelected(facility) {
     dispatch(facilitySelected, facility);
 }
@@ -33,5 +38,5 @@ export function selectFirstFacility() {
 
 // Override actions toString for logging.
 setToString('facilities', {
-  selectFirstFacility, selectFacilityByName, facilitySelected
+  fetchFacilities, selectFirstFacility, selectFacilityByName, facilitySelected
 });

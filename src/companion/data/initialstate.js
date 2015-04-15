@@ -36,6 +36,7 @@ const data = {
         {type: "shorted", description: 'relax', total: 3}
     ],
     selectedFacility: null,
+    facilities: [],
     blockedwork: {
         summaries:
         [
