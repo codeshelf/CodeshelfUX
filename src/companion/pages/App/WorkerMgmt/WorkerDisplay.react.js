@@ -120,7 +120,8 @@ class WorkerDisplay extends React.Component {
         }
         this.setState({"savePending": null});
         this.storeSelectedWorkerForm(null);
-        this.props.router.transitionTo("workermgmt");
+        let params = this.props.router.getCurrentParams();
+        this.props.router.transitionTo("workermgmt", params);
     }
 
     render() {
