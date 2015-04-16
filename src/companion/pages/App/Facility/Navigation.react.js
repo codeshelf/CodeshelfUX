@@ -42,11 +42,15 @@ class NavbarHeader extends PureComponent {
 
 class Navigation extends React.Component {
 
+  componentWillMount() {
+      document.body.classList.add("fixed-sidebar");
+  }
+
   render() {
     var params = this.props.router.getCurrentParams();
     return (
         <nav className="navbar-default navbar-static-side" role="navigation">
-            <div id="nav-container" className="sidebar-collapse">
+            <div id="nav-container" className="sidebar-collapse" style={{overflowX: "hidden", overflowY: "hidden" }}>
             <ul className="nav" id="side-menu">
             <NavbarHeader {...this.props} />
             <NavItemLink to="overview" params={params}><Icon name="clock-o"></Icon>Work Overview</NavItemLink>
