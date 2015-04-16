@@ -298,6 +298,9 @@ codeshelfApp.TierController.prototype.ok = function(){
 	}
 };
 
+/**
+ * @export
+ */
 codeshelfApp.TierController.prototype.setPoscons = function(){
 
 	var tier = this.scope_['tier'];
