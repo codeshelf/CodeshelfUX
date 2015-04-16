@@ -1,4 +1,4 @@
-import {Map} from 'immutable';
+import {fromJS} from 'immutable';
 import {logged, loggedout} from 'data/auth/actions';
 import {register} from 'dispatcher';
 import {userCursor} from 'data/state';
@@ -10,7 +10,7 @@ export const dispatchToken = register(({action, data}) => {
   switch (action) {
     case logged:
       userCursor(user => {
-        return user.setIn(['authData'], Map(data));
+        return user.setIn(['authData'], fromJS(data));
       });
       break;
     case loggedout:
@@ -21,6 +21,10 @@ export const dispatchToken = register(({action, data}) => {
   }
 
 });
+
+export function getSelectedTenant() {
+    return getIn(['authData', 'tenant']);
+}
 
 export function isLoggedIn() {
   // TODO: Use sessionStorage and real redirect to fix Chrome.

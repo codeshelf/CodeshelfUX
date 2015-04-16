@@ -4,6 +4,7 @@ import {Link, RouteHandler} from 'react-router';
 import Navigation from './Navigation.react.js';
 import TopNavBar from './TopNavBar.react';
 import Footer from './Footer.react.js';
+import {getSelectedTenant} from 'data/user/store';
 import {fetchFacilities} from 'data/facilities/actions';
 import {getSelectedFacility, getFacilities} from 'data/facilities/store';
 
@@ -15,18 +16,18 @@ export default class Facility extends React.Component {
     render() {
         let facility = getSelectedFacility();
         let facilities = getFacilities();
-        let tenantName = "PFSWeb";
+        let tenant = getSelectedTenant();
         return (
             <DocumentTitle title='CS Companion'>
             {
                     facility ?
                           <div id="wrapper">
-                          <Navigation title={tenantName} facility={facility} facilities={facilities} />
-                          <div id="page-wrapper" className="gray-bg">
-                          <TopNavBar />
-                          <RouteHandler />
-                          <Footer />
-                          </div>
+                              <Navigation title={tenant.get("name")} facility={facility} facilities={facilities} />
+                              <div id="page-wrapper" className="gray-bg">
+                                  <TopNavBar />
+                                  <RouteHandler />
+                                  <Footer />
+                              </div>
                            </div>
                       :
                           <span>Selecting Facility...</span>
