@@ -70,28 +70,6 @@ codeshelf.aisleslistview = function(websession, facility) {
 			});
 		},
 
-		setPoscons: function(aisle, inAllAisles) {
-			var theLogger = goog.debug.Logger.getLogger("AisleList View");
-
-			var theAisle = aisle;
-			if (theAisle === null){
-				theLogger.info("null aisle in context menu choice"); //why? saw this.
-				return;
-			}
-			var aisleName = theAisle['domainId'];
-			theLogger.info("setting controller for selected aisle: " + aisleName);
-
-			var data = {
-				"aisle" : theAisle,
-				"poscon": {"startIndex" : 1,
-				           "reverse" : false}
-			};
-			var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/set-poscons-aisle.html", "AisleLedController as controller", data);
-			modalInstance.result.then(function(){
-
-			});
-		},
-
 		/**
 		 * Delete the aisle
 		 */
@@ -135,13 +113,7 @@ codeshelf.aisleslistview = function(websession, facility) {
 				self.setControllerForAisle(itemContext);
 			}
 		},
-		{
-			"label" : "Set Poscons",
-			"permission": "slot:edit",
-			"action": function(itemContext) {
-				self.setPoscons(itemContext);
-			}
-		},
+
 		{
 			"label": "Delete one aisle",
 			"permission": "aisle:edit",
@@ -340,44 +312,6 @@ codeshelfApp.AisleLedController.prototype.ok = function(){
 	}
 };
 
-/**
- * @export
- */
-codeshelfApp.AisleLedController.prototype.setPoscons = function(){
-	var aisle = this.scope_['aisle'];
-	var aisleName = aisle['domainId'];
-	var startIndex = this.scope_['poscon']['startIndex'];
-	var reverse = this.scope_['poscon']['reverse'];
-
-	var methodArgs = [
-		{ 'name': 'startIndex', 'value': startIndex, 'classType': 'int'}
-//		{ 'name': 'reverse', 'value': reverse, 'classType': 'boolean'}
-	];
-
-	this.websession_.callMethod(aisle, 'Aisle', 'setPoscons', methodArgs).then(function() {
-	    this.modalInstance_.close();
-    }.bind(this));
-};
-
-
-/**
- * @export
- */
-codeshelfApp.AisleLedController.prototype.resetPoscons = function(){
-	var aisle = this.scope_['aisle'];
-	var aisleName = aisle['domainId'];
-	var startIndex = this.scope_['poscon']['startIndex'];
-	var reverse = this.scope_['poscon']['reverse'];
-
-	var methodArgs = [
-	];
-
-
-	this.websession_.callMethod(aisle, 'Aisle', 'resetPoscons', methodArgs).then(function() {
-	    this.modalInstance_.close();
-    }.bind(this));
-
-};
 
 /**
  * @export

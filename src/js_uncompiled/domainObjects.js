@@ -1101,6 +1101,11 @@ domainobjects = {
 				'title': 'Alias Range',
 				'width': 10
 			},
+			'slotPosconRange': {
+				'id':    'slotPosconRange',
+				'title': 'Poscon Range',
+				'width': 10
+			},
 			'nominalLocationId': {
 				'id':    'nominalLocationId',
 				'title': 'Nominal ID',
