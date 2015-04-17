@@ -1,12 +1,11 @@
 import React from 'react';
-import exposeRouter from 'components/common/exposerouter';
-import {isLoggedIn} from 'data/user/store';
+import {isLoggedIn, hasPermission} from 'data/user/store';
 
 // Higher order component.
 // https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750
-export default function auth(Component) {
+export function authn(Component) {
 
-    class Auth extends React.Component {
+    class Authn extends React.Component {
         static willTransitionTo(transition) {
             if (!isLoggedIn()) {
                 var nextPath = transition.path;
@@ -20,6 +19,21 @@ export default function auth(Component) {
         }
     };
 
-    return Auth;
+    return Authn;
 
 }
+
+export function authz(Component) {
+
+    class Authz extends React.Component {
+        render() {
+            let {permission} = this.props;
+            return ((permission == null || hasPermission(permission)) ?
+                       <Component {...this.props} />
+                       :
+                       null);
+        }
+    };
+    return Authz;
+
+};

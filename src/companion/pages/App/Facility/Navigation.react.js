@@ -5,7 +5,10 @@ import { NavItemLink, MenuItemLink} from 'react-router-bootstrap';
 import Icon from 'react-fa';
 import PureComponent from 'lib/purecomponent';
 import exposeRouter from 'components/common/exposerouter';
+import {authz} from 'components/common/auth';
 
+const AuthzNavItemLink = authz(NavItemLink);
+const AuthzNavItem = authz(NavItem);
 require('./navigation.styl');
 
 function renderDropdownLabel(facility) {
@@ -52,12 +55,12 @@ class Navigation extends React.Component {
         <nav className="navbar-default navbar-static-side" role="navigation">
             <div id="nav-container" className="sidebar-collapse" style={{overflowX: "hidden", overflowY: "hidden" }}>
             <ul className="nav" id="side-menu">
-            <NavbarHeader {...this.props} />
-            <NavItemLink to="overview" params={params}><Icon name="clock-o"></Icon>Work Overview</NavItemLink>
-            <NavItemLink to="blockedwork" params={params}><Icon name="exclamation-circle"></Icon>Blocked Work</NavItemLink>
-            <NavItemLink to="workresults" params={params}><Icon name="pie-chart"></Icon>Work Results</NavItemLink>
-            <NavItem href="/ux" params={params}><Icon name="cogs"></Icon>Configuration</NavItem>
-            {/*<NavItemLink to="import" params={params}><Icon name="upload"></Icon>Import</NavItemLink>*/}
+                <NavbarHeader {...this.props} />
+               <AuthzNavItemLink to="overview" params={params}><Icon name="clock-o"></Icon>Work Overview</AuthzNavItemLink>
+               <AuthzNavItemLink to="blockedwork" params={params}><Icon name="exclamation-circle"></Icon>Blocked Work</AuthzNavItemLink>
+               <AuthzNavItemLink permission="worker:view" to="workresults" params={params}><Icon name="pie-chart"></Icon>Work Results</AuthzNavItemLink>
+               <AuthzNavItem permission="ux:view" href="/ux" params={params}><Icon name="cogs"></Icon>Configuration</AuthzNavItem>)
+               {/*<NavItemLink to="import" params={params}><Icon name="upload"></Icon>Import</AuthzNavItemLink>*/}
             </ul>
             </div>
         </nav>

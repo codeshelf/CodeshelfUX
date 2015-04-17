@@ -12,13 +12,13 @@ import WorkerMgmt from './pages/App/WorkerMgmt/WorkerMgmt.react.js';
 import WorkerDisplay from './pages/App/WorkerMgmt/WorkerDisplay.react.js';
 import Import from './pages/App/Import/Import.react.js';
 import {Route, DefaultRoute, NotFoundRoute, RouteHandler, Redirect} from 'react-router';
-import auth from './components/common/auth.js';
+import {authn} from './components/common/auth.js';
 import Login from './pages/Login/Login.react.js';
 
 export default (
   <Route handler={Root} path="/">
     <Redirect from="/" to="/app" />
-    <Route handler={App} name="app"> //ensure auth and default facility
+    <Route handler={authn(App)} name="app"> //ensure auth and default facility
         <Route  handler={Facility} name="facility" path=":facilityName">
 	        <DefaultRoute handler={Overview} name="overview" />
 	        <NotFoundRoute handler={NotFound} name="not-found" />
