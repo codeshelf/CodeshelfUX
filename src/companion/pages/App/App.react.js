@@ -1,7 +1,7 @@
 import DocumentTitle from 'react-document-title';
 import React from 'react';
 import {Link, RouteHandler} from 'react-router';
-import {selectFirstFacility, selectFacilityByName} from 'data/facilities/actions';
+import {fetchFacilities, selectFirstFacility, selectFacilityByName} from 'data/facilities/actions';
 import {getSelectedFacility} from 'data/facilities/store';
 import {isLoggedIn} from 'data/user/store';
 import exposeRouter from 'components/common/exposerouter';
@@ -9,6 +9,7 @@ import exposeRouter from 'components/common/exposerouter';
 class App extends React.Component {
 
     componentWillMount() {
+        fetchFacilities();
         this.handleRouting(this.props);
     }
 

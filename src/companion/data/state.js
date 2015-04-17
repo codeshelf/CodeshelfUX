@@ -16,7 +16,9 @@ export const state = new State(initialState);
 export const $pendingActionsCursor = state.cursor(['$pendingActions']);
 export const authCursor = state.cursor(['auth']);
 export const i18nCursor = state.cursor(['i18n']);
+
 export const selectedFacilityCursor = state.cursor(['selectedFacility']);
+export const facilitiesCursor = state.cursor(['facilities']);
 export const blockedWorkCursor = state.cursor(['blockedwork']);
 export const itemsCursor = state.cursor(['items']);
 export const userCursor = state.cursor(['user']);
