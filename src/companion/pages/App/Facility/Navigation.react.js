@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
-import {DropdownButton} from 'react-bootstrap';
+import {DropdownButton, NavItem} from 'react-bootstrap';
 import { NavItemLink, MenuItemLink} from 'react-router-bootstrap';
 import Icon from 'react-fa';
 import PureComponent from 'lib/purecomponent';
@@ -56,7 +56,7 @@ class Navigation extends React.Component {
             <NavItemLink to="overview" params={params}><Icon name="clock-o"></Icon>Work Overview</NavItemLink>
             <NavItemLink to="blockedwork" params={params}><Icon name="exclamation-circle"></Icon>Blocked Work</NavItemLink>
             <NavItemLink to="workresults" params={params}><Icon name="pie-chart"></Icon>Work Results</NavItemLink>
-            <NavItemLink to="workermgmt" params={params}><Icon name="users"></Icon>Manage Workers</NavItemLink>
+            <NavItem href="/ux" params={params}><Icon name="cogs"></Icon>Configuration</NavItem>
             {/*<NavItemLink to="import" params={params}><Icon name="upload"></Icon>Import</NavItemLink>*/}
             </ul>
             </div>
