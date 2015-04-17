@@ -56,7 +56,7 @@ class Navigation extends React.Component {
             <NavItemLink to="overview" params={params}><Icon name="clock-o"></Icon>Work Overview</NavItemLink>
             <NavItemLink to="blockedwork" params={params}><Icon name="exclamation-circle"></Icon>Blocked Work</NavItemLink>
             <NavItemLink to="workresults" params={params}><Icon name="pie-chart"></Icon>Work Results</NavItemLink>
-            <NavItemLink to="workermgmt" params={params}><Icon name="users"></Icon>Manage Workers (demo) </NavItemLink>
+            <NavItemLink to="workermgmt" params={params}><Icon name="users"></Icon>Manage Workers</NavItemLink>
             {/*<NavItemLink to="import" params={params}><Icon name="upload"></Icon>Import</NavItemLink>*/}
             </ul>
             </div>
