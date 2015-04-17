@@ -8,22 +8,8 @@ import {selectedWorkerCursor, workersCursor} from 'data/state';
 
 import Immutable from 'immutable';
 import uuid from 'node-uuid';
-
-const NEWID = "new";
-
-var WorkerForm = Immutable.Record(
-    {
-        "_id": NEWID,
-        "middleInitial": null,
-        "lastName": null,
-        "firstName": null,
-        "badgeId": null,
-        "workerId": null,
-        "groupId": null,
-        "lastUpdatedTime": new Date().getTime()
-
-    }
-);
+import {NEWID, Worker} from 'data/workers/store.js';
+import {addWorker, updateWorker} from 'data/workers/actions';
 
 class WorkerDisplay extends React.Component {
 
@@ -44,12 +30,12 @@ class WorkerDisplay extends React.Component {
     findSelectedWorkerForm(props) {
         var workerId = props.router.getCurrentParams().workerId;
         var workerForm = this.getSelectedWorkerForm();
-        if (!workerForm || workerForm.get("_id") !== workerId) {
+        if (!workerForm || workerForm.get("persistentId") !== workerId) {
             if (workerId === "new") {
-                workerForm = WorkerForm();
+                workerForm = Worker();
                 this.storeSelectedWorkerForm(workerForm);
             } else {
-                workerForm = workersCursor().find((worker) => worker.get("_id") === workerId);
+                workerForm = workersCursor().find((worker) => worker.get("persistentId") === workerId);
                 this.storeSelectedWorkerForm(workerForm);
             }
         }
@@ -80,45 +66,22 @@ class WorkerDisplay extends React.Component {
         console.log("pretending to save remotely asynchronously");
 
         var selectedWorkerForm = this.getSelectedWorkerForm();
-        var id = selectedWorkerForm.get("_id");
-        var token = setTimeout(() => {
-            if (id === NEWID) {
-                this.addWorker(selectedWorkerForm);
-            } else {
-                this.updateWorker(selectedWorkerForm);
-            }
-
-            console.log("clearing form");
-            this.setState({"savePending": null});
+        var id = selectedWorkerForm.get("persistentId");
+        var promise;
+        if (id === NEWID) {
+            promise = addWorker(selectedWorkerForm.set("persistentId", null));
+        } else {
+            promise = updateWorker(selectedWorkerForm);
+        }
+        this.setState({"savePending": true});
+        promise.then(() => {
             this.handleClose();
-        }, 3000);
-        this.setState({"savePending": token});
-    }
-
-    addWorker(selectedWorkerForm) {
-        workersCursor((workerList) => {
-            var newWorker = selectedWorkerForm.set("_id", uuid.v1());
-            console.log("Saving ", newWorker);
-            return workerList.push(newWorker);
-});
-}
-
-
-    updateWorker(selectedWorkerForm) {
-        var id = selectedWorkerForm.get("_id");
-        workersCursor((workerList) => {
-            var i = workerList.findIndex((worker) => worker.get("_id") === id);
-            console.log("Saving ", selectedWorkerForm, " to ", i);
-            return workerList.set(i, selectedWorkerForm);
         });
     }
 
+
     handleClose() {
-        var token = this.state.savePending;
-        if (token) {
-            clearTimeout(token);
-        }
-        this.setState({"savePending": null});
+        this.setState({"savePending": false});
         this.storeSelectedWorkerForm(null);
         let params = this.props.router.getCurrentParams();
         this.props.router.transitionTo("workermgmt", params);
@@ -144,7 +107,7 @@ class WorkerDisplay extends React.Component {
         return (                <form onSubmit={this.handleSave.bind(this)}>
                                 <div className='modal-body'>
                                 {
-                                    ["firstName", "middleInitial", "lastName",  "badgeId", "workerId", "groupId"].map((objField, i) =>{
+                                    ["firstName", "middleInitial", "lastName",  "badgeId", "hrId", "groupName"].map((objField, i) =>{
 
                                         var value= formData.get(objField);
                                         var label= this.getLabel(objField);
@@ -170,7 +133,7 @@ class WorkerDisplay extends React.Component {
         return <Input key={objField} ref={objField}
                 type="text"
                 autoFocus={index == 0}
-                disabled={this.state.savePending == null}
+                disabled={this.state.savePending}
                 name={objField}
                 label={label}
                 value={value}
@@ -184,7 +147,7 @@ class WorkerDisplay extends React.Component {
                     type="text"
 
                     autoFocus={index == 0}
-                    disabled={this.state.savePending == null}
+                    disabled={this.state.savePending}
                     name={objField}
                     label={label}
                     value={value}
