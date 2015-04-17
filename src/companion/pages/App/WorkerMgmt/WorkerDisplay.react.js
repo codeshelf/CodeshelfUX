@@ -187,7 +187,7 @@ class WorkerDisplay extends React.Component {
     generateBarcode() {
         var length = 12;
         var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-        var code = "U%" + _.sample(chars, length).join('');
+        var code = _.sample(chars, length).join('');
         return code;
     }
 };
