@@ -10,7 +10,9 @@ import Icon from 'react-fa';
 import Immutable from 'immutable';
 import {RouteHandler} from 'react-router';
 
-import {selectedWorkerCursor, workersCursor} from 'data/state';
+
+import {fetchWorkers} from 'data/workers/actions';
+import {getWorkers} from 'data/workers/store';
 import formatTimestamp from 'lib/timeformat';
 import exposeRouter from 'components/common/exposerouter';
 
@@ -37,15 +39,15 @@ export default class WorkerMgmt extends React.Component{
                 displayName: "Badge"
             },
             {
-                columnName: "workerId",
+                columnName: "hrId",
                 displayName: "HR ID"
             },
             {
-                columnName: "groupId",
+                columnName: "groupName",
                 displayName: "Group"
             },
             {
-                columnName: "lastUpdatedTime",
+                columnName: "updated",
                 displayName: "Updated",
                 customComponent: DateDisplay
             },
@@ -59,14 +61,15 @@ export default class WorkerMgmt extends React.Component{
     }
 
 
-
-    getWorkers() {
-        return workersCursor().toJS();
+    componentWillMount() {
+        fetchWorkers();
     }
 
 
+
+
     render() {
-        var rows = this.getWorkers();
+        var rows = getWorkers();
         return (<DocumentTitle title="Worker Management">
                 <PageGrid>
                     <Row>
@@ -96,17 +99,9 @@ class DateDisplay extends React.Component {
 }
 
 class Edit extends React.Component {
-    handleClick(rowData, e) {
-        selectedWorkerCursor((oldWorker) => {
-            var o = {};
-            _.forIn(rowData, (value, key) => o[key] = value);
-            return new Immutable.Map(o);
-        });
-    }
-
     render() {
         var formData = this.props.rowData;
-        return (<ButtonLink bsStyle="primary" to="workerdisplay" params={{workerId: formData._id}} ><Icon name="edit" /></ButtonLink>);
+        return (<ButtonLink bsStyle="primary" to="workerdisplay" params={{workerId: formData.persistentId}} ><Icon name="edit" /></ButtonLink>);
     }
 
 }

@@ -86,6 +86,7 @@ export function getFacilities() {
     return ajax("/api/facilities");
 };
 
+
 export function getFacilityContext() {
     var endpoint = state.cursor(["endpoint"])();
     var facility = state.cursor(["selectedFacility"])();
@@ -93,6 +94,34 @@ export function getFacilityContext() {
     return {
         facilityId: facilityId,
         endpoint: endpoint,
+
+        getWorkers: function() {
+            var workersPath = "/api/facilities/" + facilityId + "/workers";
+            return ajax(workersPath);
+        },
+        addWorker: function(worker) {
+            if (worker.persistentId != null) {
+                console.warn("trying to add a worker with persistentId set");
+            }
+            delete worker.persistentId;  //don't send in JSON so it doesn't try to deserialize with setPersistentId and fail
+            var workersPath = "/api/facilities/" + facilityId + "/workers";
+            return ajax(workersPath, {
+                method: "POST",
+                data: JSON.stringify(worker),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            });
+        },
+        updateWorker: function(worker) {
+            var workersPath = "/api/workers/" + worker.persistentId;
+            return ajax(workersPath, {
+                method: "PUT",
+                data: JSON.stringify(worker),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            });
+        },
+
         getProductivity : function() {
             var productivityPath = "/api/facilities/" + facilityId + "/productivity";
             return ajax(productivityPath);
