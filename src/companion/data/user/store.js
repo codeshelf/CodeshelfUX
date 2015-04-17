@@ -10,7 +10,11 @@ export const dispatchToken = register(({action, data}) => {
   switch (action) {
     case logged:
       userCursor(user => {
-        return user.setIn(['authData'], fromJS(data));
+          let authResponse = fromJS(data);
+          //wrap permissions in wildcardpermission
+          return user.setIn(['authData'], authResponse.updateIn(['user', 'permissions'], (permissions) => {
+              return permissions.map(p => new WildcardPermission(p));
+          }));
       });
       break;
     case loggedout:
@@ -25,11 +29,10 @@ export const dispatchToken = register(({action, data}) => {
 export function hasPermission(permissionToCheck) : boolean {
     let permissions = getIn(['authData', 'user', 'permissions']);
     let wildcardPermissionToCheck = new WildcardPermission(permissionToCheck);
-    let matchingString = permissions.find((permission) => {
-        let wildcardPermission = new WildcardPermission(permission);
+    let matchingPermission = permissions.find((wildcardPermission) => {
         return wildcardPermission.implies(wildcardPermissionToCheck);
     });
-    return (matchingString != null);
+    return (matchingPermission != null);
 }
 
 export function getSelectedTenant() {
