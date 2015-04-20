@@ -3,14 +3,14 @@ import DocumentTitle from 'react-document-title';
 import {List, Record} from "immutable";
 import Chance from 'chance';
 import _ from 'lodash';
-import Griddle from 'griddle-react';
-import {Button} from 'react-bootstrap';
-import Icon from 'react-fa';
-import DateDisplay from 'components/common/DateDisplay';
+
+import {UnresolvedEvents, ResolvedEvents} from './EventsGrid';
 const chance = new Chance();
 
 const UPCSkipIssue = Record({
-        timestamp: null,
+        eventTimestamp: null,
+        resolvedTimestamp: null,
+        resolvedBy: null,
         worker: null,
         workDetail: null
     }
@@ -19,36 +19,12 @@ const UPCSkipIssue = Record({
 export default class SkippedVerificationList extends React.Component{
 
     constructor() {
-        this.columnMetadata = [
-            {
-                columnName: "timestamp",
-                displayName: "Last",
-                customComponent: DateDisplay
-            },
-            {
-                columnName: "worker",
-                displayName: "Worker"
-            },
-            {
-                columnName: "upc",
-                displayName: "UPC"
-            },
-            {
-                columnName: "workDetail",
-                displayName: "Work Detail"
-            },
-            {
-                columnName: "action",
-                displayName: "",
-                customComponent: Resolve
-            }
-        ];
-        this.columns = _.map(this.columnMetadata, (column) => column.columnName);
-
         this.issues = List(_.range(12).map((i) => {
             return UPCSkipIssue({
                 persistentId: chance.guid(),
-                timestamp: chance.hammertime(),
+                eventTimestamp: chance.hammertime(),
+                resolvedTimestamp: chance.hammertime(),
+                resolvedBy: chance.email(),
                 worker: {},
                 workDetail: {}
             });
@@ -59,19 +35,12 @@ export default class SkippedVerificationList extends React.Component{
 
         return (<DocumentTitle title="Skipped UPC Verification">
                 <div>
-                    <a>By Item</a>| <a>By Worker</a>
-                    <Griddle results={this.issues.toJS()}
-                     columns={this.columns}
-                     columnMetadata={this.columnMetadata} />
+                    <div><a>By Item</a>  | <a>By Worker</a></div>
+                    <div><a>Resolved</a> | <a>Unresolved</a></div>
+                <UnresolvedEvents events={this.issues}/>
+                <ResolvedEvents events={this.issues}/>
                 </div>
                 </DocumentTitle>
                );
     }
 };
-
-class Resolve extends React.Component {
-    render() {
-        return (<Button bsStyle="primary"><Icon name="close" /></Button>);
-
-    }
-}
