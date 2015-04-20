@@ -6,6 +6,7 @@ import Icon from 'react-fa';
 import PureComponent from 'lib/purecomponent';
 import exposeRouter from 'components/common/exposerouter';
 import {authz} from 'components/common/auth';
+import {getSelectedFacility} from 'data/facilities/store';
 
 const AuthzNavItemLink = authz(NavItemLink);
 const AuthzNavItem = authz(NavItem);
@@ -49,9 +50,14 @@ class Navigation extends React.Component {
       document.body.classList.add("fixed-sidebar");
   }
 
+  getUXUrl() {
+      let uxURL = "/ux/?facilityId=" + getSelectedFacility().get("domainId");
+      return uxURL;
+  }
+
   render() {
-    var params = this.props.router.getCurrentParams();
-    return (
+      var params = this.props.router.getCurrentParams();
+      return (
         <nav className="navbar-default navbar-static-side" role="navigation">
             <div id="nav-container" className="sidebar-collapse" style={{overflowX: "hidden", overflowY: "hidden" }}>
             <ul className="nav" id="side-menu">
@@ -60,7 +66,7 @@ class Navigation extends React.Component {
                <AuthzNavItemLink to="blockedwork" params={params}><Icon name="exclamation-circle"></Icon>Blocked Work</AuthzNavItemLink>
                <AuthzNavItemLink to="workresults" params={params}><Icon name="pie-chart"></Icon>Work Results</AuthzNavItemLink>
                <AuthzNavItemLink permission="worker:view" to="workermgmt" params={params}><Icon name="users" />Manage Workers</AuthzNavItemLink>
-               <AuthzNavItem permission="ux:view" href="/ux" params={params}><Icon name="cogs"></Icon>Configuration</AuthzNavItem>)
+               <AuthzNavItem permission="ux:view" href={this.getUXUrl()} params={params}><Icon name="cogs"></Icon>Configuration</AuthzNavItem>)
                {/*<NavItemLink to="import" params={params}><Icon name="upload"></Icon>Import</AuthzNavItemLink>*/}
             </ul>
             </div>

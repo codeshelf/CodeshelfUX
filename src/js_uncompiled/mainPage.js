@@ -424,9 +424,15 @@ codeshelf.mainpage = function() {
 
 						clientInitializer.start(websession_, application_.getOrganization(), loadFacilityWindows);
 					} else {
+                        var facilities = command['results'];
 						var lastFacility = null;
-						for (var i = 0; i < command['results'].length; i++) {
-							var lastFacility = command['results'][i];
+						for (var i = 0; i < facilities.length; i++) {
+
+							lastFacility = facilities[i];
+                            var domainId = lastFacility["domainId"];
+                            if (document.location.search.indexOf(domainId) >= 0) {
+                                break;
+                            }
 						}
 						// save the websession and facility so we can launch windows at any time.
 						codeshelf.sessionGlobals.setWebsession(websession_);
