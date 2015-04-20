@@ -58,7 +58,8 @@ class Navigation extends React.Component {
                 <NavbarHeader {...this.props} />
                <AuthzNavItemLink to="overview" params={params}><Icon name="clock-o"></Icon>Work Overview</AuthzNavItemLink>
                <AuthzNavItemLink to="blockedwork" params={params}><Icon name="exclamation-circle"></Icon>Blocked Work</AuthzNavItemLink>
-               <AuthzNavItemLink permission="worker:view" to="workresults" params={params}><Icon name="pie-chart"></Icon>Work Results</AuthzNavItemLink>
+               <AuthzNavItemLink to="workresults" params={params}><Icon name="pie-chart"></Icon>Work Results</AuthzNavItemLink>
+               <AuthzNavItemLink permission="worker:view" to="workermgmt" params={params}><Icon name="users" />Manage Workers</AuthzNavItemLink>
                <AuthzNavItem permission="ux:view" href="/ux" params={params}><Icon name="cogs"></Icon>Configuration</AuthzNavItem>)
                {/*<NavItemLink to="import" params={params}><Icon name="upload"></Icon>Import</AuthzNavItemLink>*/}
             </ul>

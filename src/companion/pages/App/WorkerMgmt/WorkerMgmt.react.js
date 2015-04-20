@@ -6,6 +6,7 @@ import {PageGrid, Row, Col} from 'components/common/pagelayout';
 import Griddle from 'griddle-react';
 import {Modal} from 'react-bootstrap';
 import {ButtonLink} from 'components/common/bootstrap';
+import DateDisplay from 'components/common/DateDisplay';
 import Icon from 'react-fa';
 import Immutable from 'immutable';
 import {RouteHandler} from 'react-router';
@@ -13,7 +14,7 @@ import {RouteHandler} from 'react-router';
 
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkers} from 'data/workers/store';
-import formatTimestamp from 'lib/timeformat';
+
 import exposeRouter from 'components/common/exposerouter';
 
 
@@ -92,11 +93,7 @@ export default class WorkerMgmt extends React.Component{
 
 };
 
-class DateDisplay extends React.Component {
-    render() {
-        return (<span>{formatTimestamp(this.props.data)}</span>);
-    }
-}
+
 
 class Edit extends React.Component {
     render() {
