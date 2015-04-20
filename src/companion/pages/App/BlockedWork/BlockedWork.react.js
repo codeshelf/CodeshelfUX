@@ -14,6 +14,7 @@ var IBoxTitleText = ibox.IBoxTitleText;
 var IBoxSection = ibox.IBoxSection;
 var DetailsNoLocation = require('./NoLocation');
 var ShortedWorkList = require('./Shorted');
+var SkippedVerificationList = require('./SkippedVerificationList');
 var {getFacilityContext} = require('data/csapi');
 var {ListGroup, ListGroupItem, Badge} = require('react-bootstrap');
 
@@ -29,12 +30,23 @@ var BlockedWorkPage = React.createClass({
                 "type" : "NOLOC",
                 "description": "Order Lines w/o Location",
                 "total": 0,
-                "workDetails": []
+                "workDetails": [],
+                "displayComponent": DetailsNoLocation
             },
             "SHORT" : {
                 "type": "SHORT",
                 "description": "Shorted Order Lines",
-                "total": 0
+                "total": 0,
+                "workDetails" : [],
+                "displayComponent": ShortedWorkList
+            },
+            "SKIPPEDVERIFICATION": {
+                "type" : "SKIPPEDVERIFICATION",
+                "description": "Skipped UPC Scans",
+                total: 0,
+                "workDetails" : [],
+                "displayComponent": SkippedVerificationList
+
             }/*,
               FOR LATER
             "SUSPECTORDER": {
@@ -43,11 +55,7 @@ var BlockedWorkPage = React.createClass({
                 "total": 0
             },
               SHOULD MOVE TO AN ALERTS AREA
-            "SKIPPEDVERIFICATION": {
-                "type" : "SKIPPEDVERIFICATION",
-                "description": "Skipped Verification Scans",
-                "total": 0
-            }*/
+            */
         };
         return {
             "selectedtype" : "NOLOC",
@@ -97,6 +105,7 @@ var BlockedWorkPage = React.createClass({
         var {selectedtype, blockedworksummary} = this.state;
         var {apiContext} = this.props;
         var workDetails = blockedworksummary[selectedtype]["workDetails"];
+        var DisplayComponent = blockedworksummary[selectedtype]["displayComponent"];
         return (
 
         <div>
@@ -131,9 +140,7 @@ var BlockedWorkPage = React.createClass({
             <div className="row orderdetails">
 
             <div className="col-sm-6 col-md-8">
-            {
-                (selectedtype == "NOLOC") ? <DetailsNoLocation type="NOLOC" workDetails={workDetails}/> : <ShortedWorkList type={selectedtype} workDetails={workDetails}/>
-            }
+                <DisplayComponent type={selectedtype} workDetails={workDetails} />
             </div>
             </div>
 </div>
