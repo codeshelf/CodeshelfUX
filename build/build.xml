@@ -19,6 +19,7 @@
 	<property name="target.dir" value="${basedir}/target" />
 	<property name="target.web.dir" location="${target.dir}/web/ux" />
 	<property name="target.images.dir" location="${target.dir}/web/images" />
+	<property name="target.icons.dir" location="${target.dir}/web/icons" />
 
 	<property name="target.coverage.dir" location="${target.dir}/coverage" />
 
@@ -101,7 +102,7 @@
 		<mkdir dir="${target.compiled.js.dir}" />
 		<mkdir dir="${target.web.dir}" />
 		<mkdir dir="${target.web.dir}/js" />
-		<mkdir dir="${target.web.dir}/icons" />
+		<mkdir dir="${target.icons.dir}" />
 		<mkdir dir="${target.images.dir}" />
 	</target>
 
@@ -297,7 +298,7 @@
 			</fileset>
 		</copy>
 
-		<copy todir="${target.web.dir}">
+		<copy todir="${target.icons.dir}">
 			<fileset dir="${icons.dir}">
 			</fileset>
 		</copy>
