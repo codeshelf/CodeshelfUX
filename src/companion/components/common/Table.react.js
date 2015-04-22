@@ -15,7 +15,12 @@ var Row = React.createClass({
                     columnMetadata.map(function(columnMetadata){
                         var key = columnMetadata.get("columnName");
                         var value = row.get(key);
-                        return (<td key={key}>{value}</td>);
+                        var CustomComponent = columnMetadata.get("customComponent");
+                        var valueRenderer = (<span>{value}</span>);
+                        if (CustomComponent) {
+                            valueRenderer = ( <CustomComponent rowData={row} />);
+                        }
+                        return (<td key={key}>{valueRenderer}</td>);
                     })
                 }
                 </tr>
@@ -111,7 +116,7 @@ var Table = React.createClass({
             }
         }
         return (
-                <table className="tablesaw" >
+                <table className="table table-striped dataTable no-footer" role="grid">
                     <caption>{caption}</caption>
                     <Header columns={columns} columnMetadata={columnMetadata}/>
                     <tbody>

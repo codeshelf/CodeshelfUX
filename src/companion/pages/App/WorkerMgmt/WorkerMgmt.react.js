@@ -2,8 +2,8 @@ import React from 'react';
 import _ from 'lodash';
 import DocumentTitle from 'react-document-title';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
-
-import Griddle from 'griddle-react';
+import {IBox, IBoxBody, IBoxTitleBar, IBoxTitleText} from 'components/common/IBox';
+import {Table} from 'components/common/Table';
 import {Modal} from 'react-bootstrap';
 import {ButtonLink} from 'components/common/bootstrap';
 import DateDisplay from 'components/common/DateDisplay';
@@ -67,22 +67,31 @@ export default class WorkerMgmt extends React.Component{
         fetchWorkers();
     }
 
-
-
-
     render() {
         var rows = getWorkers();
-        return (<DocumentTitle title="Worker Management">
+        let title = "Manage Workers";
+        return (<DocumentTitle title={title}>
                 <PageGrid>
                     <Row>
                         <Col sm={12}>
-                            <ButtonLink bsStyle="primary" to="workerdisplay" params={{workerId: "new"}} ><Icon name="plus" /></ButtonLink>
-                            <Griddle results={rows}
-                                     showFilter={true}
-                                     columns={this.columns}
-                                     columnMetadata={this.columnMetadata}
-                                     showSettings={true}>
-                            </Griddle>
+                            <IBox>
+                                <IBoxTitleBar>
+                                    <IBoxTitleText>{title}</IBoxTitleText>
+                                </IBoxTitleBar>
+                                <IBoxBody>
+                                    <div>
+                                        <div className="pull-right">
+                                            <ButtonLink bsStyle="primary" to="workerdisplay" params={{workerId: "new"}} >
+                                                <Icon name="plus" />
+                                            </ButtonLink>
+                                        </div>
+                                    </div>
+                                    <Table results={rows}
+                                        columns={this.columns}
+                                        columnMetadata={this.columnMetadata}
+                                    />
+                                </IBoxBody>
+                            </IBox>
                             <RouteHandler formMetadata={this.columnMetadata}/>
                         </Col>
                     </Row>
@@ -99,7 +108,12 @@ export default class WorkerMgmt extends React.Component{
 class Edit extends React.Component {
     render() {
         var formData = this.props.rowData;
-        return (<ButtonLink bsStyle="primary" to="workerdisplay" params={{workerId: formData.persistentId}} ><Icon name="edit" /></ButtonLink>);
+        var persistentId = formData.get("persistentId");
+        return (<ButtonLink bsStyle="primary"
+                            to="workerdisplay"
+                            params={{workerId: persistentId}}>
+                    <Icon name="edit" />
+                </ButtonLink>);
     }
 
 }
