@@ -28,7 +28,7 @@ export default class TopNavBar extends React.Component {
                         </div>
                     </div>
                         <div className="pull-right">
-                            <NavItem onClick={this.handleLogoutClick} ><Icon name="sign-out" />Log out</NavItem>
+                            <a onClick={this.handleLogoutClick} ><Icon name="sign-out" />Log out</a>
                         </div>
                 </div>
         );
