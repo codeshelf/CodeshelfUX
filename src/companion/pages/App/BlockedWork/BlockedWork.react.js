@@ -12,11 +12,22 @@ var IBoxData = ibox.IBoxData;
 var IBoxTitleBar = ibox.IBoxTitleBar;
 var IBoxTitleText = ibox.IBoxTitleText;
 var IBoxSection = ibox.IBoxSection;
-var DetailsNoLocation = require('./NoLocation');
-var ShortedWorkList = require('./Shorted');
+var IssuesIBox = require('./IssuesIBox');
 var SkippedVerificationList = require('./SkippedVerificationList');
 var {getFacilityContext} = require('data/csapi');
 var {ListGroup, ListGroupItem, Badge} = require('react-bootstrap');
+
+class ShortedWorkList extends React.Component {
+    render() {
+        return <IssuesIBox title="Shorted Order Lines By Item" {...this.props} />
+    }
+}
+
+class DetailsNoLocation extends React.Component {
+    render() {
+        return <IssuesIBox title="Order Lines without Location By Item" {...this.props} />
+    }
+}
 
 var BlockedWorkPage = React.createClass({
     statics: {

@@ -14,8 +14,8 @@ var loaders = {
   'styl': '!stylus-loader'
 };
 
-module.exports = function(isDevelopment) {
-
+module.exports = function(isDevelopment, isTest) {
+  var isTest = (isTest) ? isTest : false;
   var mainFile = './src/companion/main.js';
   var outputDir = './target/web/build';
 
@@ -92,7 +92,7 @@ module.exports = function(isDevelopment) {
       var plugins = [
         new webpack.DefinePlugin({
           'process.env': {
-            NODE_ENV: JSON.stringify(isDevelopment ? 'development' : 'production'),
+            NODE_ENV: JSON.stringify(isDevelopment || isTest ? 'development' : 'production'),
             IS_BROWSER: true
           }
         })

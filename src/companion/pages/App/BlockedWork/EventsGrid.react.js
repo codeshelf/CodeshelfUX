@@ -5,27 +5,30 @@ import {Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 import DateDisplay from 'components/common/DateDisplay';
 
-
 class EventsGrid extends React.Component {
     constructor() {
             this.columnMetadata = [
                 {
+                    columnName: "orderId",
+                    displayName: "Order"
+                },
+                {
+                    columnName: "actualQuantity",
+                    displayName: "Actual"
+                },
+                {
+                    columnName: "planQuantity",
+                    displayName: "Plan"
+                },
+                {
+                    columnName: "locationId",
+                    displayName: "Where"
+                },
+                {
                     columnName: "eventTimestamp",
-                    displayName: "Time",
+                    displayName: "Occurred",
                     customComponent: DateDisplay
-                },
-                {
-                    columnName: "workerId",
-                    displayName: "Worker"
-                },
-                {
-                    columnName: "upc",
-                    displayName: "UPC"
-                },
-                {
-                    columnName: "workDetail",
-                    displayName: "Work Detail"
-                },
+                }
             ];
     }
 
@@ -34,12 +37,14 @@ class EventsGrid extends React.Component {
     }
 
     render() {
-
             return <Griddle results={this.props.events.toJS()}
              columns={this.columns}
              columnMetadata={this.columnMetadata} />;
 
     }
+}
+EventsGrid.propTypes = {
+    events: React.PropTypes.object.isRequired
 }
 
 export class UnresolvedEvents extends EventsGrid {
@@ -48,7 +53,7 @@ export class UnresolvedEvents extends EventsGrid {
         this.columnMetadata.push.apply(this.columnMetadata, [
             {
                 columnName: "action",
-                displayName: "",
+                displayName: "Resolve",
                 customComponent: Resolve
             }
         ]);
@@ -66,8 +71,12 @@ export class ResolvedEvents extends EventsGrid {
                 customComponent: DateDisplay
             },
             {
-                columnName: "resolvedBy",
-                displayName: "Resolved By"
+                columnName: "resolution",
+                displayName: "Resolution"
+            },
+            {
+                columnName: "resolver",
+                displayName: "Resolver"
             }]);
     }
 
@@ -77,6 +86,22 @@ export class ResolvedEvents extends EventsGrid {
 class Resolve extends React.Component {
     render() {
         return (<Button bsStyle="primary"><Icon name="close" /></Button>);
+
+    }
+}
+
+class WorkerCellDisplay extends React.Component {
+    render() {
+        let worker = this.props.data;
+        return (<a>{worker.lastName}, {worker.firstName}</a>);
+
+    }
+}
+
+class ItemCellDisplay extends React.Component {
+    render() {
+        let item = this.props.data;
+        return (<a>{item.gtin}</a>);
 
     }
 }

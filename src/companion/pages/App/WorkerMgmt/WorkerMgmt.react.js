@@ -7,6 +7,7 @@ import Griddle from 'griddle-react';
 import {Modal} from 'react-bootstrap';
 import {ButtonLink} from 'components/common/bootstrap';
 import DateDisplay from 'components/common/DateDisplay';
+import Icon from 'react-fa';
 
 import Immutable from 'immutable';
 import {RouteHandler} from 'react-router';

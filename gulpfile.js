@@ -49,12 +49,13 @@ gulp.task('eslint', function() {
 });
 
 gulp.task('jest', function(done) {
-  var rootDir = './src';
+  var rootDir = './src/companion';
   jest.runCLI({config: {
     'rootDir': rootDir,
-    'scriptPreprocessor': '../node_modules/babel-jest',
+    'scriptPreprocessor': '../../node_modules/babel-jest',
     'testFileExtensions': ['es6', 'js'],
-    'moduleFileExtensions': ['js', 'json', 'es6']
+    'moduleFileExtensions': ['js', 'json', 'es6'],
+    "unmockedModulePathPatterns": ["react"]
   }}, rootDir, function(success) {
     /* eslint no-process-exit:0 */
     done(success ? null : 'jest failed');
