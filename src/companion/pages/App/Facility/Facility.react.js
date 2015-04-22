@@ -21,10 +21,10 @@ export default class Facility extends React.Component {
             <DocumentTitle title='CS Companion'>
             {
                     facility ?
-                          <div id="wrapper">
+                          <div id="fixed-header dashboard">
                               <Navigation title={tenant.get("name")} facility={facility} facilities={facilities} />
                               <div id="page-wrapper" className="gray-bg">
-                                  <TopNavBar />
+                                 {/** <TopNavBar />**/}
                                   <RouteHandler />
                                   <Footer />
                               </div>
