@@ -12,21 +12,30 @@ import {getSelectedFacility, getFacilities} from 'data/facilities/store';
 require('assets/css/app.styl');
 
 export default class Facility extends React.Component {
+    componentWillMount() {
+        document.body.classList.add("fixed-header", "dashboard", "sidebar-visible", "menu-pin");
+    }
 
     render() {
         let facility = getSelectedFacility();
         let facilities = getFacilities();
         let tenant = getSelectedTenant();
+        let tenantName = tenant.get("name");
         return (
             <DocumentTitle title='CS Companion'>
             {
                     facility ?
-                          <div id="fixed-header dashboard">
-                              <Navigation title={tenant.get("name")} facility={facility} facilities={facilities} />
-                              <div id="page-wrapper" className="gray-bg">
-                                 {/** <TopNavBar />**/}
-                                  <RouteHandler />
-                                  <Footer />
+                          <div>
+                              <Navigation title={tenantName} facility={facility} facilities={facilities} />
+                              <div id="page-wrapper" className="page-container">
+                                  <TopNavBar title={tenantName}/>
+                                  <div className="page-content-wrapper">
+                                      <div className="content sm-gutter">
+                                          <div className="container-fluid padding-25 sm-padding-10">
+                                              <RouteHandler />
+                                          </div>
+                                      </div>
+                                  </div>
                               </div>
                            </div>
                       :

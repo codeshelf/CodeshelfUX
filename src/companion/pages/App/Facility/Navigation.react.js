@@ -27,7 +27,7 @@ class NavbarHeader extends PureComponent {
              facility,
              facilities} = this.props;
         return (<div className="sidebar-header">
-                  <h1 style={{color: "#ffffff", display: "inline"}}>{title}</h1>
+                  <h3 style={{color: "#ffffff", display: "inline"}}>{title}</h3>
                   <div className="sidebar-header-controls">
                 <DropdownButton className="facility-dropdown" bsStyle="link" title={renderDropdownLabel(facility)}>
                 {
