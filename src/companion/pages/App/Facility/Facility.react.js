@@ -31,9 +31,7 @@ export default class Facility extends React.Component {
                                   <TopNavBar title={tenantName}/>
                                   <div className="page-content-wrapper">
                                       <div className="content sm-gutter">
-                                          <div className="container-fluid padding-25 sm-padding-10">
-                                              <RouteHandler />
-                                          </div>
+                                          <RouteHandler />
                                       </div>
                                   </div>
                               </div>
