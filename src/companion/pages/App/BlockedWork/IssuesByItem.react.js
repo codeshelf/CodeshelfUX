@@ -2,7 +2,7 @@ import  React from 'react';
 import DocumentTitle from 'react-document-title';
 import {Table} from 'components/common/Table';
 import {UnresolvedEvents} from './EventsGrid';
-
+import _ from 'lodash';
 
 export default class IssuesByItem extends React.Component{
 
@@ -30,10 +30,15 @@ export default class IssuesByItem extends React.Component{
     }
 
     render() {
-        let {issues, expand, expandSource} = this.props;
+        let {issues, expand, expandSource, onSelectedGroup} = this.props;
         return (
-                <Table results={issues} columns={this.issueColumns} columnMetadata={this.issueColumnMetadata} expand={expand} ExpandComponent={produceExpandClass(expandSource)}>
-
+                <Table results={issues}
+                       columns={this.issueColumns}
+                       columnMetadata={this.issueColumnMetadata}
+                       onRowExpand={_.partial(onSelectedGroup, true)}
+                       onRowCollapse={_.partial(onSelectedGroup, false)}
+                       expand={expand}
+                       ExpandComponent={produceExpandClass(expandSource)}>
                 </Table>
                );
     }
@@ -41,6 +46,7 @@ export default class IssuesByItem extends React.Component{
 IssuesByItem.propTypes = {
 
     issues: React.PropTypes.object.isRequired,
+    onSelectedGroup: React.PropTypes.func,
     expandSource: React.PropTypes.func.isRequired,
     expand: React.PropTypes.object
 };

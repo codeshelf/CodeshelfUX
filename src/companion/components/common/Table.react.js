@@ -1,16 +1,22 @@
 var React = require('react');
 var _ = require('lodash');
 var Immutable = require('immutable');
-
-require("tablesaw/dist/tablesaw.css");
-require("imports?jQuery=jquery,this=>window!tablesaw/dist/tablesaw.js");
+//require("tablesaw/dist/tablesaw.css");
+//require("imports?jQuery=jquery,this=>window!tablesaw/dist/tablesaw.js");
 var $ = require("jquery");
+import classnames from 'classnames';
 
 var Row = React.createClass({
     render: function() {
-        var {columnMetadata, row, rowNumber} = this.props;
+        var {columnMetadata,
+             row,
+             rowNumber,
+             expanded,
+             onClick } = this.props;
+        var rowAlt = (rowNumber % 2 == 0) ? "even" : "odd";
+        var shown = (expanded) ? "shown" : "";
         return (
-                <tr role="row" className={(rowNumber % 2 == 0) ? "even" : "odd"}>
+                <tr role="row" onClick={_.partial(onClick, row, rowNumber)} className={classnames(rowAlt, shown)}>
                 {
                     columnMetadata.map(function(columnMetadata){
                         var key = columnMetadata.get("columnName");
@@ -33,7 +39,7 @@ class ExpandRow extends React.Component {
     render() {
         let {columns} = this.props;
         let colspan = columns.size;
-        return <tr className="row-detail"><td colSpan={colspan}>{this.props.children}</td></tr>;
+        return <tr className="row-details"><td colSpan={colspan}>{this.props.children}</td></tr>;
     }
 
 }
@@ -78,17 +84,15 @@ var Table = React.createClass({
             "rows": []
         };
     },
-    componentDidMount: function() {
-        var node = this.getDOMNode();
-        var jqNode = $(node);
-        jqNode.table();
-    },
     render: function() {
+        const expandNotSet = Immutable.Map();
         var {caption = "",
              results = Immutable.List(),
              columns = Immutable.List(),
              columnMetadata = Immutable.List(),
-             expand = Immutable.Map(),
+             onRowExpand = function (){},
+             onRowCollapse = function (){},
+             expand = expandNotSet,
              ExpandComponent} = this.props;
         var rows = results;
         if (rows.constructor === Array) {
@@ -115,28 +119,39 @@ var Table = React.createClass({
                 });
             }
         }
+        var classes = classnames({
+            "table": true,
+            "table-hover": true,
+            "table-striped" : true,
+            "dataTable": true,
+            "no-footer":true,
+
+            "table-detailed" : expand !== expandNotSet,
+            "table-condensed": expand !== expandNotSet
+        });
         return (
-                <table className="table table-striped dataTable no-footer" role="grid">
+                <table className={classes} role="grid">
                     <caption>{caption}</caption>
                     <Header columns={columns} columnMetadata={columnMetadata}/>
                     <tbody>
                             {
                                rows.map(function(row, i) {
-                                   let childProps = {
+                                   var rowNumber = i;
+                                   var childProps = {
                                        columnMetadata: columnMetadata,
                                        columns: columns,
                                        row: row,
-                                       rowNumber: i
+                                       rowNumber: rowNumber
                                    };
 
-                                   let rowRenderer = <Row key={i} {...childProps}/>;
                                    if (Immutable.is(row, expand)) {
-                                       return Immutable.List.of(rowRenderer,
-                                           <ExpandRow key={i+"-expand"} {...childProps}>
+                                       return Immutable.List.of(
+                                           <Row key={rowNumber} {...childProps} onClick={onRowCollapse} expanded={true}/>,
+                                           <ExpandRow key={rowNumber+"-expand"} {...childProps}>
                                                <ExpandComponent {...childProps} />
                                            </ExpandRow>);
                                    } else {
-                                       return (rowRenderer);
+                                       return (<Row key={rowNumber} onClick={onRowExpand} {...childProps} expanded={false}/>);
                                    }
                                }).flatten(true).toJS()
                             }

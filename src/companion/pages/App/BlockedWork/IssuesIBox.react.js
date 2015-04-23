@@ -1,44 +1,53 @@
 var React = require('react');
 import DocumentTitle from 'react-document-title';
-
+import {DropdownButton, MenuItem} from 'react-bootstrap';
 var _ = require('lodash');
 
-var ibox = require('components/common/IBox');
-var IBox = ibox.IBox;
-var IBoxData = ibox.IBoxData;
-var IBoxTitleBar = ibox.IBoxTitleBar;
-var IBoxTitleText = ibox.IBoxTitleText;
-var IBoxSection = ibox.IBoxSection;
+var {IBox, IBoxBody}  = require('components/common/IBox');
 
 import IssuesByItem from './IssuesByItem';
 import {List, Map, fromJS} from 'immutable';
 
 export default class IssuesIBox extends React.Component {
+    constructor(props) {
+        this.state = {
+            "selectedGroup" : null
+        };
+    }
+
 
     getIssuesByItem(itemData) {
         let details = itemData.get("details");
         return List(details).sortBy(issue => issue.orderId);
     }
 
+    handleSelectedGroup(expanded, rowData, rowNumber, e) {
+        if (expanded) {
+            this.setState({"selectedGroup" : rowData});
+        }
+        else {
+            this.setState({"selectedGroup" : null});
+        }
+
+    }
+
     render() {
         var {title, workDetails} = this.props;
 
         var grouped = this.groupByItem(fromJS(workDetails));
-        var first = grouped.first();
+        var {selectedGroup} = this.state;
 
         return (<DocumentTitle title={title}>
                    <IBox>
-                      <IBoxTitleBar>
-                      <IBoxTitleText>
-                          {title}
-                      </IBoxTitleText>
-                      </IBoxTitleBar>
-                      <div className="ibox-content">
-                <div><a>By Item</a>  | <a>By Worker</a></div>
-                <div><a>Resolved</a> | <a>Unresolved</a></div>
+                      <IBoxBody>
+                          <DropdownButton title='Group By'>
+                              <MenuItem eventKey='1'>Item</MenuItem>
+                              <MenuItem eventKey='2'>Worker</MenuItem>
+                          </DropdownButton>
+                          <input type="checkbox" /> Show Resolved Only
 
-                          <IssuesByItem issues={grouped} expand={first} expandSource={this.getIssuesByItem}/>
-                      </div>
+                          <IssuesByItem onSelectedGroup={this.handleSelectedGroup.bind(this)} issues={grouped} expand={selectedGroup} expandSource={this.getIssuesByItem}/>
+                      </IBoxBody>
                       </IBox>
                 </DocumentTitle>
                       );

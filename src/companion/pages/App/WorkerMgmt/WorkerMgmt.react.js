@@ -75,9 +75,6 @@ export default class WorkerMgmt extends React.Component{
                     <Row>
                         <Col sm={12}>
                             <IBox>
-                                <IBoxTitleBar>
-                                    <IBoxTitleText>{title}</IBoxTitleText>
-                                </IBoxTitleBar>
                                 <IBoxBody>
                                     <div>
                                         <div className="pull-right">

@@ -6,8 +6,10 @@ var csapi = require('data/csapi');
 var {StatusSummary} = require('data/types');
 var el = React.createElement;
 
+import {PageGrid, Row, Col} from 'components/common/pagelayout';
 var ibox = require('components/common/IBox');
 var IBox = ibox.IBox;
+var IBoxBody = ibox.IBoxBody;
 var IBoxData = ibox.IBoxData;
 var IBoxTitleBar = ibox.IBoxTitleBar;
 var IBoxTitleText = ibox.IBoxTitleText;
@@ -15,7 +17,7 @@ var IBoxSection = ibox.IBoxSection;
 var IssuesIBox = require('./IssuesIBox');
 var SkippedVerificationList = require('./SkippedVerificationList');
 var {getFacilityContext} = require('data/csapi');
-var {ListGroup, ListGroupItem, Badge} = require('react-bootstrap');
+var {ListGroup, ListGroupItem, Badge, TabbedArea, TabPane} = require('react-bootstrap');
 
 class ShortedWorkList extends React.Component {
     render() {
@@ -115,46 +117,31 @@ var BlockedWorkPage = React.createClass({
     render: function() {
         var {selectedtype, blockedworksummary} = this.state;
         var {apiContext} = this.props;
-        var workDetails = blockedworksummary[selectedtype]["workDetails"];
-        var DisplayComponent = blockedworksummary[selectedtype]["displayComponent"];
         return (
 
-        <div>
-            <div className="row orderdetails">
-                <div className="col-sm-6 col-md-4">
+        <PageGrid>
+            <Row>
+                <Col sm={12}>
                 <IBox>
-                    <IBoxTitleBar>
-                        <IBoxTitleText>
-                            Blocked Work
-                        </IBoxTitleText>
-                    </IBoxTitleBar>
-                    <div className="ibox-content">
-                    <ListGroup>
-                    {
-                        _.values(blockedworksummary).map(function(blockedworktype) {
-                            var type = blockedworktype.type;
-                            return <ListGroupItem
-                                        key={type}
-                                        onClick={this.show.bind(this, type)}
-                                        active={selectedtype == type} >
-
-                                        {blockedworktype.description}
-                                        <Badge>{blockedworktype.total}</Badge>
-                                   </ListGroupItem>;
-                        }.bind(this))
+                    <IBoxBody>
+                <TabbedArea activeKey={this.state.key} onSelect={this.handleSelect}>
+                {
+                    _.values(blockedworksummary).map(function(blockedworktype) {
+                        var type = blockedworktype.type;
+                        var DisplayComponent = blockedworktype["displayComponent"];
+                        var workDetails = blockedworktype["workDetails"];
+                        return (<TabPane eventKey={type} tab={<span>{blockedworktype.description}<Badge>{blockedworktype.total}</Badge></span>}>
+                                <DisplayComponent type={selectedtype} workDetails={workDetails} />
+                                </TabPane>);
+                                }.bind(this))
                     }
-                    </ListGroup>
-                </div>
-                </IBox>
-                </div>
-                </div>
-            <div className="row orderdetails">
+                                                     </TabbedArea>
 
-            <div className="col-sm-6 col-md-8">
-                <DisplayComponent type={selectedtype} workDetails={workDetails} />
-            </div>
-            </div>
-</div>
+                    </IBoxBody>
+                </IBox>
+                </Col>
+                </Row>
+</PageGrid>
 );}});
 
 

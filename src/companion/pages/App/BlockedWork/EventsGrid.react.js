@@ -1,9 +1,9 @@
 import  React from 'react';
 import DocumentTitle from 'react-document-title';
-import Griddle from 'griddle-react';
 import {Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 import DateDisplay from 'components/common/DateDisplay';
+import {Table} from 'components/common/Table';
 
 class EventsGrid extends React.Component {
     constructor() {
@@ -37,7 +37,7 @@ class EventsGrid extends React.Component {
     }
 
     render() {
-            return <Griddle results={this.props.events.toJS()}
+            return <Table results={this.props.events.toJS()}
              columns={this.columns}
              columnMetadata={this.columnMetadata} />;
 
@@ -85,7 +85,7 @@ export class ResolvedEvents extends EventsGrid {
 
 class Resolve extends React.Component {
     render() {
-        return (<Button bsStyle="primary"><Icon name="close" /></Button>);
+        return (<Button bsStyle="primary"><Icon name="check" /></Button>);
 
     }
 }

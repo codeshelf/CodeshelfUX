@@ -17,7 +17,19 @@
 .modal-header.bg-primary
   background-color: $primary
 
-//when react-fa is in use with inspinia specifically keep spans with fa
-body.mini-navbar .navbar-default .nav li a span.fa {
-  display: block;
+.table.table-hover tbody tr:hover > td {
+  background: #daeffd !important;
+}
+
+//combined striped and hover didn't work well on odd rows with default pages
+.table.table-striped tbody tr.odd > td {
+  background: #fff !important;
+}
+
+.table.table-hover tbody tr.row-details:hover > td {
+ background: #fff !important;
+}
+
+.table.table-striped.table-hover tbody tr.odd:hover > td {
+  background: #daeffd !important;
 }
