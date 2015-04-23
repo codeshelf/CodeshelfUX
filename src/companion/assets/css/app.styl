@@ -26,6 +26,10 @@
 }
 
 //combined striped and hover didn't work well on odd rows with default pages
+.table.table-striped tbody tr.even > td {
+  background: #f9f9f9 !important;
+}
+
 .table.table-striped tbody tr.odd > td {
   background: #fff !important;
 }
@@ -34,6 +38,3 @@
  background: #fff !important;
 }
 
-.table.table-striped.table-hover tbody tr.odd:hover > td {
-  background: #daeffd !important;
-}
