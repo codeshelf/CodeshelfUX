@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import {Link} from 'react-router';
 import {DropdownButton, NavItem} from 'react-bootstrap';
 import { NavItemLink, MenuItemLink} from 'react-router-bootstrap';
@@ -49,9 +50,17 @@ class MenuItem extends React.Component {
         let {title,
              iconName,
              to,
+             params,
+             query,
              href} = this.props;
+
+        let active = to && this.context.router.isActive(to, params, query);
+
         var titleRenderer = (<span className="title">{title}</span>);
-        return (<li >
+        var classes = classnames({
+            "active": active
+        });
+        return (<li className={classes}>
                   {
                       (to) ?
                           <Link {...this.props}>{titleRenderer}</Link>
@@ -61,6 +70,9 @@ class MenuItem extends React.Component {
                   <span className="icon-thumbnail"><Icon name={iconName}></Icon></span>
                </li>);
     }
+}
+MenuItem.contextTypes = {
+    router: React.PropTypes.func.isRequired
 }
 
 const AuthzMenuItem = authz(MenuItem);
