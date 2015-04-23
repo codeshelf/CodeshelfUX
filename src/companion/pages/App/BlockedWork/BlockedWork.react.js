@@ -124,19 +124,22 @@ var BlockedWorkPage = React.createClass({
                 <Col sm={12}>
                 <IBox>
                     <IBoxBody>
-                <TabbedArea activeKey={this.state.key} onSelect={this.handleSelect}>
+                <TabbedArea className="nav-tabs-simple" activeKey={this.state.key} onSelect={this.handleSelect}>
                 {
                     _.values(blockedworksummary).map(function(blockedworktype) {
-                        var type = blockedworktype.type;
-                        var DisplayComponent = blockedworktype["displayComponent"];
-                        var workDetails = blockedworktype["workDetails"];
-                        return (<TabPane eventKey={type} tab={<span>{blockedworktype.description}<Badge>{blockedworktype.total}</Badge></span>}>
-                                <DisplayComponent type={selectedtype} workDetails={workDetails} />
+                        var {type,
+                             description,
+                             displayComponent,
+                             workDetails,
+                             total             } = blockedworktype;
+                        var DisplayComponent = displayComponent;  //Case matters for components
+                        return (<TabPane eventKey={type}
+                                         tab={<span>{description}<Badge>{total}</Badge></span>}>
+                                    <DisplayComponent type={selectedtype} workDetails={workDetails} />
                                 </TabPane>);
                                 }.bind(this))
-                    }
-                                                     </TabbedArea>
-
+                }
+                </TabbedArea>
                     </IBoxBody>
                 </IBox>
                 </Col>
