@@ -1,4 +1,5 @@
 var React = require('react');
+import {DropdownButton, MenuItem} from 'react-bootstrap';
 var _ = require('lodash');
 import Icon from 'react-fa';
 
@@ -9,18 +10,18 @@ var SummaryFilter = React.createClass({
             return (<div className="panel-controls">
                       <ul>
                           <li>
-                              <div className="dropdown">
-                                  <a aria-expanded="false" className="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-                                      <Icon name="filter" />
-                                  </a>
-                                  <ul className="dropdown-menu pull-right" role="menu">
-                                  {
-                                      filterNames.map(function(filterName) {
-                                         return (<li key={filterName}><a href="#" data-filtername={filterName} onClick={onChangeHandler.bind(null, filterName)}>{filterName}</a> </li>);
-                                      })
-                                  }
-                                  </ul>
-                              </div>
+                              <DropdownButton data-toggle={true} navItem={true} pullRight={true} noCaret={true} title={<Icon name="filter"  />}>
+                                    {
+                                        filterNames.map(function(filterName) {
+                                            return (
+                                                    <MenuItem eventKey={filterName}
+                                                     key={filterName}
+                                                     onClick={onChangeHandler.bind(null, filterName)}>
+                                                    {filterName}
+                                                </MenuItem>);
+                                        })
+                                    }
+                              </DropdownButton>
                           </li>
                       </ul>
                     </div>);
