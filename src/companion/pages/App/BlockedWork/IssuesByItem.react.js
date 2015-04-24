@@ -4,6 +4,7 @@ import {Table} from 'components/common/Table';
 import {UnresolvedEvents} from './EventsGrid';
 import _ from 'lodash';
 
+const noop = () => {};
 export default class IssuesByItem extends React.Component{
 
     constructor() {
@@ -31,12 +32,14 @@ export default class IssuesByItem extends React.Component{
 
     render() {
         let {issues, expand, expandSource, onSelectedGroup} = this.props;
+        let handleOnRowExpand = (onSelectedGroup) ? _.partial(onSelectedGroup, true) : noop;
+        let handleOnRowCollapse = (onSelectedGroup) ? _.partial(onSelectedGroup, true) : noop;
         return (
                 <Table results={issues}
                        columns={this.issueColumns}
                        columnMetadata={this.issueColumnMetadata}
-                       onRowExpand={_.partial(onSelectedGroup, true)}
-                       onRowCollapse={_.partial(onSelectedGroup, false)}
+                       onRowExpand={handleOnRowExpand}
+                       onRowCollapse={handleOnRowCollapse}
                        expand={expand}
                        ExpandComponent={produceExpandClass(expandSource)}>
                 </Table>
