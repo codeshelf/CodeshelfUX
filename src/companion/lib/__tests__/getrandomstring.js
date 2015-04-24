@@ -1,4 +1,4 @@
-jest.dontMock('../getrandomstring');
+//jest.dontMock('../getrandomstring');
 import {getRandomString} from '../getrandomstring';
 
 describe('getRandomString', () => {

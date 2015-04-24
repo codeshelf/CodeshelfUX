@@ -19,24 +19,13 @@ export class IBoxData extends React.Component {
 
 var IBoxTitleText = RClass(function() {
     /* Note that we are turning off float when no tools but when there are tools we will need to let it float left */
-        return (<h5 style={{float:"none"}}>{this.props.children}</h5>);
-    });
-
-var IBoxTitleTools = RClass(function() {
-    return (
-        <div className="ibox-tools dropdown">
-            <a onclick="{showhide();}"> <i className="fa fa-chevron-up"></i></a>
-            <a className="dropdown-toggle" href>
-            <i className="fa fa-wrench"></i>
-            </a>
-            <a onclick="closebox()"><i className="fa fa-times"></i></a>
-        </div>);
+        return (<div className="panel-title">{this.props.children}</div>);
     });
 
 var IBoxTitleBar = RClass(function() {
-    return (<div className="ibox-title text-center">
+    return (<div className="panel-heading">
             {this.props.children}
-        </div>);
+            </div>);
     });
 
 var IBoxSection = RClass(function() {
@@ -45,8 +34,16 @@ var IBoxSection = RClass(function() {
             </div>);
     });
 
+class IBoxBody extends React.Component {
+    render() {
+       return (<div className="panel-pody">
+            {this.props.children}
+        </div>);
+    }
+}
+
 var IBox = RClass(function() {
-    return (<div className="ibox float-e-margins">
+    return (<div data-pages="portlet" className="panel panel-default">
                 {this.props.children}
             </div>);
 });
@@ -56,6 +53,6 @@ module.exports = {
     IBoxData: IBoxData,
     IBoxTitleBar: IBoxTitleBar,
     IBoxTitleText: IBoxTitleText,
-    IBoxTitleTools: IBoxTitleTools,
-    IBoxSection: IBoxSection
+    IBoxSection: IBoxSection,
+    IBoxBody: IBoxBody
 };

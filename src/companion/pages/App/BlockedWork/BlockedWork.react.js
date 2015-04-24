@@ -6,16 +6,30 @@ var csapi = require('data/csapi');
 var {StatusSummary} = require('data/types');
 var el = React.createElement;
 
+import {PageGrid, Row, Col} from 'components/common/pagelayout';
 var ibox = require('components/common/IBox');
 var IBox = ibox.IBox;
+var IBoxBody = ibox.IBoxBody;
 var IBoxData = ibox.IBoxData;
 var IBoxTitleBar = ibox.IBoxTitleBar;
 var IBoxTitleText = ibox.IBoxTitleText;
 var IBoxSection = ibox.IBoxSection;
-var DetailsNoLocation = require('./NoLocation');
-var ShortedWorkList = require('./Shorted');
+var IssuesIBox = require('./IssuesIBox');
+var SkippedVerificationList = require('./SkippedVerificationList');
 var {getFacilityContext} = require('data/csapi');
-var {ListGroup, ListGroupItem, Badge} = require('react-bootstrap');
+var {ListGroup, ListGroupItem, Badge, TabbedArea, TabPane} = require('react-bootstrap');
+
+class ShortedWorkList extends React.Component {
+    render() {
+        return <IssuesIBox title="Shorted Order Lines By Item" {...this.props} />
+    }
+}
+
+class DetailsNoLocation extends React.Component {
+    render() {
+        return <IssuesIBox title="Order Lines without Location By Item" {...this.props} />
+    }
+}
 
 var BlockedWorkPage = React.createClass({
     statics: {
@@ -29,12 +43,23 @@ var BlockedWorkPage = React.createClass({
                 "type" : "NOLOC",
                 "description": "Order Lines w/o Location",
                 "total": 0,
-                "workDetails": []
+                "workDetails": [],
+                "displayComponent": DetailsNoLocation
             },
             "SHORT" : {
                 "type": "SHORT",
                 "description": "Shorted Order Lines",
-                "total": 0
+                "total": 0,
+                "workDetails" : [],
+                "displayComponent": ShortedWorkList
+            },
+            "SKIPPEDVERIFICATION": {
+                "type" : "SKIPPEDVERIFICATION",
+                "description": "Skipped UPC Scans",
+                total: 0,
+                "workDetails" : [],
+                "displayComponent": SkippedVerificationList
+
             }/*,
               FOR LATER
             "SUSPECTORDER": {
@@ -43,11 +68,7 @@ var BlockedWorkPage = React.createClass({
                 "total": 0
             },
               SHOULD MOVE TO AN ALERTS AREA
-            "SKIPPEDVERIFICATION": {
-                "type" : "SKIPPEDVERIFICATION",
-                "description": "Skipped Verification Scans",
-                "total": 0
-            }*/
+            */
         };
         return {
             "selectedtype" : "NOLOC",
@@ -96,47 +117,34 @@ var BlockedWorkPage = React.createClass({
     render: function() {
         var {selectedtype, blockedworksummary} = this.state;
         var {apiContext} = this.props;
-        var workDetails = blockedworksummary[selectedtype]["workDetails"];
         return (
 
-        <div>
-            <div className="row orderdetails">
-                <div className="col-sm-6 col-md-4">
+        <PageGrid>
+            <Row>
+                <Col sm={12}>
                 <IBox>
-                    <IBoxTitleBar>
-                        <IBoxTitleText>
-                            Blocked Work
-                        </IBoxTitleText>
-                    </IBoxTitleBar>
-                    <div className="ibox-content">
-                    <ListGroup>
-                    {
-                        _.values(blockedworksummary).map(function(blockedworktype) {
-                            var type = blockedworktype.type;
-                            return <ListGroupItem
-                                        key={type}
-                                        onClick={this.show.bind(this, type)}
-                                        active={selectedtype == type} >
-
-                                        {blockedworktype.description}
-                                        <Badge>{blockedworktype.total}</Badge>
-                                   </ListGroupItem>;
-                        }.bind(this))
-                    }
-                    </ListGroup>
-                </div>
+                    <IBoxBody>
+                <TabbedArea className="nav-tabs-simple" activeKey={this.state.key} onSelect={this.handleSelect}>
+                {
+                    _.values(blockedworksummary).map(function(blockedworktype) {
+                        var {type,
+                             description,
+                             displayComponent,
+                             workDetails,
+                             total             } = blockedworktype;
+                        var DisplayComponent = displayComponent;  //Case matters for components
+                        return (<TabPane eventKey={type}
+                                         tab={<span>{description}<Badge>{total}</Badge></span>}>
+                                    <DisplayComponent type={selectedtype} workDetails={workDetails} />
+                                </TabPane>);
+                                }.bind(this))
+                }
+                </TabbedArea>
+                    </IBoxBody>
                 </IBox>
-                </div>
-                </div>
-            <div className="row orderdetails">
-
-            <div className="col-sm-6 col-md-8">
-            {
-                (selectedtype == "NOLOC") ? <DetailsNoLocation type="NOLOC" workDetails={workDetails}/> : <ShortedWorkList type={selectedtype} workDetails={workDetails}/>
-            }
-            </div>
-            </div>
-</div>
+                </Col>
+                </Row>
+</PageGrid>
 );}});
 
 

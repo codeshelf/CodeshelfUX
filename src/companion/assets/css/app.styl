@@ -1,8 +1,10 @@
 // Remember to use rems and ems. http://css-tricks.com/rems-ems.
 
 @import '~bootstrap/dist/css/bootstrap.css'
-@import '~inspinia/css/style.css'
-@import '~inspinia/styl/variables.styl'
+@import '~pages/css/pages-icons.css'
+@import '~pages/css/pages.css'
+//@import '~inspinia/styl/variables.styl'
+
 
 // http://phonegap-tips.com/articles/essential-phonegap-css-webkit-tap-highlight-color.html
 *
@@ -15,7 +17,24 @@
 .modal-header.bg-primary
   background-color: $primary
 
-//when react-fa is in use with inspinia specifically keep spans with fa
-body.mini-navbar .navbar-default .nav li a span.fa {
-  display: block;
+.page-sidebar .sidebar-menu .menu-items > li > a > .title {
+   width: 100%;
 }
+
+.table.table-hover tbody tr:hover > td {
+  background: #daeffd !important;
+}
+
+//combined striped and hover didn't work well on odd rows with default pages
+.table.table-striped tbody tr.even > td {
+  background: #f9f9f9 !important;
+}
+
+.table.table-striped tbody tr.odd > td {
+  background: #fff !important;
+}
+
+.table.table-hover tbody tr.row-details:hover > td {
+ background: #fff !important;
+}
+

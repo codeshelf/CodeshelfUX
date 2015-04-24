@@ -1,13 +1,14 @@
+import React from 'react';
 import DocumentTitle from 'react-document-title';
-
-var React = require('react');
-var _ = require('lodash');
+import {PageGrid, Row, Col} from 'components/common/pagelayout';
+import _ from 'lodash';
+import  {getFacilityContext} from 'data/csapi';
+var StatusSummaryIBox = require('./StatusSummaryIBox');
+var TopItems = require('./TopItems');
 
 var el = React.createElement;
 
-var StatusSummaryIBox = require('./StatusSummaryIBox');
-var TopItems = require('./TopItems');
-import  {getFacilityContext} from 'data/csapi';
+
 
 var OverviewPage = React.createClass({
     statics: {
@@ -68,25 +69,23 @@ var OverviewPage = React.createClass({
     render: function() {
         var {views, apiContext, filterOptions} = this.state;
         return ( <DocumentTitle title="Overview">
-                 <div className="wrapper wrapper-content">
-
-                 <div className="row orders">
-                 {
-                     _.map(views, function(view){
-                         var stateKey = view["filterName"] + view["aggregate"];
-                         return (<div className="col-sm-6 col-md-4" key={stateKey}>
-                                 <StatusSummaryIBox apiContext={apiContext} view={view} filterOptions={filterOptions}/>
-                                 </div>);
-                     }.bind(this))
-                 }
-                 </div>
-                 <div className="row">
-                 <div className="col-sm-6 col-md-4" key="topitems">
-                 <TopItems apiContext={apiContext} />
-                 </div>
-                 </div>
-
-                 </div>
+                   <PageGrid>
+                       <Row>
+                       {
+                           _.map(views, function(view){
+                               var stateKey = view["filterName"] + view["aggregate"];
+                               return (<div className="col-sm-6 col-md-4" key={stateKey}>
+                                         <StatusSummaryIBox apiContext={apiContext} view={view} filterOptions={filterOptions}/>
+                                       </div>);
+                           }.bind(this))
+                       }
+                       </Row>
+                       <Row>
+                           <Col sm={6} md={4}>
+                               <TopItems apiContext={apiContext} />
+                           </Col>
+                       </Row>
+                   </PageGrid>
                  </DocumentTitle>);
     }
 });
