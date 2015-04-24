@@ -33,7 +33,7 @@ export default class IssuesByItem extends React.Component{
     render() {
         let {issues, expand, expandSource, onSelectedGroup} = this.props;
         let handleOnRowExpand = (onSelectedGroup) ? _.partial(onSelectedGroup, true) : noop;
-        let handleOnRowCollapse = (onSelectedGroup) ? _.partial(onSelectedGroup, true) : noop;
+        let handleOnRowCollapse = (onSelectedGroup) ? _.partial(onSelectedGroup, false) : noop;
         return (
                 <Table results={issues}
                        columns={this.issueColumns}
