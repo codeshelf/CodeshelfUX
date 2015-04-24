@@ -16,6 +16,7 @@ var loaders = {
 
 module.exports = function(isDevelopment, isTest) {
   var isTest = (isTest) ? isTest : false;
+
   var mainFile = './src/companion/main.js';
   var outputDir = './target/web/build';
 
@@ -70,15 +71,15 @@ module.exports = function(isDevelopment, isTest) {
           { test: /\.eot([\?]?.*)$/,  loader: "file-loader" },
           { test: /\.svg([\?]?.*)$/,  loader: "url-loader?limit=10000&mimetype=image/svg+xml" },
           { test: /\.(gif|jpg|png)$/, loader: 'url-loader?limit=100000' },
-        {
-        exclude: [/node_modules/, /bower_components/],
-        loaders: isDevelopment ? [
-          'react-hot', 'babel-loader'
-        ] : [
-          'babel-loader'
-        ],
-        test: /\.js$/
-      }].concat(stylesLoaders())
+          {
+              exclude: [/node_modules/, /bower_components/, /web_modules/],
+              loaders: isDevelopment ? [
+                  'react-hot', 'babel-loader'
+                  ] : [
+                      'babel-loader'
+                  ],
+                  test: /\.js$/
+          }].concat(stylesLoaders())
     },
     output: isDevelopment ? {
         path: path.join(__dirname, outputDir),
@@ -95,6 +96,11 @@ module.exports = function(isDevelopment, isTest) {
             NODE_ENV: JSON.stringify(isDevelopment || isTest ? 'development' : 'production'),
             IS_BROWSER: true
           }
+        }),
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery",
+            "window.jQuery": "jquery"
         })
       ];
       if (isDevelopment)
