@@ -42,21 +42,21 @@ var BlockedWorkPage = React.createClass({
         var types = {
             "NOLOC" : {
                 "type" : "NOLOC",
-                "description": "Order Lines w/o Location",
+                "description": "No Location",
                 "total": 0,
                 "workDetails": [],
                 "displayComponent": DetailsNoLocation
             },
             "SHORT" : {
                 "type": "SHORT",
-                "description": "Shorted Order Lines",
+                "description": "Shorted",
                 "total": 0,
                 "workDetails" : [],
                 "displayComponent": ShortedWorkList
             },
             "SKIPPEDVERIFICATION": {
                 "type" : "SKIPPEDVERIFICATION",
-                "description": "Skipped UPC Scans",
+                "description": "Skipped",
                 total: 0,
                 "workDetails" : [],
                 "displayComponent": SkippedVerificationList
@@ -135,7 +135,7 @@ var BlockedWorkPage = React.createClass({
                              total             } = blockedworktype;
                         var DisplayComponent = displayComponent;  //Case matters for components
                         return (<TabPane eventKey={type}
-                                         tab={<span>{description}<Badge>{total}</Badge></span>}>
+                                         tab={<span>{description.toUpperCase()}<Badge style={{marginLeft: "1em"}} className="badge-primary">{total}</Badge></span>}>
                                     <DisplayComponent type={selectedtype} workDetails={workDetails} />
                                 </TabPane>);
                                 }.bind(this))
