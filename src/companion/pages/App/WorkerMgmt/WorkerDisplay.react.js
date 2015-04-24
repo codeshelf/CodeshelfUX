@@ -91,7 +91,7 @@ class WorkerDisplay extends React.Component {
         var formData = this.getSelectedWorkerForm();
         var title = formData ? "Edit Worker" : "Not Found"
 ;        return (
-                <Modal bsStyle='primary' className="panel-heading" title={title} onRequestHide={this.handleClose.bind(this)}>
+                <Modal className="modal-header" title={title} onRequestHide={this.handleClose.bind(this)}>
                     { formData ? this.renderForm(formData) : this.renderNotFound()}
                 </Modal>
             );
@@ -181,7 +181,7 @@ class WorkerDisplay extends React.Component {
 
         };
 
-        return <Button bsStyle="primary" disabled={(value) ? true : false} onClick={setBadgeId.bind(this)}><Icon name="barcode" /></Button>;
+        return <Button disabled={(value) ? true : false} onClick={setBadgeId.bind(this)}><Icon name="barcode" /></Button>;
     }
 
     generateBarcode() {
