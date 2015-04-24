@@ -16,10 +16,6 @@ import {getWorkers} from 'data/workers/store';
 
 import exposeRouter from 'components/common/exposerouter';
 
-//require("assets/plugins/classie/classie.js");
-require("imports?classie=assets/plugins/classie/classie.js!pages/js/pages");
-console.log("Pages loaded", $.Pages);
-
 export default class WorkerMgmt extends React.Component{
 
     constructor() {
@@ -71,10 +67,6 @@ export default class WorkerMgmt extends React.Component{
 
     componentWillMount() {
         fetchWorkers();
-    }
-
-    componentDidMount() {
-        $.Pages.initSelectFxPlugin();
     }
 
     handleSearchChange(searchStruct) {
@@ -141,15 +133,18 @@ export default class WorkerMgmt extends React.Component{
                         <Col sm={12}>
                             <IBox>
                                 <IBoxBody>
-                                    <div>
-                                        <div className="pull-right">
-                                            <ButtonLink bsStyle="primary" to="workerdisplay" params={{workerId: "new"}} >
-                                                <Icon name="plus" />
-                                            </ButtonLink>
-                                        </div>
-                                    </div>
-
-                                    <Search columns={this.toSearchColumns()} onChange={this.handleSearchChange.bind(this)}/>
+                                    <Row>
+                                        <Col sm={3}>
+                                            <Search columns={this.toSearchColumns()} onChange={this.handleSearchChange.bind(this)}/>
+                                        </Col>
+                                        <Col sm={9} >
+                                            <div className="pull-right">
+                                                <ButtonLink bsStyle="primary" to="workerdisplay" params={{workerId: "new"}} >
+                                                    <Icon name="plus" />
+                                                </ButtonLink>
+                                            </div>
+                                        </Col>
+                                    </Row>
                                     <Table results={searchData}
                                         columns={this.columns}
                                         columnMetadata={this.columnMetadata}
@@ -190,8 +185,8 @@ class Search extends React.Component {
 
 class SearchColumns extends React.Component {
     render() {
-        return      (<select>
-            <option value="all">All</option>
+        return (<select>
+                     <option value="all">All</option>
                      {
                          _.map(this.props.columns,(column) =>{
                              return <option value={column.property}>{column.header}</option>
@@ -201,17 +196,6 @@ class SearchColumns extends React.Component {
     }
 
 }
-class SearchColumnsFancy extends React.Component {
-    render() {
-        return (
-                <select className="cs-select cs-skin-slide" data-init-plugin="cs-select">
-                <option value="Web-safe">Web-safe</option>
-                <option value="Helvetica">Helvetica</option>
-                <option value="SegeoUI">SegeoUI</option>
-                </select>);
-    }
-}
-
 
 class Edit extends React.Component {
     render() {
