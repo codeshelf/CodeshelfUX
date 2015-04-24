@@ -1,4 +1,5 @@
-var React = require('react');
+import React from 'react';
+import DocumentTitle from 'react-document-title';
 var _ = require('lodash');
 var $ = require('jquery');
 
@@ -118,7 +119,7 @@ var BlockedWorkPage = React.createClass({
         var {selectedtype, blockedworksummary} = this.state;
         var {apiContext} = this.props;
         return (
-
+                <DocumentTitle title="Blocked Work">
         <PageGrid>
             <Row>
                 <Col sm={12}>
@@ -145,6 +146,7 @@ var BlockedWorkPage = React.createClass({
                 </Col>
                 </Row>
 </PageGrid>
+</DocumentTitle>
 );}});
 
 

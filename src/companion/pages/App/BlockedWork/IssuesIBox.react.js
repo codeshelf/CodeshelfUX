@@ -1,5 +1,4 @@
 var React = require('react');
-import DocumentTitle from 'react-document-title';
 import {DropdownButton, MenuItem} from 'react-bootstrap';
 var _ = require('lodash');
 
@@ -37,7 +36,7 @@ export default class IssuesIBox extends React.Component {
         var grouped = this.groupByItem(fromJS(workDetails));
         var {selectedGroup} = this.state;
 
-        return (<DocumentTitle title={title}>
+        return (
                    <IBox>
                       <IBoxBody>
                           <DropdownButton title='Group By'>
@@ -49,7 +48,6 @@ export default class IssuesIBox extends React.Component {
                           <IssuesByItem onSelectedGroup={this.handleSelectedGroup.bind(this)} issues={grouped} expand={selectedGroup} expandSource={this.getIssuesByItem}/>
                       </IBoxBody>
                       </IBox>
-                </DocumentTitle>
                       );
     }
 
