@@ -181,7 +181,7 @@ class Search extends React.Component {
     }
 
     render(){
-            return <Input ref="query" type='text' onChange={this.handleChange.bind(this)} placeholder="Type to search on all fields" addonBefore={
+            return <Input ref="query" type='text' onChange={this.handleChange.bind(this)} placeholder="Type to search" addonBefore={
                         <SearchColumns ref="column" onChange={this.handleChange.bind(this)} columns={this.props.columns}/>
                         } />
 
