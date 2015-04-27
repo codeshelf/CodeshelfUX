@@ -277,6 +277,11 @@ domainobjects = {
 				'title': 'Order',
 				'width': 10
 			},
+			'posconIndex':     {
+				'id':    'posconIndex',
+				'title': 'Poscon',
+				'width': 8
+			},
 			'itemInCntrDescription': {
 				'id':    'itemInCntrDescription',
 				'title': 'First Item Description',

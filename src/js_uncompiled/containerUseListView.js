@@ -58,6 +58,8 @@ codeshelf.containeruselistview = function(websession, facility, inChe) {
 				return true;
 			else if (inProperty['id'] ===  'containerName')
 				return true;
+			else if (inProperty['id'] ===  'posconIndex')
+				return true;
 			else
 				return false;
 		},
