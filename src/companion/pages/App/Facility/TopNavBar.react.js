@@ -17,18 +17,19 @@ export default class TopNavBar extends React.Component {
     }
 
     render() {
+        let {title} = this.props;
         return (
-                <div className="row border-bottom">
-                    <nav style={{marginBottom: 0}} role="navigation" className="navbar navbar-static-top">
-                        <div className="navbar-header">
-                            <a href="#" className="navbar-minimalize minimalize-styl-2 btn btn-primary " onClick={this.handleNavbarMinimalize} ><Icon name="bars" /> </a>
-
+                <div className="header">
+                    <div className="pull-left sm-table">
+                        <div className="header-inner">
+                            <div class="brand inline">
+                                <h1>{title}</h1>
+                            </div>
                         </div>
-                        <ul className="nav navbar-top-links navbar-right">
-                            <NavItem onClick={this.handleLogoutClick} ><Icon name="sign-out" />Log out</NavItem>
-                        </ul>
-                    </nav>
-
+                    </div>
+                        <div className="pull-right">
+                            <a onClick={this.handleLogoutClick} ><Icon name="sign-out" />Log out</a>
+                        </div>
                 </div>
         );
     }

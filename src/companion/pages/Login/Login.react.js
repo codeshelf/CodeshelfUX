@@ -1,4 +1,5 @@
 import React from 'react';
+import {Row, Col} from 'components/common/pagelayout';
 import exposeRouter from 'components/common/exposerouter';
 import {focusInvalidField} from '../../lib/validation';
 import {getForm} from 'data/auth/store';
@@ -52,49 +53,54 @@ class Login extends React.Component {
     const form = getForm().toJS();
 
     return (
-    <div className="middle-box text-center loginscreen  animated fadeInDown">
-        <div>
-            <div>
-                <h1 className="logo-name">CS</h1>
-            </div>
-            <h3>Welcome to CS Companion</h3>
+            <div className="register-container full-height sm-p-t-30">
+                <div className="container-sm-height full-height">
+                    <div className="row row-sm-height">
+                        <div className="col-sm-12 col-sm-height col-middle">
+                            <h1>Codeshelf Companion</h1>
             {form.error &&
                 <span className="error-message">{form.error.message}</span>
             }
 
-          {/*  <div id="form-messages" className="alert alert-danger" style="display:none">
-              We didn't recognize your <br />username and password. Try again.
-            </div>
-            */}
-            <form id="login-form" className="m-t" role="form" method="POST" onSubmit={(e) => this.login(e)}>
-            <div className="form-group">
-                <input className="form-control"
-                    type="email"
-                    autoFocus="true"
-                    disabled={login.pending}
-                    name="email"
-                    onChange={updateFormField}
-                    placeholder={msg('auth.form.placeholder.email')}
-                    value={form.fields.email}
-                />
-            </div>
-            <div className="form-group">
-                <input className="form-control"
-                       disabled={login.pending}
-                       name="password"
-                       onChange={updateFormField}
-                       placeholder={msg('auth.form.placeholder.password')}
-                       type="password"
-                       value={form.fields.password}
-                />
-                </div>
-                <button type="submit" disabled={login.pending} className="btn btn-primary block full-width m-b">Login</button>
-<!--                <a href="#"><small>Forgot password?</small></a> -->
+            <form id="login-form" className="p-t-15" role="form" method="POST" onSubmit={(e) => this.login(e)}>
+                <Row>
+                    <Col sm={12}>
+                    <div className="form-group form-group-default">
+                        <label>Usernane</label>
+                        <input className="form-control"
+                               type="email"
+                               autoFocus="true"
+                               disabled={login.pending}
+                               name="email"
+                               onChange={updateFormField}
+                               placeholder={msg('auth.form.placeholder.email')}
+                               value={form.fields.email}
+                         />
+                   </div>
+                   </Col>
+                </Row>
+                <Row>
+                    <Col sm={12}>
+                        <div className="form-group form-group-default">
+                            <label>Password</label>
+                            <input className="form-control"
+                               disabled={login.pending}
+                               name="password"
+                               onChange={updateFormField}
+                               type="password"
+                               value={form.fields.password}
+                             />
+                        </div>
+                    </Col>
+                </Row>
+                <button type="submit" disabled={login.pending} className="btn btn-primary btn-cons m-t-10">Login</button>
             </form>
             <p className="m-t"> <small>Codeshelf &copy; 2015</small> </p>
-        </div>
-    </div>
 
+                        </div>
+                    </div>
+                </div>
+            </div>
     );
   }
 

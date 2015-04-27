@@ -1,0 +1,10 @@
+import Table from '../Table';
+import React from 'react/addons';
+import {findAllTextNodes} from 'lib/testutils';
+
+var TU = React.addons.TestUtils;
+describe('Table', () => {
+    it('default rendering', () => {
+        TU.renderIntoDocument(<Table />);
+    });
+});

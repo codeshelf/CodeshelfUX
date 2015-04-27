@@ -5,6 +5,9 @@ import React from 'react';
 import {RouteHandler} from 'react-router';
 import {state} from './data/state';
 
+require('imports?this=>window!assets/plugins/modernizr.custom.js');
+require("imports?classie=assets/plugins/classie/classie.js!pages/js/pages");
+
 export default class Root extends React.Component {
 
     componentDidMount() {

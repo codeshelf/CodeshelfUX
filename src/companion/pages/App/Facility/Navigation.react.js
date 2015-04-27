@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import {Link} from 'react-router';
 import {DropdownButton, NavItem} from 'react-bootstrap';
 import { NavItemLink, MenuItemLink} from 'react-router-bootstrap';
@@ -26,24 +27,55 @@ class NavbarHeader extends PureComponent {
         let {title = "",
              facility,
              facilities} = this.props;
-        return (<li className="nav-header">
-                    <div className="dropdown profile-element">
-                        <h1 className="block" style={{marginTop: 5, textOverflow: "ellipsis", overflow: "hidden"}}>{title}</h1>
-                        <DropdownButton className="facility-dropdown" bsStyle="link" title={renderDropdownLabel(facility)}>
-                            {
-                                facilities.map((facility) => {
-                                    return <MenuItemLink key={facility.get("domainId")} to="facility" params={{facilityName: facility.get("domainId")}}>{facility.get("name")}</MenuItemLink>;
-                                })
-                            }
-                        </DropdownButton>
-                    </div>
-                <div className="logo-element"> {/**when collapsed**/}
-                CS
-                </div>
-                </li>);
+        return (<div className="sidebar-header">
+                  <h3 style={{color: "#ffffff", display: "inline"}}>{title}</h3>
+                  <div className="sidebar-header-controls">
+                <DropdownButton className="facility-dropdown" bsStyle="link" title={renderDropdownLabel(facility)}>
+                {
+                    facilities.map((facility) => {
+                        return <MenuItemLink key={facility.get("domainId")} to="facility" params={{facilityName: facility.get("domainId")}}>{facility.get("name")}</MenuItemLink>;
+                    })
+               }
+        </DropdownButton>
+
+                  </div>
+                </div>);
     }
 }
 
+
+class MenuItem extends React.Component {
+
+    render() {
+        let {title,
+             iconName,
+             to,
+             params,
+             query,
+             href} = this.props;
+
+        let active = to && this.context.router.isActive(to, params, query);
+
+        var titleRenderer = (<span className="title">{title}</span>);
+        var classes = classnames({
+            "active": active
+        });
+        return (<li className={classes}>
+                  {
+                      (to) ?
+                          <Link {...this.props}>{titleRenderer}</Link>
+                          :
+                          <a {...this.props}>{titleRenderer}</a>
+                  }
+                  <span className="icon-thumbnail"><Icon name={iconName}></Icon></span>
+               </li>);
+    }
+}
+MenuItem.contextTypes = {
+    router: React.PropTypes.func.isRequired
+}
+
+const AuthzMenuItem = authz(MenuItem);
 class Navigation extends React.Component {
 
   componentWillMount() {
@@ -58,17 +90,16 @@ class Navigation extends React.Component {
   render() {
       var params = this.props.router.getCurrentParams();
       return (
-        <nav className="navbar-default navbar-static-side" role="navigation">
-            <div id="nav-container" className="sidebar-collapse" style={{overflowX: "hidden", overflowY: "hidden" }}>
-            <ul className="nav" id="side-menu">
-                <NavbarHeader {...this.props} />
-               <AuthzNavItemLink to="overview" params={params}><Icon name="clock-o"></Icon>Work Overview</AuthzNavItemLink>
-               <AuthzNavItemLink to="blockedwork" params={params}><Icon name="exclamation-circle"></Icon>Blocked Work</AuthzNavItemLink>
-               <AuthzNavItemLink to="workresults" params={params}><Icon name="pie-chart"></Icon>Work Results</AuthzNavItemLink>
-               <AuthzNavItemLink permission="worker:view" to="workermgmt" params={params}><Icon name="users" />Manage Workers</AuthzNavItemLink>
-               <AuthzNavItem permission="ux:view" href={this.getUXUrl()} params={params}><Icon name="cogs"></Icon>Configuration</AuthzNavItem>)
-               {/*<NavItemLink to="import" params={params}><Icon name="upload"></Icon>Import</AuthzNavItemLink>*/}
-            </ul>
+              <nav className="page-sidebar" dataPages="sidebar" style={{"transform": "translate3d(210px, 0px, 0px)"}} role="navigation">
+              <NavbarHeader {...this.props} />
+              <div className="sidebar-menu">
+                  <ul className="menu-items">
+                      <AuthzMenuItem to="overview" params={params} title="Work Overview" iconName="clock-o" />
+                      <AuthzMenuItem to="blockedwork" params={params} title="Blocked Work" iconName="exclamation-circle"/ >
+                      <AuthzMenuItem to="workresults" params={params} title="WorkResults" iconName="pie-chart" />
+                      <AuthzMenuItem permission="worker:view" to="workermgmt" params={params} title="Manage Workers" iconName="users" />
+                      <AuthzMenuItem permission="ux:view" href={this.getUXUrl()} params={params} title="Configuration" iconName="cogs" />
+              </ul>
             </div>
         </nav>
     );
