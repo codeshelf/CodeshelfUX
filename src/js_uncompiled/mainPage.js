@@ -25,7 +25,6 @@ goog.require('codeshelf.pathsview');
 goog.require('codeshelf.ediservicesview');
 goog.require('codeshelf.facilityeditorview');
 goog.require('codeshelf.hierarchylistview');
-goog.require('codeshelf.initializenewclient');
 goog.require('codeshelf.listdemoview');
 goog.require('codeshelf.ordersview');
 goog.require('codeshelf.orderdetailsview');
@@ -418,11 +417,9 @@ codeshelf.mainpage = function() {
 			exec: function(type,command) {
 				if (type == kWebSessionCommandType.OBJECT_GETTER_RESP) {
 					if (command['results'].length === 0) {
-						var clientInitializer = codeshelf.initializenewclient();
 						codeshelf.sessionGlobals.setWebsession(websession_);
-						// A bit odd here. We set the facility in clientInitializer
-
-						clientInitializer.start(websession_, application_.getOrganization(), loadFacilityWindows);
+						// A bit odd here. No facilities were setup on first login or by admin
+                        alert("no facilities have been created");
 					} else {
                         var facilities = command['results'];
 						var lastFacility = null;
@@ -447,16 +444,6 @@ codeshelf.mainpage = function() {
 
 		return callback;
 	}
-
-	function loadFacilityWindows() {
-		// What windows should launch immediately?
-
-
-		// Will this be the one operational view that all should see upon opening?
-		codeshelf.windowLauncher.loadCheListView();
-
-	}
-
 
 	/**
 	 * The main page view.
