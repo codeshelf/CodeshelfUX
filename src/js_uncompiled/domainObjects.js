@@ -707,6 +707,11 @@ domainobjects = {
 				'title': 'Pick Location',
 				'width': 15
 			},
+			'preferredNominalUi':         {
+				'id':    'preferredNominalUi',
+				'title': 'Pick Nominal Location',
+				'width': 15
+			},
 			'wiLocation': {
 				'id':    'wiLocation',
 				'title': 'WI Location',
@@ -1196,7 +1201,7 @@ domainobjects = {
 				'title': 'Nominal Location',
 				'width': 12
 			},
-			wiPosAlongPath: {
+			'wiPosAlongPath': {
 				'id':    'wiPosAlongPath',
 				'title': 'Meters Along Path',
 				'width': 10

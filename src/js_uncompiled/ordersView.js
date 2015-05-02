@@ -126,6 +126,8 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders, partialO
 				return false;
 			else if (inProperty['id'] === 'itemLocations' && !outboundOrders_)
 				return false;
+			else if (inProperty['id'] === 'preferredNominalUi')
+				return false;
 			else
 				return true;
 		}
