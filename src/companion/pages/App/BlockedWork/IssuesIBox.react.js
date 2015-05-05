@@ -7,8 +7,8 @@ import {Row, Col} from 'components/common/pagelayout';
 
 import IssuesByItem from './IssuesByItem';
 import {List, Map, fromJS, Set} from 'immutable';
-import {fetchTypeIssues} from 'data/issues/actions';
-import {getTypeIssues} from 'data/issues/store';
+import {fetchTypeIssues, fetchItemIssues} from 'data/issues/actions';
+import {getTypeIssues, getItemIssues} from 'data/issues/store';
 
 
 function keyIn(/*...keys*/) {
@@ -25,23 +25,22 @@ export default class IssuesIBox extends React.Component {
             "groupBy": "item",
             "resolved": false,
             "selectedGroup" : null
-
         };
     }
 
-
     getIssuesByItem(item) {
         //issues().filterBy(item).sortBy("order");
-        let {issues} = this.props();
-
-        return issues.filter((issue) => issue.get("item") === item).sortBy(issue => issue.get("order"));
+            //return issues.filter((issue) => issue.get("item") === item).sortBy(issue => issue.get("order"));
+        return getItemIssues(item.get("itemId")).get("results");
     }
 
     handleSelectedGroup(expanded, rowData, rowNumber, e) {
         if (expanded) {
+            fetchItemIssues(rowData);
             this.setState({"selectedGroup" : rowData});
         }
         else {
+
             this.setState({"selectedGroup" : null});
         }
 
@@ -68,13 +67,11 @@ export default class IssuesIBox extends React.Component {
 
     render() {
         let {type} = this.props;
-        let {groupBy, resolved} = this.state;
+        let {groupBy, resolved, selectedGroup} = this.state;
         let typeIssues = getTypeIssues(type);
         let results  = typeIssues.get("results");
         let total = typeIssues.get("total");
         let sortedBy = typeIssues.get("sortedBy");
-
-        var selectedGroup = null;
 
         return (
                    <IBox>

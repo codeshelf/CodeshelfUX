@@ -4,6 +4,26 @@ import {getFacilityContext} from 'data/csapi';
 
 import _ from 'lodash';
 
+export function  resolveIssue(issue) {
+    dispatch(resolveIssue, getFacilityContext().resolveIssue(issue).then(
+        (data) => {
+
+        }
+    ));
+};
+
+export function fetchItemIssues(item) {
+    let itemId = item.get("itemId");
+    dispatch(fetchItemIssues, getFacilityContext().getIssues({filterBy: {
+        itemId: itemId,
+        resolved: false
+    }}).then((data) => {
+        return {
+            storageKey: itemId,
+            data: data
+        };
+    }));
+};
 
 export function fetchIssuesSummary(criteria) {
     dispatch(fetchIssuesSummary, getFacilityContext().getIssues(criteria));
@@ -49,5 +69,5 @@ export function selectFirstIssue() {
 
 // Override actions toString for logging.
 setToString('issues', {
-  fetchTypeIssues, fetchIssuesSummary, selectFirstIssue, selectIssueByName, issueSelected
+  resolveIssue, fetchTypeIssues, fetchItemIssues, fetchIssuesSummary, selectFirstIssue, selectIssueByName, issueSelected
 });

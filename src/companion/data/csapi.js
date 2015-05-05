@@ -142,6 +142,13 @@ export function getFacilityContext() {
             });
         },
 
+        resolveIssue: (issue) => {
+            let persistentId = issue.get("persistentId");
+            let resolvePath = `/api/events/${persistentId}/resolve`;
+            return ajax(resolvePath, {
+                method: "POST"
+            });
+        },
         getIssues: (criteria) => {
             //http://localhost:8181/api/facilities/af44f88e-9569-48a3-b4db-d3b6e3c4689d/events?type=SKIP_ITEM_SCAN
             let data = {
