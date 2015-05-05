@@ -10,7 +10,7 @@ export default class IssuesByItem extends React.Component{
     constructor() {
         this.issueColumnMetadata = [
             {
-                columnName: "sku",
+                columnName: "itemId",
                 displayName: "Item"
             },
             {
@@ -22,7 +22,7 @@ export default class IssuesByItem extends React.Component{
                 displayName: "Description"
             },
             {
-                columnName: "issueCount",
+                columnName: "count",
                 displayName: "Count"
             }
         ];

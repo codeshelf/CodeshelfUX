@@ -1,4 +1,4 @@
-import PureComponent from '../../../lib/purecomponent';
+import PureComponent from 'components/common/PureComponent';
 import React from 'react';
 import immutable from 'immutable';
 import {ListGroup, Badge} from 'react-bootstrap';

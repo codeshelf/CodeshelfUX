@@ -1,7 +1,7 @@
 import * as actions from './actions';
-import {Range, Record, List} from 'immutable';
+import {Range, Record, List, fromJS} from 'immutable';
 import {register} from 'dispatcher';
-import {selectedIssueCursor, issuesCursor} from 'data/state';
+import {selectedIssueCursor, state} from 'data/state';
 import _ from 'lodash';
 
 export const IssueEvent = Record({
@@ -20,20 +20,22 @@ export const IssueEvent = Record({
 });
 
 
-function toIssue(issueData) {
-    issueData.name = issueData.domainId; //TODO temporary until name is returned for issue
-    return new Issue(issueData);
-}
+const issuesSummaryCursor = state.cursor(["issues", "summary"]);
+const emptyResults = fromJS({results: []});
 
 export const dispatchToken = register(({action, data}) => {
   switch (action) {
-      case actions.fetchIssues:
-
+      case actions.fetchIssuesSummary:
           if (data) {
-              issuesCursor((currentIssues) => {
-                  return _.reduce(data, (list, issueData) => {
-                      return list.push(toIssue(issueData));
-                  }, new List());
+              issuesSummaryCursor((currentSummary) => {
+                  return fromJS(data);
+              });
+          }
+          break;
+      case actions.fetchTypeIssues:
+          if (data) {
+              state.cursor(["issues", data.storageKey])((currentIssues) => {
+                  return fromJS(data.data);
               });
           }
           break;
@@ -46,9 +48,25 @@ export const dispatchToken = register(({action, data}) => {
 
 });
 
-export function getIssues() {
-    return issuesCursor();
-}
+export function getIssuesSummary() {
+    let summary = issuesSummaryCursor();
+    if (summary) {
+        return summary;
+    } else {
+        return emptyResults;
+    }
+};
+
+export function getTypeIssues(key) {
+
+    let issues =  state.cursor(["issues", key])();
+    if (issues) {
+        return issues;
+    } else {
+        return emptyResults;
+    }
+};
+
 
 export function getSelectedIssue() {
   return selectedIssueCursor();

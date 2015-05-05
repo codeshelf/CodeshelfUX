@@ -1,23 +1,40 @@
 var React = require('react');
-import {DropdownButton, MenuItem} from 'react-bootstrap';
+import {Select, Checkbox} from 'components/common/Form';
 var _ = require('lodash');
 
 var {IBox, IBoxBody}  = require('components/common/IBox');
+import {Row, Col} from 'components/common/pagelayout';
 
 import IssuesByItem from './IssuesByItem';
-import {List, Map, fromJS} from 'immutable';
+import {List, Map, fromJS, Set} from 'immutable';
+import {fetchTypeIssues} from 'data/issues/actions';
+import {getTypeIssues} from 'data/issues/store';
+
+
+function keyIn(/*...keys*/) {
+    var keySet = Set(arguments);
+    return function (v, k) {
+        return keySet.has(k);
+    };
+}
+
 
 export default class IssuesIBox extends React.Component {
     constructor(props) {
         this.state = {
+            "groupBy": "item",
+            "resolved": false,
             "selectedGroup" : null
+
         };
     }
 
 
-    getIssuesByItem(itemData) {
-        let details = itemData.get("details");
-        return List(details).sortBy(issue => issue.orderId);
+    getIssuesByItem(item) {
+        //issues().filterBy(item).sortBy("order");
+        let {issues} = this.props();
+
+        return issues.filter((issue) => issue.get("item") === item).sortBy(issue => issue.get("order"));
     }
 
     handleSelectedGroup(expanded, rowData, rowNumber, e) {
@@ -30,25 +47,52 @@ export default class IssuesIBox extends React.Component {
 
     }
 
-    render() {
-        var {title, workDetails} = this.props;
+    handleGroupBy(groupBy) {
+        this.setState({groupBy: groupBy});
+    }
 
-        var grouped = this.groupByItem(fromJS(workDetails));
-        var {selectedGroup} = this.state;
+    handleResolved(resolved) {
+        this.setState({resolved: resolved});
+    }
+
+    componentWillMount() {
+        let {type} = this.props;
+        let {groupBy, resolved} = this.state;
+        fetchTypeIssues(type, {groupBy: groupBy,
+                               filterBy: {
+                                   type: type,
+                                   resolved: resolved
+                               }});
+        //issues().pick("item", "worker", "type").filter(filter).groupBy(groupField).count().sortBy(sortField).take(100);
+    }
+
+    render() {
+        let {type} = this.props;
+        let {groupBy, resolved} = this.state;
+        let typeIssues = getTypeIssues(type);
+        let results  = typeIssues.get("results");
+        let total = typeIssues.get("total");
+        let sortedBy = typeIssues.get("sortedBy");
+
+        var selectedGroup = null;
 
         return (
                    <IBox>
                       <IBoxBody>
-                          <DropdownButton title='Group By'>
-                              <MenuItem eventKey='1'>Item</MenuItem>
-                              <MenuItem eventKey='2'>Worker</MenuItem>
-                          </DropdownButton>
-                          <input type="checkbox" /> Show Resolved Only
-
-                          <IssuesByItem onSelectedGroup={this.handleSelectedGroup.bind(this)} issues={grouped} expand={selectedGroup} expandSource={this.getIssuesByItem}/>
+                          <form role="form">
+                          <Row>
+                              <Col sm={6} lg={3}>
+                                  <Select id="groupBy" label='Group By' value={groupBy} options={[{value: "item", label: "Item"}, {value:"worker", label: "Worker"}]} onChange={this.handleGroupBy.bind(this)}/>
+                              </Col>
+                              <Col sm={6} lg={3} >
+                                  <Checkbox id="r" label="Show Resolved Only" value={resolved} onChange={this.handleResolved.bind(this)} />
+                              </Col>
+                            </Row>
+                          </form>
+                          <IssuesByItem onSelectedGroup={this.handleSelectedGroup.bind(this)} issues={results} expand={selectedGroup} expandSource={this.getIssuesByItem}/>
                       </IBoxBody>
                       </IBox>
-                      );
+              );
     }
 
     groupByItem(workDetails) {
@@ -78,6 +122,5 @@ export default class IssuesIBox extends React.Component {
 
 }
 IssuesIBox.propTypes = {
-    title: React.PropTypes.string.isRequired,
     workDetails: React.PropTypes.array.isRequired
 };
