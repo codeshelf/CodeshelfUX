@@ -13,6 +13,11 @@ export default class IssuesByItem extends React.Component{
                 columnName: "itemId",
                 displayName: "Item"
             },
+
+            {
+                columnName: "location",
+                displayName: "Location"
+            },
             {
                 columnName: "uom",
                 displayName: "UOM"

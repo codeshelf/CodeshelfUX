@@ -22,11 +22,11 @@ class EventsGrid extends React.Component {
                 {
                     columnName: "wiPlanQuantity",
                     displayName: "Plan"
-                },
+                },/*
                 {
-                    columnName: "locationId",
+                    columnName: "itemLocation",
                     displayName: "Where"
-                },
+                },*/
                 {
                     columnName: "createdAt",
                     displayName: "Occurred",
