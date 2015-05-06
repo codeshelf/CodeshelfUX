@@ -24,7 +24,7 @@ var Row = React.createClass({
                         var CustomComponent = columnMetadata.get("customComponent");
                         var valueRenderer = (<span>{value}</span>);
                         if (CustomComponent) {
-                            valueRenderer = ( <CustomComponent rowData={row} />);
+                            valueRenderer = ( <CustomComponent rowData={row} cellData={value} />);
                         }
                         return (<td key={key}>{valueRenderer}</td>);
                     })

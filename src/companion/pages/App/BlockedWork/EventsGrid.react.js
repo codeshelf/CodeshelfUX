@@ -28,7 +28,7 @@ class EventsGrid extends React.Component {
                     displayName: "Where"
                 },
                 {
-                    columnName: "eventTimestamp",
+                    columnName: "createdAt",
                     displayName: "Occurred",
                     customComponent: DateDisplay
                 }

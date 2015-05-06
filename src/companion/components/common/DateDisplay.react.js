@@ -3,6 +3,8 @@ import formatTimestamp from 'lib/timeformat';
 
 export default class DateDisplay extends React.Component {
     render() {
-        return (<span>{formatTimestamp(this.props.data)}</span>);
+        let {cellData} = this.props;
+        let formattedData = (cellData) ? formatTimestamp(cellData) : "";
+        return (<span>{formattedData}</span>);
     }
 }
