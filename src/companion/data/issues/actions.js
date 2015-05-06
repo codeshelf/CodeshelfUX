@@ -5,21 +5,13 @@ import {getFacilityContext} from 'data/csapi';
 import _ from 'lodash';
 
 export function  resolveIssue(issue) {
-    dispatch(resolveIssue, getFacilityContext().resolveIssue(issue).then(
-        (data) => {
-
-        }
-    ));
+    dispatch(resolveIssue, getFacilityContext().resolveIssue(issue));
 };
 
-export function fetchItemIssues(item) {
-    let itemId = item.get("itemId");
-    dispatch(fetchItemIssues, getFacilityContext().getIssues({filterBy: {
-        itemId: itemId,
-        resolved: false
-    }}).then((data) => {
+export function fetchItemIssues(storageKeys, criteria) {
+    dispatch(fetchItemIssues, getFacilityContext().getIssues(criteria).then((data) => {
         return {
-            storageKey: itemId,
+            storageKeys: storageKeys,
             data: data
         };
     }));
@@ -29,11 +21,11 @@ export function fetchIssuesSummary(criteria) {
     dispatch(fetchIssuesSummary, getFacilityContext().getIssues(criteria));
 };
 
-export function fetchTypeIssues(storageKey, criteria) {
+export function fetchTypeIssues(storageKeys, criteria) {
     dispatch(fetchTypeIssues, getFacilityContext().getIssues(criteria)
         .then((data) => {
             return {
-                storageKey: storageKey,
+                storageKeys: storageKeys,
                 data: data
             };
         }));

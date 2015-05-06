@@ -31,13 +31,26 @@ export default class IssuesIBox extends React.Component {
     getIssuesByItem(item) {
         //issues().filterBy(item).sortBy("order");
             //return issues.filter((issue) => issue.get("item") === item).sortBy(issue => issue.get("order"));
-        return getItemIssues(item.get("itemId")).get("results");
+        let {type} = this.props;
+        let {resolved} = this.state;
+        let {itemId} = item.get("itemId");
+
+        return getItemIssues([type, resolved.toString(), itemId]).get("results");
     }
 
-    handleSelectedGroup(expanded, rowData, rowNumber, e) {
+    handleSelectedGroup(expanded, item, rowNumber, e) {
         if (expanded) {
-            fetchItemIssues(rowData);
-            this.setState({"selectedGroup" : rowData});
+            this.setState({"selectedGroup" : item});
+
+            let {type} = this.props;
+            let {resolved} = this.state;
+            let {itemId} = item.get("itemId");
+            fetchItemIssues([type, resolved.toString(), itemId], {filterBy: {
+                type: type,
+                itemId: itemId,
+                resolved: resolved
+            }});
+
         }
         else {
 
@@ -57,7 +70,7 @@ export default class IssuesIBox extends React.Component {
     componentWillMount() {
         let {type} = this.props;
         let {groupBy, resolved} = this.state;
-        fetchTypeIssues(type, {groupBy: groupBy,
+        fetchTypeIssues([type, resolved.toString()], {groupBy: groupBy,
                                filterBy: {
                                    type: type,
                                    resolved: resolved
@@ -68,7 +81,7 @@ export default class IssuesIBox extends React.Component {
     render() {
         let {type} = this.props;
         let {groupBy, resolved, selectedGroup} = this.state;
-        let typeIssues = getTypeIssues(type);
+        let typeIssues = getTypeIssues([type, resolved.toString()]);
         let results  = typeIssues.get("results");
         let total = typeIssues.get("total");
         let sortedBy = typeIssues.get("sortedBy");
@@ -86,7 +99,7 @@ export default class IssuesIBox extends React.Component {
                               </Col>
                             </Row>
                           </form>
-                          <IssuesByItem onSelectedGroup={this.handleSelectedGroup.bind(this)} issues={results} expand={selectedGroup} expandSource={this.getIssuesByItem}/>
+                          <IssuesByItem onSelectedGroup={this.handleSelectedGroup.bind(this)} issues={results} expand={selectedGroup} expandSource={this.getIssuesByItem.bind(this)}/>
                       </IBoxBody>
                       </IBox>
               );

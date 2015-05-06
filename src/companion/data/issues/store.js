@@ -6,12 +6,14 @@ import _ from 'lodash';
 
 const issuesSummaryCursor = state.cursor(["issues", "summary"]);
 const emptyResults = fromJS({results: []});
-function issuesCursor(key) {
-    return state.cursor(["issues", key]);
+
+function issuesCursor(keys) {
+    keys.unshift("issues");
+    return state.cursor(keys);
 }
 
-function getIssuesFromCursor(key) {
-    let issues =  issuesCursor(key)();
+function getIssuesFromCursor(keys) {
+    let issues =  issuesCursor(keys)();
     if (issues) {
         return issues;
     } else {
@@ -20,14 +22,6 @@ function getIssuesFromCursor(key) {
 }
 export const dispatchToken = register(({action, data}) => {
   switch (action) {
-      case actions.fetchItemIssues:
-          if (data) {
-              issuesCursor(data.storageKey)((currentSummary) => {
-                  return fromJS(data.data);
-              });
-          }
-          break;
-
       case actions.fetchIssuesSummary:
           if (data) {
               issuesSummaryCursor((currentSummary) => {
@@ -35,9 +29,16 @@ export const dispatchToken = register(({action, data}) => {
               });
           }
           break;
+      case actions.fetchItemIssues:
+          if (data) {
+              issuesCursor(data.storageKeys)((currentSummary) => {
+                  return fromJS(data.data);
+              });
+          }
+          break;
       case actions.fetchTypeIssues:
           if (data) {
-              issuesCursor(data.storageKey)((currentIssues) => {
+              issuesCursor(data.storageKeys)((currentIssues) => {
                   return fromJS(data.data);
               });
           }
@@ -55,10 +56,10 @@ export function getIssuesSummary() {
     }
 };
 
-export function getItemIssues(itemId) {
-    return getIssuesFromCursor(itemId);
+export function getItemIssues(keys) {
+    return getIssuesFromCursor(keys);
 }
 
-export function getTypeIssues(type) {
-    return getIssuesFromCursor(type);
+export function getTypeIssues(keys) {
+    return getIssuesFromCursor(keys);
 };
