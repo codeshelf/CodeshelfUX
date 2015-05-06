@@ -579,7 +579,7 @@ goog.exportSymbol('launchAislesListView', launchAislesListView);
 function launchLedControllersListView() {
 	codeshelf.windowLauncher.loadLedControllersListView();
 }
-goog.exportSymbol('launchLedControllersListView', launchLedControllersListView);
+goog.exportSymbol('launchLocationAliasesListView', launchLocationAliasesListView);
 
 function launchLocationAliasesListView() {
 	codeshelf.windowLauncher.loadLocationAliasesListView();
