@@ -33,9 +33,9 @@ export default class IssuesIBox extends React.Component {
             //return issues.filter((issue) => issue.get("item") === item).sortBy(issue => issue.get("order"));
         let {type} = this.props;
         let {resolved} = this.state;
-        let {itemId} = item.get("itemId");
-
-        return getItemIssues([type, resolved.toString(), itemId]).get("results");
+        let itemId = item.get("itemId");
+        let location = item.get("location");
+        return getItemIssues([type, resolved.toString(), itemId, location]).get("results");
     }
 
     handleSelectedGroup(expanded, item, rowNumber, e) {
@@ -44,11 +44,13 @@ export default class IssuesIBox extends React.Component {
 
             let {type} = this.props;
             let {resolved} = this.state;
-            let {itemId} = item.get("itemId");
-            fetchItemIssues([type, resolved.toString(), itemId], {filterBy: {
+            let itemId = item.get("itemId");
+            let location = item.get("location");
+            fetchItemIssues([type, resolved.toString(), itemId, location], {filterBy: {
                 type: type,
                 itemId: itemId,
-                resolved: resolved
+                resolved: resolved,
+                location: location
             }});
 
         }
@@ -63,7 +65,7 @@ export default class IssuesIBox extends React.Component {
         this.setState({groupBy: groupBy});
     }
 
-    handleResolved(resolved) {
+    handleResolved(e, resolved) {
         this.setState({resolved: resolved});
     }
 
@@ -95,7 +97,7 @@ export default class IssuesIBox extends React.Component {
                                   <Select id="groupBy" label='Group By' value={groupBy} options={[{value: "item", label: "Item"}, {value:"worker", label: "Worker"}]} onChange={this.handleGroupBy.bind(this)}/>
                               </Col>
                               <Col sm={6} lg={3} >
-                                  <Checkbox id="r" label="Show Resolved Only" value={resolved} onChange={this.handleResolved.bind(this)} />
+                                  <Checkbox id="resolvedCheckbox" label="Show Resolved Only" value={resolved} onChange={this.handleResolved.bind(this)} />
                               </Col>
                             </Row>
                           </form>
