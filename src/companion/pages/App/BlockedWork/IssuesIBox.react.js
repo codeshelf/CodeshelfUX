@@ -65,8 +65,8 @@ export default class IssuesIBox extends React.Component {
         this.setState({groupBy: groupBy});
     }
 
-    handleResolved(e, resolved) {
-        this.setState({resolved: resolved});
+    handleResolved(e) {
+        this.setState({resolved: e.target.checked});
     }
 
     componentWillMount() {
@@ -97,7 +97,7 @@ export default class IssuesIBox extends React.Component {
                                   <Select id="groupBy" label='Group By' value={groupBy} options={[{value: "item", label: "Item"}, {value:"worker", label: "Worker"}]} onChange={this.handleGroupBy.bind(this)}/>
                               </Col>
                               <Col sm={6} lg={3} >
-                                  <Checkbox id="resolvedCheckbox" label="Show Resolved Only" value={resolved} onChange={this.handleResolved.bind(this)} />
+                <Checkbox id={"resolved_" + type} label="Show Resolved Only" value={resolved} onChange={this.handleResolved.bind(this)} />
                               </Col>
                             </Row>
                           </form>

@@ -2,14 +2,19 @@ import React from 'react';
 import {Input} from 'react-bootstrap';
 import PureComponent from 'components/common/PureComponent';
 
-export class Checkbox extends PureComponent {
+/**
+ * Note that this uses the DOM input and not the react-bootstrap Input so that the label is a sibling of the input for pages template
+ */
+export class Checkbox extends React.Component {
+    shouldComponentUpdate() {
+        return true;
+    }
+
     render() {
         let {id, label, value, onChange} = this.props;
         let checked = (value) ? true : false;
         return (<div className="checkbox check-primary">
-
-
-                <input id={id} name={id} type="checkbox" defaultValue={checked} defaultChecked={checked} onChange={onChange} onClick={(e) => {console.log(e);}}/>
+                <input id={id}  name={id} type="checkbox" defaultChecked={checked} onChange={onChange} />
                 <label htmlFor={id}>{label}</label>
                 </div>);
     }
