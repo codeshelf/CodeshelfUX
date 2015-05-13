@@ -2,8 +2,11 @@ import  React from 'react';
 import DocumentTitle from 'react-document-title';
 import {Button} from 'react-bootstrap';
 import Icon from 'react-fa';
+import PureComponent from 'components/common/PureComponent';
 import DateDisplay from 'components/common/DateDisplay';
 import {Table} from 'components/common/Table';
+import _ from 'lodash';
+import {resolveIssue} from 'data/issues/actions';
 
 class EventsGrid extends React.Component {
     constructor() {
@@ -13,19 +16,19 @@ class EventsGrid extends React.Component {
                     displayName: "Order"
                 },
                 {
-                    columnName: "actualQuantity",
+                    columnName: "wiActualQuantity",
                     displayName: "Actual"
                 },
                 {
-                    columnName: "planQuantity",
+                    columnName: "wiPlanQuantity",
                     displayName: "Plan"
-                },
+                },/*
                 {
-                    columnName: "locationId",
+                    columnName: "itemLocation",
                     displayName: "Where"
-                },
+                },*/
                 {
-                    columnName: "eventTimestamp",
+                    columnName: "createdAt",
                     displayName: "Occurred",
                     customComponent: DateDisplay
                 }
@@ -84,9 +87,15 @@ export class ResolvedEvents extends EventsGrid {
 
 
 class Resolve extends React.Component {
-    render() {
-        return (<Button bsStyle="primary"><Icon name="check" /></Button>);
 
+    handleClick(rowData) {
+        resolveIssue(rowData);
+    }
+
+    render() {
+        let {rowData} = this.props;
+        let clickHandler = _.partial(this.handleClick, rowData).bind(this);
+        return (<Button bsStyle="primary" onClick={clickHandler}><Icon name="check" /></Button>);
     }
 }
 

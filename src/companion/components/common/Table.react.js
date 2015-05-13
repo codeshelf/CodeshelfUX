@@ -24,7 +24,7 @@ var Row = React.createClass({
                         var CustomComponent = columnMetadata.get("customComponent");
                         var valueRenderer = (<span>{value}</span>);
                         if (CustomComponent) {
-                            valueRenderer = ( <CustomComponent rowData={row} />);
+                            valueRenderer = ( <CustomComponent rowData={row} cellData={value} />);
                         }
                         return (<td key={key}>{valueRenderer}</td>);
                     })
@@ -90,8 +90,8 @@ var Table = React.createClass({
              results = Immutable.List(),
              columns = Immutable.List(),
              columnMetadata = Immutable.List(),
-             onRowExpand = function (){},
-             onRowCollapse = function (){},
+             onRowExpand = function (){ console.log("row expand not set");},
+             onRowCollapse = function (){ console.log("row collapse not set");},
              expand = expandNotSet,
              ExpandComponent} = this.props;
         var rows = results;

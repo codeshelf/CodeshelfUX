@@ -30,7 +30,7 @@ export default class Facility extends React.Component {
                               <div id="page-wrapper" className="page-container">
                                   <TopNavBar title={tenantName}/>
                                   <div className="page-content-wrapper">
-                                      <div className="content sm-gutter">
+                                      <div className="content">
                                           <RouteHandler />
                                       </div>
                                   </div>

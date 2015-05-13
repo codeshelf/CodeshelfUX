@@ -91,12 +91,13 @@ export function getFacilityContext() {
     var endpoint = state.cursor(["endpoint"])();
     var facility = state.cursor(["selectedFacility"])();
     var facilityId = facility.get("persistentId");
+    var facilityPath = "/api/facilities/" + facilityId;
     return {
         facilityId: facilityId,
         endpoint: endpoint,
 
         getWorkers: function() {
-            var workersPath = "/api/facilities/" + facilityId + "/workers";
+            var workersPath = facilityPath + "/workers";
             return ajax(workersPath);
         },
         addWorker: function(worker) {
@@ -104,7 +105,7 @@ export function getFacilityContext() {
                 console.warn("trying to add a worker with persistentId set");
             }
             delete worker.persistentId;  //don't send in JSON so it doesn't try to deserialize with setPersistentId and fail
-            var workersPath = "/api/facilities/" + facilityId + "/workers";
+            var workersPath = facilityPath + "/workers";
             return ajax(workersPath, {
                 method: "POST",
                 data: JSON.stringify(worker),
@@ -123,17 +124,17 @@ export function getFacilityContext() {
         },
 
         getProductivity : function() {
-            var productivityPath = "/api/facilities/" + facilityId + "/productivity";
+            var productivityPath = facilityPath + "/productivity";
             return ajax(productivityPath);
         },
         getCheRuns: function() {
-            var cheSummaryPath = "/api/facilities/" + facilityId + "/chesummary";
+            var cheSummaryPath = facilityPath + "/chesummary";
             return ajax(cheSummaryPath);
         },
         getBlockedWork: _.partial(getBlockedWork, endpoint, facilityId),
         getSummarySnapshot: function(viewSpec) {
             var {filterName, aggregate} = viewSpec;
-            var orderstatussummary = "/api/facilities/" + facilityId + "/statussummary/" + aggregate;
+            var orderstatussummary = facilityPath + "/statussummary/" + aggregate;
             return ajax(orderstatussummary, {
                 data: {
                     filterName: filterName
@@ -141,30 +142,47 @@ export function getFacilityContext() {
             });
         },
 
+        resolveIssue: (issue) => {
+            let persistentId = issue.get("persistentId");
+            let resolvePath = `/api/events/${persistentId}/resolve`;
+            return ajax(resolvePath, {
+                method: "POST"
+            });
+        },
+        getIssues: (criteria) => {
+            //http://localhost:8181/api/facilities/af44f88e-9569-48a3-b4db-d3b6e3c4689d/events?type=SKIP_ITEM_SCAN
+            let data = {
+                groupBy: criteria.groupBy
+            };
+            _.merge(data, criteria.filterBy);
+            return ajax(facilityPath + "/events", {
+                data: data
+            });
+        },
         getWorkResults: function(startTimestamp, endTimestamp) {
-            var workResults = "/api/facilities/" + facilityId + "/work/results";
+            var workResults = facilityPath + "/work/results";
             return ajax(workResults, {
                 data: {
-                    "startTimestamp": startTimestamp,
+                   "startTimestamp": startTimestamp,
                     "endTimestamp": endTimestamp
                 }
             });
 
         },
         getTopItems: function() {
-            var topItems = "/api/facilities/" + facilityId + "/work/topitems";
+            var topItems = facilityPath + "/work/topitems";
             return ajax(topItems);
         },
         getBlockedWorkNoLocation: function () {
-            var blockedWorkNoLocationPath = "/api/facilities/" + facilityId + "/blockedwork/nolocation";
+            var blockedWorkNoLocationPath = facilityPath + "/blockedwork/nolocation";
             return ajax(blockedWorkNoLocationPath);
         },
         getBlockedWorkShorts: function () {
-            var blockedWorkNoLocationPath = "/api/facilities/" + facilityId + "/blockedwork/shorts";
+            var blockedWorkNoLocationPath = facilityPath + "/blockedwork/shorts";
             return ajax(blockedWorkNoLocationPath);
         },
         getFilters: function() {
-            var filtersUrl = "/api/facilities/" + facilityId + "/filters";
+            var filtersUrl = facilityPath + "/filters";
             return ajax(filtersUrl);
         }
     };

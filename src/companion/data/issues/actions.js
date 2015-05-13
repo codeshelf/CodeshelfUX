@@ -1,12 +1,35 @@
 import setToString from 'lib/settostring';
 import {dispatch} from 'dispatcher';
-import {getIssues} from 'data/csapi';
+import {getFacilityContext} from 'data/csapi';
+
 import _ from 'lodash';
 
-export function fetchIssues() {
-    dispatch(fetchIssues, getIssues());
-}
+export function  resolveIssue(issue) {
+    dispatch(resolveIssue, getFacilityContext().resolveIssue(issue));
+};
 
+export function fetchItemIssues(storageKeys, criteria) {
+    dispatch(fetchItemIssues, getFacilityContext().getIssues(criteria).then((data) => {
+        return {
+            storageKeys: storageKeys,
+            data: data
+        };
+    }));
+};
+
+export function fetchIssuesSummary(criteria) {
+    dispatch(fetchIssuesSummary, getFacilityContext().getIssues(criteria));
+};
+
+export function fetchTypeIssues(storageKeys, criteria) {
+    dispatch(fetchTypeIssues, getFacilityContext().getIssues(criteria)
+        .then((data) => {
+            return {
+                storageKeys: storageKeys,
+                data: data
+            };
+        }));
+};
 
 export function issueSelected(issue) {
     dispatch(issueSelected, issue);
@@ -38,5 +61,5 @@ export function selectFirstIssue() {
 
 // Override actions toString for logging.
 setToString('issues', {
-  fetchIssues, selectFirstIssue, selectIssueByName, issueSelected
+  resolveIssue, fetchTypeIssues, fetchItemIssues, fetchIssuesSummary, selectFirstIssue, selectIssueByName, issueSelected
 });

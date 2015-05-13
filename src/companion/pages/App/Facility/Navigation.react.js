@@ -4,7 +4,7 @@ import {Link} from 'react-router';
 import {DropdownButton, NavItem} from 'react-bootstrap';
 import { NavItemLink, MenuItemLink} from 'react-router-bootstrap';
 import Icon from 'react-fa';
-import PureComponent from 'lib/purecomponent';
+import PureComponent from 'components/common/PureComponent';
 import exposeRouter from 'components/common/exposerouter';
 import {authz} from 'components/common/auth';
 import {getSelectedFacility} from 'data/facilities/store';

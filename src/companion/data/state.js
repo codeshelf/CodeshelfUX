@@ -19,7 +19,6 @@ export const i18nCursor = state.cursor(['i18n']);
 
 export const selectedFacilityCursor = state.cursor(['selectedFacility']);
 export const facilitiesCursor = state.cursor(['facilities']);
-export const blockedWorkCursor = state.cursor(['blockedwork']);
 export const itemsCursor = state.cursor(['items']);
 export const userCursor = state.cursor(['user']);
 export const selectedWorkerCursor = state.cursor(['selectedWorkerForm']);
