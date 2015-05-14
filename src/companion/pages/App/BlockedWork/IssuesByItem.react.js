@@ -8,6 +8,7 @@ const noop = () => {};
 export default class IssuesByItem extends React.Component{
 
     constructor() {
+        super();
         this.issueColumnMetadata = [
             {
                 columnName: "itemId",
@@ -19,6 +20,7 @@ export default class IssuesByItem extends React.Component{
                 displayName: "Location"
             },
             {
+
                 columnName: "uom",
                 displayName: "UOM"
             },

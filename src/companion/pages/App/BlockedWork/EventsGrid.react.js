@@ -10,29 +10,30 @@ import {resolveIssue} from 'data/issues/actions';
 
 class EventsGrid extends React.Component {
     constructor() {
-            this.columnMetadata = [
-                {
-                    columnName: "orderId",
-                    displayName: "Order"
-                },
-                {
-                    columnName: "wiActualQuantity",
-                    displayName: "Actual"
-                },
-                {
-                    columnName: "wiPlanQuantity",
-                    displayName: "Plan"
-                },/*
-                {
-                    columnName: "itemLocation",
-                    displayName: "Where"
-                },*/
-                {
-                    columnName: "createdAt",
-                    displayName: "Occurred",
-                    customComponent: DateDisplay
-                }
-            ];
+        super();
+        this.columnMetadata = [
+            {
+                columnName: "orderId",
+                displayName: "Order"
+            },
+            {
+                columnName: "wiActualQuantity",
+                displayName: "Actual"
+            },
+            {
+                columnName: "wiPlanQuantity",
+                displayName: "Plan"
+            },/*
+               {
+               columnName: "itemLocation",
+               displayName: "Where"
+               },*/
+            {
+                columnName: "createdAt",
+                displayName: "Occurred",
+                customComponent: DateDisplay
+            }
+        ];
     }
 
     componentWillMount() {
