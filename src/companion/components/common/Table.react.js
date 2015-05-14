@@ -74,7 +74,7 @@ class Header extends React.Component {
 var Table = React.createClass({
     propTypes: {
         results: React.PropTypes.object.isRequired,
-        expand: React.PropTypes.object,
+        expand: React.PropTypes.func,
         ExpandComponent: React.PropTypes.element
     },
 
@@ -125,8 +125,8 @@ var Table = React.createClass({
             "dataTable": true,
             "no-footer":true,
 
-            "table-detailed" : expand !== null,
-            "table-condensed": expand !== null
+            "table-detailed" : expand != null,
+            "table-condensed": expand != null
         });
 
         if (expand == null) {
