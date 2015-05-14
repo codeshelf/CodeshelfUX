@@ -99,19 +99,3 @@ class Resolve extends React.Component {
         return (<Button bsStyle="primary" onClick={clickHandler}><Icon name="check" /></Button>);
     }
 }
-
-class WorkerCellDisplay extends React.Component {
-    render() {
-        let worker = this.props.data;
-        return (<a>{worker.lastName}, {worker.firstName}</a>);
-
-    }
-}
-
-class ItemCellDisplay extends React.Component {
-    render() {
-        let item = this.props.data;
-        return (<a>{item.gtin}</a>);
-
-    }
-}
