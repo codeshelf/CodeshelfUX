@@ -20,6 +20,7 @@ function keyIn(/*...keys*/) {
 
 export default class IssuesIBox extends React.Component {
     constructor(props) {
+        super(props);
         this.state = {
             "groupBy": "item",
             "resolved": false,

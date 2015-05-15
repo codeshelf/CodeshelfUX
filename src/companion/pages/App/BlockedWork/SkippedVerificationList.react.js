@@ -5,6 +5,7 @@ import _ from 'lodash';
 import IssuesIBox from './IssuesIBox';
 export default class SkippedVerificationList extends React.Component{
     constructor() {
+        super();
         this.issues = List(_.range(12).map((i) => {
             return generateIssue();
         })).sortBy(issue => issue.get("orderId"));

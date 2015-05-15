@@ -19,6 +19,7 @@ import exposeRouter from 'components/common/exposerouter';
 export default class WorkerMgmt extends React.Component{
 
     constructor() {
+        super();
         this.state = {
             search: {
                 query: "",
@@ -102,7 +103,8 @@ export default class WorkerMgmt extends React.Component{
         function isColumnVisible(row, col) {
             var property = col.property;
             var value = row[property];
-            var formatter = col.search || (value) => value;
+            var defaultFunction = (v) => {return v;};
+            var formatter = col.search || defaultFunction;
             var formattedValue = formatter(value);
 
             if (!formattedValue) {

@@ -9,6 +9,7 @@ import {Table} from 'components/common/Table';
 export default class WorkResults extends React.Component{
 
     constructor() {
+        super();
         this.state = {loading: false,
                       documents: []};
     }
