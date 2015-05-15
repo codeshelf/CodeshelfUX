@@ -18,7 +18,6 @@ function keyIn(/*...keys*/) {
     };
 }
 
-
 export default class IssuesIBox extends React.Component {
     constructor(props) {
         this.state = {
@@ -52,13 +51,11 @@ export default class IssuesIBox extends React.Component {
                 resolved: resolved,
                 location: location
             }});
-
         }
         else {
 
             this.setState({"selectedGroup" : null});
         }
-
     }
 
     handleGroupBy(groupBy) {
@@ -97,7 +94,7 @@ export default class IssuesIBox extends React.Component {
                                   <Select id="groupBy" label='Group By' value={groupBy} options={[{value: "item", label: "Item"}, {value:"worker", label: "Worker"}]} onChange={this.handleGroupBy.bind(this)}/>
                               </Col>
                               <Col sm={6} lg={3} >
-                <Checkbox id={"resolved_" + type} label="Show Resolved Only" value={resolved} onChange={this.handleResolved.bind(this)} />
+                                  <Checkbox id={"resolved_" + type} label="Show Resolved Only" value={resolved} onChange={this.handleResolved.bind(this)} />
                               </Col>
                             </Row>
                           </form>
@@ -107,32 +104,8 @@ export default class IssuesIBox extends React.Component {
               );
     }
 
-    groupByItem(workDetails) {
-        var groupedDetails = workDetails.groupBy((workDetail) => {
-            return (workDetail.get("sku") + ":" + workDetail.get("uom"));
-        });
-        var list = groupedDetails.keySeq().map((key) => {
-            var sameItems = groupedDetails.get(key);
-            var first = sameItems.first();
-            var sku =  first.get("sku");
-            var description = first.get("description") ? first.get("description"): "";
-            return Map({
-                key: key,
-                sku: sku,
-                gtin: sku,
-                uom: first.get("uom"),
-                description: description,
-                itemDescription: description,
-                issueCount: sameItems.size,
-                lineCount: sameItems.size,
-                details: sameItems
-            });
-        });
-
-        return list;
-    }
-
 }
+
 IssuesIBox.propTypes = {
     workDetails: React.PropTypes.array.isRequired
 };
