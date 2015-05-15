@@ -1,11 +1,39 @@
 import setToString from 'lib/settostring';
-import {dispatch} from 'dispatcher';
+import * as dispatcher from 'dispatcher';
 import {getFacilityContext} from 'data/csapi';
+import {KeyedIterable} from 'immutable';
 
 import _ from 'lodash';
 
+function dispatch(action, data) {
+    return dispatcher.dispatch(action, data);
+}
+
+export function subscribe(key, func) {
+    return dispatcher.subscribe(["issues", key], func);
+};
+
+export function unsubscribe(key) {
+    return dispatcher.unsubscribe(["issues", key]);
+};
+
+export function getSubscriptions(key) : KeyedIterable {
+    return dispatcher.getSubscriptions(key);
+};
+
 export function  resolveIssue(issue) {
-    dispatch(resolveIssue, getFacilityContext().resolveIssue(issue));
+    dispatch(resolveIssue, getFacilityContext().resolveIssue(issue)).then(() => {
+        //onsuccess
+        let subscriptions = getSubscriptions("issues");
+        subscriptions.map((v, k) => {
+            if (typeof(v) === "function") {
+                v.call();
+            } else {
+                console.warn("found subscription at ", k , "that was not a function was ", v);
+            }
+        });
+
+    });
 };
 
 export function fetchItemIssues(storageKeys, criteria) {

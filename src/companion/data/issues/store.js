@@ -25,8 +25,8 @@ const issuesByIdCursor = state.cursor(["issues", "byId"]);
 const emptyResults = fromJS({results: []});
 
 function issuesCursor(keys) {
-    keys.unshift("issues");
-    return state.cursor(keys);
+    var newKeys = List(keys).unshift("issues");
+    return state.cursor(newKeys);
 }
 
 function getIssuesFromCursor(keys) {

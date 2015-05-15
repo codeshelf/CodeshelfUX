@@ -14,6 +14,7 @@ const initialState = process.env.IS_BROWSER
 
 export const state = new State(initialState);
 export const $pendingActionsCursor = state.cursor(['$pendingActions']);
+export const $subscriptionsCursor = state.cursor(['$subscriptions']);
 export const authCursor = state.cursor(['auth']);
 export const i18nCursor = state.cursor(['i18n']);
 

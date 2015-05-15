@@ -35,6 +35,10 @@ export default class State extends EventEmitter {
     console.log(JSON.stringify(this.save())); // eslint-disable-line no-console
   }
 
+  remove(path) {
+      this.set(this._state.deleteIn(path));
+  }
+
   cursor(path) {
     return (update) => {
       if (update)

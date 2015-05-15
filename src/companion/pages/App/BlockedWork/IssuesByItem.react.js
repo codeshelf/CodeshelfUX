@@ -58,7 +58,7 @@ IssuesByItem.propTypes = {
     issues: React.PropTypes.object.isRequired,
     onSelectedGroup: React.PropTypes.func,
     expandSource: React.PropTypes.func.isRequired,
-    expand: React.PropTypes.object
+    expand: React.PropTypes.func
 };
 
 function produceExpandClass(expandSource) {
