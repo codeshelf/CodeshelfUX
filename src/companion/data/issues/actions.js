@@ -17,8 +17,14 @@ export function fetchItemIssues(storageKeys, criteria) {
     }));
 };
 
-export function fetchIssuesSummary(criteria) {
-    dispatch(fetchIssuesSummary, getFacilityContext().getIssues(criteria));
+export function fetchUnresolvedIssuesByType() {
+    let criteria = {
+        filterBy: {
+            "resolved" : false
+        },
+        groupBy: "type"
+    };
+    dispatch(fetchUnresolvedIssuesByType, getFacilityContext().getIssues(criteria));
 };
 
 export function fetchTypeIssues(storageKeys, criteria) {
@@ -61,5 +67,5 @@ export function selectFirstIssue() {
 
 // Override actions toString for logging.
 setToString('issues', {
-  resolveIssue, fetchTypeIssues, fetchItemIssues, fetchIssuesSummary, selectFirstIssue, selectIssueByName, issueSelected
+  resolveIssue, fetchTypeIssues, fetchItemIssues, fetchUnresolvedIssuesByType, selectFirstIssue, selectIssueByName, issueSelected
 });

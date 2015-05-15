@@ -7,26 +7,14 @@ var {IBox, IBoxBody} = require('components/common/IBox');
 var IssuesIBox = require('./IssuesIBox');
 var SkippedVerificationList = require('./SkippedVerificationList');
 var {getFacilityContext} = require('data/csapi');
-import {fetchIssuesSummary} from 'data/issues/actions';
+import {fetchUnresolvedIssuesByType} from 'data/issues/actions';
 import {getIssuesSummary} from 'data/issues/store';
 var {ListGroup, ListGroupItem, Badge, TabbedArea, TabPane} = require('react-bootstrap');
 
 var BlockedWorkPage = React.createClass({
 
-    updateViews: function(props) {
-        fetchIssuesSummary(
-            {
-                filterBy: {
-                    "resolved" : false
-                },
-                groupBy: "type"
-            });
-   },
-    componentWillReceiveProps: function(nextProps) {
-        //this.updateViews(nextProps);
-    },
     componentWillMount: function() {
-        this.updateViews(this.props);
+        fetchUnresolvedIssuesByType();
     },
     componentWillUnmount: function() {},
 

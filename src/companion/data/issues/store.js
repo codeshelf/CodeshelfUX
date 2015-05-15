@@ -1,10 +1,27 @@
 import * as actions from './actions';
-import {Range, Record, List, fromJS} from 'immutable';
+import {Range, Record, List, fromJS, Map} from 'immutable';
 import {register} from 'dispatcher';
 import {selectedIssueCursor, state} from 'data/state';
 import _ from 'lodash';
 
-const issuesSummaryCursor = state.cursor(["issues", "summary"]);
+
+/*
+let schema = {
+    issues: {
+        summaries: {
+            issueType: {resolved: boolean, type: IssueType, count: number},
+            issueItems: {resolved: boolean, type: IssueType, item: IssueItem, count: number},
+            issueWorkers: {resolved: boolean, type: IssueType, worker: IssueWorker, count: number}
+        },
+        entities: {
+            IssueId : Issue
+        }
+    }
+};
+*/
+
+const issuesUnresolvedByTypeCursor = state.cursor(["issues", "unresolved"]);
+const issuesByIdCursor = state.cursor(["issues", "byId"]);
 const emptyResults = fromJS({results: []});
 
 function issuesCursor(keys) {
@@ -20,11 +37,12 @@ function getIssuesFromCursor(keys) {
         return emptyResults;
     }
 }
+
 export const dispatchToken = register(({action, data}) => {
   switch (action) {
-      case actions.fetchIssuesSummary:
+      case actions.fetchUnresolvedIssuesByType:
           if (data) {
-              issuesSummaryCursor((currentSummary) => {
+              issuesUnresolvedByTypeCursor((currentSummary) => {
                   return fromJS(data);
               });
           }
@@ -48,7 +66,7 @@ export const dispatchToken = register(({action, data}) => {
 });
 
 export function getIssuesSummary() {
-    let summary = issuesSummaryCursor();
+    let summary = issuesUnresolvedByTypeCursor();
     if (summary) {
         return summary;
     } else {
