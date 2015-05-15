@@ -4,13 +4,15 @@ import {findAllTextNodes} from 'lib/testutils';
 import {fromJS} from 'immutable';
 import _ from 'lodash';
 import {List, Map} from 'immutable';
-import {generateIssue} from 'data/issues/store';
+import Chance from 'chance';
+
+let chance = new Chance();
 
 var TU = React.addons.TestUtils;
 describe('IssuesByItem', () => {
     it('renders expand', () => {
 
-        let generatedIssue = generateIssue();
+        let generatedIssue = fromJS({orderId: "ORDERIDTEST"});
 
         let issuesByItem = fromJS([
             {"id": "uuid",
@@ -22,8 +24,9 @@ describe('IssuesByItem', () => {
             if (itemData == null) throw "item data passed to expand function was null";
             return List.of(generatedIssue);
         }
+
         var component = TU.renderIntoDocument(<IssuesByItem issues={issuesByItem} expand={issuesByItem.get(0)} expandSource={expandSource}/>);
-        expect(findAllTextNodes(component)).toContain(generatedIssue.orderId +'');
+        expect(findAllTextNodes(component)).toContain(generatedIssue.get("orderId"));
     });
 
     it('renders multiple item groups', () =>{
