@@ -1,7 +1,7 @@
 import {Table} from '../Table.react.js';
 import React from 'react/addons';
 import {findAllTextNodes} from 'lib/testutils';
-import {List, Map} from 'immutable';
+import Immutable, {List, Map} from 'immutable';
 
 var TU = React.addons.TestUtils;
 describe('Table', () => {
@@ -44,7 +44,9 @@ describe('Table', () => {
       let testData = Map({"item": "a", "eventCount": 2, "showIfExpanded": "TestExpand"});
       let expandComponent = TestExpandComponent;
 
-      var component = TU.renderIntoDocument(<Table columns={["item"]} columnMetadata={columnMetadata} results={List.of(testData)} expand={testData} ExpandComponent={expandComponent}/>);
+      var component = TU.renderIntoDocument(<Table columns={["item"]} columnMetadata={columnMetadata} results={List.of(testData)} expand={(row) => {
+          return Immutable.is(row, testData);
+      }} ExpandComponent={expandComponent}/>);
 
       console.debug(React.findDOMNode(component));
 

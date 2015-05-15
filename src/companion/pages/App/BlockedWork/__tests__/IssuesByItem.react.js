@@ -1,7 +1,7 @@
 import IssuesByItem from '../IssuesByItem';
 import React from 'react/addons';
 import {findAllTextNodes} from 'lib/testutils';
-import {fromJS} from 'immutable';
+import Immutable, {fromJS} from 'immutable';
 import _ from 'lodash';
 import {List, Map} from 'immutable';
 import Chance from 'chance';
@@ -25,7 +25,9 @@ describe('IssuesByItem', () => {
             return List.of(generatedIssue);
         }
 
-        var component = TU.renderIntoDocument(<IssuesByItem issues={issuesByItem} expand={issuesByItem.get(0)} expandSource={expandSource}/>);
+        var component = TU.renderIntoDocument(<IssuesByItem issues={issuesByItem} expand={(row) => {
+            return (Immutable.is(row, issuesByItem.get(0)));
+        } } expandSource={expandSource}/>);
         expect(findAllTextNodes(component)).toContain(generatedIssue.get("orderId"));
     });
 
