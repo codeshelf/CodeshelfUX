@@ -1134,12 +1134,14 @@ domainobjects = {
 			'putWall': {
 				'id': 'putWallUi',
 				'title': 'Put Wall',
-				'width': 40
+				'width': 20
 			},
-			'tapeId': {
-				'id': 'tapeId',
+			'tapeIdUi': {
+				'id': 'tapeIdUi',
 				'title': 'Tape Id',
-				'width': 40
+				'width': 20,
+				'editor': Slick.Editors.Text,
+				'focusable': true
 			}
 		}
 	},
