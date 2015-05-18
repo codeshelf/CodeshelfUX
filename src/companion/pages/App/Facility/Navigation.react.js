@@ -99,6 +99,7 @@ class Navigation extends React.Component {
                       <AuthzMenuItem to="workresults" params={params} title="WorkResults" iconName="pie-chart" />
                       <AuthzMenuItem permission="worker:view" to="workermgmt" params={params} title="Manage Workers" iconName="users" />
                       <AuthzMenuItem permission="ux:view" href={this.getUXUrl()} params={params} title="Configuration" iconName="cogs" />
+                      <AuthzMenuItem permission="che:simulate" to="testscript" params={params} title="Test Scripts" iconName="bug" />
               </ul>
             </div>
         </nav>
