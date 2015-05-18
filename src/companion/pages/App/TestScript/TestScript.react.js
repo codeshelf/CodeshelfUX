@@ -1,32 +1,72 @@
-import DocumentTitle from 'react-document-title';
-import {getFacilityContext} from 'data/csapi';
 import React from 'react';
+import DocumentTitle from 'react-document-title';
+import _ from 'lodash';
+import {Map, List} from 'immutable';
+import {getFacilityContext} from 'data/csapi';
+
+import {IBox, IBoxBody} from 'components/common/IBox';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
 import {Input} from 'react-bootstrap';
 import {Button} from 'components/common/bootstrap';
 import Icon from 'react-fa';
 import {Table} from 'components/common/Table';
+import Dropzone from 'react-dropzone';
 
+function defaultParamName(fileName) {
+    if (fileName.startsWith("script")) {
+        return "script";
+    } else {
+        return fileName.split(".")[0];
+    }
+}
+
+
+
+/*
+var Dropzone = require("imports?this=>window!dropzone");
+require("dropzone/dist/min/dropzone.min.css");
+*/
 export default class TestScript extends React.Component{
 
     constructor() {
         super();
         this.state = {loading: false,
-                      response: null};
+                      response: null,
+                      files: Map()};
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        let form = React.findDOMNode(this.refs.testscriptform);
+        this.setState({loading: true,
+                       response: "Waiting..."});
 
-        this.setState({loading: true});
-
-
+        let scriptFormData = this.state.files.reduce((formData, file) => {
+            let name = file.name;
+            let paramName = React.findDOMNode(this.refs["paramName-" + name]).value;
+            formData.append(paramName, file);
+            return formData;
+        }, new FormData());
         var apiContext = getFacilityContext();
-        apiContext.runPickScript(form).then((response) =>{
+        apiContext.runPickScript(scriptFormData).then((response) =>{
             this.setState({loading: false,
                            response: response});
+        }, (error) => {
+            this.setState({loading: false,
+                           response: error});
         });
+    }
+
+    handleDrop(files) {
+        let newFilesMap = this.state.files.withMutations((filesMap)=> {
+            _.forEach(files, (file) =>{
+                filesMap.set(file.name, file);
+            });
+            return filesMap;
+        });
+        this.setState({files: newFilesMap});
+    }
+
+    componentDidMount() {
 
     }
 
@@ -36,46 +76,53 @@ export default class TestScript extends React.Component{
         } else {
             return <span>Run</span>;
         }
-
-    }
-
-    handleScript(e) {
-        let file = e.target.files[0];
-        let fileReader = new FileReader();
-        fileReader.onload = (load) => {
-            console.log("Read file", file, load);
-        };
-        fileReader.onerror = (error) => {
-            console.log("Error reading file", file, error);
-        };
-        fileReader.onprogress = (progress) => {
-            console.log("Progress", progress);
-        };
-        fileReader.readAsDataURL(file);
     }
 
     render() {
-        let {response} = this.state;
+        let {response, files} = this.state;
         return (<DocumentTitle title="Test Script">
                 <PageGrid>
                     <Row>
-                        <Col sm={12}>
-                            <form ref="testscriptform" onSubmit={this.handleSubmit.bind(this)}>
-                                <Input type='file' name="script" label='Script File' help='Select script file' />
-                                <Input type='file' name="orders1" label='Order File' help='Select order file' />
-                                <Button bsStyle="primary" type="submit">
+                        <Col sm={12} md={6}>
+                            <IBox>
+                                <IBoxBody>
+                                    <form ref="testscriptform" onSubmit={this.handleSubmit.bind(this)}>
+                                        <Dropzone className="dropzone text-center" style={{width: "100%", padding: "1em", borderStyle: "dashed"}} onDrop={this.handleDrop.bind(this)}>
+
+                                        {
+                                            (files.count() > 0) ?
+                                                <h3>Name Script Files or Upload More</h3>
+                                                :
+                                                <div>
+                                                    <Icon name="upload" size="5x"/>
+                                                    <h3>Click/Drop Test Script And Data Files</h3>
+                                                </div>
+                                        }
+                                        </Dropzone>
+                                        <div>
+                                            {
+                                                files.map((file) => {
+                                                    let name = file.name;
+                                                    let defaultValue = defaultParamName(name);
+                                                    let paramName = "paramName-" + name;
+                                                    return <Input key={paramName} ref={paramName} name={paramName} type="text" defaultValue={defaultValue} addonAfter={file.name}/>;
+                                                }).toArray()
+
+                                            }
+                                        </div>
+                                    <Button bsStyle="primary" type="submit">
                                     {
                                         this.renderButtonLabel()
                                     }
 
-                                </Button>
-                            </form>
-                            <div>
-                                <div>Response: </div>
-                            {
-                                (response) ? <pre>{response}</pre> : null
-                            }
-                            </div>
+                                    </Button>
+                                    <h3>Response: </h3>
+                                    {
+                                        (response) ? <pre>{response}</pre> : null
+                                    }
+                                </form>
+                            </IBoxBody>
+                          </IBox>
                         </Col>
                     </Row>
                 </PageGrid>

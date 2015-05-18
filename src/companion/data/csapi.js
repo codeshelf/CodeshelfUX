@@ -185,11 +185,11 @@ export function getFacilityContext() {
             var filtersUrl = facilityPath + "/filters";
             return ajax(filtersUrl);
         },
-        runPickScript: function(formElement) {
+        runPickScript: function(formData) {
             var runpickscript = facilityPath + "/runpickscript";
             return ajax(runpickscript, {
                 method: "POST",
-                data: new FormData(formElement),
+                data: formData,
                 processData: false,
                 contentType: false
             });
