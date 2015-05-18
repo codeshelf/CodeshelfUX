@@ -1,5 +1,7 @@
 var React = require("react");
 var pluralize = require("lib/pluralize");
+import classNames from "classnames";
+
 function RClass(renderFunction, otherMethods) {
     return React.createClass({
         render: renderFunction
@@ -43,7 +45,8 @@ class IBoxBody extends React.Component {
 }
 
 var IBox = RClass(function() {
-    return (<div data-pages="portlet" className="panel panel-default">
+    let classes = classNames("panel", "panel-default", this.props.className);
+    return (<div data-pages="portlet" className={classes}>
                 {this.props.children}
             </div>);
 });
