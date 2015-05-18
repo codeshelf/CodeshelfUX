@@ -81,7 +81,7 @@ codeshelf.pathsview = function(websession, facility) {
 			"label": "Export Path Script",
 			"permission": "path:edit",
 			"action": function(itemContext) {
-				prompt("Copy this path creating script:", itemContext["pathScript"]);
+				prompt("Use these coordinates for the path script:", itemContext["pathScript"]);
 			}
 		}
 	];
