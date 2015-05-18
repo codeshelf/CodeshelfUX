@@ -1,5 +1,6 @@
 import  React from 'react';
 import {ButtonLink}  from 'react-router-bootstrap';
+import {Button as RButton}  from 'react-bootstrap';
 import _ from 'lodash';
 import exposeRouter from 'components/common/exposerouter';
 
@@ -18,5 +19,6 @@ class CSButtonLink extends React.Component{
 };
 
 export default {
-    ButtonLink: exposeRouter(CSButtonLink)
+    ButtonLink: exposeRouter(CSButtonLink),
+    Button: RButton
 }

@@ -2,7 +2,8 @@ import DocumentTitle from 'react-document-title';
 import {getFacilityContext} from 'data/csapi';
 import React from 'react';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
-import {Input, Button} from 'react-bootstrap';
+import {Input} from 'react-bootstrap';
+import {Button} from 'components/common/bootstrap';
 import Icon from 'react-fa';
 import {Table} from 'components/common/Table';
 
@@ -62,7 +63,7 @@ export default class TestScript extends React.Component{
                             <form ref="testscriptform" onSubmit={this.handleSubmit.bind(this)}>
                                 <Input type='file' name="script" label='Script File' help='Select script file' />
                                 <Input type='file' name="orders1" label='Order File' help='Select order file' />
-                                <Button type="submit">
+                                <Button bsStyle="primary" type="submit">
                                     {
                                         this.renderButtonLabel()
                                     }
