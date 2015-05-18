@@ -900,6 +900,11 @@ domainobjects = {
 				'id':    'persistentId',
 				'title': 'Persistent ID',
 				'width': 40
+			},
+			'pathScript': {
+				'id':    'pathScript',
+				'title': 'Path Script',
+				'width': 100
 			}
 		}
 	},

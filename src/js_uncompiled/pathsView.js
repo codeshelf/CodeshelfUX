@@ -76,6 +76,13 @@ codeshelf.pathsview = function(websession, facility) {
 			"action": function(itemContext) {
 				self.sendPathDelete(itemContext);
 			}
+		},
+		{
+			"label": "Export Path Script",
+			"permission": "path:edit",
+			"action": function(itemContext) {
+				prompt("Copy this path creating script:", itemContext["pathScript"]);
+			}
 		}
 	];
 
