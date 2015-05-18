@@ -12,6 +12,7 @@ import Import from './pages/App/Import/Import.react.js';
 import {Route, DefaultRoute, NotFoundRoute, RouteHandler, Redirect} from 'react-router';
 import {authn} from './components/common/auth.js';
 import Login from './pages/Login/Login.react.js';
+import TestScript from './pages/App/TestScript/TestScript.react.js';
 
 export default (
   <Route handler={Root} path="/">
@@ -26,6 +27,7 @@ export default (
 	        <Route handler={WorkerMgmt} name="workermgmt">
 	            <Route handler={WorkerDisplay} name="workerdisplay" path=":workerId" />
 	        </Route>
+	        <Route handler={TestScript} name="testscript" />
 	     </Route>
        </Route>
     <Route handler={Login} name="login" />

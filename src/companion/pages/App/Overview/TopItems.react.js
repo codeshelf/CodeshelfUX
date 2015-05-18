@@ -56,7 +56,7 @@ var TopItems = React.createClass({
                 <IBox>
                     <IBoxTitleBar>
                         <IBoxTitleText>
-                            Top Items
+                            Top {items.length} Items
                         </IBoxTitleText>
                     </IBoxTitleBar>
                     <div className="ibox-content">

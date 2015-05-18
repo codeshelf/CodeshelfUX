@@ -184,6 +184,17 @@ export function getFacilityContext() {
         getFilters: function() {
             var filtersUrl = facilityPath + "/filters";
             return ajax(filtersUrl);
+        },
+        runPickScript: function(formElement) {
+            var runpickscript = facilityPath + "/runpickscript";
+            return ajax(runpickscript, {
+                method: "POST",
+                data: new FormData(formElement),
+                processData: false,
+                contentType: false
+            });
         }
+
+
     };
 };

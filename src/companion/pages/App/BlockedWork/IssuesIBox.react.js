@@ -6,21 +6,14 @@ var {IBox, IBoxBody}  = require('components/common/IBox');
 import {Row, Col} from 'components/common/pagelayout';
 
 import IssuesByItem from './IssuesByItem';
-import {List, Map, fromJS, Set} from 'immutable';
-import {fetchTypeIssues, fetchItemIssues} from 'data/issues/actions';
+import Immutable, {List, Map, fromJS, Set} from 'immutable';
+import {fetchTypeIssues, fetchItemIssues, subscribe, unsubscribe} from 'data/issues/actions';
 import {getTypeIssues, getItemIssues} from 'data/issues/store';
-
-
-function keyIn(/*...keys*/) {
-    var keySet = Set(arguments);
-    return function (v, k) {
-        return keySet.has(k);
-    };
-}
-
+import {keyIn} from 'lib/predicates';
 
 export default class IssuesIBox extends React.Component {
     constructor(props) {
+        super(props);
         this.state = {
             "groupBy": "item",
             "resolved": false,
@@ -46,19 +39,19 @@ export default class IssuesIBox extends React.Component {
             let {resolved} = this.state;
             let itemId = item.get("itemId");
             let location = item.get("location");
-            fetchItemIssues([type, resolved.toString(), itemId, location], {filterBy: {
+            var partialFunc = fetchItemIssues.bind(null, [type, resolved.toString(), itemId, location], {filterBy: {
                 type: type,
                 itemId: itemId,
                 resolved: resolved,
                 location: location
             }});
-
+            unsubscribe("expanded");
+            subscribe("expanded", partialFunc);
         }
         else {
-
+            unsubscribe("expanded");
             this.setState({"selectedGroup" : null});
         }
-
     }
 
     handleGroupBy(groupBy) {
@@ -69,15 +62,24 @@ export default class IssuesIBox extends React.Component {
         this.setState({resolved: e.target.checked});
     }
 
+
     componentWillMount() {
         let {type} = this.props;
         let {groupBy, resolved} = this.state;
-        fetchTypeIssues([type, resolved.toString()], {groupBy: groupBy,
-                               filterBy: {
-                                   type: type,
-                                   resolved: resolved
-                               }});
+        let partialFunc = fetchTypeIssues.bind(null,
+                                               [type, resolved.toString()],
+                                               {groupBy: groupBy,
+                                                filterBy: {
+                                                        type: type,
+                                                        resolved: resolved
+                                                }});
+
+        subscribe(type, partialFunc);
         //issues().pick("item", "worker", "type").filter(filter).groupBy(groupField).count().sortBy(sortField).take(100);
+    }
+
+    componentWillUnmount() {
+        unsubscribe(this.props.type);
     }
 
     render() {
@@ -87,7 +89,15 @@ export default class IssuesIBox extends React.Component {
         let results  = typeIssues.get("results");
         let total = typeIssues.get("total");
         let sortedBy = typeIssues.get("sortedBy");
-
+        let shouldExpand = (row) => {
+            if (selectedGroup) {
+                var selectedSubset = selectedGroup.filter(keyIn("itemId", "location", "uom"));
+                var rowSubset = row.filter(keyIn("itemId", "location", "uom"));
+                return (Immutable.is(selectedSubset, rowSubset));
+            } else {
+                return false;
+            }
+        };
         return (
                    <IBox>
                       <IBoxBody>
@@ -97,42 +107,14 @@ export default class IssuesIBox extends React.Component {
                                   <Select id="groupBy" label='Group By' value={groupBy} options={[{value: "item", label: "Item"}, {value:"worker", label: "Worker"}]} onChange={this.handleGroupBy.bind(this)}/>
                               </Col>
                               <Col sm={6} lg={3} >
-                <Checkbox id={"resolved_" + type} label="Show Resolved Only" value={resolved} onChange={this.handleResolved.bind(this)} />
+                                  <Checkbox id={"resolved_" + type} label="Show Resolved Only" value={resolved} onChange={this.handleResolved.bind(this)} />
                               </Col>
                             </Row>
                           </form>
-                          <IssuesByItem onSelectedGroup={this.handleSelectedGroup.bind(this)} issues={results} expand={selectedGroup} expandSource={this.getIssuesByItem.bind(this)}/>
+                          <IssuesByItem onSelectedGroup={this.handleSelectedGroup.bind(this)} issues={results} expand={shouldExpand} expandSource={this.getIssuesByItem.bind(this)}/>
                       </IBoxBody>
                       </IBox>
               );
     }
 
-    groupByItem(workDetails) {
-        var groupedDetails = workDetails.groupBy((workDetail) => {
-            return (workDetail.get("sku") + ":" + workDetail.get("uom"));
-        });
-        var list = groupedDetails.keySeq().map((key) => {
-            var sameItems = groupedDetails.get(key);
-            var first = sameItems.first();
-            var sku =  first.get("sku");
-            var description = first.get("description") ? first.get("description"): "";
-            return Map({
-                key: key,
-                sku: sku,
-                gtin: sku,
-                uom: first.get("uom"),
-                description: description,
-                itemDescription: description,
-                issueCount: sameItems.size,
-                lineCount: sameItems.size,
-                details: sameItems
-            });
-        });
-
-        return list;
-    }
-
-}
-IssuesIBox.propTypes = {
-    workDetails: React.PropTypes.array.isRequired
 };

@@ -5,10 +5,6 @@ import exposeRouter from 'components/common/exposerouter';
 
 class CSButtonLink extends React.Component{
 
-    constructor() {
-
-    }
-
     render() {
         var allParams = {};
         var propsWithoutParams = {};

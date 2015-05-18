@@ -74,7 +74,7 @@ class Header extends React.Component {
 var Table = React.createClass({
     propTypes: {
         results: React.PropTypes.object.isRequired,
-        expand: React.PropTypes.object,
+        expand: React.PropTypes.func,
         ExpandComponent: React.PropTypes.element
     },
 
@@ -85,14 +85,13 @@ var Table = React.createClass({
         };
     },
     render: function() {
-        const expandNotSet = Immutable.Map();
         var {caption = "",
              results = Immutable.List(),
              columns = Immutable.List(),
              columnMetadata = Immutable.List(),
              onRowExpand = function (){ console.log("row expand not set");},
              onRowCollapse = function (){ console.log("row collapse not set");},
-             expand = expandNotSet,
+             expand,
              ExpandComponent} = this.props;
         var rows = results;
         if (rows.constructor === Array) {
@@ -126,9 +125,13 @@ var Table = React.createClass({
             "dataTable": true,
             "no-footer":true,
 
-            "table-detailed" : expand !== expandNotSet,
-            "table-condensed": expand !== expandNotSet
+            "table-detailed" : expand != null,
+            "table-condensed": expand != null
         });
+
+        if (expand == null) {
+            expand = () => false;
+        }
         return (
                 <table className={classes} role="grid">
                     <caption>{caption}</caption>
@@ -144,7 +147,7 @@ var Table = React.createClass({
                                        rowNumber: rowNumber
                                    };
 
-                                   if (Immutable.is(row, expand)) {
+                                   if (expand(row)) {
                                        return Immutable.List.of(
                                            <Row key={rowNumber} {...childProps} onClick={onRowCollapse} expanded={true}/>,
                                            <ExpandRow key={rowNumber+"-expand"} {...childProps}>

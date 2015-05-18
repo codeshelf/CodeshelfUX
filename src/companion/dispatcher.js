@@ -1,7 +1,8 @@
 /*eslint-disable no-console */
 
-import {$pendingActionsCursor} from 'data/state';
+import {$pendingActionsCursor, state} from 'data/state';
 import {Dispatcher} from 'flux';
+import {List} from 'immutable';
 
 const dispatcher = new Dispatcher;
 const isDev = 'production' !== process.env.NODE_ENV;
@@ -9,6 +10,35 @@ const isDev = 'production' !== process.env.NODE_ENV;
 export function register(callback: Function): string {
   return dispatcher.register(callback);
 }
+
+function subscriptionsPath(keys) : List {
+    let fullPath = List(keys).unshift("$subscriptions");
+    return fullPath;
+}
+
+function subscriptionCursor(keys) {
+    let fullPath = subscriptionsPath(keys);
+    return state.cursor(fullPath.toArray());
+}
+
+export function getSubscriptions(key) {
+    return state.cursor(subscriptionsPath([key]))();
+};
+export function subscribe(keys, func) {
+    let fullPath = subscriptionsPath(keys);
+    let cursor = state.cursor(fullPath.toArray());
+
+    cursor(() => {
+        return func;
+    });
+    func();
+};
+
+export function unsubscribe(keys) {
+    let fullPath = subscriptionsPath(keys);
+    state.remove(fullPath);
+};
+
 
 export function dispatch(action: Function, data: ?Object, options: ?Object) {
   if (isDev && action.toString === Function.prototype.toString)

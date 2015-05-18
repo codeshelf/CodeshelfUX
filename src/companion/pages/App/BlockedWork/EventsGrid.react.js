@@ -10,29 +10,30 @@ import {resolveIssue} from 'data/issues/actions';
 
 class EventsGrid extends React.Component {
     constructor() {
-            this.columnMetadata = [
-                {
-                    columnName: "orderId",
-                    displayName: "Order"
-                },
-                {
-                    columnName: "wiActualQuantity",
-                    displayName: "Actual"
-                },
-                {
-                    columnName: "wiPlanQuantity",
-                    displayName: "Plan"
-                },/*
-                {
-                    columnName: "itemLocation",
-                    displayName: "Where"
-                },*/
-                {
-                    columnName: "createdAt",
-                    displayName: "Occurred",
-                    customComponent: DateDisplay
-                }
-            ];
+        super();
+        this.columnMetadata = [
+            {
+                columnName: "orderId",
+                displayName: "Order"
+            },
+            {
+                columnName: "wiActualQuantity",
+                displayName: "Actual"
+            },
+            {
+                columnName: "wiPlanQuantity",
+                displayName: "Plan"
+            },/*
+               {
+               columnName: "itemLocation",
+               displayName: "Where"
+               },*/
+            {
+                columnName: "createdAt",
+                displayName: "Occurred",
+                customComponent: DateDisplay
+            }
+        ];
     }
 
     componentWillMount() {
@@ -96,21 +97,5 @@ class Resolve extends React.Component {
         let {rowData} = this.props;
         let clickHandler = _.partial(this.handleClick, rowData).bind(this);
         return (<Button bsStyle="primary" onClick={clickHandler}><Icon name="check" /></Button>);
-    }
-}
-
-class WorkerCellDisplay extends React.Component {
-    render() {
-        let worker = this.props.data;
-        return (<a>{worker.lastName}, {worker.firstName}</a>);
-
-    }
-}
-
-class ItemCellDisplay extends React.Component {
-    render() {
-        let item = this.props.data;
-        return (<a>{item.gtin}</a>);
-
     }
 }

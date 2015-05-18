@@ -4,6 +4,7 @@ import Immutable from 'immutable';
 export default class State extends EventEmitter {
 
   constructor(state, reviver: ?Function) {
+    super();
     this._state = null;
     this._reviver = reviver;
     this.load(state || {});
@@ -32,6 +33,10 @@ export default class State extends EventEmitter {
 
   toConsole() {
     console.log(JSON.stringify(this.save())); // eslint-disable-line no-console
+  }
+
+  remove(path) {
+      this.set(this._state.deleteIn(path));
   }
 
   cursor(path) {

@@ -24,6 +24,7 @@ class ButtonFilter extends  React.Component {
 export default class DayOfWeekFilter extends React.Component {
 
     constructor() {
+        super();
         this.state = {
             "value" : "today"
         };

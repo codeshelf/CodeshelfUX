@@ -45,11 +45,17 @@ var OverviewPage = React.createClass({
                     aggregate: "OrderDetail"
                 },
                 {
+                    totalLabel: "Eaches",
+                    totalLabelSingular: "Each",
+                    filterName: filterOptions[0],
+                    aggregate: "Each"
+                },
+                {
                     totalLabel: "Cases",
                     totalLabelSingular: "Case",
                     filterName: filterOptions[0],
                     aggregate: "Case"
-                }
+                },
             ];
             this.setState({
                 "apiContext": apiContext,
@@ -74,16 +80,16 @@ var OverviewPage = React.createClass({
                        {
                            _.map(views, function(view){
                                var stateKey = view["filterName"] + view["aggregate"];
-                               return (<div className="col-sm-6 col-md-4" key={stateKey}>
+                               return (<Col sm={6} md={4} key={stateKey}>
                                          <StatusSummaryIBox apiContext={apiContext} view={view} filterOptions={filterOptions}/>
-                                       </div>);
+                                       </Col>);
                            }.bind(this))
                        }
-                       </Row>
-                       <Row>
-                           <Col sm={6} md={4}>
-                               <TopItems apiContext={apiContext} />
-                           </Col>
+                       <Col key="topItems" sm={6} md={4}>
+
+                           <TopItems  apiContext={apiContext} />
+
+                       </Col>
                        </Row>
                    </PageGrid>
                  </DocumentTitle>);

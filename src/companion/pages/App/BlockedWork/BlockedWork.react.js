@@ -1,55 +1,35 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
+var {Badge, TabbedArea, TabPane} = require('react-bootstrap');
 var _ = require('lodash');
 
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
 var {IBox, IBoxBody} = require('components/common/IBox');
 var IssuesIBox = require('./IssuesIBox');
-var SkippedVerificationList = require('./SkippedVerificationList');
 var {getFacilityContext} = require('data/csapi');
-import {fetchIssuesSummary} from 'data/issues/actions';
+import {fetchUnresolvedIssuesByType, subscribe, unsubscribe} from 'data/issues/actions';
 import {getIssuesSummary} from 'data/issues/store';
-var {ListGroup, ListGroupItem, Badge, TabbedArea, TabPane} = require('react-bootstrap');
 
-var BlockedWorkPage = React.createClass({
 
-    updateViews: function(props) {
-        fetchIssuesSummary(
-            {
-                filterBy: {
-                    "resolved" : false
-                },
-                groupBy: "type"
-            });
-   },
-    componentWillReceiveProps: function(nextProps) {
-        //this.updateViews(nextProps);
-    },
-    componentWillMount: function() {
-        this.updateViews(this.props);
-    },
-    componentWillUnmount: function() {},
+export default class BlockedWorkPage extends React.Component {
+    componentWillMount() {
+        subscribe("blockedwork", fetchUnresolvedIssuesByType);
+    }
+    componentWillUnmount() {
+        unsubscribe("blockedwork");
+    }
 
-    toDescription: (type) => {
+    toDescription(type) {
         return {
             "SKIP_ITEM_SCAN": "Skipped",
             "SHORT": "Shorted",
             "BUTTON": "Button",
             "COMPLETE": "Complete"
         }[type];
-    },
+    }
 
-    render: function() {
-        //groupBy("type").count()
-        let issuesSummaryResults = getIssuesSummary();
-        let issuesSummary = issuesSummaryResults.get("results");
+    renderTabbedArea(issuesSummary) {
         return (
-                <DocumentTitle title="Blocked Work">
-        <PageGrid>
-            <Row>
-                <Col sm={12}>
-                <IBox>
-                    <IBoxBody>
                 <TabbedArea className="nav-tabs-simple" defaultActiveKey={"SKIP_ITEM_SCAN"}>
                 {
 
@@ -59,25 +39,41 @@ var BlockedWorkPage = React.createClass({
                         let total = summary.get("count");
                         return (<TabPane eventKey={type}
                                  tab={<span>
-                                         {description.toUpperCase()}
-                                         <Badge style={{marginLeft: "1em"}} className="badge-primary">{total}</Badge>
+                                      {description.toUpperCase()}
+                                      <Badge style={{marginLeft: "1em"}} className="badge-primary">{total}</Badge>
                                       </span>}>
-                                    <IssuesIBox type={type} />
+                                <IssuesIBox type={type} />
                                 </TabPane>);
-                    }).toArray()
-                }
-                </TabbedArea>
+                                }).toArray()
+                    }
+            </TabbedArea>
+
+        );
+    }
+
+    render() {
+        //groupBy("type").count()
+        let title = "Blocked Work";
+        let issuesSummaryResults = getIssuesSummary();
+        let issuesSummary = issuesSummaryResults.get("results");
+        return (
+                <DocumentTitle title={title}>
+        <PageGrid>
+            <Row>
+                <Col sm={12}>
+                <IBox className="bg-primary">
+                    <IBoxBody>
+                        {(issuesSummary.count() > 0) ?
+                            renderTabbedArea(issuesSummary) :
+                            <h3 className="text-white text-center">No {title}</h3>
+                        }
+
                     </IBoxBody>
                 </IBox>
                 </Col>
                 </Row>
        </PageGrid>
        </DocumentTitle>
-);}});
-
-
-
-
-
-
-module.exports = BlockedWorkPage;
+       );
+   }
+}

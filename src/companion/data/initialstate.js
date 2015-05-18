@@ -14,6 +14,7 @@ if (process.env.IS_BROWSER) {
 const data = {
     endpoint: endpoint,
     $pendingActions: {},
+    $subscriptions: {},
     auth: {
         form: {
             fields: {

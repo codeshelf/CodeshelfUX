@@ -14,6 +14,7 @@ import {addWorker, updateWorker} from 'data/workers/actions';
 class WorkerDisplay extends React.Component {
 
     constructor() {
+        super();
         //TODO local state hack
         this.state = {
             "savePending" : false
