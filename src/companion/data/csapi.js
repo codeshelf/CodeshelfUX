@@ -186,7 +186,7 @@ export function getFacilityContext() {
             return ajax(filtersUrl);
         },
         runPickScript: function(formData) {
-            var runpickscript = facilityPath + "/runpickscript";
+            var runpickscript = facilityPath + "/runscript";
             return ajax(runpickscript, {
                 method: "POST",
                 data: formData,
