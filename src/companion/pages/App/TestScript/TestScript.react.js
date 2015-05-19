@@ -13,7 +13,7 @@ import {Table} from 'components/common/Table';
 import Dropzone from 'react-dropzone';
 
 function defaultParamName(fileName) {
-    if (fileName.startsWith("script")) {
+    if (fileName.indexOf("script") == 0) {
         return "script";
     } else {
         return fileName.split(".")[0];
