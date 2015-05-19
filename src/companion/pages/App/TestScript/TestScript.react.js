@@ -16,7 +16,8 @@ function defaultParamName(fileName) {
     if (fileName.indexOf("script") == 0) {
         return "script";
     } else {
-        return fileName.split(".")[0];
+        let droppedExtension = fileName.substring(0, fileName.lastIndexOf("."));
+        return droppedExtension;
     }
 }
 
@@ -32,6 +33,7 @@ export default class TestScript extends React.Component{
         super();
         this.state = {loading: false,
                       response: null,
+                      timeout: 5,
                       files: Map()};
     }
 
@@ -40,6 +42,7 @@ export default class TestScript extends React.Component{
         this.setState({loading: true,
                        response: "Waiting..."});
 
+        let {timeout} = this.state;
         let scriptFormData = this.state.files.reduce((formData, file) => {
             let name = file.name;
             let inputNode = React.findDOMNode(this.refs["paramName-" + name]).getElementsByTagName("input")[0];
@@ -48,7 +51,7 @@ export default class TestScript extends React.Component{
             return formData;
         }.bind(this), new FormData());
         var apiContext = getFacilityContext();
-        apiContext.runPickScript(scriptFormData).then((response) =>{
+        apiContext.runPickScript(scriptFormData, timeout).then((response) =>{
             this.setState({loading: false,
                            response: response});
         }, (error) => {
@@ -67,6 +70,10 @@ export default class TestScript extends React.Component{
         this.setState({files: newFilesMap});
     }
 
+    handleTimeoutChange(e) {
+        this.setState({"timeout": e.target.value});
+    }
+
     componentDidMount() {
 
     }
@@ -79,8 +86,46 @@ export default class TestScript extends React.Component{
         }
     }
 
+
+    renderScriptsForRun(files, timeout, response) {
+            return (<div>
+                    {
+                        files.map((file) => {
+                            let name = file.name;
+                            let defaultValue = defaultParamName(name);
+                            let paramName = "paramName-" + name;
+                            return <Input key={paramName}
+                                    ref={paramName}
+                                    name={paramName}
+                                    type="text"
+                                    defaultValue={defaultValue}
+                                    addonAfter={file.name}/>;
+                        }).toArray()
+                    }
+                    <Input label="timeout" onChange={this.handleTimeoutChange.bind(this)} type="number" value={timeout} addonAfter="minutes" />
+                     <div className="text-right">
+                        <Button bsStyle="primary" type="submit">
+                            {
+                                this.renderButtonLabel()
+                            }
+
+                        </Button>
+                    </div>
+                    {
+                        (response) ?
+                        <div>
+                            <h3>Response</h3>
+                            <pre>{response}</pre>
+                        </div>
+                        :
+                        null
+                    }
+               </div>);
+
+    }
+
     render() {
-        let {response, files} = this.state;
+        let {timeout, response, files} = this.state;
         return (<DocumentTitle title="Test Script">
                 <PageGrid>
                     <Row>
@@ -100,37 +145,12 @@ export default class TestScript extends React.Component{
                                                 </div>
                                         }
                                         </Dropzone>
-                                        <div>
-                                            {
-                                                files.map((file) => {
-                                                    let name = file.name;
-                                                    let defaultValue = defaultParamName(name);
-                                                    let paramName = "paramName-" + name;
-                                                    return <Input key={paramName}
-                                                                  ref={paramName}
-                                                                  name={paramName}
-                                                                  type="text"
-                                                                  defaultValue={defaultValue}
-                                                                  addonAfter={file.name}/>;
-                                                }).toArray()
-
-                                            }
-                                        </div>
-                                    <Button bsStyle="primary" type="submit">
-                                    {
-                                        this.renderButtonLabel()
-                                    }
-
-                                    </Button>
-                                    {
-                                        (response) ?
-                                            <div>
-                                                <h3>Response</h3>
-                                                <pre>{response}</pre>
-                                            </div>
+                                        {
+                                            (files.count() > 0) ?
+                                                this.renderScriptsForRun(files, timeout, response)
                                             :
-                                            null
-                                    }
+                                                null
+                                        }
                                 </form>
                             </IBoxBody>
                           </IBox>
