@@ -42,10 +42,11 @@ export default class TestScript extends React.Component{
 
         let scriptFormData = this.state.files.reduce((formData, file) => {
             let name = file.name;
-            let paramName = React.findDOMNode(this.refs["paramName-" + name]).value;
+            let inputNode = React.findDOMNode(this.refs["paramName-" + name]).getElementsByTagName("input")[0];
+            let paramName = inputNode.value;
             formData.append(paramName, file);
             return formData;
-        }, new FormData());
+        }.bind(this), new FormData());
         var apiContext = getFacilityContext();
         apiContext.runPickScript(scriptFormData).then((response) =>{
             this.setState({loading: false,
@@ -105,7 +106,12 @@ export default class TestScript extends React.Component{
                                                     let name = file.name;
                                                     let defaultValue = defaultParamName(name);
                                                     let paramName = "paramName-" + name;
-                                                    return <Input key={paramName} ref={paramName} name={paramName} type="text" defaultValue={defaultValue} addonAfter={file.name}/>;
+                                                    return <Input key={paramName}
+                                                                  ref={paramName}
+                                                                  name={paramName}
+                                                                  type="text"
+                                                                  defaultValue={defaultValue}
+                                                                  addonAfter={file.name}/>;
                                                 }).toArray()
 
                                             }
@@ -116,9 +122,14 @@ export default class TestScript extends React.Component{
                                     }
 
                                     </Button>
-                                    <h3>Response: </h3>
                                     {
-                                        (response) ? <pre>{response}</pre> : null
+                                        (response) ?
+                                            <div>
+                                                <h3>Response</h3>
+                                                <pre>{response}</pre>
+                                            </div>
+                                            :
+                                            null
                                     }
                                 </form>
                             </IBoxBody>
