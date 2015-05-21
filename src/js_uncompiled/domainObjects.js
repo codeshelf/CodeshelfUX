@@ -245,6 +245,11 @@ domainobjects = {
 				'id': 'lastScannedLocation',
 				'title': 'Loc Scan',
 				'width': 16
+			},
+			'associateToUi': {
+				'id': 'associateToUi',
+				'title': 'Associated CHE',
+				'width': 16
 			}
 		}
 	},
