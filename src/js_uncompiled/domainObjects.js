@@ -417,8 +417,6 @@ domainobjects = {
 		}
 	},
 
-
-
 	'Item': {
 		'className':  'Item',
 		'properties': {
@@ -745,6 +743,11 @@ domainobjects = {
 			'gtinId': {
 				'id':	 'gtinId',
 				'title': 'GTIN',
+				'width': 10
+			},
+			'needsScan': {
+				'id':	 'needsScan',
+				'title': 'Needs Scan',
 				'width': 10
 			},
 			'orderLocationAliasIds': {
@@ -1292,7 +1295,12 @@ domainobjects = {
 				'id':	'gtinId',
 				'title': 'GTIN',
 				'width': 10
-			}
+			},
+			'needsScan': {
+				'id':	 'needsScan',
+				'title': 'Needs Scan',
+				'width': 10
+			}			
 		}
 	}
 };

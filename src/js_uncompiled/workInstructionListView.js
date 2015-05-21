@@ -37,7 +37,6 @@ codeshelf.defaultWiColumnsNoSort = [
 	'uomMasterId'
 ];
 
-
 /*
 7 variations of work instruction list view. How many default formats do we want?
 Sort is very relevant for CHE run. Not so much otherwise.
