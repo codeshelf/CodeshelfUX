@@ -9,7 +9,7 @@ var IssuesIBox = require('./IssuesIBox');
 var {getFacilityContext} = require('data/csapi');
 import {fetchUnresolvedIssuesByType, subscribe, unsubscribe} from 'data/issues/actions';
 import {getIssuesSummary} from 'data/issues/store';
-
+import {List} from 'immutable';
 
 export default class BlockedWorkPage extends React.Component {
     componentWillMount() {
@@ -55,7 +55,7 @@ export default class BlockedWorkPage extends React.Component {
         //groupBy("type").count()
         let title = "Blocked Work";
         let issuesSummaryResults = getIssuesSummary();
-        let issuesSummary = issuesSummaryResults.get("results");
+        let issuesSummary = issuesSummaryResults.get("results") || List();
         return (
                 <DocumentTitle title={title}>
         <PageGrid>
