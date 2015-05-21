@@ -185,6 +185,15 @@ export function getFacilityContext() {
             var filtersUrl = facilityPath + "/filters";
             return ajax(filtersUrl);
         },
+        getPickRates: (startTimestamp, endTimestamp) => {
+            var pickRateUrl = facilityPath + "/pickrate";
+            return ajax(pickRateUrl, {
+                data: {
+                    startTimestamp: startTimestamp,
+                    endTimestamp: endTimestamp
+                }
+            });
+        },
         runPickScript: function(formData, timeout) {
             var runpickscript = facilityPath + "/runscript?timeout_min=" + timeout; //jquery ajax allows data to be one object (which we are using for formdata)
             return ajax(runpickscript, {

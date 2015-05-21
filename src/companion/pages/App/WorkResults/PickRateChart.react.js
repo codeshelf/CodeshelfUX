@@ -4,30 +4,21 @@ var d3 = require("d3");
 require("nvd3/build/nv.d3.min.css");
 var nv = require("exports?nv!nvd3/build/nv.d3.min.js");
 
-
 import {getFacilityContext} from 'data/csapi';
 
-var PickRateChart = React.createClass({
-    render: function() {
-        return (<div className="nvd3"><svg style={this.props.style}></svg></div>);
-    },
-    componentDidMount: function() {
-        var el = this.getDOMNode();
-        this.updateViews(this.props, el);
-    },
-    componentWillUnmount: function() {
+function updateChart(el, chart, data) {
+    d3.select(el).select("svg")
+        .datum(data)
+        .transition().duration(500)
+        .call(chart);
 
-    },
-    componentWillUpdate: function(prevProps, prevState) {
-        var el = this.getDOMNode();
-        this.updateViews(this.props, el);
-    },
-    updateViews: function(props, el) {
-        var {startTimestamp, endTimestamp} = props;
-        var apiContext = getFacilityContext();
-        this.pickerData(apiContext, startTimestamp, endTimestamp, function(data) {
-            var values = _.values(data);
+    //nv.utils.windowResize(chart.update);
 
+    return chart;
+}
+
+
+function chartSpec() {
             var chart = nv.models.multiBarChart()
                     //.transitionDuration(350)
                     //.reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
@@ -37,11 +28,14 @@ var PickRateChart = React.createClass({
             ;
 
 
-
+/*
             chart.xAxis.tickFormat(function(d) {
                 return d3.time.format("%-I:%M%p")(moment.unix(d).toDate());
             });
-                //.xScale(d3.time.scale()); // use a time scale instead of plain numbers in order to get nice round default values in the axi
+*/                //.xScale(d3.time.scale()); // use a time scale instead of plain numbers in order to get nice round default values in the axi
+
+            chart.xAxis.tickFormat((x) => x+":00");
+
             chart.yAxis
                 .tickFormat(d3.format('d'));
 
@@ -68,16 +62,75 @@ var PickRateChart = React.createClass({
 
 
 */
-            d3.select(el).select("svg")
-                .datum(values)
-                .transition().duration(500)
-                .call(chart);
+       return chart;
+}
 
-            //nv.utils.windowResize(chart.update);
+function toD3Data(apiData) {
+    var hoursOfOperation = _.range(6, 18);
 
-            return chart;
+    var xProperty = "hour";
+    var yProperty = "picks"; //"quantity";
+    return _.chain(apiData)
+        .groupBy("workerId")
+        .transform((result, workerHourlyRates, key) => {
+            let transformed =  _.map(workerHourlyRates, (v) => {
+                let time = moment(v[xProperty]); //epoch ms
+                return {
+                    key: v.workerId,
+                    x: time.hour(),
+                    y: v[yProperty],
+                    quantity: v.quantity,
+                    picks: v.picks
+                };
+            });
+
+            let missingValues = _.chain(hoursOfOperation)
+                .difference(_.pluck(transformed, "x"))
+                .map((v) => {
+                    return {
+                        key: key,
+                        x: v,
+                        y: 0,
+                        quantity: 0,
+                        picks: 0
+                    };
+                }).value();
+
+            let all = _.chain(transformed).concat(missingValues).sortBy("x").value();
+            result[key] = {
+                key: key,
+                values: all
+            };
+        })
+        .values()
+        .value();
+}
+
+var PickRateChart = React.createClass({
+    render: function() {
+        return (<div className="nvd3"><svg style={this.props.style}></svg></div>);
+    },
+    componentDidMount: function() {
+        this.updateViews(this.props, this.getDOMNode());
+    },
+    componentWillUnmount: function() {
+
+    },
+    componentWillUpdate: function(prevProps, prevState) {
+        this.updateViews(this.props, this.getDOMNode());
+    },
+
+    getPickRates: (startTimestamp, endTimestamp) => {
+        return getFacilityContext().getPickRates(startTimestamp, endTimestamp);
+    },
+
+    updateViews: function(props, el) {
+        var {startTimestamp, endTimestamp} = props;
+        var chart = chartSpec();
+        this.getPickRates(startTimestamp, endTimestamp).then((data) => {
+            let d3Data = toD3Data(data);
+            updateChart(el, chart, d3Data);
         });
-
     },
     pickerData: function(apiContext, startTimestamp, endTimestamp, callback) {
         var groupedValues = {};
