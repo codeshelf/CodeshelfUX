@@ -74,10 +74,9 @@ function toD3Data(apiData) {
         .groupBy("workerId")
         .transform((result, workerHourlyRates, key) => {
             let transformed =  _.map(workerHourlyRates, (v) => {
-                let time = moment(v[xProperty]); //epoch ms
                 return {
                     key: v.workerId,
-                    x: time.hour(),
+                    x: v[xProperty],
                     y: v[yProperty],
                     quantity: v.quantity,
                     picks: v.picks

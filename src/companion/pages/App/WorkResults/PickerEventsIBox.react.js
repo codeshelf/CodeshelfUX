@@ -33,17 +33,18 @@ var PickerEventsIBox = React.createClass({
                        </ButtonGroup>
                    </IBoxSection>
                    <IBoxSection>
-                       <PickerEventsChart style={{width: '100%', height: '300px'}}
-                                                   apiContext={apiContext}
-                                                   startTimestamp={startTimestamp}
-                                                   endTimestamp={endTimestamp}/>
-                   </IBoxSection>
-
-                   <IBoxSection>
                        <PickRateChart style={{width: '100%', height: '300px'}}
                            startTimestamp={startTimestamp}
                            endTimestamp={endTimestamp}/>
                    </IBoxSection>
+                {/*
+                   <IBoxSection>
+                       <PickerEventsChart style={{width: '100%', height: '300px'}}
+                           apiContext={apiContext}
+                           startTimestamp={startTimestamp}
+                           endTimestamp={endTimestamp}/>
+                   </IBoxSection>
+                  */}
                 </IBox>
         );
     }
