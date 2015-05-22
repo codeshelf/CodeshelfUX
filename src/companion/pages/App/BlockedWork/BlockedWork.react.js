@@ -30,6 +30,9 @@ export default class BlockedWorkPage extends React.Component {
 
     renderTabbedArea(issuesSummary) {
         return (
+                <IBox>
+                <IBoxBody>
+
                 <TabbedArea className="nav-tabs-simple" defaultActiveKey={"SKIP_ITEM_SCAN"}>
                 {
 
@@ -47,6 +50,8 @@ export default class BlockedWorkPage extends React.Component {
                                 }).toArray()
                     }
             </TabbedArea>
+                </IBoxBody>
+                </IBox>
 
         );
     }
@@ -61,15 +66,14 @@ export default class BlockedWorkPage extends React.Component {
         <PageGrid>
             <Row>
                 <Col sm={12}>
-                <IBox className="bg-primary">
-                    <IBoxBody>
-                        {(issuesSummary.count() > 0) ?
-                            renderTabbedArea(issuesSummary) :
+                {(issuesSummary.count() > 0) ?
+                    this.renderTabbedArea(issuesSummary) :
+                    <IBox className="bg-primary">
+                        <IBoxBody>
                             <h3 className="text-white text-center">No {title}</h3>
-                        }
-
-                    </IBoxBody>
-                </IBox>
+                        </IBoxBody>
+                    </IBox>
+                }
                 </Col>
                 </Row>
        </PageGrid>
