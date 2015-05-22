@@ -9,7 +9,7 @@ import {getFacilityContext} from 'data/csapi';
 function updateChart(el, chart, data) {
     d3.select(el).select("svg")
         .datum(data)
-        .transition().duration(500)
+//        .transition().duration(500)
         .call(chart);
 
     //nv.utils.windowResize(chart.update);
@@ -20,7 +20,7 @@ function updateChart(el, chart, data) {
 
 function chartSpec() {
             var chart = nv.models.multiBarChart()
-                    //.transitionDuration(350)
+                    .duration(50)
                     //.reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
                     .rotateLabels(0)      //Angle to rotate x-axis labels.
                     .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
@@ -58,15 +58,14 @@ function chartSpec() {
                 .tickFormat(function (d) {
                     return tickMultiFormat(new Date(d));
                 })
-            ;
-
+;
 
 */
        return chart;
 }
 
 function toD3Data(apiData) {
-    var hoursOfOperation = _.range(6, 18);
+    var hoursOfOperation = _.range(0, 24);
 
     var xProperty = "hour";
     var yProperty = "picks"; //"quantity";
@@ -115,8 +114,8 @@ var PickRateChart = React.createClass({
     componentWillUnmount: function() {
 
     },
-    componentWillUpdate: function(prevProps, prevState) {
-        this.updateViews(this.props, this.getDOMNode());
+    componentWillUpdate: function(nextProps, nextState) {
+        this.updateViews(nextProps, this.getDOMNode());
     },
 
     getPickRates: (startTimestamp, endTimestamp) => {
@@ -130,94 +129,6 @@ var PickRateChart = React.createClass({
             let d3Data = toD3Data(data);
             updateChart(el, chart, d3Data);
         });
-    },
-    pickerData: function(apiContext, startTimestamp, endTimestamp, callback) {
-        var groupedValues = {};
-        var hoursOfOperation = _.range(6, 18);
-        var startOfDay = moment("2015-03-11").startOf('day');
-//        var atEight = startOfDay.clone().add(8, 'hour');
-
-        d3.csv("/js/data/pickcountsHourOnHour.csv", function(data) {
-            _.forEach(data, function(row){
-                var groupName = row["pickerId"] != '' ? row["pickerId"] : "Unknown";
-                var groupData = groupedValues[groupName];
-                if (groupData == null) {
-                    groupData = {
-                        key: groupName,
-                        values: []
-                    };
-                    groupedValues[groupName] = groupData;
-                }
-
-                var x = row["hour"];
-                var y = parseInt(row["pickCount"]);
-                groupData.values.push({
-                      x: x
-                    , y: y
-                    , size: row["actualQuantity"]
-                    , actualQuantity: row["actualQuantity"]
-                });
-            });
-
-            _.keys(groupedValues).forEach(function(key){
-                var values = groupedValues[key].values;
-                var hourOfDayXValues = _.chain(values)
-                        .pluck('x')
-                        .map(function(x){ return moment.unix(x).hour();}).value();
-                var missingHours = _.difference(hoursOfOperation, hourOfDayXValues);
-                var missingValues  = _.map(missingHours, function(hour) {
-                    return {
-                        x: startOfDay.clone().add(hour, 'hour').unix(),
-                        y: 0,
-                        size: 0,
-                        actualQuantity: 0
-
-                    };
-                });
-                values.push.apply(values, missingValues);
-                groupedValues[key].values = _.sortByAll(values, ["x"]);
-            });
-
-
-            callback(groupedValues);
-        });
     }
-/*
-        groupedValues = {
-            "Bart" : {
-                key: "Bart",
-                values: [
-                    {
-                        x: atEight.valueOf(),
-                        y: 100,
-                        size: 4
-                    },
-                    {
-                        x: atEight.clone().add(2, 'hour').valueOf(),
-                        y: 45,
-                        size: 2
-                    }
-
-                ]
-            },
-            "Lisa" : {
-                key: "Lisa",
-                values: [
-                    {
-                        x: atEight.valueOf(),
-                        y: 80,
-                        size: 4
-                    },
-                    {
-                        x: atEight.clone().add(3, 'hour').valueOf(),
-                        y: 65,
-                        size: 2
-                    }
-
-                ]
-
-            }
-        };*/
-
 });
 module.exports = PickRateChart;
