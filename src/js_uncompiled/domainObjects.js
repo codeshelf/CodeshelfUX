@@ -1155,6 +1155,11 @@ domainobjects = {
 				'width': 20,
 				'editor': Slick.Editors.Text,
 				'focusable': true
+			},
+			'tapeId': {
+				'id': 'tapeId',
+				'title': 'Tape digits Id',
+				'width': 20
 			}
 		}
 	},
