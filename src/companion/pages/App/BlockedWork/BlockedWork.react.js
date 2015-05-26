@@ -29,7 +29,9 @@ export default class BlockedWorkPage extends React.Component {
     }
 
     renderTabbedArea(issuesSummary) {
-        let sortedSummary = issuesSummary.sortBy((summary) => summary.get("name"));
+        let sortedSummary = issuesSummary
+            .filter((summary) => summary.get("name") != "COMPLETE")
+            .sortBy((summary) => summary.get("name"));
         let firstType = sortedSummary.first().get("name");
         return (
                 <IBox>
