@@ -29,14 +29,16 @@ export default class BlockedWorkPage extends React.Component {
     }
 
     renderTabbedArea(issuesSummary) {
+        let sortedSummary = issuesSummary.sortBy((summary) => summary.get("name"));
+        let firstType = sortedSummary.first().get("name");
         return (
                 <IBox>
                 <IBoxBody>
 
-                <TabbedArea className="nav-tabs-simple" defaultActiveKey={"SKIP_ITEM_SCAN"}>
+                <TabbedArea className="nav-tabs-simple" defaultActiveKey={firstType}>
                 {
 
-                    issuesSummary.sortBy((summary) => summary.get("name")).map((summary) => {
+                    sortedSummary.map((summary) => {
                         let type = summary.get("name");
                         let description = this.toDescription(type);
                         let total = summary.get("count");
