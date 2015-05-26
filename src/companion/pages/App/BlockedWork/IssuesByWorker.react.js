@@ -10,9 +10,8 @@ import {fetchTypeIssues, fetchItemIssues, subscribe, unsubscribe} from 'data/iss
 
 
 function itemKeys(item, type, resolved) {
-    let itemId = item.get("itemId");
-    let location = item.get("location");
-    return [type, resolved.toString(), itemId, location];
+    let id = item.get("id");
+    return [type, resolved.toString(), id];
 }
 
 export default class IssuesByItem extends React.Component{
@@ -21,22 +20,8 @@ export default class IssuesByItem extends React.Component{
         super(props);
         this.issueColumnMetadata = [
             {
-                columnName: "itemId",
-                displayName: "Item"
-            },
-
-            {
-                columnName: "location",
-                displayName: "Location"
-            },
-            {
-
-                columnName: "uom",
-                displayName: "UOM"
-            },
-            {
-                columnName: "description",
-                displayName: "Description"
+                columnName: "name",
+                displayName: "Name"
             },
             {
                 columnName: "count",
@@ -61,15 +46,13 @@ export default class IssuesByItem extends React.Component{
             this.setState({"selectedGroup" : item});
 
             let {type, resolved} = this.props;
-            let itemId = item.get("itemId");
-            let location = item.get("location");
+            let id = item.get("id");
             var partialFunc = fetchItemIssues.bind(null,
                                   itemKeys(item, type, resolved),
                                   {filterBy: {
                                       type: type,
-                                      itemId: itemId,
-                                      resolved: resolved,
-                                      location: location
+                                      workerId: id,
+                                      resolved: resolved
                                   }});
             unsubscribe("expanded");
             subscribe("expanded", partialFunc);
@@ -82,8 +65,8 @@ export default class IssuesByItem extends React.Component{
 
     shouldExpand(selectedGroup, row) {
         if (selectedGroup) {
-            var selectedSubset = selectedGroup.filter(keyIn("itemId", "location", "uom"));
-            var rowSubset = row.filter(keyIn("itemId", "location", "uom"));
+            var selectedSubset = selectedGroup.filter(keyIn("id"));
+            var rowSubset = row.filter(keyIn("id"));
             return (Immutable.is(selectedSubset, rowSubset));
         } else {
             return false;

@@ -6,55 +6,20 @@ var {IBox, IBoxBody}  = require('components/common/IBox');
 import {Row, Col} from 'components/common/pagelayout';
 
 import IssuesByItem from './IssuesByItem';
+import IssuesByWorker from './IssuesByWorker';
 import Immutable, {List, Map, fromJS, Set} from 'immutable';
-import {fetchTypeIssues, fetchItemIssues, subscribe, unsubscribe} from 'data/issues/actions';
-import {getTypeIssues, getItemIssues} from 'data/issues/store';
-import {keyIn} from 'lib/predicates';
 
 export default class IssuesIBox extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             "groupBy": "item",
-            "resolved": false,
-            "selectedGroup" : null
+            "resolved": false
         };
     }
 
-    getIssuesByItem(item) {
-        //issues().filterBy(item).sortBy("order");
-            //return issues.filter((issue) => issue.get("item") === item).sortBy(issue => issue.get("order"));
-        let {type} = this.props;
-        let {resolved} = this.state;
-        let itemId = item.get("itemId");
-        let location = item.get("location");
-        return getItemIssues([type, resolved.toString(), itemId, location]).get("results");
-    }
-
-    handleSelectedGroup(expanded, item, rowNumber, e) {
-        if (expanded) {
-            this.setState({"selectedGroup" : item});
-
-            let {type} = this.props;
-            let {resolved} = this.state;
-            let itemId = item.get("itemId");
-            let location = item.get("location");
-            var partialFunc = fetchItemIssues.bind(null, [type, resolved.toString(), itemId, location], {filterBy: {
-                type: type,
-                itemId: itemId,
-                resolved: resolved,
-                location: location
-            }});
-            unsubscribe("expanded");
-            subscribe("expanded", partialFunc);
-        }
-        else {
-            unsubscribe("expanded");
-            this.setState({"selectedGroup" : null});
-        }
-    }
-
-    handleGroupBy(groupBy) {
+    handleGroupBy(e) {
+        let groupBy = e.target.value;
         this.setState({groupBy: groupBy});
     }
 
@@ -62,42 +27,9 @@ export default class IssuesIBox extends React.Component {
         this.setState({resolved: e.target.checked});
     }
 
-
-    componentWillMount() {
-        let {type} = this.props;
-        let {groupBy, resolved} = this.state;
-        let partialFunc = fetchTypeIssues.bind(null,
-                                               [type, resolved.toString()],
-                                               {groupBy: groupBy,
-                                                filterBy: {
-                                                        type: type,
-                                                        resolved: resolved
-                                                }});
-
-        subscribe(type, partialFunc);
-        //issues().pick("item", "worker", "type").filter(filter).groupBy(groupField).count().sortBy(sortField).take(100);
-    }
-
-    componentWillUnmount() {
-        unsubscribe(this.props.type);
-    }
-
     render() {
         let {type} = this.props;
-        let {groupBy, resolved, selectedGroup} = this.state;
-        let typeIssues = getTypeIssues([type, resolved.toString()]);
-        let results  = typeIssues.get("results");
-        let total = typeIssues.get("total");
-        let sortedBy = typeIssues.get("sortedBy");
-        let shouldExpand = (row) => {
-            if (selectedGroup) {
-                var selectedSubset = selectedGroup.filter(keyIn("itemId", "location", "uom"));
-                var rowSubset = row.filter(keyIn("itemId", "location", "uom"));
-                return (Immutable.is(selectedSubset, rowSubset));
-            } else {
-                return false;
-            }
-        };
+        let {groupBy, resolved} = this.state;
         return (
                    <IBox>
                       <IBoxBody>
@@ -111,7 +43,12 @@ export default class IssuesIBox extends React.Component {
                               </Col>
                             </Row>
                           </form>
-                          <IssuesByItem onSelectedGroup={this.handleSelectedGroup.bind(this)} issues={results} expand={shouldExpand} expandSource={this.getIssuesByItem.bind(this)}/>
+                          {
+                              (groupBy === "item") ?
+                                  <IssuesByItem  groupBy="item" type={type} resolved={resolved} />
+                                      :
+                                  <IssuesByWorker groupBy="worker" type={type} resolved={resolved} />
+                          }
                       </IBoxBody>
                       </IBox>
               );
