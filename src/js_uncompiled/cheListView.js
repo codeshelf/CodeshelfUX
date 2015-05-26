@@ -102,11 +102,11 @@ codeshelf.cheslistview = function(websession, facility) {
             });
         },
 
-       deleteChe: function(che) {
-           codeshelf.simpleDlogService.showModalDialog("Confirm", "Delete the che?", {})
-               .then(function() {
-                   websession_.remove(che);
-               });
+		deleteChe: function(che) {
+			codeshelf.simpleDlogService.showModalDialog("Confirm", "Delete the che?", {})
+            	.then(function() {
+					websession_.callServiceMethod("UiUpdateService", 'deleteChe', [che['persistentId']]);
+               	});
        },
 
        cheContainers: function(che) {
