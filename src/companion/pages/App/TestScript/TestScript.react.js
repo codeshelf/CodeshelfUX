@@ -120,7 +120,8 @@ class ScriptStepExecutor extends React.Component {
 
     renderNextStep(scriptInputs, stepResponse) {
         //{"nextStepId":"05b0356f-38e6-4185-a21e-989136bae79b","requiredFiles":["aisles","locations"],"report":"Script imported"}
-        let title = stepResponse.nextStepComment || "Next Step";
+        let {nextStepComment, requiredFiles} = stepResponse;
+        let title = nextStepComment || "Next Step";
 
         let {loading} = this.state;
 
@@ -131,12 +132,24 @@ class ScriptStepExecutor extends React.Component {
                     </div>
                     {
                         (stepResponse.nextStepId) ?
-                            <div className="text-right">
-                                <span>{title}</span>
-                                {
-                                    this.renderButton(this.processStep.bind(this, scriptInputs, stepResponse), loading)
-                                }
-                            </div>
+
+                                <div>
+                                    <h4>{title}</h4>
+                                    <div>Required Files:</div>
+                                    <ul>
+                                        {
+                                            _.map(requiredFiles, (fileName) => {
+                                                return (<li>{fileName}</li>);
+                                            })
+
+                                        }
+                                    </ul>
+                                    <div className="text-right">
+                                    {
+                                        this.renderButton(this.processStep.bind(this, scriptInputs, stepResponse), loading)
+                                    }
+                                    </div>
+                                 </div>
                             :
                             <span> Done </span>
                     }
@@ -145,10 +158,11 @@ class ScriptStepExecutor extends React.Component {
 
     render() {
         let {scriptInputs} = this.props;
+        let valid = _.keys(scriptInputs.files).length > 0;
         let {stepResponse} = this.state;
-        if (scriptInputs && !stepResponse) {
+        if (valid && !stepResponse) {
             return this.renderFirstStep(scriptInputs);
-        } else if (scriptInputs && stepResponse) {
+        } else if (valid && stepResponse) {
             return this.renderNextStep(scriptInputs, stepResponse);
         } else {
             return null;
