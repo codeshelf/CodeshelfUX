@@ -194,15 +194,27 @@ export function getFacilityContext() {
                 }
             });
         },
-        runPickScript: function(formData, timeout) {
-            var runpickscript = facilityPath + "/runscript?timeout_min=" + timeout; //jquery ajax allows data to be one object (which we are using for formdata)
+        processPickScript: function(formData) {
+            var runpickscript = facilityPath + "/process_script";
             return ajax(runpickscript, {
                 method: "POST",
                 data: formData,
                 processData: false,
                 contentType: false
             });
-        }
+        },
+        runScriptStep: function(formData, stepId, timeout) {
+            //jquery ajax allows data to be one object (which we are using for formdata)
+            var runpickscript = facilityPath + "/run_script?script_step_id=" + stepId + "&timeout_min=" + timeout;
+            formData.append("keepFromBeingEmpty", "empty");
+            return ajax(runpickscript, {
+                method: "POST",
+                data: formData,
+                processData: false,
+                contentType: false
+            });
+        },
+
 
 
     };

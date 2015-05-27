@@ -1,7 +1,7 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
 import _ from 'lodash';
-import {Map, List} from 'immutable';
+import {Map, List, fromJS} from 'immutable';
 import {getFacilityContext} from 'data/csapi';
 
 import {IBox, IBoxBody} from 'components/common/IBox';
@@ -12,152 +12,233 @@ import Icon from 'react-fa';
 import {Table} from 'components/common/Table';
 import Dropzone from 'react-dropzone';
 
-function defaultParamName(fileName) {
-    if (fileName.indexOf("script") == 0) {
-        return "script";
-    } else {
-        let droppedExtension = fileName.substring(0, fileName.lastIndexOf("."));
-        return droppedExtension;
-    }
-}
-
-
-
-/*
-var Dropzone = require("imports?this=>window!dropzone");
-require("dropzone/dist/min/dropzone.min.css");
-*/
 export default class TestScript extends React.Component{
 
     constructor() {
         super();
-        this.state = {loading: false,
-                      response: null,
-                      timeout: 5,
-                      files: Map()};
+        this.state = {scriptInputs: Map()
+
+                      };
     }
 
-    handleSubmit(e) {
-        e.preventDefault();
-        this.setState({loading: true,
-                       response: "Waiting..."});
+    handleScriptInputChanges(scriptInputs) {
+        this.setState({"scriptInputs": scriptInputs});
+    }
 
-        let {timeout} = this.state;
-        let scriptFormData = this.state.files.reduce((formData, file) => {
-            let name = file.name;
-            let inputNode = React.findDOMNode(this.refs["paramName-" + name]).getElementsByTagName("input")[0];
-            let paramName = inputNode.value;
-            formData.append(paramName, file);
-            return formData;
-        }.bind(this), new FormData());
+    render() {
+        let {scriptInputs} = this.state;
+        return (<DocumentTitle title="Test Script">
+                <PageGrid>
+                <Row>
+                <Col sm={12} md={6}>
+                <IBox>
+                <IBoxBody>
+                    <ScriptInput onChange={this.handleScriptInputChanges.bind(this)} />
+                    <ScriptStepExecutor scriptInputs={scriptInputs} />
+                </IBoxBody>
+                </IBox>
+                </Col>
+                </Row>
+                </PageGrid>
+                </DocumentTitle>
+               );
+    }
+};
+
+
+class ScriptStepExecutor extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            stepResponse: null
+        };
+    }
+
+    processScript(scriptInputs) {
+        this.setState({"loading": true});
+        let scriptFormData = this.toFormData(scriptInputs.files);
         var apiContext = getFacilityContext();
-        apiContext.runPickScript(scriptFormData, timeout).then((response) =>{
+        return this.processResponse(apiContext.processPickScript(scriptFormData));
+    }
+
+    processStep(scriptInputs, stepResponse) {
+        this.setState({"loading": true});
+        let {requiredFiles} = stepResponse;
+        let allFiles = scriptInputs.files;
+        let filteredFiles = Map(allFiles).filter((file) =>  {
+            return _.contains(requiredFiles, file.paramName);
+        });
+
+        if (filteredFiles.count() != requiredFiles.length) {
+            console.warn("expected ", requiredFiles);
+        }
+
+        let scriptFormData = this.toFormData(filteredFiles);
+        var apiContext = getFacilityContext();
+        return this.processResponse(apiContext.runScriptStep(scriptFormData, stepResponse.nextStepId, scriptInputs.timeout));
+    }
+
+    toFormData(files) {
+        return Map(files).reduce((formData, file, fileName) => {
+            formData.append(file.paramName, file.file);
+            return formData;
+        }, new FormData());
+    }
+
+    processResponse(promise) {
+        return promise.then((stepResponse) =>{
             this.setState({loading: false,
-                           response: response});
+                           stepResponse: stepResponse});
         }, (error) => {
             this.setState({loading: false,
-                           response: error});
+                           stepResponse: error});
+        });
+    }
+
+    renderButton(action, loading) {
+        return  (<Button bsStyle="primary" type="submit" onClick={action}>
+                {
+                    (loading) ?
+                        <span><Icon name="spinner" spin/> Running...</span>
+                        :
+                        <span>Run</span>
+                }
+                </Button>);
+
+    }
+
+    renderFirstStep(scriptInputs) {
+        return (
+                <div className="text-right">
+                    {
+                        this.renderButton(this.processScript.bind(this, scriptInputs), false)
+                    }
+                </div>
+                );
+    }
+
+    renderNextStep(scriptInputs, stepResponse) {
+        //{"nextStepId":"05b0356f-38e6-4185-a21e-989136bae79b","requiredFiles":["aisles","locations"],"report":"Script imported"}
+        let title = stepResponse.nextStepComment || "Next Step";
+
+        let {loading} = this.state;
+
+        return (<div>
+                    <div>
+                        <h3>Response</h3>
+                        <pre>{stepResponse.report}</pre>
+                    </div>
+                    {
+                        (stepResponse.nextStepId) ?
+                            <div className="text-right">
+                                <span>{title}</span>
+                                {
+                                    this.renderButton(this.processStep.bind(this, scriptInputs, stepResponse), loading)
+                                }
+                            </div>
+                            :
+                            <span> Done </span>
+                    }
+            </div>);
+    }
+
+    render() {
+        let {scriptInputs} = this.props;
+        let {stepResponse} = this.state;
+        if (scriptInputs && !stepResponse) {
+            return this.renderFirstStep(scriptInputs);
+        } else if (scriptInputs && stepResponse) {
+            return this.renderNextStep(scriptInputs, stepResponse);
+        } else {
+            return null;
+        }
+    }
+}
+
+        function defaultParamName(fileName) {
+            if (fileName.indexOf("script") == 0) {
+                return "script";
+            } else {
+                let droppedExtension = fileName.substring(0, fileName.lastIndexOf("."));
+                return droppedExtension;
+            }
+        }
+
+
+
+class ScriptInput extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state= {
+            files: Map(),
+            timeout: 5
+        };
+    }
+
+    setState(object) {
+        super.setState(object, () => {
+            this.props.onChange({
+                    files: this.state.files.toJS(),
+                    timeout: this.state.timeout
+            });
+        });
+    }
+
+    handleParamNameChange(fileToChange, e) {
+        this.setState({
+            "files": this.state.files.updateIn(
+                [fileToChange.fileName, "paramName"], e.target.value)
         });
     }
 
     handleDrop(files) {
-        let newFilesMap = this.state.files.withMutations((filesMap)=> {
-            _.forEach(files, (file) =>{
-                filesMap.set(file.name, file);
-            });
-            return filesMap;
-        });
-        this.setState({files: newFilesMap});
+        let keyedFiles = List(files).reduce((keyedFiles, file) => {
+            return keyedFiles.set(file.name, Map({
+                    paramName: defaultParamName(file.name),
+                    fileName: file.name,
+                    file: file
+            }));
+        }, Map());
+        this.setState({"files": this.state.files.merge(keyedFiles)});
     }
 
-    handleTimeoutChange(e) {
-        this.setState({"timeout": e.target.value});
-    }
-
-    componentDidMount() {
-
-    }
-
-    renderButtonLabel() {
-        if(this.state.loading) {
-            return <span><Icon name="spinner" spin/> Running...</span>;
-        } else {
-            return <span>Run</span>;
-        }
-    }
-
-
-    renderScriptsForRun(files, timeout, response) {
-            return (<div>
-                    {
-                        files.map((file) => {
-                            let name = file.name;
-                            let defaultValue = defaultParamName(name);
-                            let paramName = "paramName-" + name;
-                            return <Input key={paramName}
-                                    ref={paramName}
-                                    name={paramName}
-                                    type="text"
-                                    defaultValue={defaultValue}
-                                    addonAfter={file.name}/>;
-                        }).toArray()
-                    }
-                    <Input label="timeout" onChange={this.handleTimeoutChange.bind(this)} type="number" value={timeout} addonAfter="minutes" />
-                     <div className="text-right">
-                        <Button bsStyle="primary" type="submit">
-                            {
-                                this.renderButtonLabel()
-                            }
-
-                        </Button>
-                    </div>
-                    {
-                        (response) ?
-                        <div>
-                            <h3>Response</h3>
-                            <pre>{response}</pre>
-                        </div>
-                        :
-                        null
-                    }
-               </div>);
-
+    changeState(name, e) {
+        var newState = {};
+        newState[name] = e.target.value;
+        this.setState(newState);
     }
 
     render() {
-        let {timeout, response, files} = this.state;
-        return (<DocumentTitle title="Test Script">
-                <PageGrid>
-                    <Row>
-                        <Col sm={12} md={6}>
-                            <IBox>
-                                <IBoxBody>
-                                    <form ref="testscriptform" onSubmit={this.handleSubmit.bind(this)}>
-                                        <Dropzone className="dropzone text-center" style={{width: "100%", padding: "1em", borderStyle: "dashed"}} onDrop={this.handleDrop.bind(this)}>
+        let {files} = this.state;
+        return (<form>
+                <Dropzone className="dropzone text-center" style={{width: "100%", padding: "1em", borderStyle: "dashed"}} onDrop={this.handleDrop.bind(this)}>
+                    <Icon name="upload" size="4x"/>
+                    <h3>Click/Drop Test Script And Data Files</h3>
+                </Dropzone>
+                {
+                    (files.count() > 0) ?
+                        <Input label="timeout" onChange={this.changeState.bind(this, "timeout")} type="number" value={this.state.timeout} addonAfter="minutes" />
+                        :
+                        null
+                }
 
-                                        {
-                                            (files.count() > 0) ?
-                                                <h3>Name Script Files or Upload More</h3>
-                                                :
-                                                <div>
-                                                    <Icon name="upload" size="5x"/>
-                                                    <h3>Click/Drop Test Script And Data Files</h3>
-                                                </div>
-                                        }
-                                        </Dropzone>
-                                        {
-                                            (files.count() > 0) ?
-                                                this.renderScriptsForRun(files, timeout, response)
-                                            :
-                                                null
-                                        }
-                                </form>
-                            </IBoxBody>
-                          </IBox>
-                        </Col>
-                    </Row>
-                </PageGrid>
-                </DocumentTitle>
-        );
+                {
+                    files.map((file) => {
+                        let fileName = file.get("fileName");
+                        let paramName = file.get("paramName");
+                        return <Input
+                                key={fileName}
+                                ref={fileName}
+                                name={fileName}
+                                type="text"
+                                value={paramName}
+                                onChange={this.handleParamNameChange.bind(this, file)}
+                                addonAfter={fileName}/>;
+                    }).toArray()
+               }
+               </form>
+               );
+
     }
 };
