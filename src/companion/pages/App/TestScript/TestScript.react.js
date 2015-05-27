@@ -90,9 +90,10 @@ class ScriptStepExecutor extends React.Component {
         return promise.then((stepResponse) =>{
             this.setState({loading: false,
                            stepResponse: stepResponse});
-        }, (error) => {
+        }, (xhr) => {
+            let stepResponse = xhr.responseJSON;
             this.setState({loading: false,
-                           stepResponse: error});
+                           stepResponse: stepResponse});
         });
     }
 
@@ -156,10 +157,20 @@ class ScriptStepExecutor extends React.Component {
             </div>);
     }
 
+    validScriptInputs(scriptInputs) {
+        return _.keys(scriptInputs.files).length > 0;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (!this.validScriptInputs(nextProps.scriptInputs)) {
+            this.setState({stepResponse: null});
+        }
+    }
+
     render() {
         let {scriptInputs} = this.props;
-        let valid = _.keys(scriptInputs.files).length > 0;
         let {stepResponse} = this.state;
+        let valid = this.validScriptInputs(scriptInputs);
         if (valid && !stepResponse) {
             return this.renderFirstStep(scriptInputs);
         } else if (valid && stepResponse) {
@@ -170,14 +181,14 @@ class ScriptStepExecutor extends React.Component {
     }
 }
 
-        function defaultParamName(fileName) {
-            if (fileName.indexOf("script") == 0) {
-                return "script";
-            } else {
-                let droppedExtension = fileName.substring(0, fileName.lastIndexOf("."));
-                return droppedExtension;
-            }
-        }
+function defaultParamName(fileName) {
+    if (fileName.indexOf("script") == 0) {
+        return "script";
+    } else {
+        let droppedExtension = fileName.substring(0, fileName.lastIndexOf("."));
+        return droppedExtension;
+    }
+}
 
 
 
