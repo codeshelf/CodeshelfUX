@@ -218,7 +218,12 @@ class ScriptInput extends React.Component {
                 </Dropzone>
                 {
                     (files.count() > 0) ?
-                        <Input label="timeout" onChange={this.changeState.bind(this, "timeout")} type="number" value={this.state.timeout} addonAfter="minutes" />
+                        <div>
+                            <div className="text-right">
+                                <Button bsStyle="primary" onClick={this.setState.bind(this, {files: Map()})}>Clear</Button>
+                            </div>
+                            <Input label="timeout" onChange={this.changeState.bind(this, "timeout")} type="number" value={this.state.timeout} addonAfter="minutes" />
+                        </div>
                         :
                         null
                 }
