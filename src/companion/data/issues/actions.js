@@ -21,7 +21,7 @@ export function getSubscriptions(key) : KeyedIterable {
     return dispatcher.getSubscriptions(key);
 };
 
-export function  resolveIssue(issue) {
+export function resolveIssue(issue) {
     dispatch(resolveIssue, getFacilityContext().resolveIssue(issue)).then(() => {
         //onsuccess
         let subscriptions = getSubscriptions("issues");

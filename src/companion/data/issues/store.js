@@ -30,7 +30,7 @@ function issuesCursor(keys) {
 }
 
 function getIssuesFromCursor(keys) {
-    let issues =  issuesCursor(keys)();
+    let issues = issuesCursor(keys)();
     if (issues) {
         return issues;
     } else {

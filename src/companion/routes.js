@@ -18,17 +18,17 @@ export default (
   <Route handler={Root} path="/">
     <Redirect from="/" to="/app" />
     <Route handler={authn(App)} name="app"> //ensure auth and default facility
-        <Route  handler={Facility} name="facility" path=":facilityName">
-	        <DefaultRoute handler={Overview} name="overview" />
-	        <NotFoundRoute handler={NotFound} name="not-found" />
-	        <Route handler={BlockedWork} name="blockedwork"></Route>
-	        <Route handler={WorkResults} name="workresults" />
-	        <Route handler={Import} name="import" />
-	        <Route handler={WorkerMgmt} name="workermgmt">
-	            <Route handler={WorkerDisplay} name="workerdisplay" path=":workerId" />
-	        </Route>
-	        <Route handler={TestScript} name="testscript" />
-	     </Route>
+        <Route handler={Facility} name="facility" path=":facilityName">
+            <DefaultRoute handler={Overview} name="overview" />
+            <NotFoundRoute handler={NotFound} name="not-found" />
+            <Route handler={BlockedWork} name="blockedwork"></Route>
+            <Route handler={WorkResults} name="workresults" />
+            <Route handler={Import} name="import" />
+            <Route handler={WorkerMgmt} name="workermgmt">
+                <Route handler={WorkerDisplay} name="workerdisplay" path=":workerId" />
+            </Route>
+            <Route handler={TestScript} name="testscript" />
+         </Route>
        </Route>
     <Route handler={Login} name="login" />
   </Route>
