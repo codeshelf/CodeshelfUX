@@ -107,9 +107,9 @@ codeshelf.cheslistview = function(websession, facility) {
             	.then(function() {
 					websession_.callServiceMethod("UiUpdateService", 'deleteChe', [che['persistentId']]);
                	});
-       },
+       	},
 
-       cheContainers: function(che) {
+       	cheContainers: function(che) {
             if (che === null)
                 return;
             if (che) {
@@ -117,7 +117,7 @@ codeshelf.cheslistview = function(websession, facility) {
                 var useListWindow = codeshelf.window(useListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
                 useListWindow.open();
             }
-        },
+    	},
 
         // This is the ALL work instructions for CHE item
         cheWorkInstructions: function(che) {
@@ -148,6 +148,7 @@ codeshelf.cheslistview = function(websession, facility) {
             promise.result.then(function(){
             });
         },
+        
         showPreviousCartRun: function(che, summaries) {
             var data = {
                 "che": che,
@@ -156,6 +157,7 @@ codeshelf.cheslistview = function(websession, facility) {
             var promise = codeshelf.simpleDlogService.showCustomDialog("partials/wisummary-che.html", "CheWiSummaryController as controller", data);
             return promise;
         },
+        
         showWisForDay: function(che, summaries) {
             var data = {
                 "che": che,
@@ -163,8 +165,14 @@ codeshelf.cheslistview = function(websession, facility) {
             };
             var promise = codeshelf.simpleDlogService.showCustomDialog("partials/wibyday-che.html", "CheWiByDayController as controller", data);
             return promise;
-        }
-
+        },
+        
+		posConSetup: function(che) {
+			codeshelf.simpleDlogService.showModalDialog("Confirm", "Reset and assign position controllers?", {})
+            	.then(function() {
+					websession_.callServiceMethod("UiUpdateService", 'posConSetup', [che['persistentId'], true]);
+               	});
+       	}
     };
 
     var contextDefs = [
@@ -214,6 +222,11 @@ codeshelf.cheslistview = function(websession, facility) {
             "label": "Delete CHE",
             "permission": "che:edit",
             "action": self.deleteChe
+        },
+        {
+            "label": "PosCon Setup",
+            "permission": "che:edit",
+            "action": self.posConSetup
         },
         {
             "label": "TESTING ONLY--Simulate cart set up",

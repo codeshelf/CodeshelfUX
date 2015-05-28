@@ -102,7 +102,19 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 					var methodArgs = [item['persistentId']];
 					websession_.callServiceMethod('UiUpdateService', 'deleteController', methodArgs);
                });
-       }
+       },
+       
+   		posConSetup: function(item) {
+   			if (item["deviceType"] == "Poscons"){
+				codeshelf.simpleDlogService.showModalDialog("Confirm", "Reset and assign position controllers?", {})
+	            	.then(function() {
+						websession_.callServiceMethod("UiUpdateService", 'posConSetup', [item['persistentId'], false]);
+	               	});   			
+   			} else {
+   				alert("Can not set up position controllers on " + item["deviceType"] + " devices")
+   			}
+       	}
+       
 	};
 
 	var contextDefs = [
@@ -119,7 +131,12 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 			"action": function(itemContext) {
 				self.deleteController(itemContext);
 			}
-		}
+		},
+        {
+            "label": "PosCon Setup",
+            "permission": "ledcontroller:edit",
+            "action": self.posConSetup
+        }		
 	];
 
 	// ledController parent is codeshelf_network, whose parent is the facility
