@@ -1,10 +1,12 @@
 import DocumentTitle from 'react-document-title';
 import {getFacilityContext} from 'data/csapi';
 import React from 'react';
-import {PageGrid, Row, Col} from 'components/common/pagelayout';
+import {SingleCellLayout} from 'components/common/pagelayout';
 import {Input, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
-import {Table} from 'components/common/Table';
+import ImportList from './ImportList';
+
+import formatTimestamp from 'lib/timeformat';
 
 export default class WorkResults extends React.Component{
 
@@ -43,10 +45,12 @@ export default class WorkResults extends React.Component{
 
     render() {
 
-        return (<DocumentTitle title="Work Results">
-                <PageGrid>
-                    <Row>
-                        <Col sm={12}>
+        let imports = [{
+            fileName: "orders-2015-03-02.csv",
+            source: "dropbox",
+            imported: formatTimestamp(new Date())
+        }];
+        return (<SingleCellLayout title="Work Results">
                             <form>
                                 <Input type='file' label='Order File' help='Order file to import' />
                                 <Button type="submit" onClick={this.handleClick.bind(this)}>
@@ -57,13 +61,8 @@ export default class WorkResults extends React.Component{
                                 </Button>
 
                             </form>
-                            <Table rows={this.state.documents}>
-
-                            </Table>
-                        </Col>
-                    </Row>
-                </PageGrid>
-                </DocumentTitle>
+                            <ImportList imports={imports} />
+                </SingleCellLayout>
         );
     }
 };

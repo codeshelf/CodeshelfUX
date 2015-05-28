@@ -6,7 +6,7 @@ import Icon from 'react-fa';
 import Immutable from 'immutable';
 import {RouteHandler} from 'react-router';
 
-import {PageGrid, Row, Col} from 'components/common/pagelayout';
+import {SingleCellLayout} from 'components/common/pagelayout';
 import {IBox, IBoxBody, IBoxTitleBar, IBoxTitleText} from 'components/common/IBox';
 import {Table} from 'components/common/Table';
 import {ButtonLink} from 'components/common/bootstrap';
@@ -129,11 +129,8 @@ export default class WorkerMgmt extends React.Component{
             this.toSearchColumns(),
             rows
         );
-        return (<DocumentTitle title={title}>
-                <PageGrid>
-                    <Row>
-                        <Col sm={12}>
-                            <IBox>
+        return (<SingleCellLayout title={title}>
+                   <IBox>
                                 <IBoxBody>
                                     <Row>
                                         <Col sm={3}>
@@ -154,10 +151,7 @@ export default class WorkerMgmt extends React.Component{
                                 </IBoxBody>
                             </IBox>
                             <RouteHandler formMetadata={this.columnMetadata}/>
-                        </Col>
-                    </Row>
-                </PageGrid>
-                </DocumentTitle>
+                  </SingleCellLayout>
                );
     }
 
