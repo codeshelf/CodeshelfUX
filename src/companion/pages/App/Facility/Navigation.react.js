@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import {Link} from 'react-router';
-import {DropdownButton, NavItem} from 'react-bootstrap';
+import {NavItem} from 'react-bootstrap';
 import { NavItemLink, MenuItemLink} from 'react-router-bootstrap';
 import Icon from 'react-fa';
 import PureComponent from 'components/common/PureComponent';
@@ -13,36 +13,20 @@ const AuthzNavItemLink = authz(NavItemLink);
 const AuthzNavItem = authz(NavItem);
 require('./navigation.styl');
 
-function renderDropdownLabel(facility) {
-    let facilityName = (facility) ? facility.get("name") : "";
-    if (facility) {
-        return <span><Icon name="building" /> {facilityName}</span>;
-    }
 
 
-}
 
 class NavbarHeader extends PureComponent {
     render() {
-        let {title = "",
-             facility,
-             facilities} = this.props;
+        let {title = ""}  = this.props;
         return (<div className="sidebar-header">
                   <h3 style={{color: "#ffffff", display: "inline"}}>{title}</h3>
                   <div className="sidebar-header-controls">
-                <DropdownButton className="facility-dropdown" bsStyle="link" title={renderDropdownLabel(facility)}>
-                {
-                    facilities.map((facility) => {
-                        return <MenuItemLink key={facility.get("domainId")} to="facility" params={{facilityName: facility.get("domainId")}}>{facility.get("name")}</MenuItemLink>;
-                    })
-               }
-        </DropdownButton>
 
                   </div>
                 </div>);
     }
 }
-
 
 class MenuItem extends React.Component {
 

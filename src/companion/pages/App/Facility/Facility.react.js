@@ -28,7 +28,7 @@ export default class Facility extends React.Component {
                           <div>
                               <Navigation title={tenantName} facility={facility} facilities={facilities} />
                               <div id="page-wrapper" className="page-container">
-                                  <TopNavBar title={tenantName}/>
+                                  <TopNavBar title={tenantName} facility={facility} facilities={facilities}/>
                                   <div className="page-content-wrapper">
                                       <div className="content">
                                           <RouteHandler />
