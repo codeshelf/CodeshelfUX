@@ -95,16 +95,16 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 			});
 		},
 		
-       deleteController: function(item) {
+       	deleteController: function(item) {
        
-           codeshelf.simpleDlogService.showModalDialog("Confirm", "Delete the controller?", {})
-               .then(function() {
+        	codeshelf.simpleDlogService.showModalDialog("Confirm", "Delete the controller?", {})
+               	.then(function() {
 					var methodArgs = [item['persistentId']];
 					websession_.callServiceMethod('UiUpdateService', 'deleteController', methodArgs);
-               });
-       },
+               	});
+       	},
        
-   		posConSetup: function(item) {
+		posConSetup: function(item) {
    			if (item["deviceType"] == "Poscons"){
 				codeshelf.simpleDlogService.showModalDialog("Confirm", "Reset and assign position controllers?", {})
 	            	.then(function() {
@@ -112,6 +112,14 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 	               	});   			
    			} else {
    				alert("Can not set up position controllers on " + item["deviceType"] + " devices")
+   			}
+       	},
+       	
+       	posConShowAddresses: function(item) {
+   			if (item["deviceType"] == "Poscons"){
+				websession_.callServiceMethod("UiUpdateService", 'posConShowAddresses', [item['persistentId'], false]);
+   			} else {
+   				alert("Can not show position controller addresses on " + item["deviceType"] + " devices")
    			}
        	}
        
@@ -136,7 +144,12 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
             "label": "PosCon Setup",
             "permission": "ledcontroller:edit",
             "action": self.posConSetup
-        }		
+        },
+        {
+            "label": "PosCon Show Addresses",
+            "permission": "ux:view",
+            "action": self.posConShowAddresses
+        }
 	];
 
 	// ledController parent is codeshelf_network, whose parent is the facility
