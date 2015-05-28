@@ -127,11 +127,6 @@ class ScriptStepExecutor extends React.Component {
         let {loading} = this.state;
 
         return (<div>
-                    <div>
-                        <h3>Response</h3>
-                        <BSList label="Errors:" values={(stepResponse.errors)} />
-                        <pre>{stepResponse.report}</pre>
-                    </div>
                     {
                         (stepResponse.nextStepId) ?
 
@@ -147,7 +142,12 @@ class ScriptStepExecutor extends React.Component {
                             :
                             <span> Done </span>
                     }
-            </div>);
+                    <div>
+                        <h3>Last Response</h3>
+                        <BSList label="Errors:" values={(stepResponse.errors)} />
+                        <pre>{stepResponse.report}</pre>
+                    </div>
+                </div>);
     }
 
     validScriptInputs(scriptInputs) {
