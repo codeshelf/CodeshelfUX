@@ -6,8 +6,8 @@ import {getFacilityContext} from 'data/csapi';
 
 import {IBox, IBoxBody} from 'components/common/IBox';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
-import {Input} from 'react-bootstrap';
-import {Button} from 'components/common/bootstrap';
+import {Input, ListGroup} from 'react-bootstrap';
+import {Button, List as BSList} from 'components/common/bootstrap';
 import Icon from 'react-fa';
 import {Table} from 'components/common/Table';
 import Dropzone from 'react-dropzone';
@@ -129,6 +129,7 @@ class ScriptStepExecutor extends React.Component {
         return (<div>
                     <div>
                         <h3>Response</h3>
+                        <BSList label="Errors:" values={(stepResponse.errors)} />
                         <pre>{stepResponse.report}</pre>
                     </div>
                     {
@@ -136,15 +137,7 @@ class ScriptStepExecutor extends React.Component {
 
                                 <div>
                                     <h4>{title}</h4>
-                                    <div>Required Files:</div>
-                                    <ul>
-                                        {
-                                            _.map(requiredFiles, (fileName) => {
-                                                return (<li>{fileName}</li>);
-                                            })
-
-                                        }
-                                    </ul>
+                                    <BSList label="Required Files" values={requiredFiles} />
                                     <div className="text-right">
                                     {
                                         this.renderButton(this.processStep.bind(this, scriptInputs, stepResponse), loading)

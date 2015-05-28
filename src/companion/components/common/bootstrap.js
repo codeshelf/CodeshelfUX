@@ -18,7 +18,27 @@ class CSButtonLink extends React.Component{
     }
 };
 
+class List extends React.Component {
+    render() {
+        let {values, label} = this.props;
+        return (
+            (values && values.length > 0) ?
+            <div>
+                <div>{label}</div>
+                <ul>
+                    {_.map(values, (value) => {
+                        return <li>{value}</li>;
+                    })}
+                </ul>
+            </div>
+            :
+            null
+        );
+    }
+}
+
 export default {
     ButtonLink: exposeRouter(CSButtonLink),
-    Button: RButton
+    Button: RButton,
+    List: List
 };
