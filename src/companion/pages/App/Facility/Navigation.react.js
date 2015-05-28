@@ -81,6 +81,7 @@ class Navigation extends React.Component {
                       <AuthzMenuItem permission="event:view"  to="blockedwork" params={params} title="Work Issues" iconName="exclamation-circle"/ >
                       <AuthzMenuItem to="workresults" params={params} title="Work Results" iconName="pie-chart" />
                       <AuthzMenuItem permission="worker:view" to="workermgmt" params={params} title="Manage Workers" iconName="users" />
+                      <AuthzMenuItem  to="import" params={params} title="Manage Imports" iconName="users" />
                       <AuthzMenuItem permission="ux:view" href={this.getUXUrl()} params={params} title="Configuration" iconName="cogs" />
                       <AuthzMenuItem permission="che:simulate" to="testscript" params={params} title="Test Scripts" iconName="bug" />
               </ul>
