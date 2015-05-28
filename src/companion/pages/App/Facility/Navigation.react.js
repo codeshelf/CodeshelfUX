@@ -77,7 +77,6 @@ MenuItem.contextTypes = {
 
 const AuthzMenuItem = authz(MenuItem);
 class Navigation extends React.Component {
-
   componentWillMount() {
       document.body.classList.add("fixed-sidebar");
   }
@@ -95,8 +94,8 @@ class Navigation extends React.Component {
               <div className="sidebar-menu">
                   <ul className="menu-items">
                       <AuthzMenuItem to="overview" params={params} title="Work Overview" iconName="clock-o" />
-                      <AuthzMenuItem to="blockedwork" params={params} title="Blocked Work" iconName="exclamation-circle"/ >
-                      <AuthzMenuItem to="workresults" params={params} title="WorkResults" iconName="pie-chart" />
+                      <AuthzMenuItem permission="event:view"  to="blockedwork" params={params} title="Work Issues" iconName="exclamation-circle"/ >
+                      <AuthzMenuItem to="workresults" params={params} title="Work Results" iconName="pie-chart" />
                       <AuthzMenuItem permission="worker:view" to="workermgmt" params={params} title="Manage Workers" iconName="users" />
                       <AuthzMenuItem permission="ux:view" href={this.getUXUrl()} params={params} title="Configuration" iconName="cogs" />
                       <AuthzMenuItem permission="che:simulate" to="testscript" params={params} title="Test Scripts" iconName="bug" />
