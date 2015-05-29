@@ -115,11 +115,11 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
    			}
        	},
        	
-       	posConShowAddresses: function(item) {
+       	posConLightAddresses: function(item) {
    			if (item["deviceType"] == "Poscons"){
-				websession_.callServiceMethod("UiUpdateService", 'posConShowAddresses', [item['persistentId'], false]);
+				websession_.callServiceMethod("UiUpdateService", 'posConLightAddresses', [item['persistentId'], false]);
    			} else {
-   				alert("Can not show position controller addresses on " + item["deviceType"] + " devices")
+   				alert("Can not light position controller addresses on " + item["deviceType"] + " devices")
    			}
        	}
        
@@ -146,9 +146,9 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
             "action": self.posConSetup
         },
         {
-            "label": "PosCon Show Addresses",
+            "label": "PosCon Light Addresses",
             "permission": "ux:view",
-            "action": self.posConShowAddresses
+            "action": self.posConLightAddresses
         }
 	];
 

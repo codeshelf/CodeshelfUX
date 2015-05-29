@@ -174,8 +174,8 @@ codeshelf.cheslistview = function(websession, facility) {
                	});
        	},
        	 
-       	posConShowAddresses: function(che) {
-			websession_.callServiceMethod("UiUpdateService", 'posConShowAddresses', [che['persistentId'], true]);
+       	posConLightAddresses: function(che) {
+			websession_.callServiceMethod("UiUpdateService", 'posConLightAddresses', [che['persistentId'], true]);
        	}
     };
 
@@ -233,9 +233,9 @@ codeshelf.cheslistview = function(websession, facility) {
             "action": self.posConSetup
         },
         {
-            "label": "PosCon Show Addresses",
+            "label": "PosCon Light Addresses",
             "permission": "ux:view",
-            "action": self.posConShowAddresses
+            "action": self.posConLightAddresses
         },
         {
             "label": "TESTING ONLY--Simulate cart set up",
