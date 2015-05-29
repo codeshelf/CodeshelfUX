@@ -76,7 +76,7 @@ class ScriptStepExecutor extends React.Component {
 
         let scriptFormData = this.toFormData(filteredFiles);
         var apiContext = getFacilityContext();
-        return this.processResponse(apiContext.runScriptStep(scriptFormData, stepResponse.nextStepId, scriptInputs.timeout));
+        return this.processResponse(apiContext.runScriptStep(scriptFormData, stepResponse.id, scriptInputs.timeout));
     }
 
     toFormData(files) {
@@ -120,15 +120,15 @@ class ScriptStepExecutor extends React.Component {
     }
 
     renderNextStep(scriptInputs, stepResponse) {
-        //{"nextStepId":"05b0356f-38e6-4185-a21e-989136bae79b","requiredFiles":["aisles","locations"],"report":"Script imported"}
-        let {nextStepComment, requiredFiles} = stepResponse;
-        let title = nextStepComment || "Next Step";
+        //{"id":"05b0356f-38e6-4185-a21e-989136bae79b","requiredFiles":["aisles","locations"],"report":"Script imported"}
+        let {comment, requiredFiles} = stepResponse;
+        let title = comment || "Next Step";
 
         let {loading} = this.state;
 
         return (<div>
                     {
-                        (stepResponse.nextStepId) ?
+                        (stepResponse.id) ?
 
                                 <div>
                                     <h4>{title}</h4>
