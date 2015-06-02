@@ -6,7 +6,7 @@ import Icon from 'react-fa';
 import Immutable from 'immutable';
 import {RouteHandler} from 'react-router';
 
-import {SingleCellLayout} from 'components/common/pagelayout';
+import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {IBox, IBoxBody, IBoxTitleBar, IBoxTitleText} from 'components/common/IBox';
 import {Table} from 'components/common/Table';
 import {ButtonLink} from 'components/common/bootstrap';
@@ -206,7 +206,7 @@ class Edit extends React.Component {
 
 }
 
-import formatTimestamp from 'lib/timeformat';
+import {formatTimestamp} from 'lib/timeformat';
 class DateDisplay extends React.Component {
     static search(value) {
         return formatTimestamp(value);

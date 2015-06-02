@@ -185,6 +185,10 @@ export function getFacilityContext() {
             var filtersUrl = facilityPath + "/filters";
             return ajax(filtersUrl);
         },
+        getImportReceipts: function() {
+            var receiptPath = facilityPath + "/import";
+            return ajax(receiptPath);
+        },
         getPickRates: (startTimestamp, endTimestamp) => {
             var pickRateUrl = facilityPath + "/pickrate";
             return ajax(pickRateUrl, {

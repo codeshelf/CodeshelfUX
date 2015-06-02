@@ -1,4 +1,3 @@
-import DocumentTitle from 'react-document-title';
 import {getFacilityContext} from 'data/csapi';
 import React from 'react';
 import {SingleCellLayout} from 'components/common/pagelayout';
@@ -6,14 +5,35 @@ import {Input, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 import ImportList from './ImportList';
 
-import formatTimestamp from 'lib/timeformat';
 
-export default class WorkResults extends React.Component{
+
+
+export default class Imports extends React.Component{
 
     constructor() {
         super();
         this.state = {loading: false,
-                      documents: []};
+                      receipts: []};
+    }
+
+    subscribe() {
+        getFacilityContext().getImportReceipts().then((receipts) => {
+            this.setState({"receipts": receipts});
+        });
+    }
+
+    unsubscribe() {}
+
+    getImportReceipts() {
+        return this.state.receipts;
+    }
+
+    componentWillMount() {
+        this.subscribe("imports", this.getImportReceipts);
+    }
+
+    componentWillUnmount() {
+        this.unsubscribe("imports");
     }
 
     handleClick(e) {
@@ -44,13 +64,9 @@ export default class WorkResults extends React.Component{
     }
 
     render() {
-
-        let imports = [{
-            fileName: "orders-2015-03-02.csv",
-            source: "dropbox",
-            imported: formatTimestamp(new Date())
-        }];
-        return (<SingleCellLayout title="Work Results">
+        let receipts = this.getImportReceipts();
+        return (<SingleCellLayout title="Manage Imports">
+            {/**
                             <form>
                                 <Input type='file' label='Order File' help='Order file to import' />
                                 <Button type="submit" onClick={this.handleClick.bind(this)}>
@@ -61,7 +77,8 @@ export default class WorkResults extends React.Component{
                                 </Button>
 
                             </form>
-                            <ImportList imports={imports} />
+              **/}
+                            <ImportList receipts={receipts} />
                 </SingleCellLayout>
         );
     }
