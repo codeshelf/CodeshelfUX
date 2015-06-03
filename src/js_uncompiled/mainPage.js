@@ -652,12 +652,13 @@ function launchDomainObjectPropertiesView() {
 	codeshelf.windowLauncher.loadDomainObjectPropertiesView();
 }
 
-function launchExtensionPoints() {
+goog.exportSymbol('launchDomainObjectPropertiesView', launchDomainObjectPropertiesView);
+
+function launchExtensionPointsView() {
 	codeshelf.windowLauncher.loadExtensionPointsView();
 }
 
-goog.exportSymbol('launchDomainObjectPropertiesView', launchDomainObjectPropertiesView);
-
+goog.exportSymbol('launchExtensionPointsView', launchExtensionPointsView);
 
 function launchTestRunner() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');

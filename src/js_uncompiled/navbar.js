@@ -51,7 +51,7 @@ codeshelf.Navbar = function() {
              {"href": "javascript:launchPathsView()", key: "paths.list", "label": "Paths List", "permission": "path:view" },
              {"href": "javascript:launchLocationAliasesListView()", key: "locationAlias.list", "label": "Location Aliases", "permission": "locationAliases:view" },
              {"href": "javascript:launchDomainObjectPropertiesView()", key: "configs.list", "label": "Config Parameters", "permission": "config:edit" },
-             {"href": "javascript:launchExtensionPoints()", key: "extensionPoints", "label": "Extension Points", "permission": "extensionPoints:edit" }
+             {"href": "javascript:launchExtensionPointsView()", key: "extensionPoints", "label": "Extension Points", "permission": "extensionPoints:edit" }
          ]},
 
         {"key": "help",
