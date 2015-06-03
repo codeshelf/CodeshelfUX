@@ -38,24 +38,24 @@ var OverviewPage = React.createClass({
                     filterName: filterOptions[0],
                     aggregate: "OrderHeader"
                 },
-                {
+                /*{
                     totalLabel: "Lines",
                     totalLabelSingular: "Line",
                     filterName: filterOptions[0],
                     aggregate: "OrderDetail"
-                },
+                },*/
                 {
-                    totalLabel: "Eaches",
-                    totalLabelSingular: "Each",
+                    totalLabel: "Each Picks",
+                    totalLabelSingular: "Each Pick",
                     filterName: filterOptions[0],
                     aggregate: "Each"
-                },
+                },/*
                 {
                     totalLabel: "Cases",
                     totalLabelSingular: "Case",
                     filterName: filterOptions[0],
                     aggregate: "Case"
-                },
+                }*/
             ];
             this.setState({
                 "apiContext": apiContext,
