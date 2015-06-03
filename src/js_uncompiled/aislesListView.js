@@ -85,17 +85,17 @@ codeshelf.aisleslistview = function(websession, facility) {
 		},
 
 		associatePathSegment: function(item) {
-		var theAisle = item;
-		if (theAisle) {
-			var data = {
-				"aisle" : theAisle
-			};
-			var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-aisle-pathsegment.html", "AislePathSegmentsController as controller", data);
-			modalInstance.result.then(function(){
-			});
-		}
-	},
-	launchTiersForAisle: function(item) {
+			var theAisle = item;
+			if (theAisle) {
+				var data = {
+					"aisle" : theAisle
+				};
+				var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/change-aisle-pathsegment.html", "AislePathSegmentsController as controller", data);
+				modalInstance.result.then(function(){
+				});
+			}
+		},
+		launchTiersForAisle: function(item) {
 			var theAisle = item;
 			if (theAisle) {
 				var tierListView = codeshelf.tierlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), theAisle);
