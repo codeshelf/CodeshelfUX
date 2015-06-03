@@ -1,4 +1,5 @@
 import React from 'react';
+import DocumentTitle from 'react-document-title';
 import {Row, Col} from 'components/common/pagelayout';
 import exposeRouter from 'components/common/exposerouter';
 import {focusInvalidField} from '../../lib/validation';
@@ -52,7 +53,7 @@ class Login extends React.Component {
   render() {
     const form = getForm().toJS();
 
-    return (
+    return (<DocumentTitle title="Login">
             <div className="register-container full-height sm-p-t-30">
                 <div className="container-sm-height full-height">
                     <div className="row row-sm-height">
@@ -67,7 +68,8 @@ class Login extends React.Component {
                     <Col sm={12}>
                     <div className="form-group form-group-default">
                         <label>Usernane</label>
-                        <input className="form-control"
+                        <input id="u"
+                               className="form-control"
                                type="email"
                                autoFocus="true"
                                disabled={login.pending}
@@ -83,7 +85,8 @@ class Login extends React.Component {
                     <Col sm={12}>
                         <div className="form-group form-group-default">
                             <label>Password</label>
-                            <input className="form-control"
+                            <input id="p"
+                               className="form-control"
                                disabled={login.pending}
                                name="password"
                                onChange={updateFormField}
@@ -101,6 +104,7 @@ class Login extends React.Component {
                     </div>
                 </div>
             </div>
+            </DocumentTitle>
     );
   }
 

@@ -11,7 +11,7 @@ moment.locale('en', {
     }
 });
 
-function formatTimestamp(momentCompatibleDate, opt_relativetime) {
+export function formatTimestamp(momentCompatibleDate, opt_relativetime) {
     var referenceTime = moment();
     if (opt_relativetime != null) {
         referenceTime = moment(opt_relativetime);
@@ -25,4 +25,6 @@ function formatTimestamp(momentCompatibleDate, opt_relativetime) {
     return timeMoment.calendar(referenceTime);
 }
 
-module.exports = formatTimestamp;
+export function formatDuration(momentCompatibleDuration) {
+    return moment.duration(momentCompatibleDuration).humanize();
+}

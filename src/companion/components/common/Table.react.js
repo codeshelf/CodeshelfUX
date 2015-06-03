@@ -5,6 +5,7 @@ var Immutable = require('immutable');
 //require("imports?jQuery=jquery,this=>window!tablesaw/dist/tablesaw.js");
 var $ = require("jquery");
 import classnames from 'classnames';
+import Icon from "react-fa";
 
 var Row = React.createClass({
     render: function() {
@@ -54,8 +55,21 @@ class Header extends React.Component {
         return metadata;
     }
 
+    toSortSpec(sortBy) {
+        let firstChar = (sortBy && sortBy.length > 0) ? sortBy.charAt(0) : null;
+        if (firstChar) {
+            return {
+                dir: (firstChar === '-') ? "desc" : "asc",
+                columnName: sortBy.substring(1)
+            };
+        } else {
+            return null;
+        }
+    }
+
     render() {
-        var {columns, columnMetadata} = this.props;
+        var {columns, columnMetadata, sortedBy} = this.props;
+        let sortSpec = this.toSortSpec(sortedBy);
         return (
                 <thead>
                 <tr>
@@ -63,7 +77,15 @@ class Header extends React.Component {
                     columns.map(function(column, index){
                         let {columnName, displayName} = this.getMetadata(columnMetadata, column).toObject();
                         var priority = index;
-                        return (<th key={columnName} scope="col" data-tablesaw-priority={priority === 0 ? "persist" : priority} >{displayName}</th>);
+
+                        return (<th key={columnName} scope="col" data-tablesaw-priority={priority === 0 ? "persist" : priority} >
+                                   {displayName}
+                                   {(sortSpec && sortSpec.columnName === columnName) ?
+                                       <Icon name={"sort-numeric-"+sortSpec.dir} />
+                                        :
+                                        null
+                                   }
+                                </th>);
                     }.bind(this))
                 }
                 </tr>
@@ -89,6 +111,7 @@ var Table = React.createClass({
              results = Immutable.List(),
              columns = Immutable.List(),
              columnMetadata = Immutable.List(),
+             sortedBy,
              onRowExpand = function (){ console.log("row expand not set");},
              onRowCollapse = function (){ console.log("row collapse not set");},
              expand,
@@ -104,7 +127,8 @@ var Table = React.createClass({
             columnMetadata = Immutable.fromJS(columnMetadata);
         }
         if (rows.size > 0) {
-            var first = rows.first();
+            var first = rows.first()
+;
             if (columns.isEmpty()) {
                columns = first.keySeq();
             }
@@ -135,7 +159,7 @@ var Table = React.createClass({
         return (
                 <table className={classes} role="grid">
                     <caption>{caption}</caption>
-                    <Header columns={columns} columnMetadata={columnMetadata}/>
+                    <Header columns={columns} columnMetadata={columnMetadata} sortedBy={sortedBy}/>
                     <tbody>
                             {
                                rows.map(function(row, i) {

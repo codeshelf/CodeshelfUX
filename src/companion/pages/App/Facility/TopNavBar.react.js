@@ -53,7 +53,14 @@ class FacilitySelector extends React.Component {
         return (<DropdownButton className="facility-dropdown" bsStyle="link" title={this.renderDropdownLabel(facility)}>
                 {
                     facilities.map((facility) => {
-                        return <MenuItemLink key={facility.get("domainId")} to="facility" params={{facilityName: facility.get("domainId")}}>{facility.get("name")}</MenuItemLink>;
+                        let {name, persistentId, domainId} = facility.toObject();
+
+                        return <MenuItemLink key={domainId}
+                                             to="facility"
+                                             params={{facilityName: domainId}}
+                                             data-persistentid={persistentId}>
+                                         {name}
+                               </MenuItemLink>;
                     })
                }
         </DropdownButton>);
