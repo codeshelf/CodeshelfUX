@@ -3,7 +3,7 @@ import request from "superagent-bluebird-promise";
 import _ from 'lodash';
 import {Map} from 'immutable';
 var {state} = require('data/state.js');
-
+import {loggedout} from "data/auth/actions";
 var globalOptions = new Map({
     crossDomain: true,
     xhrFields: {
@@ -37,6 +37,12 @@ function ajax(path, options) {
         .withCredentials()
         .then((response) => {
             return response.body;
+        }, (error) => {
+            console.log("error occurred", error);
+            if (error.status === 401) {
+                loggedout();
+            }
+            throw error;
         });
 }
 
