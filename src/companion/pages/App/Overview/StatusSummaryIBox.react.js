@@ -54,7 +54,7 @@ var StatusSummaryIBox = React.createClass({
             subscription.dispose();
         }
 
-        pollPromiseProducer(function() {
+       return  pollPromiseProducer(function() {
             //produce promise on every tick of poller
             return apiContext.getSummarySnapshot(view);}, pollingPeriod)
         .subscribe(
