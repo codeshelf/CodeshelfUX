@@ -10,51 +10,10 @@ var globalOptions = new Map({
     }
 });
 
-
-
-
-
-function getBlockedWork(endpoint, facilityId, type) {
-    var blockedWorkByType = {
-        "NOLOC" : [
-                {sku:"KN-PS-6",
-                 uom:"CS",
-                 description:"Knife 6in.",
-                 lines:4,
-                 total:18
-                },
-                {sku:"BO-PA-12-P",
-                 uom:"PK",
-                 description:"12 OZ PAPER BOWL - 50/pack",
-                 lines:1,
-                 total:1
-                },
-                {sku:"BO-PA-16-P",
-                 uom:"PK",
-                 description:"16 OZ PAPER BOWL - 50/pack",
-                 lines:2,
-                 total:2
-                }
-            ]
-        ,
-        "SHORT" : [
-            {sku:"KN-PS-6", uom:"CS", orderId:"2341151234", description:"Knife 6in.", actualQuantity:"0", planQuantity:"1", location:"D-235", lines:"4", total:"18"},
-            {sku:"PA-12-P", uom:"PK", orderId:"234115aasdf4", description:"12 OZ PAPER BOWL - 50/pack", actualQuantity:"2", planQuantity:"5", location:"D-343", lines:"1", total:"1"},
-            {sku:"PA-16-P", uom:"PK", orderId:"aq321143212", description:"16 OZ PAPER BOWL - 50/pack", actualQuantity:"4", planQuantity:"8", location:"P-123", lines:"2", total:"2"}
-        ],
-        "SUSPECTORDER" : [],
-        "UNSEQUENCED" :[]
-    };
-    var promise = $.Deferred();
-    promise.resolve(blockedWorkByType[type]);
-    return promise;
-}
-
 function ajax(path, options) {
     if (options == null) options = {};
     var ajaxOptions = globalOptions.merge(options).toJS();
     return $.ajax(toAbsoluteURL(path), ajaxOptions);
-
 }
 
 function toAbsoluteURL(path) {
@@ -76,7 +35,7 @@ export function authenticate(username, password) {
 
 export function logout() {
     return ajax("/auth/logout");
-}
+};
 
 export function getUser() {
     return ajax("/auth/");
@@ -131,7 +90,6 @@ export function getFacilityContext() {
             var cheSummaryPath = facilityPath + "/chesummary";
             return ajax(cheSummaryPath);
         },
-        getBlockedWork: _.partial(getBlockedWork, endpoint, facilityId),
         getSummarySnapshot: function(viewSpec) {
             var {filterName, aggregate} = viewSpec;
             var orderstatussummary = facilityPath + "/statussummary/" + aggregate;
@@ -172,14 +130,6 @@ export function getFacilityContext() {
         getTopItems: function() {
             var topItems = facilityPath + "/work/topitems";
             return ajax(topItems);
-        },
-        getBlockedWorkNoLocation: function () {
-            var blockedWorkNoLocationPath = facilityPath + "/blockedwork/nolocation";
-            return ajax(blockedWorkNoLocationPath);
-        },
-        getBlockedWorkShorts: function () {
-            var blockedWorkNoLocationPath = facilityPath + "/blockedwork/shorts";
-            return ajax(blockedWorkNoLocationPath);
         },
         getFilters: function() {
             var filtersUrl = facilityPath + "/filters";
