@@ -13,6 +13,9 @@ export default class ImportList extends React.Component{
             {columnName: "received",
              displayName: "Received",
              customComponent: DateDisplay },
+            {columnName: "filename",
+                 displayName: "FILE NAME" },
+             
             {columnName: "started",
              displayName: "Started",
              customComponent: DateDisplay },
