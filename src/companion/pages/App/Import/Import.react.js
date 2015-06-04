@@ -78,7 +78,8 @@ export default class Imports extends React.Component{
 
                             </form>
               **/}
-                            <ImportList receipts={receipts} />
+                  <h3>Order Files Imported</h3>
+                  <ImportList receipts={receipts} />
                 </SingleCellLayout>
         );
     }

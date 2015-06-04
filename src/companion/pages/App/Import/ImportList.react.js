@@ -26,7 +26,11 @@ export default class ImportList extends React.Component{
             {columnName: "ordersProcessed",
                  displayName: "Orders Processed"},
             {columnName: "linesProcessed",
-                 displayName: "Lines Processed" }
+                 displayName: "Lines Processed" },
+            {columnName: "status",
+             displayName: "Status" },
+            {columnName: "username",
+             displayName: "Username" }
         ];
 
         this.columns = _.map(this.columnMetadata, (c) => c.columnName);
