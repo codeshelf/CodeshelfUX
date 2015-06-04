@@ -32,7 +32,7 @@ class Login extends React.Component {
                     // https://code.google.com/p/chromium/issues/detail?id=43219#c56
                     this.props.router.replaceWith(nextPath || '/');
                 }
-            });
+            }).catch(error => console.log("unable to authenticate with cookie", error));
         }
     }
 
@@ -42,12 +42,12 @@ class Login extends React.Component {
     const fields = getForm().toJS().fields;
 
     login(fields)
-      .catch(focusInvalidField(this))
       .then(() => {
         // TODO: Probably use hard reload for Chrome to remember password.
         // https://code.google.com/p/chromium/issues/detail?id=43219#c56
         this.props.router.replaceWith(nextPath || '/');
-      });
+      })
+      .catch(focusInvalidField(this));
   }
 
   render() {

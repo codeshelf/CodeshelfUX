@@ -1,4 +1,5 @@
-import $ from 'jquery';
+import Promise from "bluebird";
+import request from "superagent-bluebird-promise";
 import _ from 'lodash';
 import {Map} from 'immutable';
 var {state} = require('data/state.js');
@@ -13,7 +14,30 @@ var globalOptions = new Map({
 function ajax(path, options) {
     if (options == null) options = {};
     var ajaxOptions = globalOptions.merge(options).toJS();
-    return $.ajax(toAbsoluteURL(path), ajaxOptions);
+    let absolueURL = toAbsoluteURL(path);
+
+    let reqWithMethod = null;
+    if (options.method && options.method === "POST") {
+        reqWithMethod = request.post(absolueURL)
+                            .query(options.query)
+                            .send(options.data);
+    } else if (options.method && options.method === "PUT") {
+        reqWithMethod = request.put(absolueURL)
+                            .query(options.query)
+                            .send(options.data);
+    } else {
+        reqWithMethod = request.get(absolueURL)
+                            .query(options.data);
+    }
+
+    if (options.contentType) {
+        reqWithMethod = reqWithMethod.type(options.contentType);
+    }
+    return reqWithMethod
+        .withCredentials()
+        .then((response) => {
+            return response.body;
+        });
 }
 
 function toAbsoluteURL(path) {
@@ -24,6 +48,7 @@ function toAbsoluteURL(path) {
 export function authenticate(username, password) {
     var options = {
         method: 'POST',
+        contentType: "form", //superagent forum url encoded
         data: {
             "u": username,
             "p": password
@@ -104,7 +129,8 @@ export function getFacilityContext() {
             let persistentId = issue.get("persistentId");
             let resolvePath = `/api/events/${persistentId}/resolve`;
             return ajax(resolvePath, {
-                method: "POST"
+                method: "POST",
+                contentType: "form" //superagent forum url encoded
             });
         },
         getIssues: (criteria) => {
@@ -159,10 +185,14 @@ export function getFacilityContext() {
         },
         runScriptStep: function(formData, stepId, timeout) {
             //jquery ajax allows data to be one object (which we are using for formdata)
-            var runpickscript = facilityPath + "/run_script?script_step_id=" + stepId + "&timeout_min=" + timeout;
+            var runpickscript = facilityPath + "/run_script";
             formData.append("keepFromBeingEmpty", "empty");
             return ajax(runpickscript, {
                 method: "POST",
+                query: {
+                    script_step_id: stepId,
+                    timeout_min: timeout
+                },
                 data: formData,
                 processData: false,
                 contentType: false

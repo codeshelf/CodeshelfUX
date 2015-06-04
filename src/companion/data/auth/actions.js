@@ -16,18 +16,22 @@ export function updateFormField({target: {name, value}}) {
 export function login(fields) {
   return dispatch(login, validateForm(fields)
     .then(() => {
-      return validateCredentials(fields);
-    })
-    .catch(error => {
-      loginError(error);
-      throw error;
+      return authenticateCredentials(fields);
     })
     .then((authData) => logged(authData))
+    .catch((error) => {
+        loginError(error);
+        throw error;
+    })
   );
 };
 
 export function loginCookies() {
-    return getUser().then((user) => logged(user));
+    return getUser()
+        .then((user) => {
+            logged(user);
+            return user;
+        });
 };
 
 function validateForm(fields) {
@@ -37,24 +41,20 @@ function validateForm(fields) {
     .promise;
 }
 
-function validateCredentials(fields) {
-    return new Promise((resolve, reject) => {
-        var email = fields.email;
-        var password = fields.password;
-        return authenticate(email, password)
-            .done((user) => resolve(user))
-        .fail(() => {
-            reject(new ValidationError ('Wrong password', 'password'));
-        });
+function authenticateCredentials(fields) {
+    let {email, password} = fields;
+    return authenticate(email, password)
+    .catch(() =>{
+        throw new ValidationError ('Wrong password', 'password');
     });
 }
 
 export function loginError(error) {
-  dispatch(loginError, error);
+  return dispatch(loginError, error);
 }
 
 export function logged(authData) {
-  dispatch(logged, authData);
+  return dispatch(logged, authData);
 }
 
 export function loggedout() {
