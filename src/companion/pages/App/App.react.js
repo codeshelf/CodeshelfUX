@@ -3,7 +3,7 @@ import React from 'react';
 import {Link, RouteHandler} from 'react-router';
 import {fetchFacilities, selectFirstFacility, selectFacilityByName} from 'data/facilities/actions';
 import {getSelectedFacility} from 'data/facilities/store';
-import {isLoggedIn} from 'data/user/store';
+import {isLoggedIn, getSelectedTenant} from 'data/user/store';
 import exposeRouter from 'components/common/exposerouter';
 
 class App extends React.Component {
@@ -43,8 +43,10 @@ class App extends React.Component {
     render() {
         console.log("Rendering App");
         const facility = getSelectedFacility();
-        return (facility) ?
-            <RouteHandler />
+        let tenant = getSelectedTenant();
+
+        return (facility && tenant) ?
+            <RouteHandler facility={facility} tenant={tenant}/>
             :
             <span>Retrieving Facilities...</span>;
     }

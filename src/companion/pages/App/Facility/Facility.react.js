@@ -17,10 +17,9 @@ export default class Facility extends React.Component {
     }
 
     render() {
-        let facility = getSelectedFacility();
-        let facilities = getFacilities();
-        let tenant = getSelectedTenant();
+        let {facility, tenant} = this.props;
         let tenantName = tenant.get("name");
+        let facilities = getFacilities();
         return (
             <DocumentTitle title='CS Companion'>
             {
