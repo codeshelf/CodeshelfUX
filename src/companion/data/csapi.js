@@ -86,6 +86,15 @@ export function getFacilityContext() {
         facilityId: facilityId,
         endpoint: endpoint,
 
+        getOrdersForStatus: function(status) {
+            let ordersPath = facilityPath + "/orders";
+            return ajax(ordersPath, {
+                data: {
+                    status: status
+                }
+            });
+        },
+
         getWorkers: function() {
             var workersPath = facilityPath + "/workers";
             return ajax(workersPath);
@@ -111,15 +120,6 @@ export function getFacilityContext() {
                 contentType: "application/json; charset=utf-8",
                 dataType: "json"
             });
-        },
-
-        getProductivity : function() {
-            var productivityPath = facilityPath + "/productivity";
-            return ajax(productivityPath);
-        },
-        getCheRuns: function() {
-            var cheSummaryPath = facilityPath + "/chesummary";
-            return ajax(cheSummaryPath);
         },
         getSummarySnapshot: function(viewSpec) {
             var {filterName, aggregate} = viewSpec;
@@ -203,7 +203,7 @@ export function getFacilityContext() {
                 processData: false,
                 contentType: false
             });
-        },
+        }
 
 
 

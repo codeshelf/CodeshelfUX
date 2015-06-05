@@ -1,14 +1,14 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
+import {IBox, IBoxBody, IBoxTitleBar, IBoxTitleText} from "components/common/IBox";
 import _ from 'lodash';
 import  {getFacilityContext} from 'data/csapi';
-var StatusSummaryIBox = require('./StatusSummaryIBox');
-var TopItems = require('./TopItems');
+import StatusSummaryIBox from "./StatusSummaryIBox";
+import OrderList from "./OrderList";
+import TopItems from "./TopItems";
 
 var el = React.createElement;
-
-
 
 var OverviewPage = React.createClass({
     statics: {
@@ -74,6 +74,7 @@ var OverviewPage = React.createClass({
 
     render: function() {
         var {views, apiContext, filterOptions} = this.state;
+        var status = "RELEASED";
         return ( <DocumentTitle title="Overview">
                    <PageGrid>
                        <Row>
@@ -86,11 +87,21 @@ var OverviewPage = React.createClass({
                            }.bind(this))
                        }
                        <Col key="topItems" sm={6} md={4}>
-
                            <TopItems  apiContext={apiContext} />
-
                        </Col>
                        </Row>
+                        <Row>
+                            <Col key="topItems" sm={12}>
+                                <IBox>
+                                    <IBoxTitleBar>
+                                        <IBoxTitleText>Orders List</IBoxTitleText>
+                                    </IBoxTitleBar>
+                                    <IBoxBody>
+                                        <OrderList status={status}/>
+                                    </IBoxBody>
+                                </IBox>
+                            </Col>
+                        </Row>
                    </PageGrid>
                  </DocumentTitle>);
     }
