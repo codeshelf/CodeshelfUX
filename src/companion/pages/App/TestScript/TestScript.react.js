@@ -221,6 +221,12 @@ class ScriptInput extends React.Component {
         this.setState({"files": this.state.files.merge(keyedFiles)});
     }
 
+    handleClear() {
+        let fileInput = React.findDOMNode(this).querySelector("input[type=\"file\"]");
+        fileInput.value = null;
+        this.setState({"files" : Map()});
+    }
+
     changeState(name, e) {
         var newState = {};
         newState[name] = e.target.value;
@@ -238,7 +244,7 @@ class ScriptInput extends React.Component {
                     (files.count() > 0) ?
                         <div>
                             <div className="text-right">
-                                <Button bsStyle="primary" onClick={this.setState.bind(this, {files: Map()})}>Clear</Button>
+                                <Button bsStyle="primary" onClick={this.handleClear.bind(this)}>Clear</Button>
                             </div>
                             <Input label="timeout" onChange={this.changeState.bind(this, "timeout")} type="number" value={this.state.timeout} addonAfter="minutes" />
                         </div>
