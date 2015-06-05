@@ -90,8 +90,8 @@ class ScriptStepExecutor extends React.Component {
         return promise.then((stepResponse) =>{
             this.setState({loading: false,
                            stepResponse: stepResponse});
-        }, (xhr) => {
-            let stepResponse = xhr.responseJSON;
+        }, (error) => {
+            let stepResponse = error.body;
             this.setState({loading: false,
                            stepResponse: stepResponse});
         });
