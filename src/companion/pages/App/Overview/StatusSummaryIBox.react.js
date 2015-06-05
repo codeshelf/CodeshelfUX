@@ -1,7 +1,10 @@
 var React = require("react");
+var Icon = require("react-fa");
 var Rx = require('rx');
 
+var {StatusSummary} = require("data/types");
 var SummaryFilter = require("./SummaryFilter");
+var SummaryList = require("components/common/SummaryList");
 var DoughnutSummary = require("components/common/DoughnutSummary");
 var ibox = require("components/common/IBox");
 var IBox = ibox.IBox;
@@ -76,6 +79,14 @@ var StatusSummaryIBox = React.createClass({
 
         var filterName = this.state.view["filterName"];
         var statusSummary = this.state.statusSummary;
+
+        var summaryList = _.map(StatusSummary.Templates, (template) => {
+            return {
+                id: template.key,
+                label: <div><Icon name="square" style={{color: template.color, marginRight: "1em"}}/>{template.label}</div>,
+                quantity: statusSummary[template.key]
+            };
+        });
         var filterOptions = this.props.filterOptions;
         var title = `${filterName} ${totalLabel} Burn Down`;
         return (<IBox>
@@ -91,10 +102,17 @@ var StatusSummaryIBox = React.createClass({
                                      totalLabelSingular={totalLabelSingular}
                                      totalLabel={totalLabel} />
                 </IBoxSection>
+                <IBoxSection>
+                    <SummaryList list={summaryList} />
+                </IBoxSection>
                </IBox>);
 
     }
 });
+
+function toSummaryList(statusSummary) {
+
+}
 
 function pollPromiseProducer(promiseProducer, period /*ms*/) {
     return Rx.Observable.timer(0, period)

@@ -8,13 +8,12 @@ var {StatusSummary} = require('data/types');
 var el = React.createElement;
 
 var ibox = require('components/common/IBox');
+var SummaryList = require('components/common/SummaryList');
 var IBox = ibox.IBox;
 var IBoxData = ibox.IBoxData;
 var IBoxTitleBar = ibox.IBoxTitleBar;
 var IBoxTitleText = ibox.IBoxTitleText;
 var IBoxSection = ibox.IBoxSection;
-
-var {ListGroup, ListGroupItem, Badge} = require('react-bootstrap');
 
 var TopItems = React.createClass({
     getInitialState: function() {
@@ -51,6 +50,15 @@ var TopItems = React.createClass({
 
     render: function() {
         var {items} = this.state;
+        var summaryList = _.map(items, (item) => {
+            let summary = {
+                id: item.id,
+                label: `${item.sku} ${item.uom}`,
+                description: item.description,
+                quantity: item.planQuantity
+            };
+            return summary;
+        });
         return (
 
                 <IBox>
@@ -60,22 +68,7 @@ var TopItems = React.createClass({
                         </IBoxTitleText>
                     </IBoxTitleBar>
                     <div className="ibox-content">
-                    <ListGroup>
-                    {
-                        _.map(items, function(item) {
-                            var {id, sku, uom, description, planQuantity} = item;
-                            return <ListGroupItem
-                                        key={id}
-                                        active={false} >
-                                        <Badge className="text-right">{planQuantity}</Badge>
-                                        <div>
-                                            <div>{sku} {uom} </div>
-                                            <div><small>{description}</small></div>
-                                        </div>
-                                   </ListGroupItem>;
-                        }.bind(this))
-                    }
-                    </ListGroup>
+                    <SummaryList list={summaryList} />
                 </div>
                 </IBox>
         );}});

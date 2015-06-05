@@ -4,24 +4,6 @@ var {StatusSummary} = require("data/types");
 var DoughnutChart = require("./Doughnut");
 var pluralize = require("lib/pluralize");
 
-//Clockwise order
-var segmentTemplates = [{key: "released",
-                         color: "#CC78DE",
-                         label: "Remaining",
-                         value: 0},
-                        {key: "inprogress",
-                         color: "#7B0793",
-                         label: "In Progress",
-                         value: 0},
-                        {key: "short",
-                         color: "#D3D3D3",
-                         label: "Short",
-                         value: 0},
-                        {key: "complete",
-                         color: "#F1F1F1",
-                         label: "Complete",
-                         value: 1}]; //to draw something
-
 var DoughnutSummary = React.createClass({
 
     getDefaultProps: function() {
@@ -45,7 +27,7 @@ var DoughnutSummary = React.createClass({
    },
 
    renderSummaryChart : function(summaryData, total, totalLabel) {
-       var chartData = toChartData(segmentTemplates, summaryData);
+       var chartData = toChartData(StatusSummary.Templates, summaryData);
        var remaining = total - StatusSummary.sumByKeys(summaryData, ["complete", "short"]);
        return (<div>
                     {{/* The first div provides the proper box dimensions for the chart resize calculations */}}
