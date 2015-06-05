@@ -1,6 +1,6 @@
 import React from "react";
 import Icon from "react-fa";
-import {DropdownButton, NavItem} from "react-bootstrap";
+import {DropdownButton, NavItem, Button} from "react-bootstrap";
 import { NavItemLink, MenuItemLink} from 'react-router-bootstrap';
 import {loggedout} from "data/auth/actions";
 
@@ -30,7 +30,7 @@ export default class TopNavBar extends React.Component {
                     </div>
                     <div className="pull-right">
                             <FacilitySelector facility={facility} facilities={facilities} />
-                            <a onClick={this.handleLogoutClick} ><Icon name="sign-out" />Log out</a>
+                <Button bsStyle='link' onClick={this.handleLogoutClick}><Icon name="sign-out" />Log out</Button>
                         </div>
                 </div>
         );
