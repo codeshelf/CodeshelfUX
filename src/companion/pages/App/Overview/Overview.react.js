@@ -5,7 +5,7 @@ import {IBox, IBoxBody, IBoxTitleBar, IBoxTitleText} from "components/common/IBo
 import _ from 'lodash';
 import  {getFacilityContext} from 'data/csapi';
 import StatusSummaryIBox from "./StatusSummaryIBox";
-import OrderList from "./OrderList";
+import OrderReview from "./OrderReview";
 import TopItems from "./TopItems";
 
 var el = React.createElement;
@@ -74,7 +74,6 @@ var OverviewPage = React.createClass({
 
     render: function() {
         var {views, apiContext, filterOptions} = this.state;
-        var status = "RELEASED";
         return ( <DocumentTitle title="Overview">
                    <PageGrid>
                        <Row>
@@ -97,7 +96,7 @@ var OverviewPage = React.createClass({
                                         <IBoxTitleText>Orders List</IBoxTitleText>
                                     </IBoxTitleBar>
                                     <IBoxBody>
-                                        <OrderList status={status}/>
+                                        <OrderReview />
                                     </IBoxBody>
                                 </IBox>
                             </Col>

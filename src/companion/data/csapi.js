@@ -86,12 +86,10 @@ export function getFacilityContext() {
         facilityId: facilityId,
         endpoint: endpoint,
 
-        getOrdersForStatus: function(status) {
+        findOrders: function(filter) {
             let ordersPath = facilityPath + "/orders";
             return ajax(ordersPath, {
-                data: {
-                    status: status
-                }
+                data: filter
             });
         },
 
