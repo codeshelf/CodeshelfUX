@@ -1,6 +1,8 @@
 import {getFacilityContext} from 'data/csapi';
 import React from 'react';
 import {SingleCellLayout} from 'components/common/pagelayout';
+import {SingleCellIBox} from 'components/common/IBox';
+
 import {Input, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 import ImportList from './ImportList';
@@ -66,6 +68,7 @@ export default class Imports extends React.Component{
     render() {
         let receipts = this.getImportReceipts();
         return (<SingleCellLayout title="Manage Imports">
+                   <SingleCellIBox title="Order Files Imported">
             {/**
                             <form>
                                 <Input type='file' label='Order File' help='Order file to import' />
@@ -78,8 +81,8 @@ export default class Imports extends React.Component{
 
                             </form>
               **/}
-                  <h3>Order Files Imported</h3>
                   <ImportList receipts={receipts} />
+                  </SingleCellIBox>
                 </SingleCellLayout>
         );
     }

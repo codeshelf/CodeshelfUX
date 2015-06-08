@@ -9,6 +9,7 @@ function RClass(renderFunction, otherMethods) {
 }
 
 
+
 export class IBoxData extends React.Component {
 
     render() {
@@ -51,11 +52,31 @@ var IBox = RClass(function() {
             </div>);
 });
 
+export class SingleCellIBox extends React.Component {
+    render() {
+        let {title} = this.props;
+        return (
+                <IBox>
+                    <IBoxTitleBar>
+                        <IBoxTitleText>
+                            {title}
+                        </IBoxTitleText>
+                    </IBoxTitleBar>
+                    <IBoxBody>
+                        {this.props.children}
+                    </IBoxBody>
+                </IBox>
+        );
+    }
+}
+
+
 module.exports = {
     IBox: IBox,
     IBoxData: IBoxData,
     IBoxTitleBar: IBoxTitleBar,
     IBoxTitleText: IBoxTitleText,
     IBoxSection: IBoxSection,
-    IBoxBody: IBoxBody
+    IBoxBody: IBoxBody,
+    SingleCellIBox: SingleCellIBox
 };
