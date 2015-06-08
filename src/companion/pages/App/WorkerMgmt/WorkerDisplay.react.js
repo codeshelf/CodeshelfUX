@@ -134,15 +134,8 @@ class WorkerDisplay extends React.Component {
 
 
     renderTextInput(objField, index, label, value, required) {
-        var classes = classnames({
-            "form-group": true,
-            "form-group-default": true,
-            "required": required
-        });
         return (
                 <Input key={objField} ref={objField}
-                 groupClassName={classes}
-                 inputClassName="form-control"
                  type="text"
                  name={objField}
                  label={label}
@@ -157,17 +150,9 @@ class WorkerDisplay extends React.Component {
 
     renderCustomInput(objField, index, label, value, required) {
         if (objField === "badgeId") {
-            var classes = classnames({
-                "form-group": true,
-                "form-group-default": true,
-                "input-group": true,
-                "required": required
-            });
             return (
                     <Input key={objField} ref={objField}
-                           groupClassName={classes}
                            type="text"
-                           inputClassName="form-control"
                            required={required}
                            autoFocus={index == 0}
                            disabled={this.state.savePending}

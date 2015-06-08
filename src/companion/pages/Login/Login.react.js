@@ -2,6 +2,7 @@ import React from 'react';
 import DocumentTitle from 'react-document-title';
 import {Row, Col} from 'components/common/pagelayout';
 import exposeRouter from 'components/common/exposerouter';
+import {Input} from 'components/common/Form';
 import {focusInvalidField} from '../../lib/validation';
 import {getForm} from 'data/auth/store';
 import {msg} from 'data/intl/store';
@@ -66,10 +67,8 @@ class Login extends React.Component {
             <form id="login-form" className="p-t-15" role="form" method="POST" onSubmit={(e) => this.login(e)}>
                 <Row>
                     <Col sm={12}>
-                    <div className="form-group form-group-default">
-                        <label>Usernane</label>
-                        <input id="u"
-                               className="form-control"
+                        <Input id="u"
+                               label="Username"
                                type="email"
                                autoFocus="true"
                                disabled={login.pending}
@@ -78,22 +77,18 @@ class Login extends React.Component {
                                placeholder={msg('auth.form.placeholder.email')}
                                value={form.fields.email}
                          />
-                   </div>
                    </Col>
                 </Row>
                 <Row>
                     <Col sm={12}>
-                        <div className="form-group form-group-default">
-                            <label>Password</label>
-                            <input id="p"
-                               className="form-control"
+                            <Input id="p"
+                               label="Password"
                                disabled={login.pending}
                                name="password"
                                onChange={updateFormField}
                                type="password"
                                value={form.fields.password}
                              />
-                        </div>
                     </Col>
                 </Row>
                 <button type="submit" disabled={login.pending} className="btn btn-primary btn-cons m-t-10">Login</button>

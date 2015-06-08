@@ -4,10 +4,10 @@ import PureComponent from 'components/common/PureComponent';
 import classnames from 'classnames';
 
 export class Input extends React.Component {
+
+
     render() {
-        let {groupClassName,
-             inputClassName,
-             label,
+        let {label,
              type,
              name,
              value,
@@ -17,13 +17,22 @@ export class Input extends React.Component {
              onChange,
              addOnAfter} = this.props;
 
-        if (addOnAfter) {
-            groupClassName = classnames(groupClassName, {"input-group": true});
-        }
-        return <div className={groupClassName}>
+        var inputClasses = classnames({
+            "form-control": true
+
+        });
+
+        var groupClasses = classnames({
+            "form-group": true,
+            "form-group-default": true,
+            "required": required,
+            "input-group": (addOnAfter != null)
+        });
+
+        return <div className={groupClasses}>
                 <label>{label}</label>
                 <input type={type}
-                       className={inputClassName}
+                       className={inputClasses}
                        required={required}
                        autoFocus={autoFocus}
                        disabled={disabled}
