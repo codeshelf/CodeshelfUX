@@ -1,9 +1,10 @@
 import  React from 'react';
-import exposeRouter from 'components/common/exposerouter';
-
 import DocumentTitle from 'react-document-title';
-import {Modal, Button, Input} from 'react-bootstrap';
+import {Modal, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
+import classnames from 'classnames';
+import exposeRouter from 'components/common/exposerouter';
+import {Input} from "components/common/Form";
 import {selectedWorkerCursor, workersCursor} from 'data/state';
 
 import Immutable from 'immutable';
@@ -112,7 +113,9 @@ class WorkerDisplay extends React.Component {
 
                                         var value= formData.get(objField);
                                         var label= this.getLabel(objField);
-                                        return this.renderCustomInput(objField, i, label, value) || this.renderTextInput(objField, i, label, value);
+                                        var required = ["badgeId", "lastName"].indexOf(objField) >= 0;
+                                        return this.renderCustomInput(objField, i, label, value, required)
+                                            || this.renderTextInput(objField, i, label, value, required);
 
                                     })
                }
@@ -130,31 +133,51 @@ class WorkerDisplay extends React.Component {
 
 
 
-    renderTextInput(objField, index, label, value) {
-        return <Input key={objField} ref={objField}
-                type="text"
-                autoFocus={index == 0}
-                disabled={this.state.savePending}
-                name={objField}
-                label={label}
-                value={value}
-                onChange={this.handleChange.bind(this, objField)}
-                />;
+    renderTextInput(objField, index, label, value, required) {
+        var classes = classnames({
+            "form-group": true,
+            "form-group-default": true,
+            "required": required
+        });
+        return (
+                <Input key={objField} ref={objField}
+                 groupClassName={classes}
+                 inputClassName="form-control"
+                 type="text"
+                 name={objField}
+                 label={label}
+                 value={value}
+                 required={required}
+                 disabled={this.state.savePending}
+                 autoFocus={index == 0}
+                 onChange={this.handleChange.bind(this, objField)}
+                 />
+        );
     }
 
-    renderCustomInput(objField, index, label, value) {
+    renderCustomInput(objField, index, label, value, required) {
         if (objField === "badgeId") {
-            return <Input key={objField} ref={objField}
-                    type="text"
-
-                    autoFocus={index == 0}
-                    disabled={this.state.savePending}
-                    name={objField}
-                    label={label}
-                    value={value}
-                    onChange={this.handleChange.bind(this, objField)}
-                    buttonAfter={this.renderBarcodeGeneratorComponent(objField, value)}
-                    />;
+            var classes = classnames({
+                "form-group": true,
+                "form-group-default": true,
+                "input-group": true,
+                "required": required
+            });
+            return (
+                    <Input key={objField} ref={objField}
+                           groupClassName={classes}
+                           type="text"
+                           inputClassName="form-control"
+                           required={required}
+                           autoFocus={index == 0}
+                           disabled={this.state.savePending}
+                           name={objField}
+                           label={label}
+                           value={value}
+                           onChange={this.handleChange.bind(this, objField)}
+                           addOnAfter={this.renderBarcodeGeneratorComponent(objField, value)}
+                    />
+            );
         }
         else {
             return null;
@@ -182,7 +205,7 @@ class WorkerDisplay extends React.Component {
 
         };
 
-        return <Button disabled={(value) ? true : false} onClick={setBadgeId.bind(this)}><Icon name="barcode" /></Button>;
+        return <Button bsStyle="link" disabled={(value) ? true : false} onClick={setBadgeId.bind(this)}><Icon name="barcode" size="2x" /></Button>;
     }
 
     generateBarcode() {

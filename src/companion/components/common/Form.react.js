@@ -1,6 +1,48 @@
 import React from 'react';
-import {Input} from 'react-bootstrap';
+import {Input as BSInput} from 'react-bootstrap';
 import PureComponent from 'components/common/PureComponent';
+import classnames from 'classnames';
+
+export class Input extends React.Component {
+    render() {
+        let {groupClassName,
+             inputClassName,
+             label,
+             type,
+             name,
+             value,
+             required,
+             autoFocus,
+             disabled,
+             onChange,
+             addOnAfter} = this.props;
+
+        if (addOnAfter) {
+            groupClassName = classnames(groupClassName, {"input-group": true});
+        }
+        return <div className={groupClassName}>
+                <label>{label}</label>
+                <input type={type}
+                       className={inputClassName}
+                       required={required}
+                       autoFocus={autoFocus}
+                       disabled={disabled}
+                       name={name}
+                       label={label}
+                       value={value}
+                       onChange={onChange}
+                 />
+                {
+                    (addOnAfter) ?
+                        <span className="input-group-addon">
+                            {addOnAfter}
+                        </span>
+                        :
+                        null
+                }
+              </div>
+    }
+}
 
 /**
  * Note that this uses the DOM input and not the react-bootstrap Input so that the label is a sibling of the input for pages template
@@ -23,7 +65,7 @@ export class Checkbox extends React.Component {
 export class Select extends PureComponent {
     render() {
         let {label, options, value, onChange} = this.props;
-        return (<Input type='select' className="full-width" label={label} value={value} data-init-plugin="select2"
+        return (<BSInput type='select' className="full-width" label={label} value={value} data-init-plugin="select2"
                  onChange={onChange}>
                     {
                         options.map((option) => {
@@ -33,6 +75,6 @@ export class Select extends PureComponent {
                         })
 
                     }
-                </Input>);
+                </BSInput>);
     }
 };
