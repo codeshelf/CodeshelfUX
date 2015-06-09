@@ -31,7 +31,8 @@ export class StatusSummary {
     }
 
     static toLabel(statusEnum) {
-        var obj = _.find(StatusSummaryTemplate, {key: statusEnum});
+        let lowerCaseEnum = statusEnum.toLowerCase();
+        var obj = _.find(StatusSummaryTemplate, {key: lowerCaseEnum});
         return obj.label;
     }
 

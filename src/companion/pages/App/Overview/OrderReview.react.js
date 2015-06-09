@@ -1,6 +1,7 @@
 import  React from "react";
 import _ from "lodash";
 import {getFacilityContext} from "data/csapi";
+import {StatusSummary} from "data/types";
 import {Table} from "components/common/Table";
 import {Select, Input} from 'components/common/Form';
 import {Row, Col} from 'components/common/pagelayout';
@@ -32,19 +33,19 @@ export default class OrderReview extends React.Component{
 
         this.orderStatusOptions = [
             {
-                label: "Released",
+                label: StatusSummary.toLabel("RELEASED"),
                 value: "RELEASED"
             },
             {
-                label: "Complete",
+                label: StatusSummary.toLabel("COMPLETE"),
                 value: "COMPLETE"
             },
             {
-                label: "Short",
+                label: StatusSummary.toLabel("SHORT"),
                 value: "SHORT"
             },
             {
-                label: "In progress",
+                label: StatusSummary.toLabel("INPROGRESS"),
                 value: "INPROGRESS"
             }
         ];
