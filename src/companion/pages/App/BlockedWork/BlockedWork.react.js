@@ -30,7 +30,6 @@ export default class BlockedWorkPage extends React.Component {
 
     renderTabbedArea(issuesSummary) {
         let sortedSummary = issuesSummary
-            .filter((summary) => summary.get("name") !== "COMPLETE")
             .sortBy((summary) => summary.get("name"));
         let firstType = sortedSummary.first().get("name");
         return (
@@ -61,17 +60,18 @@ export default class BlockedWorkPage extends React.Component {
     }
 
     render() {
-        //groupBy("type").count()
         let title = "Blocked Work";
-        let issuesSummaryResults = getIssuesSummary();
-        let issuesSummary = issuesSummaryResults.get("results") || List();
+        let issuesSummary = getIssuesSummary();
+        let issuesSummaryResults = issuesSummary.get("results") || List();
+        let filteredIssueSummaryResults = issuesSummaryResults
+                .filter((summary) => summary.get("name") !== "COMPLETE");
         return (
                 <DocumentTitle title={title}>
         <PageGrid>
             <Row>
                 <Col sm={12}>
-                {(issuesSummary.count() > 0) ?
-                    this.renderTabbedArea(issuesSummary) :
+                {(filteredIssueSummaryResults.count() > 0) ?
+                    this.renderTabbedArea(filteredIssueSummaryResults) :
                     <IBox className="bg-primary">
                         <IBoxBody>
                             <h3 className="text-white text-center">No {title}</h3>
