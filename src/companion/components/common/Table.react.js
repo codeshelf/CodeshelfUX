@@ -106,9 +106,9 @@ var Table = React.createClass({
             "rows": []
         };
     },
-    render: function() {
+
+    renderTable: function(rows) {
         var {caption = "",
-             results = Immutable.List(),
              columns = Immutable.List(),
              columnMetadata = Immutable.List(),
              sortedBy,
@@ -116,10 +116,6 @@ var Table = React.createClass({
              onRowCollapse = function (){ console.log("row collapse not set");},
              expand,
              ExpandComponent} = this.props;
-        var rows = results;
-        if (rows.constructor === Array) {
-            rows = Immutable.fromJS(rows);
-        }
         if (columns.constructor === Array) {
             columns = Immutable.fromJS(columns);
         }
@@ -185,6 +181,17 @@ var Table = React.createClass({
                     </tbody>
                 </table>
         );
+    },
+    render: function() {
+        var {results = []} = this.props;
+        if (results.constructor === Array) {
+            results = Immutable.fromJS(results);
+        }
+
+        return (results.count() > 0) ?
+            this.renderTable(results)
+            :
+            <h3>No Data Available</h3>;
     }
 });
 
