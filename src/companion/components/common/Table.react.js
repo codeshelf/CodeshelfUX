@@ -75,7 +75,7 @@ class Header extends React.Component {
                 <tr>
                 {
                     columns.map(function(column, index){
-                        let {columnName, displayName} = this.getMetadata(columnMetadata, column).toObject();
+                        let {columnName, displayName = columnName} = this.getMetadata(columnMetadata, column).toObject();
                         var priority = index;
 
                         return (<th key={columnName} scope="col" data-tablesaw-priority={priority === 0 ? "persist" : priority} >
@@ -96,8 +96,7 @@ class Header extends React.Component {
 var Table = React.createClass({
     propTypes: {
         results: React.PropTypes.object.isRequired,
-        expand: React.PropTypes.func,
-        ExpandComponent: React.PropTypes.element
+        expand: React.PropTypes.func
     },
 
     getDefaultProps: function(){
@@ -114,8 +113,7 @@ var Table = React.createClass({
              sortedBy,
              onRowExpand = function (){ console.log("row expand not set");},
              onRowCollapse = function (){ console.log("row collapse not set");},
-             expand,
-             ExpandComponent} = this.props;
+             expand} = this.props;
         if (columns.constructor === Array) {
             columns = Immutable.fromJS(columns);
         }
@@ -150,7 +148,7 @@ var Table = React.createClass({
         });
 
         if (expand == null) {
-            expand = () => false;
+            expand = () => {return null;};
         }
         return (
                 <table className={classes} role="grid">
@@ -167,11 +165,12 @@ var Table = React.createClass({
                                        rowNumber: rowNumber
                                    };
 
-                                   if (expand(row)) {
+                                   let renderExpandComponent = expand(row, rowNumber);
+                                   if (renderExpandComponent != null) {
                                        return Immutable.List.of(
                                            <Row key={rowNumber} {...childProps} onClick={onRowCollapse} expanded={true}/>,
                                            <ExpandRow key={rowNumber+"-expand"} {...childProps}>
-                                               <ExpandComponent {...childProps} />
+                                               {renderExpandComponent}
                                            </ExpandRow>);
                                    } else {
                                        return (<Row key={rowNumber} onClick={onRowExpand} {...childProps} expanded={false}/>);

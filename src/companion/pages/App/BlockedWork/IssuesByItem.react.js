@@ -84,10 +84,12 @@ export default class IssuesByItem extends React.Component{
         if (selectedGroup) {
             var selectedSubset = selectedGroup.filter(keyIn("itemId", "location", "uom"));
             var rowSubset = row.filter(keyIn("itemId", "location", "uom"));
-            return (Immutable.is(selectedSubset, rowSubset));
-        } else {
-            return false;
+            if (Immutable.is(selectedSubset, rowSubset)) {
+                let issues = this.getIssuesByItem(row);
+                return <UnresolvedEvents events={issues} />;
+            }
         }
+        return null;
     }
 
         subscribeToIssues() {
@@ -130,8 +132,7 @@ export default class IssuesByItem extends React.Component{
                        columnMetadata={this.issueColumnMetadata}
                        onRowExpand={handleOnRowExpand}
                        onRowCollapse={handleOnRowCollapse}
-                       expand={expandFunc}
-                       ExpandComponent={produceExpandClass(this.getIssuesByItem.bind(this))}>
+                       expand={expandFunc}>
                 </Table>
                );
     }
@@ -141,19 +142,3 @@ IssuesByItem.propTypes = {
     type: React.PropTypes.string.isRequired,
     resolved: React.PropTypes.bool.isRequired
 };
-
-function produceExpandClass(expandSource) {
-    class ExpandIssues extends React.Component {
-        render() {
-            let {
-                row
-            } = this.props;
-            let issues = expandSource(row);
-            return <UnresolvedEvents events={issues} />;
-        }
-    }
-    ExpandIssues.propTypes = {
-        row: React.PropTypes.object.isRequired
-    };
-    return ExpandIssues;
-}

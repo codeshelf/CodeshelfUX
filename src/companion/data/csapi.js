@@ -86,6 +86,11 @@ export function getFacilityContext() {
         facilityId: facilityId,
         endpoint: endpoint,
 
+        getOrderDetails(orderId) {
+            let orderDetailsPath = facilityPath + "/orders/" + orderId + "/details";
+            return ajax(orderDetailsPath, {});
+        },
+
         findOrders: function(filter) {
             let ordersPath = facilityPath + "/orders";
             return ajax(ordersPath, {
