@@ -5,7 +5,6 @@ import {IBox, IBoxBody, IBoxTitleBar, IBoxTitleText} from "components/common/IBo
 import _ from 'lodash';
 import  {getFacilityContext} from 'data/csapi';
 import StatusSummaryIBox from "./StatusSummaryIBox";
-import OrderReview from "./OrderReview";
 import TopItems from "./TopItems";
 
 var el = React.createElement;
@@ -89,18 +88,6 @@ var OverviewPage = React.createClass({
                            <TopItems  apiContext={apiContext} />
                        </Col>
                        </Row>
-                        <Row>
-                            <Col key="topItems" sm={12}>
-                                <IBox>
-                                    <IBoxTitleBar>
-                                        <IBoxTitleText>Orders List</IBoxTitleText>
-                                    </IBoxTitleBar>
-                                    <IBoxBody>
-                                        <OrderReview />
-                                    </IBoxBody>
-                                </IBox>
-                            </Col>
-                        </Row>
                    </PageGrid>
                  </DocumentTitle>);
     }

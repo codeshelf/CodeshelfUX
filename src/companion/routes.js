@@ -4,6 +4,7 @@ import Facility from './pages/App/Facility/Facility.react.js';
 import NotFound from 'pages/NotFound';
 import React from 'react';
 import Overview from './pages/App/Overview/Overview.react.js';
+import Orders from './pages/App/Orders/Orders.react.js';
 import BlockedWork from './pages/App/BlockedWork/BlockedWork.react.js';
 import WorkResults from './pages/App/WorkResults/WorkResults.react.js';
 import WorkerMgmt from './pages/App/WorkerMgmt/WorkerMgmt.react.js';
@@ -21,6 +22,7 @@ export default (
         <Route handler={Facility} name="facility" path=":facilityName">
             <DefaultRoute handler={Overview} name="overview" />
             <NotFoundRoute handler={NotFound} name="not-found" />
+            <Route handler={Orders} name="orders"></Route>
             <Route handler={BlockedWork} name="blockedwork"></Route>
             <Route handler={WorkResults} name="workresults" />
             <Route handler={Import} name="import" />
