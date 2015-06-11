@@ -30,12 +30,15 @@ export class Input extends React.Component {
         var groupClasses = classnames({
             "form-group": true,
             "form-group-default": true,
-            "required": required,
             "input-group": (addOnAfter != null)
         });
 
+        var labelClasses = classnames({
+            "required": required
+        });
+
         return <div className={groupClasses} onClick={this.handleInputGroupClick.bind(this)}>
-                <label htmlFor={name} >{label}</label>
+            <label htmlFor={name} className={labelClasses}>{label}</label>
                 <input type={type}
                        className={inputClasses}
                        required={required}
