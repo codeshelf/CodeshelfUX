@@ -5,7 +5,12 @@ import classnames from 'classnames';
 
 export class Input extends React.Component {
 
-
+    handleInputGroupClick(e) {
+        var inputs = e.target.getElementsByTagName("input");
+        Array.prototype.forEach.call(inputs, function(el, i){
+            el.focus();
+        });
+    }
     render() {
         let {label,
              type,
@@ -29,13 +34,14 @@ export class Input extends React.Component {
             "input-group": (addOnAfter != null)
         });
 
-        return <div className={groupClasses}>
-                <label>{label}</label>
+        return <div className={groupClasses} onClick={this.handleInputGroupClick.bind(this)}>
+                <label htmlFor={name} >{label}</label>
                 <input type={type}
                        className={inputClasses}
                        required={required}
                        autoFocus={autoFocus}
                        disabled={disabled}
+                       id={name}
                        name={name}
                        label={label}
                        value={value}
