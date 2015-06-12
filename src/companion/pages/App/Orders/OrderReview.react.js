@@ -70,13 +70,12 @@ export default class OrderReview extends React.Component{
 
     }
 
-    handleFilterOrderIdBy(e) {
-        this.setState({orderId: e.target.value}, () => {
-            this.findOrders({
-                "orderId": "*" + this.state.orderId + "*"
-            });
+    handleSearch(e) {
+        e.preventDefault();
+        let value = React.findDOMNode(this.refs.orderId).getElementsByTagName("input")[0].value;
+        this.findOrders({
+            "orderId": "*" + value + "*"
         });
-
     }
 
     findOrders(filter) {
@@ -119,14 +118,14 @@ export default class OrderReview extends React.Component{
     }
     render() {
         let orders = _.sortBy(this.state.orders, "domainId");
-        let {status, orderId} = this.state;
+        let {status} = this.state;
 
         return (<div>
                 <Row>
                     <Col md={4}>
-                        <form>
+                        <form onSubmit={this.handleSearch.bind(this)}>
                             <Select id="filterBy" label='Status Filter' value={status} options={this.orderStatusOptions} onChange={this.handleFilterStatusBy.bind(this)}/>
-                            <Input label="Order ID" name="orderId" type="text" onChange={this.handleFilterOrderIdBy.bind(this)} value={orderId} />
+                            <Input ref="orderId" label="Order ID" name="orderId" type="text" />
                         </form>
                     </Col>
                 </Row>
