@@ -9,7 +9,7 @@ import {RouteHandler} from 'react-router';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {IBox, IBoxBody, IBoxTitleBar, IBoxTitleText} from 'components/common/IBox';
 import {Table} from 'components/common/Table';
-import {EditButtonLink} from 'components/common/TableButtons';
+import {EditButtonLink, AddButtonLink} from 'components/common/TableButtons';
 
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkers} from 'data/workers/store';
@@ -138,9 +138,8 @@ export default class WorkerMgmt extends React.Component{
                                         </Col>
                                         <Col sm={9} >
                                             <div className="pull-right">
-                                                <ButtonLink bsStyle="primary" to="workerdisplay" params={{workerId: "new"}} >
-                                                    <Icon name="plus" />
-                                                </ButtonLink>
+                                                <AddButtonLink bsStyle="primary" to="workerdisplay" params={{workerId: "new"}} >
+                                                </AddButtonLink>
                                             </div>
                                         </Col>
                                     </Row>
