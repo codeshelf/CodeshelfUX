@@ -9,7 +9,7 @@ import {RouteHandler} from 'react-router';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {IBox, IBoxBody, IBoxTitleBar, IBoxTitleText} from 'components/common/IBox';
 import {Table} from 'components/common/Table';
-import {ButtonLink} from 'components/common/bootstrap';
+import EditButtonLink from 'components/common/EditButtonLink';
 
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkers} from 'data/workers/store';
@@ -197,11 +197,9 @@ class Edit extends React.Component {
     render() {
         var formData = this.props.rowData;
         var persistentId = formData.get("persistentId");
-        return (<ButtonLink bsStyle="primary"
-                            to="workerdisplay"
+        return (<EditButtonLink to="workerdisplay"
                             params={{workerId: persistentId}}>
-                    <Icon name="edit" />
-                </ButtonLink>);
+                </EditButtonLink>);
     }
 
 }

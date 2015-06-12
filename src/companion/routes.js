@@ -14,6 +14,8 @@ import {Route, DefaultRoute, NotFoundRoute, RouteHandler, Redirect} from 'react-
 import {authn} from './components/common/auth.js';
 import Login from './pages/Login/Login.react.js';
 import TestScript from './pages/App/TestScript/TestScript.react.js';
+import ExtensionPointsPage from "./pages/App/ExtensionPoints/ExtensionPointsPage.react.js";
+import ExtensionPointDisplay from "./pages/App/ExtensionPoints/ExtensionPointDisplay.react.js";
 
 export default (
   <Route handler={Root} path="/">
@@ -30,6 +32,10 @@ export default (
                 <Route handler={WorkerDisplay} name="workerdisplay" path=":workerId" />
             </Route>
             <Route handler={TestScript} name="testscript" />
+            <Route handler={ExtensionPointsPage} name="extensionpoints">
+                <Route handler={ExtensionPointDisplay} name="extensionpointdisplay" path=":extensionPointId" />
+            </Route>
+
          </Route>
        </Route>
     <Route handler={Login} name="login" />

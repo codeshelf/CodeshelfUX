@@ -22,6 +22,7 @@ var Row = React.createClass({
                     columnMetadata.map(function(columnMetadata){
                         var key = columnMetadata.get("columnName");
                         var value = row.get(key);
+                        value = (typeof value === "boolean") ? value.toString() : value;
                         var CustomComponent = columnMetadata.get("customComponent");
                         var valueRenderer = (<span>{value}</span>);
                         if (CustomComponent) {
@@ -120,9 +121,16 @@ var Table = React.createClass({
         if (columnMetadata.constructor === Array) {
             columnMetadata = Immutable.fromJS(columnMetadata);
         }
+
+        if (columns.count() == 0 && columnMetadata.count() > 0) {
+            columns = columnMetadata.map((column) => {
+                return column.get("columnName");
+            });
+        }
+
+
         if (rows.size > 0) {
-            var first = rows.first()
-;
+            var first = rows.first() ;
             if (columns.isEmpty()) {
                columns = first.keySeq();
             }

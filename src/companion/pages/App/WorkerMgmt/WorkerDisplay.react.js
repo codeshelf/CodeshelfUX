@@ -65,8 +65,6 @@ class WorkerDisplay extends React.Component {
 
     handleSave(e) {
         e.preventDefault();
-        console.log("pretending to save remotely asynchronously");
-
         var selectedWorkerForm = this.getSelectedWorkerForm();
         var id = selectedWorkerForm.get("persistentId");
         var promise;

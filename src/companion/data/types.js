@@ -1,5 +1,11 @@
 var _ = require("lodash");
 
+export class ExtensionPoint {
+    static toLabel(property) {
+        return property.toUpperCase();
+    }
+}
+
 const StatusSummaryTemplate = [{key: "released",
                                 color: "#CC78DE",
                                 label: "Remaining",

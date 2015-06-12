@@ -91,6 +91,20 @@ export function getFacilityContext() {
             return ajax(orderDetailsPath, {});
         },
 
+        getExtensionPoints: function() {
+            let extensionPointsPath = facilityPath + "/extensionpoints";
+            return ajax(extensionPointsPath);
+        },
+
+        updateExtensionPoint: function(extensionPoint) {
+            let extensionPointsPath = facilityPath + "/extensionpoints/" + extensionPoint.persistentId;
+            return ajax(extensionPointsPath, {
+                method: "PUT",
+                contentType: "form", //superagent forum url encoded
+                data: extensionPoint
+            });
+        },
+
         findOrders: function(filter) {
             let ordersPath = facilityPath + "/orders";
             return ajax(ordersPath, {
