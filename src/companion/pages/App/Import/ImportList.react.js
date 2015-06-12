@@ -27,6 +27,9 @@ export default class ImportList extends React.Component{
                  displayName: "Orders Processed"},
             {columnName: "linesProcessed",
                  displayName: "Lines Processed" },
+             {columnName: "linesFailed",
+                 displayName: "Lines Failed" },
+                 
             {columnName: "status",
              displayName: "Status" },
             {columnName: "username",
