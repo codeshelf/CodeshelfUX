@@ -23,6 +23,7 @@
     "fastclick": "^1.0.6",
     "flux": "^2.0.1",
     "griddle-react": "^0.2.12",
+    "immstruct": "^1.4.1",
     "immutable": "^3.6.4",
     "intl": "^0.1.4",
     "intl-messageformat": "^1.1.0",

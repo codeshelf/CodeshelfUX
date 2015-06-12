@@ -24,15 +24,20 @@ class ExtensionPointDisplay extends React.Component {
 
     findSelectedExtensionPointForm(props) {
         var extensionPointId = props.router.getCurrentParams().extensionPointId;
-        var extensionPoints = Immutable.fromJS(props.extensionPoints);
-        var extensionPoint = extensionPoints.find((extensionPoint) => extensionPoint.get("persistentId") === extensionPointId);
+        let {extensionPoints} = props;
+        var extensionPoint = extensionPoints.cursor().deref().find((extensionPoint) => extensionPoint.get("persistentId") === extensionPointId);
         this.setState({"extensionPoint": extensionPoint});
     }
 
     handleSave() {
         let extensionPoint = this.refs.form.getExtensionPoint();
         return getFacilityContext().updateExtensionPoint(extensionPoint.toJS()).then((updateExtensionPoint) => {
-
+            let newExtensionPoint = Immutable.fromJS(updateExtensionPoint);
+            let {extensionPoints} = this.props;
+            extensionPoints.cursor().update((pts) => {
+                let index = pts.findIndex((p) => p.get("persistentId") === updateExtensionPoint.persistentId);
+                return pts.set(index, newExtensionPoint);
+            });
         } );
     }
 

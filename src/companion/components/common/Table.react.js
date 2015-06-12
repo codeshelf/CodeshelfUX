@@ -129,7 +129,7 @@ var Table = React.createClass({
         }
 
 
-        if (rows.size > 0) {
+        if (rows.count() > 0) {
             var first = rows.first() ;
             if (columns.isEmpty()) {
                columns = first.keySeq();
