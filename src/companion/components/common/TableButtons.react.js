@@ -2,7 +2,7 @@ import  React from "react";
 import {ButtonLink} from 'components/common/bootstrap';
 import Icon from 'react-fa';
 
-export default class EditButtonLink extends React.Component{
+export class EditButtonLink extends React.Component{
 
     constructor(props) {
         super(props);
@@ -11,6 +11,19 @@ export default class EditButtonLink extends React.Component{
     render() {
         return (<ButtonLink bsStyle="primary" {...this.props}>
                     <Icon name="edit" />
+                </ButtonLink>);
+    }
+};
+
+export class AddButtonLink extends React.Component{
+
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (<ButtonLink bsStyle="primary" {...this.props}>
+                <Icon name="plus" />
                 </ButtonLink>);
     }
 };

@@ -30,7 +30,7 @@ class ModalForm extends React.Component{
 
     render() {
         var {title, formData} = this.props;
-        var modalTitle = formData ? `Edit ${title}` : "Not Found"
+        var modalTitle = formData ? title : "Not Found"
 ;        return (
                 <Modal className="modal-header" title={modalTitle} onRequestHide={this.handleClose.bind(this)}>
                     { formData ? this.renderForm(formData) : this.renderNotFound()}

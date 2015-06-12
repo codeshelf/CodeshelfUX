@@ -2,8 +2,11 @@ import  React from "react";
 import {getFacilityContext} from "data/csapi";
 import {Table} from "components/common/Table";
 import {RouteHandler} from "react-router";
-import EditButtonLink from "components/common/EditButtonLink";
-import {fromJS} from "immutable";
+import {Row, Col} from "components/common/pagelayout";
+import {EditButtonLink, AddButtonLink} from "components/common/TableButtons";
+import {Button} from "react-bootstrap";
+import Icon from "react-fa";
+import {fromJS, List} from "immutable";
 import immstruct from "immstruct";
 
 export default class ExtensionPoints extends React.Component{
@@ -37,6 +40,11 @@ export default class ExtensionPoints extends React.Component{
             }
 
         ];
+
+        this.allTypes = [{value: "OrderImportBeanTransformation"},
+	                     {value: "OrderImportHeaderTransformation"},
+	                     {value: "OrderImportLineTransformation"}];
+
     }
 
     componentWillMount() {
@@ -51,9 +59,23 @@ export default class ExtensionPoints extends React.Component{
     render() {
         let {extensionPoints} = this.state;
         let list = extensionPoints.cursor().deref();
+
+        let currentTypes = list.map((pt) => pt.get("type"));
+        let allTypes = List(this.allTypes);
+        let availableTypes = allTypes.filter((t) => {
+            return currentTypes.includes(t.value) == false;
+        });
         return (<div>
+                <Row>
+                    <Col sm={12}>
+                        <div className="pull-right">
+                            <AddButtonLink to="extensionpointadd" disabled={(availableTypes.count() <= 0)}>
+                            </AddButtonLink>
+                        </div>
+                    </Col>
+                </Row>
                 <Table results={list} columnMetadata={this.columnMetadata} />
-                <RouteHandler formMetadata={this.columnMetadata} extensionPoints={extensionPoints} />
+                <RouteHandler availableTypes={availableTypes} formMetadata={this.columnMetadata} extensionPoints={extensionPoints} />
                 </div>
         );
     }

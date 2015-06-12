@@ -96,6 +96,16 @@ export function getFacilityContext() {
             return ajax(extensionPointsPath);
         },
 
+        addExtensionPoint: function(params) {
+            let extensionPointsPath = facilityPath + "/extensionpoints";
+            return ajax(extensionPointsPath, {
+                method: "POST",
+                data: params,
+                contentType: "form"
+            });
+        },
+
+
         updateExtensionPoint: function(extensionPoint) {
             let extensionPointsPath = facilityPath + "/extensionpoints/" + extensionPoint.persistentId;
             return ajax(extensionPointsPath, {
