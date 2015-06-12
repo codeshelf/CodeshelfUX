@@ -15,7 +15,7 @@ import {authn} from './components/common/auth.js';
 import Login from './pages/Login/Login.react.js';
 import TestScript from './pages/App/TestScript/TestScript.react.js';
 import ExtensionPointsPage from "./pages/App/ExtensionPoints/ExtensionPointsPage.react.js";
-import ExtensionPointDisplay from "./pages/App/ExtensionPoints/ExtensionPointDisplay.react.js";
+import ExtensionPointEdit from "./pages/App/ExtensionPoints/ExtensionPointEdit.react.js";
 import ExtensionPointAdd from "./pages/App/ExtensionPoints/ExtensionPointAdd.react.js";
 
 export default (
@@ -35,7 +35,7 @@ export default (
             <Route handler={TestScript} name="testscript" />
             <Route handler={ExtensionPointsPage} name="extensionpoints">
                 <Route handler={ExtensionPointAdd} name="extensionpointadd" path="new" />
-        <Route handler={ExtensionPointDisplay} name="extensionpointdisplay" path=":extensionPointId" />
+                <Route handler={ExtensionPointEdit} name="extensionpointedit" path=":extensionPointId" />
             </Route>
 
          </Route>

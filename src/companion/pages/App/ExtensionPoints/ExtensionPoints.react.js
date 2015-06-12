@@ -86,7 +86,7 @@ class Edit extends React.Component {
         var formData = this.props.rowData;
         var persistentId = formData.get("persistentId");
         return (<EditButtonLink
-                 to="extensionpointdisplay"
+                 to="extensionpointedit"
                  params={{extensionPointId: persistentId}}>
                 </EditButtonLink>);
     }

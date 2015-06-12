@@ -5,7 +5,7 @@ import ModalForm from "components/common/ModalForm";
 import ExtensionPointForm from "./ExtensionPointForm.react.js";
 import {getFacilityContext} from "data/csapi";
 
-class ExtensionPointDisplay extends React.Component {
+class ExtensionPointEdit extends React.Component {
 
     constructor() {
         super();
@@ -49,9 +49,9 @@ class ExtensionPointDisplay extends React.Component {
     }
 };
 
-ExtensionPointDisplay.propTypes = {
+ExtensionPointEdit.propTypes = {
     formMetadata: React.PropTypes.array,
     router: React.PropTypes.func
 };
 
-export default exposeRouter(ExtensionPointDisplay);
+export default exposeRouter(ExtensionPointEdit);
