@@ -138,7 +138,7 @@ export default class WorkerMgmt extends React.Component{
                                         </Col>
                                         <Col sm={9} >
                                             <div className="pull-right">
-                                                <AddButtonLink bsStyle="primary" to="workerdisplay" params={{workerId: "new"}} >
+                                                <AddButtonLink to="workernew" >
                                                 </AddButtonLink>
                                             </div>
                                         </Col>

@@ -30,6 +30,7 @@ export default (
             <Route handler={WorkResults} name="workresults" />
             <Route handler={Import} name="import" />
             <Route handler={WorkerMgmt} name="workermgmt">
+                <Route handler={WorkerDisplay} name="workernew" path="new" />
                 <Route handler={WorkerDisplay} name="workerdisplay" path=":workerId" />
             </Route>
             <Route handler={TestScript} name="testscript" />

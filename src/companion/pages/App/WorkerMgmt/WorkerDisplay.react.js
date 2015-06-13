@@ -30,7 +30,14 @@ class WorkerDisplay extends React.Component {
     }
 
     findSelectedWorkerForm(props) {
-        var workerId = props.router.getCurrentParams().workerId;
+        let path = props.router.getCurrentPath();
+        var workerId = null;
+        if (path.indexOf("new") >= 0) {
+            workerId = "new";
+        } else {
+            workerId = props.router.getCurrentParams().workerId;
+        }
+
         var workerForm = this.getSelectedWorkerForm();
         if (!workerForm || workerForm.get("persistentId") !== workerId) {
             if (workerId === "new") {
