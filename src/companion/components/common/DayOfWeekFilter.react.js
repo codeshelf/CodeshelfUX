@@ -1,7 +1,6 @@
 import React from 'react';
 import {ButtonGroup, Button} from 'react-bootstrap';
 import {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} from "components/common/IBox";
-import PickerEventsChart from './PickerEventsChart';
 import moment from 'moment';
 
 class ButtonFilter extends  React.Component {
@@ -21,10 +20,21 @@ class ButtonFilter extends  React.Component {
 }
 
 
+function priorDay(daysBack) {
+    return moment().subtract(daysBack, 'days').local();
+}
 
 
 export default class DayOfWeekFilter extends React.Component {
 
+
+    static priorDayStart(daysBack) {
+        return priorDay(daysBack).startOf('day').toISOString();
+    }
+
+    static priorDayEnd(daysBack) {
+        return priorDay(daysBack).endOf('day').toISOString();
+    }
 
     constructor() {
         super();
@@ -45,7 +55,8 @@ export default class DayOfWeekFilter extends React.Component {
         var {numDays} = this.props;
         var {value} = this.state;
         return (
-            <div>
+            <ButtonGroup>
+
                 {
                     _.range(1,numDays+1).reverse().map(function(index){
                         var dayOfWeek = moment().subtract(index, 'days').local().format('dd');
@@ -55,7 +66,7 @@ export default class DayOfWeekFilter extends React.Component {
 
                 }
                 <ButtonFilter key="today" onClick={this.handleButtonClick.bind(this, this.today)} selectedValue={value} value={this.today}>Today</ButtonFilter>
-            </div>
+            </ButtonGroup>
         );
 
     }

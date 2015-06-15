@@ -1,7 +1,8 @@
 import {getFacilityContext} from 'data/csapi';
 import React from 'react';
 import {SingleCellLayout} from 'components/common/pagelayout';
-import {SingleCellIBox} from 'components/common/IBox';
+import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
+import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
 
 import {Input, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
@@ -9,33 +10,42 @@ import ImportList from './ImportList';
 
 
 
+const priorDayStart = DayOfWeekFilter.priorDayStart;
+const priorDayEnd = DayOfWeekFilter.priorDayEnd;
+
 
 export default class Imports extends React.Component{
 
     constructor() {
         super();
         this.state = {loading: false,
+                      "startTimestamp" : priorDayStart(0),
+                      "endTimestamp" : priorDayEnd(0),
                       receipts: []};
     }
 
-    subscribe() {
-        getFacilityContext().getImportReceipts().then((receipts) => {
+    fetchImportReceipts() {
+        let {startTimestamp, endTimestamp} = this.state;
+        getFacilityContext().getImportReceipts(startTimestamp, endTimestamp).then((receipts) => {
             this.setState({"receipts": receipts});
         });
     }
-
-    unsubscribe() {}
 
     getImportReceipts() {
         return this.state.receipts;
     }
 
     componentWillMount() {
-        this.subscribe("imports", this.getImportReceipts);
+        this.fetchImportReceipts();
     }
 
-    componentWillUnmount() {
-        this.unsubscribe("imports");
+    handleChange(daysBack) {
+        this.setState({startTimestamp: priorDayStart(daysBack),
+                       endTimestamp: priorDayEnd(daysBack)},
+                       () => {
+                           this.fetchImportReceipts();
+                       });
+
     }
 
     handleClick(e) {
@@ -81,7 +91,15 @@ export default class Imports extends React.Component{
 
                             </form>
               **/}
-                  <ImportList receipts={receipts} />
+                <IBoxSection>
+                    <DayOfWeekFilter numDays={4} onChange={this.handleChange.bind(this)} />
+                </IBoxSection>
+                <IBoxSection>
+                    <ImportList receipts={receipts} />
+                </IBoxSection>
+
+
+
                   </SingleCellIBox>
                 </SingleCellLayout>
         );

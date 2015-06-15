@@ -1,25 +1,23 @@
 import React from 'react';
-import {ButtonGroup, Button} from 'react-bootstrap';
 import {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} from "components/common/IBox";
 import PickerEventsChart from './PickerEventsChart';
 import PickRateChart from './PickRateChart';
 import moment from 'moment';
-import DayOfWeekFilter from './DayOfWeekFilter';
+import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
 
-function priorDay(daysBack) {
-    return moment().subtract(daysBack, 'days');
-}
+const priorDayStart = DayOfWeekFilter.priorDayStart;
+const priorDayEnd = DayOfWeekFilter.priorDayEnd;
 
 var PickerEventsIBox = React.createClass({
     getInitialState: function() {
         return {
-            "startTimestamp" : moment().local().startOf('day').toISOString(),
-            "endTimestamp" : moment().local().endOf('day').toISOString()
+            "startTimestamp" : priorDayStart(0),
+            "endTimestamp" : priorDayEnd(0)
         };
     },
     handleChange: function(daysBack) {
-        this.setState({startTimestamp: priorDay(daysBack).local().startOf('day').toISOString(),
-                       endTimestamp: priorDay(daysBack).local().endOf('day').toISOString()});
+        this.setState({startTimestamp: priorDayStart(daysBack),
+                       endTimestamp: priorDayEnd(daysBack)});
     },
 
     render: function() {
@@ -32,9 +30,7 @@ var PickerEventsIBox = React.createClass({
                      </IBoxTitleText>
                    </IBoxTitleBar>
                    <IBoxSection>
-                       <ButtonGroup>
-                           <DayOfWeekFilter numDays={4} onChange={this.handleChange}/>
-                       </ButtonGroup>
+                       <DayOfWeekFilter numDays={4} onChange={this.handleChange}/>
                    </IBoxSection>
                    <IBoxSection>
                        <PickRateChart style={{width: '100%', height: '300px'}}

@@ -194,9 +194,14 @@ export function getFacilityContext() {
             var filtersUrl = facilityPath + "/filters";
             return ajax(filtersUrl);
         },
-        getImportReceipts: function() {
+        getImportReceipts: function(startTimestamp, endTimestamp) {
             var receiptPath = facilityPath + "/import";
-            return ajax(receiptPath);
+            return ajax(receiptPath, {
+                data: {
+                    "startTimestamp": startTimestamp,
+                    "endTimestamp": endTimestamp
+                }
+            });
         },
         getPickRates: (startTimestamp, endTimestamp) => {
             var pickRateUrl = facilityPath + "/pickrate";
