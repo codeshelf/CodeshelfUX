@@ -5,6 +5,8 @@ import Icon from 'react-fa';
 import classnames from 'classnames';
 import exposeRouter from 'components/common/exposerouter';
 import {Input} from "components/common/Form";
+import ModalForm from "components/common/ModalForm";
+
 import {selectedWorkerCursor, workersCursor} from 'data/state';
 
 import Immutable from 'immutable';
@@ -70,8 +72,7 @@ class WorkerDisplay extends React.Component {
         });
     }
 
-    handleSave(e) {
-        e.preventDefault();
+    handleSave() {
         var selectedWorkerForm = this.getSelectedWorkerForm();
         var id = selectedWorkerForm.get("persistentId");
         var promise;
@@ -80,27 +81,21 @@ class WorkerDisplay extends React.Component {
         } else {
             promise = updateWorker(selectedWorkerForm);
         }
-        this.setState({"savePending": true});
-        promise.then(() => {
-            this.handleClose();
-        });
+        return promise;
     }
 
 
     handleClose() {
-        this.setState({"savePending": false});
         this.storeSelectedWorkerForm(null);
-        let params = this.props.router.getCurrentParams();
-        this.props.router.transitionTo("workermgmt", params);
     }
 
     render() {
         var formData = this.getSelectedWorkerForm();
-        var title = formData ? "Edit Worker" : "Not Found"
-;        return (
-                <Modal className="modal-header" title={title} onRequestHide={this.handleClose.bind(this)}>
-                    { formData ? this.renderForm(formData) : this.renderNotFound()}
-                </Modal>
+        return (<ModalForm title="Edit Worker" formData={formData} returnRoute="workermgmt"
+                           onSave={this.handleSave.bind(this)}
+                           onClose={this.handleClose.bind(this)}>
+                   {this.renderForm(formData)}
+                </ModalForm>
             );
     }
 
@@ -111,8 +106,8 @@ class WorkerDisplay extends React.Component {
     }
 
     renderForm(formData) {
-        return (                <form onSubmit={this.handleSave.bind(this)}>
-                                <div className='modal-body'>
+        return (
+                                <div>
                                 {
                                     ["firstName", "middleInitial", "lastName",  "badgeId", "hrId", "groupName"].map((objField, i) =>{
 
@@ -124,16 +119,7 @@ class WorkerDisplay extends React.Component {
 
                                     })
                }
-        </div>
-            <div className='modal-footer'>
-            <Button onClick={this.handleClose.bind(this)}>Cancel</Button>
-
-            <Button bsStyle="primary" type="submit">{
-                this.renderSaveButtonContent()
-            }</Button>
-            </div>
-            </form>
-);
+        </div>);
     }
 
 
@@ -173,16 +159,6 @@ class WorkerDisplay extends React.Component {
             return null;
         }
     }
-
-    renderSaveButtonContent() {
-        if (this.state.savePending) {
-            return (<span><Icon name="spinner" spin/> Saving...</span>);
-        }
-        else {
-            return "Save";
-        }
-    }
-
 
     renderBarcodeGeneratorComponent (objField, value) {
         var setBadgeId = function() {
