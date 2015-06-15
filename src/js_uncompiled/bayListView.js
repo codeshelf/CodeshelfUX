@@ -7,6 +7,7 @@
 file bayListView.js author jon ranstrom
  */
 goog.provide('codeshelf.baylistview');
+goog.require('codeshelf.simpleDlogService');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.view');
@@ -58,6 +59,28 @@ codeshelf.baylistview = function(websession, facility) {
 
 		'getViewName': function() {
 			return 'Bays List';
+		},
+
+
+		setPosconForBay: function(item) {
+			var theLogger = goog.debug.Logger.getLogger('Bay view');
+			var theBay = item;
+			if (theBay === null){
+				theLogger.info("null bay in context menu choice"); //why?
+			}
+			var bayName = theBay['domainId'];
+			theLogger.info("setting controller for selected bay: " + bayName);
+
+			var bayPosconIndex = theBay.posconIndex;
+
+			var data = {
+				"bay" : theBay,
+				"poscon": {"index" : bayPosconIndex}
+			};
+			var modalInstance = codeshelf.simpleDlogService.showCustomDialog("partials/set-poscons-bay.html", "BayController as controller", data);
+			modalInstance.result.then(function(){
+
+			});
 		}
 	};
 
@@ -68,7 +91,15 @@ codeshelf.baylistview = function(websession, facility) {
 			"action": function(itemContext) {
 				codeshelf.windowLauncher.loadItemsListView(itemContext);
 			}
+		},
+		{
+			"label" : "Assign Single Poscon for Bay",
+			"permission": "bay:edit",
+			"action": function(itemContext) {
+				self.setPosconForBay(itemContext);
+			}
 		}
+
 
 	];
 
@@ -119,3 +150,76 @@ codeshelf.baylistview = function(websession, facility) {
 
 	return view;
 };
+
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
+codeshelfApp.BayController = function($scope, $modalInstance, websession, data, ledcontrollers){
+	this.scope_ = $scope;
+	this.modalInstance_ = $modalInstance;
+	this.websession_ = websession;
+	$scope['bay'] = data['bay'];
+	$scope['poscon'] = data['poscon'];
+
+	ledcontrollers.getLedControllers().then(function(ledControllers) {
+		$scope['ledControllers'] = ledControllers;
+	});
+};
+
+
+/**
+ * @export
+ */
+codeshelfApp.BayController.prototype.ok = function(){
+
+	var bay = this.scope_['bay'];
+	var bayName = bay['domainId'];
+	var indexStr = this.scope_['poscon']['index'];
+	var controllerDomainId = bay['ledControllerId'];
+
+	var controllers = this.scope_['ledControllers'];
+	var controller = controllers.filter(function(c){
+		return c['domainId'] == controllerDomainId;
+	}).shift();
+
+	if (controller) {
+		var cntlrPersistId = controller['persistentId'];
+
+
+		var methodArgs = [
+			{'name': 'inControllerPersistentIDStr', 'value': cntlrPersistId, 'classType': 'java.lang.String'},
+			{'name': 'inIndexStr', 'value': indexStr, 'classType': 'java.lang.String'}
+		];
+
+		this.websession_.callMethod(bay, 'Bay', 'setPosconAssignment', methodArgs);
+		this.modalInstance_.close();
+	}
+};
+
+/**
+ * @export
+ */
+codeshelfApp.BayController.prototype.resetBayPoscon = function(){
+
+	var bay = this.scope_['bay'];
+	var bayName = bay['domainId'];
+
+	var methodArgs = [
+	];
+
+	this.websession_.callMethod(bay, 'Bay', 'clearPosconAssignment', methodArgs);
+	this.modalInstance_.close();
+};
+
+
+/**
+ * @export
+ */
+codeshelfApp.BayController.prototype.cancel = function(){
+	this.modalInstance_['dismiss']();
+};
+angular.module('codeshelfApp').controller('BayController', ['$scope', '$modalInstance', 'websession', 'data', 'ledcontrollers', codeshelfApp.BayController]);

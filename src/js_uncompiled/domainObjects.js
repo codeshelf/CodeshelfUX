@@ -179,6 +179,16 @@ domainobjects = {
 				'id': 'tapeId',
 				'title': 'Tape Id',
 				'width': 40
+			},
+			'ledControllerIdUi': {
+				'id':    'ledControllerIdUi',
+				'title': 'Controller',
+				'width': 25
+			},
+			'posconIndex': {
+				'id':    'posconIndex',
+				'title': 'Poscon',
+				'width': 8
 			}
 		}
 	},

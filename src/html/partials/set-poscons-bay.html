@@ -1,0 +1,35 @@
+<div class="modal-header">
+    <h3>Set Poscon For Bay</h3>
+</div>
+<div class="modal-body">
+     <div id='instructions' style="padding-bottom: 10px">
+         <!-- forcing separate lines on these instructions-->
+         <p>
+         Set poscon assignment for bay {{bay.nominalLocationId}}.
+         </p>
+         <p>
+         Use "Reset" to clear poscon assignment for this bay.
+         </p>
+      </div>
+
+
+    <!-- web examples show adding ng-controller="thisLinkCtrl", but that kills the ok,cancel button action -->
+	<form class="form-horizontal" role="form" name="set_poscons">
+		<div>
+			Poscon Manager:
+			<select ng-model="bay.ledControllerId" ng-options="o.domainId as o.domainId for o in ledControllers"></select>
+		</div>
+		<div class="form-group">
+            <div class="col-sm-4">
+	            Poscon Index:
+                <input type="text" class='form-control' ng-model="poscon.index"/>
+            </div>
+         </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+	<button class="btn" ng-click="controller.cancel()">Cancel</button>
+	<button class="btn" ng-click="controller.resetBayPoscon()">Reset</button>
+	<button class="btn btn-primary" ng-click="controller.ok()">Save</button>
+</div>
