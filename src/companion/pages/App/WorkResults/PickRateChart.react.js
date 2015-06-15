@@ -64,18 +64,22 @@ function chartSpec() {
        return chart;
 }
 
-function toD3Data(apiData) {
-    var hoursOfOperation = _.range(0, 24);
+function toD3Data(startTimestamp, endTimestamp, apiData) {
+    var hoursOfOperation = _.range(
+        moment(startTimestamp).hour(),
+        moment(endTimestamp).hour()+1);
 
-    var xProperty = "hour";
-    var yProperty = "picks"; //"quantity";
+    var yProperty = "picks"; //or "quantity";
     return _.chain(apiData)
         .groupBy("workerId")
         .transform((result, workerHourlyRates, key) => {
             let transformed =  _.map(workerHourlyRates, (v) => {
+                let utcHour = v.hour;
+                let localHour = moment(startTimestamp).utc().hour(utcHour).local().hour();
+
                 return {
                     key: v.workerId,
-                    x: v[xProperty],
+                    x: localHour,
                     y: v[yProperty],
                     quantity: v.quantity,
                     picks: v.picks
@@ -126,7 +130,7 @@ var PickRateChart = React.createClass({
         var {startTimestamp, endTimestamp} = props;
         var chart = chartSpec();
         this.getPickRates(startTimestamp, endTimestamp).then((data) => {
-            let d3Data = toD3Data(data);
+            let d3Data = toD3Data(startTimestamp, endTimestamp, data);
             updateChart(el, chart, d3Data);
         });
     }

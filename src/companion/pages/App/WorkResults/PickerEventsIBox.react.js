@@ -6,16 +6,20 @@ import PickRateChart from './PickRateChart';
 import moment from 'moment';
 import DayOfWeekFilter from './DayOfWeekFilter';
 
+function priorDay(daysBack) {
+    return moment().subtract(daysBack, 'days');
+}
+
 var PickerEventsIBox = React.createClass({
     getInitialState: function() {
         return {
-            "startTimestamp" : "today",
-            "endTimestamp" : "today"
+            "startTimestamp" : moment().local().startOf('day').toISOString(),
+            "endTimestamp" : moment().local().endOf('day').toISOString()
         };
     },
-    handleChange: function(dayOfWeek) {
-        this.setState({startTimestamp: dayOfWeek,
-                       endTimestamp: dayOfWeek});
+    handleChange: function(daysBack) {
+        this.setState({startTimestamp: priorDay(daysBack).local().startOf('day').toISOString(),
+                       endTimestamp: priorDay(daysBack).local().endOf('day').toISOString()});
     },
 
     render: function() {
