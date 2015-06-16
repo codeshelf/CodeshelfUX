@@ -23,12 +23,21 @@ export function authn(Component) {
 
 }
 
+
+
 export function authz(Component) {
 
     class Authz extends React.Component {
         render() {
-            let {permission} = this.props;
-            return ((permission == null || hasPermission(permission)) ?
+            let {permission, notPermission} = this.props;
+            var permit = true;
+            if (permission != null) {
+                permit = hasPermission(permission);
+            }
+            if (notPermission != null) {
+                permit = !hasPermission(notPermission);
+            }
+            return ((permit) ?
                        <Component {...this.props} />
                        :
                        null);

@@ -4,6 +4,7 @@ import {DropdownButton, NavItem, Button, MenuItem} from "react-bootstrap";
 import { NavItemLink, MenuItemLink} from 'react-router-bootstrap';
 import {loggedout, toggleStoredCredentials} from "data/auth/actions";
 import {getEmail, isCredentialsStored} from "data/user/store";
+import {authz} from 'components/common/auth';
 
 //TODO show logout if logged in
 export default class TopNavBar extends React.Component {
@@ -38,16 +39,6 @@ class UserProfileMenu extends React.Component {
         super(props);
     }
 
-    handleStoreCredentialsClick(credentialsStored, e) {
-        e.preventDefault();
-        if (credentialsStored) {
-            loggedout(false);
-        } else {
-            loggedout(true);
-        }
-
-    }
-
 
     handleLogoutClick(e) {
         e.preventDefault();
@@ -62,23 +53,45 @@ class UserProfileMenu extends React.Component {
     }
 
     render() {
-        let credentialsStored = isCredentialsStored();
+
         return (
             <DropdownButton bsStyle="link" title={this.renderTitle()} pullRight="true">
-                <MenuItem onClick={this.handleStoreCredentialsClick.bind(this, credentialsStored)}>
-                {
-                    (credentialsStored) ?
-                        <span><Icon name="trash" /> Clear Credentials</span>
-                        :
-                        <span><Icon name="briefcase" /> Remember Credentials</span>
-                }
-                </MenuItem>
+                <AuthzCredentialsStore permission="companion:savecredentials" notPermission="companion:nosavecredentials"/>
                 <MenuItem onClick={this.handleLogoutClick.bind(this)}><Icon name="sign-out" />Log out</MenuItem>
             </DropdownButton>
         );
     }
 
 }
+
+class CredentialsStore extends React.Component {
+
+    handleStoreCredentialsClick(credentialsStored, e) {
+        e.preventDefault();
+        if (credentialsStored) {
+            loggedout(false);
+        } else {
+            loggedout(true);
+        }
+
+    }
+
+    render() {
+        let credentialsStored = isCredentialsStored();
+        return (
+                <MenuItem onClick={this.handleStoreCredentialsClick.bind(this, credentialsStored)}>
+            {
+
+                (credentialsStored) ?
+                    <span><Icon name="trash" /> Clear Credentials</span>
+                    :
+                    <span><Icon name="briefcase" /> Remember Credentials</span>
+            }
+            </MenuItem>
+        );
+    }
+}
+const AuthzCredentialsStore = authz(CredentialsStore);
 
 class FacilitySelector extends React.Component {
 
