@@ -13,6 +13,22 @@ class EventsGrid extends React.Component {
         super();
         this.columnMetadata = [
             {
+                columnName: "workerName",
+                displayName: "Worker"
+            },
+            {
+                columnName: "itemId",
+                displayName: "Item"
+            },
+            {
+                columnName: "itemUom",
+                displayName: "UOM"
+            },
+            {
+                columnName: "itemLocation",
+                displayName: "Location"
+            },
+            {
                 columnName: "orderId",
                 displayName: "Order"
             },
