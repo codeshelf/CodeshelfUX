@@ -2,7 +2,7 @@ import React from "react";
 import Icon from "react-fa";
 import {DropdownButton, NavItem, Button, MenuItem} from "react-bootstrap";
 import { NavItemLink, MenuItemLink} from 'react-router-bootstrap';
-import {loggedout, rememberCredentials} from "data/auth/actions";
+import {loggedout, toggleStoredCredentials} from "data/auth/actions";
 import {getEmail, isCredentialsStored} from "data/user/store";
 
 //TODO show logout if logged in
@@ -38,9 +38,20 @@ class UserProfileMenu extends React.Component {
         super(props);
     }
 
+    handleStoreCredentialsClick(credentialsStored, e) {
+        e.preventDefault();
+        if (credentialsStored) {
+            loggedout(false);
+        } else {
+            loggedout(true);
+        }
+
+    }
+
+
     handleLogoutClick(e) {
         e.preventDefault();
-        loggedout();
+        loggedout(false);
     }
 
 
@@ -51,15 +62,15 @@ class UserProfileMenu extends React.Component {
     }
 
     render() {
-        let {credentialsStored} = isCredentialsStored();
+        let credentialsStored = isCredentialsStored();
         return (
             <DropdownButton bsStyle="link" title={this.renderTitle()} pullRight="true">
-                <MenuItem className="disabled"><Icon name="briefcase" onClick={rememberCredentials}/> Remember Credentials
+                <MenuItem onClick={this.handleStoreCredentialsClick.bind(this, credentialsStored)}>
                 {
                     (credentialsStored) ?
-                        <Icon name="check" style={{marginLeft: "1em"}}/>
+                        <span><Icon name="trash" /> Clear Credentials</span>
                         :
-                        null
+                        <span><Icon name="briefcase" /> Remember Credentials</span>
                 }
                 </MenuItem>
                 <MenuItem onClick={this.handleLogoutClick.bind(this)}><Icon name="sign-out" />Log out</MenuItem>

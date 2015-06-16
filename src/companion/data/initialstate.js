@@ -19,7 +19,8 @@ const data = {
         form: {
             fields: {
                 email: '',
-                password: ''
+                password: '',
+                store: false
             },
             error: null
         }

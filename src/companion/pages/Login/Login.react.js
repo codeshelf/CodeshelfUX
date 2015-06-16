@@ -41,7 +41,6 @@ class Login extends React.Component {
     e.preventDefault();
     const nextPath = this.props.router.getCurrentQuery().nextPath;
     const fields = getForm().toJS().fields;
-
     login(fields)
       .then(() => {
         // TODO: Probably use hard reload for Chrome to remember password.
@@ -65,6 +64,7 @@ class Login extends React.Component {
             }
 
             <form id="login-form" className="p-t-15" role="form" method="POST" onSubmit={(e) => this.login(e)}>
+                <input type="hidden" name="store" defaultValue={form.fields.store} />
                 <Row>
                     <Col sm={12}>
                         <Input id="u"

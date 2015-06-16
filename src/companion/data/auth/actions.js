@@ -18,7 +18,7 @@ export function login(fields) {
     .then(() => {
       return authenticateCredentials(fields);
     })
-    .then((authData) => logged(authData))
+    .then((authData) => logged(authData, fields))
     .catch((error) => {
         loginError(error);
         throw error;
@@ -29,7 +29,7 @@ export function login(fields) {
 export function loginCookies() {
     return getUser()
         .then((user) => {
-            logged(user);
+            logged(user, null);
             return user;
         });
 };
@@ -49,25 +49,32 @@ function authenticateCredentials(fields) {
     });
 }
 
-export function rememberCredentials(e) {
+export function toggleStoredCredentials(e) {
     e.preventDefault();
+    dispatch(toggleStoredCredentials, {});
+
 }
 
 export function loginError(error) {
   return dispatch(loginError, error);
 }
 
-export function logged(authData) {
-  return dispatch(logged, authData);
+export function logged(authData, fields) {
+  let data = {authData: authData,
+              fields: fields};
+  return dispatch(logged, data);
 }
 
-export function loggedout() {
+/**
+ * optional parameter to flip store field
+ */
+export function loggedout(toStore) {
     logout().done(() => {
-        dispatch(loggedout);
+        dispatch(loggedout, {store: toStore});
     });
 
 }
 
 setToString('auth', {
-  updateFormField, login, loginError, logged, loggedout
+  updateFormField, login, loginError, logged, loggedout, toggleStoredCredentials
 });

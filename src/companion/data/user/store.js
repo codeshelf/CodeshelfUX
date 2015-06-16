@@ -1,21 +1,54 @@
 import {fromJS} from 'immutable';
-import {logged, loggedout} from 'data/auth/actions';
+import {logged, loggedout, toggleStoredCredentials} from 'data/auth/actions';
 import {register} from 'dispatcher';
 import {userCursor} from 'data/state';
 
 const getIn = (path) => userCursor().getIn(path);
 
+function getStoredCredentials() {
+    return window.localStorage.getItem("authData");
+}
+
+function clearStoredCredentials() {
+    window.localStorage.removeItem("authData");
+}
+function storeCredentials(email, password) {
+    window.localStorage.setItem("authData", JSON.stringify({email: email, password: password}));
+}
+
+export function isCredentialsStored() {
+    return !!getStoredCredentials();
+}
+
+export function getEmail() {
+    return getIn(['authData', 'user', 'username']);
+}
+
+export function getPassword() {
+    return getStoredCredentials().get("password");
+}
+
 export const dispatchToken = register(({action, data}) => {
 
   switch (action) {
     case logged:
+      let {authData, fields} = data;
       userCursor(user => {
-          let authResponse = fromJS(data);
+          let authResponse = fromJS(authData);
+
           //wrap permissions in wildcardpermission
-          return user.setIn(['authData'], authResponse.updateIn(['user', 'permissions'], (permissions) => {
-              return permissions.map(p => new WildcardPermission(p));
-          }));
+          return user.setIn(['authData'],
+                            authResponse.updateIn(['user', 'permissions'], (permissions) => {
+                                return permissions.map(p => new WildcardPermission(p));
+                            }));
       });
+      if (fields) {
+          if (fields.store) {
+              storeCredentials(fields.email, fields.password);
+          } else {
+              clearStoredCredentials();
+          }
+      }
       break;
     case loggedout:
       userCursor(user => {
@@ -25,6 +58,7 @@ export const dispatchToken = register(({action, data}) => {
   }
 
 });
+
 
 export function hasPermission(permissionToCheck) : boolean {
     let permissions = getIn(['authData', 'user', 'permissions']);
@@ -39,13 +73,6 @@ export function getSelectedTenant() {
     return getIn(['authData', 'tenant']);
 }
 
-export function getEmail() {
-    return getIn(['authData', 'user', 'username']);
-}
-
-export function isCredentialsStored() {
-    return false;
-}
 
 
 export function isLoggedIn() {
