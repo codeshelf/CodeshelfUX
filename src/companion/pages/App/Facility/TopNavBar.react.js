@@ -1,16 +1,12 @@
 import React from "react";
 import Icon from "react-fa";
-import {DropdownButton, NavItem, Button} from "react-bootstrap";
+import {DropdownButton, NavItem, Button, MenuItem} from "react-bootstrap";
 import { NavItemLink, MenuItemLink} from 'react-router-bootstrap';
-import {loggedout} from "data/auth/actions";
+import {loggedout, rememberCredentials} from "data/auth/actions";
+import {getEmail, isCredentialsStored} from "data/user/store";
 
 //TODO show logout if logged in
 export default class TopNavBar extends React.Component {
-
-    handleLogoutClick(e) {
-        e.preventDefault();
-        loggedout();
-    }
 
     handleNavbarMinimalize(e) {
         e.preventDefault();
@@ -18,7 +14,7 @@ export default class TopNavBar extends React.Component {
     }
 
     render() {
-        let {title, facility, facilities} = this.props;
+        let {title, facility, facilities, user} = this.props;
         return (
                 <div className="header">
                     <div className="pull-left sm-table">
@@ -30,12 +26,48 @@ export default class TopNavBar extends React.Component {
                     </div>
                     <div className="pull-right">
                             <FacilitySelector facility={facility} facilities={facilities} />
-                <Button bsStyle='link' onClick={this.handleLogoutClick}><Icon name="sign-out" />Log out</Button>
+                            <UserProfileMenu user={user}/>
                         </div>
                 </div>
         );
     }
 };
+
+class UserProfileMenu extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    handleLogoutClick(e) {
+        e.preventDefault();
+        loggedout();
+    }
+
+
+    renderTitle() {
+        let email = getEmail();
+        let userTitle = email.replace(/@.*/, "");
+        return (<span><Icon name="user"/> {userTitle} </span>);
+    }
+
+    render() {
+        let {credentialsStored} = isCredentialsStored();
+        return (
+            <DropdownButton bsStyle="link" title={this.renderTitle()} pullRight="true">
+                <MenuItem className="disabled"><Icon name="briefcase" onClick={rememberCredentials}/> Remember Credentials
+                {
+                    (credentialsStored) ?
+                        <Icon name="check" style={{marginLeft: "1em"}}/>
+                        :
+                        null
+                }
+                </MenuItem>
+                <MenuItem onClick={this.handleLogoutClick.bind(this)}><Icon name="sign-out" />Log out</MenuItem>
+            </DropdownButton>
+        );
+    }
+
+}
 
 class FacilitySelector extends React.Component {
 

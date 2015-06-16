@@ -39,6 +39,15 @@ export function getSelectedTenant() {
     return getIn(['authData', 'tenant']);
 }
 
+export function getEmail() {
+    return getIn(['authData', 'user', 'username']);
+}
+
+export function isCredentialsStored() {
+    return false;
+}
+
+
 export function isLoggedIn() {
   // TODO: Use sessionStorage and real redirect to fix Chrome.
   return !!getIn(['authData']);

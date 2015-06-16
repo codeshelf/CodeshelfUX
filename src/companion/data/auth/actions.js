@@ -49,6 +49,10 @@ function authenticateCredentials(fields) {
     });
 }
 
+export function rememberCredentials(e) {
+    e.preventDefault();
+}
+
 export function loginError(error) {
   return dispatch(loginError, error);
 }
