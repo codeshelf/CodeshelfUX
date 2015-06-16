@@ -49,12 +49,6 @@ function authenticateCredentials(fields) {
     });
 }
 
-export function toggleStoredCredentials(e) {
-    e.preventDefault();
-    dispatch(toggleStoredCredentials, {});
-
-}
-
 export function loginError(error) {
   return dispatch(loginError, error);
 }
@@ -76,5 +70,5 @@ export function loggedout(toStore) {
 }
 
 setToString('auth', {
-  updateFormField, login, loginError, logged, loggedout, toggleStoredCredentials
+  updateFormField, login, loginError, logged, loggedout
 });

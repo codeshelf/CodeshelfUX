@@ -2,9 +2,15 @@ import React from "react";
 import Icon from "react-fa";
 import {DropdownButton, NavItem, Button, MenuItem} from "react-bootstrap";
 import { NavItemLink, MenuItemLink} from 'react-router-bootstrap';
-import {loggedout, toggleStoredCredentials} from "data/auth/actions";
-import {getEmail, isCredentialsStored} from "data/user/store";
+import {loggedout} from "data/auth/actions";
+//todo turn clearStoredCredentials into an action
+import {getEmail, isCredentialsStored, clearStoredCredentials} from "data/user/store";
 import {authz} from 'components/common/auth';
+
+function     clearCredentials() {
+    clearStoredCredentials();
+    loggedout(false);
+}
 
 //TODO show logout if logged in
 export default class TopNavBar extends React.Component {
@@ -39,10 +45,9 @@ class UserProfileMenu extends React.Component {
         super(props);
     }
 
-
     handleLogoutClick(e) {
         e.preventDefault();
-        loggedout(false);
+        clearCredentials();
     }
 
 
@@ -69,8 +74,9 @@ class CredentialsStore extends React.Component {
     handleStoreCredentialsClick(credentialsStored, e) {
         e.preventDefault();
         if (credentialsStored) {
-            loggedout(false);
+            clearCredentials();
         } else {
+            //logout and capture credentials
             loggedout(true);
         }
 

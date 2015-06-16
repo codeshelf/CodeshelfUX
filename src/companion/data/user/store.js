@@ -5,11 +5,16 @@ import {userCursor} from 'data/state';
 
 const getIn = (path) => userCursor().getIn(path);
 
-function getStoredCredentials() {
-    return window.localStorage.getItem("authData");
+export function getStoredCredentials() {
+    let JSONString = window.localStorage.getItem("authData");
+    if (JSONString != null) {
+        return JSON.parse(JSONString);
+    } else {
+        return null;
+    }
 }
 
-function clearStoredCredentials() {
+export function clearStoredCredentials() {
     window.localStorage.removeItem("authData");
 }
 function storeCredentials(email, password) {
