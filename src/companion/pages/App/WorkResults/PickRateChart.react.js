@@ -4,8 +4,6 @@ var d3 = require("d3");
 require("nvd3/build/nv.d3.min.css");
 var nv = require("exports?nv!nvd3/build/nv.d3.min.js");
 
-import {getFacilityContext} from 'data/csapi';
-
 function updateChart(el, chart, data) {
     d3.select(el).select("svg")
         .datum(data)
@@ -64,50 +62,6 @@ function chartSpec() {
        return chart;
 }
 
-function toD3Data(startTimestamp, endTimestamp, apiData) {
-    var hoursOfOperation = _.range(
-        moment(startTimestamp).hour(),
-        moment(endTimestamp).hour()+1);
-
-    var yProperty = "picks"; //or "quantity";
-    return _.chain(apiData)
-        .groupBy("workerId")
-        .transform((result, workerHourlyRates, key) => {
-            let transformed =  _.map(workerHourlyRates, (v) => {
-                let utcHour = v.hour;
-                let localHour = moment(startTimestamp).utc().hour(utcHour).local().hour();
-
-                return {
-                    key: v.workerId,
-                    x: localHour,
-                    y: v[yProperty],
-                    quantity: v.quantity,
-                    picks: v.picks
-                };
-            });
-
-            let missingValues = _.chain(hoursOfOperation)
-                .difference(_.pluck(transformed, "x"))
-                .map((v) => {
-                    return {
-                        key: key,
-                        x: v,
-                        y: 0,
-                        quantity: 0,
-                        picks: 0
-                    };
-                }).value();
-
-            let all = _.chain(transformed).concat(missingValues).sortBy("x").value();
-            result[key] = {
-                key: key,
-                values: all
-            };
-        })
-        .values()
-        .value();
-}
-
 var PickRateChart = React.createClass({
     render: function() {
         return (<div className="nvd3"><svg style={this.props.style}></svg></div>);
@@ -122,17 +76,10 @@ var PickRateChart = React.createClass({
         this.updateViews(nextProps, this.getDOMNode());
     },
 
-    getPickRates: (startTimestamp, endTimestamp) => {
-        return getFacilityContext().getPickRates(startTimestamp, endTimestamp);
-    },
-
     updateViews: function(props, el) {
-        var {startTimestamp, endTimestamp} = props;
+        var {pickRates} = props;
         var chart = chartSpec();
-        this.getPickRates(startTimestamp, endTimestamp).then((data) => {
-            let d3Data = toD3Data(startTimestamp, endTimestamp, data);
-            updateChart(el, chart, d3Data);
-        });
+        updateChart(el, chart, pickRates);
     }
 });
 module.exports = PickRateChart;
