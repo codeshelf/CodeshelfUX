@@ -9,7 +9,8 @@ import Icon from "react-fa";
 
 var Row = React.createClass({
     render: function() {
-        var {columnMetadata,
+        var {columns,
+             columnMetadata,
              row,
              rowNumber,
              expanded,
@@ -19,8 +20,7 @@ var Row = React.createClass({
         return (
                 <tr role="row" onClick={_.partial(onClick, row, rowNumber)} className={classnames(rowAlt, shown)}>
                 {
-                    columnMetadata.map(function(columnMetadata){
-                        var key = columnMetadata.get("columnName");
+                    columns.map(function(key){
                         var value = row.get(key);
                         value = (typeof value === "boolean") ? value.toString() : value;
                         var CustomComponent = columnMetadata.get("customComponent");

@@ -27,13 +27,10 @@ function priorDay(daysBack) {
 
 export default class DayOfWeekFilter extends React.Component {
 
-
-    static priorDayStart(daysBack) {
-        return priorDay(daysBack).startOf('day').toISOString();
-    }
-
-    static priorDayEnd(daysBack) {
-        return priorDay(daysBack).endOf('day').toISOString();
+    static priorDayInterval(daysBack) {
+        return {start: priorDay(daysBack).startOf('day'),
+                end: priorDay(daysBack).endOf('day')
+               };
     }
 
     constructor() {

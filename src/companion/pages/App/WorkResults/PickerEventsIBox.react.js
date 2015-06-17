@@ -2,14 +2,19 @@ import React from 'react';
 import {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} from "components/common/IBox";
 import PickerEventsChart from './PickerEventsChart';
 import PickRateChart from './PickRateChart';
+import PickRateTable from "./PickRateTable";
 import moment from 'moment';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
 
 import _ from "lodash";
 import {getFacilityContext} from "data/csapi";
 
-const priorDayStart = DayOfWeekFilter.priorDayStart;
-const priorDayEnd = DayOfWeekFilter.priorDayEnd;
+const priorDayInterval = (daysBack) => {
+    let interval = DayOfWeekFilter.priorDayInterval(daysBack);
+    interval.start = moment(interval.start).hour(6); //6am
+    interval.end = moment(interval.end).hour(18); //6pm
+    return interval;
+};
 
 function toD3Data(startTimestamp, endTimestamp, apiData) {
     var hoursOfOperation = _.range(
@@ -59,26 +64,24 @@ function toD3Data(startTimestamp, endTimestamp, apiData) {
 var PickerEventsIBox = React.createClass({
     getInitialState: function() {
         return {
-            "startTimestamp" : priorDayStart(0),
-            "endTimestamp" : priorDayEnd(0),
+            "interval": priorDayInterval(0),
             "pickRates" : []
         };
     },
     handleChange: function(daysBack) {
-        this.setState({startTimestamp: priorDayStart(daysBack),
-                       endTimestamp: priorDayEnd(daysBack)}, () => {
+        this.setState({interval: priorDayInterval(daysBack)}, () => {
                            this.updateViews(this.state);
                        });
     },
 
     getPickRates: (startTimestamp, endTimestamp) => {
-        return getFacilityContext().getPickRates(startTimestamp, endTimestamp);
+        return getFacilityContext().getPickRates(startTimestamp.toISOString(), endTimestamp.toISOString());
     },
 
     updateViews: function(state) {
-        let {startTimestamp, endTimestamp} = state;
-        this.getPickRates(startTimestamp, endTimestamp).then((data) => {
-            let d3Data = toD3Data(startTimestamp, endTimestamp, data);
+        let {start, end} = state.interval;
+        this.getPickRates(start,  end).then((data) => {
+            let d3Data = toD3Data(start, end, data);
             this.setState({"pickRates": d3Data});
         });
     },
@@ -88,7 +91,7 @@ var PickerEventsIBox = React.createClass({
     },
 
     render: function() {
-        var {startTimestamp, endTimestamp, pickRates} = this.state;
+        var {interval, pickRates} = this.state;
         return (<IBox>
                    <IBoxTitleBar>
                      <IBoxTitleText>
@@ -100,6 +103,14 @@ var PickerEventsIBox = React.createClass({
                    </IBoxSection>
                    <IBoxSection>
                        <PickRateChart style={{width: '100%', height: '300px'}}
+                           startTimestamp={interval.start}
+                           endTimestamp={interval.end}
+                           pickRates={pickRates} />
+                   </IBoxSection>
+                   <IBoxSection>
+                       <PickRateTable style={{width: '100%', height: '300px'}}
+                           startTimestamp={interval.start}
+                           endTimestamp={interval.end}
                            pickRates={pickRates} />
                    </IBoxSection>
                 {/*

@@ -10,23 +10,20 @@ import ImportList from './ImportList';
 
 
 
-const priorDayStart = DayOfWeekFilter.priorDayStart;
-const priorDayEnd = DayOfWeekFilter.priorDayEnd;
-
+const priorDayInterval = DayOfWeekFilter.priorDayInterval;
 
 export default class Imports extends React.Component{
 
     constructor() {
         super();
         this.state = {loading: false,
-                      "startTimestamp" : priorDayStart(0),
-                      "endTimestamp" : priorDayEnd(0),
+                      interval: priorDayInterval(0),
                       receipts: []};
     }
 
     fetchImportReceipts() {
-        let {startTimestamp, endTimestamp} = this.state;
-        getFacilityContext().getImportReceipts(startTimestamp, endTimestamp).then((receipts) => {
+        let {start, end} = this.state.interval;
+        getFacilityContext().getImportReceipts(start.toISOString(), end.toISOString()).then((receipts) => {
             this.setState({"receipts": receipts});
         });
     }
@@ -40,8 +37,7 @@ export default class Imports extends React.Component{
     }
 
     handleChange(daysBack) {
-        this.setState({startTimestamp: priorDayStart(daysBack),
-                       endTimestamp: priorDayEnd(daysBack)},
+        this.setState({interval: priorDayInterval(daysBack)},
                        () => {
                            this.fetchImportReceipts();
                        });
