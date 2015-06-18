@@ -189,8 +189,9 @@ var Table = React.createClass({
                 </table>
         );
     },
+
     render: function() {
-        var {results = []} = this.props;
+        var {results = [], emptyMessage = "No Data Available"} = this.props;
         if (results.constructor === Array) {
             results = Immutable.fromJS(results);
         }
@@ -198,7 +199,7 @@ var Table = React.createClass({
         return (results.count() > 0) ?
             this.renderTable(results)
             :
-            <h3>No Data Available</h3>;
+            <h3>{emptyMessage}</h3>;
     }
 });
 

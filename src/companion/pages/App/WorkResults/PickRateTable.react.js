@@ -47,7 +47,7 @@ export default class PickRateTable extends React.Component{
             displayName: "Total"
         });
         return (<div>
-                   <Table results={tableData} columnMetadata={columnMetadata} sortedBy="-total" />
+                   <Table results={tableData} columnMetadata={columnMetadata} sortedBy="-total" emptyMessage={""} />
                 </div>
         );
     }
