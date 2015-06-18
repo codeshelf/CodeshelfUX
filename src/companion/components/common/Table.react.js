@@ -7,6 +7,17 @@ var $ = require("jquery");
 import classnames from 'classnames';
 import Icon from "react-fa";
 
+
+function getMetadata(columnMetadata, columnName) {
+    let metadata = columnMetadata.find((obj) => obj.get("columnName") === columnName);
+    if (metadata == null) {
+        console.warn(`no column metadata for column: ${columnName}`);
+    }
+    return metadata;
+}
+
+
+
 var Row = React.createClass({
     render: function() {
         var {columns,
@@ -22,8 +33,10 @@ var Row = React.createClass({
                 {
                     columns.map(function(key){
                         var value = row.get(key);
+                        //TODO likely need better performing index of metadata
+                        var metadata = getMetadata(columnMetadata, key);
                         value = (typeof value === "boolean") ? value.toString() : value;
-                        var CustomComponent = columnMetadata.get("customComponent");
+                        var CustomComponent = metadata.get("customComponent");
                         var valueRenderer = (<span>{value}</span>);
                         if (CustomComponent) {
                             valueRenderer = ( <CustomComponent rowData={row} cellData={value} />);
@@ -48,14 +61,6 @@ class ExpandRow extends React.Component {
 
 class Header extends React.Component {
 
-    getMetadata(columnMetadata, columnName) {
-        let metadata = columnMetadata.find((obj) => obj.get("columnName") === columnName);
-        if (metadata == null) {
-            console.warn(`no column metadata for column: ${columnName}`);
-        }
-        return metadata;
-    }
-
     toSortSpec(sortBy) {
         let firstChar = (sortBy && sortBy.length > 0) ? sortBy.charAt(0) : null;
         if (firstChar) {
@@ -76,7 +81,7 @@ class Header extends React.Component {
                 <tr>
                 {
                     columns.map(function(column, index){
-                        let {columnName, displayName = columnName} = this.getMetadata(columnMetadata, column).toObject();
+                        let {columnName, displayName = columnName} = getMetadata(columnMetadata, column).toObject();
                         var priority = index;
 
                         return (<th key={columnName} scope="col" data-tablesaw-priority={priority === 0 ? "persist" : priority} >
