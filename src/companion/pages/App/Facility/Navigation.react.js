@@ -8,6 +8,8 @@ import PureComponent from 'components/common/PureComponent';
 import exposeRouter from 'components/common/exposerouter';
 import {authz} from 'components/common/auth';
 import {getSelectedFacility} from 'data/facilities/store';
+import _ from "lodash";
+
 
 const AuthzNavItemLink = authz(NavItemLink);
 const AuthzNavItem = authz(NavItem);
@@ -36,20 +38,26 @@ class MenuItem extends React.Component {
              to,
              params,
              query,
-             href} = this.props;
+             href,
+             className} = this.props;
 
         let active = to && this.context.router.isActive(to, params, query);
 
         var titleRenderer = (<span className="title">{title}</span>);
-        var classes = classnames({
+
+        var classes = classnames(className, {
             "active": active
         });
+
+        var propsToPass = _.clone(this.props);
+        delete propsToPass.className; //pass everything but className
+
         return (<li className={classes}>
                   {
                       (to) ?
-                          <Link {...this.props}>{titleRenderer}</Link>
+                          <Link {...propsToPass}>{titleRenderer}</Link>
                           :
-                          <a {...this.props}>{titleRenderer}</a>
+                          <a {...propsToPass}>{titleRenderer}</a>
                   }
                   <span className="icon-thumbnail"><Icon name={iconName}></Icon></span>
                </li>);
@@ -77,7 +85,7 @@ class Navigation extends React.Component {
               <NavbarHeader {...this.props} />
               <div className="sidebar-menu">
                   <ul className="menu-items">
-                      <AuthzMenuItem to="overview" params={params} title="Overview" iconName="clock-o" />
+                      <AuthzMenuItem className="m-t-30" to="overview" params={params} title="Overview" iconName="clock-o" />
                       <AuthzMenuItem to="orders" params={params} title="Orders" iconName="shopping-cart" />
                       <AuthzMenuItem permission="event:view"  to="blockedwork" params={params} title="Work Issues" iconName="exclamation-circle"/ >
                       <AuthzMenuItem permission="event:view" to="workresults" params={params} title="Work Results" iconName="pie-chart" />
