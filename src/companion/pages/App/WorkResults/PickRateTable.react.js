@@ -8,14 +8,19 @@ export default class PickRateTable extends React.Component{
     }
 
     toTableData(pickRates) {
-        return _.map(pickRates, (series) =>{
+        return _.chain(pickRates).map((series) =>{
             return _.reduce(series.values, (row, value) => {
-                let cellValue = (value.y > 0) ? value.y : null;
+                let y = value.y;
+                let cellValue = (y > 0) ? y : null;
                 row[value.x.toString()] = cellValue;
                 row.worker = value.key;
+                row.total += y;
                 return row;
-            }, {});
-        });
+            }, {total: 0});
+        })
+        .sortBy("total")
+        .reverse()
+        .value();
 
     }
 
@@ -37,9 +42,12 @@ export default class PickRateTable extends React.Component{
             columnName: "worker",
             displayName: "Worker"
         });
-        columnMetadata
+        columnMetadata.push({
+            columnName: "total",
+            displayName: "Total"
+        });
         return (<div>
-                <Table results={tableData} columnMetadata={columnMetadata}/>
+                   <Table results={tableData} columnMetadata={columnMetadata} sortedBy="-total" />
                 </div>
         );
     }
