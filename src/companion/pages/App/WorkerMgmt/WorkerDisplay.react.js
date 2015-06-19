@@ -171,7 +171,7 @@ class WorkerDisplay extends React.Component {
 
         };
 
-        return <Button bsStyle="link" disabled={(value) ? true : false} onClick={setBadgeId.bind(this)}><Icon name="barcode" size="2x" /></Button>;
+        return <Button bsStyle="link" onClick={setBadgeId.bind(this)}><Icon name="barcode" size="2x" /></Button>;
     }
 
     generateBarcode() {
