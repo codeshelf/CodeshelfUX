@@ -87,12 +87,12 @@ class Navigation extends React.Component {
                   <ul className="menu-items">
                       <AuthzMenuItem className="m-t-30" to="overview" params={params} title="Overview" iconName="clock-o" />
                       <AuthzMenuItem to="orders" params={params} title="Orders" iconName="shopping-cart" />
-                      <AuthzMenuItem permission="event:view"  to="blockedwork" params={params} title="Work Issues" iconName="exclamation-circle"/ >
-                      <AuthzMenuItem permission="event:view" to="workresults" params={params} title="Work Results" iconName="pie-chart" />
-                      <AuthzMenuItem permission="worker:view" to="workermgmt" params={params} title="Manage Workers" iconName="users" />
-                      <AuthzMenuItem  to="import" params={params} title="Manage Imports" iconName="upload" />
+                      <AuthzMenuItem permission="event:view"  to="blockedwork" params={params} title="Issues" iconName="exclamation-circle"/ >
+                      <AuthzMenuItem permission="event:view" to="workresults" params={params} title="Pick Rates" iconName="pie-chart" />
+                      <AuthzMenuItem permission="worker:view" to="workermgmt" params={params} title="Workers" iconName="users" />
+                      <AuthzMenuItem  to="import" params={params} title="Imports" iconName="file-text" />
 
-                      <AuthzMenuItem permission="facility:edit" to="extensionpoints" params={params} title="Script Extensions" iconName="file-code-o" />
+                      <AuthzMenuItem permission="facility:edit" to="extensionpoints" params={params} title="Extensions" iconName="file-code-o" />
 
                       <AuthzMenuItem permission="ux:view" href={this.getUXUrl()} params={params} title="Configuration" iconName="cogs" />
                       <AuthzMenuItem permission="che:simulate" to="testscript" params={params} title="Test Scripts" iconName="bug" />
