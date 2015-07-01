@@ -13,6 +13,18 @@ import {ValidationError} from 'lib/validation';
 
 class ChangePassword extends React.Component {
 
+  componentWillUnmount() {
+      this.resetForm(this.getFormCursor());
+  }
+
+  resetForm(formCursor) {
+      formCursor((form) =>{
+          return form.set("values", form.get("values").clear());
+          return form.set("errors", form.get("errors").clear());
+      });
+
+  }
+
   handleSubmit(formCursor) {
     const nextPath = this.props.router.getCurrentQuery().nextPath;
       validate(formCursor().get("values").toJS()).prop("new").matchesProp("confirm").promise
@@ -20,6 +32,7 @@ class ChangePassword extends React.Component {
               return changePassword(formCursor().getIn(["values", "old"]),  formCursor().getIn(["values", "new"]));
           })
           .then(() => {
+              this.resetForm(formCursor);
               formCursor((form) =>{
                   return form.set("errors", form.get("errors").clear());
               });

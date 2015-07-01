@@ -62,6 +62,7 @@ class UserProfileMenu extends React.Component {
         return (
             <DropdownButton bsStyle="link" title={this.renderTitle()} pullRight="true">
                 <AuthzCredentialsStore permission="companion:savecredentials" notPermission="companion:nosavecredentials"/>
+                <MenuItemLink to="changepassword"><Icon name="edit" />Change Password</MenuItemLink>
                 <MenuItem onClick={this.handleLogoutClick.bind(this)}><Icon name="sign-out" />Log out</MenuItem>
             </DropdownButton>
         );
