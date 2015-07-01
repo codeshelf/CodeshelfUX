@@ -13,6 +13,7 @@ import Import from './pages/App/Import/Import.react.js';
 import {Route, DefaultRoute, NotFoundRoute, RouteHandler, Redirect} from 'react-router';
 import {authn} from './components/common/auth.js';
 import Login from './pages/Login/Login.react.js';
+import ChangePassword from './pages/ChangePassword/ChangePassword.react.js';
 import TestScript from './pages/App/TestScript/TestScript.react.js';
 import ExtensionPointsPage from "./pages/App/ExtensionPoints/ExtensionPointsPage.react.js";
 import ExtensionPointEdit from "./pages/App/ExtensionPoints/ExtensionPointEdit.react.js";
@@ -41,6 +42,7 @@ export default (
 
          </Route>
        </Route>
-    <Route handler={Login} name="login" />
+        <Route handler={Login} name="login" />
+        <Route handler={ChangePassword} name="changepassword" />
   </Route>
 );

@@ -5,6 +5,7 @@ import Promise from 'bluebird';
 import React from 'react';
 import validator from 'validator';
 
+
 export class ValidationError extends Error {
   constructor(message: string, prop: string) {
     super();
@@ -12,6 +13,7 @@ export class ValidationError extends Error {
     this.prop = prop;
   }
 }
+
 
 export function focusInvalidField(component) {
   return (error) => {
@@ -78,6 +80,14 @@ export default class Validation {
         prop
       );
     });
+  }
+
+  matchesProp(otherProp: string) {
+      return this.custom((value, prop, object) =>{
+          let otherValue = object[otherProp];
+          if (this._validator.equals(value, otherValue)) return;
+          throw new ValidationError(`${prop} does not match ${otherProp}`, otherProp);
+      });
   }
 
   getEmailMessage() {

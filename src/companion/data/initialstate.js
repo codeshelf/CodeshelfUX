@@ -23,6 +23,19 @@ const data = {
                 store: false
             },
             error: null
+        },
+        changepassword: {
+            values: {
+                old: "",
+                new: "",
+                confirm: ""
+            },
+            errors: {
+                old: [],
+                new: [],
+                confirm: []
+
+            }
         }
     },
     i18n: {

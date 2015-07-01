@@ -51,6 +51,19 @@ function toAbsoluteURL(path) {
     return endpoint + path;
 }
 
+export function changePassword(oldPassword, newPassword) {
+    var options = {
+        method: 'POST',
+        contentType: "form", //superagent forum url encoded
+        data: {
+            "old": oldPassword,
+            "new": newPassword
+        }
+    };
+    return ajax("/auth/pw", options);
+
+};
+
 export function authenticate(username, password) {
     var options = {
         method: 'POST',
