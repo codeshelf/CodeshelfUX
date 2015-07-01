@@ -3,6 +3,7 @@ import {Input as BSInput} from 'react-bootstrap';
 import PureComponent from 'components/common/PureComponent';
 import classnames from 'classnames';
 
+require('./Form.styl');
 
 class  WrapInput extends React.Component {
     handleInputGroupClick(e) {
@@ -16,6 +17,7 @@ class  WrapInput extends React.Component {
         let {label,
              name,
              required,
+             errors,
              addOnAfter} = this.props;
 
         var groupClasses = classnames({
@@ -30,10 +32,15 @@ class  WrapInput extends React.Component {
 
 
         return (
-                <div className={groupClasses} onClick={this.handleInputGroupClick.bind(this)}>
-                <label htmlFor={name} className={labelClasses}>{label}</label>
-                {this.props.children}
-            </div>
+                <div>
+                    <div className={groupClasses} onClick={this.handleInputGroupClick.bind(this)}>
+                        <label htmlFor={name} className={labelClasses}>{label}</label>
+                        {this.props.children}
+                    </div>
+                    {errors.map((error) => {
+                        return (<em key={error} htmlFor={name} className="input-error"><span className="text-danger">{error}</span></em>);
+                    })}
+                </div>
         );
     }
 
@@ -46,6 +53,7 @@ export class Input extends React.Component {
              type,
              name,
              value,
+             errors = [],
              required,
              autoFocus,
              disabled,
@@ -67,7 +75,7 @@ export class Input extends React.Component {
             "required": required
         });
 
-        return (<WrapInput label={label} name={name} required={required} addOnAfter={addOnAfter}>
+        return (<WrapInput label={label} name={name} required={required} errors={errors} addOnAfter={addOnAfter}>
                     <input type={type}
                            className={inputClasses}
                            required={required}
