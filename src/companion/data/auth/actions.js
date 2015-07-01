@@ -37,7 +37,7 @@ export function loginCookies() {
 function validateForm(fields) {
   return validate(fields)
     .prop('email').required().email()
-    .prop('password').required().simplePassword()
+    .prop('password').required()//.simplePassword()
     .promise;
 }
 
