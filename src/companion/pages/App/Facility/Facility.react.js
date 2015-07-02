@@ -17,7 +17,7 @@ export default class Facility extends React.Component {
     }
 
     render() {
-        let {facility, tenant} = this.props;
+        let {facility, tenant, state} = this.props;
         let tenantName = tenant.get("name");
         let facilities = getFacilities();
         return (
@@ -30,7 +30,7 @@ export default class Facility extends React.Component {
                                   <TopNavBar title={tenantName} facility={facility} facilities={facilities}/>
                                   <div className="page-content-wrapper">
                                       <div className="content">
-                                          <RouteHandler />
+                                          <RouteHandler state={state}/>
                                       </div>
                                   </div>
                               </div>
