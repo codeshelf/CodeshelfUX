@@ -38,6 +38,14 @@ const data = {
             }
         }
     },
+    pivot: {
+        options: {
+            "cols": ["status"]
+            ,"rows": ["customerId", "shipperId"]
+            ,"hiddenAttributes": ["domainId", "containerId", "orderDate", "updated", "pickStrategy", "persistentId", "orderType", "active"]
+        },
+        orders: []
+    },
     i18n: {
         formats: {},
         locales: initialLocale,
