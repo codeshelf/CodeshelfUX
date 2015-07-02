@@ -352,6 +352,15 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 
 	}
 
+	function rememberCurrentColumns(){
+		var sortCols = grid_.getSortColumns();
+		var firstSortAsc = sortCols[0]['sortAsc'];
+		var firstColumn = grid_.getColumns()[0];
+		setSortColumn(grid_, firstColumn, firstSortAsc);
+		sortDataView(dataView_, firstSortAsc);
+		saveJsonColumnFormat();
+	}
+
 	var self_ = {
 		logger: goog.debug.Logger.getLogger('hierarch list view'),
 
@@ -479,12 +488,29 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 				});
 
 				grid_.onColumnsReordered.subscribe(function(event) {
+					rememberCurrentColumns();
+					/*
 					var sortCols = grid_.getSortColumns();
 					var firstSortAsc = sortCols[0]['sortAsc'];
 					var firstColumn = grid_.getColumns()[0];
 					setSortColumn(grid_, firstColumn, firstSortAsc);
 					sortDataView(dataView_, firstSortAsc);
 					saveJsonColumnFormat();
+					*/
+				});
+
+			// Quite a sledge-hammer. We really want to save the cookie after dismissing the add/remove column widget. But not hook.
+			// Usually user resizes after, so this might work.
+				grid_.onColumnsResized.subscribe(function(event) {
+					rememberCurrentColumns();
+					/*
+					var sortCols = grid_.getSortColumns();
+					var firstSortAsc = sortCols[0]['sortAsc'];
+					var firstColumn = grid_.getColumns()[0];
+					setSortColumn(grid_, firstColumn, firstSortAsc);
+					sortDataView(dataView_, firstSortAsc);
+					saveJsonColumnFormat();
+					*/
 				});
 
 				grid_.onSelectedRowsChanged.subscribe(function(event) {
