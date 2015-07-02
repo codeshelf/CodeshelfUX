@@ -99,9 +99,9 @@ domainobjects = {
 				'title': 'Vertices',
 				'width': 40
 			},
-			'putWall': {
-				'id': 'putWallUi',
-				'title': 'Put Wall',
+			'wall': {
+				'id': 'wallUi',
+				'title': 'Wall',
 				'width': 40
 			},
 			'tapeId': {
@@ -170,9 +170,9 @@ domainobjects = {
 				'title': 'Vertices',
 				'width': 40
 			},
-			'putWall': {
-				'id': 'putWallUi',
-				'title': 'Put Wall',
+			'wall': {
+				'id': 'wallUi',
+				'title': 'Wall',
 				'width': 40
 			},
 			'tapeId': {
@@ -771,9 +771,9 @@ domainobjects = {
 				'title': 'Active',
 				'width': 8
 			},
-			'putWall': {
-				'id': 'putWallUi',
-				'title': 'Put Wall',
+			'wall': {
+				'id': 'wallUi',
+				'title': 'Wall',
 				'width': 40
 			},
 			'groupUi': {
@@ -903,9 +903,9 @@ domainobjects = {
 				'title': 'Order Type',
 				'width': 10
 			},
-			'putWall': {
-				'id': 'putWallUi',
-				'title': 'Put Wall',
+			'wall': {
+				'id': 'wallUi',
+				'title': 'Wall',
 				'width': 40
 			},
 			'groupUi': {
@@ -1084,9 +1084,9 @@ domainobjects = {
 				'title': 'Pick End Y',
 				'width': 40
 			},
-			'putWall': {
-				'id': 'putWallUi',
-				'title': 'Put Wall',
+			'wall': {
+				'id': 'wallUi',
+				'title': 'Wall',
 				'width': 40
 			},
 			'tapeId': {
@@ -1185,10 +1185,10 @@ domainobjects = {
 				'title': 'Alias',
 				'width': 10
 			},
-			'putWall': {
-				'id': 'putWallUi',
-				'title': 'Put Wall',
-				'width': 20
+			'wall': {
+				'id': 'wallUi',
+				'title': 'Wall',
+				'width': 40
 			},
 			'tapeIdUi': {
 				'id': 'tapeIdUi',

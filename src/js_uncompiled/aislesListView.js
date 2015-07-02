@@ -80,8 +80,8 @@ codeshelf.aisleslistview = function(websession, facility) {
 			websession_.callMethod(theAisle, 'Aisle', 'makeInactiveAndAllChildren', methodArgs);
 		},
 
-		togglePutWall: function(item) {
-			websession_.callMethod(item, 'Aisle', 'togglePutWallLocation', []);
+		toggleWall: function(item) {
+			websession_.callMethod(item, 'Aisle', 'toggleWallLocation', []);
 		},
 
 		associatePathSegment: function(item) {
@@ -158,10 +158,10 @@ codeshelf.aisleslistview = function(websession, facility) {
 			}
 		},
 		{
-			"label" : "Toggle put wall",
+			"label" : "Toggle wall: off/PutWall/SkuWall",
 			"permission": "aisle:edit",
 			"action": function(itemContext) {
-				self.togglePutWall(itemContext);
+				self.toggleWall(itemContext);
 			}
 		}
 	];
