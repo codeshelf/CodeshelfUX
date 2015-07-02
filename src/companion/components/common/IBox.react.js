@@ -39,7 +39,7 @@ var IBoxSection = RClass(function() {
 
 class IBoxBody extends React.Component {
     render() {
-       return (<div className="panel-pody">
+       return (<div className="panel-body">
             {this.props.children}
         </div>);
     }
@@ -47,7 +47,8 @@ class IBoxBody extends React.Component {
 
 var IBox = RClass(function() {
     let classes = classNames("panel", "panel-default", this.props.className);
-    return (<div data-pages="portlet" className={classes}>
+    let {style} = this.props;
+    return (<div data-pages="portlet" className={classes} style={style}>
                 {this.props.children}
             </div>);
 });
