@@ -57,7 +57,7 @@ onDocumentKeypress(e) {
 }
 
 render() {
-    return (<RouteHandler />);
+    return (<RouteHandler state={state}/>);
 
 }
 };

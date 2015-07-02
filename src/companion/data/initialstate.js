@@ -23,7 +23,28 @@ const data = {
                 store: false
             },
             error: null
+        },
+        changepassword: {
+            values: {
+                old: "",
+                new: "",
+                confirm: ""
+            },
+            errors: {
+                old: [],
+                new: [],
+                confirm: []
+
+            }
         }
+    },
+    pivot: {
+        options: {
+            "cols": ["status"]
+            ,"rows": ["customerId", "shipperId"]
+            ,"hiddenAttributes": ["domainId", "containerId", "orderDate", "updated", "pickStrategy", "persistentId", "orderType", "active"]
+        },
+        orders: []
     },
     i18n: {
         formats: {},

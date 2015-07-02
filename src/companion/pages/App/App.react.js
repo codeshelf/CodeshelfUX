@@ -44,9 +44,9 @@ class App extends React.Component {
         console.log("Rendering App");
         const facility = getSelectedFacility();
         let tenant = getSelectedTenant();
-
+        let {state} = this.props;
         return (facility && tenant) ?
-            <RouteHandler facility={facility} tenant={tenant}/>
+            <RouteHandler facility={facility} tenant={tenant} state={state}/>
             :
             <span>Retrieving Facilities...</span>;
     }
