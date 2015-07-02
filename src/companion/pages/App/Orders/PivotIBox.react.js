@@ -5,7 +5,8 @@ import {IBox, IBoxTitleBar, IBoxBody, IBoxSection, IBoxTitleText} from 'componen
 import {Button} from "react-bootstrap";
 import {getFacilityContext} from "data/csapi";
 require("jquery-ui");
-require("imports?this=>window!pivottable");
+//use a small customer loader to add a line ending
+require("imports?this=>window!../../../lib/newline-loader.js!pivottable");
 
 import  {fromJS} from "immutable";
 
@@ -44,7 +45,7 @@ export default class PivotIBox extends React.Component{
     }
 
     handleRefresh() {
-        getFacilityContext().findOrders({status: "RELEASED"}).then((data) =>{
+        getFacilityContext().findOrders().then((data) =>{
             this.getOrdersCursor()((orders) =>{
                 return orders.clear().concat(fromJS(data));
             });
