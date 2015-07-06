@@ -8,8 +8,7 @@ import {getSelectedTenant} from 'data/user/store';
 import {fetchFacilities} from 'data/facilities/actions';
 import {getSelectedFacility, getFacilities} from 'data/facilities/store';
 
-// Leverage webpack require goodness for feature toggle based dead code removal.
-require('assets/css/app.styl');
+
 
 export default class Facility extends React.Component {
     componentWillMount() {

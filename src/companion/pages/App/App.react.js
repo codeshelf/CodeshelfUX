@@ -6,6 +6,8 @@ import {getSelectedFacility} from 'data/facilities/store';
 import {isLoggedIn, getSelectedTenant} from 'data/user/store';
 import exposeRouter from 'components/common/exposerouter';
 
+require('assets/css/app.styl');
+
 class App extends React.Component {
 
     componentWillMount() {
