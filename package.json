@@ -34,6 +34,7 @@
     "node-notifier": "^4.1.0",
     "node-uuid": "^1.4.3",
     "normalize.css": "^3.0.2",
+    "orb": "^1.0.9",
     "piping": "0.1.6",
     "pivottable": "^1.6.1",
     "react": "^0.13.3",

@@ -100,7 +100,9 @@ module.exports = function(isDevelopment, isTest) {
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery",
-            "window.jQuery": "jquery"
+            "window.jQuery": "jquery",
+            "window.React": "react",
+            "React": "react"
         })
       ];
       if (isDevelopment)

@@ -124,7 +124,6 @@ export default class OrderReview extends React.Component{
                 <Row>
                     <Col md={4}>
                         <form onSubmit={this.handleSearch.bind(this)}>
-                            <Select id="filterBy" label='Status Filter' value={status} options={this.orderStatusOptions} onChange={this.handleFilterStatusBy.bind(this)}/>
                             <Input ref="orderId" label="Order ID" name="orderId" type="text" />
                         </form>
                     </Col>

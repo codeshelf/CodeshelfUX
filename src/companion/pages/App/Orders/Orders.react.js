@@ -5,7 +5,6 @@ import {SingleCellIBox} from "components/common/IBox";
 import OrderReview from "./OrderReview";
 import PivotIBox from "./PivotIBox";
 
-
 export default class Orders extends React.Component{
 
     constructor(props) {
@@ -16,10 +15,10 @@ export default class Orders extends React.Component{
 
         return (<DocumentTitle title="Orders">
                   <SingleCellLayout>
-                      <PivotIBox state={this.props.state}/>
-                      <SingleCellIBox title="Order List">
-                          <OrderReview />
-                      </SingleCellIBox>
+                     <PivotIBox state={this.props.state} />
+                     <SingleCellIBox title="By Order ID">
+                         <OrderReview state={this.props.state} />
+                     </SingleCellIBox>
                   </SingleCellLayout>
                 </DocumentTitle>
                );

@@ -5,34 +5,11 @@ import {IBox, IBoxTitleBar, IBoxBody, IBoxSection, IBoxTitleText} from 'componen
 import {Button} from "react-bootstrap";
 import {getFacilityContext} from "data/csapi";
 require("jquery-ui");
-//use a small customer loader to add a line ending
-require("imports?this=>window!../../../lib/newline-loader.js!pivottable");
 
 import  {fromJS} from "immutable";
 
-require("./pivottable.css");
+import PivotTable from "./PivotTable";
 
-class PivotTable extends React.Component {
-
-    renderPivotTable(props) {
-        let el = React.findDOMNode(this);
-        let jqEl = $(el);
-        //jqEl.empty();
-        jqEl.pivotUI(props.orders.toJS(), props.options.toJS());
-    }
-
-    componentDidMount() {
-        this.renderPivotTable(this.props);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.renderPivotTable(nextProps);
-    }
-
-    render() {
-        return (<div>Table</div>);
-    }
-}
 
 export default class PivotIBox extends React.Component{
 
@@ -85,7 +62,7 @@ export default class PivotIBox extends React.Component{
                 <div style={{display: "inline-block"}}>
                 <div className="text-right" >
                 </div>
-                <PivotTable orders={orders} options={options}/>
+                <PivotTable orders={orders} />
                 </div>
                 </IBoxBody>
                 </IBox>);
