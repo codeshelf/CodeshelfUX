@@ -128,6 +128,10 @@ module.exports = function(isDevelopment, isTest) {
       return plugins;
     })(),
     resolve: {
+        alias: {
+            "react": path.resolve(process.cwd(), './node_modules/react'),
+            "react/addons": path.resolve(process.cwd(), './node_modules/react')
+        },
         root: [ path.resolve(process.cwd(), './src/companion'),
                 path.resolve(process.cwd(), './bower_components')],
         extensions: ['', '.js', '.json', '.react.js']
