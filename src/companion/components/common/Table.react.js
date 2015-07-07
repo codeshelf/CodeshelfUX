@@ -84,7 +84,11 @@ class Header extends React.Component {
                         let {columnName, displayName = columnName} = getMetadata(columnMetadata, column).toObject();
                         var priority = index;
 
-                        return (<th key={columnName} scope="col" data-tablesaw-priority={priority === 0 ? "persist" : priority} >
+                        return (<th key={columnName}
+                                scope="col"
+                                data-tablesaw-priority={priority === 0 ? "persist" : priority}
+                                data-toggle="tooltip"
+                                title={displayName}>
                                    {displayName}
                                    {(sortSpec && sortSpec.columnName === columnName) ?
                                        <Icon name={"sort-numeric-"+sortSpec.dir} />
