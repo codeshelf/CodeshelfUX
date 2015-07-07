@@ -13,8 +13,6 @@ export default class OrderReview extends React.Component{
     constructor(props) {
         super(props);
         this.state= {
-            status: "INPROGRESS",
-            orders: [],
             selectedOrderId: null,
             orderDetails: Map()
         };
@@ -35,53 +33,7 @@ export default class OrderReview extends React.Component{
         ];
         this.columns = _.pluck(this.columnMetadata, "columnName");
 
-        this.orderStatusOptions = [
-            {
-                label: StatusSummary.toLabel("RELEASED"),
-                value: "RELEASED"
-            },
-            {
-                label: StatusSummary.toLabel("COMPLETE"),
-                value: "COMPLETE"
-            },
-            {
-                label: StatusSummary.toLabel("SHORT"),
-                value: "SHORT"
-            },
-            {
-                label: StatusSummary.toLabel("INPROGRESS"),
-                value: "INPROGRESS"
-            }
-        ];
 
-    }
-
-    componentWillMount() {
-        let {status} = this.state;
-        this.findOrders({status: status});
-    }
-
-    handleFilterStatusBy(e) {
-        this.setState({status: e.target.value}, () => {
-            this.findOrders({
-                "status" : this.state.status
-            });
-        });
-
-    }
-
-    handleSearch(e) {
-        e.preventDefault();
-        let value = React.findDOMNode(this.refs.orderId).getElementsByTagName("input")[0].value;
-        this.findOrders({
-            "orderId": "*" + value + "*"
-        });
-    }
-
-    findOrders(filter) {
-        getFacilityContext().findOrders(filter).then((orders) =>{
-            this.setState({"orders": orders});
-        });
     }
 
     handleRowExpand(row) {
@@ -117,18 +69,15 @@ export default class OrderReview extends React.Component{
 
     }
     render() {
-        let orders = _.sortBy(this.state.orders, "domainId");
-        let {status} = this.state;
+        let orders = this.props.orders.sortBy(order => order.get("domainId"));
 
         return (<div>
-                <Row>
-                    <Col md={4}>
-                        <form onSubmit={this.handleSearch.bind(this)}>
-                            <Input ref="orderId" label="Order ID" name="orderId" type="text" />
-                        </form>
-                    </Col>
-                </Row>
-                <Table results={orders} columns={this.columns} columnMetadata={this.columnMetadata} sortedBy="+domainId" expand={this.shouldExpand.bind(this)} onRowExpand={this.handleRowExpand.bind(this)} onRowCollapse={this.handleRowCollapse.bind(this)} />
+                <Table results={orders} columns={this.columns}
+                    columnMetadata={this.columnMetadata}
+                    sortedBy="+domainId"
+                    expand={this.shouldExpand.bind(this)}
+                    onRowExpand={this.handleRowExpand.bind(this)}
+                    onRowCollapse={this.handleRowCollapse.bind(this)} />
                 </div>);
     }
 };

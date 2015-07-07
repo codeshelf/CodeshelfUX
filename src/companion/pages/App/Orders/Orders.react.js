@@ -12,13 +12,9 @@ export default class Orders extends React.Component{
     }
 
     render() {
-
         return (<DocumentTitle title="Orders">
                   <SingleCellLayout>
-                     <PivotIBox state={this.props.state} />
-                     <SingleCellIBox title="By Order ID">
-                         <OrderReview state={this.props.state} />
-                     </SingleCellIBox>
+                      <PivotIBox state={this.props.state} />
                   </SingleCellLayout>
                 </DocumentTitle>
                );

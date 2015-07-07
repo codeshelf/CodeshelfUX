@@ -44,7 +44,9 @@ const data = {
             ,"rows": ["customerId", "shipperId"]
             ,"hiddenAttributes": ["domainId", "containerId", "orderDate", "updated", "pickStrategy", "persistentId", "orderType", "active"]
         },
+        selectedOrders: [],
         orders: []
+
     },
     i18n: {
         formats: {},

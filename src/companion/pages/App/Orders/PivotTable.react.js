@@ -11,17 +11,10 @@ export default class PivotTable extends React.Component{
     }
 
     getConfig() {
-    var data = [
-        {"dueDate":null,"active":true,"orderType":"OUTBOUND","destinationId":null,"persistentId":"d30dfabb-3e33-4217-9434-88ffaab70890","status":"RELEASED","pickStrategy":"SERIAL","customerId":"WORLD","updated":1434752011887,"orderDate":null,"containerId":"526768720","shipperId":"FEDEX","domainId":"526768720"},
-        {"dueDate":null,"active":true,"orderType":"OUTBOUND","destinationId":null,"persistentId":"d30dfabb-3e33-4217-9434-88ffaab70890","status":"RELEASED","pickStrategy":"SERIAL","customerId":"LUNERA","updated":1434752011887,"orderDate":null,"containerId":"526768720","shipperId":"FEDEX","domainId":"526768720"},
-        {"dueDate":null,"active":true,"orderType":"OUTBOUND","destinationId":null,"persistentId":"d30dfabb-3e33-4217-9434-88ffaab70890","status":"RELEASED","pickStrategy":"SERIAL","customerId":"WORLD","updated":1434752011887,"orderDate":null,"containerId":"526768720","shipperId":"UPS","domainId":"526768720"},
-        {"dueDate":null,"active":true,"orderType":"OUTBOUND","destinationId":null,"persistentId":"d30dfabb-3e33-4217-9434-88ffaab70890","status":"RELEASED","pickStrategy":"SERIAL","customerId":"LUNERA","updated":1434752011887,"orderDate":null,"containerId":"526768720","shipperId":"UPS","domainId":"526768720"}
-
-    ];
     return {
         width: "100%",
         height: "100%",
-    	dataSource: data,
+    	dataSource: [{}],
     	dataHeadersLocation: 'columns',
         theme: 'gray',
         toolbar: {
@@ -69,10 +62,25 @@ export default class PivotTable extends React.Component{
     };
     }
 
+    onDrillDown(dataCell, pivotId) {
+        if (dataCell) {
+            var colIndexes = dataCell.columnDimension.getRowIndexes();
+            var data = dataCell.rowDimension.getRowIndexes().filter((index) => {
+                return colIndexes.indexOf(index) >= 0;
+            }).map((index) => {
+                return this.pivotWidget.pgrid.filteredDataSource[index];
+            });
+            this.props.onDrillDown(data);
+        }
+    }
+
     componentDidMount() {
         var el = React.findDOMNode(this);
-        var orb = require("orb");
-        this.pivotWidget = new orb.pgridwidget(this.getConfig());
+        let orders = this.props.orders;
+        let config = this.getConfig();
+        config.dataSource = orders.toJS();
+        this.pivotWidget = new orb.pgridwidget(config);
+        this.pivotWidget.drilldown = this.onDrillDown.bind(this);
         this.pivotWidget.render(el);
 
 

@@ -4,9 +4,9 @@ import {SingleCellLayout} from "components/common/pagelayout";
 import {IBox, IBoxTitleBar, IBoxBody, IBoxSection, IBoxTitleText} from 'components/common/IBox';
 import {Button} from "react-bootstrap";
 import {getFacilityContext} from "data/csapi";
-require("jquery-ui");
-
 import  {fromJS} from "immutable";
+import OrderSearch from "./OrderSearch";
+import OrderReview from "./OrderReview";
 
 import PivotTable from "./PivotTable";
 
@@ -17,21 +17,35 @@ export default class PivotIBox extends React.Component{
         super(props);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.handleRefresh();
     }
 
     handleRefresh() {
-        getFacilityContext().findOrders().then((data) =>{
-            this.getOrdersCursor()((orders) =>{
-                return orders.clear().concat(fromJS(data));
-            });
+        this.refs.orderSearch.refresh();
+    }
+
+    handleOrdersUpdated(updatedOrders) {
+        this.getOrdersCursor()((orders) =>{
+            return orders.clear().concat(fromJS(updatedOrders));
+        });
+        this.handleDrillDown(updatedOrders);
+    }
+
+    handleDrillDown(selectedOrders) {
+        this.getSelectedOrdersCursor()((orders) =>{
+            return orders.clear().concat(fromJS(selectedOrders));
         });
     }
 
     getOrdersCursor() {
         let {state}=  this.props;
         return state.cursor(["pivot", "orders"]);
+    }
+
+    getSelectedOrdersCursor() {
+        let {state}=  this.props;
+        return state.cursor(["pivot", "selectedOrders"]);
     }
 
     getOptionsCursor() {
@@ -42,6 +56,7 @@ export default class PivotIBox extends React.Component{
 
     render() {
         let orders = this.getOrdersCursor()();
+        let selectedOrders = this.getSelectedOrdersCursor()();
         let options = this.getOptionsCursor()();
         return (
                 <IBox style={{display: "inline-block"}}>
@@ -59,11 +74,9 @@ export default class PivotIBox extends React.Component{
                 </div>
                 </IBoxTitleBar>
                 <IBoxBody>
-                <div style={{display: "inline-block"}}>
-                <div className="text-right" >
-                </div>
-                <PivotTable orders={orders} />
-                </div>
+                    <OrderSearch ref="orderSearch" onOrdersUpdated={this.handleOrdersUpdated.bind(this)}/>
+                    <PivotTable orders={orders} onDrillDown={this.handleDrillDown.bind(this)}/>
+                    <OrderReview orders={selectedOrders} />
                 </IBoxBody>
                 </IBox>);
 
