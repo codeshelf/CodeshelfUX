@@ -18,27 +18,29 @@ export default class OrderReview extends React.Component{
         };
 
         this.columnMetadata = [
-            {
-                columnName: "domainId",
-                displayName: "Order ID"
-            },
-            {
-                columnName: "containerId",
-                displayName: "Container"
-            },
-            {
-                columnName: "status",
-                displayName: "Status"
-            }
+            {columnName:  "persistentId", displayName: "UUID"},
+            {columnName:  "orderId", displayName: "ID"},
+            {columnName:  "customerId", displayName: "Customer"},
+            {columnName:  "shipperId", displayName: "Shipper"},
+            {columnName:  "destinationId", displayName: "Destination"},
+            {columnName:  "containerId", displayName: "Container"},
+            {columnName:  "readableDueDate", displayName: "Due Date"},
+            {columnName:  "status", displayName: "Status"},
+            {columnName:  "orderLocationAliasIds", displayName: "Location"},
+            {columnName:  "groupUi", displayName: "Group"},
+            {columnName:  "active", displayName: "Active"},
+            {columnName:  "fullDomainId", displayName: "Full ID"},
+            {columnName:  "wallUi", displayName: "Wall"},
+            {columnName:  "readableOrderDate", displayName: "Order Date"},
+            {columnName:  "orderType", displayName: "Type"}
+
         ];
-        this.columns = _.pluck(this.columnMetadata, "columnName");
-
-
+        this.columns = ["orderId", "customerId", "shipperId", "destinationId", "containerId", "readableDueDate", "status", "readableDueDate"];
     }
 
     handleRowExpand(row) {
         let persistentId = row.get("persistentId");
-        let orderId = row.get("domainId");
+        let orderId = row.get("orderId");
         this.setState({selectedOrderId: persistentId});
         this.fetchOrderDetails(orderId);
     }
@@ -62,19 +64,19 @@ export default class OrderReview extends React.Component{
     shouldExpand(row) {
         let {selectedOrderId} = this.state;
         if (row.get("persistentId") === selectedOrderId) {
-            let orderDetails = this.state.orderDetails.get(row.get("domainId"));
+            let orderDetails = this.state.orderDetails.get(row.get("orderId"));
             return <OrderDetailList orderDetails={orderDetails} />;
         }
         return null;
 
     }
     render() {
-        let orders = this.props.orders.sortBy(order => order.get("domainId"));
+        let orders = this.props.orders.sortBy(order => order.get("orderId"));
 
         return (<div>
                 <Table results={orders} columns={this.columns}
                     columnMetadata={this.columnMetadata}
-                    sortedBy="+domainId"
+                    sortedBy="+orderId"
                     expand={this.shouldExpand.bind(this)}
                     onRowExpand={this.handleRowExpand.bind(this)}
                     onRowCollapse={this.handleRowCollapse.bind(this)} />
