@@ -63,8 +63,6 @@ codeshelf.orderdetailsview = function(websession, facility) {
 				return false;
 			else if (inProperty['id'] === 'readableDueDate')
 				return false;
-			else if (inProperty['id'] === 'shipmentId')
-				return false;
 			else if (inProperty['id'] === 'customerId')
 				return false;
 			else if (inProperty['id'] === 'workSequence')
@@ -84,6 +82,14 @@ codeshelf.orderdetailsview = function(websession, facility) {
 			else if (inProperty['id'] === 'orderLocationAliasIds')
 				return false;
 			else if (inProperty['id'] === 'needsScan')
+				return false;
+			else if (inProperty['id'] === 'customerId')
+				return false;
+			else if (inProperty['id'] === 'destinationId')
+				return false;
+			else if (inProperty['id'] === 'shipperId')
+				return false;
+			else if (inProperty['id'] === 'willProduceWiUi')
 				return false;
 			else if (inProperty['id'] === 'preferredNominalUi')
 				return false;

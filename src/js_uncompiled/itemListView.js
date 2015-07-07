@@ -86,7 +86,7 @@ codeshelf.buildItemListView = function(websession, facility, itemFilter, itemFil
 
 		// following psuedo-inheritance
 		'shouldAddThisColumn': function(inProperty){
-			if (inProperty['id'] ===  'itemLocationAlias')
+			if (inProperty['id'] ===  'itemLocationName')
 				return true;
 			else if (inProperty['id'] ===  'itemDescription')
 				return true;

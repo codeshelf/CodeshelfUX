@@ -506,8 +506,8 @@ domainobjects = {
 				'title': 'Tier',
 				'width': 6
 			},
-			itemLocationAlias: {
-				'id':    'itemLocationAlias',
+			itemLocationName: {
+				'id':    'itemLocationName',
 				'title': 'Location',
 				'width': 10,
 				'editor' : Slick.Editors.Text,
@@ -708,7 +708,17 @@ domainobjects = {
 			},
 			'shipperId': {
 				'id': 'shipperId',
-				'title': 'Shipper Id',
+				'title': 'Shipper',
+				'width': 15
+			},
+			'customerId':   {
+				'id':    'customerId',
+				'title': 'Customer',
+				'width': 15
+			},
+			'destinationId':   {
+				'id':    'destinationId',
+				'title': 'Destination',
 				'width': 15
 			},
 			'willProduceWiUi':    {
@@ -875,12 +885,17 @@ domainobjects = {
 			},
 			'shipperId': {
 				'id': 'shipperId',
-				'title': 'Shipper Id',
+				'title': 'Shipper',
 				'width': 15
 			},
 			'customerId':   {
 				'id':    'customerId',
-				'title': 'Customer ID',
+				'title': 'Customer',
+				'width': 15
+			},
+			'destinationId':   {
+				'id':    'destination Id',
+				'title': 'Destination',
 				'width': 15
 			},
 			'workSequence': {
