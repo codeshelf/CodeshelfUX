@@ -80,23 +80,30 @@ class Header extends React.Component {
                 <thead>
                 <tr>
                 {
-                    columns.map(function(column, index){
-                        let {columnName, displayName = columnName} = getMetadata(columnMetadata, column).toObject();
-                        var priority = index;
+                    columnMetadata
+                        .filter((metadata) => {
+                            return columns.includes(metadata.get("columnName"))
+                        })
+                        .sortBy((metadata) => {
+                            return metadata.get("order") || 1
+                        })
+                        .map(function (metadata, index)  {
+                            let {columnName, displayName = columnName} = metadata.toObject();
+                            var priority = index;
 
-                        return (<th key={columnName}
-                                scope="col"
-                                data-tablesaw-priority={priority === 0 ? "persist" : priority}
-                                data-toggle="tooltip"
-                                title={displayName}>
-                                   {displayName}
-                                   {(sortSpec && sortSpec.columnName === columnName) ?
-                                       <Icon name={"sort-numeric-"+sortSpec.dir} />
-                                        :
-                                        null
-                                   }
-                                </th>);
-                    }.bind(this))
+                            return (<th key={columnName}
+                                    scope="col"
+                                    data-tablesaw-priority={priority === 0 ? "persist" : priority}
+                                    data-toggle="tooltip"
+                                    title={displayName}>
+                                    {displayName}
+                                    {(sortSpec && sortSpec.columnName === columnName) ?
+                                     <Icon name={"sort-numeric-"+sortSpec.dir} />
+                                     :
+                                     null
+                                    }
+                                    </th>);
+                        })
                 }
                 </tr>
                 </thead>);

@@ -2,7 +2,8 @@ import React from 'react';
 import {Input as BSInput} from 'react-bootstrap';
 import PureComponent from 'components/common/PureComponent';
 import classnames from 'classnames';
-
+import _ from "lodash";
+import {Set} from "immutable";
 require('./Form.styl');
 
 class  WrapInput extends React.Component {
@@ -124,11 +125,56 @@ export class Checkbox extends React.Component {
     }
 };
 
+export class MultiSelect extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {values: (props.values) ? Set(props.values) : Set()};
+    }
+    
+    handleChange(e) {
+        let input = e.target;
+        if (input.checked) {
+            this.setState({values: this.state.values.add(input.value)}, () =>{
+                this.props.onChange(this.state.values);
+            });
+        } else {
+            this.setState({values: this.state.values.delete(input.value)}, () =>{
+                this.props.onChange(this.state.values);
+            });
+        }
+    }
+    
+    render() {
+        let {label, options, onChange} = this.props;
+        let {values} = this.state;
+        let selectLabel = label;
+        return (<div>
+            {
+                options.map((option) =>{
+                    let {label, value } = option;
+                    let id = selectLabel + value;
+                    return <div className="checkbox check-primary">
+                        <input type="checkbox" value={value}  id={id} name={id} defaultChecked={values.includes(value)}
+                    onChange={this.handleChange.bind(this)}/>
+                        <label htmlFor={id}>{label}</label>
+                        </div>
+                })
+            }
+        </div>
+        );
+    }
+}
+
 export class Select extends PureComponent {
     render() {
-        let {label, options, value, onChange} = this.props;
-        return (<BSInput type='select' className="full-width" label={label} value={value} data-init-plugin="select2"
-                 onChange={onChange}>
+        let {label, options, value, onChange, multiple} = this.props;
+        return (<BSInput type='select'
+                className="full-width"
+                label={label}
+                value={value}
+                multiple={multiple}
+                data-init-plugin="select2"
+                onChange={onChange}>
                     {
                         options.map((option) => {
                             let label = (option.label != null) ? option.label : option.value;
