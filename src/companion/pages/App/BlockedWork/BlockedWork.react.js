@@ -30,8 +30,8 @@ export default class BlockedWorkPage extends React.Component {
 
     renderTabbedArea(issuesSummary) {
         let sortedSummary = issuesSummary
-            .sortBy((summary) => summary.get("name"));
-        let firstType = sortedSummary.first().get("name");
+            .sortBy((summary) => summary.get("eventType"));
+        let firstType = sortedSummary.first().get("eventType");
         return (
                 <IBox>
                 <IBoxBody>
@@ -40,7 +40,7 @@ export default class BlockedWorkPage extends React.Component {
                 {
 
                     sortedSummary.map((summary) => {
-                        let type = summary.get("name");
+                        let type = summary.get("eventType");
                         let description = this.toDescription(type);
                         let total = summary.get("count");
                         return (<TabPane eventKey={type}
@@ -64,7 +64,7 @@ export default class BlockedWorkPage extends React.Component {
         let issuesSummary = getIssuesSummary();
         let issuesSummaryResults = issuesSummary.get("results") || List();
         let filteredIssueSummaryResults = issuesSummaryResults
-                .filter((summary) => summary.get("name") !== "COMPLETE");
+                .filter((summary) => summary.get("eventType") !== "COMPLETE");
         return (
                 <DocumentTitle title={title}>
         <PageGrid>
