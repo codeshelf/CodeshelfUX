@@ -18,7 +18,7 @@ class  WrapInput extends React.Component {
         let {label,
              name,
              required,
-             errors,
+             errors = [],
              addOnAfter} = this.props;
 
         var groupClasses = classnames({
@@ -130,7 +130,7 @@ export class MultiSelect extends PureComponent {
         super(props);
         this.state = {values: (props.values) ? Set(props.values) : Set()};
     }
-    
+
     handleChange(e) {
         let input = e.target;
         if (input.checked) {
@@ -143,7 +143,7 @@ export class MultiSelect extends PureComponent {
             });
         }
     }
-    
+
     render() {
         let {label, options, onChange} = this.props;
         let {values} = this.state;
