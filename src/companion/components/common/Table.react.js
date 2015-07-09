@@ -8,15 +8,16 @@ import classnames from 'classnames';
 import Icon from "react-fa";
 
 
-function getMetadata(columnMetadata, columnName) {
-    let metadata = columnMetadata.find((obj) => obj.get("columnName") === columnName);
-    if (metadata == null) {
-        console.warn(`no column metadata for column: ${columnName}`);
-    }
-    return metadata;
+//TODO likely need better performing index of metadata
+function toShownColumns(columnMetadata, columns) {
+    return columnMetadata
+        .filter((metadata) => {
+            return columns.includes(metadata.get("columnName"));
+        })
+        .sortBy((metadata) => {
+            return metadata.get("order") || 1;
+        });
 }
-
-
 
 var Row = React.createClass({
     render: function() {
@@ -31,10 +32,10 @@ var Row = React.createClass({
         return (
                 <tr role="row" onClick={_.partial(onClick, row, rowNumber)} className={classnames(rowAlt, shown)}>
                 {
-                    columns.map(function(key){
+                    toShownColumns(columnMetadata, columns).map((metadata) => {
+                        let key = metadata.get("columnName");
                         var value = row.get(key);
-                        //TODO likely need better performing index of metadata
-                        var metadata = getMetadata(columnMetadata, key);
+
                         value = (typeof value === "boolean") ? value.toString() : value;
                         var CustomComponent = metadata.get("customComponent");
                         var valueRenderer = (<span>{value}</span>);
@@ -42,10 +43,10 @@ var Row = React.createClass({
                             valueRenderer = ( <CustomComponent rowData={row} cellData={value} />);
                         }
                         return (<td key={key}>{valueRenderer}</td>);
+
                     })
                 }
                 </tr>
-
         );
     }
 });
@@ -82,10 +83,10 @@ class Header extends React.Component {
                 {
                     columnMetadata
                         .filter((metadata) => {
-                            return columns.includes(metadata.get("columnName"))
+                            return columns.includes(metadata.get("columnName"));
                         })
                         .sortBy((metadata) => {
-                            return metadata.get("order") || 1
+                            return metadata.get("order") || 1;
                         })
                         .map(function (metadata, index)  {
                             let {columnName, displayName = columnName} = metadata.toObject();
