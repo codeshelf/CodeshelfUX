@@ -22,7 +22,7 @@ export default class PivotTable extends React.Component{
     	dataHeadersLocation: 'columns',
         theme: 'gray',
         toolbar: {
-            visible: true
+            visible: false
         },
     	grandTotal: {
     		rowsvisible: true,
