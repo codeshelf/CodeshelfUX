@@ -60,7 +60,16 @@ codeshelf.buildGtinListView = function(websession, facility, itemFilter, itemFil
 
 		'getViewTypeName': function() {
 			return 'GTIN List View';
+		},
+		
+		deleteGtin: function(gtin) {
+			gtinDescription = "Delete GTIN: " + [gtin['domainId']] + " for SKU: " + [gtin['itemMasterId']] + "?"
+			codeshelf.simpleDlogService.showModalDialog("Confirm", gtinDescription, {})
+				.then(function() {
+					websession_.callServiceMethod("UiUpdateService", "deleleGtin", [gtin['persistentId']]);
+				});
 		}
+
 
 	};
 
@@ -71,6 +80,11 @@ codeshelf.buildGtinListView = function(websession, facility, itemFilter, itemFil
 			"action": function(gtin) {
 				codeshelf.windowLauncher.loadItemsListViewForGtin(gtin['domainId'], gtin['itemMasterPersistentId'],gtin['uomMasterPersistentId']);
 			}
+		},
+		{
+			"label": "Delete GTIN",
+			"permission": "gtin:edit",
+			"action": self.deleteGtin
 		}
 	];
 
