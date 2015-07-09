@@ -1,13 +1,17 @@
 var React = require("react");
 var orb = require("orb");
-//var {PivotTable} = require('orb/src/js/react/orb.react.compiled');
-
 require("./PivotTable.less");
+import selectableCell from "./SelectablePivotCell";
+import {extractDimensions} from "./celldimensions"
+
 export default class PivotTable extends React.Component{
 
     constructor(props) {
         super(props);
         this.pivotWidget = null;
+        this.state = {
+            dimensions: []
+        };
     }
 
     getConfig() {
@@ -64,6 +68,9 @@ export default class PivotTable extends React.Component{
 
     onDrillDown(dataCell, pivotId) {
         if (dataCell) {
+            var dimensions = extractDimensions(dataCell);
+            this.setState({dimensions: dimensions});
+            
             var colIndexes = dataCell.columnDimension.getRowIndexes();
             var data = dataCell.rowDimension.getRowIndexes().filter((index) => {
                 return colIndexes.indexOf(index) >= 0;
@@ -80,7 +87,14 @@ export default class PivotTable extends React.Component{
         let config = this.getConfig();
         config.dataSource = orders.toJS();
         this.pivotWidget = new orb.pgridwidget(config);
+        window.OrbReactClasses.PivotCell = selectableCell(window.OrbReactClasses.PivotCell, () => {
+            return this.state.dimensions;
+        }.bind(this));
+        console.log("ReactClasses", window.OrbReactClasses);
+
+
         this.pivotWidget.drilldown = this.onDrillDown.bind(this);
+
         this.pivotWidget.render(el);
 
 

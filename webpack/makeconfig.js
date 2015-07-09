@@ -65,7 +65,8 @@ module.exports = function(isDevelopment, isTest) {
       ]
     },
     module: {
-      loaders: [
+        loaders: [
+          { test: /orb.react.compiled/, loader: "expose?OrbReactClasses" },
           { test: /\.(woff|woff2)([\?]?.*)$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
           { test: /\.ttf([\?]?.*)$/,  loader: "url-loader?limit=10000&mimetype=application/octet-stream" },
           { test: /\.eot([\?]?.*)$/,  loader: "file-loader" },
