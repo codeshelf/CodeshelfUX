@@ -4,7 +4,7 @@
 'use strict';
 import React from "react";
 var classNames = require('classnames');
-import {extractDimensions, matchDimensions} from "./celldimensions"
+import {extractDimensions, matchDimensions} from "./celldimensions";
 
 export default function selectableCell(Component, selectedFunc) {
 
@@ -17,16 +17,18 @@ export default function selectableCell(Component, selectedFunc) {
             if (!_.isEmpty(selected)) {
                 //compare if all the selectedDimensions match the cell dimensions
                 let result = _.reduce(selected, (foundAll, selectedDim) => {
-                    let matchSelected = matchDimensions.bind(null, selectedDim)
+                    let matchSelected = matchDimensions.bind(null, selectedDim);
 
                     //short circuits match call if already false
-                    let result = foundAll && !!_.find(dimensions, matchSelected); 
+                    let result = foundAll && !!_.find(dimensions, matchSelected);
                     return result;
-                }, true);  
+                }, true);
                 return result;
-            } 
+            } else {
+                return false;
+            }
         }
-        
+
         render() {
             var classes = classNames(this.props.cell.cssclass, {
                 selected: this.selectable(this.props)
@@ -36,4 +38,3 @@ export default function selectableCell(Component, selectedFunc) {
         }
     };
 }
-

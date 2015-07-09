@@ -1,12 +1,21 @@
 import _ from "lodash";
 
+
+function walkDimParent(dim) {
+    if (dim) {
+        return _.flattenDeep([dim, walkDimParent(dim.parent)]);
+    } else {
+        return [];
+    }
+}
+
 function extractField(dim) {
     let dimPaths = {
         field: "field.name",
         value: "value",
         values: "values"
-    };
-    
+        };
+
     let fieldSpec = _.transform(dimPaths, (result, path, key) => {
         result[key] = _.get(dim, path);
     });
@@ -22,9 +31,10 @@ export function matchDimensions(selected, dim) {
 
 export function extractDimensions(cell) {
     let dimensions = _.chain([cell.rowDimension, cell.columnDimension])
-        .compact()
-        .map(extractField)
-        .value();
+                         .compact() //remove nulls
+                         .map(walkDimParent) //walk self and ancestors for each dim
+                         .flattenDeep()
+                         .map(extractField)
+                         .value();
     return dimensions;
 }
-
