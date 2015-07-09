@@ -103,7 +103,7 @@ const AuthzCredentialsStore = authz(CredentialsStore);
 class FacilitySelector extends React.Component {
 
     renderDropdownLabel(facility) {
-        let facilityName = (facility) ? facility.get("name") : "";
+        let facilityName = (facility) ? facility.get("description") : "";
         if (facility) {
             return (<span><Icon name="building" /> {facilityName}</span>);
         } else {
@@ -116,13 +116,13 @@ class FacilitySelector extends React.Component {
         return (<DropdownButton className="facility-dropdown" bsStyle="link" title={this.renderDropdownLabel(facility)}>
                 {
                     facilities.map((facility) => {
-                        let {name, persistentId, domainId} = facility.toObject();
+                        let {name, persistentId, domainId, description} = facility.toObject();
 
                         return <MenuItemLink key={domainId}
                                              to="facility"
                                              params={{facilityName: domainId}}
                                              data-persistentid={persistentId}>
-                                         {name}
+                                         {description}
                                </MenuItemLink>;
                     })
                }
