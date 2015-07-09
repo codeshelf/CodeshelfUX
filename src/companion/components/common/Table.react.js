@@ -160,6 +160,14 @@ var Table = React.createClass({
                 });
             }
         }
+
+        columnMetadata = columnMetadata.map((metadata, i) => {
+            if (typeof metadata.order === "undefined") {
+                metadata.order = i;
+                return metadata;
+            }
+        });
+
         var classes = classnames({
             "table": true,
             "table-hover": true,

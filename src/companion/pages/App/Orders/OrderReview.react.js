@@ -34,10 +34,6 @@ export default class OrderReview extends React.Component{
             {columnName:  "orderType", displayName: "Type"}
 
         ];
-        this.columnMetadata = _.map(this.columnMetadata, (metadata, i) => {
-            metadata.order = i;
-            return metadata;
-        })
 
         this.state= {
             selectedOrderId: null,
@@ -102,17 +98,9 @@ export default class OrderReview extends React.Component{
     render() {
         let orders = this.props.orders.sortBy(order => order.get("orderId"));
         let {columns} = this.state;
-        let options = _.map(this.columnMetadata, (columnMetadata) => {
-            return {label: columnMetadata.displayName, value: columnMetadata.columnName};
-        })
+        let {columnMetadata} = this;
         return (<div>
-                <Row>
-                <Col sm={12} >
-                <DropdownButton className="pull-right" title={<Icon name="gear" />}>
-                <MultiSelect options={options} values={columns} onChange={(data) => this.storeColumns(data)}/>
-                </DropdownButton>
-                </Col>
-                </Row>
+                <TableSettings onColumnsChange={(data) => this.storeColumns(data)} columns={columns} columnMetadata={columnMetadata} />
                 <Table results={orders} columns={columns}
                     columnMetadata={this.columnMetadata}
                     sortedBy="+orderId"
@@ -122,3 +110,24 @@ export default class OrderReview extends React.Component{
                 </div>);
     }
 };
+
+class TableSettings extends React.Component {
+
+    render() {
+        let {columns, columnMetadata, onColumnsChange} = this.props;
+        let options = _.map(columnMetadata, (columnMetadata) => {
+            return {label: columnMetadata.displayName, value: columnMetadata.columnName};
+        })
+        
+        return (
+                <Row>
+                <Col sm={12} >
+                <DropdownButton className="pull-right" title={<Icon name="gear" />}>
+                <MultiSelect options={options} values={columns} onChange={onColumnsChange}/>
+                </DropdownButton>
+                </Col>
+                </Row>
+
+        );
+    }
+}
