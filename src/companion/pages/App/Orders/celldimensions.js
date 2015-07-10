@@ -2,7 +2,7 @@ import _ from "lodash";
 
 
 function walkDimParent(dim) {
-    if (dim) {
+    if (dim && dim.field) {
         return _.flattenDeep([dim, walkDimParent(dim.parent)]);
     } else {
         return [];
