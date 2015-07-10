@@ -14,19 +14,24 @@ var globalOptions = new Map({
 function ajax(path, options) {
     if (options == null) options = {};
     var ajaxOptions = globalOptions.merge(options).toJS();
-    let absolueURL = toAbsoluteURL(path);
+
+    let absoluteURL = toAbsoluteURL(path);
 
     let reqWithMethod = null;
     if (options.method && options.method === "POST") {
-        reqWithMethod = request.post(absolueURL)
+        reqWithMethod = request.post(absoluteURL)
                             .query(options.query)
                             .send(options.data);
     } else if (options.method && options.method === "PUT") {
-        reqWithMethod = request.put(absolueURL)
+        reqWithMethod = request.put(absoluteURL)
                             .query(options.query)
                             .send(options.data);
+    } else if (options.method && options.method === "DELETE") {
+        reqWithMethod = request.del(absoluteURL)
+            .query(options.query)
+            .send(options.data);
     } else {
-        reqWithMethod = request.get(absolueURL)
+        reqWithMethod = request.get(absoluteURL)
                             .query(options.data);
     }
 
@@ -95,6 +100,8 @@ export function getFacilityContext() {
     var facility = state.cursor(["selectedFacility"])();
     var facilityId = facility.get("persistentId");
     var facilityPath = "/api/facilities/" + facilityId;
+    let ordersPath = facilityPath + "/orders";
+
     return {
         facilityId: facilityId,
         endpoint: endpoint,
@@ -129,10 +136,13 @@ export function getFacilityContext() {
         },
 
         findOrders: function(filter) {
-            let ordersPath = facilityPath + "/orders";
             return ajax(ordersPath, {
                 data: filter
             });
+        },
+
+        deleteOrders: () => {
+            return ajax(ordersPath, {method: "DELETE"});
         },
 
         getWorkers: function() {
