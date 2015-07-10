@@ -75,6 +75,8 @@ export default class PivotTable extends React.Component{
             var indexes = [];
             if(dataCell.colType === uiheaders.HeaderType.GRAND_TOTAL) {
                 indexes = dataCell.rowDimension.getRowIndexes();
+            } else if (dataCell.rowType === uiheaders.HeaderType.GRAND_TOTAL) {
+                indexes = dataCell.columnDimension.getRowIndexes();
             } else {
                 var colIndexes = dataCell.columnDimension.getRowIndexes();
                 indexes = dataCell.rowDimension.getRowIndexes().filter((index) => {
