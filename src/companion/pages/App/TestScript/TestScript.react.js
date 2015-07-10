@@ -32,9 +32,19 @@ export default class TestScript extends React.Component{
                 <Row>
                 <Col sm={12} md={6}>
                 <IBox>
-                <IBoxBody>
-                    <ScriptInput onChange={this.handleScriptInputChanges.bind(this)} />
-                    <ScriptStepExecutor scriptInputs={scriptInputs} />
+                    <IBoxBody>
+                    <Button className="pull-right" type="button" bsStyle="primary" onClick={() => {
+
+                            getFacilityContext().deleteOrders().then(() => {
+                                window.alert("Deleted orders");
+                            }, () => {
+                                window.alert("Delete failed");
+                            });
+                }}>
+                            Delete Orders
+                            </Button>
+                        <ScriptInput onChange={this.handleScriptInputChanges.bind(this)} />
+                        <ScriptStepExecutor scriptInputs={scriptInputs} />
                 </IBoxBody>
                 </IBox>
                 </Col>
