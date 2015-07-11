@@ -1,6 +1,8 @@
 import _ from "lodash";
 
-
+/*
+ Returns an array of self and parents with a field
+ */
 function walkDimParent(dim) {
     if (dim && dim.field) {
         return _.flattenDeep([dim, walkDimParent(dim.parent)]);
@@ -33,8 +35,8 @@ export function extractDimensions(cell) {
     let dimensions = _.chain([cell.rowDimension, cell.columnDimension])
                          .compact() //remove nulls
                          .map(walkDimParent) //walk self and ancestors for each dim
-                         .flattenDeep()
-                         .map(extractField)
+                         .flattenDeep() //combine all fields from dimensions
+                         .map(extractField) //convert the orb.field to the key fields we need
                          .value();
     return dimensions;
 }
