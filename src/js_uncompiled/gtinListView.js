@@ -42,7 +42,7 @@ codeshelf.buildGtinListView = function(websession, facility, itemFilter, itemFil
 
 		// following psuedo-inheritance
 		'shouldAddThisColumn': function(inProperty){
-			if (inProperty['id'] ===  'domainId')
+			if (inProperty['id'] ===  'gtinUi')
 				return true;
 			else if (inProperty['id'] ===  'itemDescription')
 				return true;

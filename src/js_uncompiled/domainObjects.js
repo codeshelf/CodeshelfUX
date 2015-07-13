@@ -588,9 +588,11 @@ domainobjects = {
 		'className':  'Gtin',
 		'properties': {
 			'domainId': {
-				'id': 'domainId',
-				'title': 'GTIN',
-				'width': 25
+				'id': 'gtinUi',
+				'title': 'GTIN/UPC',
+				'width': 25,
+				'editor' : Slick.Editors.Text,
+				'focusable': true
 			},
 			'persistentId': {
 				'id': 'persistentId',
