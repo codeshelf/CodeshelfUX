@@ -36,34 +36,45 @@ export default class PivotTable extends React.Component{
         fields: [
             {
                 name: 'status',
-                caption: 'Status'
+                caption: 'Status',
+                sort: {order: "asc"}
             },
             {
                 name: 'customerId',
                 caption: 'Customer',
-                formatFunc: (data) => {
-                    if (data == null) {
-                        return "<N/A>";
-                    } else {
-                        return data;
-                    }
-                }
-            },
+                sort: { order: "asc"}
+                },
+            {
+                name: 'destinationId',
+                caption: 'Destination',
+                sort: { order: "asc"}
+                },
             {
                 name: "shipperId",
-                caption: "Shipper"
+                    caption: "Shipper",
+                sort: { order: "asc"}
             },
             {
-                name: "",
+                name: "dueDay",
+                caption: "Date Due",
+                sort: { order: "asc"}
+            },
+            {
+                name: "dueTime",
+                caption: "Time Due",
+                sort: { order: "asc"}
+            },
+            {
+                name: "count",
                 caption: "Count",
                 dataSettings: {aggregateFunc: 'count'}
 
             }
 
         ],
-        rows    : [ 'Status' ],
-        columns : [ 'Customer' ],
-        data: ["Count"]
+            rows    : [ 'dueDay', "customerId" ],
+        columns : [ 'status' ],
+        data: ["count"]
     };
     }
 

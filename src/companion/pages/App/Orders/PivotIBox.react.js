@@ -7,6 +7,7 @@ import {getFacilityContext} from "data/csapi";
 import  {fromJS} from "immutable";
 import OrderSearch from "./OrderSearch";
 import OrderReview from "./OrderReview";
+import moment from "moment";
 
 import PivotTable from "./PivotTable";
 
@@ -27,7 +28,16 @@ export default class PivotIBox extends React.Component{
 
     handleOrdersUpdated(updatedOrders) {
         this.getOrdersCursor()((orders) =>{
-            return orders.clear().concat(fromJS(updatedOrders));
+            let newOrders=  orders.clear().concat(fromJS(updatedOrders));
+            return newOrders.map((order) => {
+                return order.withMutations((o) => {
+                    let localDate = moment(o.get("dueDate")).local();
+                    let endOfDay = localDate.clone();
+                    endOfDay.endOf('day');
+                    o.set("dueDay", endOfDay.format("YYYY-MM-DD"))
+                         .set("dueTime", localDate.format("YYYY-MM-DD HH"));
+                });
+            });
         });
         this.handleDrillDown(updatedOrders);
     }
