@@ -8,6 +8,9 @@ import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
 
 import _ from "lodash";
 import {getFacilityContext} from "data/csapi";
+import {fetchWorkers} from 'data/workers/actions';
+    import {getWorkersByBadgeId, toWorkerName} from 'data/workers/store';
+
 
 const priorDayInterval = (daysBack) => {
     let interval = DayOfWeekFilter.priorDayInterval(daysBack);
@@ -80,13 +83,22 @@ var PickerEventsIBox = React.createClass({
 
     updateViews: function(state) {
         let {start, end} = state.interval;
+        let workersByBadgeId = getWorkersByBadgeId();
         this.getPickRates(start,  end).then((data) => {
             let d3Data = toD3Data(start, end, data);
-            this.setState({"pickRates": d3Data});
+            let withWorkerNames = d3Data.map((keyData) => {
+                let badgeId = keyData.key;
+                let worker = workersByBadgeId.get(badgeId);
+                let name = toWorkerName(worker, badgeId);
+                keyData.key = name;
+                return keyData;
+            });
+            this.setState({"pickRates": withWorkerNames});
         });
     },
 
     componentWillMount: function() {
+        fetchWorkers();
         this.updateViews(this.state);
     },
 

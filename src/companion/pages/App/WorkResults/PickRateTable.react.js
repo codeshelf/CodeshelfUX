@@ -13,10 +13,10 @@ export default class PickRateTable extends React.Component{
                 let y = value.y;
                 let cellValue = (y > 0) ? y : null;
                 row[value.x.toString()] = cellValue;
-                row.worker = value.key;
                 row.total += y;
                 return row;
-            }, {total: 0});
+            }, {worker: series.key,
+                total: 0});
         })
         .sortBy("total")
         .reverse()

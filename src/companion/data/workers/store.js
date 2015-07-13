@@ -62,6 +62,31 @@ export const dispatchToken = register(({action, data}) => {
 
 });
 
+export function toWorkerName(worker, defaultName) {
+    let name = defaultName;
+    if (worker) {
+        let {badgeId, lastName, firstName, middleInitial} = worker;
+        name = badgeId;
+        if (lastName) {
+            name = lastName;
+            if (firstName) {
+                name += ", " + firstName;
+                if (middleInitial) {
+                    name += " " + middleInitial;
+                }
+            }
+        }
+    }
+    return name;
+
+}
+
 export function getWorkers() {
     return workersCursor().toJS();
+}
+
+export function getWorkersByBadgeId() {
+    return workersCursor().reduce((indexedWorkers, worker) => {
+        return indexedWorkers.set(worker.badgeId, worker);
+    }, new Map());
 }
