@@ -41,11 +41,13 @@ export default class State extends EventEmitter {
 
   cursor(path) {
     return (update) => {
-      if (update)
-        this.set(this._state.updateIn(path, update));
-      else
-        return this._state.getIn(path);
+        if (typeof update === "undefined") {
+            return this._state.getIn(path);
+        } else if (typeof update === "function") {
+            return this.set(this._state.updateIn(path, update));
+        } else {
+            return this.set(this._state.setIn(path, update));
+        }
     };
   }
-
-}
+};

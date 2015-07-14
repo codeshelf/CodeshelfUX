@@ -37,8 +37,7 @@ export default class OrderReview extends React.Component{
 
         this.state= {
             selectedOrderId: null,
-            orderDetails: Map(),
-            columns: ["orderId", "customerId", "shipperId", "destinationId", "containerId", "readableDueDate", "status", "readableDueDate"]
+            orderDetails: Map()
         };
 
     }
@@ -76,10 +75,6 @@ export default class OrderReview extends React.Component{
 
     }
 
-    storeColumns(columns) {
-        this.setState({columns: columns});
-    }
-    
     getAllSelected(select) {
         var result = [];
         var options = select && select.options;
@@ -87,21 +82,24 @@ export default class OrderReview extends React.Component{
 
         for (var i=0, iLen=options.length; i<iLen; i++) {
             opt = options[i];
-            
+
             if (opt.selected) {
                 result.push(opt.value || opt.text);
             }
         }
         return result;
     }
-    
+
     render() {
         let orders = this.props.orders.sortBy(order => order.get("orderId"));
-        let {columns} = this.state;
+        let columns = this.props.columns;
         let {columnMetadata} = this;
         return (<div>
-                <TableSettings onColumnsChange={(data) => this.storeColumns(data)} columns={columns} columnMetadata={columnMetadata} />
-                <Table results={orders} columns={columns}
+                <TableSettings onColumnsChange={columns}
+                    columns={columns()}
+                    columnMetadata={columnMetadata} />
+                <Table results={orders}
+                    columns={columns()}
                     columnMetadata={this.columnMetadata}
                     sortedBy="+orderId"
                     expand={this.shouldExpand.bind(this)}
@@ -117,8 +115,8 @@ class TableSettings extends React.Component {
         let {columns, columnMetadata, onColumnsChange} = this.props;
         let options = _.map(columnMetadata, (columnMetadata) => {
             return {label: columnMetadata.displayName, value: columnMetadata.columnName};
-        })
-        
+        });
+
         return (
                 <Row>
                 <Col sm={12} >

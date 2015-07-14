@@ -15,6 +15,57 @@ const data = {
     endpoint: endpoint,
     $pendingActions: {},
     $subscriptions: {},
+    preferences: {
+        orders: {
+            table: {
+                columns: ["orderId", "customerId", "shipperId", "destinationId", "containerId", "readableDueDate", "status", "readableDueDate"]
+            },
+            pivot: {
+                fields: [
+                    {
+                        name: 'status',
+                        caption: 'Status',
+                        sort: {order: "asc"}
+                    },
+                    {
+                        name: 'customerId',
+                        caption: 'Customer',
+                        sort: { order: "asc"}
+                    },
+                    {
+                        name: 'destinationId',
+                        caption: 'Destination',
+                        sort: { order: "asc"}
+                    },
+                    {
+                        name: "shipperId",
+                        caption: "Shipper",
+                        sort: { order: "asc"}
+                    },
+                    {
+                        name: "dueDay",
+                        caption: "Date Due",
+                        sort: { order: "asc"}
+                    },
+                    {
+                        name: "dueTime",
+                        caption: "Time Due",
+                        sort: { order: "asc"}
+                    },
+                    {
+                        name: "count",
+                        caption: "Count",
+                        dataSettings: {aggregateFunc: 'count'}
+
+                    }
+
+                ],
+                rowFields    : [ 'dueDay', "customerId" ],
+                columnFields : [ 'status' ],
+                dataFields: ["count"]
+            }
+        }
+    },
     auth: {
         form: {
             fields: {

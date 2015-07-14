@@ -15,67 +15,30 @@ export default class PivotTable extends React.Component{
         };
     }
 
-    getConfig() {
-    return {
-        width: "100%",
-        height: "100%",
-    	dataSource: [{}],
-    	dataHeadersLocation: 'columns',
-        theme: 'gray',
-        toolbar: {
-            visible: false
-        },
-    	grandTotal: {
-    		rowsvisible: true,
-    		columnsvisible: true
-    	},
-    	subTotal: {
-    		visible: false,
-            collapsed: true
-    	},
-        fields: [
-            {
-                name: 'status',
-                caption: 'Status',
-                sort: {order: "asc"}
+    getConfig(props) {
+        let options = props.options().toJS();
+        return {
+            width: "100%",
+            height: "100%",
+    	    dataSource: [{}],
+    	    dataHeadersLocation: 'columns',
+            theme: 'gray',
+            toolbar: {
+                visible: false
             },
-            {
-                name: 'customerId',
-                caption: 'Customer',
-                sort: { order: "asc"}
-                },
-            {
-                name: 'destinationId',
-                caption: 'Destination',
-                sort: { order: "asc"}
-                },
-            {
-                name: "shipperId",
-                    caption: "Shipper",
-                sort: { order: "asc"}
-            },
-            {
-                name: "dueDay",
-                caption: "Date Due",
-                sort: { order: "asc"}
-            },
-            {
-                name: "dueTime",
-                caption: "Time Due",
-                sort: { order: "asc"}
-            },
-            {
-                name: "count",
-                caption: "Count",
-                dataSettings: {aggregateFunc: 'count'}
-
-            }
-
-        ],
-            rows    : [ 'dueDay', "customerId" ],
-        columns : [ 'status' ],
-        data: ["count"]
-    };
+    	    grandTotal: {
+    		    rowsvisible: true,
+    		    columnsvisible: true
+    	    },
+    	    subTotal: {
+    		    visible: false,
+                collapsed: true
+    	    }
+            , fields: options.fields
+            , rows: options.rowFields
+            , columns: options.columnFields
+            , data: options.dataFields
+        };
     }
 
     onDrillDown(dataCell, pivotId) {
@@ -102,19 +65,61 @@ export default class PivotTable extends React.Component{
         }
     }
 
+    /**
+     * Track the moves of fields in the pivot table and store
+     */
+    onFieldMoved(field, oldAxeType, newAxeType, position) {
+        //console.log("Field moved", arguments);
+        let axes = [0, "columnFields", "rowFields", "dataFields"];
+
+        this.props.options((options) => {
+            var newOptions = options;
+            if (oldAxeType != null) {
+                var removeAxe = axes[oldAxeType];
+                var removeFunc = (fields) => {
+                    return fields.delete(fields.indexOf(field));
+                };
+                newOptions = options.updateIn([removeAxe], removeFunc);
+            }
+
+            if (newAxeType != null) {
+                var addAxe = axes[newAxeType];
+                var addFunc = (fields) => {
+                    if (position != null) {
+                        return fields.splice(position, 0, field);
+                    } else {
+                        return fields.push(field);
+                    }
+                };
+                return newOptions.updateIn([addAxe], addFunc);
+            } else {
+                return newOptions;
+            }
+        });
+    }
+
     componentDidMount() {
         var el = React.findDOMNode(this);
-        let orders = this.props.orders;
-        let config = this.getConfig();
+        let orders = this.props.results;
+        let config = this.getConfig(this.props);
         config.dataSource = orders.toJS();
         this.pivotWidget = new orb.pgridwidget(config);
         window.OrbReactClasses.PivotCell = selectableCell(window.OrbReactClasses.PivotCell, () => {
             return this.state.dimensions;
         }.bind(this));
-        console.log("ReactClasses", window.OrbReactClasses);
 
+        console.log("Orb ReactClasses overriden");
 
         this.pivotWidget.drilldown = this.onDrillDown.bind(this);
+
+        // Wrap original call to move field so that local method can be called
+        let original = this.pivotWidget.moveField;
+        this.pivotWidget.moveField = function() {
+            var origArgs = Array.prototype.slice.call(arguments); //toArray
+            var result = original.apply(this.pivotWidget, origArgs);
+            this.onFieldMoved.apply(this, origArgs);
+            return result;
+        }.bind(this);
 
         this.pivotWidget.render(el);
 
@@ -122,7 +127,7 @@ export default class PivotTable extends React.Component{
     }
 
     componentWillReceiveProps(nextProps) {
-        this.pivotWidget.refreshData(nextProps.orders.toJS());
+        this.pivotWidget.refreshData(nextProps.results.toJS());
     }
 
 

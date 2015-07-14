@@ -35,60 +35,66 @@ export default class PivotIBox extends React.Component{
                     let endOfDay = localDate.clone();
                     endOfDay.endOf('day');
                     o.set("dueDay", endOfDay.format("YYYY-MM-DD"))
-                         .set("dueTime", localDate.format("YYYY-MM-DD HH"));
+                        .set("dueTime", localDate.format("YYYY-MM-DD HH"));
                 });
-            });
         });
-        this.handleDrillDown(updatedOrders);
+});
+this.handleDrillDown(updatedOrders);
+}
+
+handleDrillDown(selectedOrders) {
+    this.getSelectedOrdersCursor()((orders) =>{
+        return orders.clear().concat(fromJS(selectedOrders));
+    });
+}
+
+getOrdersCursor() {
+    let {state}=  this.props;
+    return state.cursor(["pivot", "orders"]);
+}
+
+getSelectedOrdersCursor() {
+    let {state}=  this.props;
+    return state.cursor(["pivot", "selectedOrders"]);
+}
+
+getPivotOptionsCursor() {
+    let {state}=  this.props;
+        return state.cursor(["preferences", "orders", "pivot"]);
     }
 
-    handleDrillDown(selectedOrders) {
-        this.getSelectedOrdersCursor()((orders) =>{
-            return orders.clear().concat(fromJS(selectedOrders));
-        });
-    }
-
-    getOrdersCursor() {
-        let {state}=  this.props;
-        return state.cursor(["pivot", "orders"]);
-    }
-
-    getSelectedOrdersCursor() {
-        let {state}=  this.props;
-        return state.cursor(["pivot", "selectedOrders"]);
-    }
-
-    getOptionsCursor() {
-        let {state}=  this.props;
-        return state.cursor(["pivot", "options"]);
-    }
+getColumnsCursor() {
+    let {state}=  this.props;
+    return state.cursor(["preferences", "orders", "table", "columns"]);
+}
 
 
-    render() {
-        let orders = this.getOrdersCursor()();
-        let selectedOrders = this.getSelectedOrdersCursor()();
-        let options = this.getOptionsCursor()();
-        return (
-                <IBox style={{display: "inline-block"}}>
-                <IBoxTitleBar>
-                <IBoxTitleText>
-                    Orders
-                </IBoxTitleText>
-                <div className="panel-controls">
-                    <ul>
-                        <li><a href="#" className="portlet-refresh text-black" data-toggle="refresh"
-                                onClick={this.handleRefresh.bind(this)}
-                             ><i className="portlet-icon portlet-icon-refresh"></i></a>
-                        </li>
-                    </ul>
-                </div>
-                </IBoxTitleBar>
-                <IBoxBody>
-                    <OrderSearch ref="orderSearch" onOrdersUpdated={this.handleOrdersUpdated.bind(this)}/>
-                    <PivotTable orders={orders} onDrillDown={this.handleDrillDown.bind(this)}/>
-                    <OrderReview orders={selectedOrders} />
-                </IBoxBody>
-                </IBox>);
+render() {
+    let orders = this.getOrdersCursor()();
+    let selectedOrders = this.getSelectedOrdersCursor()();
+    let pivotOptions = this.getPivotOptionsCursor();
+    let columns = this.getColumnsCursor();
+    return (
+            <IBox style={{display: "inline-block"}}>
+            <IBoxTitleBar>
+            <IBoxTitleText>
+            Orders
+        </IBoxTitleText>
+            <div className="panel-controls">
+            <ul>
+            <li><a href="#" className="portlet-refresh text-black" data-toggle="refresh"
+                 onClick={this.handleRefresh.bind(this)}
+                 ><i className="portlet-icon portlet-icon-refresh"></i></a>
+            </li>
+            </ul>
+            </div>
+            </IBoxTitleBar>
+            <IBoxBody>
+            <OrderSearch ref="orderSearch" onOrdersUpdated={this.handleOrdersUpdated.bind(this)}/>
+            <PivotTable results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
+                <OrderReview orders={selectedOrders} columns={columns} />
+            </IBoxBody>
+            </IBox>);
 
-    }
+}
 };
