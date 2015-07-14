@@ -34,6 +34,7 @@ goog.require('codeshelf.window');
 goog.require('codeshelf.workareaeditorview');
 goog.require('domainobjects');
 goog.require('goog.Disposable');
+goog.require('goog.Uri');
 goog.require('goog.debug');
 goog.require('goog.debug.FancyWindow');
 goog.require('goog.debug.Logger');
@@ -434,12 +435,14 @@ codeshelf.mainpage = function() {
                         alert("no facilities have been created");
 					} else {
                         var facilities = command['results'];
-						var lastFacility = null;
+					    var lastFacility = null;
+                        var uri = goog.Uri.parse(window.location.href);
+                        var requestedFacilityId = uri.getParameterValue("facilityId");
 						for (var i = 0; i < facilities.length; i++) {
 
 							lastFacility = facilities[i];
                             var domainId = lastFacility["domainId"];
-                            if (document.location.search.indexOf(domainId) >= 0) {
+                            if (domainId === requestedFacilityId) {
                                 break;
                             }
 						}
