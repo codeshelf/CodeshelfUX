@@ -4,6 +4,7 @@ import DocumentTitle from 'react-document-title';
 import React from 'react';
 import {RouteHandler} from 'react-router';
 import {state} from './data/state';
+import storage from 'lib/storage';
 
 require('imports?this=>window!assets/plugins/modernizr.custom.js');
 require("imports?classie=assets/plugins/classie/classie.js!pages/js/pages");
@@ -19,12 +20,16 @@ export default class Root extends React.Component {
         // http://developer.telerik.com/featured/300-ms-click-delay-ios-8/
         require('fastclick').attach(document.body);
 
-        state.on('change', () => {
+        state.on('change', (newState, path) => {
             /*eslint-disable no-console */
             console.time('whole app rerender');
             this.forceUpdate(() => {
                 console.timeEnd('whole app rerender');
             });
+
+            if (path != null && path.indexOf("preferences") >= 0) {
+                storage.set("preferences", state.cursor(["preferences"])());
+            }
         /*eslint-enable */
     });
 

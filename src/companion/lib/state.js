@@ -17,10 +17,10 @@ export default class State extends EventEmitter {
     );
   }
 
-  set(state) {
+    set(state, path) {
     if (this._state === state) return;
     this._state = state;
-    this.emit('change', this._state);
+        this.emit('change', this._state, path);
   }
 
   get() {
@@ -44,9 +44,9 @@ export default class State extends EventEmitter {
         if (typeof update === "undefined") {
             return this._state.getIn(path);
         } else if (typeof update === "function") {
-            return this.set(this._state.updateIn(path, update));
+                return this.set(this._state.updateIn(path, update), path);
         } else {
-            return this.set(this._state.setIn(path, update));
+                return this.set(this._state.setIn(path, update), path);
         }
     };
   }

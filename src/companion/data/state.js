@@ -1,9 +1,11 @@
 import State from '../lib/state';
-
+import storage from "../lib/storage";
+import {fromJS} from "immutable";
 const initialState = require('../data/initialstate');
 
 if (process.env.IS_BROWSER) {
    window._appState = initialState;
+
 }
 /*
 const initialState = process.env.IS_BROWSER
@@ -12,7 +14,14 @@ const initialState = process.env.IS_BROWSER
 */
 
 
+
 export const state = new State(initialState);
+export const preferences = state.cursor(["preferences"]);
+
+if (process.env.IS_BROWSER) {
+    preferences(fromJS(storage.get("preferences")));
+}
+
 export const $pendingActionsCursor = state.cursor(['$pendingActions']);
 export const $subscriptionsCursor = state.cursor(['$subscriptions']);
 export const authCursor = state.cursor(['auth']);

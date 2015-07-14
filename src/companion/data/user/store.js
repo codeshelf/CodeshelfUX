@@ -2,27 +2,24 @@ import {fromJS} from 'immutable';
 import {logged, loggedout, toggleStoredCredentials} from 'data/auth/actions';
 import {register} from 'dispatcher';
 import {userCursor} from 'data/state';
+import storage from "lib/storage";
 
 const getIn = (path) => userCursor().getIn(path);
 
 export function getStoredCredentials() {
-    let JSONString = window.localStorage.getItem("authData");
-    if (JSONString != null) {
-        return JSON.parse(JSONString);
-    } else {
-        return null;
-    }
+    return storage.get("authData");
 }
 
 export function clearStoredCredentials() {
-    window.localStorage.removeItem("authData");
+    return storage.remove("authData");
 }
+
 function storeCredentials(email, password) {
-    window.localStorage.setItem("authData", JSON.stringify({email: email, password: password}));
+    storage.set("authData", {email: email, password: password});
 }
 
 export function isCredentialsStored() {
-    return !!getStoredCredentials();
+    return storage.has("authData");
 }
 
 export function getEmail() {
