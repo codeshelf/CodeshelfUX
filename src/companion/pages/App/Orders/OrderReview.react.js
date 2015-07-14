@@ -90,6 +90,18 @@ export default class OrderReview extends React.Component{
         return result;
     }
 
+    handleColumnMove(moved, afterName) {
+
+    this.props.columns((columns) => {
+            let formerPosition = columns.indexOf(moved);
+            let newPosition = columns.indexOf(afterName);
+            let after = columns.splice(formerPosition, 1)
+                    .splice(newPosition, 0, moved);
+            return after;
+        });
+    }
+
+
     render() {
         let orders = this.props.orders.sortBy(order => order.get("orderId"));
         let columns = this.props.columns;
@@ -104,7 +116,8 @@ export default class OrderReview extends React.Component{
                     sortedBy="+orderId"
                     expand={this.shouldExpand.bind(this)}
                     onRowExpand={this.handleRowExpand.bind(this)}
-                    onRowCollapse={this.handleRowCollapse.bind(this)} />
+                    onRowCollapse={this.handleRowCollapse.bind(this)}
+                    onColumnMove={this.handleColumnMove.bind(this)}/>
                 </div>);
     }
 };

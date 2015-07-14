@@ -6,6 +6,9 @@ var Immutable = require('immutable');
 var $ = require("jquery");
 import classnames from 'classnames';
 import Icon from "react-fa";
+import { DragSource, DropTarget, DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd/modules/backends/HTML5';
+
 
 
 //TODO likely need better performing index of metadata
@@ -15,7 +18,7 @@ function toShownColumns(columnMetadata, columns) {
             return columns.includes(metadata.get("columnName"));
         })
         .sortBy((metadata) => {
-            return metadata.get("order") || 1;
+            return columns.indexOf(metadata.get("columnName")) || 0;
         });
 }
 
@@ -60,6 +63,66 @@ class ExpandRow extends React.Component {
 
 }
 
+class ColumnHeader extends React.Component {
+
+    render() {
+        let {columnName, displayName = columnName, sortSpec} = this.props;
+        const { isDragging, connectDragSource, connectDropTarget } = this.props;
+            return (connectDragSource(connectDropTarget(
+                    <th key={columnName}
+                        scope="col"
+                        data-toggle="tooltip"
+                        title={displayName}>
+                            {displayName}
+                            {(sortSpec) ?
+                                <Icon name={"sort-numeric-"+sortSpec.dir} />
+                                :
+                            null
+                            }
+                     </th>)));
+    }
+}
+
+
+/**
+ * Implements the drag source contract.
+ */
+const cardSource = {
+    beginDrag(props) {
+        return {
+            columnName: props.columnName
+        };
+    }
+};
+
+const cardTarget = {
+    hover(props, monitor) {
+        const draggedId = monitor.getItem().columnName;
+        if (draggedId !== props.columnName) {
+            props.onMove(draggedId, props.columnName);
+        }
+    }
+};
+
+/**
+ * Specifies the props to inject into your component.
+ */
+function collectDrag(connect, monitor) {
+    return {
+        connectDragSource: connect.dragSource(),
+        isDragging: monitor.isDragging()
+    };
+}
+
+function collectDrop(connect, monitor) {
+    return {
+        connectDropTarget: connect.dropTarget()
+    };
+}
+
+var DraggableColumnHeader = DragSource("table-header", cardSource, collectDrag)(ColumnHeader);
+var DragDropColumnHeader = DropTarget("table-header", cardTarget, collectDrop)(DraggableColumnHeader);
+
 class Header extends React.Component {
 
     toSortSpec(sortBy) {
@@ -75,41 +138,28 @@ class Header extends React.Component {
     }
 
     render() {
-        var {columns, columnMetadata, sortedBy} = this.props;
+            var {columns, columnMetadata, sortedBy, onColumnMove} = this.props;
         let sortSpec = this.toSortSpec(sortedBy);
         return (
                 <thead>
                 <tr>
                 {
-                    columnMetadata
-                        .filter((metadata) => {
-                            return columns.includes(metadata.get("columnName"));
-                        })
-                        .sortBy((metadata) => {
-                            return metadata.get("order") || 1;
-                        })
-                        .map(function (metadata, index)  {
+                    toShownColumns(columnMetadata, columns).map(function (metadata, index)  {
                             let {columnName, displayName = columnName} = metadata.toObject();
-                            var priority = index;
-
-                            return (<th key={columnName}
-                                    scope="col"
-                                    data-tablesaw-priority={priority === 0 ? "persist" : priority}
-                                    data-toggle="tooltip"
-                                    title={displayName}>
-                                    {displayName}
-                                    {(sortSpec && sortSpec.columnName === columnName) ?
-                                     <Icon name={"sort-numeric-"+sortSpec.dir} />
-                                     :
-                                     null
-                                    }
-                                    </th>);
-                        })
+                            var sortSpecProp = (sortSpec && sortSpec.columnName === columnName) ? sortSpec : null;
+                            return (<DragDropColumnHeader
+                                        columnName={columnName}
+                                        displayName={displayName}
+                                        sortSpec={sortSpecProp}
+                                        onMove={onColumnMove}/>);
+                            }.bind(this))
                 }
                 </tr>
                 </thead>);
     }
 }
+
+var DraggableHeader = DragDropContext(HTML5Backend)(Header);
 
 var Table = React.createClass({
     propTypes: {
@@ -131,6 +181,7 @@ var Table = React.createClass({
              sortedBy,
              onRowExpand = function (){ console.log("row expand not set");},
              onRowCollapse = function (){ console.log("row collapse not set");},
+             onColumnMove = () => { console.log("column moveHandler not set");},
              expand} = this.props;
         if (columns.constructor === Array) {
             columns = Immutable.fromJS(columns);
@@ -162,13 +213,6 @@ var Table = React.createClass({
             }
         }
 
-        columnMetadata = columnMetadata.map((metadata, i) => {
-            if (typeof metadata.order === "undefined") {
-                metadata.order = i;
-                return metadata;
-            }
-        });
-
         var classes = classnames({
             "table": true,
             "table-hover": true,
@@ -186,7 +230,11 @@ var Table = React.createClass({
         return (
                 <table className={classes} role="grid">
                     <caption>{caption}</caption>
-                    <Header columns={columns} columnMetadata={columnMetadata} sortedBy={sortedBy}/>
+                            <DraggableHeader
+                                columns={columns}
+                                columnMetadata={columnMetadata}
+                                sortedBy={sortedBy}
+                                onColumnMove={onColumnMove}/>
                     <tbody>
                             {
                                rows.map(function(row, i) {
