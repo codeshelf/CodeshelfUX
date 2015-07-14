@@ -19,7 +19,10 @@ export const state = new State(initialState);
 export const preferences = state.cursor(["preferences"]);
 
 if (process.env.IS_BROWSER) {
-    preferences(fromJS(storage.get("preferences")));
+    let storedPreferences = storage.get("preferences");
+    if (storedPreferences) {
+        preferences(fromJS());
+    }
 }
 
 export const $pendingActionsCursor = state.cursor(['$pendingActions']);
