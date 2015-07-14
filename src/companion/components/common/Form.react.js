@@ -3,7 +3,7 @@ import {Input as BSInput} from 'react-bootstrap';
 import PureComponent from 'components/common/PureComponent';
 import classnames from 'classnames';
 import _ from "lodash";
-import {Set} from "immutable";
+import {List} from "immutable";
 require('./Form.styl');
 
 class  WrapInput extends React.Component {
@@ -121,24 +121,24 @@ export class Checkbox extends React.Component {
                                    <label htmlFor={nameAttr}>{label} </label>
                                 </div>
                     </div>
-);
+               );
     }
 };
 
 export class MultiSelect extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {values: (props.values) ? Set(props.values) : Set()};
+        this.state = {values: (props.values) ? List(props.values) : List()};
     }
 
     handleChange(e) {
         let input = e.target;
         if (input.checked) {
-            this.setState({values: this.state.values.add(input.value)}, () =>{
+            this.setState({values: this.state.values.push(input.value)}, () =>{
                 this.props.onChange(this.state.values);
             });
         } else {
-            this.setState({values: this.state.values.delete(input.value)}, () =>{
+                this.setState({values: this.state.values.filterNot( value => input.value === value)}, () =>{
                 this.props.onChange(this.state.values);
             });
         }
