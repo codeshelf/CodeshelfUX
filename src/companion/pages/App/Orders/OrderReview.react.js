@@ -2,7 +2,7 @@ import  React from "react";
 import {DropdownButton} from "react-bootstrap";
 import Icon from "react-fa";
 import _ from "lodash";
-import {Map, fromJS} from "immutable";
+import {Map, List, frocks} from "immutable";
 import {getFacilityContext} from "data/csapi";
 import {StatusSummary} from "data/types";
 import {Table} from "components/common/Table";
@@ -102,8 +102,37 @@ export default class OrderReview extends React.Component{
     }
 
 
+
     render() {
-        let orders = this.props.orders.sortBy(order => order.get("orderId"));
+        let desc = (b) => b * -1;
+
+        let ascFunc = (a, b) => {
+            if (a < b) return -1;
+            if (a > b) return 1;
+            return 0;
+        };
+
+        let sortBy = List(["+customerId", "-shipperId"]).map((spec) => {
+            var prefix = spec.charAt(0);
+            var specObj = {
+                property: spec.substring(1)
+            };
+            if (prefix === "-") {
+                specObj.sortFunction = _.compose(desc, ascFunc); // compose = desc(ascFunc(a,b))
+                specObj.direction = "desc";
+            } else {
+                specObj.sortFunction = ascFunc;
+                specObj.direction = "asc";
+            }
+            return specObj;
+        });
+
+
+        let orders = this.props.orders.sort((a, b) => {
+            let comp =  sortBy.map(({sortFunction, property}) => sortFunction(a.get(property), b.get(property)))
+                .find((result) => result !=0) || 0;
+            return comp;
+        });
         let columns = this.props.columns;
         let {columnMetadata} = this;
         return (<div>
@@ -113,7 +142,7 @@ export default class OrderReview extends React.Component{
                 <Table results={orders}
                     columns={columns()}
                     columnMetadata={this.columnMetadata}
-                    sortedBy="+orderId"
+                    sortedBy={sortBy}
                     expand={this.shouldExpand.bind(this)}
                     onRowExpand={this.handleRowExpand.bind(this)}
                     onRowCollapse={this.handleRowCollapse.bind(this)}

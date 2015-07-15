@@ -1,10 +1,12 @@
 import  React from "react";
 import {Table} from "components/common/Table";
 import moment from "moment";
+import {List} from "immutable";
 export default class PickRateTable extends React.Component{
 
     constructor(props) {
         super(props);
+        this.sortBy = List([{property: "total", direction: "desc"}]);
     }
 
     toTableData(pickRates) {
@@ -47,7 +49,7 @@ export default class PickRateTable extends React.Component{
             displayName: "Total"
         });
         return (<div>
-                   <Table results={tableData} columnMetadata={columnMetadata} sortedBy="-total" emptyMessage={""} />
+                <Table results={tableData} columnMetadata={columnMetadata} sortedBy={this.sortBy} emptyMessage={""} />
                 </div>
         );
     }

@@ -75,7 +75,7 @@ class ColumnHeader extends React.Component {
                         title={displayName}>
                             {displayName}
                             {(sortSpec) ?
-                                <Icon name={"sort-numeric-"+sortSpec.dir} />
+                                <Icon name={"sort-numeric-"+sortSpec.direction} />
                                 :
                             null
                             }
@@ -125,32 +125,25 @@ var DragDropColumnHeader = DropTarget("table-header", cardTarget, collectDrop)(D
 
 class Header extends React.Component {
 
-    toSortSpec(sortBy) {
-        let firstChar = (sortBy && sortBy.length > 0) ? sortBy.charAt(0) : null;
-        if (firstChar) {
-            return {
-                dir: (firstChar === '-') ? "desc" : "asc",
-                columnName: sortBy.substring(1)
-            };
-        } else {
-            return null;
-        }
+    toSortSpec(sortedBy, columnName) {
+        let sortSpec = (sortedBy && sortedBy.find((s) => s.property === columnName));
+        return sortSpec;
     }
 
     render() {
             var {columns, columnMetadata, sortedBy, onColumnMove} = this.props;
-        let sortSpec = this.toSortSpec(sortedBy);
+
         return (
                 <thead>
                 <tr>
                 {
                     toShownColumns(columnMetadata, columns).map(function (metadata, index)  {
                             let {columnName, displayName = columnName} = metadata.toObject();
-                            var sortSpecProp = (sortSpec && sortSpec.columnName === columnName) ? sortSpec : null;
+                            var sortSpec = this.toSortSpec(sortedBy, columnName);
                             return (<DragDropColumnHeader
                                         columnName={columnName}
                                         displayName={displayName}
-                                        sortSpec={sortSpecProp}
+                                        sortSpec={sortSpec}
                                         onMove={onColumnMove}/>);
                             }.bind(this))
                 }

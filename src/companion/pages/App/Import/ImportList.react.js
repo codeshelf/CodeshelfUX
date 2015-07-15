@@ -37,7 +37,7 @@ export default class ImportList extends React.Component{
         ];
 
         this.columns = _.map(this.columnMetadata, (c) => c.columnName);
-
+        this.sortBy = Immutable.List([{property: "started", direction: "desc"}]);
     }
 
     render() {
@@ -54,7 +54,7 @@ export default class ImportList extends React.Component{
         return (<Table results={sorted}
                  columnMetadata={this.columnMetadata}
                  columns={this.columns}
-                 sortedBy={"-started"}>
+                     sortedBy={this.sortBy}>
                 </Table>);
     }
 };
