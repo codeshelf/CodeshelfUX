@@ -2,7 +2,7 @@ import  React from "react";
 import {DropdownButton} from "react-bootstrap";
 import Icon from "react-fa";
 import _ from "lodash";
-import {Map, List, frocks} from "immutable";
+    import {Map, List, fromJS, Record} from "immutable";
 import {getFacilityContext} from "data/csapi";
 import {StatusSummary} from "data/types";
 import {Table} from "components/common/Table";
@@ -10,6 +10,42 @@ import {MultiSelect, Input} from 'components/common/Form';
 
 import {Row, Col} from 'components/common/pagelayout';
 import OrderDetailList from "./OrderDetailList";
+
+
+let desc = (b) => b * -1;
+
+let ascFunc = (a, b) => {
+    if (a < b) return -1;
+        if (a > b) return 1;
+    return 0;
+};
+
+
+var SortSpec = Record({
+    property: null,
+    direction: "asc",
+    sortFunction: ascFunc
+});
+
+function toSortSpecs(columns, colDirMap) {
+    return columns.reduce((sortSpecs, c) => {
+        let columnName = c;
+        let dir = colDirMap.get(columnName);
+        if (dir) {
+            return sortSpecs.push(SortSpec({direction: dir, property: columnName}));
+        } else {
+            return sortSpecs;
+        }
+
+    }, List())
+    .map((spec) => {
+        if (spec.direction === "desc") {
+            return spec.set("sortFunction",  _.compose(desc, ascFunc)); // compose = desc(ascFunc(a,b))
+        } else {
+            return spec.set("sortFunction", ascFunc);
+        }
+    });;
+}
 
 export default class OrderReview extends React.Component{
 
@@ -37,7 +73,11 @@ export default class OrderReview extends React.Component{
 
         this.state= {
             selectedOrderId: null,
-            orderDetails: Map()
+            orderDetails: Map(),
+            colDirMap: Map({
+                "customerId": "asc",
+                "shipperId": "desc"
+            })
         };
 
     }
@@ -92,7 +132,7 @@ export default class OrderReview extends React.Component{
 
     handleColumnMove(moved, afterName) {
 
-    this.props.columns((columns) => {
+        this.props.columns((columns) => {
             let formerPosition = columns.indexOf(moved);
             let newPosition = columns.indexOf(afterName);
             let after = columns.splice(formerPosition, 1)
@@ -101,40 +141,23 @@ export default class OrderReview extends React.Component{
         });
     }
 
-
+    handleColumnSortChange(columnName, direction) {
+        this.setState({colDirMap: this.state.colDirMap.set(columnName, direction)});
+    }
 
     render() {
-        let desc = (b) => b * -1;
 
-        let ascFunc = (a, b) => {
-            if (a < b) return -1;
-            if (a > b) return 1;
-            return 0;
-        };
-
-        let sortBy = List(["+customerId", "-shipperId"]).map((spec) => {
-            var prefix = spec.charAt(0);
-            var specObj = {
-                property: spec.substring(1)
-            };
-            if (prefix === "-") {
-                specObj.sortFunction = _.compose(desc, ascFunc); // compose = desc(ascFunc(a,b))
-                specObj.direction = "desc";
-            } else {
-                specObj.sortFunction = ascFunc;
-                specObj.direction = "asc";
-            }
-            return specObj;
-        });
-
-
+        let columns = this.props.columns;
+        let sortBy = toSortSpecs(columns(), this.state.colDirMap);
         let orders = this.props.orders.sort((a, b) => {
+                //find first non zero result as you run each sort function in order
             let comp =  sortBy.map(({sortFunction, property}) => sortFunction(a.get(property), b.get(property)))
-                .find((result) => result !=0) || 0;
+                            .find((result) => result !=0) || 0;
             return comp;
         });
-        let columns = this.props.columns;
+
         let {columnMetadata} = this;
+
         return (<div>
                 <TableSettings onColumnsChange={columns}
                     columns={columns()}
@@ -146,7 +169,9 @@ export default class OrderReview extends React.Component{
                     expand={this.shouldExpand.bind(this)}
                     onRowExpand={this.handleRowExpand.bind(this)}
                     onRowCollapse={this.handleRowCollapse.bind(this)}
-                    onColumnMove={this.handleColumnMove.bind(this)}/>
+                    onColumnMove={this.handleColumnMove.bind(this)}
+                    onColumnSortChange={this.handleColumnSortChange.bind(this)}
+                 />
                 </div>);
     }
 };

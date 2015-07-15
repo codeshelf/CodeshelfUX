@@ -66,12 +66,13 @@ class ExpandRow extends React.Component {
 class ColumnHeader extends React.Component {
 
     render() {
-        let {columnName, displayName = columnName, sortSpec} = this.props;
+            let {columnName, displayName = columnName, sortSpec, onClick} = this.props;
         const { isDragging, connectDragSource, connectDropTarget } = this.props;
             return (connectDragSource(connectDropTarget(
                     <th key={columnName}
                         scope="col"
                         data-toggle="tooltip"
+                        onClick={onClick}
                         title={displayName}>
                             {displayName}
                             {(sortSpec) ?
@@ -130,8 +131,16 @@ class Header extends React.Component {
         return sortSpec;
     }
 
+    handleClick(oldSortSpec, columnName) {
+        var direction = "desc";
+        if (oldSortSpec && oldSortSpec.get("direction") === "desc") {
+            direction = "asc";
+        }
+        this.props.onColumnSortChange(columnName, direction);
+    }
+
     render() {
-            var {columns, columnMetadata, sortedBy, onColumnMove} = this.props;
+        var {columns, columnMetadata, sortedBy, onColumnMove, onColumnSortChange} = this.props;
 
         return (
                 <thead>
@@ -144,7 +153,8 @@ class Header extends React.Component {
                                         columnName={columnName}
                                         displayName={displayName}
                                         sortSpec={sortSpec}
-                                        onMove={onColumnMove}/>);
+                                        onMove={onColumnMove}
+                                        onClick={this.handleClick.bind(this, sortSpec, columnName)}/>);
                             }.bind(this))
                 }
                 </tr>
@@ -175,6 +185,7 @@ var Table = React.createClass({
              onRowExpand = function (){ console.log("row expand not set");},
              onRowCollapse = function (){ console.log("row collapse not set");},
              onColumnMove = () => { console.log("column moveHandler not set");},
+             onColumnSortChange = () => { console.log("onColumnSortChange  not set");},
              expand} = this.props;
         if (columns.constructor === Array) {
             columns = Immutable.fromJS(columns);
@@ -227,7 +238,8 @@ var Table = React.createClass({
                                 columns={columns}
                                 columnMetadata={columnMetadata}
                                 sortedBy={sortedBy}
-                                onColumnMove={onColumnMove}/>
+                                onColumnMove={onColumnMove}
+                                onColumnSortChange={onColumnSortChange}/>
                     <tbody>
                             {
                                rows.map(function(row, i) {
