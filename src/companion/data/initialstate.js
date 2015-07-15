@@ -16,9 +16,13 @@ const data = {
     $pendingActions: {},
     $subscriptions: {},
     preferences: {
+        version: "1.1",
         orders: {
             table: {
-                columns: ["orderId", "customerId", "shipperId", "destinationId", "containerId", "readableDueDate", "status", "readableDueDate"]
+                columns: ["orderId", "customerId", "shipperId", "destinationId", "containerId", "readableDueDate", "status", "readableDueDate"],
+                sortSpecs: {
+                    "orderId": {order: "asc"}
+                }
             },
             pivot: {
                 fields: [
@@ -90,11 +94,6 @@ const data = {
         }
     },
     pivot: {
-        options: {
-            "cols": ["status"]
-            ,"rows": ["customerId", "shipperId"]
-            ,"hiddenAttributes": ["domainId", "containerId", "orderDate", "updated", "pickStrategy", "persistentId", "orderType", "active"]
-        },
         selectedOrders: [],
         orders: []
 

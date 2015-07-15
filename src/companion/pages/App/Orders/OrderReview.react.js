@@ -27,14 +27,14 @@ var SortSpec = Record({
     sortFunction: ascFunc
 });
 
-function toSortSpecs(columns, colDirMap) {
-    return columns.reduce((sortSpecs, c) => {
+function toFullSortSpecs(columns, sortSpecs) {
+    return columns.reduce((fullSortSpecs, c) => {
         let columnName = c;
-        let dir = colDirMap.get(columnName);
-        if (dir) {
-            return sortSpecs.push(SortSpec({direction: dir, property: columnName}));
+        let order = sortSpecs.getIn([columnName, "order"]);
+        if (order) {
+            return fullSortSpecs.push(SortSpec({direction: order, property: columnName}));
         } else {
-            return sortSpecs;
+            return fullSortSpecs;
         }
 
     }, List())
@@ -73,11 +73,7 @@ export default class OrderReview extends React.Component{
 
         this.state= {
             selectedOrderId: null,
-            orderDetails: Map(),
-            colDirMap: Map({
-                "customerId": "asc",
-                "shipperId": "desc"
-            })
+            orderDetails: Map()
         };
 
     }
@@ -142,13 +138,15 @@ export default class OrderReview extends React.Component{
     }
 
     handleColumnSortChange(columnName, direction) {
-        this.setState({colDirMap: this.state.colDirMap.set(columnName, direction)});
+            this.props.sortSpecs((oldSortSpec)=>{
+                return oldSortSpec.set(columnName, Map({order: direction}));
+            });
     }
 
     render() {
 
-        let columns = this.props.columns;
-        let sortBy = toSortSpecs(columns(), this.state.colDirMap);
+        let {columns, sortSpecs} = this.props;
+        let sortBy = toFullSortSpecs(columns(), sortSpecs());
         let orders = this.props.orders.sort((a, b) => {
                 //find first non zero result as you run each sort function in order
             let comp =  sortBy.map(({sortFunction, property}) => sortFunction(a.get(property), b.get(property)))

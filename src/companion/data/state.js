@@ -21,7 +21,21 @@ export const preferences = state.cursor(["preferences"]);
 if (process.env.IS_BROWSER) {
     let storedPreferences = storage.get("preferences");
     if (storedPreferences) {
-        preferences(fromJS(storedPreferences));
+        let versionedPreferences =  fromJS(storedPreferences);
+        let expectedVersion = preferences().get("version");
+        let storedVersion = versionedPreferences.get("version", "1.0");
+
+        var [storedMajor, storedMinor] = storedVersion.split(".");
+        var [expectedMajor, expectedMinor] = expectedVersion.split(".");
+        if (storedMajor === expectedMajor) {
+            preferences((oldPreferences) => {
+                return oldPreferences.mergeDeep(storedPreferences)
+                    .set("version", expectedVersion);
+            });
+        } else {
+            console.log("Stored preferences are not compatible with application, resetting");
+        }
+
     }
 }
 

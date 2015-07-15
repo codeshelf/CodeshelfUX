@@ -68,12 +68,19 @@ getColumnsCursor() {
     return state.cursor(["preferences", "orders", "table", "columns"]);
 }
 
+getColumnSortSpecs() {
+    let {state}=  this.props;
+    return state.cursor(["preferences", "orders", "table", "sortSpecs"]);
+
+}
+
 
 render() {
     let orders = this.getOrdersCursor()();
     let selectedOrders = this.getSelectedOrdersCursor()();
     let pivotOptions = this.getPivotOptionsCursor();
     let columns = this.getColumnsCursor();
+    let sortSpecs = this.getColumnSortSpecs();
     return (
             <IBox style={{display: "inline-block"}}>
             <IBoxTitleBar>
@@ -90,9 +97,9 @@ render() {
             </div>
             </IBoxTitleBar>
             <IBoxBody>
-            <OrderSearch ref="orderSearch" onOrdersUpdated={this.handleOrdersUpdated.bind(this)}/>
-            <PivotTable results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
-                <OrderReview orders={selectedOrders} columns={columns} />
+                <OrderSearch ref="orderSearch" onOrdersUpdated={this.handleOrdersUpdated.bind(this)}/>
+                <PivotTable results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
+                <OrderReview orders={selectedOrders} columns={columns} sortSpecs={sortSpecs}/>
             </IBoxBody>
             </IBox>);
 
