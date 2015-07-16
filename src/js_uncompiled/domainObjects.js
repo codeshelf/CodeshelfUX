@@ -5,6 +5,7 @@
 
 goog.provide('domainobjects');
 goog.require('codeshelf.dateformat');
+goog.require('goog.string');
 
 codeshelf.toLocationDescription = function(location) {
 	var primaryAliasId = location['primaryAliasId'];
@@ -538,7 +539,8 @@ domainobjects = {
 			gtinId: {
 				'id':		'gtinId',
 				'title':	'GTIN',
-				'width':	10
+			    'width':	10,
+                'comparer': goog.string.caseInsensitiveCompare
 			}
 		}
 	},
@@ -592,7 +594,8 @@ domainobjects = {
 				'title': 'GTIN/UPC',
 				'width': 25,
 				'editor' : Slick.Editors.Text,
-				'focusable': true
+			    'focusable': true,
+                'comparer': goog.string.caseInsensitiveCompare
 			},
 			'persistentId': {
 				'id': 'persistentId',
@@ -806,7 +809,8 @@ domainobjects = {
 			'gtinId': {
 				'id':	 'gtinId',
 				'title': 'GTIN',
-				'width': 10
+			    'width': 10,
+                'comparer': goog.string.caseInsensitiveCompare
 			},
 			'needsScan': {
 				'id':	 'needsScan',

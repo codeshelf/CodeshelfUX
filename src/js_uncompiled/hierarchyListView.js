@@ -786,7 +786,8 @@ codeshelf.grid.toColumns = function(hierarchyLevelDef) {
 					'cannotTriggerInsert': true,
 					'resizable': true,
 					'selectable': true,
-					'sortable': true,  //sortable so that it will set up structure for arrows
+			        'sortable': true,  //sortable so that it will set up structure for arrows
+                    'comparer': propertyDef.comparer,
 					'focusable': false
 			};
 			goog.object.extend(newColumn, propertyDef);
