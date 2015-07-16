@@ -164,11 +164,18 @@ codeshelf.grid.propertyComparer = function(columns, itemA, itemB) {
 		var field = column['id'];
 
 		var valueA = itemA[field];
-		var valueB = itemB[field];
-		var result = codeshelf.grid.valueComparer(valueA, valueB);
+        var valueB = itemB[field];
+
+        var result = null;
+        var customComparer = column['comparer'];
+        if (typeof customComparer === 'function') {
+            result = customComparer(valueA, valueB);
+        } else {
+            result = codeshelf.grid.valueComparer(valueA, valueB);
+        }
 		if (result != 0) {
 			return result;
-		}
+		} //else try the next one
 	}
 	return 0;
 };
