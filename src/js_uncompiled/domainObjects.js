@@ -619,6 +619,11 @@ domainobjects = {
 				'title': 'UOM',
 				'width': 5
 			},
+			'gtinLocations':         {
+				'id':    'gtinLocations',
+				'title': 'Item Locations',
+				'width': 20
+			},
 			'uomMasterPersistentId':         {
 				'id':    'uomMasterPersistentId',
 				'title': 'UOM PersistentId',
