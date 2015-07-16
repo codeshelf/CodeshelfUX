@@ -67,9 +67,11 @@ class ColumnHeader extends React.Component {
 
     render() {
             let {columnName, displayName = columnName, sortSpec, onClick} = this.props;
-        const { isDragging, connectDragSource, connectDropTarget } = this.props;
+            const { isDragging, connectDragSource, connectDropTarget } = this.props;
+            var classes = classnames({"dragging": isDragging});
             return (connectDragSource(connectDropTarget(
                     <th key={columnName}
+                        className={classes}
                         scope="col"
                         data-toggle="tooltip"
                         onClick={onClick}
