@@ -50,6 +50,8 @@ codeshelf.buildGtinListView = function(websession, facility, itemFilter, itemFil
 				return true;
 			else if (inProperty['id'] ===  'uomMasterId')
 				return true;
+			else if (inProperty['id'] ===  'gtinLocations')
+				return true;
 			else
 				return false;
 		},
