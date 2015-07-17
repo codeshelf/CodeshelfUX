@@ -1,5 +1,12 @@
 @import "~orb/dist/orb.css";
 
+.orb {
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */
+}
+
 .orb .filter {
   display: none;
 }
@@ -28,8 +35,4 @@
 
 .orb .cell {
     cursor: pointer;
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none;          /* Likely future */
 }
