@@ -23,6 +23,14 @@ function toShownColumns(columnMetadata, columns) {
 }
 
 var Row = React.createClass({
+
+
+    getWidth: function(columnName) {
+        var tdNode = React.findDOMNode(this.refs[columnName]);
+        var scrollWidth = tdNode.scrollWidth;
+        return scrollWidth + 1;
+    },
+
     render: function() {
         var {columns,
              columnMetadata,
@@ -45,7 +53,7 @@ var Row = React.createClass({
                         if (CustomComponent) {
                             valueRenderer = ( <CustomComponent rowData={row} cellData={value} />);
                         }
-                        return (<td key={key}>{valueRenderer}</td>);
+                        return (<td ref={key} key={key}>{valueRenderer}</td>);
 
                     })
                 }
@@ -66,22 +74,27 @@ class ExpandRow extends React.Component {
 class ColumnHeader extends React.Component {
 
     render() {
-            let {columnName, displayName = columnName, sortSpec, onClick} = this.props;
+            let {columnName, displayName = columnName, width, sortSpec, onClick} = this.props;
             const { isDragging, connectDragSource, connectDropTarget } = this.props;
             var classes = classnames({"dragging": isDragging});
+            var style = {};
+            if (width) {
+                style.width = width;
+            }
             return (connectDragSource(connectDropTarget(
                     <th key={columnName}
                         className={classes}
+                        style={style}
                         scope="col"
                         data-toggle="tooltip"
                         onClick={onClick}
                         title={displayName}>
-                            {displayName}
                             {(sortSpec) ?
-                                <Icon name={"sort-numeric-"+sortSpec.direction} />
-                                :
-                            null
+                             <Icon name={"sort-numeric-"+sortSpec.direction} style={{marginRight: "0.25em"}}/>
+                             :
+                             null
                             }
+                            {displayName}
                      </th>)));
     }
 }
@@ -133,16 +146,9 @@ class Header extends React.Component {
         return sortSpec;
     }
 
-    handleClick(oldSortSpec, columnName) {
-        var direction = "desc";
-        if (oldSortSpec && oldSortSpec.get("direction") === "desc") {
-            direction = "asc";
-        }
-        this.props.onColumnSortChange(columnName, direction);
-    }
 
     render() {
-        var {columns, columnMetadata, sortedBy, onColumnMove, onColumnSortChange} = this.props;
+        var {columns, columnMetadata, columnWidths, sortedBy, onColumnMove, onColumnClick} = this.props;
 
         return (
                 <thead>
@@ -151,12 +157,14 @@ class Header extends React.Component {
                     toShownColumns(columnMetadata, columns).map(function (metadata, index)  {
                             let {columnName, displayName = columnName} = metadata.toObject();
                             var sortSpec = this.toSortSpec(sortedBy, columnName);
+                            var width = columnWidths[columnName];
                             return (<DragDropColumnHeader
                                         columnName={columnName}
+                                        width={width}
                                         displayName={displayName}
                                         sortSpec={sortSpec}
                                         onMove={onColumnMove}
-                                        onClick={this.handleClick.bind(this, sortSpec, columnName)}/>);
+                                        onClick={(e) => {onColumnClick(sortSpec, columnName, e);}}/>);
                             }.bind(this))
                 }
                 </tr>
@@ -177,6 +185,40 @@ var Table = React.createClass({
             "caption": "",
             "rows": []
         };
+    },
+
+    getInitialState: function() {
+        return {
+            widths: {}
+        };
+    },
+
+    handleColumnClick: function(oldSortSpec, columnName, evt) {
+        if (!evt.ctrlKey) {
+            var direction = "desc";
+            if (oldSortSpec && oldSortSpec.get("direction") === "desc") {
+                direction = "asc";
+            }
+            let {onColumnSortChange} = this.props;
+            if (onColumnSortChange) {
+                onColumnSortChange(columnName, direction);
+            }
+        } else {
+            var widths = this.state.widths;
+                if (widths[columnName]) {
+                delete widths[columnName];
+            } else {
+                var largestCellWidth = 0;
+                for(var key in this.refs) {
+                    if (key.indexOf("row") == 0) {
+                        largestCellWidth = Math.max(largestCellWidth, this.refs[key].getWidth(columnName));
+                    }
+                }
+                widths[columnName] = largestCellWidth;
+            }
+            this.setState({widths: widths});
+
+        }
     },
 
     renderTable: function(rows) {
@@ -239,9 +281,10 @@ var Table = React.createClass({
                             <DraggableHeader
                                 columns={columns}
                                 columnMetadata={columnMetadata}
+                                columnWidths={this.state.widths}
                                 sortedBy={sortedBy}
                                 onColumnMove={onColumnMove}
-                                onColumnSortChange={onColumnSortChange}/>
+                                onColumnClick={this.handleColumnClick}/>
                     <tbody>
                             {
                                rows.map(function(row, i) {
@@ -256,12 +299,12 @@ var Table = React.createClass({
                                    let renderExpandComponent = expand(row, rowNumber);
                                    if (renderExpandComponent != null) {
                                        return Immutable.List.of(
-                                           <Row key={rowNumber} {...childProps} onClick={onRowCollapse} expanded={true}/>,
+                                               <Row ref={"row" + rowNumber} key={rowNumber} {...childProps} onClick={onRowCollapse} expanded={true}/>,
                                            <ExpandRow key={rowNumber+"-expand"} {...childProps}>
                                                {renderExpandComponent}
                                            </ExpandRow>);
                                    } else {
-                                       return (<Row key={rowNumber} onClick={onRowExpand} {...childProps} expanded={false}/>);
+                                       return (<Row ref={"row" + rowNumber} key={rowNumber} onClick={onRowExpand} {...childProps} expanded={false}/>);
                                    }
                                }).flatten(true).toJS()
                             }
