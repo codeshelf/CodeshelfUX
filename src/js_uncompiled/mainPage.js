@@ -128,9 +128,9 @@ codeshelf.windowLauncher = (function() {
 			}
 		},
 
-		loadOrderDetailsView: function() {
+		loadOrderDetailsView: function(partialQuery) {
 			try {
-				var orderDetailsView = codeshelf.orderdetailsview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				    var orderDetailsView = codeshelf.orderdetailsview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), partialQuery);
 				var orderDetailsWindow = codeshelf.window(orderDetailsView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				orderDetailsWindow.open();
 			}
@@ -271,7 +271,7 @@ codeshelf.windowLauncher = (function() {
 				alert(err);
 			}
 		},
-		
+
 		loadExtensionPointsView: function() {
 			try {
 				var domainExtensionPointsView = codeshelf.extensionpointsview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
@@ -282,7 +282,7 @@ codeshelf.windowLauncher = (function() {
 				alert(err);
 			}
 		},
-		
+
 		loadGtinListView: function() {
 			try {
 				var gtinListView = codeshelf.gtinlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
@@ -561,6 +561,16 @@ function launchEdiServicesView() {
 }
 goog.exportSymbol('launchEdiServicesView', launchEdiServicesView);
 
+function handleSearchInput(query) {
+    if (query && query.indexOf("d:") == 0) {
+
+        launchOrderDetailsView(query.substring(2));
+    } else {
+        launchOrdersView(query);
+    }
+}
+goog.exportSymbol('handleSearchInput', handleSearchInput);
+
 function launchOrdersView(partialOrderIdQuery) {
 	codeshelf.windowLauncher.loadOrdersView(partialOrderIdQuery, true); // OUTBOUND orders
 }
@@ -571,8 +581,8 @@ function launchBatchOrdersView(partialOrderIdQuery) {
 }
 goog.exportSymbol('launchBatchOrdersView', launchBatchOrdersView);
 
-function launchOrderDetailsView() {
-	codeshelf.windowLauncher.loadOrderDetailsView(false); // non-hierarchical
+function launchOrderDetailsView(partialQuery) {
+	codeshelf.windowLauncher.loadOrderDetailsView(partialQuery);
 }
 goog.exportSymbol('launchOrderDetailsView', launchOrderDetailsView);
 

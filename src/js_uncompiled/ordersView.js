@@ -67,11 +67,15 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders, partialO
 
 	var self = {
 
-		'getViewName': function () {
+        'getViewName': function () {
+            var prefix = null;
 			if (outboundOrders_)
-				return 'Outbound Orders';
+				prefix = 'Outbound Orders';
 			else
-				return 'Cross Batch Orders';
+		        prefix = 'Cross Batch Orders';
+
+            var queryPart = (partialOrderIdQuery_) ? ": " + partialOrderIdQuery_ : "";
+            return prefix + queryPart;
 		},
 
         'getViewMenu': function() {

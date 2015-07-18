@@ -22,10 +22,11 @@ goog.require('adhocDialogService');
  * @param facility The facility to check.
  * @return {Object} The orders view.
  */
-codeshelf.orderdetailsview = function(websession, facility) {
+    codeshelf.orderdetailsview = function(websession, facility, partialQuery) {
 
 	var websession_ = websession;
-	var facility_ = facility;
+    var facility_ = facility;
+    var partialQuery_ = partialQuery;
 
 	function websocketCmdCallbackFacility() {
 		var callback = {
@@ -47,8 +48,9 @@ codeshelf.orderdetailsview = function(websession, facility) {
 
 	var self = {
 
-		'getViewName': function () {
-				return 'Order Details';
+        'getViewName': function () {
+            var queryPart = (partialQuery_) ? ": " + partialQuery_ : "";
+            return 'Order Details' + queryPart;
 		},
 
 		// following psuedo-inheritance pattern
@@ -130,10 +132,19 @@ codeshelf.orderdetailsview = function(websession, facility) {
 	);
 
 
-	var orderDetailFilter = "orderDetailsByFacility";
-	var orderDetailFilterParams = [
-		{ 'name': 'facilityId', 'value': facility_['persistentId']}
-	];
+    var orderDetailFilter = "orderDetailsByFacility";
+    var orderDetailFilterParams = [
+        { 'name': 'facilityId', 'value': facility_['persistentId']}
+    ];
+
+    if (partialQuery_) {
+	    orderDetailFilter = "orderDetailsByFacilityAndPartialQuery";
+	    orderDetailFilterParams = [
+            { 'name': 'facilityId',   'value': facility_['persistentId']},
+            { 'name': 'partialQuery', 'value': '%' + partialQuery_ + '%'}
+	    ];
+
+    }
 
 	var orderDetailHierarchyMapDef = { "className": domainobjects['OrderDetail']['className'], "linkProperty": 'parent', "filter": orderDetailFilter, "filterParams": orderDetailFilterParams, "properties": domainobjects['OrderDetail']['properties'], "comparer": undefined , "contextMenuDefs": orderDetailContextDefs};
 
