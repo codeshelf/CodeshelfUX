@@ -8,8 +8,7 @@ import classnames from 'classnames';
 import Icon from "react-fa";
 import { DragSource, DropTarget, DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd/modules/backends/HTML5';
-
-
+import PureComponent from 'components/common/PureComponent';
 
 //TODO likely need better performing index of metadata
 function toShownColumns(columnMetadata, columns) {
@@ -22,16 +21,14 @@ function toShownColumns(columnMetadata, columns) {
         });
 }
 
-var Row = React.createClass({
-
-
-    getWidth: function(columnName) {
+class Row extends PureComponent {
+    getWidth(columnName) {
         var tdNode = React.findDOMNode(this.refs[columnName]);
         var scrollWidth = tdNode.scrollWidth;
         return scrollWidth + 1;
-    },
+    }
 
-    render: function() {
+    render() {
         var {columns,
              columnMetadata,
              row,
@@ -60,7 +57,7 @@ var Row = React.createClass({
                 </tr>
         );
     }
-});
+}
 
 class ExpandRow extends React.Component {
     render() {
@@ -158,7 +155,8 @@ class Header extends React.Component {
                             let {columnName, displayName = columnName} = metadata.toObject();
                             var sortSpec = this.toSortSpec(sortedBy, columnName);
                             var width = columnWidths[columnName];
-                            return (<DragDropColumnHeader
+                                return (<DragDropColumnHeader
+                                         key={columnName}
                                         columnName={columnName}
                                         width={width}
                                         displayName={displayName}
@@ -225,6 +223,7 @@ var Table = React.createClass({
         var {caption = "",
              columns = Immutable.List(),
              columnMetadata = Immutable.List(),
+             keyColumn,
              sortedBy,
              onRowExpand = function (){ console.log("row expand not set");},
              onRowCollapse = function (){ console.log("row collapse not set");},
@@ -295,16 +294,19 @@ var Table = React.createClass({
                                        row: row,
                                        rowNumber: rowNumber
                                    };
-
+                                   var id = rowNumber;
+                                   if (keyColumn) {
+                                       id = row.get(keyColumn);
+                                   }
                                    let renderExpandComponent = expand(row, rowNumber);
                                    if (renderExpandComponent != null) {
                                        return Immutable.List.of(
-                                               <Row ref={"row" + rowNumber} key={rowNumber} {...childProps} onClick={onRowCollapse} expanded={true}/>,
-                                           <ExpandRow key={rowNumber+"-expand"} {...childProps}>
+                                               <Row ref={"row" + rowNumber} key={id} {...childProps} onClick={onRowCollapse} expanded={true}/>,
+                                           <ExpandRow key={id+"-expand"} {...childProps}>
                                                {renderExpandComponent}
                                            </ExpandRow>);
                                    } else {
-                                       return (<Row ref={"row" + rowNumber} key={rowNumber} onClick={onRowExpand} {...childProps} expanded={false}/>);
+                                       return (<Row ref={"row" + rowNumber} key={id} onClick={onRowExpand} {...childProps} expanded={false}/>);
                                    }
                                }).flatten(true).toJS()
                             }

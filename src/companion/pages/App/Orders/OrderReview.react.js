@@ -2,12 +2,12 @@ import  React from "react";
 import {DropdownButton} from "react-bootstrap";
 import Icon from "react-fa";
 import _ from "lodash";
-    import {Map, List, fromJS, Record} from "immutable";
+    import {Map, List, fromJS, Record, Seq} from "immutable";
 import {getFacilityContext} from "data/csapi";
 import {StatusSummary} from "data/types";
 import {Table} from "components/common/Table";
 import {MultiSelect, Input} from 'components/common/Form';
-
+import PureComponent from 'components/common/PureComponent';
 import {Row, Col} from 'components/common/pagelayout';
 import OrderDetailList from "./OrderDetailList";
 
@@ -52,7 +52,7 @@ export default class OrderReview extends React.Component{
     constructor(props) {
         super(props);
 
-        this.columnMetadata = [
+            this.columnMetadata = fromJS([
             {columnName:  "persistentId", displayName: "UUID"},
             {columnName:  "orderId", displayName: "ID"},
             {columnName:  "customerId", displayName: "Customer"},
@@ -69,13 +69,14 @@ export default class OrderReview extends React.Component{
             {columnName:  "readableOrderDate", displayName: "Order Date"},
             {columnName:  "orderType", displayName: "Type"}
 
-        ];
+        ]);
 
         this.state= {
             selectedOrderId: null,
             orderDetails: Map()
         };
-
+        this.handleRowExpand = this.handleRowExpand.bind(this);
+        this.handleRowCollapse = this.handleRowCollapse.bind(this);
     }
 
     handleRowExpand(row) {
@@ -146,11 +147,13 @@ export default class OrderReview extends React.Component{
     render() {
 
         let {columns, sortSpecs} = this.props;
-        let sortBy = toFullSortSpecs(columns(), sortSpecs());
+        let sortBy = Seq(toFullSortSpecs(columns(), sortSpecs()));
         let orders = this.props.orders.sort((a, b) => {
                 //find first non zero result as you run each sort function in order
-            let comp =  sortBy.map(({sortFunction, property}) => sortFunction(a.get(property), b.get(property)))
-                            .find((result) => result !=0) || 0;
+            let comp =  sortBy.map(({sortFunction, property}) => {
+                    return sortFunction(a.get(property), b.get(property));
+                })
+                .find((result) => result !=0) || 0;
             return comp;
         });
 
@@ -163,10 +166,11 @@ export default class OrderReview extends React.Component{
                 <Table results={orders}
                     columns={columns()}
                     columnMetadata={this.columnMetadata}
+                    keyColumn="orderId"
                     sortedBy={sortBy}
                     expand={this.shouldExpand.bind(this)}
-                    onRowExpand={this.handleRowExpand.bind(this)}
-                    onRowCollapse={this.handleRowCollapse.bind(this)}
+                    onRowExpand={this.handleRowExpand}
+                    onRowCollapse={this.handleRowCollapse}
                     onColumnMove={this.handleColumnMove.bind(this)}
                     onColumnSortChange={this.handleColumnSortChange.bind(this)}
                  />
@@ -174,12 +178,12 @@ export default class OrderReview extends React.Component{
     }
 };
 
-class TableSettings extends React.Component {
+class TableSettings extends PureComponent {
 
     render() {
         let {columns, columnMetadata, onColumnsChange} = this.props;
-        let options = _.map(columnMetadata, (columnMetadata) => {
-            return {label: columnMetadata.displayName, value: columnMetadata.columnName};
+        let options = columnMetadata.map((columnMetadata) => {
+            return {label: columnMetadata.get("displayName"), value: columnMetadata.get("columnName")};
         });
 
         return (

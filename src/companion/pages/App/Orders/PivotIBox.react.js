@@ -16,6 +16,12 @@ export default class PivotIBox extends React.Component{
 
     constructor(props) {
         super(props);
+        let {state}=  this.props;
+        this.columnsCursor  = state.cursor(["preferences", "orders", "table", "columns"]);
+        this.columnSortSpecsCursor = state.cursor(["preferences", "orders", "table", "sortSpecs"]);
+        this.pivotOptionsCursor = state.cursor(["preferences", "orders", "pivot"]);
+        this.selectedOrdersCursor = state.cursor(["pivot", "selectedOrders"]);
+        this.ordersCursor = state.cursor(["pivot", "orders"]);
     }
 
     componentDidMount() {
@@ -27,7 +33,7 @@ export default class PivotIBox extends React.Component{
     }
 
     handleOrdersUpdated(updatedOrders) {
-        this.getOrdersCursor()((orders) =>{
+        this.ordersCursor((orders) =>{
             let newOrders=  orders.clear().concat(fromJS(updatedOrders));
             return newOrders.map((order) => {
                 return order.withMutations((o) => {
@@ -37,50 +43,23 @@ export default class PivotIBox extends React.Component{
                     o.set("dueDay", endOfDay.format("YYYY-MM-DD"))
                         .set("dueTime", localDate.format("YYYY-MM-DD HH"));
                 });
+            });
         });
-});
-this.handleDrillDown(updatedOrders);
-}
-
-handleDrillDown(selectedOrders) {
-    this.getSelectedOrdersCursor()((orders) =>{
-        return orders.clear().concat(fromJS(selectedOrders));
-    });
-}
-
-getOrdersCursor() {
-    let {state}=  this.props;
-    return state.cursor(["pivot", "orders"]);
-}
-
-getSelectedOrdersCursor() {
-    let {state}=  this.props;
-    return state.cursor(["pivot", "selectedOrders"]);
-}
-
-getPivotOptionsCursor() {
-    let {state}=  this.props;
-        return state.cursor(["preferences", "orders", "pivot"]);
+        this.handleDrillDown(updatedOrders);
     }
 
-getColumnsCursor() {
-    let {state}=  this.props;
-    return state.cursor(["preferences", "orders", "table", "columns"]);
-}
-
-getColumnSortSpecs() {
-    let {state}=  this.props;
-    return state.cursor(["preferences", "orders", "table", "sortSpecs"]);
-
-}
-
+    handleDrillDown(selectedOrders) {
+        this.selectedOrdersCursor((orders) =>{
+            return orders.clear().concat(fromJS(selectedOrders));
+        });
+    }
 
 render() {
-    let orders = this.getOrdersCursor()();
-    let selectedOrders = this.getSelectedOrdersCursor()();
-    let pivotOptions = this.getPivotOptionsCursor();
-    let columns = this.getColumnsCursor();
-    let sortSpecs = this.getColumnSortSpecs();
+    let orders = this.ordersCursor();
+    let selectedOrders = this.selectedOrdersCursor();
+    let pivotOptions = this.pivotOptionsCursor;
+    let columns = this.columnsCursor;
+    let sortSpecs = this.columnSortSpecsCursor;
     return (
             <IBox style={{display: "inline-block"}}>
             <IBoxTitleBar>
