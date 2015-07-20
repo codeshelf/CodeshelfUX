@@ -217,6 +217,16 @@ export function getFacilityContext() {
             var filtersUrl = facilityPath + "/filters";
             return ajax(filtersUrl);
         },
+        importOrderFile: function(formData) {
+            var runpickscript = facilityPath + "/import/orders";
+            return ajax(runpickscript, {
+                method: "POST",
+                data: formData,
+                processData: false,
+                contentType: false
+            });
+        },
+
         getImportReceipts: function(startTimestamp, endTimestamp) {
             var receiptPath = facilityPath + "/import";
             return ajax(receiptPath, {

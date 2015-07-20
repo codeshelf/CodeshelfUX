@@ -44,21 +44,17 @@ export default class Imports extends React.Component{
 
     }
 
-    handleClick(e) {
+    handleSubmit(e) {
         e.preventDefault();
         this.setState({loading: true});
 
-        //var apiContext = getFacilityContext();
-        setTimeout(() => {
-            this.setState({loading: false,
-                           documents:[
-                               {name: "a",
-                                totalLines: 5},
-                               {name: "b",
-                                totalLines: 6}
 
-                           ]});
-        },3000);
+        var formData = new FormData();
+        var input = React.findDOMNode(this.refs.orderFileInput);
+        formData.append("file", input.getElementsByTagName("input")[0].files[0]);
+        getFacilityContext().importOrderFile(formData).then(() => {
+            this.setState({loading: false});
+        });
     }
 
 
@@ -74,10 +70,16 @@ export default class Imports extends React.Component{
     render() {
         let receipts = this.getImportReceipts();
         return (<SingleCellLayout title="Manage Imports">
-                   <SingleCellIBox title="Order Files Imported">
+                <SingleCellIBox title="Import Orders">
+                    <form onSubmit={this.handleSubmit.bind(this)}>
+                        <Input ref="orderFileInput" type='file' label='Order File' help='Order file to import' />
+                        <Button bsStyle="primary" type="submit">Import</Button>
+                    </form>
+                </SingleCellIBox>
+                <SingleCellIBox title="Order Files Imported">
             {/**
                             <form>
-                                <Input type='file' label='Order File' help='Order file to import' />
+
                                 <Button type="submit" onClick={this.handleClick.bind(this)}>
                                     {
                                         this.renderButtonLabel()
