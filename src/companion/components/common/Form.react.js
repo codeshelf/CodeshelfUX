@@ -153,11 +153,11 @@ export class MultiSelect extends PureComponent {
                 options.map((option) =>{
                     let {label, value } = option;
                     let id = selectLabel + value;
-                    return <div className="checkbox check-primary">
-                        <input type="checkbox" value={value}  id={id} name={id} defaultChecked={values.includes(value)}
-                    onChange={this.handleChange.bind(this)}/>
-                        <label htmlFor={id}>{label}</label>
-                        </div>
+                        return <div key={value} className="checkbox check-primary">
+                                <input type="checkbox" value={value}  id={id} name={id} defaultChecked={values.includes(value)}
+                                 onChange={this.handleChange.bind(this)}/>
+                                <label htmlFor={id}>{label}</label>
+                                </div>
                 })
             }
         </div>

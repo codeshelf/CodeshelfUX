@@ -8,8 +8,11 @@ import storage from 'lib/storage';
 
 require('imports?this=>window!assets/plugins/modernizr.custom.js');
 require("imports?classie=assets/plugins/classie/classie.js!pages/js/pages");
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd/modules/backends/HTML5';
 
-export default class Root extends React.Component {
+
+class Root extends React.Component {
 
     componentDidMount() {
         document.addEventListener('keypress', this.onDocumentKeypress);
@@ -34,6 +37,8 @@ export default class Root extends React.Component {
     });
 
 }
+
+
 
 componentWillUnmount() {
     document.removeEventListener('keypress', this.onDocumentKeypress);
@@ -66,3 +71,4 @@ render() {
 
 }
 };
+export default DragDropContext(HTML5Backend)(Root);

@@ -1,16 +1,12 @@
-import  React from "react";
+import React from "react";
 import DocumentTitle from "react-document-title";
+import {fromJS} from "immutable";
+import moment from "moment";
 import {SingleCellLayout} from "components/common/pagelayout";
 import {IBox, IBoxTitleBar, IBoxBody, IBoxSection, IBoxTitleText} from 'components/common/IBox';
-import {Button} from "react-bootstrap";
-import {getFacilityContext} from "data/csapi";
-import  {fromJS} from "immutable";
+import PivotTable from "components/common/pivot/PivotTable";
 import OrderSearch from "./OrderSearch";
 import OrderReview from "./OrderReview";
-import moment from "moment";
-
-import PivotTable from "./PivotTable";
-
 
 export default class PivotIBox extends React.Component{
 
@@ -64,8 +60,8 @@ render() {
             <IBox style={{display: "inline-block"}}>
             <IBoxTitleBar>
             <IBoxTitleText>
-            Orders
-        </IBoxTitleText>
+                Orders
+            </IBoxTitleText>
             <div className="panel-controls">
             <ul>
             <li><a href="#" className="portlet-refresh text-black" data-toggle="refresh"

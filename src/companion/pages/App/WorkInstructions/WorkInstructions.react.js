@@ -2,18 +2,17 @@ import  React from "react";
 import DocumentTitle from "react-document-title";
 import {SingleCellLayout} from 'components/common/pagelayout';
 import {SingleCellIBox} from "components/common/IBox";
-import PivotIBox from "./PivotIBox";
-
-export default class Orders extends React.Component{
+import WorkInstructionIBox from "./WorkInstructionIBox";
+export default class WorkInstructions extends React.Component{
 
     constructor(props) {
         super(props);
     }
 
     render() {
-        return (<DocumentTitle title="Orders">
+        return (<DocumentTitle title="Work Instructions">
                   <SingleCellLayout>
-                      <PivotIBox state={this.props.state} />
+                      <WorkInstructionIBox state={this.props.state} />
                   </SingleCellLayout>
                 </DocumentTitle>
                );

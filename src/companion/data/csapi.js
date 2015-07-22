@@ -199,6 +199,14 @@ export function getFacilityContext() {
                 data: data
             });
         },
+
+        findWorkInstructions: function(filter) {
+            var workResults = facilityPath + "/work/instructions";
+            return ajax(workResults, {
+                data: filter
+            });
+        },
+
         getWorkResults: function(startTimestamp, endTimestamp) {
             var workResults = facilityPath + "/work/results";
             return ajax(workResults, {

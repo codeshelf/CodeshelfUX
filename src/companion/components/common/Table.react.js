@@ -1,4 +1,4 @@
-var React = require('react');
+import React from "react";
 var _ = require('lodash');
 var Immutable = require('immutable');
 //require("tablesaw/dist/tablesaw.css");
@@ -6,8 +6,7 @@ var Immutable = require('immutable');
 var $ = require("jquery");
 import classnames from 'classnames';
 import Icon from "react-fa";
-import { DragSource, DropTarget, DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd/modules/backends/HTML5';
+import { DragSource, DropTarget} from 'react-dnd';
 import PureComponent from 'components/common/PureComponent';
 
 //TODO likely need better performing index of metadata
@@ -51,8 +50,7 @@ class Row extends PureComponent {
                             valueRenderer = ( <CustomComponent rowData={row} cellData={value} />);
                         }
                         return (<td ref={key} key={key}>{valueRenderer}</td>);
-
-                    })
+                    }).toList()
                 }
                 </tr>
         );
@@ -72,7 +70,8 @@ class ColumnHeader extends React.Component {
 
     render() {
             let {columnName, displayName = columnName, width, sortSpec, onClick} = this.props;
-            const { isDragging, connectDragSource, connectDropTarget } = this.props;
+            let { isDragging, connectDragSource = (c) => c, connectDropTarget = (c) => c} = this.props;
+
             var classes = classnames({"dragging": isDragging});
             var style = {};
             if (width) {
@@ -133,6 +132,7 @@ function collectDrop(connect, monitor) {
     };
 }
 
+
 var DraggableColumnHeader = DragSource("table-header", cardSource, collectDrag)(ColumnHeader);
 var DragDropColumnHeader = DropTarget("table-header", cardTarget, collectDrop)(DraggableColumnHeader);
 
@@ -149,28 +149,28 @@ class Header extends React.Component {
 
         return (
                 <thead>
-                <tr>
+                    <tr>
                 {
                     toShownColumns(columnMetadata, columns).map(function (metadata, index)  {
                             let {columnName, displayName = columnName} = metadata.toObject();
                             var sortSpec = this.toSortSpec(sortedBy, columnName);
                             var width = columnWidths[columnName];
-                                return (<DragDropColumnHeader
-                                         key={columnName}
-                                        columnName={columnName}
-                                        width={width}
-                                        displayName={displayName}
-                                        sortSpec={sortSpec}
-                                        onMove={onColumnMove}
-                                        onClick={(e) => {onColumnClick(sortSpec, columnName, e);}}/>);
-                            }.bind(this))
+                            return (<DragDropColumnHeader
+                                 key={columnName}
+                                 columnName={columnName}
+                                 width={width}
+                                 displayName={displayName}
+                                 sortSpec={sortSpec}
+                                 onMove={onColumnMove}
+                                 onClick={(e) => {onColumnClick(sortSpec, columnName, e);}}/>);
+
+                        }.bind(this))
+                        .toList()
                 }
                 </tr>
                 </thead>);
     }
 }
-
-var DraggableHeader = DragDropContext(HTML5Backend)(Header);
 
 var Table = React.createClass({
     propTypes: {
@@ -275,9 +275,9 @@ var Table = React.createClass({
             expand = () => {return null;};
         }
         return (
-                <table className={classes} role="grid">
+            <table className={classes} role="grid">
                     <caption>{caption}</caption>
-                            <DraggableHeader
+                            <Header
                                 columns={columns}
                                 columnMetadata={columnMetadata}
                                 columnWidths={this.state.widths}
@@ -311,7 +311,7 @@ var Table = React.createClass({
                                }).flatten(true).toJS()
                             }
                     </tbody>
-                </table>
+                    </table>
         );
     },
 

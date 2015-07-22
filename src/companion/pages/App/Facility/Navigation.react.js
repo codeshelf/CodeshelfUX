@@ -86,7 +86,8 @@ class Navigation extends React.Component {
               <div className="sidebar-menu">
                   <ul className="menu-items">
                       <AuthzMenuItem className="m-t-30" to="overview" params={params} title="Overview" iconName="clock-o" />
-                      <AuthzMenuItem to="orders" params={params} title="Orders" iconName="shopping-cart" />
+                  <AuthzMenuItem to="orders" params={params} title="Orders" iconName="shopping-cart" />
+                  <AuthzMenuItem to="workinstructions" params={params} title="WorkInstructions" iconName="barcode" />
                       <AuthzMenuItem permission="event:view"  to="blockedwork" params={params} title="Issues" iconName="exclamation-circle"/ >
                       <AuthzMenuItem permission="event:view" to="workresults" params={params} title="Pick Rates" iconName="pie-chart" />
                       <AuthzMenuItem permission="worker:view" to="workermgmt" params={params} title="Workers" iconName="users" />

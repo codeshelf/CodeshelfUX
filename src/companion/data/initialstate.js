@@ -16,7 +16,27 @@ const data = {
     $pendingActions: {},
     $subscriptions: {},
     preferences: {
-        version: "1.1",
+        version: "1.2",
+        workInstructions: {
+            table: {
+                    columns: ["persistentId", "status"],
+                sortSpecs: {}
+            },
+            pivot: {
+                fields: [
+                    { name: 'itemMasterId'},
+                    {name: 'assignedCheName'},
+                    {
+                        name: "count",
+                        caption: "Count",
+                        dataSettings: {aggregateFunc: 'count'}
+                    }
+                ],
+                rowFields: [],
+                columnFields: [],
+                dataFields: ["count"]
+            }
+        },
         orders: {
             table: {
                 columns: ["orderId", "customerId", "shipperId", "destinationId", "containerId", "readableDueDate", "status", "readableDueDate"],
@@ -62,7 +82,6 @@ const data = {
                         dataSettings: {aggregateFunc: 'count'}
 
                     }
-
                 ],
                 rowFields    : [ 'dueDay', "customerId" ],
                 columnFields : [ 'status' ],
@@ -95,7 +114,9 @@ const data = {
     },
     pivot: {
         selectedOrders: [],
-        orders: []
+            orders: [],
+        selectedWorkInstructions: [],
+        workInstructions: []
 
     },
     i18n: {
