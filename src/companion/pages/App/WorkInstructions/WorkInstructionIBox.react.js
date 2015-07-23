@@ -8,6 +8,8 @@ import ListView from "components/common/list/ListView";
 import PivotTable from "components/common/pivot/PivotTable";
 import {Table} from "components/common/Table";
 import {keyColumn, properties} from 'data/types/WorkInstruction';
+import DateTime from "data/types/DateTime";
+import DateDisplay from "components/common/DateDisplay";
 
 export default class WorkInstructionIBox extends React.Component{
 
@@ -29,8 +31,16 @@ export default class WorkInstructionIBox extends React.Component{
         this.handleDrillDown = this.handleDrillDown.bind(this);
 
         this.title = "Work Instructions";
-        this.columnMetadata = properties.map((metadata) => {
-            return new ListView.ColumnRecord({columnName: metadata.id, displayName: metadata.title});
+        this.columnMetadata = properties.map((property) => {
+            var  customComponent = null;
+            if (property.type === DateTime) {
+                customComponent = DateDisplay;
+            }
+            return new ListView.ColumnRecord({
+                    columnName: property.id,
+                    displayName: property.title,
+                    customComponent: customComponent
+            });
         });
     }
 
@@ -42,8 +52,7 @@ export default class WorkInstructionIBox extends React.Component{
         this.refs.search.refresh();
     }
 
-    handleSearchUpdate(updatedResults) {
-        let updatedResultsList = fromJS(updatedResults);
+    handleSearchUpdate(updatedResultsList) {
         this.resultsCursor((previousResults) =>{
             return previousResults.clear().concat(updatedResultsList);
         });

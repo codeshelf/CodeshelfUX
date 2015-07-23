@@ -1,15 +1,21 @@
 import {fromJS, Record, Seq, Iterable} from "immutable";
 import {PropertyRecord} from "./properties";
+import DateTime from "./DateTime";
 
-
-    export const keyColumn = "persistentId";
+export const keyColumn = "persistentId";
 export const properties = fromJS([
     {'id':    'groupAndSortCode',
      'title': 'Sort'},
+    {'id': 'pickerId',
+    'title': 'Worker'},
+    {'id': 'type',
+    'title': 'Type'},
     {'id':    'assigned',
-     'title': 'Assign'},
+     'title': 'Assign',
+     'type': DateTime},
     {'id':    'completed',
-     'title': 'Complete'},
+     'title': 'Complete',
+     'type': DateTime},
     {'id':    'pickInstructionUi',
      'title': 'Where'},
     {'id':    'nominalLocationId',
@@ -29,7 +35,7 @@ export const properties = fromJS([
     {'id':    'orderDetailId',
      'title': 'for Order Detail'},
     {'id':    'containerId',
-     'title': 'Container'},
+     'title': 'Pallet'},
     {'id':    'assignedCheName',
      'title': 'CHE'},
     {'id':    'domainId',
@@ -46,10 +52,12 @@ export const properties = fromJS([
      'title': 'Actual'},
     {'id':    'litLedsForWi',
      'title': 'LEDs'},
-    {'id': 'gtinId',
+    {'id': 'gtin',
      'title': 'GTIN'},
     {'id': 'needsScan',
-     'title': 'Needs Scan'}
+     'title': 'Needs Scan'},
+    {'id': 'store',
+     'title': 'Store'}
 ], (key, value) => {
     if (Iterable.isKeyed(value)) {
         return PropertyRecord(value);

@@ -24,13 +24,16 @@ const data = {
             },
             pivot: {
                 fields: [
-                    { name: 'itemMasterId'},
-                    {name: 'assignedCheName'},
+                    {name: 'gtin', caption: "GTIN"},
+                        {name: 'assignedCheName', caption: "CHE"},
+                    {name: 'pickerId', caption: "Worker"},
+                        {name: 'store', caption: 'Store'}, //pseudo field
+                    {name: 'containerId', caption: 'Pallet'}, //pseudo field
                     {
-                        name: "count",
-                        caption: "Count",
-                        dataSettings: {aggregateFunc: 'count'}
-                    }
+                    name: "count",
+                    caption: "Count",
+                    dataSettings: {aggregateFunc: 'count'}
+                }
                 ],
                 rowFields: [],
                 columnFields: [],

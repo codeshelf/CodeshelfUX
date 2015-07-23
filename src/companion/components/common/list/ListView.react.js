@@ -111,7 +111,7 @@ export default class ListView extends React.Component{
     }
 };
 
-ListView.ColumnRecord = Record({columnName: null, displayName: null });
+ListView.ColumnRecord = Record({columnName: null, displayName: null, customComponent: null });
 ListView.propTypes = {
     columns: React.PropTypes.func, //cursor
     columnMetadata: React.PropTypes.func, //cursor
