@@ -61,7 +61,7 @@ class IBoxControls extends React.Component {
                 <ul>
                     <li><a href="#" className="portlet-refresh text-black" data-toggle="refresh"
                             onClick={onRefresh}
-                         ><i className="portlet-icon portlet-icon-refresh"></i></a>
+                         ><i className="portlet-icon portlet-icon-refresh" title="Refresh"></i></a>
                     </li>
                 </ul>
             </div>);
