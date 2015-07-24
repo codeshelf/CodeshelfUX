@@ -3,7 +3,7 @@ import DocumentTitle from "react-document-title";
 import {fromJS} from "immutable";
 import moment from "moment";
 import {SingleCellLayout} from "components/common/pagelayout";
-import {IBox, IBoxTitleBar, IBoxBody, IBoxSection, IBoxTitleText} from 'components/common/IBox';
+import {SingleCellIBox} from 'components/common/IBox';
 import PivotTable from "components/common/pivot/PivotTable";
 import OrderSearch from "./OrderSearch";
 import OrderReview from "./OrderReview";
@@ -18,24 +18,18 @@ export default class PivotIBox extends React.Component{
         this.pivotOptionsCursor = state.cursor(["preferences", "orders", "pivot"]);
         this.selectedOrdersCursor = state.cursor(["pivot", "selectedOrders"]);
         this.ordersCursor = state.cursor(["pivot", "orders"]);
-        this.handleRefresh.pending = false;
-        this.state = {
-            "refreshPending" : false
-        };
+        this.handleRefresh = this.handleRefresh.bind(this);
     }
 
     componentDidMount() {
-            window.requestAnimationFrame(() => this.handleRefresh());
+        window.requestAnimationFrame(() => this.refs.ibox.refresh());
     }
 
     handleRefresh() {
-        this.setState({"refreshPending": true});
-        this.refs.orderSearch.refresh().then(() => this.setState({"refreshPending": false}));
-
+        return this.refs.orderSearch.refresh();
     }
 
     handleOrdersUpdated(updatedOrders) {
-        this.setState({"refreshPending": false});
         this.ordersCursor((orders) =>{
             let newOrders=  orders.clear().concat(fromJS(updatedOrders));
             return newOrders.map((order) => {
@@ -57,36 +51,17 @@ export default class PivotIBox extends React.Component{
         });
     }
 
-render() {
-    let orders = this.ordersCursor();
-    let selectedOrders = this.selectedOrdersCursor();
-    let pivotOptions = this.pivotOptionsCursor;
-    let columns = this.columnsCursor;
-    let sortSpecs = this.columnSortSpecsCursor;
-    let {refreshPending} = this.state;
-    let progressStyle = {display: (refreshPending) ? "block" : "none"};
-    return (
-            <IBox style={{display: "inline-block"}}>
-            <IBoxTitleBar>
-            <IBoxTitleText>
-                Orders
-            </IBoxTitleText>
-            <div className="panel-controls">
-            <ul>
-            <li><a href="#" className="portlet-refresh text-black" data-toggle="refresh"
-                 onClick={this.handleRefresh.bind(this)}
-                 ><i className="portlet-icon portlet-icon-refresh"></i></a>
-            </li>
-            </ul>
-            </div>
-            </IBoxTitleBar>
-            <IBoxBody>
+    render() {
+        let orders = this.ordersCursor();
+        let selectedOrders = this.selectedOrdersCursor();
+        let pivotOptions = this.pivotOptionsCursor;
+        let columns = this.columnsCursor;
+        let sortSpecs = this.columnSortSpecsCursor;
+        return (
+            <SingleCellIBox ref="ibox" title="Orders" style={{display: "inline-block"}} onRefresh={this.handleRefresh}>
                 <OrderSearch ref="orderSearch" onOrdersUpdated={this.handleOrdersUpdated.bind(this)}/>
                 <PivotTable results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
                 <OrderReview orders={selectedOrders} columns={columns} sortSpecs={sortSpecs}/>
-                    </IBoxBody>
-                            <div className="portlet-progress" style={progressStyle}><div className="progress-circle-indeterminate progress-circle-master"></div></div>
-            </IBox>);
-
-}
+            </SingleCellIBox>);
+    }
 };

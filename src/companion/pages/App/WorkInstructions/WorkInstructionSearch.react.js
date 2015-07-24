@@ -5,7 +5,7 @@ import {fromJS} from "immutable";
 export default class WorkInstructionSearch extends Search {
 
     doSearch() {
-        getFacilityContext().findWorkInstructions({}).then((wis) =>{
+        return getFacilityContext().findWorkInstructions({}).then((wis) =>{
             let enhancedWIs = fromJS(wis).map((wi) => {
                 let gtin = wi.get("gtin");
                 if (gtin && gtin.length >= 4) {

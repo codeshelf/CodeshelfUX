@@ -53,19 +53,58 @@ var IBox = RClass(function() {
             </div>);
 });
 
-export class SingleCellIBox extends React.Component {
+class IBoxControls extends React.Component {
     render() {
-        let {title} = this.props;
+        let {onRefresh} = this.props;
         return (
-                <IBox>
+            <div className="panel-controls">
+                <ul>
+                    <li><a href="#" className="portlet-refresh text-black" data-toggle="refresh"
+                            onClick={onRefresh}
+                         ><i className="portlet-icon portlet-icon-refresh"></i></a>
+                    </li>
+                </ul>
+            </div>);
+    }
+}
+
+export class SingleCellIBox extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.refresh = this.refresh.bind(this);
+        this.state = {
+            "refreshPending" : false
+        };
+
+    }
+
+    //called externally
+    refresh() {
+        this.setState({"refreshPending": true});
+        this.props.onRefresh().then(() => this.setState({"refreshPending": false}));
+    }
+
+    render() {
+        let {title, style, onRefresh} = this.props;
+        let {refreshPending} = this.state;
+        let progressStyle = {display: (refreshPending) ? "block" : "none"};
+        return (
+                <IBox style={style}>
                     <IBoxTitleBar>
                         <IBoxTitleText>
                             {title}
                         </IBoxTitleText>
+                        {(onRefresh) ?
+                            <IBoxControls onRefresh={this.refresh} /> : null
+                        }
                     </IBoxTitleBar>
                     <IBoxBody>
                         {this.props.children}
                     </IBoxBody>
+                    <div className="portlet-progress" style={progressStyle}>
+                        <div className="progress-circle-indeterminate progress-circle-master"></div>
+                    </div>
                 </IBox>
         );
     }
