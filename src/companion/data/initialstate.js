@@ -48,7 +48,7 @@ const data = {
         },
         orders: {
             table: {
-                columns: ["orderId", "customerId", "shipperId", "destinationId", "containerId", "readableDueDate", "status", "readableDueDate"],
+                columns: ["orderId", "customerId", "shipperId", "destinationId", "containerId", "dueDate", "status"],
                 sortSpecs: {
                     "orderId": {order: "asc"}
                 }

@@ -7,6 +7,7 @@ import {getFacilityContext} from "data/csapi";
 import {StatusSummary} from "data/types";
 import {Table} from "components/common/Table";
 import {MultiSelect, Input} from 'components/common/Form';
+import DateDisplay from 'components/common/DateDisplay';
 import PureComponent from 'components/common/PureComponent';
 import {Row, Col} from 'components/common/pagelayout';
 import OrderDetailList from "./OrderDetailList";
@@ -59,15 +60,16 @@ export default class OrderReview extends React.Component{
             {columnName:  "shipperId", displayName: "Shipper"},
             {columnName:  "destinationId", displayName: "Destination"},
             {columnName:  "containerId",           displayName: "Container"},
-            {columnName:  "readableDueDate",       displayName: "Due Date"},
             {columnName:  "status",                displayName: "Status"},
             {columnName:  "orderLocationAliasIds", displayName: "Location"},
             {columnName:  "groupUi", displayName: "Group"},
             {columnName:  "active", displayName: "Active"},
             {columnName:  "fullDomainId", displayName: "Full ID"},
             {columnName:  "wallUi", displayName: "Wall"},
-            {columnName:  "readableOrderDate", displayName: "Order Date"},
-            {columnName:  "orderType", displayName: "Type"}
+            {columnName:  "orderType", displayName: "Type"},
+            {columnName:  "dueDate", displayName: "Due Date", customComponent: DateDisplay},
+            {columnName:  "orderDate", displayName: "Order Date", customComponent: DateDisplay},
+
 
         ]);
 
