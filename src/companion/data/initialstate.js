@@ -26,14 +26,20 @@ const data = {
                 fields: [
                     {name: 'gtin', caption: "GTIN"},
                         {name: 'assignedCheName', caption: "CHE"},
+                    {name: 'uomNormalized', caption: "UOM"},
                     {name: 'pickerId', caption: "Worker"},
                         {name: 'store', caption: 'Store'}, //pseudo field
                     {name: 'containerId', caption: 'Pallet'}, //pseudo field
                     {
                     name: "count",
-                    caption: "Count",
+                    caption: "Lines",
                     dataSettings: {aggregateFunc: 'count'}
-                }
+                    },
+                    {
+                    name: "actualQuantity",
+                    caption: "QTY",
+                    dataSettings: {aggregateFunc: 'sum'}
+                    }
                 ],
                 rowFields: [],
                 columnFields: [],
