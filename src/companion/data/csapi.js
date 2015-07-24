@@ -30,9 +30,24 @@ function ajax(path, options) {
         reqWithMethod = request.del(absoluteURL)
             .query(options.query)
             .send(options.data);
-    } else {
-        reqWithMethod = request.get(absoluteURL)
-                            .query(options.data);
+    } else { //GET
+        reqWithMethod = request.get(absoluteURL);
+            for (var key in options.data) {
+                let value = options.data[key];
+                if (_.isArray(value)) { //arrays should set a query pair for each value
+                    for(var i = 0; i < value.length; i++) {
+                        let queryVal = {};
+                        queryVal[key] = value[i];
+                        reqWithMethod = reqWithMethod.query(queryVal);
+                    }
+                }
+                else {
+                    let queryVal = {};
+                    queryVal[key] = value;
+
+                    reqWithMethod = reqWithMethod.query(queryVal);
+                }
+        }
     }
 
     if (options.contentType) {

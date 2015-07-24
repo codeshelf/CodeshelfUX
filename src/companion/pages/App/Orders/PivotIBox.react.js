@@ -1,6 +1,6 @@
 import React from "react";
 import DocumentTitle from "react-document-title";
-import {fromJS} from "immutable";
+import {fromJS, Set} from "immutable";
 import moment from "moment";
 import {SingleCellLayout} from "components/common/pagelayout";
 import {SingleCellIBox} from 'components/common/IBox';
@@ -56,10 +56,12 @@ export default class PivotIBox extends React.Component{
         let selectedOrders = this.selectedOrdersCursor();
         let pivotOptions = this.pivotOptionsCursor;
         let columns = this.columnsCursor;
+        let properties = new Set(columns()).union(pivotOptions().get("fields").map((f) => f.get("name")));
+
         let sortSpecs = this.columnSortSpecsCursor;
         return (
             <SingleCellIBox ref="ibox" title="Orders" style={{display: "inline-block"}} onRefresh={this.handleRefresh}>
-                <OrderSearch ref="orderSearch" onOrdersUpdated={this.handleOrdersUpdated.bind(this)}/>
+                <OrderSearch ref="orderSearch" properties={properties} onOrdersUpdated={this.handleOrdersUpdated.bind(this)}/>
                 <PivotTable results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
                 <OrderReview orders={selectedOrders} columns={columns} sortSpecs={sortSpecs}/>
             </SingleCellIBox>);

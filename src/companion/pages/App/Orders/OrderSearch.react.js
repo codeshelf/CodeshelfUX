@@ -16,8 +16,10 @@ export default class OrderSearch extends React.Component {
     doSearch() {
         let value = React.findDOMNode(this.refs.orderId).getElementsByTagName("input")[0].value;
         let  filter = {
-            "orderId": "*" + value + "*"
+            "orderId": "*" + value + "*",
+            "properties": this.props.properties.toJS()
         };
+
         return getFacilityContext().findOrders(filter).then((orders) =>{
             this.onOrdersUpdated(orders);
         });
