@@ -18,17 +18,24 @@ export default class PivotIBox extends React.Component{
         this.pivotOptionsCursor = state.cursor(["preferences", "orders", "pivot"]);
         this.selectedOrdersCursor = state.cursor(["pivot", "selectedOrders"]);
         this.ordersCursor = state.cursor(["pivot", "orders"]);
+        this.handleRefresh.pending = false;
+        this.state = {
+            "refreshPending" : false
+        };
     }
 
     componentDidMount() {
-        this.handleRefresh();
+            window.requestAnimationFrame(() => this.handleRefresh());
     }
 
     handleRefresh() {
-        this.refs.orderSearch.refresh();
+        this.setState({"refreshPending": true});
+        this.refs.orderSearch.refresh().then(() => this.setState({"refreshPending": false}));
+
     }
 
     handleOrdersUpdated(updatedOrders) {
+        this.setState({"refreshPending": false});
         this.ordersCursor((orders) =>{
             let newOrders=  orders.clear().concat(fromJS(updatedOrders));
             return newOrders.map((order) => {
@@ -56,6 +63,8 @@ render() {
     let pivotOptions = this.pivotOptionsCursor;
     let columns = this.columnsCursor;
     let sortSpecs = this.columnSortSpecsCursor;
+    let {refreshPending} = this.state;
+    let progressStyle = {display: (refreshPending) ? "block" : "none"};
     return (
             <IBox style={{display: "inline-block"}}>
             <IBoxTitleBar>
@@ -75,7 +84,8 @@ render() {
                 <OrderSearch ref="orderSearch" onOrdersUpdated={this.handleOrdersUpdated.bind(this)}/>
                 <PivotTable results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
                 <OrderReview orders={selectedOrders} columns={columns} sortSpecs={sortSpecs}/>
-            </IBoxBody>
+                    </IBoxBody>
+                            <div className="portlet-progress" style={progressStyle}><div className="progress-circle-indeterminate progress-circle-master"></div></div>
             </IBox>);
 
 }

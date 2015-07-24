@@ -5,7 +5,7 @@ import {Select, Input} from 'components/common/Form';
 export default class OrderSearch extends React.Component {
 
     refresh() {
-        this.doSearch();
+        return this.doSearch();
     }
 
     handleSubmit(e) {
@@ -18,7 +18,7 @@ export default class OrderSearch extends React.Component {
         let  filter = {
             "orderId": "*" + value + "*"
         };
-        getFacilityContext().findOrders(filter).then((orders) =>{
+        return getFacilityContext().findOrders(filter).then((orders) =>{
             this.onOrdersUpdated(orders);
         });
     }
