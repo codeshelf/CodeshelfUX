@@ -59,7 +59,24 @@ const data = {
                         name: 'status',
                         caption: 'Status',
                         sort: {order: "asc"}
+                        },
+                    {name: "pivotDetailCount",
+                     caption: "Lines"},
+                    {name: "pivotRemainingDetailCount",
+                     caption: "Lines Remaining"},
+
+                     {name: "caseQuantity",
+                    caption: "Cases",
+                     dataSettings: {aggregateFunc: 'sum'}
                     },
+                    {name: "eachQuantity",
+                    caption: "Eaches",
+                    dataSettings: {aggregateFunc: 'sum'}
+                    },
+                    {name: "otherQuantity",
+                     caption: "Other UOM",
+                     dataSettings: {aggregateFunc: 'sum'}
+                     },
                     {
                         name: 'customerId',
                         caption: 'Customer',
