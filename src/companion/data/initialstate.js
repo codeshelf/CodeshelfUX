@@ -16,10 +16,10 @@ const data = {
     $pendingActions: {},
     $subscriptions: {},
     preferences: {
-        version: "1.2",
+        version: "1.3",
         workInstructions: {
             table: {
-                    columns: ["persistentId", "status"],
+                columns: ["persistentId", "status"],
                 sortSpecs: {}
             },
             pivot: {
@@ -46,6 +46,13 @@ const data = {
                 dataFields: ["count"]
             }
         },
+        workers: {
+            table: {
+                columns: ["lastName", "firstName", "badgeId", "updated"],
+                sortSpecs: {"lastName": {order: "asc"}}
+            }
+        },
+
         orders: {
             table: {
                 columns: ["orderId", "customerId", "shipperId", "destinationId", "containerId", "dueDate", "status"],

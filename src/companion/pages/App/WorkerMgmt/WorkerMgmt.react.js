@@ -5,10 +5,10 @@ import {Modal, Input} from 'react-bootstrap';
 import Icon from 'react-fa';
 import Immutable from 'immutable';
 import {RouteHandler} from 'react-router';
-
+import PureComponent from 'components/common/PureComponent';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {IBox, IBoxBody, IBoxTitleBar, IBoxTitleText} from 'components/common/IBox';
-import {Table} from 'components/common/Table';
+import ListView from "components/common/list/ListView";
 import {EditButtonLink, AddButtonLink} from 'components/common/TableButtons';
 
 import {fetchWorkers} from 'data/workers/actions';
@@ -18,16 +18,20 @@ import exposeRouter from 'components/common/exposerouter';
 
 export default class WorkerMgmt extends React.Component{
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             search: {
                 query: "",
                 column: ""
             }
         };
-        this.columnMetadata = [
+        this.columnMetadata = Immutable.fromJS([
             {
+                columnName: "persistentId",
+                displayName: "UUID"
+            },
+                {
                 columnName: "lastName",
                 displayName: "Last"
             },
@@ -61,8 +65,17 @@ export default class WorkerMgmt extends React.Component{
                 displayName: "",
                 customComponent: Edit
             }
-        ];
-        this.columns = _.map(this.columnMetadata, (column) => column.columnName);
+        ], (key, value) => {
+            if (Immutable.Iterable.isKeyed(value)) {
+                return new ListView.ColumnRecord(value);
+            } else {
+                return value;
+            }
+        });
+        let {state} = props;
+        this.columnsCursor  = state.cursor(["preferences", "workers", "table", "columns"]);
+        this.columnSortSpecsCursor = state.cursor(["preferences", "workers", "table", "sortSpecs"]);
+
     }
 
 
@@ -75,37 +88,38 @@ export default class WorkerMgmt extends React.Component{
     }
 
     toSearchColumns() {
-        return _.map(this.columnMetadata, (c) => {
-            return {property: c.columnName,
-                    header: c.displayName,
-                    search: c.search || (c.customComponent) ? c.customComponent.search : null};
+        return this.columnMetadata.map((c) => {
+            return c.update("search", (search) => {
+                if (search == null) {
+                    return c.customComponent.search;
+                } else {
+                    return search;
+                }
+            });
         });
     }
 
     search(search, columns, data) {
-        var query = search.query;
-        var column = search.column;
-
+        let {query, columnName} = search;
+        var dataSeq = new Immutable.Seq(Immutable.fromJS(data));
         if(!query) {
-            return data;
+            return dataSeq;
         }
 
-        if(column !== 'all') {
-            columns = _.filter(columns, (col) =>
-                col.property === column
+        if(columnName !== 'all') {
+            columns = columns.filter((col) =>
+                col.columnName === columnName
             );
         }
 
-        return _.filter(data, (row) =>
-            _.filter(columns, isColumnVisible.bind(this, row)).length > 0
+        return dataSeq.filter((row) =>
+            columns.filter(isColumnVisible.bind(null, row)).count() > 0
         );
 
         function isColumnVisible(row, col) {
-            var property = col.property;
-            var value = row[property];
-            var defaultFunction = (v) => {return v;};
-            var formatter = col.search || defaultFunction;
-            var formattedValue = formatter(value);
+            var {columnName, search = (v) => v} = col;
+            var value = row.get(columnName);
+            var formattedValue = search(value);
 
             if (!formattedValue) {
                 return false;
@@ -116,7 +130,7 @@ export default class WorkerMgmt extends React.Component{
             }
 
             // TODO: allow strategy to be passed, now just defaulting to infix
-            return formattedValue.indexOf(query.toLowerCase()) >= 0;
+            return formattedValue.toLowerCase().indexOf(query.toLowerCase()) >= 0;
         }
 
     }
@@ -126,7 +140,7 @@ export default class WorkerMgmt extends React.Component{
         let title = "Manage Workers";
         var searchData = this.search(
             this.state.search,
-            this.toSearchColumns(),
+            this.columnMetadata,
             rows
         );
         return (<SingleCellLayout title={title}>
@@ -134,7 +148,7 @@ export default class WorkerMgmt extends React.Component{
                                 <IBoxBody>
                                     <Row>
                                         <Col sm={3}>
-                                            <Search columns={this.toSearchColumns()} onChange={this.handleSearchChange.bind(this)}/>
+                                            <Search columns={this.columnMetadata} onChange={this.handleSearchChange.bind(this)}/>
                                         </Col>
                                         <Col sm={9} >
                                             <div className="pull-right">
@@ -143,9 +157,11 @@ export default class WorkerMgmt extends React.Component{
                                             </div>
                                         </Col>
                                     </Row>
-                                    <Table results={searchData}
-                                        columns={this.columns}
-                                        columnMetadata={this.columnMetadata}
+                                        <ListView results={searchData}
+                                                keyColumn="persistentId"
+                                                columns={this.columnsCursor}
+                                                columnMetadata={this.columnMetadata}
+                                                sortSpecs={this.columnSortSpecsCursor}
                                     />
                                 </IBoxBody>
                             </IBox>
@@ -158,6 +174,12 @@ export default class WorkerMgmt extends React.Component{
 };
 
 class Search extends React.Component {
+
+    constructor(props){
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+    }
+
     handleChange(e) {
 
         var query = React.findDOMNode(this.refs.query).getElementsByTagName("input")[0];
@@ -165,26 +187,28 @@ class Search extends React.Component {
         (this.props.onChange)({
             search: {
                 query: query.value,
-                column: column.value
+                columnName: column.value
             }
         });
     }
 
     render(){
-            return <Input ref="query" type='text' onChange={this.handleChange.bind(this)} placeholder="Type to search" addonBefore={
-                        <SearchColumns ref="column" onChange={this.handleChange.bind(this)} columns={this.props.columns}/>
+            return <Input ref="query" type='text' onChange={this.handleChange} placeholder="Type to search" addonBefore={
+                        <SearchColumns ref="column" onChange={this.handleChange} columns={this.props.columns}/>
                         } />
 
     }
 }
 
-class SearchColumns extends React.Component {
+class SearchColumns extends PureComponent {
+
+
     render() {
-        return (<select>
+        return (<select onChange={this.props.onChange}>
                      <option value="all">All</option>
                      {
-                         _.map(this.props.columns,(column) =>{
-                             return <option value={column.property}>{column.header}</option>
+                         this.props.columns.map((column) =>{
+                             return <option value={column.columnName}>{column.displayName}</option>
                          })
                      }
             </select>);

@@ -83,16 +83,22 @@ export default class ListView extends React.Component{
 
     render() {
 
-            let {columns, sortSpecs, columnMetadata, keyColumn} = this.props;
-        let sortBy = Seq(toFullSortSpecs(columns(), sortSpecs()));
-        let results = this.props.results.sort((a, b) => {
+        let {columns, columnMetadata, keyColumn} = this.props;
+
+        var {results, sortSpecs = () => {}} = this.props;
+
+        var sortBy = null;
+        if (typeof sortSpecs === 'function') {
+            sortBy = Seq(toFullSortSpecs(columns(), sortSpecs()));
+            results = this.props.results.sort((a, b) => {
                 //find first non zero result as you run each sort function in order
-            let comp =  sortBy.map(({sortFunction, property}) => {
+                let comp =  sortBy.map(({sortFunction, property}) => {
                     return sortFunction(a.get(property), b.get(property));
                 })
                 .find((result) => result !=0) || 0;
-            return comp;
-        });
+                return comp;
+            });
+        }
 
         return (<div>
                 <TableSettings onColumnsChange={columns}
