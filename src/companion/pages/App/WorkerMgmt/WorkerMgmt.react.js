@@ -26,7 +26,7 @@ export default class WorkerMgmt extends React.Component{
                 column: ""
             }
         };
-        this.columnMetadata = Immutable.fromJS([
+            this.columnMetadata = ListView.toColumnMetadata([
             {
                 columnName: "persistentId",
                 displayName: "UUID"
@@ -65,13 +65,7 @@ export default class WorkerMgmt extends React.Component{
                 displayName: "",
                 customComponent: Edit
             }
-        ], (key, value) => {
-            if (Immutable.Iterable.isKeyed(value)) {
-                return new ListView.ColumnRecord(value);
-            } else {
-                return value;
-            }
-        });
+        ]);
         let {state} = props;
         this.columnsCursor  = state.cursor(["preferences", "workers", "table", "columns"]);
         this.columnSortSpecsCursor = state.cursor(["preferences", "workers", "table", "sortSpecs"]);
@@ -205,10 +199,11 @@ class SearchColumns extends PureComponent {
 
     render() {
         return (<select onChange={this.props.onChange}>
-                     <option value="all">All</option>
+                     <option key="all" value="all">All</option>
                      {
                          this.props.columns.map((column) =>{
-                             return <option value={column.columnName}>{column.displayName}</option>
+                             let {columnName, displayName} = column;
+                             return <option key={columnName} value={columnName}>{displayName}</option>
                          })
                      }
             </select>);
