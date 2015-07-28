@@ -22,7 +22,11 @@ export default class PivotIBox extends React.Component{
     }
 
     componentDidMount() {
-        window.requestAnimationFrame(() => this.refs.ibox.refresh());
+        window.requestAnimationFrame(() => {
+            if (this.ordersCursor().count() <= 0) {
+                this.refs.ibox.refresh();
+            }
+        }.bind(this));
     }
 
     handleRefresh() {
@@ -42,7 +46,6 @@ export default class PivotIBox extends React.Component{
                 });
             });
         });
-        this.handleDrillDown(updatedOrders);
     }
 
     handleDrillDown(selectedOrders) {
@@ -56,7 +59,10 @@ export default class PivotIBox extends React.Component{
         let selectedOrders = this.selectedOrdersCursor();
         let pivotOptions = this.pivotOptionsCursor;
         let columns = this.columnsCursor;
-        let properties = new Set(columns()).union(pivotOptions().get("fields").map((f) => f.get("name")));
+        let properties = new Set(columns())
+                .union(pivotOptions().get("fields").map((f) => f.get("name")))
+                .add("persistentId");
+
 
         let sortSpecs = this.columnSortSpecsCursor;
         return (
