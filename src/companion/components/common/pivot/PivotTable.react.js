@@ -127,7 +127,9 @@ export default class PivotTable extends React.Component{
     }
 
     componentWillReceiveProps(nextProps) {
-        this.pivotWidget.refreshData(nextProps.results.toJS());
+        if (this.props.results != nextProps.results) {
+            this.pivotWidget.refreshData(nextProps.results.toJS());
+        }
     }
 
 
