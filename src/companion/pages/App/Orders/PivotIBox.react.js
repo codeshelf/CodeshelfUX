@@ -8,6 +8,33 @@ import PivotTable from "components/common/pivot/PivotTable";
 import OrderSearch from "./OrderSearch";
 import OrderReview from "./OrderReview";
 
+class RelativeTime extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            intervalToken: null
+        };
+    }
+
+    componentDidMount(){
+        let token = setInterval(() => {
+                this.forceUpdate();
+        }.bind(this), 1000 * 30);
+        this.setState({intervalToken: token});
+    }
+
+    componentWillUnmount() {
+        if (this.state.intervalToken) {
+            clearInterval(this.state.intervalToken);
+        }
+    }
+
+    render() {
+        var time = this.props.time;
+        return <span title={time.local().format()}>{time.local().fromNow()}</span>
+    }
+}
+
 export default class PivotIBox extends React.Component{
 
     constructor(props) {
@@ -17,13 +44,14 @@ export default class PivotIBox extends React.Component{
         this.columnSortSpecsCursor = state.cursor(["preferences", "orders", "table", "sortSpecs"]);
         this.pivotOptionsCursor = state.cursor(["preferences", "orders", "pivot"]);
         this.selectedOrdersCursor = state.cursor(["pivot", "selectedOrders"]);
+
         this.ordersCursor = state.cursor(["pivot", "orders"]);
         this.handleRefresh = this.handleRefresh.bind(this);
     }
 
     componentDidMount() {
         window.requestAnimationFrame(() => {
-            if (this.ordersCursor().count() <= 0) {
+            if (this.ordersCursor().get("values").count() <= 0) {
                 this.refs.ibox.refresh();
             }
         }.bind(this));
@@ -35,16 +63,13 @@ export default class PivotIBox extends React.Component{
 
     handleOrdersUpdated(updatedOrders) {
         this.ordersCursor((orders) =>{
-            let newOrders=  orders.clear().concat(fromJS(updatedOrders));
-            return newOrders.map((order) => {
-                return order.withMutations((o) => {
-                    let localDate = moment(o.get("dueDate")).local();
-                    let endOfDay = localDate.clone();
-                    endOfDay.endOf('day');
-                    o.set("dueDay", endOfDay.format("YYYY-MM-DD"))
-                        .set("dueTime", localDate.format("YYYY-MM-DD HH"));
-                });
-            });
+            return orders.set("updated", moment())
+                         .set("values", fromJS(updatedOrders).map((order) => {
+                                 let localDate = moment(order.get("dueDate")).local();
+                                 let endOfDay = localDate.clone();
+                                 return order.set("dueDay", endOfDay.format("YYYY-MM-DD"))
+                                             .set("dueTime", localDate.format("YYYY-MM-DD HH"));
+                             }));
         });
     }
 
@@ -56,6 +81,7 @@ export default class PivotIBox extends React.Component{
 
     render() {
         let orders = this.ordersCursor();
+        let ordersUpdated = orders.get("updated");
         let selectedOrders = this.selectedOrdersCursor();
         let pivotOptions = this.pivotOptionsCursor;
         let columns = this.columnsCursor;
@@ -68,7 +94,9 @@ export default class PivotIBox extends React.Component{
         return (
             <SingleCellIBox ref="ibox" title="Orders" style={{display: "inline-block"}} onRefresh={this.handleRefresh}>
                 <OrderSearch ref="orderSearch" properties={properties} onOrdersUpdated={this.handleOrdersUpdated.bind(this)}/>
-                <PivotTable results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
+                {(ordersUpdated) ? <h5>Last Updated: <RelativeTime time={ordersUpdated} /></h5>: null}
+
+                <PivotTable results={orders.get("values")} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
                 <OrderReview orders={selectedOrders} columns={columns} sortSpecs={sortSpecs}/>
             </SingleCellIBox>);
     }

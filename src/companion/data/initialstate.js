@@ -140,7 +140,11 @@ const data = {
     },
     pivot: {
         selectedOrders: [],
-            orders: [],
+
+        orders: {
+            updated: null,
+            values: []
+        },
         selectedWorkInstructions: [],
         workInstructions: []
 
