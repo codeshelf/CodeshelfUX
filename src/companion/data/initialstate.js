@@ -46,6 +46,15 @@ const data = {
                 dataFields: ["count"]
             }
         },
+        imports: {
+            orders: {
+                table: {
+                    columns: ["received", "filename", "started", "processingTime", "ordersProcessed", "linesProcessed", "linesFailed", "status", "username"],
+                    sortSpecs: {"started": {order:"desc"}}
+                }
+
+            }
+        },
         workers: {
             table: {
                 columns: ["lastName", "firstName", "badgeId", "updated"],

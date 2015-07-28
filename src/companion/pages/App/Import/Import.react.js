@@ -92,8 +92,9 @@ export default class Imports extends React.Component{
                 <IBoxSection>
                     <DayOfWeekFilter numDays={4} onChange={this.handleChange.bind(this)} />
                 </IBoxSection>
-                <IBoxSection>
-                    <ImportList receipts={receipts} />
+                    <IBoxSection>
+                            {/**  passing state through is a hack until we can have something like sub cursors**/}
+                    <ImportList receipts={receipts} state={this.props.state}/>
                 </IBoxSection>
 
 

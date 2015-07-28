@@ -2,7 +2,7 @@ import  React from "react";
 import {DropdownButton} from "react-bootstrap";
 import Icon from "react-fa";
 import _ from "lodash";
-import {Map, List, fromJS, Record, Seq} from "immutable";
+    import {Map, List, fromJS, Record, Seq, Iterable} from "immutable";
 import {Table} from "components/common/Table";
 import {MultiSelect, Input} from 'components/common/Form';
 import PureComponent from 'components/common/PureComponent';
@@ -43,12 +43,24 @@ function toFullSortSpecs(columns, sortSpecs) {
     });;
 }
 
+const ColumnRecord = Record({columnName: null, displayName: null, customComponent: null });
+
 export default class ListView extends React.Component{
 
     constructor(props) {
         super(props);
     }
 
+    static toColumnMetadata(arrayOfObjects) {
+        return fromJS(arrayOfObjects, (key, value) => {
+            if (Iterable.isKeyed(value)) {
+                return new ColumnRecord(value);
+            } else {
+                return value;
+            }
+    });
+
+}
     getAllSelected(select) {
         var result = [];
         var options = select && select.options;
@@ -117,10 +129,10 @@ export default class ListView extends React.Component{
     }
 };
 
-ListView.ColumnRecord = Record({columnName: null, displayName: null, customComponent: null });
+ListView.ColumnRecord = ColumnRecord;
 ListView.propTypes = {
     columns: React.PropTypes.func, //cursor
-    columnMetadata: React.PropTypes.func, //cursor
+    columnMetadata: React.PropTypes.object,
     sortSpecs: React.PropTypes.func, //cursor
     keyColumn: React.PropTypes.string.isRequired
 };
