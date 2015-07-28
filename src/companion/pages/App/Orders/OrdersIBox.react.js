@@ -35,7 +35,7 @@ class RelativeTime extends React.Component {
     }
 }
 
-export default class PivotIBox extends React.Component{
+export default class OrdersIBox extends React.Component{
 
     constructor(props) {
         super(props);

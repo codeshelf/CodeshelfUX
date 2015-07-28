@@ -2,7 +2,7 @@ import  React from "react";
 import DocumentTitle from "react-document-title";
 import {SingleCellLayout} from 'components/common/pagelayout';
 import {SingleCellIBox} from "components/common/IBox";
-import PivotIBox from "./PivotIBox";
+import OrdersIBox from "./OrdersIBox";
 
 export default class Orders extends React.Component{
 
@@ -11,11 +11,10 @@ export default class Orders extends React.Component{
     }
 
     render() {
-        return (<DocumentTitle title="Orders">
-                  <SingleCellLayout>
-                      <PivotIBox state={this.props.state} />
+        return (
+                  <SingleCellLayout title="Orders">
+                      <OrdersIBox state={this.props.state} />
                   </SingleCellLayout>
-                </DocumentTitle>
                );
     }
 };
