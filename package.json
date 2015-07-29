@@ -36,7 +36,7 @@
     "piping": "0.1.6",
     "pivottable": "^1.6.1",
     "react": "~0.13.3",
-    "react-bootstrap": "^0.19.1",
+    "react-bootstrap": "0.24.2",
     "react-dnd": "^1.1.4",
     "react-document-title": "^1.0.0",
     "react-dropzone": "^1.1.1",

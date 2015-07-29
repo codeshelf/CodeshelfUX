@@ -6,41 +6,91 @@ import {getFacilityContext} from 'data/csapi';
 
 import {IBox, IBoxBody} from 'components/common/IBox';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
-import {Input, ListGroup} from 'react-bootstrap';
+import {Input, ListGroup, Modal} from 'react-bootstrap';
 import {Button, List as BSList} from 'components/common/bootstrap';
 import Icon from 'react-fa';
 import {Table} from 'components/common/Table';
 import Dropzone from 'react-dropzone';
 
+class Confirm extends React.Component {
+
+
+    render() {
+        let {onClick, actionLabel} = this.props;
+        return (<Modal {...this.props}>
+                    <Modal.Header><h5>{this.props.title}</h5></Modal.Header>
+                    <Modal.Body>{this.props.children}</Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={onClick}>{actionLabel}</Button>
+                        <Button bsStyle="primary" onClick={this.props.onHide}>Cancel</Button></Modal.Footer>
+                </Modal>);
+    }
+}
+
 export default class TestScript extends React.Component{
 
     constructor() {
         super();
-        this.state = {scriptInputs: Map()
-
-                      };
+        this.state = {scriptInputs: Map(),
+                      confirmDelete: false,
+                      deleteFailure: ""
+                     };
+        this.deleteOrders = this.deleteOrders.bind(this);
+        this.closeConfirm = this.closeConfirm.bind(this);
     }
 
     handleScriptInputChanges(scriptInputs) {
         this.setState({"scriptInputs": scriptInputs});
     }
 
+    closeConfirm() {
+        this.setState({confirmDelete: false,
+                       deleteFailure: ""});
+    }
+
+    deleteOrders() {
+        this.setState({deleting: true});
+        getFacilityContext().deleteOrders().then(() => {
+            this.closeConfirm();
+        }.bind(this), (e) => {
+            this.setState({deleteFailure: "Deletion Failed: " + e});
+        }.bind(this))
+        .finally(() =>{
+            this.setState({deleting: false});
+        });
+
+    }
+
     render() {
-        let {scriptInputs} = this.state;
-        return (<DocumentTitle title="Test Script">
-                <PageGrid>
-                <Row>
-                <Col sm={12} md={6}>
+            let {scriptInputs, deleteFailure, deleting, confirmDelete} = this.state;
+            return (<DocumentTitle title="Test Script">
+                        <PageGrid>
+                            <Row>
+                                <Col sm={12} md={6}>
+                                        <Confirm show={confirmDelete}
+                                            title="Delete All Orders"
+                                            actionLabel={
+                                                (deleting)
+                                                    ? <span>Deleting <Icon name="spinner" /></span>
+                                                    : "Delete"
+                                            }
+                                            onClick={this.deleteOrders}
+                                            onHide={this.closeConfirm}>
+                                                {
+
+                                                    (deleteFailure) ?
+                                                        <div className="alert alert-danger">
+                                                            {deleteFailure}
+                                                        </div> : null
+                                                }
+                                                Are you sure you want to delete all order information for this facility?
+                                            </Confirm>
+
                 <IBox>
                     <IBoxBody>
-                    <Button className="pull-right" type="button" bsStyle="primary" onClick={() => {
-
-                            getFacilityContext().deleteOrders().then(() => {
-                                window.alert("Deleted orders");
-                            }, () => {
-                                window.alert("Delete failed");
-                            });
-                }}>
+                        <Button className="pull-right" type="button" bsStyle="primary" onClick={() => {
+                                this.setState({"confirmDelete": true});
+                        }}>
                             Delete Orders
                             </Button>
                         <ScriptInput onChange={this.handleScriptInputChanges.bind(this)} />
