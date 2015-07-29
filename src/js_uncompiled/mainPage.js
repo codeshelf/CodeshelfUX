@@ -400,16 +400,18 @@ codeshelf.mainpage = function() {
 		// frame_.style.height = size.height - 5 + 'px';
 	}
 
-	function setupNavbar(facility, authz, configValues) {
+	    function setupNavbar(websession, facility, authz, configValues) {
 		goog.dom.setProperties(goog.dom.getDocument()['body'], {'class': 'main_body'});
 		var navbar = new codeshelf.Navbar();
 
 	    var filteredNavbar = navbar.getNavbarItems(facility, authz, configValues);
-        var user = websession_.email;
-        var facilityName = facility.domainId;
-        goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.mainPage, {
+        var user = websession.email;
+        var facilityName = facility["domainId"];
+        var tenantName = websession.tenantName;
+                goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.mainPage, {
                 navbar: filteredNavbar,
                 user: user,
+                tenantName: tenantName,
                 facility: facilityName}));
 	}
 
@@ -420,7 +422,7 @@ codeshelf.mainpage = function() {
                     var configValues = command['results'];
                     //this needs to go in the callback
 					if (facility != null) {
-						setupNavbar(facility, authz, configValues);
+				        setupNavbar(websession, facility, authz, configValues);
 					}
 
 				}

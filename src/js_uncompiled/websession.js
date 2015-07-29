@@ -331,7 +331,8 @@ codeshelf.websession = function () {
 			self_.sendCommand(loginCommand,  {
 				exec: function(commandType, response) {
                     if (response.status == 'Success') {
-					    self_.setState(kWebsessionState.VALIDATED);
+				        self_.setState(kWebsessionState.VALIDATED);
+                        var tenantName = response['tenantName'];
 					    application_.setOrganization(response['organization']);
 					    var user = response['user'];
 					    var email = user['username'];
@@ -354,6 +355,7 @@ codeshelf.websession = function () {
 					    authz.setPermissions(permissions);
 					    authz = Object.freeze(authz); //ECMAScript 5 prevent changes from this point
                         self_.setAuthz(authz);
+                        self_.tenantName = tenantName;
                         self_.email = email;
                         self_.onAuthenticated();
 					    promise.resolve(response);

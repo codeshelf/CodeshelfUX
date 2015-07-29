@@ -5,6 +5,7 @@
  * @param navbar
  * @param user
  * @param facility
+ * @param tenantName
  */
 {template .mainPage}
 <nav class="navbar navbar-inverse navbar-fixed-top role=navigation">
@@ -44,7 +45,7 @@
 				{/foreach}
             </ul><!-- /.navbar-nav-->
            <ul class="nav navbar-nav navbar-right">
-             <li class="navbar-text">{$facility}</li>
+             <li class="navbar-text">{$tenantName}/{$facility}</li>
              <li class="navbar-text">{$user}</li>
              <li><a href="/">Companion</a></li>
            </ul>
