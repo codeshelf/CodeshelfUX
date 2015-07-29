@@ -3,10 +3,12 @@
 /**
  * The template for the main page.
  * @param navbar
+ * @param user
+ * @param facility
  */
 {template .mainPage}
 <nav class="navbar navbar-inverse navbar-fixed-top role=navigation">
-    <div id="navbar-container" class="container">
+    <div id="navbar-container" class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
         <!--  comment out the collapse button until it works in compiled code -->
@@ -22,7 +24,7 @@
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <<div class="navbar-collapse collapse">
+        <div class="navbar-collapse collapse">
         <!-- <div class="mystaticnavbar"> -->
            <ul class="nav navbar-nav">
 		   	    {foreach $dropdown in $navbar}
@@ -41,18 +43,19 @@
 	                </li>
 				{/foreach}
             </ul><!-- /.navbar-nav-->
-
-            <div class="col-sm-3 col-md-3 pull-right">
-                <form class="navbar-form" role="search">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search Order ID" name="q" id="q">
-                        <div class="input-group-btn">
-                            <button class="btn btn-default" onClick="handleSearchInput(this.form['q'].value); return false;"><i class="glyphicon glyphicon-search"></i></button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-                         
+           <ul class="nav navbar-nav navbar-right">
+             <li class="navbar-text">{$facility}</li>
+             <li class="navbar-text">{$user}</li>
+             <li><a href="/">Companion</a></li>
+           </ul>
+           <form class="navbar-form navbar-right" style="width: 20em;" role="search">
+             <div class="input-group">
+               <input type="text" class="form-control" placeholder="Search Order ID" name="q" id="q">
+               <div class="input-group-btn">
+                 <button class="btn btn-default" onClick="handleSearchInput(this.form['q'].value); return false;"><i class="glyphicon glyphicon-search"></i></button>
+               </div>
+             </div>
+           </form>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container -->
 </nav>

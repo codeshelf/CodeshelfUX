@@ -404,8 +404,13 @@ codeshelf.mainpage = function() {
 		goog.dom.setProperties(goog.dom.getDocument()['body'], {'class': 'main_body'});
 		var navbar = new codeshelf.Navbar();
 
-		var filteredNavbar = navbar.getNavbarItems(facility, authz, configValues);
-		goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.mainPage, {navbar: filteredNavbar}));
+	    var filteredNavbar = navbar.getNavbarItems(facility, authz, configValues);
+        var user = websession_.email;
+        var facilityName = facility.domainId;
+        goog.dom.appendChild(goog.dom.getDocument()['body'], soy.renderAsElement(codeshelf.templates.mainPage, {
+                navbar: filteredNavbar,
+                user: user,
+                facility: facilityName}));
 	}
 
 	function domainPropertiesCallback(websession, facility, authz) {
@@ -520,6 +525,11 @@ codeshelf.mainpage = function() {
 	return self;
 }
 ;
+
+function logout() {
+
+}
+goog.exportSymbol('logout', logout);
 
 function contactWasSelected() {
 	codeshelf.simpleDlogService.showNotifyDialog("Contact Codeshelf", "Check out <a href=\"http://www.codeshelf.com\">codeshelf.com</a>");

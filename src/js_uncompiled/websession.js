@@ -161,6 +161,12 @@ codeshelf.websession = function () {
 			});
 		},
 
+        closeWebSocket: function() {
+            if (!websocket_.isOpen()) {
+                websocket_.close();
+            }
+        },
+
 		createCommand: function (commandType, data) {
 			/*
 			if (commandType==kWebSessionCommandType.OBJECT_GETTER_REQ) {
@@ -347,7 +353,8 @@ codeshelf.websession = function () {
 					    // no special translation for "che@" user ("che:simulate" permission exists on app server)
 					    authz.setPermissions(permissions);
 					    authz = Object.freeze(authz); //ECMAScript 5 prevent changes from this point
-					    self_.setAuthz(authz);
+                        self_.setAuthz(authz);
+                        self_.email = email;
                         self_.onAuthenticated();
 					    promise.resolve(response);
                     }
