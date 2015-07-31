@@ -48,7 +48,7 @@ function authenticateCredentials(fields) {
             if (e instanceof ConnectionError) {
                 throw e;
             } else {
-                throw new ValidationError ('Wrong password', 'password');
+                throw new ValidationError ('Wrong username or password', 'password');
             }
         });
 }
