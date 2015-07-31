@@ -2,6 +2,7 @@ import  React from 'react';
 import DocumentTitle from 'react-document-title';
 import {Modal, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import classnames from 'classnames';
 import exposeRouter from 'components/common/exposerouter';
 import {Input} from "components/common/Form";
@@ -54,7 +55,9 @@ class WorkerDisplay extends React.Component {
     }
 
     getLabel(key) {
-        return _.result(_.find(this.props.formMetadata, "columnName", key), "displayName", "");
+        return this.props.formMetadata
+            .find((f)=> f.get("columnName") == key)
+            .get("displayName", "");
     }
 
     getSelectedWorkerForm() {
@@ -184,7 +187,7 @@ class WorkerDisplay extends React.Component {
 };
 
 WorkerDisplay.propTypes = {
-    formMetadata: React.PropTypes.array,
+    formMetadata: ImmutablePropTypes.iterable,
     router: React.PropTypes.func
 };
 
