@@ -95,7 +95,7 @@ class WorkerDisplay extends React.Component {
 
     render() {
         var formData = this.getSelectedWorkerForm();
-            return (<ModalForm show={true} title="Edit Worker" formData={formData} returnRoute="workermgmt"
+            return (<ModalForm title="Edit Worker" formData={formData} returnRoute="workermgmt"
                            onSave={this.handleSave}
                            onClose={this.handleClose}>
                    {this.renderForm(formData)}

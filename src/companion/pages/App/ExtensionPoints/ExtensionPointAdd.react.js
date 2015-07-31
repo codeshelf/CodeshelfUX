@@ -25,7 +25,7 @@ export default class ExtensionPointAdd extends React.Component{
     render() {
 
         let {availableTypes} = this.props;
-            return (<ModalForm show={true} title="Add Extension Point" formData={{}} returnRoute="extensionpoints" onSave={this.handleSave.bind(this)}>
+            return (<ModalForm title="Add Extension Point" formData={{}} returnRoute="extensionpoints" onSave={this.handleSave.bind(this)}>
                     <Select ref="type" options={availableTypes.toJS()}/>
                 </ModalForm>);
     }

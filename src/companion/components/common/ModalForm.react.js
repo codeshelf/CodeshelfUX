@@ -8,7 +8,8 @@ class ModalForm extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            "savePending" : false
+            "savePending" : false,
+            "show": true
         };
 
         this.handleClose = this.handleClose.bind(this);
@@ -17,8 +18,10 @@ class ModalForm extends React.Component{
     }
 
     handleClose() {
+        this.setState({"savePending": false,
+               "show": false});
+        //Transition away, so make sure unmount tears down the modal
         let routeName = this.props.returnRoute;
-        this.setState({"savePending": false});
         let params = this.props.router.getCurrentParams();
         this.props.router.transitionTo(routeName, params);
     }
@@ -29,14 +32,19 @@ class ModalForm extends React.Component{
         this.props.onSave().then(() => {
             this.handleClose();
         });
-}
+    }
 
+    componentWillUnmount() {
+        //always teardown modal before transitioning away
+        this.refs.modal.onHide();
+    }
 
     render() {
-            var {title, formData, show} = this.props;
+        var {title, formData} = this.props;
+        let {show} = this.state;
         var modalTitle = formData ? title : "Not Found"
 ;        return (
-                <Modal show={show} title={modalTitle} onHide={this.handleClose}>
+                <Modal ref="modal" show={show} title={modalTitle} onHide={this.handleClose}>
                     <Modal.Header><h5>{modalTitle}</h5></Modal.Header>
                     { formData ? this.renderForm(formData, this.renderSaveButtonContent(), this.handleSave, this.handleClose ) : this.renderNotFound()}
                 </Modal>
