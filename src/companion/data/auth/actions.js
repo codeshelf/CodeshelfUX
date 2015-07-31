@@ -3,7 +3,7 @@ import setToString from 'lib/settostring';
 import {ValidationError} from 'lib/validation';
 import {dispatch} from 'dispatcher';
 import {validate} from 'validation';
-import {authenticate, getUser, logout} from 'data/csapi';
+import {authenticate, getUser, logout, ConnectionError} from 'data/csapi';
 
 export function updateFormField({target: {name, value}}) {
   // Both email and password max length is 100.
@@ -44,9 +44,13 @@ function validateForm(fields) {
 function authenticateCredentials(fields) {
     let {email, password} = fields;
     return authenticate(email, password)
-    .catch(() =>{
-        throw new ValidationError ('Wrong password', 'password');
-    });
+        .catch((e) =>{
+            if (e instanceof ConnectionError) {
+                throw e;
+            } else {
+                throw new ValidationError ('Wrong password', 'password');
+            }
+        });
 }
 
 export function loginError(error) {

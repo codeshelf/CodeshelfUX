@@ -4,12 +4,22 @@ import _ from 'lodash';
 import {Map} from 'immutable';
 var {state} = require('data/state.js');
 import {loggedout} from "data/auth/actions";
+
+export class ConnectionError extends Error {
+    constructor(message) {
+        super(message);
+        this.message = message;
+    }
+}
+
+
 var globalOptions = new Map({
     crossDomain: true,
     xhrFields: {
         withCredentials: true
     }
 });
+
 
 function ajax(path, options) {
     if (options == null) options = {};
@@ -59,7 +69,9 @@ function ajax(path, options) {
             return response.body;
         }, (error) => {
             console.log("error occurred", error);
-            if (error.status === 401) {
+            if (error.status == null) {
+                throw new ConnectionError("Server is not available");
+            } else if (error.status === 401) {
                 loggedout();
             }
             throw error;
