@@ -6,6 +6,18 @@ import _ from "lodash";
 import {List} from "immutable";
 require('./Form.styl');
 
+export class ErrorDisplay extends PureComponent {
+    render() {
+        let {message} = this.props;
+        return (
+            (message) ?
+                <div className="alert alert-danger">
+                    {message}
+                </div> : null
+        );
+    }
+}
+
 class  WrapInput extends React.Component {
     handleInputGroupClick(e) {
         var inputs = e.target.getElementsByTagName("input");

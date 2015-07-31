@@ -2,7 +2,7 @@ import React from 'react';
 import DocumentTitle from 'react-document-title';
 import {Row, Col} from 'components/common/pagelayout';
 import exposeRouter from 'components/common/exposerouter';
-import {Input} from 'components/common/Form';
+import {ErrorDisplay, Input} from 'components/common/Form';
 import {focusInvalidField} from '../../lib/validation';
 import {getForm} from 'data/auth/store';
 import {msg} from 'data/intl/store';
@@ -67,10 +67,9 @@ class Login extends React.Component {
                 <div className="container-sm-height full-height">
                     <div className="row row-sm-height">
                         <div className="col-sm-12 col-sm-height col-middle">
-                            <h1>Codeshelf Companion</h1>
-            {form.error &&
-                <span className="error-message">{form.error.message}</span>
-            }
+                        <h1>Codeshelf Companion</h1>
+                        {form.error &&
+                            <ErrorDisplay message={form.error.message} />}
 
             <form id="login-form" className="p-t-15" role="form" method="POST" onSubmit={(e) => {
                 e.preventDefault();

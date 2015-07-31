@@ -6,7 +6,8 @@ import {getFacilityContext} from 'data/csapi';
 import {IBox, IBoxBody} from 'components/common/IBox';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
 import {Input, ListGroup, Modal} from 'react-bootstrap';
-import {Button, List as BSList} from 'components/common/bootstrap';
+    import {Button, List as BSList} from 'components/common/bootstrap';
+import {ErrorDisplay} from 'components/common/Form';
 import Icon from 'react-fa';
 import {Table} from 'components/common/Table';
 import Dropzone from 'react-dropzone';
@@ -66,13 +67,8 @@ class ConfirmAction extends React.Component {
                                 : <span>{confirmLabel}</span>
                         }
                         onConfirm={this.handleConfirm}
-                        onHide={this.closeConfirm}>
-                        {
-                            (failure) ?
-                                <div className="alert alert-danger">
-                                    {failure}
-                                </div> : null
-                        }
+                            onHide={this.closeConfirm}>
+                        <ErrorDisplay message={failure} />
                         <div>{instructions}</div>
                     </ConfirmModal>
                 </div>);
