@@ -109,7 +109,6 @@ export function getFacilities() {
     return ajax("/api/facilities");
 };
 
-
 export function getFacilityContext() {
     var endpoint = state.cursor(["endpoint"])();
     var facility = state.cursor(["selectedFacility"])();
@@ -120,6 +119,12 @@ export function getFacilityContext() {
     return {
         facilityId: facilityId,
         endpoint: endpoint,
+
+        recreateFacility() {
+            return ajax("/api/facilities/recreate/" + facility.domainId, {
+                method: "POST"
+            });
+        },
 
         getOrderDetails(orderId) {
             let orderDetailsPath = facilityPath + "/orders/" + orderId + "/details";

@@ -3,7 +3,6 @@ import DocumentTitle from 'react-document-title';
 import _ from 'lodash';
 import {Map, List, fromJS} from 'immutable';
 import {getFacilityContext} from 'data/csapi';
-
 import {IBox, IBoxBody} from 'components/common/IBox';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
 import {Input, ListGroup, Modal} from 'react-bootstrap';
@@ -12,17 +11,84 @@ import Icon from 'react-fa';
 import {Table} from 'components/common/Table';
 import Dropzone from 'react-dropzone';
 
-class Confirm extends React.Component {
+class ConfirmAction extends React.Component {
 
+    constructor() {
+        super();
+        this.state = {confirm: false,
+                      failure: null,
+                      inprogress: false
+                     };
+        this.handleConfirm = this.handleConfirm.bind(this);
+        this.closeConfirm = this.closeConfirm.bind(this);
+        this.openConfirm = this.openConfirm.bind(this);
+    }
+
+    handleConfirm() {
+        this.setState({inprogress: true});
+        this.props.onConfirm()
+            .then(() => {
+                this.closeConfirm();
+            }, (e) => {
+                this.setState({failure: "Failed: " + e});
+            })
+            .finally(() => {
+                this.setState({inprogress: false});
+            });
+    }
+
+    openConfirm() {
+        this.setState({confirm: true,
+                       inprogress: false,
+                       failure: ""});
+    }
+
+    closeConfirm() {
+        this.setState({confirm: false,
+                       inprogress: false,
+                       failure: ""});
+    }
 
     render() {
-        let {onClick, actionLabel} = this.props;
+            let {confirmLabel, confirmInProgressLabel,  instructions, children, style} = this.props;
+        let {confirm, failure, inprogress} = this.state;
+        return (<div>
+                    <Button style={style} type="button" bsStyle="primary"
+                            onClick={this.openConfirm}>
+                        {children}
+                    </Button>
+                    <ConfirmModal
+                        show={confirm}
+                        title={(inprogress) ? confirmInProgressLabel : confirmLabel}
+                        confirmLabel={
+                            (inprogress)
+                                ? <span>{confirmInProgressLabel} <Icon name="spinner" /></span>
+                                : <span>{confirmLabel}</span>
+                        }
+                        onConfirm={this.handleConfirm}
+                        onHide={this.closeConfirm}>
+                        {
+                            (failure) ?
+                                <div className="alert alert-danger">
+                                    {failure}
+                                </div> : null
+                        }
+                        <div>{instructions}</div>
+                    </ConfirmModal>
+                </div>);
+    }
+}
+
+class ConfirmModal extends React.Component {
+    render() {
+        let {confirmLabel, title, children, onConfirm, onHide} = this.props;
         return (<Modal {...this.props}>
-                    <Modal.Header><h5>{this.props.title}</h5></Modal.Header>
-                    <Modal.Body>{this.props.children}</Modal.Body>
+                    <Modal.Header><h5>{title}</h5></Modal.Header>
+                    <Modal.Body>{children}</Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={onClick}>{actionLabel}</Button>
-                        <Button bsStyle="primary" onClick={this.props.onHide}>Cancel</Button></Modal.Footer>
+                        <Button onClick={onConfirm}>{confirmLabel}</Button>
+                        <Button bsStyle="primary" onClick={onHide}>Cancel</Button>
+                    </Modal.Footer>
                 </Modal>);
     }
 }
@@ -31,68 +97,54 @@ export default class TestScript extends React.Component{
 
     constructor() {
         super();
-        this.state = {scriptInputs: Map(),
-                      confirmDelete: false,
-                      deleteFailure: ""
-                     };
+        this.state = {scriptInputs: Map()};
         this.deleteOrders = this.deleteOrders.bind(this);
-        this.closeConfirm = this.closeConfirm.bind(this);
+        this.recreateFacility = this.recreateFacility.bind(this);
     }
 
     handleScriptInputChanges(scriptInputs) {
         this.setState({"scriptInputs": scriptInputs});
     }
 
-    closeConfirm() {
-        this.setState({confirmDelete: false,
-                       deleteFailure: ""});
+    deleteOrders() {
+        return getFacilityContext().recreateFacility();
     }
 
-    deleteOrders() {
-        this.setState({deleting: true});
-        getFacilityContext().deleteOrders().then(() => {
-            this.closeConfirm();
-        }.bind(this), (e) => {
-            this.setState({deleteFailure: "Deletion Failed: " + e});
-        }.bind(this))
-        .finally(() =>{
-            this.setState({deleting: false});
+    recreateFacility() {
+        return getFacilityContext().recreateFacility().then((facility) => {
+            window.location.reload();
+            return facility;
         });
-
     }
 
     render() {
-            let {scriptInputs, deleteFailure, deleting, confirmDelete} = this.state;
+            let {scriptInputs} = this.state;
             return (<DocumentTitle title="Test Script">
                         <PageGrid>
                             <Row>
                                 <Col sm={12} md={6}>
-                                        <Confirm show={confirmDelete}
-                                            title="Delete All Orders"
-                                            actionLabel={
-                                                (deleting)
-                                                    ? <span>Deleting <Icon name="spinner" /></span>
-                                                    : "Delete"
-                                            }
-                                            onClick={this.deleteOrders}
-                                            onHide={this.closeConfirm}>
-                                                {
-
-                                                    (deleteFailure) ?
-                                                        <div className="alert alert-danger">
-                                                            {deleteFailure}
-                                                        </div> : null
-                                                }
-                                                Are you sure you want to delete all order information for this facility?
-                                            </Confirm>
-
                 <IBox>
                     <IBoxBody>
-                        <Button className="pull-right" type="button" bsStyle="primary" onClick={() => {
-                                this.setState({"confirmDelete": true});
-                        }}>
-                            Delete Orders
-                            </Button>
+                        <div className="pull-right" style={{marginBottom: "1em"}}>
+                            <div>
+                        <ConfirmAction
+                         style={{width: "100%"}}
+                            onConfirm={this.deleteOrders}
+                            confirmLabel="Delete"
+                            confirmInProgressLabel="Deleting"
+                            instructions="Do you want to delete all orders for this facility?">
+                                Delete Orders
+                        </ConfirmAction>
+                                <ConfirmAction
+                                style={{width: "100%", marginTop: "0.5em"}}
+                             onConfirm={this.recreateFacility}
+                             confirmLabel="Recreate"
+                             confirmInProgressLabel="Recreating"
+                             instructions="Do you want to remove all data for this facility?">
+                                     Recreate Facility
+                             </ConfirmAction>
+                            </div>
+                        </div>
                         <ScriptInput onChange={this.handleScriptInputChanges.bind(this)} />
                         <ScriptStepExecutor scriptInputs={scriptInputs} />
                 </IBoxBody>
