@@ -10,6 +10,10 @@ class ModalForm extends React.Component{
         this.state = {
             "savePending" : false
         };
+
+        this.handleClose = this.handleClose.bind(this);
+        this.handleSave = this.handleSave.bind(this);
+
     }
 
     handleClose() {
@@ -29,35 +33,35 @@ class ModalForm extends React.Component{
 
 
     render() {
-        var {title, formData} = this.props;
+            var {title, formData, show} = this.props;
         var modalTitle = formData ? title : "Not Found"
 ;        return (
-                <Modal className="modal-header" title={modalTitle} onRequestHide={this.handleClose.bind(this)}>
-                    { formData ? this.renderForm(formData) : this.renderNotFound()}
+                <Modal show={show} title={modalTitle} onHide={this.handleClose}>
+                    <Modal.Header><h5>{modalTitle}</h5></Modal.Header>
+                    { formData ? this.renderForm(formData, this.renderSaveButtonContent(), this.handleSave, this.handleClose ) : this.renderNotFound()}
                 </Modal>
             );
     }
 
     renderNotFound() {
-        return (<div className="modal-body">
+        return ( <Modal.Body>
                    Not Found
-                </div>);
+                 </Modal.Body>
+               );
     }
 
-    renderForm(formData) {
-        return (<form onSubmit={this.handleSave.bind(this)}>
-                    <div className='modal-body'>
-                    {
-                        this.props.children
-                    }
-                    </div>
-                    <div className='modal-footer'>
-                        <Button onClick={this.handleClose.bind(this)}>Cancel</Button>
-                        <Button bsStyle="primary" type="submit">{
-                            this.renderSaveButtonContent()
-                        }</Button>
-                    </div>
-                </form>);
+        renderForm(formData, label, onSave, onHide) {
+            return (<form onSubmit={onSave}>
+                        <Modal.Body>
+                        {
+                            this.props.children
+                        }
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button  onClick={onHide}>Cancel</Button>
+                            <Button type="submit" bsStyle="primary" >{label}</Button>
+                        </Modal.Footer>
+                    </form>);
     }
 
     renderSaveButtonContent() {

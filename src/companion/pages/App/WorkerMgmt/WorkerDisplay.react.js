@@ -22,7 +22,8 @@ class WorkerDisplay extends React.Component {
         this.state = {
             "savePending" : false
         };
-
+        this.handleSave = this.handleSave.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
     componentWillMount() {
         this.findSelectedWorkerForm(this.props);
@@ -91,9 +92,9 @@ class WorkerDisplay extends React.Component {
 
     render() {
         var formData = this.getSelectedWorkerForm();
-        return (<ModalForm title="Edit Worker" formData={formData} returnRoute="workermgmt"
-                           onSave={this.handleSave.bind(this)}
-                           onClose={this.handleClose.bind(this)}>
+            return (<ModalForm show={true} title="Edit Worker" formData={formData} returnRoute="workermgmt"
+                           onSave={this.handleSave}
+                           onClose={this.handleClose}>
                    {this.renderForm(formData)}
                 </ModalForm>
             );
