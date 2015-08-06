@@ -16,7 +16,7 @@ const data = {
     $pendingActions: {},
     $subscriptions: {},
     preferences: {
-        version: "1.3",
+        version: "1.4",
         workInstructions: {
             table: {
                 columns: ["persistentId", "status"],
@@ -53,6 +53,12 @@ const data = {
                     sortSpecs: {"started": {order:"desc"}}
                 }
 
+            }
+        },
+        users: {
+            table: {
+                columns: ["username", "active"],
+                sortSpecs: {"username": {order: "asc"}}
             }
         },
         workers: {
@@ -152,7 +158,19 @@ const data = {
                 confirm: []
 
             }
+        },
+        setuppassword: {
+            values: {
+                new: "",
+                confirm: ""
+            },
+            errors: {
+                new: [],
+                confirm: []
+
+            }
         }
+
     },
     pivot: {
         selectedOrders: [],
