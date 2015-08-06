@@ -14,6 +14,7 @@ export default class FormFields extends React.Component{
             let {name, label, required, readonly, options} = objField;
             return (
                 <MultiSelect label={label}
+                        key={name}
                         name={name}
                         options={options}
                         values={value}
@@ -33,7 +34,7 @@ export default class FormFields extends React.Component{
             }
 
             return (
-                <TextArea label={label} name={name} value={value} rows="10" onChange={handleInputTextChange}/>
+                <TextArea label={label} key={name} name={name} value={value} rows="10" onChange={handleInputTextChange}/>
             );
         } else {
             return null;
@@ -47,7 +48,7 @@ export default class FormFields extends React.Component{
                 handleChange(objField, e.target.checked);
             }
 
-            return (<Checkbox label={label} name="name" value={value} onChange={handleCheckboxChange} required={required} readonly={readonly}/>);
+                return (<Checkbox label={label} key={name} name={name} value={value} onChange={handleCheckboxChange} required={required} readonly={readonly}/>);
         } else {
             return null;
         }
