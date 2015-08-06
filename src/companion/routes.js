@@ -2,6 +2,7 @@ import React from 'react';
 import {Route, DefaultRoute, NotFoundRoute, RouteHandler, Redirect} from 'react-router';
 import Root from './Root.react.js';
 import App from './pages/App/App.react.js';
+import Admin from './pages/App/Admin/Admin.react.js';
 import Facility from './pages/App/Facility/Facility.react.js';
 import NotFound from 'pages/NotFound';
 import Overview from './pages/App/Overview/Overview.react.js';
@@ -26,10 +27,10 @@ import ExtensionPointAdd from "./pages/App/ExtensionPoints/ExtensionPointAdd.rea
 
 export default (
   <Route handler={Root} path="/">
-    <Redirect from="/" to="/app" />
-    <Route handler={authn(App)} name="app"> //ensure auth and default facility
+    <Redirect from="/" to="/facilities" />
+    <Route handler={authn(App)} name="facilities"> //ensure auth and default facility
         <Route handler={Facility} name="facility" path=":facilityName">
-            <DefaultRoute handler={Overview} name="overview" />
+        <DefaultRoute handler={Overview} name="overview" />
             <NotFoundRoute handler={NotFound} name="not-found" />
             <Route handler={Orders} name="orders"></Route>
             <Route handler={WorkInstructions} name="workinstructions"></Route>
@@ -46,14 +47,17 @@ export default (
                 <Route handler={ExtensionPointEdit} name="extensionpointedit" path=":extensionPointId" />
             </Route>
 
-         </Route>
-       </Route>
-        <Route handler={Login} name="login" />
+        </Route>
+    </Route>
+    <Route handler={authn(Admin)} name="admin" path="admin">
         <Route handler={Users} name="users">
             <Route handler={UserAdd} name="usernew" path="new"/>
             <Route handler={UserEdit} name="useredit" path=":userId"/>
         </Route>
-        <Route handler={SetupPassword} name="usersetup" path="users/setup"/>
-        <Route handler={ChangePassword} name="changepassword" />
+    </Route>
+
+    <Route handler={Login} name="login" />
+    <Route handler={SetupPassword} name="usersetup" path="users/setup"/>
+    <Route handler={ChangePassword} name="changepassword" />
   </Route>
 );

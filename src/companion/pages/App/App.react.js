@@ -21,24 +21,17 @@ class App extends React.Component {
 
     handleRouting(props) {
         var router = props.router;
-        var currentPath = router.getCurrentPath();
         var params = router.getCurrentParams();
         var facilityName = params.facilityName;
         const facility = getSelectedFacility();
-        if (!isLoggedIn()) {
-            var nextPath = currentPath;
-            console.log("not authenticated to reach " + nextPath);
-            router.transitionTo("login", {}, {nextPath: nextPath});
-        } else if (facilityName != null) {
+        if (facilityName != null) {
             if (!facility || (facility && facility.domainId !== facilityName)) {
                 selectFacilityByName(facilityName);
             }
+        } else if (facility != null) {
+            router.transitionTo("facility", {facilityName: facility.domainId});
         } else {
-            if (facility != null) {
-                router.transitionTo("facility", {facilityName: facility.domainId});
-            } else {
-                selectFirstFacility();
-            }
+            selectFirstFacility();
         }
     }
 

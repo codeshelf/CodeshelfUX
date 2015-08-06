@@ -7,12 +7,11 @@ import {loggedout} from "data/auth/actions";
 import {getEmail, isCredentialsStored, clearStoredCredentials} from "data/user/store";
 import {authz} from 'components/common/auth';
 
-function     clearCredentials() {
+function clearCredentials() {
     clearStoredCredentials();
     loggedout(false);
 }
 
-//TODO show logout if logged in
 export default class TopNavBar extends React.Component {
 
     handleNavbarMinimalize(e) {
@@ -32,7 +31,8 @@ export default class TopNavBar extends React.Component {
                         </div>
                     </div>
                     <div className="pull-right">
-                            <FacilitySelector facility={facility} facilities={facilities} />
+                            {(facilities) &&
+                                <FacilitySelector facility={facility} facilities={facilities} />}
                             <UserProfileMenu user={user}/>
                         </div>
                 </div>
