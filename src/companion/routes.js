@@ -1,8 +1,9 @@
+import React from 'react';
+import {Route, DefaultRoute, NotFoundRoute, RouteHandler, Redirect} from 'react-router';
 import Root from './Root.react.js';
 import App from './pages/App/App.react.js';
 import Facility from './pages/App/Facility/Facility.react.js';
 import NotFound from 'pages/NotFound';
-import React from 'react';
 import Overview from './pages/App/Overview/Overview.react.js';
 import Orders from './pages/App/Orders/Orders.react.js';
 import WorkInstructions from './pages/App/WorkInstructions/WorkInstructions.react.js';
@@ -11,9 +12,11 @@ import WorkResults from './pages/App/WorkResults/WorkResults.react.js';
 import WorkerMgmt from './pages/App/WorkerMgmt/WorkerMgmt.react.js';
 import WorkerDisplay from './pages/App/WorkerMgmt/WorkerDisplay.react.js';
 import Import from './pages/App/Import/Import.react.js';
-import {Route, DefaultRoute, NotFoundRoute, RouteHandler, Redirect} from 'react-router';
 import {authn} from './components/common/auth.js';
 import Login from './pages/Login/Login.react.js';
+import Users from './pages/Users/Users.react.js';
+import UserAdd from './pages/Users/UserAdd.react.js';
+import SetupPassword from './pages/SetupPassword/SetupPassword.react.js';
 import ChangePassword from './pages/ChangePassword/ChangePassword.react.js';
 import TestScript from './pages/App/TestScript/TestScript.react.js';
 import ExtensionPointsPage from "./pages/App/ExtensionPoints/ExtensionPointsPage.react.js";
@@ -45,6 +48,11 @@ export default (
          </Route>
        </Route>
         <Route handler={Login} name="login" />
+        <Route handler={Users} name="users">
+            <Route handler={UserAdd} name="usernew" path="new"/>
+
+        </Route>
+        <Route handler={SetupPassword} name="usersetup" path="users/setup"/>
         <Route handler={ChangePassword} name="changepassword" />
   </Route>
 );
