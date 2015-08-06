@@ -5,7 +5,9 @@ export const properties = toProperties([
     {'id': 'username',
     'title': 'Email'},
     {'id': "active",
-    title: "Active"}
+     title: "Active"},
+     {'id': "roles",
+     title: "Roles"}
      ]);
 
 export const UserRecord = createTypeRecord(properties);

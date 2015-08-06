@@ -16,6 +16,7 @@ import {authn} from './components/common/auth.js';
 import Login from './pages/Login/Login.react.js';
 import Users from './pages/Users/Users.react.js';
 import UserAdd from './pages/Users/UserAdd.react.js';
+import UserEdit from './pages/Users/UserEdit.react.js';
 import SetupPassword from './pages/SetupPassword/SetupPassword.react.js';
 import ChangePassword from './pages/ChangePassword/ChangePassword.react.js';
 import TestScript from './pages/App/TestScript/TestScript.react.js';
@@ -50,7 +51,7 @@ export default (
         <Route handler={Login} name="login" />
         <Route handler={Users} name="users">
             <Route handler={UserAdd} name="usernew" path="new"/>
-
+            <Route handler={UserEdit} name="useredit" path=":userId"/>
         </Route>
         <Route handler={SetupPassword} name="usersetup" path="users/setup"/>
         <Route handler={ChangePassword} name="changepassword" />

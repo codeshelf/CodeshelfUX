@@ -71,6 +71,7 @@ export class Input extends React.Component {
              autoFocus,
              disabled,
              onChange,
+             readOnly,
              addOnAfter} = this.props;
 
         var inputClasses = classnames({
@@ -99,6 +100,7 @@ export class Input extends React.Component {
                            label={label}
                            value={value}
                            onChange={onChange}
+                           readOnly={readOnly}
                      />
                     {
                         (addOnAfter) ?

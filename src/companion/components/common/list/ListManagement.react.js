@@ -22,6 +22,19 @@ export default class ListManagement extends React.Component{
         this.handleSearchChange = this.handleSearchChange.bind(this);
     }
 
+    static toEditButton(editButtonPropsFn: Function) {
+        class Edit extends React.Component {
+            render() {
+                var row  = this.props.rowData;
+                return (<EditButtonLink {...editButtonPropsFn(row)}>
+                        </EditButtonLink>);
+            }
+
+        }
+        return Edit;
+    }
+
+
     handleSearchChange(searchStruct) {
         this.setState(searchStruct);
     }

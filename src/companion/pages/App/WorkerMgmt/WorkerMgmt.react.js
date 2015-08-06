@@ -17,13 +17,16 @@ import {getWorkers} from 'data/workers/store';
 
 import exposeRouter from 'components/common/exposerouter';
 
+const keyColumn = "persistentId";
+
 export default class WorkerMgmt extends React.Component{
 
     constructor(props) {
         super(props);
+
         this.columnMetadata = ListView.toColumnMetadata([
             {
-                columnName: "persistentId",
+                columnName: keyColumn,
                 displayName: "UUID"
             },
                 {
@@ -58,7 +61,10 @@ export default class WorkerMgmt extends React.Component{
             {
                 columnName: "action",
                 displayName: "",
-                customComponent: Edit
+                customComponent:  ListManagement.toEditButton((row) => {
+                    return {    to: "workerdisplay",
+                                params: {workerId: row.get(keyColumn)}};
+                })
             }
         ]);
         let {state} = props;
@@ -82,7 +88,7 @@ export default class WorkerMgmt extends React.Component{
 
                         columnMetadata={this.columnMetadata}
                         results={rows}
-                        keyColumn="persistentId"
+                            keyColumn={keyColumn}
                         columns={this.columnsCursor}
                         sortSpecs={this.columnSortSpecsCursor} />
                 <RouteHandler formMetadata={this.columnMetadata}/>
@@ -91,17 +97,6 @@ export default class WorkerMgmt extends React.Component{
 
 
 };
-
-class Edit extends React.Component {
-    render() {
-        var formData = this.props.rowData;
-        var persistentId = formData.get("persistentId");
-        return (<EditButtonLink to="workerdisplay"
-                            params={{workerId: persistentId}}>
-                </EditButtonLink>);
-    }
-
-}
 
 import {formatTimestamp} from 'lib/timeformat';
 class DateDisplay extends React.Component {

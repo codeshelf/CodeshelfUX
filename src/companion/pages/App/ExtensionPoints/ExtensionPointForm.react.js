@@ -1,7 +1,23 @@
 import  React from 'react';
-import {Input, Checkbox, TextArea} from "components/common/Form";
+import FormFields from "components/common/FormFields";
 import Immutable from 'immutable';
 import {ExtensionPoint} from "data/types";
+import Text from "data/types/Text";
+
+const formMetadata = [
+        {name: "type",
+         label: ExtensionPoint.toLabel("type"),
+        readOnly: true},
+        {name: "active",
+         label: ExtensionPoint.toLabel("active"),
+         type: Boolean
+        },
+        {name: "script",
+        label: ExtensionPoint.toLabel("script"),
+        type: Text
+        }
+
+];
 
 export default class ExtensionPointForm extends React.Component {
 
@@ -14,15 +30,9 @@ export default class ExtensionPointForm extends React.Component {
 
     }
 
-    handleChange(field, e) {
+    handleChange(field, value) {
         let {formData} = this.state;
-        var value = null;
-        if (field === "active") {
-            value = (e.target.checked);
-        } else {
-            value = e.target.value;
-        }
-        let newFormData = formData.set(field, value);
+        let newFormData = formData.set(field.name, value);
         this.setState({formData: newFormData});
     }
 
@@ -32,12 +42,10 @@ export default class ExtensionPointForm extends React.Component {
 
     render() {
         let {formData} = this.state;
-        var title = formData ? "Edit Worker" : "Not Found";
         return (
-                <div>
-                    <Input type="text" readonly={true} label={ExtensionPoint.toLabel("type")} name="type" value={formData.get("type")} />
-                <Checkbox label={ExtensionPoint.toLabel("active")} name="active" value={formData.get("active")} onChange={this.handleChange.bind(this, "active")}/>
-                <TextArea label={ExtensionPoint.toLabel("script")} name="script" value={formData.get("script")} rows="10" onChange={this.handleChange.bind(this, "script")}/>
+            <div>
+                <FormFields formMetadata={formMetadata} formData={formData} handleChange={this.handleChange.bind(this)} />
+
                 </div>
             );
     }
