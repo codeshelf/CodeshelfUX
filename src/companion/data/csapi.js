@@ -139,6 +139,13 @@ export function createUser(data) {
                                    data: data});
 }
 
+export function updateUser(id, data) {
+    return ajax("/api/users/"+id, {method: 'POST',
+                               contentType: "form", //superagent forum url encoded
+                               data: data});
+}
+
+
 export function  resendNewUserEmail(userId) {
     return ajax("/api/users/"+userId +"/resend", {method: 'POST'});
     }

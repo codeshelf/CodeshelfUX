@@ -12,13 +12,16 @@ export default class FormFields extends React.Component{
     renderMultiSelect(objField, index, value, handleChange, disabled) {
         if (objField.type === Array) {
             let {name, label, required, readonly, options} = objField;
+            function handleMultiSelectChange(values) {
+                handleChange(objField, values.toJS());
+            }
             return (
                 <MultiSelect label={label}
                         key={name}
                         name={name}
                         options={options}
                         values={value}
-                        onChange={handleChange}/>
+                        onChange={handleMultiSelectChange}/>
             );
         } else {
             return null;

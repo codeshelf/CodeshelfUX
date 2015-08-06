@@ -3,11 +3,13 @@ import DocumentTitle from "react-document-title";
 import ModalForm from "components/common/ModalForm";
 import FormFields from "components/common/FormFields";
 import {Map} from "immutable";
-import {createUser} from "data/csapi";
 import _ from "lodash";
 
 export const formMetadata = [
-    {name: "username",
+    {name: "id",
+     label: "ID",
+     hidden: true},
+     {name: "username",
      label: "Email",
      required: true},
     {name: "active",
@@ -16,37 +18,32 @@ export const formMetadata = [
      required: true},
     {name: "roles",
      label: "Roles",
-     options:[{name: "Admin", label: "Admin"},
-              {name: "Companion", label: "Companion"},
+     options:[{value: "Admin", label: "Admin"},
+              {value: "Companion", label: "Companion"},
              ],
      type: Array,
      required: false}
 ];
 
-export function toUserModalForm(title, formMetadata, returnRoute) {
+export function toUserModalForm(title, formMetadata, returnRoute, handleSave) {
     class UserForm extends React.Component{
 
         constructor(props) {
             super(props);
-            this.handleSave = this.handleSave.bind(this);
             this.handleChange = this.handleChange.bind(this);
             this.state = {formData: Map()};
         }
 
         handleChange(field, value) {
-            let newFormData = this.state.formData.set(field.name, value);
+                let newFormData = this.state.formData.set(field.name, value);
             this.setState({formData: newFormData});
-        }
-
-        handleSave(formData) {
-            return createUser(formData.toJS());
         }
 
         render() {
             let {formData} = this.state;
             return (<DocumentTitle title={title}>
                     <ModalForm title={title} returnRoute={returnRoute}
-                     onSave={_.partial(this.handleSave, formData)}
+                     onSave={_.partial(handleSave, formData)}
                      formData={formData}>
 
                     <FormFields formMetadata={formMetadata}
