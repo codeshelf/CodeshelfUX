@@ -66,8 +66,8 @@ class ModalForm extends React.Component{
                         }
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button  onClick={onHide}>Cancel</Button>
-                            <Button type="submit" bsStyle="primary" >{label}</Button>
+                            <Button  id="cancel" onClick={onHide}>Cancel</Button>
+                            <Button id="submit" type="submit" bsStyle="primary" >{label}</Button>
                         </Modal.Footer>
                     </form>);
     }
