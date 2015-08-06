@@ -4,6 +4,7 @@ import DocumentTitle from "react-document-title";
 import {getUsers, resendNewUserEmail} from "data/csapi";
 import {Button} from "components/common/bootstrap";
 import {EditButtonLink, AddButtonLink} from 'components/common/TableButtons';
+import ListManagement from "components/common/list/ListManagement";
 import ListView from "components/common/list/ListView";
 import {properties, keyColumn} from "data/types/User";
 import {fromJS} from "immutable";
@@ -28,18 +29,19 @@ export default class Users extends React.Component{
         let columnsCursor  = state.cursor(["preferences", "users", "table", "columns"]);
         let columnSortSpecsCursor = state.cursor(["preferences", "users", "table", "sortSpecs"]);
         let columnMetadata = ListView.toColumnMetadataFromProperties(properties);
-        debugger;
-            return (<DocumentTitle title="Users">
+        return (<DocumentTitle title="Users">
                 <div>
-                    <AddButtonLink to="usernew" />
+                    <ListManagement
+                        addButtonRoute="usernew"
 
-                    <div>Users</div>
-                    <ListView results={users}
-                            columns={columnsCursor}
-                            sortSpecs={columnSortSpecsCursor}
-                            columnMetadata={columnMetadata}/>
+                        results={users}
+                        keyColumn={keyColumn}
+                        columns={columnsCursor}
+                        sortSpecs={columnSortSpecsCursor}
+                        columnMetadata={columnMetadata} />
+
                        <RouteHandler />
-                   </div>
+                </div>
 
 
                 </DocumentTitle>

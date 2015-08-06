@@ -158,10 +158,10 @@ export default class ListView extends React.Component{
 ListView.ColumnRecord = ColumnRecord;
 ListView.propTypes = {
     columns: React.PropTypes.func, //cursor
-    columnMetadata: ImmutablePropTypes.list.isRequired,
+    columnMetadata: ImmutablePropTypes.iterable.isRequired,
     sortSpecs: React.PropTypes.func, //cursor
     keyColumn: React.PropTypes.string.isRequired,
-    results: ImmutablePropTypes.list
+    results: ImmutablePropTypes.iterable
 };
 
 export
