@@ -1,18 +1,10 @@
-import {toUserModalForm} from "./UserForm.js";
+import {toUserModalForm, formMetadata} from "./UserForm.js";
+import _ from "lodash";
 
-const formMetadata = [
-    {name: "active",
-     label: "Active",
-     type: Boolean,
-     required: true},
-    {name: "roles",
-     label: "Roles",
-     options:[{name: "Admin", label: "Admin"},
-              {name: "Companion", label: "Companion"},
-             ],
-     type: Array,
-     required: false}];
+const fields = ["active", "roles"];
+
+const metadata = _.filter(formMetadata, (m) => fields.indexOf(m.name) >= 0);
 const title = "Edit User";
 const returnRoute = "users";
 
-export default toUserModalForm(title, formMetadata, returnRoute);
+export default toUserModalForm(title, metadata, returnRoute);

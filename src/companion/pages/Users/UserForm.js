@@ -6,6 +6,23 @@ import {Map} from "immutable";
 import {createUser} from "data/csapi";
 import _ from "lodash";
 
+export const formMetadata = [
+    {name: "username",
+     label: "Email",
+     required: true},
+    {name: "active",
+     label: "Active",
+     type: Boolean,
+     required: true},
+    {name: "roles",
+     label: "Roles",
+     options:[{name: "Admin", label: "Admin"},
+              {name: "Companion", label: "Companion"},
+             ],
+     type: Array,
+     required: false}
+];
+
 export function toUserModalForm(title, formMetadata, returnRoute) {
     class UserForm extends React.Component{
 
