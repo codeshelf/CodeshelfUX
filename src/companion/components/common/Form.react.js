@@ -139,7 +139,7 @@ export class Checkbox extends React.Component {
     }
 };
 
-export class MultiSelect extends PureComponent {
+export class MultiSelectUnwrapped extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {values: (props.values) ? List(props.values) : List()};
@@ -174,8 +174,16 @@ export class MultiSelect extends PureComponent {
                                 </div>
                 })
             }
-        </div>
+            </div>
         );
+    }
+}
+
+export class MultiSelect extends PureComponent {
+    render() {
+        return <WrapInput {...this.props}>
+                   <MultiSelectUnwrapped {...this.props} />
+               </WrapInput>
     }
 }
 

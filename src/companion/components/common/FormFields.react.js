@@ -1,12 +1,27 @@
 import  React from "react";
 import DocumentTitle from "react-document-title";
-    import {Input, Checkbox, TextArea} from "components/common/Form";
+import {Input, Checkbox, TextArea, MultiSelect} from "components/common/Form";
 import Text from "data/types/Text";
 
 export default class FormFields extends React.Component{
 
     constructor(props) {
         super(props);
+    }
+
+    renderMultiSelect(objField, index, value, handleChange, disabled) {
+        if (objField.type === Array) {
+            let {name, label, required, readonly, options} = objField;
+            return (
+                <MultiSelect label={label}
+                        name={name}
+                        options={options}
+                        values={value}
+                        onChange={handleChange}/>
+            );
+        } else {
+            return null;
+        }
     }
 
     renderTextArea(objField, index, value, handleChange, disabled) {
@@ -26,8 +41,6 @@ export default class FormFields extends React.Component{
     }
 
     renderBooleanInput(objField, index, value, handleChange, disabled){
-
-
         if (objField.type === Boolean) {
             let {name, label, required, readonly} = objField;
             function handleCheckboxChange(e) {
@@ -78,6 +91,7 @@ export default class FormFields extends React.Component{
                         let value= formData.get(objField.name);
                         return this.renderCustomInput( objField, i, value, handleChange, savePending)
                             || this.renderBooleanInput(objField, i, value, handleChange, savePending)
+                            || this.renderMultiSelect( objField, i, value, handleChange, savePending)
                             || this.renderTextArea(    objField, i, value, handleChange, savePending)
                             || this.renderTextInput(   objField, i, value, handleChange, savePending);
                     })

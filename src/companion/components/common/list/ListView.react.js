@@ -6,7 +6,7 @@ import Icon from "react-fa";
 import _ from "lodash";
 import {Map, List, fromJS, Record, Seq, Iterable} from "immutable";
 import {Table} from "components/common/Table";
-import {MultiSelect, Input} from 'components/common/Form';
+import {MultiSelectUnwrapped, Input} from 'components/common/Form';
 import PureComponent from 'components/common/PureComponent';
 import {Row, Col} from 'components/common/pagelayout';
 
@@ -155,16 +155,6 @@ export default class ListView extends React.Component{
     }
 };
 
-ListView.ColumnRecord = ColumnRecord;
-ListView.propTypes = {
-    columns: React.PropTypes.func, //cursor
-    columnMetadata: ImmutablePropTypes.iterable.isRequired,
-    sortSpecs: React.PropTypes.func, //cursor
-    keyColumn: React.PropTypes.string.isRequired,
-    results: ImmutablePropTypes.iterable
-};
-
-export
 
 class TableSettings extends PureComponent {
 
@@ -178,7 +168,7 @@ class TableSettings extends PureComponent {
                 <Row>
                 <Col sm={12} >
                 <DropdownButton className="pull-right" title={<Icon name="gear" />}>
-                <MultiSelect options={options} values={columns} onChange={onColumnsChange}/>
+                    <MultiSelectUnwrapped options={options} values={columns} onChange={onColumnsChange}/>
                 </DropdownButton>
                 </Col>
                 </Row>
@@ -186,3 +176,13 @@ class TableSettings extends PureComponent {
         );
     }
 }
+
+ListView.TableSettings = TableSettings;
+ListView.ColumnRecord = ColumnRecord;
+ListView.propTypes = {
+    columns: React.PropTypes.func, //cursor
+    columnMetadata: ImmutablePropTypes.iterable.isRequired,
+    sortSpecs: React.PropTypes.func, //cursor
+    keyColumn: React.PropTypes.string.isRequired,
+    results: ImmutablePropTypes.iterable
+};
