@@ -22,7 +22,7 @@ export class AddButtonLink extends React.Component{
     }
 
     render() {
-        return (<ButtonLink bsStyle="primary" {...this.props}>
+        return (<ButtonLink bsStyle="primary" {...this.props} id="add" >
                 <Icon name="plus" />
                 </ButtonLink>);
     }

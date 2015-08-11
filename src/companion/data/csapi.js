@@ -83,6 +83,18 @@ function toAbsoluteURL(path) {
     return endpoint + path;
 }
 
+export function setupPassword(newPassword, queryData) {
+    queryData.new = newPassword;
+    var options = {
+        method: 'POST',
+        contentType: "form", //superagent forum url encoded
+        data: queryData
+    };
+    return ajax("/auth/pw", options);
+
+};
+
+
 export function changePassword(oldPassword, newPassword) {
     var options = {
         method: 'POST',
@@ -116,6 +128,32 @@ export function logout() {
 export function getUser() {
     return ajax("/auth/");
 };
+
+export function getUsers() {
+    return ajax("/api/users");
+};
+
+export function createUser(data) {
+        return ajax("/api/users", {method: 'POST',
+                                   contentType: "form", //superagent forum url encoded
+                                   data: data});
+}
+
+export function updateUser(id, data) {
+    return ajax("/api/users/"+id, {method: 'POST',
+                               contentType: "form", //superagent forum url encoded
+                               data: data});
+}
+
+
+export function  resendNewUserEmail(userId) {
+    return ajax("/api/users/"+userId +"/resend", {method: 'POST'});
+    }
+
+export function getAvailableSecurityQuestions(data) {
+    return ajax("/auth/questions", {data: data});
+}
+
 
 export function getFacilities() {
     return ajax("/api/facilities");

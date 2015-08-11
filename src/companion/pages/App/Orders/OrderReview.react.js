@@ -2,11 +2,11 @@ import  React from "react";
 import {DropdownButton} from "react-bootstrap";
 import Icon from "react-fa";
 import _ from "lodash";
-    import {Map, List, fromJS, Record, Seq} from "immutable";
+import {Map, List, fromJS, Record, Seq} from "immutable";
 import {getFacilityContext} from "data/csapi";
 import {StatusSummary} from "data/types";
 import {Table} from "components/common/Table";
-import {MultiSelect, Input} from 'components/common/Form';
+import ListView from "components/common/list/ListView";
 import DateDisplay from 'components/common/DateDisplay';
 import PureComponent from 'components/common/PureComponent';
 import {Row, Col} from 'components/common/pagelayout';
@@ -162,7 +162,7 @@ export default class OrderReview extends React.Component{
         let {columnMetadata} = this;
 
         return (<div>
-                <TableSettings onColumnsChange={columns}
+                <ListView.TableSettings onColumnsChange={columns}
                     columns={columns()}
                     columnMetadata={columnMetadata} />
                 <Table results={orders}
@@ -179,24 +179,3 @@ export default class OrderReview extends React.Component{
                 </div>);
     }
 };
-
-class TableSettings extends PureComponent {
-
-    render() {
-        let {columns, columnMetadata, onColumnsChange} = this.props;
-        let options = columnMetadata.map((columnMetadata) => {
-            return {label: columnMetadata.get("displayName"), value: columnMetadata.get("columnName")};
-        });
-
-        return (
-                <Row>
-                <Col sm={12} >
-                <DropdownButton className="pull-right" title={<Icon name="gear" />}>
-                <MultiSelect options={options} values={columns} onChange={onColumnsChange}/>
-                </DropdownButton>
-                </Col>
-                </Row>
-
-        );
-    }
-}

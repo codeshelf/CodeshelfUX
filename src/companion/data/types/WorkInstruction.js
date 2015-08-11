@@ -1,9 +1,8 @@
-import {fromJS, Record, Seq, Iterable} from "immutable";
-import {PropertyRecord} from "./properties";
-import DateTime from "./DateTime";
+import {toProperties, createTypeRecord} from "./properties";
+import DateTime from "data/types/DateTime";
 
 export const keyColumn = "persistentId";
-export const properties = fromJS([
+export const properties = toProperties([
     {'id':    'groupAndSortCode',
      'title': 'Sort'},
     {'id': 'pickerId',
@@ -60,15 +59,6 @@ export const properties = fromJS([
      'title': 'Needs Scan'},
     {'id': 'store',
      'title': 'Store'}
-], (key, value) => {
-    if (Iterable.isKeyed(value)) {
-        return PropertyRecord(value);
-    } else {
-        return value;
-    }
-});
+]);
 
-export const WorkInstructionRecord = Record(Seq(properties).reduce((spec, metadata) => {
-    spec[metadata.id] = null;
-    return spec;
-}, {}));
+export const WorkInstructionRecord = createTypeRecord(properties);

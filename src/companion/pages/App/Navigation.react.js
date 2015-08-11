@@ -15,9 +15,6 @@ const AuthzNavItemLink = authz(NavItemLink);
 const AuthzNavItem = authz(NavItem);
 require('./navigation.styl');
 
-
-
-
 class NavbarHeader extends PureComponent {
     render() {
         let {title = ""}  = this.props;
@@ -67,7 +64,6 @@ MenuItem.contextTypes = {
     router: React.PropTypes.func.isRequired
 }
 
-const AuthzMenuItem = authz(MenuItem);
 class Navigation extends React.Component {
   componentWillMount() {
       document.body.classList.add("fixed-sidebar");
@@ -85,18 +81,7 @@ class Navigation extends React.Component {
               <NavbarHeader {...this.props} />
               <div className="sidebar-menu">
                   <ul className="menu-items">
-                      <AuthzMenuItem className="m-t-30" to="overview" params={params} title="Overview" iconName="clock-o" />
-                  <AuthzMenuItem to="orders" params={params} title="Orders" iconName="shopping-cart" />
-                  <AuthzMenuItem to="workinstructions" params={params} title="WorkInstructions" iconName="barcode" />
-                      <AuthzMenuItem permission="event:view"  to="blockedwork" params={params} title="Issues" iconName="exclamation-circle"/ >
-                      <AuthzMenuItem permission="event:view" to="workresults" params={params} title="Pick Rates" iconName="pie-chart" />
-                      <AuthzMenuItem permission="worker:view" to="workermgmt" params={params} title="Workers" iconName="users" />
-                      <AuthzMenuItem  to="import" params={params} title="Imports" iconName="file-text" />
-
-                      <AuthzMenuItem permission="facility:edit" to="extensionpoints" params={params} title="Extensions" iconName="code" />
-
-                      <AuthzMenuItem permission="ux:view" href={this.getUXUrl()} params={params} title="Configuration" iconName="cogs" />
-                      <AuthzMenuItem permission="che:simulate" to="testscript" params={params} title="Test Scripts" iconName="bug" />
+                      {this.props.children}
               </ul>
             </div>
         </nav>
@@ -105,4 +90,6 @@ class Navigation extends React.Component {
 
 };
 
-export default exposeRouter(Navigation);
+var NavigationWithRouter = exposeRouter(Navigation);
+NavigationWithRouter.AuthzMenuItem = authz(MenuItem);
+export default NavigationWithRouter;

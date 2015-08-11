@@ -10,19 +10,19 @@ import {isLoggedIn, getStoredCredentials} from 'data/user/store';
 import {validate} from 'validation';
 import {ValidationError} from 'lib/validation';
 
-import {changePassword} from "data/csapi";
-const title = "Change Password";
-const fields = [{name: "old", label: "Current Password"},
-                {name: "new", label: "New Password"},
+import {setupPassword} from "data/csapi";
+const title = "Set Password";
+const fields = [{name: "new", label: "New Password"},
                 {name: "confirm", label: "Confirm Password"}
-                ];
-const statePath = ["auth", "changepassword"];
+                    ];
+const statePath = ["auth", "setuppassword"];
 function executePasswordAction(props, form) {
-    return changePassword(form.getIn(["values", "old"]),  form.getIn(["values", "new"]));
-
+    let queryData = props.router.getCurrentQuery();
+    let newPassword = form.getIn(["values", "new"]);
+    return setupPassword(newPassword, queryData);
 }
 
-class ChangePassword extends React.Component {
+class SetupPassword extends React.Component {
 
   componentWillUnmount() {
       this.resetForm(this.getFormCursor());
@@ -39,7 +39,7 @@ class ChangePassword extends React.Component {
   handleSubmit(formCursor) {
     const nextPath = this.props.router.getCurrentQuery().nextPath;
       validate(formCursor().get("values").toJS()).prop("new").matchesProp("confirm").promise
-          .then(() =>{
+              .then(() =>{
               return executePasswordAction(this.props, formCursor());
           }.bind(this))
           .then(() => {
@@ -84,7 +84,6 @@ class ChangePassword extends React.Component {
 
   render() {
     let formCursor = this.getFormCursor();
-
     return (<DocumentTitle title={title}>
             <div className="register-container full-height sm-p-t-30">
                 <div className="container-sm-height full-height">
@@ -95,12 +94,12 @@ class ChangePassword extends React.Component {
                 e.preventDefault();
                 this.handleSubmit(formCursor);
                 }}>
-                {
-                    fields.map((field) => {
-                        let {name, label} = field;
-                        return this.renderPasswordField(formCursor(), name, label);
-                    })
-                }
+                        {
+                            fields.map((field) => {
+                                let {name, label} = field;
+                                return this.renderPasswordField(formCursor(), name, label);
+                            })
+                        }
                 <button type="submit" disabled={executePasswordAction.pending} className="btn btn-primary btn-cons m-t-10">{title}</button>
             </form>
                         </div>
@@ -115,7 +114,7 @@ class ChangePassword extends React.Component {
       let values = form.get("values");
       let errors = form.get("errors");
       return (
-          <Row>
+          <Row key={id}>
               <Col sm={12}>
                   <Input id={id}
                    label={label}
@@ -133,8 +132,8 @@ class ChangePassword extends React.Component {
 
 }
 
-ChangePassword.propTypes = {
+SetupPassword.propTypes = {
   router: React.PropTypes.func
 };
 
-export default exposeRouter(ChangePassword);
+export default exposeRouter(SetupPassword);

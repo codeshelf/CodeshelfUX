@@ -1,5 +1,6 @@
 import React from 'react';
 import {isLoggedIn, hasPermission} from 'data/user/store';
+import exposeRouter from 'components/common/exposerouter';
 
 // Higher order component.
 // https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750
@@ -14,12 +15,31 @@ export function authn(Component) {
             }
         }
 
+        componentWillMount() {
+            this.handleRouting(this.props);
+        }
+
+        componentWillReceiveProps(nextProps) {
+            this.handleRouting(nextProps);
+        }
+
+        handleRouting(props) {
+            var router = props.router;
+            var currentPath = router.getCurrentPath();
+            var params = router.getCurrentParams();
+            if (!isLoggedIn()) {
+                var nextPath = currentPath;
+                console.log("not authenticated to reach " + nextPath);
+                router.transitionTo("login", {}, {nextPath: nextPath});
+            }
+        }
+
         render() {
-            return <Component {...this.props} />;
+            return isLoggedIn() && <Component {...this.props} />;
         }
     };
 
-    return Authn;
+    return exposeRouter(Authn);
 
 }
 

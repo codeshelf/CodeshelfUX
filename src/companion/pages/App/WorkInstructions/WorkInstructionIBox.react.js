@@ -31,17 +31,7 @@ export default class WorkInstructionIBox extends React.Component{
         this.handleDrillDown = this.handleDrillDown.bind(this);
 
         this.title = "Work Instructions";
-        this.columnMetadata = properties.map((property) => {
-            var  customComponent = null;
-            if (property.type === DateTime) {
-                customComponent = DateDisplay;
-            }
-            return new ListView.ColumnRecord({
-                    columnName: property.id,
-                    displayName: property.title,
-                    customComponent: customComponent
-            });
-        });
+        this.columnMetadata = ListView.toColumnMetadataFromProperties(properties);
     }
 
     componentDidMount() {
