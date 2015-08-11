@@ -1,5 +1,6 @@
 import React from 'react';
-import {Input as BSInput} from 'react-bootstrap';
+import Icon from 'react-fa';
+import {Input as BSInput, Button} from 'react-bootstrap';
 import PureComponent from 'components/common/PureComponent';
 import classnames from 'classnames';
 import _ from "lodash";
@@ -17,6 +18,58 @@ export class ErrorDisplay extends PureComponent {
         );
     }
 }
+
+export class SubmitButton extends React.Component {
+    render() {
+        let {label, submitPending}  = this.props;
+        return (<Button bsStyle="primary" type="submit" disable={submitPending}>
+                                <span>
+                                    {(submitPending) && <Icon name="spinner" style={{marginRight: ".5em"}} />}
+                                    {label}
+                                </span>
+                            </Button>);
+    }
+}
+
+
+export class Form extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            "submitPending" : false
+        };
+
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        this.setState({"submitPending": true});
+        return this.props.onSubmit(e).finally(() => {
+            this.setState({"submitPending": false});
+        });
+    }
+
+    recursiveCloneChildren(children, newProps) {
+        return React.Children.map(children, (child) => {
+            if(!_.isObject(child)) return child;
+            var childProps = _.clone(newProps);
+            childProps.children = this.recursiveCloneChildren(child.props.children, newProps);
+            return React.cloneElement(child, childProps);
+        }.bind(this));
+    }
+
+    render() {
+        let {submitPending} = this.state;
+        let {onSubmit, ...restProps} = this.props;
+        return (<form onSubmit={this.handleSubmit} {...restProps}>
+                {
+                    this.recursiveCloneChildren(this.props.children, {submitPending: submitPending})
+                }
+               </form>);
+    }
+}
+
 
 class  WrapInput extends React.Component {
     handleInputGroupClick(e) {

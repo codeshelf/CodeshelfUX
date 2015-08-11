@@ -2,7 +2,7 @@ import React from 'react';
 import DocumentTitle from 'react-document-title';
 import {Row, Col} from 'components/common/pagelayout';
 import exposeRouter from 'components/common/exposerouter';
-import {Input} from 'components/common/Form';
+import {Form, Input, SubmitButton} from 'components/common/Form';
 import {focusInvalidField} from '../../lib/validation';
 import {getForm} from 'data/auth/store';
 import {msg} from 'data/intl/store';
@@ -38,7 +38,7 @@ class SetupPassword extends React.Component {
 
   handleSubmit(formCursor) {
     const nextPath = this.props.router.getCurrentQuery().nextPath;
-      validate(formCursor().get("values").toJS()).prop("new").matchesProp("confirm").promise
+    return  validate(formCursor().get("values").toJS()).prop("new").matchesProp("confirm").promise
               .then(() =>{
               return executePasswordAction(this.props, formCursor());
           }.bind(this))
@@ -90,9 +90,9 @@ class SetupPassword extends React.Component {
                     <div className="row row-sm-height">
                         <div className="col-sm-12 col-sm-height col-middle">
                             <h1>{title}</h1>
-            <form id="changepassword-form" className="p-t-15" role="form" method="POST" onSubmit={(e) => {
+            <Form id="changepassword-form" className="p-t-15" role="form" method="POST" onSubmit={(e) => {
                 e.preventDefault();
-                this.handleSubmit(formCursor);
+                return this.handleSubmit(formCursor);
                 }}>
                         {
                             fields.map((field) => {
@@ -100,8 +100,8 @@ class SetupPassword extends React.Component {
                                 return this.renderPasswordField(formCursor(), name, label);
                             })
                         }
-                <button type="submit" disabled={executePasswordAction.pending} className="btn btn-primary btn-cons m-t-10">{title}</button>
-            </form>
+                        <SubmitButton label={title} />
+            </Form>
                         </div>
                     </div>
                 </div>

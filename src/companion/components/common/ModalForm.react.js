@@ -1,6 +1,8 @@
 import React from "react";
 import Icon from "react-fa";
 import {Modal, Button} from 'react-bootstrap';
+import {Form, SubmitButton} from 'components/common/Form';
+
 import exposeRouter from 'components/common/exposerouter';
 
 class ModalForm extends React.Component{
@@ -8,7 +10,6 @@ class ModalForm extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            "savePending" : false,
             "show": true
         };
 
@@ -18,8 +19,7 @@ class ModalForm extends React.Component{
     }
 
     handleClose() {
-        this.setState({"savePending": false,
-               "show": false});
+        this.setState({"show": false});
         //Transition away, so make sure unmount tears down the modal
         let routeName = this.props.returnRoute;
         let params = this.props.router.getCurrentParams();
@@ -28,8 +28,7 @@ class ModalForm extends React.Component{
 
     handleSave(e) {
         e.preventDefault();
-        this.setState({"savePending": true});
-        this.props.onSave().then(() => {
+        return this.props.onSave().then(() => {
             this.handleClose();
         });
     }
@@ -46,7 +45,7 @@ class ModalForm extends React.Component{
 ;        return (
                 <Modal ref="modal" show={show} title={modalTitle} onHide={this.handleClose}>
                     <Modal.Header><h5>{modalTitle}</h5></Modal.Header>
-                    { formData ? this.renderForm(formData, this.renderSaveButtonContent(), this.handleSave, this.handleClose ) : this.renderNotFound()}
+                    { formData ? this.renderForm(formData, this.handleSave, this.handleClose ) : this.renderNotFound()}
                 </Modal>
             );
     }
@@ -58,8 +57,8 @@ class ModalForm extends React.Component{
                );
     }
 
-        renderForm(formData, label, onSave, onHide) {
-            return (<form onSubmit={onSave}>
+        renderForm(formData, onSave, onHide) {
+            return (<Form onSubmit={onSave}>
                         <Modal.Body>
                         {
                             this.props.children
@@ -67,21 +66,10 @@ class ModalForm extends React.Component{
                         </Modal.Body>
                         <Modal.Footer>
                             <Button  id="cancel" onClick={onHide}>Cancel</Button>
-                            <Button id="submit" type="submit" bsStyle="primary" >{label}</Button>
+                            <SubmitButton label="Save"></SubmitButton>
                         </Modal.Footer>
-                    </form>);
+                    </Form>);
     }
-
-    renderSaveButtonContent() {
-        if (this.state.savePending) {
-            return (<span><Icon name="spinner" spin/> Saving...</span>);
-        }
-        else {
-            return "Save";
-        }
-    }
-
-
 };
 
 export default exposeRouter(ModalForm);

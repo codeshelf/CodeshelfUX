@@ -2,7 +2,8 @@ import React from 'react';
 import DocumentTitle from 'react-document-title';
 import {Row, Col} from 'components/common/pagelayout';
 import exposeRouter from 'components/common/exposerouter';
-import {ErrorDisplay, Input} from 'components/common/Form';
+import {Form, SubmitButton, ErrorDisplay, Input} from 'components/common/Form';
+
 import {focusInvalidField} from '../../lib/validation';
 import {getForm} from 'data/auth/store';
 import {msg} from 'data/intl/store';
@@ -50,7 +51,7 @@ class Login extends React.Component {
 
   handleLogin(fields) {
     const nextPath = this.props.router.getCurrentQuery().nextPath;
-    login(fields)
+    return login(fields)
       .then(() => {
         // TODO: Probably use hard reload for Chrome to remember password.
         // https://code.google.com/p/chromium/issues/detail?id=43219#c56
@@ -71,9 +72,9 @@ class Login extends React.Component {
                         {form.error &&
                             <ErrorDisplay message={form.error.message} />}
 
-            <form id="login-form" className="p-t-15" role="form" method="POST" onSubmit={(e) => {
+            <Form id="login-form" className="p-t-15" role="form" method="POST" onSubmit={(e) => {
                 e.preventDefault();
-                this.handleLogin(form.fields);
+                return this.handleLogin(form.fields);
             }}>
                 <input type="hidden" name="store" defaultValue={form.fields.store} />
                 <Row>
@@ -102,8 +103,8 @@ class Login extends React.Component {
                              />
                     </Col>
                 </Row>
-                <button type="submit" disabled={login.pending} className="btn btn-primary btn-cons m-t-10">Login</button>
-            </form>
+                <SubmitButton label="Login" />
+            </Form>
             <p className="m-t"> <small>Codeshelf &copy; 2015</small> </p>
 
                         </div>
