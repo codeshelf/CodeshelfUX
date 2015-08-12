@@ -83,6 +83,7 @@ class  WrapInput extends React.Component {
         let {label,
              name,
              required,
+             hidden,
              errors = [],
              addOnAfter} = this.props;
 
@@ -96,10 +97,10 @@ class  WrapInput extends React.Component {
             "required": required
         });
 
-
+        let style = (hidden) ? {display: "none"} : {};
         return (
                 <div>
-                    <div className={groupClasses} onClick={this.handleInputGroupClick.bind(this)}>
+                    <div className={groupClasses} style={style} onClick={this.handleInputGroupClick.bind(this)}>
                         <label htmlFor={name} className={labelClasses}>{label}</label>
                         {this.props.children}
                     </div>
@@ -125,6 +126,7 @@ export class Input extends React.Component {
              disabled,
              onChange,
              readOnly,
+             hidden,
              addOnAfter} = this.props;
 
         var inputClasses = classnames({
@@ -141,9 +143,9 @@ export class Input extends React.Component {
         var labelClasses = classnames({
             "required": required
         });
-
-        return (<WrapInput label={label} name={name} required={required} errors={errors} addOnAfter={addOnAfter}>
-                    <input type={type}
+        var inputType = (hidden) ? "hidden" : type;
+            return (<WrapInput label={label} name={name} required={required} errors={errors} hidden={hidden} addOnAfter={addOnAfter}>
+                    <input type={inputType}
                            className={inputClasses}
                            required={required}
                            autoFocus={autoFocus}

@@ -7,20 +7,28 @@ import {EditButtonLink, AddButtonLink} from 'components/common/TableButtons';
 import ListManagement from "components/common/list/ListManagement";
 import ListView from "components/common/list/ListView";
 import {properties, keyColumn} from "data/types/User";
-import {fromJS} from "immutable";
+import {fromJS, List} from "immutable";
 
 export default class Users extends React.Component{
 
     constructor(props) {
         super(props);
-        this.state = {users: []};
+        this.state = {users: List()};
 
     }
 
-    componentDidMount() {
-        getUsers().then((users) => {
+    updateUsers() {
+        return getUsers().then((users) => {
             this.setState({users: fromJS(users)});
         });
+    }
+
+    componentWillMount() {
+        this.updateUsers();
+    }
+
+    componentWillReceiveProps() {
+        this.updateUsers();
     }
 
     render() {
@@ -48,7 +56,7 @@ export default class Users extends React.Component{
                         sortSpecs={columnSortSpecsCursor}
                         columnMetadata={columnMetadata} />
 
-                       <RouteHandler />
+                <RouteHandler users={users}/>
                 </div>
                 </DocumentTitle>
                );

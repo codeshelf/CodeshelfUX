@@ -20,27 +20,29 @@ export const formMetadata = [
      label: "Roles",
      options:[{value: "Admin", label: "Admin"},
               {value: "Companion", label: "Companion"},
+              {value: "Dashboard", label: "Dashboard"}
              ],
      type: Array,
      required: false}
 ];
 
-export function toUserModalForm(title, formMetadata, returnRoute, handleSave) {
+export function toUserModalForm(defaultTitle, formMetadata, returnRoute, handleSave) {
     class UserForm extends React.Component{
 
         constructor(props) {
             super(props);
             this.handleChange = this.handleChange.bind(this);
-            this.state = {formData: Map()};
+            this.state = {formData: this.props.initialFormData || Map()};
         }
 
         handleChange(field, value) {
-                let newFormData = this.state.formData.set(field.name, value);
+            let newFormData = this.state.formData.set(field.name, value);
             this.setState({formData: newFormData});
         }
 
         render() {
             let {formData} = this.state;
+            let {title = defaultTitle} = this.props;
             return (<DocumentTitle title={title}>
                     <ModalForm title={title} returnRoute={returnRoute}
                      onSave={_.partial(handleSave, formData)}

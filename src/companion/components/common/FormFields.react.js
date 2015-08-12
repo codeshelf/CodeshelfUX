@@ -58,7 +58,7 @@ export default class FormFields extends React.Component{
     }
 
     renderTextInput(objField, index, value, handleChange, disabled) {
-        let {name, label, required, readOnly} = objField;
+        let {name, label, required, hidden, readOnly} = objField;
         function handleInputTextChange(e) {
             handleChange(objField, e.target.value);
         }
@@ -70,6 +70,7 @@ export default class FormFields extends React.Component{
                  value={value}
                  required={required}
                  disabled={disabled}
+                 hidden={hidden}
                  readOnly={readOnly}
                  autoFocus={index == 0}
                  onChange={handleInputTextChange}
