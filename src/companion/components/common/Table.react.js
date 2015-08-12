@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react/addons";
 var _ = require('lodash');
 var Immutable = require('immutable');
 //require("tablesaw/dist/tablesaw.css");
@@ -8,6 +8,8 @@ import classnames from 'classnames';
 import Icon from "react-fa";
 import { DragSource, DropTarget} from 'react-dnd';
 import PureComponent from 'components/common/PureComponent';
+
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 //TODO likely need better performing index of metadata
 function toShownColumns(columnMetadata, columns) {
@@ -284,7 +286,7 @@ var Table = React.createClass({
                                 sortedBy={sortedBy}
                                 onColumnMove={onColumnMove}
                                 onColumnClick={this.handleColumnClick}/>
-                    <tbody>
+                <ReactCSSTransitionGroup transitionName="newrow" component="tbody">
                             {
                                rows.map(function(row, i) {
                                    var rowNumber = i;
@@ -309,8 +311,8 @@ var Table = React.createClass({
                                        return (<Row ref={"row" + rowNumber} key={id} onClick={onRowExpand} {...childProps} expanded={false}/>);
                                    }
                                }).flatten(true).toJS()
-                            }
-                    </tbody>
+                               }
+                </ReactCSSTransitionGroup>
                     </table>
         );
     },
