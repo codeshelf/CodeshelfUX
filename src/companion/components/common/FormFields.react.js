@@ -2,6 +2,7 @@ import  React from "react";
 import DocumentTitle from "react-document-title";
 import {Input, Checkbox, TextArea, MultiSelect} from "components/common/Form";
 import Text from "data/types/Text";
+import {Map} from "immutable";
 
 export default class FormFields extends React.Component{
 
@@ -88,7 +89,7 @@ export default class FormFields extends React.Component{
     }
 
     render() {
-        let {formMetadata, formData, savePending, handleChange} = this.props;
+        let {formMetadata, formData = Map(), savePending, handleChange = () => {}} = this.props;
         return (
                 <div>
                 {
@@ -103,4 +104,7 @@ export default class FormFields extends React.Component{
         }
         </div>);
     }
+};
+FormFields.propTypes = {
+    formMetadata: React.PropTypes.array.isRequired
 };
