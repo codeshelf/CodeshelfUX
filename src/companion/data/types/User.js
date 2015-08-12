@@ -1,5 +1,5 @@
 import {toProperties, createTypeRecord} from "./properties";
-
+import DateTime from "./DateTime.js";
 export const keyColumn = "id";
 export const properties = toProperties([
     {'id': 'username',
@@ -7,7 +7,10 @@ export const properties = toProperties([
     {'id': "active",
      title: "Active"},
      {'id': "roles",
-     title: "Roles"}
+    title: "Roles"},
+    {'id': "lastAuthenticated",
+     title: "Last Login",
+     type: DateTime}
      ]);
 
 export const UserRecord = createTypeRecord(properties);
