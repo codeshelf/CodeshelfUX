@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "react-fa";
-import {DropdownButton, NavItem, Button, MenuItem} from "react-bootstrap";
-import { NavItemLink, MenuItemLink} from 'react-router-bootstrap';
+import {DropdownButton, Nav, NavItem, Button, MenuItem} from "react-bootstrap";
+    import { NavItemLink, MenuItemLink, ButtonLink} from 'react-router-bootstrap';
 import {loggedout} from "data/auth/actions";
 //todo turn clearStoredCredentials into an action
 import {getEmail, isCredentialsStored, clearStoredCredentials} from "data/user/store";
@@ -11,6 +11,8 @@ function clearCredentials() {
     clearStoredCredentials();
     loggedout(false);
 }
+
+const AuthzButtonLink = authz(ButtonLink);
 
 export default class TopNavBar extends React.Component {
 
@@ -31,10 +33,15 @@ export default class TopNavBar extends React.Component {
                         </div>
                     </div>
                     <div className="pull-right">
+                            {
+                                (facilities) ?
+                                    <AuthzButtonLink permission="user:edit" bsStyle="link" to="users">Admin</AuthzButtonLink> :
+                                    <ButtonLink bsStyle="link" to="facilities">Facilities</ButtonLink>
+                            }
                             {(facilities) &&
                                 <FacilitySelector facility={facility} facilities={facilities} />}
-                            <UserProfileMenu user={user}/>
-                        </div>
+                                <UserProfileMenu user={user}/>
+                            </div>
                 </div>
         );
     }
