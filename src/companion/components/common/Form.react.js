@@ -24,7 +24,7 @@ export class SubmitButton extends React.Component {
         let {label, submitPending}  = this.props;
         return (<Button bsStyle="primary" type="submit" disable={submitPending}>
                                 <span>
-                                    {(submitPending) && <Icon name="spinner" style={{marginRight: ".5em"}} />}
+                                    {(submitPending) && <Icon name="spinner" style={{marginRight: ".5em"}} spin />}
                                     {label}
                                 </span>
                             </Button>);
