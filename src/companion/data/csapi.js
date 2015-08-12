@@ -83,6 +83,18 @@ function toAbsoluteURL(path) {
     return endpoint + path;
 }
 
+export function recoverPassword(email) {
+    let queryData = {u: email};
+    var options = {
+        method: 'POST',
+        contentType: "form", //superagent forum url encoded
+        data: queryData
+    };
+    return ajax("/auth/recovery/start", options);
+
+};
+
+
 export function setupPassword(newPassword, queryData) {
     queryData.new = newPassword;
     var options = {

@@ -1,6 +1,7 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import {Row, Col} from 'components/common/pagelayout';
+import {Link} from "react-router";
+import {FormPageLayout, Row, Col} from 'components/common/pagelayout';
 import exposeRouter from 'components/common/exposerouter';
 import {Form, SubmitButton, ErrorDisplay, Input} from 'components/common/Form';
 
@@ -63,12 +64,7 @@ class Login extends React.Component {
   render() {
     const form = getForm().toJS();
 
-    return (<DocumentTitle title="Login">
-            <div className="register-container full-height sm-p-t-30">
-                <div className="container-sm-height full-height">
-                    <div className="row row-sm-height">
-                        <div className="col-sm-12 col-sm-height col-middle">
-                        <h1>Codeshelf Companion</h1>
+    return (<FormPageLayout title="Codeshelf Companion">
                         {form.error &&
                             <ErrorDisplay message={form.error.message} />}
 
@@ -103,15 +99,15 @@ class Login extends React.Component {
                              />
                     </Col>
                 </Row>
+          <Row>
+          <Col sm={12} >
+              <Link to="recoverpassword" className="pull-right">Forgot Password</Link>
+          </Col>
+          </Row>
                 <SubmitButton label="Login" />
             </Form>
             <p className="m-t"> <small>Codeshelf &copy; 2015</small> </p>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </DocumentTitle>
+            </FormPageLayout>
     );
   }
 
