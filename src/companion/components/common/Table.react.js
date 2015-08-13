@@ -45,9 +45,11 @@ class Row extends PureComponent {
                         let key = metadata.get("columnName");
                         var value = row.get(key);
 
+                        value = (Immutable.Iterable.isIterable(value)) ? value.join(", ") : value;
                         value = (typeof value === "boolean") ? value.toString() : value;
-                        var CustomComponent = metadata.get("customComponent");
+
                         var valueRenderer = (<span>{value}</span>);
+                        var CustomComponent = metadata.get("customComponent");
                         if (CustomComponent) {
                             valueRenderer = ( <CustomComponent rowData={row} cellData={value} />);
                         }
