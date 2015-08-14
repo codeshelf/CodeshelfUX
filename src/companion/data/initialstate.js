@@ -19,7 +19,7 @@ const data = {
         version: "1.4",
         workInstructions: {
             table: {
-                columns: ["persistentId", "status"],
+                columns: ["itemMasterId", "status"],
                 sortSpecs: {}
             },
             pivot: {
