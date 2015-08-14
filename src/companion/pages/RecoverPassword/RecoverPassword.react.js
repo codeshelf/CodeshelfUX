@@ -5,6 +5,7 @@ import FormFields from "components/common/FormFields";
 import {Form, SubmitButton} from "components/common/Form";
 import {recoverPassword} from 'data/csapi';
 import {Map} from "immutable";
+import exposeRouter from 'components/common/exposerouter';
 
 const formMetadata = [
     {name: "u",
@@ -30,7 +31,10 @@ export default class RecoverPassword extends React.Component{
 
     handleSubmit(e) {
         e.preventDefault();
-        return recoverPassword(this.state.formData.get("u"));
+        return recoverPassword(this.state.formData.get("u"))
+            .then(() => {
+                this.props.router.transitionTo("recoversuccess");
+            });
     }
 
     render() {
@@ -44,3 +48,4 @@ export default class RecoverPassword extends React.Component{
     );
     }
 };
+export default exposeRouter(RecoverPassword);

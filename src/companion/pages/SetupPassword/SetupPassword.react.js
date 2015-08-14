@@ -1,6 +1,6 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import {Row, Col} from 'components/common/pagelayout';
+import {FormPageLayout, Row, Col} from 'components/common/pagelayout';
 import exposeRouter from 'components/common/exposerouter';
 import {Form, Input, SubmitButton} from 'components/common/Form';
 import {focusInvalidField} from '../../lib/validation';
@@ -84,12 +84,7 @@ class SetupPassword extends React.Component {
 
   render() {
     let formCursor = this.getFormCursor();
-    return (<DocumentTitle title={title}>
-            <div className="register-container full-height sm-p-t-30">
-                <div className="container-sm-height full-height">
-                    <div className="row row-sm-height">
-                        <div className="col-sm-12 col-sm-height col-middle">
-                            <h1>{title}</h1>
+    return (<FormPageLayout  title={title}>
             <Form id="changepassword-form" className="p-t-15" role="form" method="POST" onSubmit={(e) => {
                 e.preventDefault();
                 return this.handleSubmit(formCursor);
@@ -102,11 +97,7 @@ class SetupPassword extends React.Component {
                         }
                         <SubmitButton label={title} />
             </Form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </DocumentTitle>
+            </FormPageLayout>
     );
   }
 

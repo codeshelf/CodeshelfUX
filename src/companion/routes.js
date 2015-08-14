@@ -21,6 +21,8 @@ import UserEdit from './pages/Users/UserEdit.react.js';
 import SetupPassword from './pages/SetupPassword/SetupPassword.react.js';
 import ChangePassword from './pages/ChangePassword/ChangePassword.react.js';
 import RecoverPassword from './pages/RecoverPassword/RecoverPassword.react.js';
+import RecoverSuccess from './pages/RecoverSuccess/RecoverSuccess.react.js';
+
 import TestScript from './pages/App/TestScript/TestScript.react.js';
 import ExtensionPointsPage from "./pages/App/ExtensionPoints/ExtensionPointsPage.react.js";
 import ExtensionPointEdit from "./pages/App/ExtensionPoints/ExtensionPointEdit.react.js";
@@ -61,5 +63,6 @@ export default (
     <Route handler={SetupPassword} name="setuppassword" path="setuppassword"/>
     <Route handler={ChangePassword} name="changepassword" />
     <Route handler={RecoverPassword} name="recoverpassword" />
+    <Route handler={RecoverSuccess} name="recoversuccess" />
   </Route>
 );
