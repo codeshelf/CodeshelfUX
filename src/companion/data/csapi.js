@@ -217,6 +217,15 @@ export function getFacilityContext() {
             });
         },
 
+            updateEDISFTPOrders: function(config) {
+            let edipath = facilityPath + "/edigateways/" + config.domainId;
+            return ajax(edipath, {
+                method: "POST",
+                data: config,
+                contentType: "form"
+            });
+        },
+
         findOrders: function(filter) {
             return ajax(ordersPath, {
                 data: filter
