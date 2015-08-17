@@ -63,7 +63,7 @@ class ConfirmAction extends React.Component {
                         title={(inprogress) ? confirmInProgressLabel : confirmLabel}
                         confirmLabel={
                             (inprogress)
-                                ? <span>{confirmInProgressLabel} <Icon name="spinner" /></span>
+                                ? <span>{confirmInProgressLabel} <Icon name="spinner" spin /></span>
                                 : <span>{confirmLabel}</span>
                         }
                         onConfirm={this.handleConfirm}
