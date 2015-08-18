@@ -29,7 +29,7 @@ var SortSpec = Record({
     sortFunction: ascFunc
 });
 
-function toFullSortSpecs(columns, sortSpecs) {
+function toFullSortSpecs(columns = new Seq(), sortSpecs = new Map()) {
     return columns.reduce((fullSortSpecs, c) => {
         let columnName = c;
         let order = sortSpecs.getIn([columnName, "order"]);
@@ -154,7 +154,6 @@ export default class ListView extends React.Component{
                 </div>);
     }
 };
-
 
 class TableSettings extends PureComponent {
 
