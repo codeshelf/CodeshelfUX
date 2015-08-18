@@ -59,6 +59,10 @@ export default class WorkerMgmt extends React.Component{
                 customComponent: DateDisplay
             },
             {
+                columnName: "active",
+                displayName: "Active"
+            },
+            {
                 columnName: "action",
                 displayName: "",
                 customComponent:  ListManagement.toEditButton((row) => {
