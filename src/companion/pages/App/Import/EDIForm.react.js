@@ -5,39 +5,19 @@ import {Button} from "components/common/Form";
 import ModalForm from "components/common/ModalForm";
 import FormFields from "components/common/FormFields";
 import {getFacilityContext} from "data/csapi";
-const baseFormMetadata = [{name: "domainId",
-                          label: "ID",
-                          hidden: true},
-                      {name: "host",
-                       label: "Host",
-                       required: true},
-                      {name: "port",
-                       label: "Port"},
-                      {name: "username",
-                       label: "Username",
-                       required: true},
-                      {name: "password",
-                       label: "Password",
-                       required: true}
-                     ];
 
-
-export default class SFTPForm extends React.Component{
+export default class EDIForm extends React.Component{
 
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
         let {initialFormData} = props;
-        var formData = Map();
+        var formData = initialFormData || Map();
         if (initialFormData && initialFormData.get("passwordEnc")) {
             formData = initialFormData.set("password", "********");
         }
 
         this.state = {formData: formData};
-    }
-
-    static appendMetadata(toAppend) {
-        return baseFormMetadata.concat(toAppend);
     }
 
     handleSubmit(formData) {
@@ -70,7 +50,7 @@ export default class SFTPForm extends React.Component{
                         formData={formData}
                         handleChange={this.handleChange}/>
 
-
+                    {this.props.children}
                 </ModalForm>
                 </DocumentTitle>
                );

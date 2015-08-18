@@ -1,4 +1,3 @@
-import SFTPImportEdit from "./SFTPImportEdit.react.js";
 import {getFacilityContext} from "data/csapi";
 import {properties, keyColumn} from "data/types/EdiGateway";
 

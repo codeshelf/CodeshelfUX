@@ -232,6 +232,11 @@ export function getFacilityContext() {
             });
         },
 
+        startDropboxLink: function() {
+            let edipath = facilityPath + "/edigateways/DROPBOX/link";
+            return ajax(edipath);
+        },
+
         findOrders: function(filter) {
             return ajax(ordersPath, {
                 data: filter

@@ -1,7 +1,26 @@
 import  React from "react";
-import SFTPForm from "./SFTPForm";
+import {Button} from "components/common/bootstrap";
+import EDIForm from "./EDIForm";
 import {Map} from "immutable";
-const formMetadata = SFTPForm.appendMetadata([
+import {getFacilityContext} from "data/csapi";
+
+const baseFormMetadata = [{name: "domainId",
+                           label: "ID",
+                           hidden: true},
+                          {name: "host",
+                           label: "Host",
+                           required: true},
+                          {name: "port",
+                           label: "Port"},
+                          {name: "username",
+                           label: "Username",
+                           required: true},
+                          {name: "password",
+                           label: "Password",
+                           required: true}
+                         ];
+
+const sftpOrderFormMetadata = baseFormMetadata.concat([
                       {name: "importPath",
                        label: "Import Path",
                        required: true},
@@ -10,6 +29,28 @@ const formMetadata = SFTPForm.appendMetadata([
                        required: true}
 ]);
 
+const ironMQFormMetadata = [{name: "domainId",
+                             label: "ID",
+                                     hidden: true},
+                                     {name: "projectId",
+                             label: "Project ID",
+                             required: true},
+                            {name: "token",
+                             label: "Token",
+                             required: true}
+                     ];
+
+const dropboxFormMetadata = [{name: "domainId",
+                              label: "ID",
+                                      hidden: true},
+                                      {name: "code",
+                             label: "Activation",
+                                 required: true}
+                            ];
+
+
+const providerMap = new Map({"IRONMQ": ironMQFormMetadata,
+                             "DROPBOX": dropboxFormMetadata   });
 
 function toSelectedListItem() {
     class SelectedItem extends React.Component {
@@ -23,12 +64,28 @@ function toSelectedListItem() {
             let configJSON = new Map(JSON.parse(config))
                                  .set("domainId", id); //add domainId for form
 
-
-            let ComponentForm = SFTPForm; //or ironmq or dropbox <ComponentForm title={"Edit " + listItem.get("domainId")} initialFormData={configJSON} formMetadata={formMetadata}/>;
+            let provider = listItem.get("provider");
+            let formMetadata = providerMap.get(provider, sftpOrderFormMetadata);
+            return (<EDIForm title={"Edit " + listItem.get("domainId")} initialFormData={configJSON} formMetadata={formMetadata}>
+                       {(provider === "DROPBOX") && <DropboxLinkButton>Link</DropboxLinkButton>}
+                    </EDIForm>);
         }
     }
     return SelectedItem;
 }
 
-
 export default toSelectedListItem();
+
+class DropboxLinkButton extends React.Component {
+
+    handleClick() {
+        return getFacilityContext().startDropboxLink().then((urlObj) => {
+                window.open(urlObj.url, '_blank');
+            window.focus();
+        });
+    }
+
+    render() {
+        return (<Button type="button" onClick={this.handleClick.bind(this)}>Link</Button>);
+    }
+}
