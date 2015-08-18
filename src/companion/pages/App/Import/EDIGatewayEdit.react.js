@@ -29,6 +29,13 @@ const sftpOrderFormMetadata = baseFormMetadata.concat([
                        required: true}
 ]);
 
+const sftpWIFormMetadata = baseFormMetadata.concat([
+    {name: "exportPath",
+     label: "Export Path",
+     required: true}
+]);
+
+
 const ironMQFormMetadata = [{name: "domainId",
                              label: "ID",
                                      hidden: true},
@@ -49,8 +56,10 @@ const dropboxFormMetadata = [{name: "domainId",
                             ];
 
 
-const providerMap = new Map({"IRONMQ": ironMQFormMetadata,
-                             "DROPBOX": dropboxFormMetadata   });
+const domainIdMap = new Map({"IRONMQ": ironMQFormMetadata,
+                             "DROPBOX": dropboxFormMetadata,
+                             "SFTPORDERS": sftpOrderFormMetadata,
+                             "SFTPWIS": sftpWIFormMetadata});
 
 function toSelectedListItem() {
     class SelectedItem extends React.Component {
@@ -64,10 +73,9 @@ function toSelectedListItem() {
             let configJSON = new Map(JSON.parse(config))
                                  .set("domainId", id); //add domainId for form
 
-            let provider = listItem.get("provider");
-            let formMetadata = providerMap.get(provider, sftpOrderFormMetadata);
+            let formMetadata = domainIdMap.get(id, sftpOrderFormMetadata);
             return (<EDIForm title={"Edit " + listItem.get("domainId")} initialFormData={configJSON} formMetadata={formMetadata}>
-                       {(provider === "DROPBOX") && <DropboxLinkButton>Link</DropboxLinkButton>}
+                       {(id === "DROPBOX") && <DropboxLinkButton>Link</DropboxLinkButton>}
                     </EDIForm>);
         }
     }
