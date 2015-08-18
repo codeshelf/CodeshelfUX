@@ -14,6 +14,7 @@ import WorkerMgmt from './pages/App/WorkerMgmt/WorkerMgmt.react.js';
 import WorkerDisplay from './pages/App/WorkerMgmt/WorkerDisplay.react.js';
 import Import from './pages/App/Import/Import.react.js';
 import EDIGateways from './pages/App/Import/EDIGateways.react.js';
+import EDIGatewayEdit from './pages/App/Import/EDIGatewayEdit.react.js';
 import {authn} from './components/common/auth.js';
 import Login from './pages/Login/Login.react.js';
 import Users from './pages/Users/Users.react.js';
@@ -41,8 +42,11 @@ export default (
             <Route handler={BlockedWork} name="blockedwork"></Route>
             <Route handler={WorkResults} name="workresults" />
             <Route handler={Import} name="import" />
-            <Route handler={EDIGateways} name="edigateways" />
-            <Route handler={WorkerMgmt} name="workermgmt">
+            <Route handler={EDIGateways} name="edigateways">
+                <Route handler={EDIGatewayEdit} name="edigatewayedit" path=":id"/>
+            </Route>
+
+                <Route handler={WorkerMgmt} name="workermgmt">
                 <Route handler={WorkerDisplay} name="workernew" path="new" />
                 <Route handler={WorkerDisplay} name="workerdisplay" path=":workerId" />
             </Route>

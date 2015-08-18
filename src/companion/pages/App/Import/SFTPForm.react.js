@@ -22,10 +22,18 @@ const baseFormMetadata = [{name: "domainId",
                      ];
 
 
-export default class name extends React.Component{
+export default class SFTPForm extends React.Component{
 
     constructor(props) {
         super(props);
+        this.handleChange = this.handleChange.bind(this);
+        let {initialFormData} = props;
+        var formData = Map();
+        if (initialFormData && initialFormData.get("passwordEnc")) {
+            formData = initialFormData.set("password", "********");
+        }
+
+        this.state = {formData: formData};
     }
 
     static appendMetadata(toAppend) {
@@ -33,21 +41,26 @@ export default class name extends React.Component{
     }
 
     handleSubmit(formData) {
-        return getFacilityContext().updateEDISFTPOrders(formData.toJS());
+        var params = formData.toJS();
+        //don't save password if it hasn't been edited
+        if (params.password && params.password.replace(/\*+/, '').length == 0) { //all * replaced
+            delete params.password;
+        }
+        return getFacilityContext().updateEdiGateway(params);
     }
+
+    handleChange(field, value) {
+        let newFormData = this.state.formData.set(field.name, value);
+        this.setState({formData: newFormData});
+    }
+
+
 
     render() {
         let {title, formMetadata} = this.props;
-            let formData = Map({
-            domainId: "SFTPORDERS",
-            host: "sftp.codeshelf.com",
-            username: "test",
-            password: "m80isrq411",
-            importPath: "/out",
-            archivePath: "/out/archive"
-        });
-            return (<DocumentTitle title={title}>
-                <ModalForm title={"Configure" + title}
+        let {formData} = this.state;
+        return (<DocumentTitle title={title}>
+                <ModalForm title={title}
                         returnRoute="edigateways"
                         onSave={this.handleSubmit.bind(this, formData)}
                         formData={formData}>
@@ -55,7 +68,9 @@ export default class name extends React.Component{
                     <FormFields
                         formMetadata={formMetadata}
                         formData={formData}
-                        handleChange={() =>{}}/>
+                        handleChange={this.handleChange}/>
+
+
                 </ModalForm>
                 </DocumentTitle>
                );

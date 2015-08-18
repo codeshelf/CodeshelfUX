@@ -65,6 +65,7 @@ function ajax(path, options) {
     }
     return reqWithMethod
         .withCredentials()
+        .accept('application/json')
         .then((response) => {
             return response.body;
         }, (error) => {
@@ -217,7 +218,12 @@ export function getFacilityContext() {
             });
         },
 
-            updateEDISFTPOrders: function(config) {
+        getEdiGateways: function() {
+            let edipath = facilityPath + "/edigateways";
+            return ajax(edipath);
+
+        },
+        updateEdiGateway: function(config) {
             let edipath = facilityPath + "/edigateways/" + config.domainId;
             return ajax(edipath, {
                 method: "POST",
