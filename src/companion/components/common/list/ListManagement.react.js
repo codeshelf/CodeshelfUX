@@ -94,7 +94,7 @@ export default class ListManagement extends React.Component{
                     </Col>
                     <Col sm={9} >
                         <div className="pull-right">
-                            <AddButtonLink to={addButtonRoute} />
+                            {(addButtonRoute) && <AddButtonLink to={addButtonRoute} />}
                         </div>
                     </Col>
                 </Row>
