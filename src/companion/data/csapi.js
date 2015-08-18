@@ -178,8 +178,9 @@ export function getFacilityContext() {
     var facilityId = facility.get("persistentId");
     var facilityPath = "/api/facilities/" + facilityId;
     let ordersPath = facilityPath + "/orders";
-
+    let domainId = facility.domainId;
     return {
+        domainId: domainId,
         facilityId: facilityId,
         endpoint: endpoint,
 

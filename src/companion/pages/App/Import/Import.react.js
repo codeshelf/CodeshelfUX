@@ -1,5 +1,6 @@
 import {getFacilityContext} from 'data/csapi';
 import React from 'react';
+import {Link} from 'react-router';
 import {SingleCellLayout} from 'components/common/pagelayout';
 import {Form, SubmitButton, Input} from 'components/common/Form';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
@@ -51,7 +52,9 @@ export default class Imports extends React.Component{
 
     render() {
         let receipts = this.getImportReceipts();
-        return (<SingleCellLayout title="Manage Imports">
+            return (<SingleCellLayout title="Manage Imports">
+
+        <Link to="edigateways" params={{facilityName: getFacilityContext().domainId}}>Configure EDI</Link>
                 <SingleCellIBox title="Import Orders">
                     <Form onSubmit={this.handleSubmit.bind(this)}>
                             <Input ref="orderFileInput" type='file' label='Order File' help='Order file to import' required={true} />
