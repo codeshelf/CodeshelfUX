@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 var _ = require('lodash');
 var Immutable = require('immutable');
 //require("tablesaw/dist/tablesaw.css");
@@ -9,7 +9,13 @@ import Icon from "react-fa";
 import { DragSource, DropTarget} from 'react-dnd';
 import PureComponent from 'components/common/PureComponent';
 
+/*
+import React from "react/addons";
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+Broken while there is collapse/expand functionality
+<ReactCSSTransitionGroup transitionName="newrow" component="tbody">
+ See note in https://facebook.github.io/react/docs/animation.html where the expand is kept in the DOM
+*/
 
 //TODO likely need better performing index of metadata
 function toShownColumns(columnMetadata, columns) {
@@ -287,8 +293,8 @@ var Table = React.createClass({
                                 columnWidths={this.state.widths}
                                 sortedBy={sortedBy}
                                 onColumnMove={onColumnMove}
-                                onColumnClick={this.handleColumnClick}/>
-                <ReactCSSTransitionGroup transitionName="newrow" component="tbody">
+                                    onColumnClick={this.handleColumnClick}/>
+                <tbody>
                             {
                                rows.map(function(row, i) {
                                    var rowNumber = i;
@@ -314,7 +320,7 @@ var Table = React.createClass({
                                    }
                                }).flatten(true).toJS()
                                }
-                </ReactCSSTransitionGroup>
+                </tbody>
                     </table>
         );
     },
