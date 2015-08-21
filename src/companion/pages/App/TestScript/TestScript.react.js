@@ -103,7 +103,7 @@ export default class TestScript extends React.Component{
     }
 
     deleteOrders() {
-        return getFacilityContext().recreateFacility();
+        return getFacilityContext().deleteOrders();
     }
 
     recreateFacility() {
