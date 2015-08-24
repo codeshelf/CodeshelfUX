@@ -183,6 +183,7 @@ export class Checkbox extends React.Component {
         let {id, label, value, onChange, name} = this.props;
         let checked = (value) ? true : false;
         let nameAttr = name || id;
+        console.log("Checkbox name: " + nameAttr);
         return (<div className="form-group form-group-default" >
 
                     <div className="checkbox check-primary">
