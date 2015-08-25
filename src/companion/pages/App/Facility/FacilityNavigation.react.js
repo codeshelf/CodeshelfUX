@@ -20,7 +20,8 @@ class FacilityNavigation extends React.Component {
                       <AuthzMenuItem permission="event:view"  to="blockedwork" params={params} title="Issues" iconName="exclamation-circle"/ >
                       <AuthzMenuItem permission="event:view" to="workresults" params={params} title="Pick Rates" iconName="pie-chart" />
                       <AuthzMenuItem permission="worker:view" to="workermgmt" params={params} title="Workers" iconName="users" />
-                      <AuthzMenuItem  to="import" params={params} title="Imports/Exports" iconName="exchange" />
+                      {/* TODO: support *:import permissions */}
+                      <AuthzMenuItem permission="order:import" to="import" params={params} title="Imports/Exports" iconName="exchange" />
                       <AuthzMenuItem permission="facility:edit" to="extensionpoints" params={params} title="Extensions" iconName="code" />
                       <AuthzMenuItem permission="ux:view" href={this.getUXUrl(facility)} params={params} title="Configuration" iconName="cogs" />
                       <AuthzMenuItem permission="che:simulate" to="testscript" params={params} title="Test Scripts" iconName="bug" />
