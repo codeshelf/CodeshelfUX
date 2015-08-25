@@ -19,6 +19,19 @@ export class ErrorDisplay extends PureComponent {
     }
 }
 
+export class SuccessDisplay extends PureComponent {
+    render() {
+        let {message} = this.props;
+        return (
+            (message) ?
+                <div className="alert alert-info">
+                {message}
+            </div> : null
+        );
+    }
+}
+
+
 export class SubmitButton extends React.Component {
     render() {
         let {label, submitPending}  = this.props;

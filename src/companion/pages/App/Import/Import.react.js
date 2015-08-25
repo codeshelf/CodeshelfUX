@@ -3,7 +3,7 @@ import React from 'react';
 import {Link} from 'react-router';
 import {TabbedArea, TabPane} from 'react-bootstrap';
 import {SingleCellLayout} from 'components/common/pagelayout';
-import {Form, SubmitButton, ErrorDisplay, Input} from 'components/common/Form';
+import {Form, SubmitButton, SuccessDisplay, ErrorDisplay, Input} from 'components/common/Form';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
 import ImportList from './ImportList';
@@ -106,22 +106,26 @@ class UploadForm extends React.Component{
         e.preventDefault();
         var input = React.findDOMNode(this.refs.fileInput);
         let file = input.getElementsByTagName("input")[0].files[0];
+        this.setState({errorMessage: null});
+        this.setState({successMessage: null});
         return this.props.onImportSubmit(file).then(((data) => {
-            this.setState({errorMessage: null});
+                this.setState({errorMessage: null});
+            this.setState({successMessage: "File Imported"});
             return data;
         }), (e) => {
                 this.setState({errorMessage: e.message});
+                this.setState({successMessage: null});
             return e;
         });
     }
 
     render() {
         let {eventKey, label, onImportSubmit} = this.props;
-        let {errorMessage} = this.state;
-    return (<SingleCellIBox title={label + " Import"}>
+        let {successMessage, errorMessage} = this.state;
+        return (<SingleCellIBox title={label + " Import"}>
             <Form onSubmit={this.handleSubmit.bind(this)}>
-                {errorMessage &&
-                    <ErrorDisplay message={errorMessage} />}
+                 <SuccessDisplay message={successMessage} />
+                 <ErrorDisplay message={errorMessage} />
                                 <Input ref="fileInput"
                                        type='file'
                                        label={label + " File"}
