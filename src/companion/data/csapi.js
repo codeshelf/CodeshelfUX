@@ -328,16 +328,28 @@ export function getFacilityContext() {
             var filtersUrl = facilityPath + "/filters";
             return ajax(filtersUrl);
         },
-        importOrderFile: function(formData) {
-            var runpickscript = facilityPath + "/import/orders";
-            return ajax(runpickscript, {
+
+        importFile: function(path, formData) {
+            let importPath = facilityPath + "/import/" + path;
+            return ajax(importPath, {
                 method: "POST",
                 data: formData,
                 processData: false,
                 contentType: false
             });
         },
-
+        importOrderFile: function(formData) {
+            return this.importFile("orders", formData);
+        },
+        importLocationFile: function(formData) {
+            return this.importFile("locations", formData);
+        },
+        importAislesFile: function(formData) {
+            return this.importFile("site", formData);
+        },
+        importInventoryFile: function(formData) {
+            return this.importFile("inventory", formData);
+        },
         getImportReceipts: function(startTimestamp, endTimestamp) {
             var receiptPath = facilityPath + "/import";
             return ajax(receiptPath, {

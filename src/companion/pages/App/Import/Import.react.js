@@ -1,6 +1,7 @@
 import {getFacilityContext} from 'data/csapi';
 import React from 'react';
 import {Link} from 'react-router';
+import {TabbedArea, TabPane} from 'react-bootstrap';
 import {SingleCellLayout} from 'components/common/pagelayout';
 import {Form, SubmitButton, Input} from 'components/common/Form';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
@@ -40,12 +41,10 @@ export default class Imports extends React.Component{
 
     }
 
-    handleSubmit(e) {
-        e.preventDefault();
+    handleImportSubmit(method, file) {
         var formData = new FormData();
-        var input = React.findDOMNode(this.refs.orderFileInput);
-        formData.append("file", input.getElementsByTagName("input")[0].files[0]);
-        return getFacilityContext().importOrderFile(formData).then(() => {
+        formData.append("file", file);
+         return getFacilityContext()[method](formData).then(() => {
             this.fetchImportReceipts();
         }.bind(this));
     }
@@ -54,26 +53,72 @@ export default class Imports extends React.Component{
         let receipts = this.getImportReceipts();
             return (<SingleCellLayout title="Manage Imports">
 
-        <Link to="edigateways" params={{facilityName: getFacilityContext().domainId}}>Configure EDI</Link>
-                <SingleCellIBox title="Import Orders">
-                    <Form onSubmit={this.handleSubmit.bind(this)}>
-                            <Input ref="orderFileInput" type='file' label='Order File' help='Order file to import' required={true} />
-                        <SubmitButton label="Import" />
-                    </Form>
-                </SingleCellIBox>
-                <SingleCellIBox title="Order Files Imported">
-                <IBoxSection>
-                    <DayOfWeekFilter numDays={4} onChange={this.handleChange.bind(this)} />
-                </IBoxSection>
-                    <IBoxSection>
+                <Link to="edigateways" params={{facilityName: getFacilityContext().domainId}}>Configure EDI</Link>
+
+                <TabbedArea className="nav-tabs-simple" defaultActiveKey="orders">
+                    <TabPane eventKey="orders" tab="Orders">
+                    <UploadForm eventKey="other"
+                        label="Orders"
+                        onImportSubmit={this.handleImportSubmit.bind(this, "importOrderFile")} />
+
+                        <SingleCellIBox title="Order Files Imported">
+                            <IBoxSection>
+                                <DayOfWeekFilter numDays={4} onChange={this.handleChange.bind(this)} />
+                            </IBoxSection>
+                            <IBoxSection>
                             {/**  passing state through is a hack until we can have something like sub cursors**/}
-                    <ImportList receipts={receipts} state={this.props.state}/>
-                </IBoxSection>
+                            <ImportList receipts={receipts} state={this.props.state}/>
+                            </IBoxSection>
+                        </SingleCellIBox>
+                    </TabPane>
+                    <TabPane eventKey="locations" tab="Locations">
+                        <UploadForm eventKey="locations"
+                            label="Locations"
+                            onImportSubmit={this.handleImportSubmit.bind(this, "importLocationFile")} />
+                    </TabPane>
+                    <TabPane eventKey="aisles" tab="Aisles">
+                        <UploadForm eventKey="aisles"
+                            label="Aisles"
+                            onImportSubmit={this.handleImportSubmit.bind(this, "importAislesFile")} />
+                    </TabPane>
+                    <TabPane eventKey="inventory" tab="Inventory">
+                        <UploadForm eventKey="inventory"
+                            label="Inventory"
+                            onImportSubmit={this.handleImportSubmit.bind(this, "importInventoryFile")} />
+                    </TabPane>
 
+                </TabbedArea>
 
-
-                  </SingleCellIBox>
                 </SingleCellLayout>
         );
     }
 };
+
+
+class UploadForm extends React.Component{
+
+    constructor(props) {
+        super(props);
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        var input = React.findDOMNode(this.refs.fileInput);
+        let file = input.getElementsByTagName("input")[0].files[0];
+        return this.props.onImportSubmit(file);
+    }
+
+    render() {
+        let {eventKey, label, onImportSubmit} = this.props;
+    return (<SingleCellIBox title={label + " Import"}>
+            <Form onSubmit={this.handleSubmit.bind(this)}>
+                                <Input ref="fileInput"
+                                       type='file'
+                                       label={label + " File"}
+                                       help={label + " files to import"}
+                                       required={true} />
+                                <SubmitButton label="Import" />
+                            </Form>
+            </SingleCellIBox>);
+        }
+    };
