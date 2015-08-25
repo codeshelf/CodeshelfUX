@@ -261,6 +261,11 @@ domainobjects = {
 				'id': 'associateToUi',
 				'title': 'Associated CHE',
 				'width': 16
+			},
+			'scannerType': {
+				'id': 'scannerType',
+				'title': 'Scanner Type',
+				'width': 16
 			}
 		}
 	},

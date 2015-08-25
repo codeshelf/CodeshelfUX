@@ -415,6 +415,9 @@ codeshelfApp.CheNgController = function($scope, $modalInstance, websession, data
                 $scope.$apply();
             });
     }
+    //Set Scanner Type
+    var scannerType = data['che']['scannerType'];
+    $scope['che']['scannerType'] = (scannerType == undefined)?"ORIGINALSERIAL" : scannerType;
 };
 goog.inherits(codeshelfApp.CheNgController, codeshelfApp.AbstractCheController);
 
@@ -424,7 +427,7 @@ goog.inherits(codeshelfApp.CheNgController, codeshelfApp.AbstractCheController);
  */
 codeshelfApp.CheNgController.prototype.edit = function(){
     var che = this.scope_['che'];
-    var methodArgs = [che["persistentId"], che["domainid"], che["description"], che["color"], che["cntrlrid"], che["processMode"]];
+    var methodArgs = [che["persistentId"], che["domainid"], che["description"], che["color"], che["cntrlrid"], che["processMode"], che["scannerType"]];
     var self = this;
     this.websession_.callServiceMethod("UiUpdateService", 'updateChe', methodArgs)
         .then(function(response) {
@@ -442,7 +445,7 @@ codeshelfApp.CheNgController.prototype.edit = function(){
 codeshelfApp.CheNgController.prototype.add = function(){
     var che = this.scope_['che'];
     var facilityPersistentId =  this.scope_['facility']['persistentId'];
-    var methodArgs = [ facilityPersistentId, che["domainid"], che["description"], che["color"], che["cntrlrid"], che["processMode"]];
+    var methodArgs = [ facilityPersistentId, che["domainid"], che["description"], che["color"], che["cntrlrid"], che["processMode"], che["scannerType"]];
     var self = this;
     this.websession_.callServiceMethod("UiUpdateService", 'addChe', methodArgs)
         .then(function(response) { //onsuccess
