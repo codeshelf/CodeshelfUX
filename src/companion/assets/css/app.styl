@@ -82,3 +82,91 @@
 input[type="file"].form-control {
   margin-top: .10em;
 }
+
+/* Tabs override to look like pages template
+   Basically it changes what used to match <ul class="nav-tabs-simple"> to
+   <div class="nav-tables-simple>
+     ...
+     <ul></ul>
+*/
+
+.nav-tabs-simple ul {
+  border-bottom: 0px;
+}
+.nav-tabs-simple ul:after {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  width: 100%;
+  position: relative;
+  bottom: 3px;
+  z-index: 120;
+}
+.nav-tabs-simple ul > li {
+  margin-bottom: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+}
+.nav-tabs-simple ul > li:after {
+  -webkit-transition: all 0.1s linear 0s;
+  transition: all 0.1s linear 0s;
+  -webkit-backface-visibility: hidden;
+  width: 100%;
+  display: block;
+  background-color: #f55753;
+  height: 0px;
+  content: '';
+  z-index: 125;
+}
+.nav-tabs-primary.nav-tabs-simple ul > li:after {
+  background-color: #6d5cae;
+}
+.nav-tabs-success.nav-tabs-simple ul > li:after {
+  background-color: #10cfbd;
+}
+.nav-tabs-complete.nav-tabs-simple ul > li:after {
+  background-color: #48b0f7;
+}
+.nav-tabs-danger.nav-tabs-simple ul > li:after {
+  background-color: #f55753;
+}
+.nav-tabs-warning.nav-tabs-simple ul > li:after {
+  background-color: #f8d053;
+}
+.nav-tabs-info.nav-tabs-simple ul > li:after {
+  background-color: #3b4752;
+}
+.nav-tabs-simple ul > li.active a,
+.nav-tabs-simple ul > li.active a:hover,
+.nav-tabs-simple ul > li.active a:focus {
+  background-color: transparent;
+  border-color: transparent;
+}
+.nav-tabs-simple ul > li.active:after,
+.nav-tabs-simple ul > li:hover:after {
+  height: 3px;
+}
+.nav-tabs-simple.nav-tabs-left ul:after,
+.nav-tabs-simple.nav-tabs-right ul:after {
+  border-bottom: 0px;
+}
+.nav-tabs-simple.nav-tabs-left ul > li:after,
+.nav-tabs-simple.nav-tabs-right ul > li:after {
+  width: 0px;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+}
+.nav-tabs-simple.nav-tabs-left ul > li.active:after,
+.nav-tabs-simple.nav-tabs-right ul > li.active:after,
+.nav-tabs-simple.nav-tabs-left ul > li:hover:after,
+.nav-tabs-simple.nav-tabs-right ul > li:hover:after {
+  width: 3px;
+}
+.nav-tabs-simple.nav-tabs-left ul > li:after {
+  right: 0;
+}
+.nav-tabs-simple.nav-tabs-right ul > li:after {
+  left: 0;
+}
+
+
