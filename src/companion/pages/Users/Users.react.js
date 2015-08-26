@@ -36,15 +36,11 @@ export default class Users extends React.Component{
         let {users} = this.state;
         let columnsCursor  = state.cursor(["preferences", "users", "table", "columns"]);
         let columnSortSpecsCursor = state.cursor(["preferences", "users", "table", "sortSpecs"]);
-        let columnMetadata = ListView.toColumnMetadataFromProperties(properties)
-                .concat([new ListView.ColumnRecord({
-                    columnName: "action",
-                    displayName: "",
-                    customComponent: ListManagement.toEditButton((row) => {
-                        return {    to: "useredit",
-                                params: {userId: row.get(keyColumn)}};
-                    })
-                })]);
+        let columnMetadata = ListView.toColumnMetadataFromProperties(properties);
+        let rowActionComponent = ListManagement.toEditButton((row) => {
+            return {    to: "useredit",
+                        params: {userId: row.get(keyColumn)}};
+        });
         return (<DocumentTitle title="Users">
                 <div>
                     <ListManagement
@@ -54,7 +50,8 @@ export default class Users extends React.Component{
                         keyColumn={keyColumn}
                         columns={columnsCursor}
                         sortSpecs={columnSortSpecsCursor}
-                        columnMetadata={columnMetadata} />
+                        columnMetadata={columnMetadata}
+                        rowActionComponent={rowActionComponent}/>
 
                 <RouteHandler users={users}/>
                 </div>

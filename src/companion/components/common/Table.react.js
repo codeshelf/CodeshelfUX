@@ -41,9 +41,11 @@ class Row extends PureComponent {
              row,
              rowNumber,
              expanded,
+             rowActionComponent,
              onClick } = this.props;
         var rowAlt = (rowNumber % 2 == 0) ? "even" : "odd";
         var shown = (expanded) ? "shown" : "";
+        var RowActionComponent = rowActionComponent; //to call in JSX
         return (
                 <tr role="row" onClick={_.partial(onClick, row, rowNumber)} className={classnames(rowAlt, shown)}>
                 {
@@ -62,6 +64,7 @@ class Row extends PureComponent {
                         return (<td ref={key} key={key}>{valueRenderer}</td>);
                     }).toList()
                 }
+                {(rowActionComponent) && <td key="actions"><RowActionComponent rowData={row}/ ></td>}
                 </tr>
         );
     }
@@ -76,7 +79,23 @@ class ExpandRow extends React.Component {
 
 }
 
+function renderHeaderMarkup(columnName, displayName, sortComponent, className, style, onClick) {
+    return <th
+            scope="col"
+            data-toggle="tooltip"
+            key={columnName}
+            className={className}
+            style={style}
+            onClick={onClick}
+            title={displayName}>
+        {sortComponent}
+    {displayName}
+    </th>;
+}
+
+
 class ColumnHeader extends React.Component {
+
 
     render() {
             let {columnName, displayName = columnName, width, sortSpec, onClick} = this.props;
@@ -86,22 +105,18 @@ class ColumnHeader extends React.Component {
             var style = {};
             if (width) {
                 style.width = width;
-            }
-            return (connectDragSource(connectDropTarget(
-                    <th key={columnName}
-                        className={classes}
-                        style={style}
-                        scope="col"
-                        data-toggle="tooltip"
-                        onClick={onClick}
-                        title={displayName}>
-                            {(sortSpec) ?
-                             <Icon name={"sort-numeric-"+sortSpec.direction} style={{marginRight: "0.25em"}}/>
-                             :
-                             null
-                            }
-                            {displayName}
-                     </th>)));
+                }
+            let sortComponent = (sortSpec) &&
+                <Icon name={"sort-numeric-"+sortSpec.direction} style={{marginRight: "0.25em"}}/>;
+
+            return (connectDragSource(connectDropTarget(renderHeaderMarkup(
+                    columnName,
+                    displayName,
+                        sortComponent,
+                    classes,
+                    style,
+                    onClick
+                    ))));
     }
 }
 
@@ -155,7 +170,13 @@ class Header extends React.Component {
 
 
     render() {
-        var {columns, columnMetadata, columnWidths, sortedBy, onColumnMove, onColumnClick} = this.props;
+        var {columns,
+             columnMetadata,
+             columnWidths,
+             sortedBy,
+             onColumnMove,
+             onColumnClick,
+             rowActionComponent} = this.props;
 
         return (
                 <thead>
@@ -177,6 +198,7 @@ class Header extends React.Component {
                         }.bind(this))
                         .toList()
                 }
+                    {(rowActionComponent) && renderHeaderMarkup("actions", "")}
                 </tr>
                 </thead>);
     }
@@ -235,6 +257,7 @@ var Table = React.createClass({
              columnMetadata = Immutable.List(),
              keyColumn,
              sortedBy,
+             rowActionComponent,
              onRowExpand = function (){ console.log("row expand not set");},
              onRowCollapse = function (){ console.log("row collapse not set");},
              onColumnMove = () => { console.log("column moveHandler not set");},
@@ -292,6 +315,7 @@ var Table = React.createClass({
                                 columnMetadata={columnMetadata}
                                 columnWidths={this.state.widths}
                                 sortedBy={sortedBy}
+                                rowActionComponent={rowActionComponent}
                                 onColumnMove={onColumnMove}
                                     onColumnClick={this.handleColumnClick}/>
                 <tbody>
@@ -302,7 +326,8 @@ var Table = React.createClass({
                                        columnMetadata: columnMetadata,
                                        columns: columns,
                                        row: row,
-                                       rowNumber: rowNumber
+                                       rowNumber: rowNumber,
+                                       rowActionComponent: rowActionComponent
                                    };
                                    var id = rowNumber;
                                    if (keyColumn) {

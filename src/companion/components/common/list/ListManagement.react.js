@@ -98,7 +98,7 @@ export default class ListManagement extends React.Component{
                         </div>
                     </Col>
                 </Row>
-                        <ListView {...other} results={filteredResults} columnMetadata={columnMetadata}/>
+                <ListView {...other} results={filteredResults} columnMetadata={columnMetadata}/>
             </SingleCellIBox>);
     }
 };

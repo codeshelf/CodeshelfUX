@@ -59,7 +59,8 @@ class EventsGrid extends React.Component {
     render() {
             return <Table results={this.props.events.toJS()}
              columns={this.columns}
-             columnMetadata={this.columnMetadata} />;
+             columnMetadata={this.columnMetadata}
+             rowActionComponent={this.rowActionComponent}/>;
 
     }
 }
@@ -70,13 +71,7 @@ EventsGrid.propTypes = {
 export class UnresolvedEvents extends EventsGrid {
     constructor() {
         super();
-        this.columnMetadata.push.apply(this.columnMetadata, [
-            {
-                columnName: "action",
-                displayName: "Resolve",
-                customComponent: Resolve
-            }
-        ]);
+        this.rowActionComponent = Resolve;
     }
 }
 
