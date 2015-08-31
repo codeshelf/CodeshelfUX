@@ -62,15 +62,11 @@ export default class WorkerMgmt extends React.Component{
                 columnName: "active",
                 displayName: "Active"
             },
-            {
-                columnName: "action",
-                displayName: "",
-                customComponent:  ListManagement.toEditButton((row) => {
-                    return {    to: "workerdisplay",
-                                params: {workerId: row.get(keyColumn)}};
-                })
-            }
         ]);
+            this.rowActionComponent = ListManagement.toEditButton((row) => {
+            return {    to: "workerdisplay",
+                        params: {workerId: row.get(keyColumn)}};
+        });
         let {state} = props;
         this.columnsCursor  = state.cursor(["preferences", "workers", "table", "columns"]);
         this.columnSortSpecsCursor = state.cursor(["preferences", "workers", "table", "sortSpecs"]);
@@ -90,11 +86,12 @@ export default class WorkerMgmt extends React.Component{
                 <ListManagement
                         addButtonRoute="workernew"
 
-                        columnMetadata={this.columnMetadata}
-                        results={rows}
-                            keyColumn={keyColumn}
                         columns={this.columnsCursor}
-                        sortSpecs={this.columnSortSpecsCursor} />
+                        columnMetadata={this.columnMetadata}
+                        sortSpecs={this.columnSortSpecsCursor}
+                        rowActionComponent={this.rowActionComponent}
+                        results={rows}
+                        keyColumn={keyColumn}/>
                 <RouteHandler formMetadata={this.columnMetadata}/>
            </SingleCellLayout>);
     }

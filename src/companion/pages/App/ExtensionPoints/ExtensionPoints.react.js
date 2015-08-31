@@ -49,15 +49,8 @@ export default class ExtensionPoints extends React.Component{
             {
                 columnName: "active",
                 displayName: "Active"
-            },
-            {
-                columnName: "action",
-                displayName: "",
-                customComponent: Edit
             }
-
         ];
-
     }
 
     componentWillMount() {
@@ -86,7 +79,7 @@ export default class ExtensionPoints extends React.Component{
                         </div>
                     </Col>
                 </Row>
-                <Table results={list} columnMetadata={this.columnMetadata} />
+                    <Table results={list} columnMetadata={this.columnMetadata} rowActionComponent={Edit}/>
                 <RouteHandler availableTypes={availableTypes} formMetadata={this.columnMetadata} extensionPoints={extensionPoints} />
                 </div>
         );

@@ -121,7 +121,7 @@ export default class ListView extends React.Component{
 
     render() {
 
-        let {columns, columnMetadata, keyColumn} = this.props;
+        let {columns, columnMetadata, keyColumn, rowActionComponent} = this.props;
 
         var {results, sortSpecs = () => {}} = this.props;
 
@@ -146,10 +146,10 @@ export default class ListView extends React.Component{
                     columns={columns()}
                     columnMetadata={columnMetadata}
                     keyColumn={keyColumn}
+                    rowActionComponent={rowActionComponent}
                     sortedBy={sortBy}
                     onColumnMove={this.handleColumnMove.bind(this)}
                     onColumnSortChange={this.handleColumnSortChange.bind(this)}
-
                  />
                 </div>);
     }

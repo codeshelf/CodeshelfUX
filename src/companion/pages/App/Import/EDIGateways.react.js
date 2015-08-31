@@ -70,19 +70,16 @@ class ListPage extends React.Component{
         let list = this.state[stateProp];
         let columnsCursor  = appState.cursor(["preferences", stateProp, "table", "columns"]);
         let columnSortSpecsCursor = appState.cursor(["preferences", stateProp, "table", "sortSpecs"]);
-        let columnMetadata = ListView.toColumnMetadataFromProperties(properties)
-                .concat([new ListView.ColumnRecord({
-                    columnName: "action",
-                    displayName: "",
-                    customComponent: ListManagement.toEditButton(editRouteFactory)
-                })]);
-                return (<DocumentTitle title={title}>
+        let columnMetadata = ListView.toColumnMetadataFromProperties(properties);
+        let rowActionComponent = ListManagement.toEditButton(editRouteFactory);
+        return (<DocumentTitle title={title}>
                 <div>
                     <ListManagement
                         addButtonRoute={addRoute}
                         results={list}
                         keyColumn={keyColumn}
                         columns={columnsCursor}
+                        rowActionComponent={rowActionComponent}
                         sortSpecs={columnSortSpecsCursor}
                         columnMetadata={columnMetadata} />
 
