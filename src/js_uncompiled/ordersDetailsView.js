@@ -143,7 +143,6 @@ goog.require('adhocDialogService');
             { 'name': 'facilityId',   'value': facility_['persistentId']},
             { 'name': 'partialQuery', 'value': '%' + partialQuery_ + '%'}
 	    ];
-
     }
 
 	var orderDetailHierarchyMapDef = { "className": domainobjects['OrderDetail']['className'], "linkProperty": 'parent', "filter": orderDetailFilter, "filterParams": orderDetailFilterParams, "properties": domainobjects['OrderDetail']['properties'], "comparer": undefined , "contextMenuDefs": orderDetailContextDefs};

@@ -21,10 +21,11 @@ goog.require('goog.ui.tree.TreeControl');
  * @param facility The facility to check.
  * @return {Object} The container use list view.
  */
-codeshelf.itemmasterlistview = function(websession, facility) {
+codeshelf.itemmasterlistview = function(websession, facility, partialQuery) {
 
 	var websession_ = websession;
 	var facility_ = facility;
+	var partialQuery_ = partialQuery;
 
 	var self = {
 
@@ -41,8 +42,8 @@ codeshelf.itemmasterlistview = function(websession, facility) {
 		},
 
 		'getViewName': function() {
-			var returnStr = "Item Masters (SKUs)";
-			return returnStr;
+            var queryPart = (partialQuery_) ? ": " + partialQuery_ : "";
+            return 'Item Masters (SKUs)' + queryPart;
 		},
 
 		doLaunchWorkInstructionList: function(item) {
@@ -82,9 +83,16 @@ codeshelf.itemmasterlistview = function(websession, facility) {
 	var itemMasterFilter = "allActiveByParent";
 
 	var itemMasterFilterParams = [
-			{ 'name': 'parentId', 'value': facility_['persistentId']}
-		];
+		{ 'name': 'parentId', 'value': facility_['persistentId']}
+	];
 
+    if (partialQuery_) {
+    	itemMasterFilter = "itemMastersByParentAndPartialQuery";
+	    itemMasterFilterParams = [
+            { 'name': 'parentId', 'value': facility_['persistentId']},
+            { 'name': 'partialQuery', 'value': '%' + partialQuery_ + '%'}
+	    ];
+    }
 
 	var hierarchyMap = [];
 	hierarchyMap[0] = { "className": domainobjects['ItemMaster']['className'], "linkProperty": 'parent', "filter" : itemMasterFilter, "filterParams" : itemMasterFilterParams, "properties": domainobjects['ItemMaster']['properties'], "contextMenuDefs" : contextDefs };

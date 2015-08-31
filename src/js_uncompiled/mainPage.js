@@ -130,7 +130,7 @@ codeshelf.windowLauncher = (function() {
 
 		loadOrderDetailsView: function(partialQuery) {
 			try {
-				    var orderDetailsView = codeshelf.orderdetailsview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), partialQuery);
+			    var orderDetailsView = codeshelf.orderdetailsview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), partialQuery);
 				var orderDetailsWindow = codeshelf.window(orderDetailsView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				orderDetailsWindow.open();
 			}
@@ -250,9 +250,9 @@ codeshelf.windowLauncher = (function() {
 			}
 		},
 
-		loadItemMastersListView: function() {
+		loadItemMastersListView: function(partialQuery) {
 			try {
-				var itemMasterListView = codeshelf.itemmasterlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var itemMasterListView = codeshelf.itemmasterlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), partialQuery);
 				var itemMasterWindow = codeshelf.window(itemMasterListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				itemMasterWindow.open();
 			}
@@ -283,9 +283,9 @@ codeshelf.windowLauncher = (function() {
 			}
 		},
 
-		loadGtinListView: function() {
+		loadGtinListView: function(partialQuery) {
 			try {
-				var gtinListView = codeshelf.gtinlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
+				var gtinListView = codeshelf.gtinlistview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), partialQuery);
 				var gtinListViewWindow = codeshelf.window(gtinListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				gtinListViewWindow.open();
 			}
@@ -575,8 +575,11 @@ goog.exportSymbol('launchEdiServicesView', launchEdiServicesView);
 
 function handleSearchInput(query) {
     if (query && query.indexOf("d:") == 0) {
-
         launchOrderDetailsView(query.substring(2));
+    } else if (query && query.indexOf("i:") == 0) {
+    	launchItemMastersView(query.substring(2));
+    } else if (query && query.indexOf("g:") == 0) {
+    	launchGtinView(query.substring(2));
     } else {
         launchOrdersView(query);
     }
@@ -663,13 +666,13 @@ function launchInventoryView() {
 }
 goog.exportSymbol('launchInventoryView', launchInventoryView);
 
-function launchItemMastersView() {
-	codeshelf.windowLauncher.loadItemMastersListView();
+function launchItemMastersView(partialQuery) {
+	codeshelf.windowLauncher.loadItemMastersListView(partialQuery);
 }
 goog.exportSymbol('launchItemMastersView', launchItemMastersView);
 
-function launchGtinView() {
-	codeshelf.windowLauncher.loadGtinListView();
+function launchGtinView(partialQuery) {
+	codeshelf.windowLauncher.loadGtinListView(partialQuery);
 }
 goog.exportSymbol('launchGtinView', launchGtinView);
 

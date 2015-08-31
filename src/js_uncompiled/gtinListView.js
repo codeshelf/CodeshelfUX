@@ -16,12 +16,22 @@ goog.require('goog.string');
 goog.require('goog.dom.query');
 goog.require('goog.ui.tree.TreeControl');
 
-codeshelf.gtinlistview = function(websession, facility) {
-	var	itemFilter = "gtinsByFacility";
-	var itemFilterParams = [
+codeshelf.gtinlistview = function(websession, facility, partialQuery) {
+	var viewName = "Items by GTIN";
+	if (partialQuery) {
+		var	itemFilter = "gtinsByFacilityAndPartialQuery";
+		var itemFilterParams = [
+			{ 'name': 'facilityId', 'value': facility['persistentId']},
+			{ 'name': 'partialQuery', 'value': '%' + partialQuery + '%'}
+		];
+		viewName += ": " + partialQuery;
+	} else {
+		var	itemFilter = "gtinsByFacility";
+		var itemFilterParams = [
 			{ 'name': 'facilityId', 'value': facility['persistentId']}
 		];
-	return codeshelf.buildGtinListView(websession, facility, itemFilter, itemFilterParams, "Items by GTIN");
+	}
+	return codeshelf.buildGtinListView(websession, facility, itemFilter, itemFilterParams, viewName);
 
 };
 
