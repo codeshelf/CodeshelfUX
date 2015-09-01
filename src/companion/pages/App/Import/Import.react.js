@@ -53,7 +53,7 @@ export default class Imports extends React.Component{
         let receipts = this.getImportReceipts();
             return (<SingleCellLayout title="Manage Imports">
 
-                <Link to="edigateways" params={{facilityName: getFacilityContext().domainId}}>Configure EDI</Link>
+                <Link id="configure" to="edigateways" params={{facilityName: getFacilityContext().domainId}}>Configure EDI</Link>
 
                 <TabbedArea className="nav-tabs-simple" defaultActiveKey="orders">
                     <TabPane eventKey="orders" tab="Orders">

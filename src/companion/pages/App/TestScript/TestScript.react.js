@@ -51,10 +51,10 @@ class ConfirmAction extends React.Component {
     }
 
     render() {
-            let {confirmLabel, confirmInProgressLabel,  instructions, children, style} = this.props;
+        let {id, confirmLabel, confirmInProgressLabel,  instructions, children, style} = this.props;
         let {confirm, failure, inprogress} = this.state;
         return (<div>
-                    <Button style={style} type="button" bsStyle="primary"
+                    <Button id={id} style={style} type="button" bsStyle="primary"
                             onClick={this.openConfirm}>
                         {children}
                     </Button>
@@ -123,22 +123,25 @@ export default class TestScript extends React.Component{
                     <IBoxBody>
                         <div className="pull-right" style={{marginBottom: "1em"}}>
                             <div>
-                        <ConfirmAction
-                         style={{width: "100%"}}
-                            onConfirm={this.deleteOrders}
-                            confirmLabel="Delete"
-                            confirmInProgressLabel="Deleting"
-                            instructions="Do you want to delete all orders for this facility?">
-                                Delete Orders
-                        </ConfirmAction>
                                 <ConfirmAction
-                                style={{width: "100%", marginTop: "0.5em"}}
-                             onConfirm={this.recreateFacility}
-                             confirmLabel="Recreate"
-                             confirmInProgressLabel="Recreating"
-                             instructions="Do you want to remove all data for this facility?">
-                                     Recreate Facility
-                             </ConfirmAction>
+                                    id="deleteOrders"
+                                    style={{width: "100%"}}
+                                    onConfirm={this.deleteOrders}
+                                    confirmLabel="Delete"
+                                    confirmInProgressLabel="Deleting"
+                                    instructions="Do you want to delete all orders for this facility?">
+                                        Delete Orders
+                                 </ConfirmAction>
+                                 <ConfirmAction
+                                    id="recreateFacility"
+
+                                    style={{width: "100%", marginTop: "0.5em"}}
+                                    onConfirm={this.recreateFacility}
+                                    confirmLabel="Recreate"
+                                    confirmInProgressLabel="Recreating"
+                                    instructions="Do you want to remove all data for this facility?">
+                                        Recreate Facility
+                                 </ConfirmAction>
                             </div>
                         </div>
                         <ScriptInput onChange={this.handleScriptInputChanges.bind(this)} />
