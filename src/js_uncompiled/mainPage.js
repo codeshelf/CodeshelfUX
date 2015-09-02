@@ -106,17 +106,6 @@ codeshelf.windowLauncher = (function() {
 			}
 		},
 
-		loadEdiServicesView: function() {
-			try {
-				var ediServicesView_ = codeshelf.ediservicesview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
-				var ediServicesWindow = codeshelf.window(ediServicesView_, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
-				ediServicesWindow.open();
-			}
-			catch (err) {
-				alert(err);
-			}
-		},
-
 		loadOrdersView: function(partialOrderIdQuery, inOutboundOrders) {
 			try {
 				var ordersView = codeshelf.ordersview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility(), inOutboundOrders, partialOrderIdQuery);
@@ -568,11 +557,6 @@ function launchWorkAreaEditor() {
 }
 goog.exportSymbol('launchWorkAreaEditor', launchWorkAreaEditor);
 
-function launchEdiServicesView() {
-	codeshelf.windowLauncher.loadEdiServicesView();
-}
-goog.exportSymbol('launchEdiServicesView', launchEdiServicesView);
-
 function handleSearchInput(query) {
     if (query && query.indexOf("d:") == 0) {
         launchOrderDetailsView(query.substring(2));
@@ -696,7 +680,6 @@ function launchTestRunner() {
 	launchListViewDemo();
 	launchPathsView();
 	launchWorkAreaEditor();
-	launchEdiServicesView();
 	launchOrdersView(''); // only outbound orders
 	launchOrderDetailsView(); // only outbound orders
 	// launchWorkAreaView();
