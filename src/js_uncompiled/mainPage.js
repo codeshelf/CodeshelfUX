@@ -23,7 +23,6 @@ goog.require('codeshelf.tierslotlistview');
 goog.require('codeshelf.ledcontrollerslistview');
 goog.require('codeshelf.locationaliaseslistview');
 goog.require('codeshelf.pathsview');
-goog.require('codeshelf.ediservicesview');
 goog.require('codeshelf.facilityeditorview');
 goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.listdemoview');
@@ -380,8 +379,6 @@ codeshelf.mainpage = function() {
 	var frameTop_ = 35; // allow 30 for the navbar
 	var frameLeft_ = 5;
 	var limits_;
-
-	var ediServicesView_;
 
 	function updateFrameSize(size) {
 		// goog.style.setSize(goog.dom.getElement('frame'), size);
