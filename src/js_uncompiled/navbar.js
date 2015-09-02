@@ -49,8 +49,7 @@ codeshelf.Navbar = function() {
              {"href": "javascript:launchWorkAreaEditor()", key: "workarea.editor", "label": "Work Area Editor",  "permission": "workArea:edit"},
              {"href": "javascript:launchPathsView()", key: "paths.list", "label": "Paths List", "permission": "path:view" },
              {"href": "javascript:launchLocationAliasesListView()", key: "locationAlias.list", "label": "Location Aliases", "permission": "locationAliases:view" },
-             {"href": "javascript:launchDomainObjectPropertiesView()", key: "configs.list", "label": "Config Parameters", "permission": "config:edit" },
-             {"href": "javascript:launchExtensionPointsView()", key: "extensionPoints", "label": "Extension Points", "permission": "extensionPoints:edit" }
+             {"href": "javascript:launchDomainObjectPropertiesView()", key: "configs.list", "label": "Config Parameters", "permission": "config:edit" }
          ]},
 
         {"key": "help",

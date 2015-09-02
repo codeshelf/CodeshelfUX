@@ -364,32 +364,6 @@ domainobjects = {
 		}
 	},
 
-	'EdiServiceABC': {
-		'className':  'EdiServiceABC',
-		'properties': {
-			'domainId':         {
-				'id':    'domainId',
-				'title': 'ID',
-				'width': 25
-			},
-			'provider':     {
-				'id':    'provider',
-				'title': 'Provider',
-				'width': 40
-			},
-			'serviceState': {
-				'id':    'serviceState',
-				'title': 'Service State',
-				'width': 40
-			},
-			'hasCredentials': {
-				'id':    'hasCredentials',
-				'title': 'Stored Credentials',
-				'width': 20
-			}
-		}
-	},
-	
 	'EdiDocumentLocator': {
 		'className':  'EdiDocumentLocator',
 		'properties': {
@@ -407,37 +381,6 @@ domainobjects = {
 				'id':    'documentName',
 				'title': 'Document Name',
 				'width': 100
-			}
-		}
-	},
-
-	'ExtensionPoint': {
-		'className':  'ExtensionPoint',
-		'properties': {
-			'domainId':         {
-				'id':    'domainId',
-				'title': 'Domain ID',
-				'width': 30
-			},
-			'persistentId': {
-				'id': 'persistentId',
-				'title': 'Persistent ID',
-				'width': 40
-			},
-			active: {
-				'id':    'active',
-				'title': 'Active',
-				'width': 6
-			},			
-			'script': {
-				'id': 'script',
-				'title': 'Script',
-				'width': 40
-			},
-			'type': {
-				'id': 'type',
-				'title': 'Type',
-				'width': 8
 			}
 		}
 	},

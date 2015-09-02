@@ -13,7 +13,6 @@ goog.require('codeshelf.chelistview');
 goog.require('codeshelf.baylistview');
 goog.require('codeshelf.containeruselistview');
 goog.require('codeshelf.domainobjectpropertiesview');
-goog.require('codeshelf.extensionpointsview');
 goog.require('codeshelf.gtinlistview');
 goog.require('codeshelf.itemlistview');
 goog.require('codeshelf.itemmasterlistview');
@@ -254,17 +253,6 @@ codeshelf.windowLauncher = (function() {
 				var domainObjectPropertiesView = codeshelf.domainobjectpropertiesview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
 				var domainObjectPropertiesWindow = codeshelf.window(domainObjectPropertiesView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				domainObjectPropertiesWindow.open();
-			}
-			catch (err) {
-				alert(err);
-			}
-		},
-
-		loadExtensionPointsView: function() {
-			try {
-				var domainExtensionPointsView = codeshelf.extensionpointsview(codeshelf.sessionGlobals.getWebsession(), codeshelf.sessionGlobals.getFacility());
-				var domainExtensionPointsWindow = codeshelf.window(domainExtensionPointsView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
-				domainExtensionPointsWindow.open();
 			}
 			catch (err) {
 				alert(err);
@@ -662,12 +650,6 @@ function launchDomainObjectPropertiesView() {
 }
 
 goog.exportSymbol('launchDomainObjectPropertiesView', launchDomainObjectPropertiesView);
-
-function launchExtensionPointsView() {
-	codeshelf.windowLauncher.loadExtensionPointsView();
-}
-
-goog.exportSymbol('launchExtensionPointsView', launchExtensionPointsView);
 
 function launchTestRunner() {
 	var theLogger = goog.debug.Logger.getLogger('navbar');
