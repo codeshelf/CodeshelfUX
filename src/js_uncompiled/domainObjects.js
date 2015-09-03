@@ -222,9 +222,9 @@ domainobjects = {
 				'title': 'Color',
 				'width': 16
 			},
-			'currentUser': {
-				'id': 'currentUser',
-				'title': 'User',
+			'worker': {
+				'id': 'workerUi',
+				'title': 'Worker',
 				'width': 16
 			},
 			'lastBatteryLevel': {
