@@ -39,7 +39,7 @@ export const dispatchToken = register(({action, data}) => {
           if (data) {
               workersCursor((workerList) => {
                   console.log("Saving ", data);
-                  return workerList.push(data);
+                  return workerList.push(Worker(data));
               });
           }
       break;
