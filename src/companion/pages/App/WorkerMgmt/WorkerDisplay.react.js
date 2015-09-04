@@ -24,7 +24,6 @@ class WorkerDisplay extends React.Component {
             "savePending" : false
         };
         this.handleSave = this.handleSave.bind(this);
-            this.handleClose = this.handleClose.bind(this);
         this.formMetadata = [
             {name: "firstName", label: "First"},
             {name: "middleInitial", label: "Middle Initial"},
@@ -97,15 +96,10 @@ class WorkerDisplay extends React.Component {
     }
 
 
-    handleClose() {
-        this.storeSelectedWorkerForm(null);
-    }
-
     render() {
         var formData = this.getSelectedWorkerForm();
             return (<ModalForm title="Edit Worker" formData={formData} returnRoute="workermgmt"
-                           onSave={this.handleSave}
-                           onClose={this.handleClose}>
+                           onSave={this.handleSave}>
                     <FormFields formData={formData} formMetadata={this.formMetadata} handleChange={this.handleChange} />
                 </ModalForm>
             );
@@ -128,7 +122,7 @@ class WorkerDisplay extends React.Component {
 
         };
 
-        return <Button bsStyle="link" onClick={setBadgeId.bind(this)}><Icon name="barcode" size="2x" /></Button>;
+        return <Button id="generateBadgeId" bsStyle="link" onClick={setBadgeId.bind(this)}><Icon name="barcode" size="2x" /></Button>;
     }
 
     generateBarcode() {
