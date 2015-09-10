@@ -101,7 +101,7 @@ export default class Maintenance extends React.Component{
     }
 
     handleSubmit(e) {
-        e.preventDefault();
+        e && e.preventDefault();
 
         return this.loadSummary(this.state.daysOld);
     }
@@ -113,12 +113,23 @@ export default class Maintenance extends React.Component{
     }
 
     cleanWorkInstructions(daysOld) {
-        return getFacilityContext().deleteWIData(daysOld);
+        return getFacilityContext().deleteWIData(daysOld).then(() => {
+            return this.loadSummary(daysOld);
+        }.bind(this));
     }
 
     cleanOrders(daysOld) {
-        return getFacilityContext().deleteOrderData(daysOld);
+        return getFacilityContext().deleteOrderData(daysOld).then(() => {
+            return this.loadSummary(daysOld);
+        }.bind(this));
     }
+
+    cleanContainers(daysOld) {
+        return getFacilityContext().deleteContainerData(daysOld).then(() => {
+            return this.loadSummary(daysOld);
+        }.bind(this));
+    }
+
 
     render() {
         let {daysOld, dataSummary = "Loading Summary"} = this.state;
@@ -135,9 +146,15 @@ export default class Maintenance extends React.Component{
                                         label="Days Old"
                                         name="daysOld"
                                         value={daysOld}
-                                        min="0"
+                                        min="1"
                                         onChange={this.handleChange}
-                                            onBlur={this.handleSubmit} />
+                                        onBlur={(e) => {
+                                            if (e.target.checkValidity()) {
+                                                    this.handleSubmit();
+                                            } else {
+                                                //e.target.focus();
+                                            }
+                                        }.bind(this)} />
                                 </form>
                             </Col>
                         </Row>
@@ -170,7 +187,21 @@ export default class Maintenance extends React.Component{
                                </ConfirmAction>
                             </Col>
                         </Row>
-                    </IBoxBody>
+                    <Row>
+                        <Col sm={12} md={3}>
+                            <ConfirmAction
+                                  id="cleanContainers"
+                                  style={{width: "100%", marginTop: "0.5em"}}
+                                  onConfirm={this.cleanContainers.bind(this, daysOld)}
+                                  confirmLabel="Clean Containers"
+                                  confirmInProgressLabel="Cleaning"
+                                  instructions={`Do you want to clean containers older than ${daysOld} day(s)?`}>
+                                  Clean Containers
+                            </ConfirmAction>
+                        </Col>
+                    </Row>
+
+                        </IBoxBody>
                 </IBox>
                 </Col>
                 </Row>
