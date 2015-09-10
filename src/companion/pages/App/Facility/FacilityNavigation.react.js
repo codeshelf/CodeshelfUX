@@ -23,6 +23,7 @@ class FacilityNavigation extends React.Component {
                       {/* TODO: support *:import permissions */}
                       <AuthzMenuItem permission="order:import" to="import" params={params} title="Imports/Exports" iconName="exchange" />
                       <AuthzMenuItem permission="facility:edit" to="extensionpoints" params={params} title="Extensions" iconName="code" />
+                      <AuthzMenuItem permission="facility:edit" to="maintenance" params={params} title="Maintenance" iconName="heartbeat" />
                       <AuthzMenuItem permission="ux:view" href={this.getUXUrl(facility)} params={params} title="Configuration" iconName="cogs" />
                       <AuthzMenuItem permission="che:simulate" to="testscript" params={params} title="Test Scripts" iconName="bug" />
                   </Navigation>);

@@ -244,6 +244,11 @@ export function getFacilityContext() {
             });
         },
 
+        getDataSummary: function(daysOld) {
+            let dataSummary = facilityPath + "/data/summary";
+            return ajax(dataSummary, {data: {daysOld: daysOld}});
+        },
+
         deleteOrders: () => {
             return ajax(ordersPath, {method: "DELETE"});
         },

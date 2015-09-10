@@ -138,9 +138,11 @@ export class Input extends React.Component {
              autoFocus,
              disabled,
              onChange,
+             onBlur,
              readOnly,
              hidden,
-             addOnAfter} = this.props;
+             addOnAfter,
+             ...others} = this.props;
 
         var inputClasses = classnames({
             "form-control": true
@@ -168,7 +170,9 @@ export class Input extends React.Component {
                            label={label}
                            value={value}
                            onChange={onChange}
+                           onBlur={onBlur}
                            readOnly={readOnly}
+                           {...others}
                      />
                     {
                         (addOnAfter) ?
@@ -196,7 +200,7 @@ export class Checkbox extends React.Component {
         let {id, label, value, onChange, name} = this.props;
         let checked = (value) ? true : false;
         let nameAttr = name || id;
-        console.log("Checkbox name: " + nameAttr);
+        (nameAttr) || console.warn("Checkbox name: " + nameAttr);
         return (<div className="form-group form-group-default" >
 
                     <div className="checkbox check-primary">
@@ -206,7 +210,7 @@ export class Checkbox extends React.Component {
                     </div>
                );
     }
-};
+    };
 
 export class MultiSelectUnwrapped extends PureComponent {
     constructor(props) {
