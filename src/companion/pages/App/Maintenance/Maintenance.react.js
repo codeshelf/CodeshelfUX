@@ -113,11 +113,11 @@ export default class Maintenance extends React.Component{
     }
 
     cleanWorkInstructions(daysOld) {
-        return getFacilityContext().cleanWorkInstructions(daysOld);
+        return getFacilityContext().deleteWIData(daysOld);
     }
 
     cleanOrders(daysOld) {
-        return getFacilityContext().cleanOrders(daysOld);
+        return getFacilityContext().deleteOrderData(daysOld);
     }
 
     render() {

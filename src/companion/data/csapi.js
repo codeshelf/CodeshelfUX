@@ -249,6 +249,21 @@ export function getFacilityContext() {
             return ajax(dataSummary, {data: {daysOld: daysOld}});
         },
 
+        deleteOrderData: function(daysOld) {
+            let dataSummary = facilityPath + "/data/orders";
+            return ajax(dataSummary, {
+                method: "DELETE",
+                data: {daysOld: daysOld}
+            });
+        },
+
+        deleteWIData: function(daysOld) {
+            let dataSummary = facilityPath + "/data/wis";
+            return ajax(dataSummary, {
+                method: "DELETE",
+                data: {daysOld: daysOld}
+            });
+        },
         deleteOrders: () => {
             return ajax(ordersPath, {method: "DELETE"});
         },
