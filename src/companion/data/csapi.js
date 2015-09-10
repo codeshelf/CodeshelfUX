@@ -264,6 +264,16 @@ export function getFacilityContext() {
                 data: {daysOld: daysOld}
             });
         },
+
+        deleteContainerData: function(daysOld) {
+            let dataSummary = facilityPath + "/data/containers";
+            return ajax(dataSummary, {
+                method: "DELETE",
+                data: {daysOld: daysOld}
+            });
+        },
+
+
         deleteOrders: () => {
             return ajax(ordersPath, {method: "DELETE"});
         },
