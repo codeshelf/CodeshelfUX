@@ -25,6 +25,7 @@ import ChangePassword from './pages/ChangePassword/ChangePassword.react.js';
 import RecoverPassword from './pages/RecoverPassword/RecoverPassword.react.js';
 import RecoverSuccess from './pages/RecoverSuccess/RecoverSuccess.react.js';
 
+import Maintenance from './pages/App/Maintenance/Maintenance.react.js';
 import TestScript from './pages/App/TestScript/TestScript.react.js';
 import ExtensionPointsPage from "./pages/App/ExtensionPoints/ExtensionPointsPage.react.js";
 import ExtensionPointEdit from "./pages/App/ExtensionPoints/ExtensionPointEdit.react.js";
@@ -45,11 +46,11 @@ export default (
             <Route handler={EDIGateways} name="edigateways">
                 <Route handler={EDIGatewayEdit} name="edigatewayedit" path=":id"/>
             </Route>
-
-                <Route handler={WorkerMgmt} name="workermgmt">
+            <Route handler={WorkerMgmt} name="workermgmt">
                 <Route handler={WorkerDisplay} name="workernew" path="new" />
                 <Route handler={WorkerDisplay} name="workerdisplay" path=":workerId" />
             </Route>
+            <Route handler={Maintenance} name="maintenance" />
             <Route handler={TestScript} name="testscript" />
             <Route handler={ExtensionPointsPage} name="extensionpoints">
                 <Route handler={ExtensionPointAdd} name="extensionpointadd" path="new" />
