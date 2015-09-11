@@ -1,16 +1,15 @@
 import {getFacilityContext} from 'data/csapi';
 import React from 'react';
 import {Link} from 'react-router';
-import {TabbedArea, TabPane} from 'react-bootstrap';
+import {Tabs, Tab} from 'react-bootstrap';
 import {SingleCellLayout} from 'components/common/pagelayout';
 import {Form, SubmitButton, SuccessDisplay, ErrorDisplay, Input} from 'components/common/Form';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
 import ImportList from './ImportList';
-import {Authz, authz} from 'components/common/auth';
+import {Authz, authz, isAuthorized} from 'components/common/auth';
 
 const priorDayInterval = DayOfWeekFilter.priorDayInterval;
-const AuthzTabPane = authz(TabPane);
 export default class Imports extends React.Component{
 
     constructor() {
@@ -50,46 +49,69 @@ export default class Imports extends React.Component{
         }.bind(this));
     }
 
-    render() {
+    renderOrder() {
         let receipts = this.getImportReceipts();
+        return (
+                <Tab eventKey="orders" title="Orders">
+                    <Authz permission="order:import">
+                        <UploadForm
+                            label="Orders"
+                            onImportSubmit={this.handleImportSubmit.bind(this, "importOrderFile")} />
+                    </Authz>
+
+                    <SingleCellIBox title="Order Files Imported">
+                        <IBoxSection>
+                            <DayOfWeekFilter numDays={4} onChange={this.handleChange.bind(this)} />
+                        </IBoxSection>
+                        <IBoxSection>
+                        {/**  passing state through is a hack until we can have something like sub cursors**/}
+                            <ImportList receipts={receipts} state={this.props.state}/>
+                        </IBoxSection>
+                    </SingleCellIBox>
+                </Tab>
+        );
+    }
+
+    renderLocation() {
+        return (
+            <Tab eventKey="locations" title="Locations" >
+                <UploadForm
+                    label="Locations"
+                    onImportSubmit={this.handleImportSubmit.bind(this, "importLocationFile")} />
+            </Tab>
+        );
+    }
+
+    renderAisle() {
+        return (
+            <Tab eventKey="aisles" title="Aisles">
+                <UploadForm
+                    label="Aisles"
+                    onImportSubmit={this.handleImportSubmit.bind(this, "importAislesFile")} />
+            </Tab>
+        );
+    }
+
+    renderInventory() {
+            return  (<Tab eventKey="inventory" title="Inventory">
+                        <UploadForm
+                                label="Inventory"
+                                onImportSubmit={this.handleImportSubmit.bind(this, "importInventoryFile")} />
+                     </Tab>);
+    }
+
+    render() {
+
             return (<SingleCellLayout title="Manage Imports">
                 <Authz permission="facility:edit">
                     <Link id="configure" to="edigateways" params={{facilityName: getFacilityContext().domainId}}>Configure EDI</Link>
                 </Authz>
-                <TabbedArea className="nav-tabs-simple" defaultActiveKey="orders">
-                    <TabPane eventKey="orders" tab="Orders">
-                        <Authz permission="order:import">
-                            <UploadForm eventKey="other"
-                                label="Orders"
-                                    onImportSubmit={this.handleImportSubmit.bind(this, "importOrderFile")} />
-                        </Authz>
-
-                        <SingleCellIBox title="Order Files Imported">
-                            <IBoxSection>
-                                <DayOfWeekFilter numDays={4} onChange={this.handleChange.bind(this)} />
-                            </IBoxSection>
-                            <IBoxSection>
-                            {/**  passing state through is a hack until we can have something like sub cursors**/}
-                            <ImportList receipts={receipts} state={this.props.state}/>
-                            </IBoxSection>
-                        </SingleCellIBox>
-                        </TabPane>
-                        <AuthzTabPane permission="location:import" eventKey="locations" tab="Locations">
-                            <UploadForm eventKey="locations"
-                                label="Locations"
-                                onImportSubmit={this.handleImportSubmit.bind(this, "importLocationFile")} />
-                        </AuthzTabPane>
-                        <AuthzTabPane permission="location:import" eventKey="aisles" tab="Aisles">
-                            <UploadForm eventKey="aisles"
-                                label="Aisles"
-                                onImportSubmit={this.handleImportSubmit.bind(this, "importAislesFile")} />
-                        </AuthzTabPane>
-                        <AuthzTabPane permission="inventory:import" eventKey="inventory" tab="Inventory">
-                            <UploadForm eventKey="inventory"
-                                label="Inventory"
-                                onImportSubmit={this.handleImportSubmit.bind(this, "importInventoryFile")} />
-                        </AuthzTabPane>
-                </TabbedArea>
+                <Tabs className="nav-tabs-simple" defaultActiveKey="orders">
+                    {this.renderOrder()}
+                    {isAuthorized("location:import") && this.renderLocation()}
+                    {isAuthorized("location:import") && this.renderAisle()}
+                    {isAuthorized("inventory:import") && this.renderInventory()}
+                </Tabs>
 
                 </SingleCellLayout>
         );
@@ -130,7 +152,7 @@ class UploadForm extends React.Component{
                  <ErrorDisplay message={errorMessage} />
                                 <Input ref="fileInput"
                                        type='file'
-                                       label={label + " File"}
+                                           label={label + " File"}
                                        help={label + " files to import"}
                                        required={true} />
                                 <SubmitButton label="Import" />
