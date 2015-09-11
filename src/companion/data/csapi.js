@@ -253,6 +253,7 @@ export function getFacilityContext() {
             let dataSummary = facilityPath + "/data/orders";
             return ajax(dataSummary, {
                 method: "DELETE",
+                contentType: "form",
                 data: {daysOld: daysOld}
             });
         },
@@ -261,6 +262,7 @@ export function getFacilityContext() {
             let dataSummary = facilityPath + "/data/wis";
             return ajax(dataSummary, {
                 method: "DELETE",
+                contentType: "form",
                 data: {daysOld: daysOld}
             });
         },
@@ -269,6 +271,7 @@ export function getFacilityContext() {
             let dataSummary = facilityPath + "/data/containers";
             return ajax(dataSummary, {
                 method: "DELETE",
+                contentType: "form",
                 data: {daysOld: daysOld}
             });
         },
