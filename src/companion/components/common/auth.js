@@ -44,7 +44,10 @@ export function authn(Component) {
 }
 
 
-
+export function isAuthorized(permission) {
+    let result =  hasPermission(permission);
+    return result;
+}
 
 export function authz(Component) {
 
