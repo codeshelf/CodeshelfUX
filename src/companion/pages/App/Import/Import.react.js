@@ -7,9 +7,10 @@ import {Form, SubmitButton, SuccessDisplay, ErrorDisplay, Input} from 'component
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
 import ImportList from './ImportList';
+import {Authz, authz} from 'components/common/auth';
 
 const priorDayInterval = DayOfWeekFilter.priorDayInterval;
-
+const AuthzTabPane = authz(TabPane);
 export default class Imports extends React.Component{
 
     constructor() {
@@ -52,14 +53,16 @@ export default class Imports extends React.Component{
     render() {
         let receipts = this.getImportReceipts();
             return (<SingleCellLayout title="Manage Imports">
-
-                <Link id="configure" to="edigateways" params={{facilityName: getFacilityContext().domainId}}>Configure EDI</Link>
-
+                <Authz permission="facility:edit">
+                    <Link id="configure" to="edigateways" params={{facilityName: getFacilityContext().domainId}}>Configure EDI</Link>
+                </Authz>
                 <TabbedArea className="nav-tabs-simple" defaultActiveKey="orders">
                     <TabPane eventKey="orders" tab="Orders">
-                    <UploadForm eventKey="other"
-                        label="Orders"
-                        onImportSubmit={this.handleImportSubmit.bind(this, "importOrderFile")} />
+                        <Authz permission="order:import">
+                            <UploadForm eventKey="other"
+                                label="Orders"
+                                    onImportSubmit={this.handleImportSubmit.bind(this, "importOrderFile")} />
+                        </Authz>
 
                         <SingleCellIBox title="Order Files Imported">
                             <IBoxSection>
@@ -70,23 +73,22 @@ export default class Imports extends React.Component{
                             <ImportList receipts={receipts} state={this.props.state}/>
                             </IBoxSection>
                         </SingleCellIBox>
-                    </TabPane>
-                    <TabPane eventKey="locations" tab="Locations">
-                        <UploadForm eventKey="locations"
-                            label="Locations"
-                            onImportSubmit={this.handleImportSubmit.bind(this, "importLocationFile")} />
-                    </TabPane>
-                    <TabPane eventKey="aisles" tab="Aisles">
-                        <UploadForm eventKey="aisles"
-                            label="Aisles"
-                            onImportSubmit={this.handleImportSubmit.bind(this, "importAislesFile")} />
-                    </TabPane>
-                    <TabPane eventKey="inventory" tab="Inventory">
-                        <UploadForm eventKey="inventory"
-                            label="Inventory"
-                            onImportSubmit={this.handleImportSubmit.bind(this, "importInventoryFile")} />
-                    </TabPane>
-
+                        </TabPane>
+                        <AuthzTabPane permission="location:import" eventKey="locations" tab="Locations">
+                            <UploadForm eventKey="locations"
+                                label="Locations"
+                                onImportSubmit={this.handleImportSubmit.bind(this, "importLocationFile")} />
+                        </AuthzTabPane>
+                        <AuthzTabPane permission="location:import" eventKey="aisles" tab="Aisles">
+                            <UploadForm eventKey="aisles"
+                                label="Aisles"
+                                onImportSubmit={this.handleImportSubmit.bind(this, "importAislesFile")} />
+                        </AuthzTabPane>
+                        <AuthzTabPane permission="inventory:import" eventKey="inventory" tab="Inventory">
+                            <UploadForm eventKey="inventory"
+                                label="Inventory"
+                                onImportSubmit={this.handleImportSubmit.bind(this, "importInventoryFile")} />
+                        </AuthzTabPane>
                 </TabbedArea>
 
                 </SingleCellLayout>
@@ -135,4 +137,4 @@ class UploadForm extends React.Component{
                             </Form>
             </SingleCellIBox>);
         }
-    };
+};

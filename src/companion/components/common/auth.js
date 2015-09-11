@@ -45,9 +45,10 @@ export function authn(Component) {
 
 
 
+
 export function authz(Component) {
 
-    class Authz extends React.Component {
+    class AuthzWrapper extends React.Component {
         render() {
             let {permission, notPermission} = this.props;
             var permit = true;
@@ -63,6 +64,23 @@ export function authz(Component) {
                        null);
         }
     };
-    return Authz;
+    return AuthzWrapper;
 
+};
+
+export class Authz extends React.Component {
+    render() {
+        let {permission, notPermission} = this.props;
+        var permit = true;
+        if (permission != null) {
+            permit = hasPermission(permission);
+        }
+        if (notPermission != null) {
+            permit = !hasPermission(notPermission);
+        }
+        return ((permit) ?
+                <div>{this.props.children}</div>
+                :
+                null);
+    }
 };

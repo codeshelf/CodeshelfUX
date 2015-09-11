@@ -20,7 +20,8 @@ export const formMetadata = [
      label: "Roles",
      options:[{value: "Admin", label: "Admin"},
               {value: "Upload", label: "Upload"},
-              {value: "Companion", label: "Companion"},
+              {value: "View", label: "View"},
+              {value: "Supervise", label: "Supervise"},
               {value: "Dashboard", label: "Dashboard"}
              ],
      type: Array,
