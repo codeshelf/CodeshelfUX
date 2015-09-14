@@ -1,13 +1,13 @@
-import {getFacilityContext} from 'data/csapi';
 import React from 'react';
 import {Link} from 'react-router';
 import {Tabs, Tab} from 'react-bootstrap';
 import {SingleCellLayout} from 'components/common/pagelayout';
-import {Form, SubmitButton, SuccessDisplay, ErrorDisplay, Input} from 'components/common/Form';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
+import UploadForm from 'components/common/UploadForm';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
-import ImportList from './ImportList';
 import {Authz, authz, isAuthorized} from 'components/common/auth';
+import {getFacilityContext} from 'data/csapi';
+import ImportList from './ImportList';
 
 const priorDayInterval = DayOfWeekFilter.priorDayInterval;
 export default class Imports extends React.Component{
@@ -116,47 +116,4 @@ export default class Imports extends React.Component{
                 </SingleCellLayout>
         );
     }
-};
-
-
-class UploadForm extends React.Component{
-
-    constructor(props) {
-        super(props);
-        this.state = {errorMessage: null};
-    }
-
-    handleSubmit(e) {
-        e.preventDefault();
-        var input = React.findDOMNode(this.refs.fileInput);
-        let file = input.getElementsByTagName("input")[0].files[0];
-        this.setState({errorMessage: null});
-        this.setState({successMessage: null});
-        return this.props.onImportSubmit(file).then(((data) => {
-                this.setState({errorMessage: null});
-            this.setState({successMessage: "File Imported"});
-            return data;
-        }), (e) => {
-                this.setState({errorMessage: e.message});
-                this.setState({successMessage: null});
-            return e;
-        });
-    }
-
-    render() {
-        let {eventKey, label, onImportSubmit} = this.props;
-        let {successMessage, errorMessage} = this.state;
-        return (<SingleCellIBox title={label + " Import"}>
-            <Form onSubmit={this.handleSubmit.bind(this)}>
-                 <SuccessDisplay message={successMessage} />
-                 <ErrorDisplay message={errorMessage} />
-                                <Input ref="fileInput"
-                                       type='file'
-                                           label={label + " File"}
-                                       help={label + " files to import"}
-                                       required={true} />
-                                <SubmitButton label="Import" />
-                            </Form>
-            </SingleCellIBox>);
-        }
 };

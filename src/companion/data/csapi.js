@@ -307,6 +307,11 @@ export function getFacilityContext() {
                 dataType: "json"
             });
         },
+
+        importWorkers: function(formData) {
+            return this.importFile("workers", formData);
+        },
+
         getSummarySnapshot: function(viewSpec) {
             var {filterName, aggregate} = viewSpec;
             var orderstatussummary = facilityPath + "/statussummary/" + aggregate;

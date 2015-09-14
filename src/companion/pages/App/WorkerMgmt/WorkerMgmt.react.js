@@ -8,14 +8,18 @@ import {RouteHandler} from 'react-router';
 import PureComponent from 'components/common/PureComponent';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {SingleCellIBox} from 'components/common/IBox';
-    import ListView from "components/common/list/ListView";
+import UploadForm from 'components/common/UploadForm';
+
+
+import ListView from "components/common/list/ListView";
 import ListManagement from "components/common/list/ListManagement";
 import {EditButtonLink, AddButtonLink} from 'components/common/TableButtons';
+import {Authz} from 'components/common/auth';
 
+
+import {getFacilityContext} from 'data/csapi';
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkers} from 'data/workers/store';
-
-import exposeRouter from 'components/common/exposerouter';
 
 const keyColumn = "persistentId";
 
@@ -78,11 +82,23 @@ export default class WorkerMgmt extends React.Component{
         fetchWorkers();
     }
 
+    handleImportSubmit(method, file) {
+        var formData = new FormData();
+        formData.append("file", file);
+        return getFacilityContext()[method](formData).then(() => {
+            fetchWorkers();
+        }.bind(this));
+    }
+
     render() {
         var rows = getWorkers();
         let title = "Manage Workers";
         return (
             <SingleCellLayout title={title}>
+                <Authz permission="worker:import">
+                    <UploadForm label="Workers"
+                            onImportSubmit={this.handleImportSubmit.bind(this, "importWorkers")} />
+                </Authz>
                 <ListManagement
                         addButtonRoute="workernew"
 
