@@ -39,6 +39,7 @@ export default class OrdersIBox extends React.Component{
 
     constructor(props) {
         super(props);
+        this.state = {};
         let {state}=  this.props;
         this.columnsCursor  = state.cursor(["preferences", "orders", "table", "columns"]);
         this.columnSortSpecsCursor = state.cursor(["preferences", "orders", "table", "sortSpecs"]);
@@ -47,6 +48,7 @@ export default class OrdersIBox extends React.Component{
 
         this.ordersCursor = state.cursor(["pivot", "orders"]);
         this.handleRefresh = this.handleRefresh.bind(this);
+        this.cancelRefresh = this.cancelRefresh.bind(this);
     }
 
     componentDidMount() {
@@ -57,8 +59,30 @@ export default class OrdersIBox extends React.Component{
         }.bind(this));
     }
 
+    componentWillUnmount() {
+        this.cancelRefresh();
+    }
+
+
     handleRefresh() {
-        return this.refs.orderSearch.refresh();
+        var promise = this.state.refreshingAction;
+
+        if (promise && promise.isPending()) {
+            console.log("refresh already happening, cancellable: ", promise.isCancellable());
+            return promise;
+        } else {
+            promise = this.refs.orderSearch.refresh();
+            this.setState({"refreshingAction" : promise});
+            return promise;
+        }
+    }
+
+    cancelRefresh() {
+        var promise = this.state.refreshingAction;
+        if (promise && promise.isPending()) {
+            console.log("cancelling order refresh");
+            promise.cancel();
+        }
     }
 
     handleOrdersUpdated(updatedOrders) {

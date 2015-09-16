@@ -135,7 +135,7 @@ export default class PivotTable extends React.Component{
 
     componentWillUnmount() {
         var result = React.unmountComponentAtNode(React.findDOMNode(this));
-        console.log(result);
+        console.log("Unmounting pivot table:", result);
     }
 
     render() {

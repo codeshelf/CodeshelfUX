@@ -1,6 +1,7 @@
-var React = require("react");
-var pluralize = require("lib/pluralize");
+import React from "react";
+import pluralize from "lib/pluralize";
 import classNames from "classnames";
+import Promise from "bluebird";
 
 function RClass(renderFunction, otherMethods) {
     return React.createClass({
@@ -55,13 +56,27 @@ var IBox = RClass(function() {
 
 class IBoxControls extends React.Component {
     render() {
-        let {onRefresh} = this.props;
+        let {onRefresh, refreshPending} = this.props;
+        let refreshButton = classNames({
+            "portlet-icon": true,
+            "portlet-icon-refresh-lg-master" : true,
+            "fade" : refreshPending
+        } );
+        let refreshingButton = classNames({
+            "portlet-icon-refresh-lg-master-animated": true,
+            "active": refreshPending
+        });
+
         return (
             <div className="panel-controls">
                 <ul>
-                    <li><a href="#" className="portlet-refresh text-black" data-toggle="refresh"
-                            onClick={onRefresh}
-                         ><i className="portlet-icon portlet-icon-refresh" title="Refresh"></i></a>
+                    <li>
+                        <a href="#" className="portlet-refresh text-black" data-toggle="refresh"
+                            onClick={onRefresh}>
+                            <i className={refreshButton}  title="Refresh"></i>
+                            <i className={refreshingButton} style={{position: "absolute", top: 17}} title="Refreshing"></i>
+
+                        </a>
                     </li>
                 </ul>
             </div>);
@@ -74,21 +89,21 @@ export class SingleCellIBox extends React.Component {
         super(props);
         this.refresh = this.refresh.bind(this);
         this.state = {
-            "refreshPending" : false
+            "pendingRefresh" : Promise.resolve(null)
         };
 
     }
 
     //called externally
     refresh() {
-        this.setState({"refreshPending": true});
-        this.props.onRefresh().then(() => this.setState({"refreshPending": false}));
+        let promise =  this.props.onRefresh();
+        this.setState({"pendingRefresh": promise});
     }
 
     render() {
         let {title, style, onRefresh} = this.props;
-        let {refreshPending} = this.state;
-        let progressStyle = {display: (refreshPending) ? "block" : "none"};
+        let {pendingRefresh} = this.state;
+        let progressStyle = {display: "none"};//(pendingRefresh) ? "block" : "none"};
         return (
                 <IBox style={style}>
                     <IBoxTitleBar>
@@ -96,7 +111,8 @@ export class SingleCellIBox extends React.Component {
                             {title}
                         </IBoxTitleText>
                         {(onRefresh) ?
-                            <IBoxControls onRefresh={this.refresh} /> : null
+                                <IBoxControls onRefresh={this.refresh} refreshPending={pendingRefresh.isPending()}/>
+                                : null
                         }
                     </IBoxTitleBar>
                     <IBoxBody>

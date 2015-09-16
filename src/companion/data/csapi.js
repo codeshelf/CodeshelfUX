@@ -190,6 +190,12 @@ export function getFacilityContext() {
             });
         },
 
+        getOrder(orderId, properties) {
+            let orderPath = facilityPath + "/orders/" + orderId;
+            return ajax(orderPath, {data: {"properties" : properties}});
+        },
+
+
         getOrderDetails(orderId) {
             let orderDetailsPath = facilityPath + "/orders/" + orderId + "/details";
             return ajax(orderDetailsPath, {});
@@ -243,6 +249,13 @@ export function getFacilityContext() {
                 data: filter
             });
         },
+
+        findOrderReferences: function(filter) {
+            return ajax(ordersPath + "/references", {
+                data: filter
+            });
+        },
+
 
         getDataSummary: function(daysOld) {
             let dataSummary = facilityPath + "/data/summary";
