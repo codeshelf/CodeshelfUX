@@ -24,13 +24,24 @@ function priorDay(daysBack) {
     return moment().subtract(daysBack, 'days').local();
 }
 
+class Interval {
+    constructor(start, end) {
+        this.start = moment(start);
+        this.end = moment(end);
+    }
+
+    toQueryParameterValue() {
+        return `${this.start.toISOString()}/${this.end.toISOString()}`;
+    }
+}
 
 export default class DayOfWeekFilter extends React.Component {
 
     static priorDayInterval(daysBack) {
-        return {start: priorDay(daysBack).startOf('day'),
-                end: priorDay(daysBack).endOf('day')
-               };
+        return new Interval(
+            priorDay(daysBack).startOf('day'),
+            priorDay(daysBack).endOf('day')
+        );
     }
 
     constructor() {
@@ -41,11 +52,15 @@ export default class DayOfWeekFilter extends React.Component {
         };
     }
 
+    getInterval() {
+        return DayOfWeekFilter.priorDayInterval(this.state.value);
+    }
 
     handleButtonClick(value, e) {
-        this.setState({value: value});
-        var {onChange} = this.props;
-        onChange(value);
+        this.setState({value: value}, () => {
+            var {onChange} = this.props;
+            onChange(value);
+        });
     }
 
     render() {

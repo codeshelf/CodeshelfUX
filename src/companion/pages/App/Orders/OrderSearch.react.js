@@ -3,6 +3,8 @@ import {Row, Col} from 'components/common/pagelayout';
 import {Select, Input} from 'components/common/Form';
 import Promise from "bluebird";
 import _ from "lodash";
+import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
+
 export default class OrderSearch extends React.Component {
 
     constructor(props){
@@ -19,17 +21,25 @@ export default class OrderSearch extends React.Component {
         this.doSearch();
     }
 
+    handleDayChange(daysBack) {
+        this.doSearch();
+    }
+
     doSearch() {
         let {searchPending} = this.state;
         if (searchPending != null && searchPending.isPending()) {
             searchPending.cancel();
         }
 
+        let interval = this.refs.dueDateFilter.getInterval();
         let orderIdSubstring = React.findDOMNode(this.refs.orderId).getElementsByTagName("input")[0].value;
         let  filter = {
             orderId: orderIdSubstring,
             properties: ["orderId"]
         };
+        if (interval) {
+            filter['dueDate'] = interval.toQueryParameterValue();
+        }
 
         var error = null;
         console.log("searching orders with filter: ", filter);
@@ -74,10 +84,12 @@ export default class OrderSearch extends React.Component {
     render() {
         return (
             <Row>
-                <Col md={4}>
+                <Col md={6}>
                     <form onSubmit={this.handleSubmit.bind(this)}>
+                        <DayOfWeekFilter ref="dueDateFilter" numDays={4} onChange={this.handleDayChange.bind(this)}/>
                         <Input ref="orderId" label="Order ID" name="orderId" type="text" />
                     </form>
+
                 </Col>
             </Row>);
     }
