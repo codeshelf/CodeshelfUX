@@ -7,6 +7,7 @@ import {SingleCellIBox} from 'components/common/IBox';
 import PivotTable from "components/common/pivot/PivotTable";
 import OrderSearch from "./OrderSearch";
 import OrderReview from "./OrderReview";
+import Promise from "bluebird";
 
 class RelativeTime extends React.Component {
     constructor(props) {
@@ -39,7 +40,9 @@ export default class OrdersIBox extends React.Component{
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            refreshingAction: Promise.resolve([])
+        };
         let {state}=  this.props;
         this.columnsCursor  = state.cursor(["preferences", "orders", "table", "columns"]);
         this.columnSortSpecsCursor = state.cursor(["preferences", "orders", "table", "sortSpecs"]);
@@ -54,7 +57,7 @@ export default class OrdersIBox extends React.Component{
     componentDidMount() {
         window.requestAnimationFrame(() => {
             if (this.ordersCursor().get("values").count() <= 0) {
-                this.refs.ibox.refresh();
+                this.handleRefresh();
             }
         }.bind(this));
     }
@@ -72,9 +75,11 @@ export default class OrdersIBox extends React.Component{
             return promise;
         } else {
             promise = this.refs.orderSearch.refresh();
+            promise.then(()=> this.forceUpdate());
             this.setState({"refreshingAction" : promise});
             return promise;
         }
+
     }
 
     cancelRefresh() {
@@ -104,6 +109,7 @@ export default class OrdersIBox extends React.Component{
     }
 
     render() {
+        let {refreshingAction} = this.state;
         let orders = this.ordersCursor();
         let ordersUpdated = orders.get("updated");
         let selectedOrders = this.selectedOrdersCursor();
@@ -116,10 +122,9 @@ export default class OrdersIBox extends React.Component{
 
         let sortSpecs = this.columnSortSpecsCursor;
         return (
-            <SingleCellIBox ref="ibox" title="Orders" style={{display: "inline-block"}} onRefresh={this.handleRefresh}>
+                <SingleCellIBox ref="ibox" title="Orders" style={{display: "inline-block"}} isRefreshing={refreshingAction.isPending()} onRefresh={this.handleRefresh}>
                 <OrderSearch ref="orderSearch" properties={properties} onOrdersUpdated={this.handleOrdersUpdated.bind(this)}/>
                 {(ordersUpdated) ? <h5>Last Updated: <RelativeTime time={ordersUpdated} /></h5>: null}
-
                 <PivotTable results={orders.get("values")} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
                 <OrderReview orders={selectedOrders} columns={columns} sortSpecs={sortSpecs}/>
             </SingleCellIBox>);

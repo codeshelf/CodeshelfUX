@@ -56,15 +56,15 @@ var IBox = RClass(function() {
 
 class IBoxControls extends React.Component {
     render() {
-        let {onRefresh, refreshPending} = this.props;
+        let {onRefresh, isRefreshing} = this.props;
         let refreshButton = classNames({
             "portlet-icon": true,
             "portlet-icon-refresh-lg-master" : true,
-            "fade" : refreshPending
+            "fade" : isRefreshing
         } );
         let refreshingButton = classNames({
             "portlet-icon-refresh-lg-master-animated": true,
-            "active": refreshPending
+            "active": isRefreshing
         });
 
         return (
@@ -82,27 +82,16 @@ class IBoxControls extends React.Component {
             </div>);
     }
 }
+IBoxControls.displayName = "IBoxControls";
 
 export class SingleCellIBox extends React.Component {
 
     constructor(props) {
         super(props);
-        this.refresh = this.refresh.bind(this);
-        this.state = {
-            "pendingRefresh" : Promise.resolve(null)
-        };
-
-    }
-
-    //called externally
-    refresh() {
-        let promise =  this.props.onRefresh();
-        this.setState({"pendingRefresh": promise});
     }
 
     render() {
-        let {title, style, onRefresh} = this.props;
-        let {pendingRefresh} = this.state;
+        let {title, style, isRefreshing, onRefresh} = this.props;
         return (
                 <IBox style={style}>
                     <IBoxTitleBar>
@@ -110,7 +99,7 @@ export class SingleCellIBox extends React.Component {
                             {title}
                         </IBoxTitleText>
                         {(onRefresh) ?
-                                <IBoxControls onRefresh={this.refresh} refreshPending={pendingRefresh.isPending()}/>
+                            <IBoxControls {...{onRefresh, isRefreshing}}/>
                                 : null
                         }
                     </IBoxTitleBar>
@@ -121,7 +110,7 @@ export class SingleCellIBox extends React.Component {
         );
     }
 }
-
+SingleCellIBox.displayName = "SingleCellIBox";
 
 module.exports = {
     IBox: IBox,
