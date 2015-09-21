@@ -190,7 +190,7 @@ export function getFacilityContext() {
             });
         },
 
-        getOrder(orderId, properties) {
+            getOrder(properties, orderId) {
             let orderPath = facilityPath + "/orders/" + orderId;
             return ajax(orderPath, {data: {"properties" : properties}});
         },

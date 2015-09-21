@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 import DocumentTitle from "react-document-title";
 import {fromJS, Set} from "immutable";
 import moment from "moment";
@@ -8,6 +9,8 @@ import PivotTable from "components/common/pivot/PivotTable";
 import OrderSearch from "./OrderSearch";
 import OrderReview from "./OrderReview";
 import Promise from "bluebird";
+import search from "data/search";
+import {getFacilityContext} from "data/csapi";
 
 class RelativeTime extends React.Component {
     constructor(props) {
@@ -74,7 +77,7 @@ export default class OrdersIBox extends React.Component{
             console.log("refresh already happening, cancellable: ", promise.isCancellable());
             return promise;
         } else {
-            promise = this.refs.orderSearch.refresh();
+            promise = this.handleFilterChange(this.refs.orderSearch.getFilter());
             promise.then(()=> this.forceUpdate());
             this.setState({"refreshingAction" : promise});
             return promise;
@@ -90,10 +93,26 @@ export default class OrdersIBox extends React.Component{
         }
     }
 
-    handleOrdersUpdated(updatedOrders) {
+    handleFilterChange(filter) {
+        let pivotOptions = this.pivotOptionsCursor;
+        let columns = this.columnsCursor;
+        let properties = new Set(columns())
+            .union(pivotOptions().get("fields").map((f) => f.get("name")))
+            .add("persistentId")
+            .toJS();
+
+
+        return search(getFacilityContext().findOrderReferences,
+               _.partial(getFacilityContext().getOrder, properties),
+               this.handleOrdersUpdated.bind(this),
+               filter);
+    }
+
+    handleOrdersUpdated(updatedOrders, total) {
         this.ordersCursor((orders) =>{
-            return orders.set("updated", moment())
-                         .set("values", fromJS(updatedOrders).map((order) => {
+        return orders.set("updated", moment())
+                     .set("total", total)
+                     .set("values", fromJS(updatedOrders).map((order) => {
                                  let localDate = moment(order.get("dueDate")).local();
                                  let endOfDay = localDate.clone();
                                  return order.set("dueDay", endOfDay.format("YYYY-MM-DD"))
@@ -110,8 +129,10 @@ export default class OrdersIBox extends React.Component{
 
     render() {
         let {refreshingAction} = this.state;
-        let orders = this.ordersCursor();
-        let ordersUpdated = orders.get("updated");
+        let ordersResult = this.ordersCursor();
+        let ordersUpdated = ordersResult.get("updated");
+        let ordersTotal = ordersResult.get("total") || 0;
+        let orders = ordersResult.get("values");
         let selectedOrders = this.selectedOrdersCursor();
         let pivotOptions = this.pivotOptionsCursor;
         let columns = this.columnsCursor;
@@ -123,9 +144,10 @@ export default class OrdersIBox extends React.Component{
         let sortSpecs = this.columnSortSpecsCursor;
         return (
                 <SingleCellIBox ref="ibox" title="Orders" style={{display: "inline-block"}} isRefreshing={refreshingAction.isPending()} onRefresh={this.handleRefresh}>
-                <OrderSearch ref="orderSearch" properties={properties} onOrdersUpdated={this.handleOrdersUpdated.bind(this)}/>
-                {(ordersUpdated) ? <h5>Last Updated: <RelativeTime time={ordersUpdated} /></h5>: null}
-                <PivotTable results={orders.get("values")} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
+                    <OrderSearch ref="orderSearch" onFilterChange={this.handleFilterChange.bind(this)}/>
+                    {(ordersUpdated) ? <h5>Last Updated: <RelativeTime time={ordersUpdated} /></h5>: null}
+                    <h5>Loading  {orders.count()} / {ordersTotal} Orders</h5>
+                    <PivotTable results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
                 <OrderReview orders={selectedOrders} columns={columns} sortSpecs={sortSpecs}/>
             </SingleCellIBox>);
     }

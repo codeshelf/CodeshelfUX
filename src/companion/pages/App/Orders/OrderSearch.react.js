@@ -1,4 +1,3 @@
-import {getFacilityContext} from "data/csapi";
 import {Row, Col} from 'components/common/pagelayout';
 import {Select, Input, WrapInput} from 'components/common/Form';
 import Promise from "bluebird";
@@ -12,25 +11,7 @@ export default class OrderSearch extends React.Component {
         this.state = {};
     }
 
-    refresh() {
-        return this.doSearch();
-    }
-
-    handleSubmit(e) {
-        e.preventDefault();
-        this.doSearch();
-    }
-
-    handleDayChange(daysBack) {
-        this.doSearch();
-    }
-
-    doSearch() {
-        let {searchPending} = this.state;
-        if (searchPending != null && searchPending.isPending()) {
-            searchPending.cancel();
-        }
-
+    getFilter() {
         let interval = this.refs.dueDateFilter.getInterval();
         let orderIdSubstring = React.findDOMNode(this.refs.orderId).getElementsByTagName("input")[0].value;
         let  filter = {
@@ -40,45 +21,26 @@ export default class OrderSearch extends React.Component {
         if (interval) {
             filter['dueDate'] = interval.toQueryParameterValue();
         }
-
-        var error = null;
-        console.log("searching orders with filter: ", filter);
-        var totalOrders = [];
-        let promise = getFacilityContext().findOrderReferences(filter)
-            .then((orderRefs) =>{
-
-                return Promise.map(_.chunk(orderRefs, 100), (orderRefSet) =>{
-                    if (error) {
-                        return error;
-                    }
-                    return Promise
-                        .map(orderRefSet, (orderRef) =>{
-                            if (error) {
-                                return error;
-                            }
-                            return Promise.resolve(getFacilityContext().getOrder(orderRef, this.props.properties.toJS()));
-                        }, {concurrency: 2})
-                        .then((orders) => {
-                            totalOrders = totalOrders.concat(orders);
-                            this.onOrdersUpdated(totalOrders);
-
-                        });
-                 }, {concurrency: 1});
-             })
-             .then(() => {
-                 this.onOrdersUpdated(totalOrders);
-             })
-             .catch(Promise.CancellationError, (e) => {
-                 console.log("cancelling order search with filter", filter, e);
-                 error = e;
-            });
-
-        this.setState({searchPending:  promise});
-        return promise;
+        return filter;
     }
 
-    onOrdersUpdated(orders) {
-        this.props.onOrdersUpdated(orders);
+    handleSubmit(e) {
+        e.preventDefault();
+        this.fireFilterChange();
+    }
+
+    handleDayChange(daysBack) {
+        this.fireFilterChange();
+    }
+
+    fireFilterChange() {
+        let {searchPending} = this.state;
+        if (searchPending != null && searchPending.isPending()) {
+            searchPending.cancel();
+        }
+
+        let  filter = this.getFilter();
+        this.props.onFilterChange(filter);
     }
 
     render() {
@@ -87,7 +49,7 @@ export default class OrderSearch extends React.Component {
                 <Col md={6}>
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <WrapInput label="Due Date">
-                                <DayOfWeekFilter ref="dueDateFilter" numDays={4} onChange={this.handleDayChange.bind(this)}/>
+                            <DayOfWeekFilter ref="dueDateFilter" numDays={4} onChange={this.handleDayChange.bind(this)}/>
                         </WrapInput>
                         <Input ref="orderId" label="Order ID" name="orderId" type="text" />
                     </form>
