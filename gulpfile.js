@@ -25,7 +25,7 @@ var args = yargs
 function runKarma(options, done) {
     var singleRun = options.singleRun;
     var server = new karma.Server({
-        configFile: path.join(__dirname, 'karma-companion.conf.js'), // eslint-disable-line no-undef
+        configFile: path.join(__dirname, 'karma.conf.js'), // eslint-disable-line no-undef
         singleRun: singleRun
     }, function() {
         done();
