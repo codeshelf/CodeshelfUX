@@ -84,7 +84,7 @@ export class Form extends React.Component {
 }
 
 
-class  WrapInput extends React.Component {
+export class  WrapInput extends React.Component {
     handleInputGroupClick(e) {
         var inputs = e.target.getElementsByTagName("input");
         Array.prototype.forEach.call(inputs, function(el, i){

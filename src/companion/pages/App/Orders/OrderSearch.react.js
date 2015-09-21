@@ -1,6 +1,6 @@
 import {getFacilityContext} from "data/csapi";
 import {Row, Col} from 'components/common/pagelayout';
-import {Select, Input} from 'components/common/Form';
+import {Select, Input, WrapInput} from 'components/common/Form';
 import Promise from "bluebird";
 import _ from "lodash";
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
@@ -86,7 +86,9 @@ export default class OrderSearch extends React.Component {
             <Row>
                 <Col md={6}>
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <DayOfWeekFilter ref="dueDateFilter" numDays={4} onChange={this.handleDayChange.bind(this)}/>
+                        <WrapInput label="Due Date">
+                                <DayOfWeekFilter ref="dueDateFilter" numDays={4} onChange={this.handleDayChange.bind(this)}/>
+                        </WrapInput>
                         <Input ref="orderId" label="Order ID" name="orderId" type="text" />
                     </form>
 
