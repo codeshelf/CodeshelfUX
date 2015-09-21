@@ -161,21 +161,14 @@ export default class OrderReview extends React.Component{
 
         let {columnMetadata} = this;
 
-        return (<div>
-                <ListView.TableSettings onColumnsChange={columns}
-                    columns={columns()}
-                    columnMetadata={columnMetadata} />
-                <Table results={orders}
-                    columns={columns()}
-                    columnMetadata={this.columnMetadata}
-                    keyColumn="orderId"
-                    sortedBy={sortBy}
-                    expand={this.shouldExpand.bind(this)}
-                    onRowExpand={this.handleRowExpand}
-                    onRowCollapse={this.handleRowCollapse}
-                    onColumnMove={this.handleColumnMove.bind(this)}
-                    onColumnSortChange={this.handleColumnSortChange.bind(this)}
-                 />
-                </div>);
+            return (<ListView
+                        results={orders}
+                        columns={columns}
+                        columnMetadata={columnMetadata}
+                        keyColumn="orderId"
+                        sortSpecs={sortBy}
+                        expand={this.shouldExpand.bind(this)}
+                        onRowExpand={this.handleRowExpand}
+                        onRowCollapse={this.handleRowCollapse} />);
     }
 };
