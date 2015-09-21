@@ -16,7 +16,7 @@ module.exports = function(config) {
     },
     exclude: ['./node_modules'],
     files: [
-      'test/companion/index.js'
+      'src/companion/__tests__/index.js'
     ],
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['mocha', 'chai'],
@@ -30,7 +30,7 @@ module.exports = function(config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       // preprocess with webpack and our sourcemap loader
-      'test/companion/index.js': ['webpack', 'sourcemap']
+      'src/companion/__tests__/index.js': ['webpack', 'sourcemap']
     },
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: process.env.CONTINUOUS_INTEGRATION ? [
