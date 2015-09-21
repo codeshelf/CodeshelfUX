@@ -13,13 +13,25 @@ var webpackBuild = require('./webpack/build');
 var webpackDevServer = require('./webpack/devserver');
 var yargs = require('yargs');
 var closureCompiler = require('gulp-closure-compiler');
-
+var path = require('path');
+var karma = require('karma');
 // Enables node's --harmony flag programmatically for jest.
 harmonize();
 
 var args = yargs
   .alias('p', 'production')
   .argv;
+
+function runKarma(options, done) {
+    var singleRun = options.singleRun;
+    var server = new karma.Server({
+        configFile: path.join(__dirname, 'karma-companion.conf.js'), // eslint-disable-line no-undef
+        singleRun: singleRun
+    }, function() {
+        done();
+    });
+    server.start();
+};
 
 gulp.task('env', function() {
   process.env.NODE_ENV = args.production ? 'production' : 'development';
@@ -48,6 +60,14 @@ gulp.task('eslint', function() {
     //.pipe(eslint.failOnError());
 });
 
+gulp.task('karma-ci', function(done) {
+    runKarma({singleRun: true}, done);
+});
+
+gulp.task('karma', function(done) {
+    runKarma({singleRun: false}, done);
+});
+
 gulp.task('jest', function(done) {
   var rootDir = './src/companion';
   jest.runCLI({config: {
@@ -71,6 +91,12 @@ gulp.task('test', function(done) {
   // Gulp deps aren't helpful, because we want to run tasks without deps as well.
   runSequence('eslint', 'jest', 'build-webpack-production', done);
 });
+
+gulp.task('tdd', function (done) {
+    // Run karma configured for TDD.
+    runSequence('server', 'karma', done);
+});
+
 
 gulp.task('server', ['env', 'build'], bg('node', 'src/server'));
 

@@ -133,7 +133,10 @@ module.exports = function(isDevelopment, isTest) {
     resolve: {
         alias: {
             "react": path.resolve(process.cwd(), './node_modules/react'),
-            "react/addons": path.resolve(process.cwd(), './node_modules/react')
+            "react/addons": path.resolve(process.cwd(), './node_modules/react'),
+            "react-addons-test-utils": "react/addons", //TODO remove when switched to react 14
+            "react-dom/server": "react" // TODO remove when switched to react 14
+
         },
         root: [ path.resolve(process.cwd(), './src/companion'),
                 path.resolve(process.cwd(), './bower_components')],
