@@ -103,7 +103,6 @@ export class SingleCellIBox extends React.Component {
     render() {
         let {title, style, onRefresh} = this.props;
         let {pendingRefresh} = this.state;
-        let progressStyle = {display: "none"};//(pendingRefresh) ? "block" : "none"};
         return (
                 <IBox style={style}>
                     <IBoxTitleBar>
@@ -118,9 +117,6 @@ export class SingleCellIBox extends React.Component {
                     <IBoxBody>
                         {this.props.children}
                     </IBoxBody>
-                    <div className="portlet-progress" style={progressStyle}>
-                        <div className="progress-circle-indeterminate progress-circle-master"></div>
-                    </div>
                 </IBox>
         );
     }
