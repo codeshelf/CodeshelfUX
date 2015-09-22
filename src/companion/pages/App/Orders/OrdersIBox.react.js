@@ -77,10 +77,7 @@ export default class OrdersIBox extends React.Component{
             console.log("refresh already happening, cancellable: ", promise.isCancellable());
             return promise;
         } else {
-            promise = this.handleFilterChange(this.refs.orderSearch.getFilter());
-            promise.then(()=> this.forceUpdate());
-            this.setState({"refreshingAction" : promise});
-            return promise;
+            return this.handleFilterChange(this.refs.orderSearch.getFilter());
         }
 
     }
@@ -101,11 +98,24 @@ export default class OrdersIBox extends React.Component{
             .add("persistentId")
             .toJS();
 
+        var promise = this.state.refreshingAction;
 
-        return search(getFacilityContext().findOrderReferences,
-               _.partial(getFacilityContext().getOrder, properties),
-               this.handleOrdersUpdated.bind(this),
-               filter);
+        if (promise && promise.isPending()) {
+            if (promise.isCancellable() == false) {
+                console.error("unable to cancel existing search");
+            } else {
+                console.log("cancelling order search");
+                promise.cancel();
+            }
+        }
+        promise =  search(getFacilityContext().findOrderReferences,
+                          _.partial(getFacilityContext().getOrder, properties),
+                          this.handleOrdersUpdated.bind(this),
+                          filter);
+
+        promise.then(()=> this.forceUpdate());
+        this.setState({"refreshingAction" : promise});
+        return promise;
     }
 
     handleOrdersUpdated(updatedOrders, total) {
