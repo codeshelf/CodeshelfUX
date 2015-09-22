@@ -121,7 +121,7 @@ export default class ListView extends React.Component{
 
     render() {
 
-    let {columns, columnMetadata, keyColumn, rowActionComponent, expand, onRowExpand, onRowCollapse} = this.props;
+        let {columns, columnMetadata, keyColumn, rowActionComponent, expand, onRowExpand, onRowCollapse} = this.props;
 
         var {results, sortSpecs = () => {}} = this.props;
 
@@ -139,9 +139,22 @@ export default class ListView extends React.Component{
         }
 
         return (<div>
-                <TableSettings onColumnsChange={columns}
-                    columns={columns()}
-                    columnMetadata={columnMetadata} />
+                <Row >
+                <Col sm={6} >
+                        <div className="pullLeft">
+                            Total: {results.count()}
+                        </div>
+                    </Col>
+                    <Col sm={6} >
+                        <div className="pullRight">
+                            <TableSettings onColumnsChange={columns}
+                                columns={columns()}
+                                columnMetadata={columnMetadata} />
+                        </div>
+                    </Col>
+                 </Row>
+
+
                 <Table results={results}
                     columns={columns()}
                     columnMetadata={columnMetadata}
@@ -165,14 +178,9 @@ class TableSettings extends PureComponent {
         });
 
         return (
-                <Row>
-                <Col sm={12} >
                 <DropdownButton className="pull-right" title={<Icon name="gear" />}>
                     <MultiSelectUnwrapped options={options} values={columns} onChange={onColumnsChange}/>
                 </DropdownButton>
-                </Col>
-                </Row>
-
         );
     }
 }
