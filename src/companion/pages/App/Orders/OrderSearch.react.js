@@ -34,11 +34,6 @@ export default class OrderSearch extends React.Component {
     }
 
     fireFilterChange() {
-        let {searchPending} = this.state;
-        if (searchPending != null && searchPending.isPending()) {
-            searchPending.cancel();
-        }
-
         let  filter = this.getFilter();
         this.props.onFilterChange(filter);
     }
