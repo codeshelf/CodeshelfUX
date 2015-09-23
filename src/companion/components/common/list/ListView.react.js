@@ -141,7 +141,7 @@ export default class ListView extends React.Component{
         return (<div>
                 <Row >
                 <Col sm={6} >
-                        <div className="pullLeft">
+                        <div className="pullLeft text-left">
                             Total: {results.count()}
                         </div>
                     </Col>
