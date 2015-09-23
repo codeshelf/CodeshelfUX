@@ -1,5 +1,5 @@
 import * as actions from './actions';
-import {Record, List} from 'immutable';
+import {Record, List, Map} from 'immutable';
 import {register} from 'dispatcher';
 import {selectedWorkerCursor, workersCursor} from 'data/state';
 

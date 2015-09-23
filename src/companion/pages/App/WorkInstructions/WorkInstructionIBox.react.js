@@ -13,6 +13,8 @@ import Promise from "bluebird";
 import search from "data/search";
 import {getFacilityContext} from "data/csapi";
 import SearchStatus from "components/common/SearchStatus";
+import {fetchWorkers} from 'data/workers/actions';
+import {getWorkersByBadgeId, toWorkerName} from 'data/workers/store';
 
 export default class WorkInstructionIBox extends React.Component{
 
@@ -42,6 +44,9 @@ export default class WorkInstructionIBox extends React.Component{
         this.columnMetadata = ListView.toColumnMetadataFromProperties(properties);
     }
 
+    componentWillMount() {
+        fetchWorkers();
+    }
 
     componentDidMount() {
         window.requestAnimationFrame(() => {
@@ -106,15 +111,22 @@ export default class WorkInstructionIBox extends React.Component{
 
     handleResultsUpdated(updatedResultsList, total) {
         this.resultsCursor((previousResults) =>{
+                let workersByBadgeId = getWorkersByBadgeId();
+
                 return previousResults.set("updated", moment())
                                       .set("total", total)
                                       .set("values", fromJS(updatedResultsList).map((wi) => {
+                                          let badgeId = wi.get("pickerId");
+                                          let worker = workersByBadgeId.get(badgeId);
+                                          let name = toWorkerName(worker, badgeId);
+                                          let wiWithName = wi.set("pickerId", name);
+
                                           let gtin = wi.get("gtin");
                                           if (gtin && gtin.length >= 4) {
-                                          return wi.set("store", gtin.substring(0,4));
-                                      } else {
-                                          return wi;
-                                      }
+                                              return wiWithName.set("store", gtin.substring(0,4));
+                                          } else {
+                                              return wiWithName;
+                                          }
                     }));
             });
     }
