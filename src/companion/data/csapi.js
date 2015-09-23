@@ -178,6 +178,7 @@ export function getFacilityContext() {
     var facilityId = facility.get("persistentId");
     var facilityPath = "/api/facilities/" + facilityId;
     let ordersPath = facilityPath + "/orders";
+    let workInstructionsPath = facilityPath + "/work/instructions";
     let domainId = facility.domainId;
     return {
         domainId: domainId,
@@ -190,7 +191,7 @@ export function getFacilityContext() {
             });
         },
 
-            getOrder(properties, orderId) {
+        getOrder(properties, orderId) {
             let orderPath = facilityPath + "/orders/" + orderId;
             return ajax(orderPath, {data: {"properties" : properties}});
         },
@@ -242,6 +243,19 @@ export function getFacilityContext() {
         startDropboxLink: function() {
             let edipath = facilityPath + "/edigateways/DROPBOX/link";
             return ajax(edipath);
+        },
+
+        findWorkInstructionReferences: function(filter) {
+            var workInstructionsReferencesPath = workInstructionsPath + "/references";
+            return ajax(workInstructionsReferencesPath, {
+                data: filter
+            });
+        },
+
+        getWorkInstruction: function(properties, persistentId) {
+            return ajax(workInstructionsPath + "/" + persistentId, {
+                data: {properties: properties}
+            });
         },
 
         findOrders: function(filter) {
@@ -351,13 +365,6 @@ export function getFacilityContext() {
             _.merge(data, criteria.filterBy);
             return ajax(facilityPath + "/events", {
                 data: data
-            });
-        },
-
-        findWorkInstructions: function(filter) {
-            var workResults = facilityPath + "/work/instructions";
-            return ajax(workResults, {
-                data: filter
             });
         },
 

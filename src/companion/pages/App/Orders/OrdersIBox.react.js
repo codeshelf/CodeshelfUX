@@ -11,33 +11,7 @@ import OrderReview from "./OrderReview";
 import Promise from "bluebird";
 import search from "data/search";
 import {getFacilityContext} from "data/csapi";
-
-class RelativeTime extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            intervalToken: null
-        };
-    }
-
-    componentDidMount(){
-        let token = setInterval(() => {
-                this.forceUpdate();
-        }.bind(this), 1000 * 30);
-        this.setState({intervalToken: token});
-    }
-
-    componentWillUnmount() {
-        if (this.state.intervalToken) {
-            clearInterval(this.state.intervalToken);
-        }
-    }
-
-    render() {
-        var time = this.props.time;
-        return <span title={time.local().format()}>{time.local().fromNow()}</span>
-    }
-}
+import SearchStatus from "components/common/SearchStatus";
 
 export default class OrdersIBox extends React.Component{
 
@@ -50,16 +24,16 @@ export default class OrdersIBox extends React.Component{
         this.columnsCursor  = state.cursor(["preferences", "orders", "table", "columns"]);
         this.columnSortSpecsCursor = state.cursor(["preferences", "orders", "table", "sortSpecs"]);
         this.pivotOptionsCursor = state.cursor(["preferences", "orders", "pivot"]);
-        this.selectedOrdersCursor = state.cursor(["pivot", "selectedOrders"]);
+        this.selectedCursor = state.cursor(["pivot", "selectedOrders"]);
 
-        this.ordersCursor = state.cursor(["pivot", "orders"]);
+        this.resultsCursor = state.cursor(["pivot", "orders"]);
         this.handleRefresh = this.handleRefresh.bind(this);
         this.cancelRefresh = this.cancelRefresh.bind(this);
     }
 
     componentDidMount() {
         window.requestAnimationFrame(() => {
-            if (this.ordersCursor().get("values").count() <= 0) {
+            if (this.resultsCursor().get("values").count() <= 0) {
                 this.handleRefresh();
             }
         }.bind(this));
@@ -77,7 +51,7 @@ export default class OrdersIBox extends React.Component{
             console.log("refresh already happening, cancellable: ", promise.isCancellable());
             return promise;
         } else {
-            return this.handleFilterChange(this.refs.orderSearch.getFilter());
+            return this.handleFilterChange(this.refs.search.getFilter());
         }
 
     }
@@ -110,7 +84,7 @@ export default class OrdersIBox extends React.Component{
         }
         promise =  search(getFacilityContext().findOrderReferences,
                           _.partial(getFacilityContext().getOrder, properties),
-                          this.handleOrdersUpdated.bind(this),
+                          this.handleResultsUpdated.bind(this),
                           filter);
 
         promise.then(()=> this.forceUpdate());
@@ -118,8 +92,8 @@ export default class OrdersIBox extends React.Component{
         return promise;
     }
 
-    handleOrdersUpdated(updatedOrders, total) {
-        this.ordersCursor((orders) =>{
+    handleResultsUpdated(updatedOrders, total) {
+        this.resultsCursor((orders) =>{
         return orders.set("updated", moment())
                      .set("total", total)
                      .set("values", fromJS(updatedOrders).map((order) => {
@@ -131,32 +105,24 @@ export default class OrdersIBox extends React.Component{
         });
     }
 
-    handleDrillDown(selectedOrders) {
-        this.selectedOrdersCursor((orders) =>{
-            return orders.clear().concat(fromJS(selectedOrders));
+    handleDrillDown(selected) {
+        this.selectedCursor((previousSelected) =>{
+            return previousSelected.clear().concat(fromJS(selected));
         });
     }
 
     render() {
         let {refreshingAction} = this.state;
-        let ordersResult = this.ordersCursor();
-        let ordersUpdated = ordersResult.get("updated");
-        let ordersTotal = ordersResult.get("total") || 0;
-        let orders = ordersResult.get("values");
-        let selectedOrders = this.selectedOrdersCursor();
+        let results = this.resultsCursor();
+        let orders = results.get("values");
+        let selectedOrders = this.selectedCursor();
         let pivotOptions = this.pivotOptionsCursor;
         let columns = this.columnsCursor;
-        let properties = new Set(columns())
-                .union(pivotOptions().get("fields").map((f) => f.get("name")))
-                .add("persistentId");
-
-
         let sortSpecs = this.columnSortSpecsCursor;
         return (
                 <SingleCellIBox ref="ibox" title="Orders" style={{display: "inline-block"}} isRefreshing={refreshingAction.isPending()} onRefresh={this.handleRefresh}>
-                    <OrderSearch ref="orderSearch" onFilterChange={this.handleFilterChange.bind(this)}/>
-                    {(ordersUpdated) ? <h5>Last Updated: <RelativeTime time={ordersUpdated} /></h5>: null}
-                    <h5>Loading  {orders.count()} / {ordersTotal} Orders</h5>
+                    <OrderSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
+                    <SearchStatus {...{results}} />
                     <PivotTable results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
                 <OrderReview orders={selectedOrders} columns={columns} sortSpecs={sortSpecs}/>
             </SingleCellIBox>);

@@ -25,11 +25,13 @@ const data = {
             pivot: {
                 fields: [
                     {name: 'gtin', caption: "GTIN"},
-                        {name: 'assignedCheName', caption: "CHE"},
+                    {name: 'assignedCheName', caption: "CHE"},
                     {name: 'uomNormalized', caption: "UOM"},
                     {name: 'pickerId', caption: "Worker"},
-                        {name: 'store', caption: 'Store'}, //pseudo field
-                    {name: 'containerId', caption: 'Pallet'}, //pseudo field
+                    {name: 'status', caption: 'Status'},
+                    {name: 'type', caption: 'Type'}, //pseudo field
+                    //{name: 'store', caption: 'Store'}, //pseudo field
+                    {name: 'containerId', caption: 'Container'}, //pseudo field
                     {
                     name: "count",
                     caption: "Lines",
@@ -177,11 +179,15 @@ const data = {
 
         orders: {
             updated: null,
+            total: 0,
             values: []
         },
         selectedWorkInstructions: [],
-        workInstructions: []
-
+        workInstructions: {
+            updated: null,
+            total: 0,
+            values: []
+        }
     },
     i18n: {
         formats: {},

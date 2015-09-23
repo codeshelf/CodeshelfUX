@@ -172,3 +172,4 @@ export default class OrderReview extends React.Component{
                         onRowCollapse={this.handleRowCollapse} />);
     }
 };
+OrderReview.displayName = "OrderReview";
