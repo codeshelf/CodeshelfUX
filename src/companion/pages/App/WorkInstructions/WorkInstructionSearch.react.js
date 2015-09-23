@@ -14,9 +14,11 @@ export default class WorkInstructionSearch extends React.Component {
     getFilter() {
         let interval = this.refs.assignedFilter.getInterval();
         let itemIdSubstring = React.findDOMNode(this.refs.sku).getElementsByTagName("input")[0].value;
+        let containerIdSubstring = React.findDOMNode(this.refs.containerId).getElementsByTagName("input")[0].value;
         let  filter = {
             itemId: itemIdSubstring,
-            properties: ["orderId"]
+            containerId: containerIdSubstring
+            //properties: ["orderId"]
         };
         if (interval) {
             filter['assigned'] = interval.toQueryParameterValue();
@@ -47,6 +49,8 @@ export default class WorkInstructionSearch extends React.Component {
                             <DayOfWeekFilter ref="assignedFilter" numDays={4} onChange={this.handleDayChange.bind(this)}/>
                         </WrapInput>
                         <Input ref="sku" label="SKU" name="itemId" type="text" />
+                        <Input ref="containerId" label="Container ID" name="containerId" type="text" />
+                <input type="submit" style={{display: "none"}}/>
                     </form>
                 </Col>
             </Row>);
