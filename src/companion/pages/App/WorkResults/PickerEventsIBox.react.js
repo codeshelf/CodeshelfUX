@@ -15,7 +15,7 @@ import {fetchWorkers} from 'data/workers/actions';
 const priorDayInterval = (daysBack) => {
     let interval = DayOfWeekFilter.priorDayInterval(daysBack);
     interval.start = moment(interval.start).hour(6); //6am
-    interval.end = moment(interval.end).hour(18); //6pm
+    interval.end = moment(interval.end).hour(20); //8pm
     return interval;
 };
 
