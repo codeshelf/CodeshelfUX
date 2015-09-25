@@ -67,7 +67,10 @@ codeshelf.window = function(view, parent, limits) {
             else
                 label.innerHTML = "getViewName ???";
 
+
             windowBar_ = goog.dom.query('.windowBar', windowElement_)[0];
+            var theCloseButton = windowBar_.querySelector("#closeme");
+            var theRefreshButton = windowBar_.querySelector("#refreshme");
             if (view.hasOwnProperty('getViewMenu')) {
                 var getViewMenu = view_['getViewMenu'];
                 if (getViewMenu != null) {
@@ -81,8 +84,7 @@ codeshelf.window = function(view, parent, limits) {
                         return permitted;
                     });
                     var menuElements = soy.renderAsElement(codeshelf.templates.windowmenu, {menuItems: menuItems});
-                    var dropdown = goog.dom.query('.windowButtons', windowBar_)[0];
-                    goog.dom.appendChild(dropdown, menuElements);
+                    goog.dom.insertSiblingAfter(menuElements, theCloseButton);
                     for (var i = 0; i < menuItems.length; i++) {
                         var id  = menuItems[i]["label"];
                         var action = menuItems[i]["action"];
@@ -100,9 +102,8 @@ codeshelf.window = function(view, parent, limits) {
             goog.events.listen(windowBar_, goog.events.EventType.MOUSEDOWN, thisWindow_.focusWindowEventHandler(thisWindow_));
 
             // this close button is part of the windowBar_ for this window. Search from there in the dom.
-            var theCloseButton = goog.dom.getElementsByTagNameAndClass(undefined,"close", windowBar_)[0];
             goog.events.listen(theCloseButton, goog.events.EventType.CLICK, thisWindow_.close());
-
+            goog.events.listen(theRefreshButton, goog.events.EventType.CLICK, thisWindow_.refresh());
             goog.events.listen(dragger_, goog.fx.Dragger.EventType.START, thisWindow_.moverStart(windowElement_));
             goog.events.listen(dragger_, goog.fx.Dragger.EventType.END, thisWindow_.moverEnd(windowElement_));
 
@@ -158,6 +159,16 @@ codeshelf.window = function(view, parent, limits) {
             };
             return closeFunction;
         },
+
+        refresh: function() {
+            var refreshFunction = function(event) {
+                var promise = view_.refresh();
+                event.dispose();
+                return promise;
+            };
+            return refreshFunction;
+        },
+
 
         /**
          * find and close the DOM window corresponding to this close button click

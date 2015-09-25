@@ -38,7 +38,6 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 	var selectedRowIds_ = [];
 	var contextMenusByLevel_ = [];
 
-	var registeredCommands_ = [];
 	// Compute the columns we need for this domain object.
 	var columns_ = [];
 
@@ -101,8 +100,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 
 										var className = childDef["className"];
 										var setListViewFilterCmd = websession_.createRegisterFilterRequest(className,computedProperties,filter,filterParams);
-										var sent = websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
-										registeredCommands_.push(sent);
+										var sent = websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), false);
 									}
 								}
 							}
@@ -369,12 +367,6 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 
 			columns_ = codeshelf.grid.toColumnsForHierarchy(hierarchyMap_);
 
-			var computedProperties = goog.array.reduce(columns_, function (ids, column) {
-				ids.push(column.id);
-				return ids;
-			}, []);
-
-
 			// If we've specified drag-ordering then present a drag-ordering column.
 			if (viewOptions_["draggableHierarchyLevel"] != -1) {
 				var selectAndMove = {
@@ -441,7 +433,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 			// Setup the column picker, so the user can change the visible columns.
 			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
-            self_.doLoadData(computedProperties);
+            self_.doLoadData();
 
 				//Add click handlers from the columns
 				goog.array.forEach(columns_, function(column) {
@@ -620,19 +612,23 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 
 		},
 
-        doLoadData: function(computedProperties) {
+        doLoadData: function() {
+                var cols = codeshelf.grid.toColumnsForHierarchy(hierarchyMap_);
+
+			    var computedProperties = goog.array.reduce(cols, function (ids, column) {
+				    ids.push(column.id);
+				    return ids;
+			    }, []);
             // New objectPropererties mechanism. This is not generic.
 			if (this.hasOwnProperty('doObjectProperitiesRequest')) {
 				var facilityPersistentIdStr = this['doObjectProperitiesRequest']();
 				var theDomainPropertiesCmd = websession_.createObjectPropertiesRequest('Facility', facilityPersistentIdStr);
-				var sent2 = websession_.sendCommand(theDomainPropertiesCmd, domainPropertiesCallback(), true);
-				registeredCommands_.push(sent2);
+				var sent2 = websession_.sendCommand(theDomainPropertiesCmd, domainPropertiesCallback(), false);
 			}
 			else {
 				// Normal domain object and filter works like this
 				var setListViewFilterCmd = websession_.createRegisterFilterRequest(domainObject_['className'], computedProperties, hierarchyMap_[0]["filter"], hierarchyMap_[0]["filterParams"]);
-				var sent = websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
-				registeredCommands_.push(sent);
+				var sent = websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), false);
 			}
 
         },
@@ -726,12 +722,11 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 
 			$('#gridContainer')['resizable']();
 		},
-
+        refresh: function() {
+            self_.doLoadData();
+        },
 		close: function() {
-			for(var i = 0; i < registeredCommands_.length; i++) {
-				websession_.cancelCommand(registeredCommands_[i]);
-			}
-			logger_.info("removing websession listeners");
+			logger_.info("closing view: " + self_);
 		},
 
 		doResize: function() {
