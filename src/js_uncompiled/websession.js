@@ -374,15 +374,7 @@ codeshelf.websession = function () {
 		callServiceMethod: function(inClassName, inMethodName, inArgArray) {
 			var methodCallCmd = self_.createServiceMethodRequest(inClassName, inMethodName, inArgArray);
 			var promise = jQuery.Deferred();
-			self_.sendCommand(methodCallCmd,  {
-				exec: function(commandType, response) {
-					promise.resolve(response["results"]);
-				},
-				fail: function(commandType, response) {
-					promise.reject(response);
-				}
-			}, false);
-			return promise;
+		    self_.sendPromiseCommand(methodCallCmd);
 		},
 
 
@@ -409,17 +401,8 @@ codeshelf.websession = function () {
 				objectProperties[fieldName] = csDomainObject[fieldName];
 			});
 			var command = self_.createObjectUpdateRequest(csDomainObject['className'], csDomainObject['persistentId'], objectProperties);
-			var promise = jQuery.Deferred();
-			self_.sendCommand(command,  {
-					exec: function(commandType, response) {
-						promise.resolve(response["results"]);
-					},
-					fail: function(commandType, response) {
-						promise.reject(response);
-					}
-			}, false);
-			return promise;
-		},
+            return self_.sendPromiseCommand(command);
+        },
 
 		remove: function(csDomainObject) {
 			var command = self_.createObjectDeleteRequest(csDomainObject['className'], csDomainObject['persistentId']);
@@ -435,6 +418,19 @@ codeshelf.websession = function () {
 			return promise;
 
 		},
+
+        sendPromiseCommand: function(command) {
+        	var promise = jQuery.Deferred();
+			self_.sendCommand(command,  {
+				exec: function(commandType, response) {
+					promise.resolve(response["results"]);
+				},
+				fail: function(commandType, response) {
+					promise.reject(response);
+				}
+			}, false);
+			return promise;
+        },
 
 		sendCommand: function (inCommand, inCallback, inRemainActive) {
 			// Attempt to send the command.

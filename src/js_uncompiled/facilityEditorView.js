@@ -74,13 +74,15 @@ codeshelf.facilityeditorview = function (websession, facility) {
 				var className = domainobjects['Facility']['className'];
 				var persistentId = facility_['persistentId'];
 				var newVertexCmd = websession_.createObjectMethodRequest(className,persistentId,'createVertex',methodArgs);
-				websession_.sendCommand(newVertexCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_METHOD_RESP), false);
-
-				// update facility anchor point
-				// If this was the anchor vertex then set the location of the facility as well.
-				updateAnchorPoint(event.latLng.lng(), event.latLng.lat(), 0.0);
+                websession_.sendPromiseCommand(newVertexCmd).then(function() {
+				    // update facility anchor point
+				    // If this was the anchor vertex then set the location of the facility as well.
+                    return updateAnchorPoint(event.latLng.lng(), event.latLng.lat(), 0.0);
+                }).then(function(){
+                    return this.doLoadData();
+                }.bind(this));
 			}
-		}, 250);
+        }.bind(this), 250);
 	}
 
 	function updateAnchorPoint(x, y, z) {
@@ -92,19 +94,13 @@ codeshelf.facilityeditorview = function (websession, facility) {
 		var className = domainobjects['Facility']['className'];
 		var persistentId = facility_['persistentId'];
 		var newVertexCmd = websession_.createObjectMethodRequest(className,persistentId,'updateAnchorPoint',methodArgs);
-		websession_.sendCommand(newVertexCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_METHOD_RESP), false);
+	    return websession_.sendPromiseCommand(newVertexCmd);
 	}
 
 	function doubleClickHandler(event) {
-		deleteFacilityOutlineWrapper()
+        this.deleteFacilityOutlineWrapper();
 	}
 
-	function deleteFacilityOutlineWrapper(){
-		clearTimeout(clickTimeout_);
-		if (canEditOutline_) {
-			deleteFacilityOutline();
-		}
-	}
 
 	function checkSquareness(event, latLngA, latLngB) {
 		var heading1 = getNormalizedHeading(latLngA, latLngB);
@@ -211,153 +207,6 @@ codeshelf.facilityeditorview = function (websession, facility) {
 		return vertexNum;
 	}
 
-	function handleCreateFacilityVertexCmd(latLng, vertex) {
-
-		ensureOutlineStructures();
-		facilityOutlinePath_.setAt(vertex['drawOrder'], latLng);
-		facilityOutline_.setVisible(true);
-
-		// The case where we're adding a new marker (maybe even the anchor marker) that we must show.
-		var iconUrl = '../icons/marker_20_blue.png';
-		if (vertex['drawOrder'] === 0) {
-			iconUrl = '../icons/marker_20_red.png';
-		}
-
-		var markerImage = new google.maps.MarkerImage(
-			iconUrl,
-			new google.maps.Size(12, 20),
-			new google.maps.Point(0, 0),
-			new google.maps.Point(6, 19)
-		);
-
-		var marker = new google.maps.Marker({
-			'position': latLng,
-			'map': map_,
-			'draggable': true,
-			'icon': markerImage
-		});
-
-		var vertexData = {marker: marker, Vertex: vertex};
-		facilityOutlineVertices_[vertex['drawOrder']] = vertexData;
-		marker.setTitle(vertex['domainId']);
-
-		// Add a drag handler to the marker.
-		google.maps.event.addListener(marker, 'dragend', function () {
-				if (canEditOutline_) {
-					facilityOutlinePath_.setAt(vertexData.Vertex['drawOrder'], marker.getPosition());
-
-					if (canEditOutline_) {
-						var className = domainobjects['Vertex']['className'];
-						var persistentId = vertex['persistentId'];
-						var methodArgs = [
-								{'name': 'x', 'value': marker.getPosition().lng(), 'classType': 'java.lang.Double'},
-								{'name': 'y', 'value': marker.getPosition().lat(), 'classType': 'java.lang.Double'},
-								{'name': 'z', 'value': 0.0, 'classType': 'java.lang.Double'}
-						];
-						var updatePointCmd = websession_.createObjectMethodRequest(className,persistentId,"updatePoint", methodArgs);
-						logger_.info("sending lat lng" + marker.getPosition());
-						websession_.sendCommand(updatePointCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_UPDATE_RESP),false);
-					}
-				}
-			}
-		);
-
-		//  The vertex at DrawPos 0 goes to the anchor marker.
-		if (vertex['drawOrder'] === 0) {
-			facilityAnchorMarker_ = marker;
-			// If the user clicks on the anchor marker then create a final marker on top of the anchor, and prevent further markers.
-			// When the update returns this will close the polyline into a polygon.
-			google.maps.event.addListener(facilityAnchorMarker_, goog.events.EventType.CLICK, function () {
-					if (canEditOutline_) {
-						facilityOutline_.setMap(null);
-						completePolygon();
-					}
-				}
-			);
-		}
-
-		setBounds();
-
-//			            var newPoint;
-//			            var longLat;
-//			            var rotateDeg = 0;
-//						var clickPoint = projection.fromLatLngToContainerPixel(event.latLng);
-//						for (var deg = 0; deg <= 360; deg += 10) {
-//							var rotatePoint = rotatePoint(clickPoint.x, clickPoint.y, mapPane_.clientWidth / 2, mapPane_.clientHeight / 2, deg);
-//							newPoint = new google.maps.Point(rotatePoint.x, rotatePoint.y);
-//							longLat = projection.fromContainerPixelToLatLng(newPoint, true);
-//							pen_.draw(longLat);
-//						}
-	}
-
-	function handleUpdateFacilityVertexCmd(latLng, vertex) {
-		if ((facilityOutlinePath_ === undefined) || (facilityOutlinePath_.getAt(vertex['drawOrder']) === undefined)) {
-			// If the outline or marker don't exist then create them.
-			handleCreateFacilityVertexCmd(latLng, vertex);
-		} else {
-			// The outline and marker exist, so update the  marker.
-			facilityOutlinePath_.setAt(vertex['drawOrder'], latLng);
-			var vertexData = facilityOutlineVertices_[vertex['drawOrder']];
-			vertexData.marker.setPosition(latLng);
-			logger_.info("updated lat lng" + latLng);
-		}
-		setBounds();
-	}
-
-	function handleDeleteFacilityVertexCmd(latLng, persistentId) {
-		for (var drawOrder in facilityOutlineVertices_) {
-			var vertexCheck = facilityOutlineVertices_[drawOrder]
-			if (vertexCheck.Vertex !== undefined && vertexCheck.Vertex['persistentId'] === persistentId) {
-				var vertex = vertexCheck;
-				break
-			}
-		}
-
-		if (vertex !== undefined) {
-			//facilityOutlineVertices_[vertex.Vertex['drawOrder']] = undefined;
-			facilityOutlineVertices_.splice(vertex.Vertex['drawOrder'], 1);
-			vertex.marker.setMap(null);
-			facilityOutlinePath_.setAt(vertex.Vertex['drawOrder'], undefined);
-
-			if (vertex.Vertex['drawOrder'] === 0) {
-				facilityAnchorMarker_ = undefined;
-			}
-		}
-
-		// If we've deleted all of the vertices then we need to re-init the outline structures.
-		// (Seems like an error in GMaps)
-		var shouldInit = true;
-		for (var i = 0; i < facilityOutlineVertices_.length; i++) {
-			if (facilityOutlineVertices_[i] !== undefined) {
-				shouldInit = false;
-			}
-		}
-		if (shouldInit) {
-			facilityOutlinePath_ = undefined;
-			//localUserCreatedMarker_ = false;
-			ensureOutlineStructures();
-			facilityOutlineVertices_ = [];
-			facilityOutline_.setPath(null);
-			facilityOutlinePath_ = undefined;
-		}
-	}
-
-	function deleteFacilityOutline() {
-		// Clear all of the markers from the map.
-		for (var i = Object.size(facilityOutlineVertices_) - 1; i >= 0; i--) {
-			/*
-			var data = {
-				'className': domainobjects['Vertex']['className'],
-				'persistentId': facilityOutlineVertices_[i].Vertex['persistentId']
-			};
-			var newVertexCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_DELETE_REQ, data);
-			*/
-			var className = domainobjects['Vertex']['className'];
-			var persistentId = facilityOutlineVertices_[i].Vertex['persistentId'];
-			var newVertexCmd = websession_.createObjectDeleteRequest(className,persistentId);
-			websession_.sendCommand(newVertexCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_DELETE_RESP), false);
-		}
-	}
 
 	function completePolygon() {
 		// First make the outline into a polygon.
@@ -527,38 +376,6 @@ codeshelf.facilityeditorview = function (websession, facility) {
 		}
 	}
 
-	function websocketCmdCallback(expectedResponseType) {
-		var callback = {
-			exec: function (type,command) {
-				if (type == kWebSessionCommandType.OBJECT_FILTER_RESP) {
-					for (var i = 0; i < command['results'].length; i++) {
-						var object = command['results'][i];
-						// Make sure the class name matches.
-						if (object['className'] === domainobjects['Vertex']['className']) {
-							var latLng = new google.maps.LatLng(object['posY'], object['posX']);
-							if (object['op'] === 'cre') {
-								logFacilityResponse('FILTER_RESP:cre');
-								handleCreateFacilityVertexCmd(latLng, object);
-							} else if (object['op'] === 'upd') {
-								logFacilityResponse('FILTER_RESP:upd -- init or update vertex from backend');
-								handleUpdateFacilityVertexCmd(latLng, object);
-							} else if (object['op'] === 'del') {
-								logFacilityResponse('FILTER_RESP:del -- delete vertex from backend');
-								handleDeleteFacilityVertexCmd(latLng, object['persistentId']);
-							}
-						}
-					}
-				} else if (type == kWebSessionCommandType.OBJECT_UPDATE_RESP) {
-					logFacilityResponse('UPDATE_RESP -- ack the vertext update that I sent');
-				} else if (type == kWebSessionCommandType.OBJECT_DELETE_RESP) {
-					logFacilityResponse('UPDATE_RESP -- ack the vertex delete that I sent');
-				}
-			}
-		};
-
-		return callback;
-	}
-
 	/**
 	 * THe facility editor view public functions.
 	 * @type {Object}
@@ -640,9 +457,9 @@ codeshelf.facilityeditorview = function (websession, facility) {
 			googleField_.decorate(inputElement);
 
 			var buttonElementDelete = new goog.ui.Button('Delete Vertices');
-			buttonElementDelete.render(self.getMainPaneElement())
+            buttonElementDelete.render(self.getMainPaneElement());
 			goog.events.listen(buttonElementDelete, goog.ui.Component.EventType.ACTION, function (event) {
-				deleteFacilityOutlineWrapper()
+                self.deleteFacilityOutlineWrapper();
 			});
 
 			goog.events.listen(inputElement, goog.editor.Field.EventType.CHANGE, function (event) {
@@ -660,31 +477,219 @@ codeshelf.facilityeditorview = function (websession, facility) {
 			map_.setMapTypeId('codeshelfMapStyle');
 
 
-			clickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.CLICK, clickHandler);
-			doubleClickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.DBLCLICK, doubleClickHandler);
-		},
+            clickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.CLICK, clickHandler.bind(self));
+			        doubleClickHandler_ = google.maps.event.addListener(map_, goog.events.EventType.DBLCLICK, doubleClickHandler.bind(self));
+        },
 
-		open: function () {
+        handleCreateFacilityVertexCmd: function(latLng, vertex) {
+
+		    ensureOutlineStructures();
+		    facilityOutlinePath_.setAt(vertex['drawOrder'], latLng);
+		    facilityOutline_.setVisible(true);
+
+		    // The case where we're adding a new marker (maybe even the anchor marker) that we must show.
+		    var iconUrl = '../icons/marker_20_blue.png';
+		    if (vertex['drawOrder'] === 0) {
+			    iconUrl = '../icons/marker_20_red.png';
+		    }
+
+		    var markerImage = new google.maps.MarkerImage(
+			    iconUrl,
+			    new google.maps.Size(12, 20),
+			    new google.maps.Point(0, 0),
+			    new google.maps.Point(6, 19)
+		    );
+
+		    var marker = new google.maps.Marker({
+			    'position': latLng,
+			    'map': map_,
+			    'draggable': true,
+			    'icon': markerImage
+		    });
+
+		    var vertexData = {marker: marker, Vertex: vertex};
+		    facilityOutlineVertices_[vertex['drawOrder']] = vertexData;
+		    marker.setTitle(vertex['domainId']);
+
+		    // Add a drag handler to the marker.
+		    google.maps.event.addListener(marker, 'dragend', function () {
+				if (canEditOutline_) {
+					facilityOutlinePath_.setAt(vertexData.Vertex['drawOrder'], marker.getPosition());
+
+					if (canEditOutline_) {
+						var className = domainobjects['Vertex']['className'];
+						var persistentId = vertex['persistentId'];
+						var methodArgs = [
+							{'name': 'x', 'value': marker.getPosition().lng(), 'classType': 'java.lang.Double'},
+							{'name': 'y', 'value': marker.getPosition().lat(), 'classType': 'java.lang.Double'},
+							{'name': 'z', 'value': 0.0, 'classType': 'java.lang.Double'}
+						];
+						var updatePointCmd = websession_.createObjectMethodRequest(className,persistentId,"updatePoint", methodArgs);
+						logger_.info("sending lat lng" + marker.getPosition());
+					    websession_.sendPromiseCommand(updatePointCmd).then(function(){
+                            logger_.info("updated point" + marker.getPosition());
+                        });
+					}
+				}
+		    }.bind(this)
+		                                 );
+
+		    //  The vertex at DrawPos 0 goes to the anchor marker.
+		    if (vertex['drawOrder'] === 0) {
+			    facilityAnchorMarker_ = marker;
+			    // If the user clicks on the anchor marker then create a final marker on top of the anchor, and prevent further markers.
+			    // When the update returns this will close the polyline into a polygon.
+			    google.maps.event.addListener(facilityAnchorMarker_, goog.events.EventType.CLICK, function () {
+					if (canEditOutline_) {
+						facilityOutline_.setMap(null);
+						completePolygon();
+					}
+				}
+			                                 );
+		    }
+
+		    setBounds();
+
+            //			            var newPoint;
+            //			            var longLat;
+            //			            var rotateDeg = 0;
+            //						var clickPoint = projection.fromLatLngToContainerPixel(event.latLng);
+            //						for (var deg = 0; deg <= 360; deg += 10) {
+            //							var rotatePoint = rotatePoint(clickPoint.x, clickPoint.y, mapPane_.clientWidth / 2, mapPane_.clientHeight / 2, deg);
+            //							newPoint = new google.maps.Point(rotatePoint.x, rotatePoint.y);
+            //							longLat = projection.fromContainerPixelToLatLng(newPoint, true);
+            //							pen_.draw(longLat);
+            //						}
+        },
+
+
+	    handleUpdateFacilityVertexCmd: function(latLng, vertex) {
+		    if ((facilityOutlinePath_ === undefined) || (facilityOutlinePath_.getAt(vertex['drawOrder']) === undefined)) {
+			    // If the outline or marker don't exist then create them.
+		        self.handleCreateFacilityVertexCmd(latLng, vertex);
+		    } else {
+			    // The outline and marker exist, so update the  marker.
+			    facilityOutlinePath_.setAt(vertex['drawOrder'], latLng);
+			    var vertexData = facilityOutlineVertices_[vertex['drawOrder']];
+			    vertexData.marker.setPosition(latLng);
+			    logger_.info("updated lat lng" + latLng);
+		    }
+		    setBounds();
+	    },
+
+	    handleDeleteFacilityVertexCmd: function(latLng, persistentId) {
+		    for (var drawOrder in facilityOutlineVertices_) {
+	            var vertexCheck = facilityOutlineVertices_[drawOrder];
+			    if (vertexCheck.Vertex !== undefined && vertexCheck.Vertex['persistentId'] === persistentId) {
+				    var vertex = vertexCheck;
+			        break;
+			    }
+		    }
+
+		    if (vertex !== undefined) {
+			    //facilityOutlineVertices_[vertex.Vertex['drawOrder']] = undefined;
+			    facilityOutlineVertices_.splice(vertex.Vertex['drawOrder'], 1);
+			    vertex.marker.setMap(null);
+			    facilityOutlinePath_.setAt(vertex.Vertex['drawOrder'], undefined);
+
+			    if (vertex.Vertex['drawOrder'] === 0) {
+				    facilityAnchorMarker_ = undefined;
+			    }
+		    }
+
+		    // If we've deleted all of the vertices then we need to re-init the outline structures.
+		    // (Seems like an error in GMaps)
+		    var shouldInit = true;
+		    for (var i = 0; i < facilityOutlineVertices_.length; i++) {
+			    if (facilityOutlineVertices_[i] !== undefined) {
+				    shouldInit = false;
+			    }
+		    }
+            if (shouldInit) {
+			    facilityOutlinePath_ = undefined;
+			    //localUserCreatedMarker_ = false;
+			    ensureOutlineStructures();
+			    facilityOutlineVertices_ = [];
+			    //facilityOutline_.setPath(null);
+			    facilityOutlinePath_ = undefined;
+		    }
+	    },
+
+        deleteFacilityOutlineWrapper: function(){
+            clearTimeout(clickTimeout_);
+	        if (canEditOutline_) {
+	            self.deleteFacilityOutline();
+            }
+	    },
+
+	    deleteFacilityOutline: function() {
+            // Clear all of the markers from the map.
+            var size = Object.size(facilityOutlineVertices_);
+            var promises = new Array(size);
+	        for (var i = size-1; i >= 0; i--) {
+                var vertex = facilityOutlineVertices_[i];
+			    var className = domainobjects['Vertex']['className'];
+			    var persistentId = vertex.Vertex['persistentId'];
+                var latLng = vertex.marker.getPosition();
+			    var deleteVertexCmd = websession_.createObjectDeleteRequest(className,persistentId);
+                promises.push(websession_.sendPromiseCommand(deleteVertexCmd).then(function(latLng_, id_){
+                        self.handleDeleteFacilityVertexCmd(latLng_, id_);
+                        return vertex;
+                    }.bind(self, latLng, persistentId)));
+	        }
+            return $.when.apply($, promises);
+	 },
+
+
+        updateVertices: function(vertices) {
+            if (vertices.length == 0) {
+                var size = Object.size(facilityOutlineVertices_);
+	            for (var i = size-1; i >= 0; i--) {
+                    var vertex = facilityOutlineVertices_[i];
+			        var persistentId = vertex.Vertex['persistentId'];
+                    var latLng = vertex.marker.getPosition();
+                    self.handleDeleteFacilityVertexCmd(latLng, persistentId);
+                }
+	        }
+            for (var i = 0; i < vertices.length; i++) {
+			    var vertex = vertices[i];
+				// Make sure the class name matches.
+				if (vertex['className'] === domainobjects['Vertex']['className']) {
+				    var latLng = new google.maps.LatLng(vertex['posY'], vertex['posX']);
+				    self.handleUpdateFacilityVertexCmd(latLng, vertex);
+				}
+			}
+        },
+
+        doLoadData: function() {
 			// Create the filter to listen to all vertex updates for this facility.
 			/*
-			var data = {
-				'className': domainobjects['Vertex']['className'],
-				'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder'],
-				'filterClause': 'parent.persistentId = :theId',
-				'filterParams': [
-					{ 'name': 'theId', 'value': facility_['persistentId']}
-				]
-			};
-			var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
-			*/
+			 var data = {
+			 'className': domainobjects['Vertex']['className'],
+			 'propertyNames': ['domainId', 'posType', 'posX', 'posY', 'drawOrder'],
+			 'filterClause': 'parent.persistentId = :theId',
+			 'filterParams': [
+			 { 'name': 'theId', 'value': facility_['persistentId']}
+			 ]
+			 };
+			 var setListViewFilterCmd = websession_.createCommand(kWebSessionCommandType.OBJECT_FILTER_REQ, data);
+			 */
 			var className = domainobjects['Vertex']['className'];
 
 			var propertyNames = ['domainId', 'posType', 'posX', 'posY', 'drawOrder'];
 			var filterClause = 'allByParent';
 			var filterParams = [{ 'name': 'parentId', 'value': facility_['persistentId']}];
 			var setListViewFilterCmd = websession_.createRegisterFilterRequest(className,propertyNames,filterClause,filterParams);
-			websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(kWebSessionCommandType.OBJECT_FILTER_RESP),true);
-		},
+                    return websession_.sendPromiseCommand(setListViewFilterCmd).then(self.updateVertices, function() {console.log("fail");});
+        },
+
+		open: function () {
+            self.doLoadData();
+        },
+
+        refresh: function() {
+            self.doLoadData();
+        },
 
 		close: function () {
 			this.exit(); // disconnect the google maps APIs. Maybe exit is not a good name.
