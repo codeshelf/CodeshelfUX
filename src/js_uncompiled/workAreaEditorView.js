@@ -758,6 +758,10 @@ codeshelf.workareaeditorview = function (websession, facility, options) {
 			websession_.sendCommand(pathFilterCmd, websocketCmdCallbackPath(kWebSessionCommandType.OBJECT_FILTER_RESP), true);
 		},
 
+        refresh: function() {
+            self.open();
+        },
+
 		close: function () {
 
 		},
