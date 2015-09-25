@@ -441,20 +441,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 			// Setup the column picker, so the user can change the visible columns.
 			var columnpicker = new Slick.Controls.ColumnPicker(columns_, grid_, options_);
 
-
-			// New objectPropererties mechanism. This is not generic.
-			if (this.hasOwnProperty('doObjectProperitiesRequest')) {
-				var facilityPersistentIdStr = this['doObjectProperitiesRequest']();
-				var theDomainPropertiesCmd = websession_.createObjectPropertiesRequest('Facility', facilityPersistentIdStr);
-				var sent2 = websession_.sendCommand(theDomainPropertiesCmd, domainPropertiesCallback(), true);
-				registeredCommands_.push(sent2);
-			}
-			else {
-				// Normal domain object and filter works like this
-				var setListViewFilterCmd = websession_.createRegisterFilterRequest(domainObject_['className'], computedProperties, hierarchyMap_[0]["filter"], hierarchyMap_[0]["filterParams"]);
-				var sent = websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
-				registeredCommands_.push(sent);
-			}
+            self_.doLoadData(computedProperties);
 
 				//Add click handlers from the columns
 				goog.array.forEach(columns_, function(column) {
@@ -632,6 +619,23 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
 				}
 
 		},
+
+        doLoadData: function(computedProperties) {
+            // New objectPropererties mechanism. This is not generic.
+			if (this.hasOwnProperty('doObjectProperitiesRequest')) {
+				var facilityPersistentIdStr = this['doObjectProperitiesRequest']();
+				var theDomainPropertiesCmd = websession_.createObjectPropertiesRequest('Facility', facilityPersistentIdStr);
+				var sent2 = websession_.sendCommand(theDomainPropertiesCmd, domainPropertiesCallback(), true);
+				registeredCommands_.push(sent2);
+			}
+			else {
+				// Normal domain object and filter works like this
+				var setListViewFilterCmd = websession_.createRegisterFilterRequest(domainObject_['className'], computedProperties, hierarchyMap_[0]["filter"], hierarchyMap_[0]["filterParams"]);
+				var sent = websession_.sendCommand(setListViewFilterCmd, websocketCmdCallback(), true);
+				registeredCommands_.push(sent);
+			}
+
+        },
 
         generateCSV: function(){
             function formatField(val) {
