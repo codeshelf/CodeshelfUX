@@ -8,7 +8,10 @@ export const properties = toProperties([
     {id: "provider",
      title: "Provider"},
     {id: "hasCredentials",
-     title: "Has Creds"}
+            title: "Has Creds"},
+    {id: "active",
+     title: "Active"}
+
 ]);
 
 export const UserRecord = createTypeRecord(properties);

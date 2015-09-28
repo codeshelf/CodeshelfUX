@@ -4,56 +4,65 @@ import EDIForm from "./EDIForm";
 import {Map} from "immutable";
 import {getFacilityContext} from "data/csapi";
 
-const baseFormMetadata = [{name: "domainId",
-                           label: "ID",
-                           hidden: true},
-                          {name: "host",
-                           label: "Host",
-                           required: true},
-                          {name: "port",
-                           label: "Port"},
-                          {name: "username",
-                           label: "Username",
-                           required: true},
-                          {name: "password",
-                           label: "Password",
-                           required: true}
-                         ];
+const baseFormMetadata = [
+    {name: "active",
+    label: "Active",
+     type: Boolean}
+];
 
-const sftpOrderFormMetadata = baseFormMetadata.concat([
-                      {name: "importPath",
-                       label: "Import Path",
-                       required: true},
-                      {name: "archivePath",
-                       label: "Archive Path",
-                       required: true}
+const baseSftpFormMetadata = baseFormMetadata.concat([
+    {name: "domainId",
+     label: "ID",
+     hidden: true},
+    {name: "host",
+     label: "Host",
+     required: true},
+    {name: "port",
+     label: "Port"},
+    {name: "username",
+     label: "Username",
+     required: true},
+    {name: "password",
+     label: "Password",
+     required: true}
 ]);
 
-const sftpWIFormMetadata = baseFormMetadata.concat([
+const sftpOrderFormMetadata = baseSftpFormMetadata.concat([
+    {name: "importPath",
+     label: "Import Path",
+     required: true},
+    {name: "archivePath",
+     label: "Archive Path",
+     required: true}
+]);
+
+const sftpWIFormMetadata = baseSftpFormMetadata.concat([
     {name: "exportPath",
      label: "Export Path",
      required: true}
 ]);
 
 
-const ironMQFormMetadata = [{name: "domainId",
-                             label: "ID",
-                                     hidden: true},
-                                     {name: "projectId",
-                             label: "Project ID",
-                             required: true},
-                            {name: "token",
-                             label: "Token",
-                             required: true}
-                     ];
+const ironMQFormMetadata = baseFormMetadata.concat([
+    {name: "domainId",
+     label: "ID",
+     hidden: true},
+    {name: "projectId",
+     label: "Project ID",
+     required: true},
+    {name: "token",
+     label: "Token",
+     required: true}
+]);
 
-const dropboxFormMetadata = [{name: "domainId",
-                              label: "ID",
-                                      hidden: true},
-                                      {name: "code",
-                             label: "Activation",
-                                 required: true}
-                            ];
+const dropboxFormMetadata = baseFormMetadata.concat([
+    {name: "domainId",
+     label: "ID",
+     hidden: true},
+    {name: "code",
+     label: "Activation",
+     required: true}
+]);
 
 
 const domainIdMap = new Map({"IRONMQ": ironMQFormMetadata,
