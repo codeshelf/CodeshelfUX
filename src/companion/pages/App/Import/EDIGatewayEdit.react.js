@@ -79,8 +79,10 @@ function toSelectedListItem() {
                 return u.get("domainId") == id;
             });
             let config = listItem.get("providerCredentials", "{}");
+            let active  = listItem.get("active", false);
             let configJSON = new Map(JSON.parse(config))
-                                 .set("domainId", id); //add domainId for form
+                .set("domainId", id) //add domainId  and active for form
+                .set("active", active);
 
             let formMetadata = domainIdMap.get(id, sftpOrderFormMetadata);
             return (<EDIForm title={"Edit " + listItem.get("domainId")} initialFormData={configJSON} formMetadata={formMetadata}>
