@@ -1,13 +1,15 @@
 import  React from "react";
+import {RouteHandler} from "react-router";
+import exposeRouter from 'components/common/exposerouter';
 import {getFacilityContext} from "data/csapi";
 import {Table} from "components/common/Table";
-import {RouteHandler} from "react-router";
 import {Row, Col} from "components/common/pagelayout";
 import {EditButtonLink, AddButtonLink} from "components/common/TableButtons";
 import {Button} from "react-bootstrap";
 import Icon from "react-fa";
 import {fromJS, Map, List} from "immutable";
 import immstruct from "immstruct";
+import ExtensionPointEditButtonLink from "./ExtensionPointEditButton";
 
 const allTypes = fromJS([
     {value: "OrderImportBeanTransformation",           label: "Import Order Record Change"},
@@ -25,7 +27,16 @@ const typeLabelMap = allTypes.reduce((map, option) => {
         return map.set(option.get("value"), option.get("label"));
     }, Map());
 
-export default class ExtensionPoints extends React.Component{
+class Type extends React.Component {
+    render() {
+        var formData = this.props.rowData;
+        var type = formData.get("type");
+        return (<span data-type={type}>{typeLabelMap.get(type)}</span>);
+    }
+
+}
+
+class ExtensionPoints extends React.Component{
 
     constructor(props) {
         super(props);
@@ -51,6 +62,7 @@ export default class ExtensionPoints extends React.Component{
                 displayName: "Active"
             }
         ];
+        this.handleExtensionPointUpdate = this.handleExtensionPointUpdate.bind(this);
     }
 
     componentWillMount() {
@@ -62,6 +74,18 @@ export default class ExtensionPoints extends React.Component{
         });
     }
 
+    handleExtensionPointUpdate(extensionPoint) {
+        return getFacilityContext().updateExtensionPoint(extensionPoint.toJS()).then((updatedExtensionPoint) => {
+            let newExtensionPoint = fromJS(updatedExtensionPoint);
+            let {extensionPoints} = this.state;
+            extensionPoints.cursor().update((pts) => {
+                let index = pts.findIndex((p) => p.get("persistentId") === updatedExtensionPoint.persistentId);
+            return pts.set(index, newExtensionPoint);
+        });
+} );
+
+    }
+
     render() {
         let {extensionPoints} = this.state;
         let list = extensionPoints.cursor().deref();
@@ -70,6 +94,12 @@ export default class ExtensionPoints extends React.Component{
         let availableTypes = allTypes.filter((t) => {
             return currentTypes.includes(t.get("value")) == false;
         });
+        let extensionPointId = this.props.router.getCurrentParams().extensionPointId;
+        let extensionPoint = null;
+        if (extensionPointId) {
+            extensionPoint = extensionPoints.cursor().deref().find((extensionPoint) => extensionPoint.get("persistentId") === extensionPointId);
+        }
+
         return (<div>
                 <Row>
                     <Col sm={12}>
@@ -79,30 +109,15 @@ export default class ExtensionPoints extends React.Component{
                         </div>
                     </Col>
                 </Row>
-                    <Table results={list} columnMetadata={this.columnMetadata} rowActionComponent={Edit}/>
-                <RouteHandler availableTypes={availableTypes} formMetadata={this.columnMetadata} extensionPoints={extensionPoints} />
+                    <Table results={list} columnMetadata={this.columnMetadata} rowActionComponent={ExtensionPointEditButtonLink}/>
+                    <RouteHandler availableTypes={availableTypes} onExtensionPointUpdate={this.handleExtensionPointUpdate} extensionPoint={extensionPoint}/>
                 </div>
         );
     }
 };
 
-class Type extends React.Component {
-    render() {
-        var formData = this.props.rowData;
-        var type = formData.get("type");
-        return (<span data-type={type}>{typeLabelMap.get(type)}</span>);
-    }
+ExtensionPoints.propTypes = {
+    router: React.PropTypes.func
+};
 
-}
-
-class Edit extends React.Component {
-    render() {
-        var formData = this.props.rowData;
-        var persistentId = formData.get("persistentId");
-        return (<EditButtonLink
-                 to="extensionpointedit"
-                 params={{extensionPointId: persistentId}}>
-                </EditButtonLink>);
-    }
-
-}
+export default exposeRouter(ExtensionPoints);
