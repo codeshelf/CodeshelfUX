@@ -3,7 +3,7 @@ export const keyColumn = "domainId";
 export const properties = toProperties([
     {id: 'domainId',
      title: 'ID'},
-    {id: "serviceState",
+    {id: "gatewayState",
      title: "State"},
     {id: "provider",
      title: "Provider"},
