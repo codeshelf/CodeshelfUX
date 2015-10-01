@@ -6,11 +6,12 @@ import {Map} from "immutable";
 
 describe("WorkInstructionIBox", () => {
     let appState = new State({pivot: {workInstructions: []}});
-    it("Renders default", () => {
+
+        /* it("Renders default", () => {
 
         let tree = sd.shallowRender(<WorkInstructionIBox state={appState}/>);
     });
-
+*/
     /*
     it("Show progress", () => {
         let tree = sd.shallowRender(<WorkInstructionIBox state={appState}/>);
