@@ -374,7 +374,7 @@ codeshelf.websession = function () {
 		callServiceMethod: function(inClassName, inMethodName, inArgArray) {
 			var methodCallCmd = self_.createServiceMethodRequest(inClassName, inMethodName, inArgArray);
 			var promise = jQuery.Deferred();
-		    self_.sendPromiseCommand(methodCallCmd);
+		    return self_.sendPromiseCommand(methodCallCmd);
 		},
 
 
