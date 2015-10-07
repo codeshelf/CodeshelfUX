@@ -105,7 +105,7 @@ codeshelf.cheslistview = function(websession, facility) {
 		deleteChe: function(che) {
 			codeshelf.simpleDlogService.showModalDialog("Confirm", "Delete the che?", {})
             	.then(function() {
-					websession_.callServiceMethod("UiUpdateService", 'deleteChe', [che['persistentId']]);
+					websession_.callServiceMethod("UiUpdateBehavior", 'deleteChe', [che['persistentId']]);
                	});
        	},
 
@@ -166,16 +166,16 @@ codeshelf.cheslistview = function(websession, facility) {
             var promise = codeshelf.simpleDlogService.showCustomDialog("partials/wibyday-che.html", "CheWiByDayController as controller", data);
             return promise;
         },
-        
+
 		posConSetup: function(che) {
 			codeshelf.simpleDlogService.showModalDialog("Confirm", "Reset and assign position controllers?", {})
             	.then(function() {
-					websession_.callServiceMethod("UiUpdateService", 'posConSetup', [che['persistentId'], true]);
+					websession_.callServiceMethod("UiUpdateBehavior", 'posConSetup', [che['persistentId'], true]);
                	});
        	},
-       	 
+
        	posConLightAddresses: function(che) {
-			websession_.callServiceMethod("UiUpdateService", 'posConLightAddresses', [che['persistentId'], true]);
+			websession_.callServiceMethod("UiUpdateBehavior", 'posConLightAddresses', [che['persistentId'], true]);
        	}
     };
 
@@ -184,7 +184,7 @@ codeshelf.cheslistview = function(websession, facility) {
             "label": "Work Instructions (CHE runs)",
             "permission": "workinstructions:view",
             "action": function(che) {
-                websession_.callServiceMethod("WorkService", "workAssignedSummary", [che ['persistentId'], facility_ ['persistentId']])
+                websession_.callServiceMethod("WorkBehavior", "workAssignedSummary", [che ['persistentId'], facility_ ['persistentId']])
                     .then(function(summaries) {
                         return self.showPreviousCartRun(che, summaries);
                     });
@@ -194,7 +194,7 @@ codeshelf.cheslistview = function(websession, facility) {
             "label": "Work Instructions (by day)",
             "permission": "workinstructions:view",
             "action": function(che) {
-                websession_.callServiceMethod("WorkService", "workCompletedSummary", [che ['persistentId'], facility_ ['persistentId']])
+                websession_.callServiceMethod("WorkBehavior", "workCompletedSummary", [che ['persistentId'], facility_ ['persistentId']])
                     .then(function(summaries) {
                         return self.showWisForDay(che, summaries);
                     });
@@ -409,7 +409,7 @@ codeshelfApp.CheNgController = function($scope, $modalInstance, websession, data
     $scope['che']['processMode'] = (processMode == undefined)?"LINE_SCAN" : processMode;
     if (processMode == undefined) {
         var methodArgs = [data['che']['persistentId']];
-        websession.callServiceMethod("UiUpdateService", 'getDefaultProcessMode', methodArgs)
+        websession.callServiceMethod("UiUpdateBehavior", 'getDefaultProcessMode', methodArgs)
             .then(function(response) {
                 $scope['che']['processMode'] = response;
                 $scope.$apply();
@@ -429,7 +429,7 @@ codeshelfApp.CheNgController.prototype.edit = function(){
     var che = this.scope_['che'];
     var methodArgs = [che["persistentId"], che["domainid"], che["description"], che["color"], che["cntrlrid"], che["processMode"], che["scannerType"]];
     var self = this;
-    this.websession_.callServiceMethod("UiUpdateService", 'updateChe', methodArgs)
+    this.websession_.callServiceMethod("UiUpdateBehavior", 'updateChe', methodArgs)
         .then(function(response) {
             self.close();
         }, function(error) {
@@ -447,7 +447,7 @@ codeshelfApp.CheNgController.prototype.add = function(){
     var facilityPersistentId =  this.scope_['facility']['persistentId'];
     var methodArgs = [ facilityPersistentId, che["domainid"], che["description"], che["color"], che["cntrlrid"], che["processMode"], che["scannerType"]];
     var self = this;
-    this.websession_.callServiceMethod("UiUpdateService", 'addChe', methodArgs)
+    this.websession_.callServiceMethod("UiUpdateBehavior", 'addChe', methodArgs)
         .then(function(response) { //onsuccess
             self.close();
         }, function(error) {
@@ -488,7 +488,7 @@ codeshelfApp.SetupCheNgController.prototype.ok = function(){
 
     if (!isEmptyString(che[containersProperty])) {
         var dialog = this;
-        this.websession_.callServiceMethod('WorkService', 'fakeSetupUpContainersOnChe', [che['persistentId'],
+        this.websession_.callServiceMethod("WorkBehavior", 'fakeSetupUpContainersOnChe', [che['persistentId'],
                                                                                          che[containersProperty]]).
             then(function() {
                 dialog.close();

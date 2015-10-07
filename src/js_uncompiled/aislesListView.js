@@ -172,7 +172,7 @@ codeshelf.aisleslistview = function(websession, facility) {
 		"width" : 10,
 		"iconClass" : ["glyphicon-flash", "glyphicon-download-alt"],
 		"handler" : function(event, args, item) {
-			websession_.callServiceMethod("LightService", 'lightLocation', [facility_["persistentId"],
+			websession_.callServiceMethod("LightBehavior", 'lightLocation', [facility_["persistentId"],
 																				  item["nominalLocationId"]]
 			).then(function(response) {
 				logger_.info("Sent lightLocation for location:  " + item["domainId"]);

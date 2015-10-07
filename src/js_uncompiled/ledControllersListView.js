@@ -94,35 +94,35 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 
 			});
 		},
-		
+
        	deleteController: function(item) {
-       
+
         	codeshelf.simpleDlogService.showModalDialog("Confirm", "Delete the controller?", {})
                	.then(function() {
 					var methodArgs = [item['persistentId']];
-					websession_.callServiceMethod('UiUpdateService', 'deleteController', methodArgs);
+					websession_.callServiceMethod('UiUpdateBehavior', 'deleteController', methodArgs);
                	});
        	},
-       
+
 		posConSetup: function(item) {
    			if (item["deviceType"] == "Poscons"){
 				codeshelf.simpleDlogService.showModalDialog("Confirm", "Reset and assign position controllers?", {})
 	            	.then(function() {
-						websession_.callServiceMethod("UiUpdateService", 'posConSetup', [item['persistentId'], false]);
-	               	});   			
+						websession_.callServiceMethod("UiUpdateBehavior", 'posConSetup', [item['persistentId'], false]);
+	               	});
    			} else {
    				alert("Can not set up position controllers on " + item["deviceType"] + " devices")
    			}
        	},
-       	
+
        	posConLightAddresses: function(item) {
    			if (item["deviceType"] == "Poscons"){
-				websession_.callServiceMethod("UiUpdateService", 'posConLightAddresses', [item['persistentId'], false]);
+				websession_.callServiceMethod("UiUpdateBehavior", 'posConLightAddresses', [item['persistentId'], false]);
    			} else {
    				alert("Can not light position controller addresses on " + item["deviceType"] + " devices")
    			}
        	}
-       
+
 	};
 
 	var contextDefs = [
@@ -184,14 +184,14 @@ codeshelf.ledcontrollerslistview = function(websession, facility) {
 codeshelfApp.LedNgController = function($scope, $modalInstance, websession, data){
 
 	this.scope_ = $scope;
-	
+
 	this.modalInstance_ = $modalInstance;
 	this.websession_ = websession;
 	$scope['mode'] = data["mode"];
 	$scope['facility'] = data['facility'];
 	$scope['ledcontroller'] = data['ledcontroller'];
 	$scope['ledcontroller']['led_controller_id'] = data['ledcontroller']['deviceGuidStr'];
-	var deviceType = data['ledcontroller']['deviceType'];	
+	var deviceType = data['ledcontroller']['deviceType'];
 	$scope['ledcontroller']['deviceType'] = (deviceType == undefined) ? "Lights" : deviceType;
 };
 
@@ -226,7 +226,7 @@ codeshelfApp.LedNgController.prototype.add = function(){
 	var jsControllerProperty = "led_controller_id"; // this matches the partial html
 	var facilityPersistentId = this.scope_['facility']['persistentId'];
 	var methodArgs = [facilityPersistentId, ledcontroller[jsControllerProperty], ledcontroller['deviceType']];
-	this.websession_.callServiceMethod('UiUpdateService', 'addController', methodArgs);
+	this.websession_.callServiceMethod("UiUpdateBehavior", 'addController', methodArgs);
 	this.modalInstance_.close();
 };
 

@@ -78,7 +78,7 @@ codeshelf.buildGtinListView = function(websession, facility, itemFilter, itemFil
 			gtinDescription = "Delete GTIN: " + [gtin['domainId']] + " for SKU: " + [gtin['itemMasterId']] + "?"
 			codeshelf.simpleDlogService.showModalDialog("Confirm", gtinDescription, {})
 				.then(function() {
-					websession_.callServiceMethod("UiUpdateService", "deleleGtin", [gtin['persistentId']]);
+					websession_.callServiceMethod("UiUpdateBehavior", "deleleGtin", [gtin['persistentId']]);
 				});
 		}
 
@@ -107,13 +107,13 @@ codeshelf.buildGtinListView = function(websession, facility, itemFilter, itemFil
 		"width" : 10,
 		"iconClass" : ["glyphicon-flash", "glyphicon-barcode"],
 		"handler" : function(event, args, item) {
-			websession_.callServiceMethod("LightService", 'lightItem', [facility_['persistentId'],
+			websession_.callServiceMethod("LightBehavior", 'lightItem', [facility_['persistentId'],
 																		item["persistentId"]
 			]).then(function(response) {
 				logger_.info("Sent light for item:  " + item["persistentId"]);
 			});
 		}
-		
+
 	}*/];
 
 	var hierarchyMap = [];

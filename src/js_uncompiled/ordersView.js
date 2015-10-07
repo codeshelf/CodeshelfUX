@@ -89,7 +89,7 @@ codeshelf.ordersview = function(websession, facility, inOutboundOrders, partialO
             var uuid = facility['persistentId'];
             codeshelf.simpleDlogService.showModalDialog("Confirm", "Archive all orders,ordergroups and orderdetails?", {})
                 .then(function() {
-                    websession_.callServiceMethod("OrderService", "archiveAllOrders", [uuid]).then();
+                    websession_.callServiceMethod("OrderBehavior", "archiveAllOrders", [uuid]).then();
                 });
 
 

@@ -109,7 +109,7 @@ codeshelf.baylistview = function(websession, facility) {
 		"width" : 10,
 		"iconClass" : ["glyphicon-flash", "glyphicon-download-alt"],
 		"handler" : function(event, args, item) {
-			websession_.callServiceMethod("LightService", 'lightLocation', [facility_["persistentId"],
+			websession_.callServiceMethod("LightBehavior", 'lightLocation', [facility_["persistentId"],
 																				  item["nominalLocationId"]]
 			).then(function(response) {
 				logger_.info("Sent lightChildLocations for location:  " + item["domainId"]);
@@ -121,7 +121,7 @@ codeshelf.baylistview = function(websession, facility) {
 		"width" : 10,
 		"iconClass" : ["glyphicon-flash", "glyphicon-barcode"],
 		"handler" : function(event, args, item) {
-			websession_.callServiceMethod("LightService", 'lightInventory', [facility_["persistentId"],
+			websession_.callServiceMethod("LightBehavior", 'lightInventory', [facility_["persistentId"],
 																				  item["nominalLocationId"]]
 			).then(function(response) {
 				logger_.info("Sent lightInventory for location:  " + item["domainId"]);

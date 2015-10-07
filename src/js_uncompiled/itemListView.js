@@ -139,7 +139,7 @@ codeshelf.buildItemListView = function(websession, facility, itemFilter, itemFil
 		"width" : 10,
 		"iconClass" : ["glyphicon-flash", "glyphicon-barcode"],
 		"handler" : function(event, args, item) {
-			websession_.callServiceMethod("LightService", 'lightItem', [facility_['persistentId'],
+			websession_.callServiceMethod("LightBehavior", 'lightItem', [facility_['persistentId'],
 																		item["persistentId"]
 			]).then(function(response) {
 				logger_.info("Sent light for item:  " + item["persistentId"]);
@@ -199,7 +199,7 @@ codeshelfApp.ItemController.prototype.ok = function(){
 
 	var methodArgs = [facility['persistentId'], item['sku'], item['locationAlias'], item['cmFromLeft'], "0", item['uom'], item['orderDetailId']];
 
-	this.websession_.callServiceMethod("UiUpdateService", 'storeItem', methodArgs)
+	this.websession_.callServiceMethod("UiUpdateBehavior", 'storeItem', methodArgs)
 		.then(function(response) {
 			modalInstance.close();
 		})
