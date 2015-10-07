@@ -271,38 +271,17 @@ export function getFacilityContext() {
         },
 
 
-        getDataSummary: function(daysOld) {
+        getDataSummary: function() {
             let dataSummary = facilityPath + "/data/summary";
-            return ajax(dataSummary, {data: {daysOld: daysOld}});
+            return ajax(dataSummary);
         },
 
-        deleteOrderData: function(daysOld) {
-            let dataSummary = facilityPath + "/data/orders";
+        triggerDataPurge: function() {
+            let dataSummary = facilityPath + "/data/purge";
             return ajax(dataSummary, {
-                method: "DELETE",
-                contentType: "form",
-                data: {daysOld: daysOld}
+                method: "DELETE"
             });
         },
-
-        deleteWIData: function(daysOld) {
-            let dataSummary = facilityPath + "/data/wis";
-            return ajax(dataSummary, {
-                method: "DELETE",
-                contentType: "form",
-                data: {daysOld: daysOld}
-            });
-        },
-
-        deleteContainerData: function(daysOld) {
-            let dataSummary = facilityPath + "/data/containers";
-            return ajax(dataSummary, {
-                method: "DELETE",
-                contentType: "form",
-                data: {daysOld: daysOld}
-            });
-        },
-
 
         deleteOrders: () => {
             return ajax(ordersPath, {method: "DELETE"});

@@ -105,30 +105,17 @@ export default class DataObjectPurge extends React.Component{
         return this.loadSummary(this.state.daysOld);
     }
 
-    loadSummary(daysOld) {
-        return getFacilityContext().getDataSummary(daysOld).then((summaries) => {
+    loadSummary() {
+        return getFacilityContext().getDataSummary().then((summaries) => {
             this.changeState("dataSummary", summaries != null && summaries.join('\n'));
         });
     }
 
-    cleanWorkInstructions(daysOld) {
-        return getFacilityContext().deleteWIData(daysOld).then(() => {
-            return this.loadSummary(daysOld);
+    triggerPurge() {
+        return getFacilityContext().triggerDataPurge().then(() => {
+            return this.loadSummary();
         }.bind(this));
     }
-
-    cleanOrders(daysOld) {
-        return getFacilityContext().deleteOrderData(daysOld).then(() => {
-            return this.loadSummary(daysOld);
-        }.bind(this));
-    }
-
-    cleanContainers(daysOld) {
-        return getFacilityContext().deleteContainerData(daysOld).then(() => {
-            return this.loadSummary(daysOld);
-        }.bind(this));
-    }
-
 
     render() {
         let {daysOld, dataSummary = "Loading Summary"} = this.state;
@@ -136,66 +123,21 @@ export default class DataObjectPurge extends React.Component{
                         <Row>
                             <Col md={8}><pre>{dataSummary}</pre></Col>
                             <Col md={4}>
-                                <Row>
-                                    <Col sm={12}>
-                                        <form onSubmit={this.handleSubmit}>
-                                    <Input type="number"
-                                        label="Days Old"
-                                        name="daysOld"
-                                        value={daysOld}
-                                        min="1"
-                                        onChange={this.handleChange}
-                                        onBlur={(e) => {
-                                            if (e.target.checkValidity()) {
-                                                    this.handleSubmit();
-                                            } else {
-                                                //e.target.focus();
-                                            }
-                                        }.bind(this)} />
-                                </form>
-                            </Col>
-                        </Row>
-                        <Row>
+                              <Row>
                                 <Col sm={12} md={6}>
                                 <ConfirmAction
-                                    id="cleanWIs"
+                                    id="triggerPurge"
                                     style={{width: "100%", marginTop: "0.5em"}}
-                                    onConfirm={this.cleanWorkInstructions.bind(this, daysOld)}
-                                    confirmLabel="Clean WIs"
-                                    confirmInProgressLabel="Cleaning"
-                                    instructions={`Do you want to clean work instructions older than ${daysOld} day(s)?`}>
-                                        Clean WIs
+                                    onConfirm={this.triggerPurge.bind(this)}
+                                    confirmLabel="Trigger Purge"
+                                    confirmInProgressLabel="Triggering"
+                                    instructions={`Do you want to purge data older than ${daysOld} day(s)?`}>
+                                        Trigger Purge
                                 </ConfirmAction>
                             </Col>
-                        </Row>
-                        <Row>
-                                <Col sm={12} md={6}>
-                                <ConfirmAction
-                                    id="cleanOrders"
-                                    style={{width: "100%", marginTop: "0.5em"}}
-                                    onConfirm={this.cleanOrders.bind(this, daysOld)}
-                                    confirmLabel="Clean Orders"
-                                    confirmInProgressLabel="Cleaning"
-                                    instructions={`Do you want to clean orders older than ${daysOld} day(s)?`}>
-                                       Clean Orders
-                               </ConfirmAction>
-                            </Col>
-                        </Row>
-                    <Row>
-                    <Col sm={12} md={6}>
-                            <ConfirmAction
-                                  id="cleanContainers"
-                                  style={{width: "100%", marginTop: "0.5em"}}
-                                  onConfirm={this.cleanContainers.bind(this, daysOld)}
-                                  confirmLabel="Clean Containers"
-                                  confirmInProgressLabel="Cleaning"
-                                  instructions={`Do you want to clean containers older than ${daysOld} day(s)?`}>
-                                  Clean Containers
-                            </ConfirmAction>
-                        </Col>
-                        </Row>
-                            </Col>
-                        </Row>
+                                </Row>
+                      </Col>
+                   </Row>
                 </SingleCellIBox>
                );
     }

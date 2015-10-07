@@ -16,7 +16,7 @@ export default class Maintenance extends React.Component{
                         <PageGrid>
                         <Row>
                         <Col sm={12}>
-                            <DataObjectNotificationThreshold />
+                        {/** <DataObjectNotificationThreshold /> */}
                         </Col>
                         </Row>
                         <Row>
