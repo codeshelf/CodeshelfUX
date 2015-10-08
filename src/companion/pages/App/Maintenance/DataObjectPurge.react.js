@@ -1,4 +1,6 @@
 import React from 'react';
+import {RouteHandler} from "react-router";
+import exposeRouter from 'components/common/exposerouter';
 import _ from 'lodash';
 import {Map, List, fromJS} from 'immutable';
 import {getFacilityContext} from 'data/csapi';
@@ -9,8 +11,8 @@ import {Button, List as BSList} from 'components/common/bootstrap';
 import {Input, Checkbox, ErrorDisplay} from 'components/common/Form';
 import Icon from 'react-fa';
 import {Table} from 'components/common/Table';
+import {EditButtonLink} from "components/common/TableButtons";
 import Dropzone from 'react-dropzone';
-
 
 function changeState(name, value, callback) {
     let obj = new Object();
@@ -81,28 +83,44 @@ class ConfirmAction extends React.Component {
     }
 }
 
-export default class DataObjectPurge extends React.Component{
+class DataObjectPurge extends React.Component{
 
     constructor() {
         super();
-        this.state = {daysOld: 5};
         this.changeState = changeState.bind(this);
-        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleExtensionPointUpdate = this.handleExtensionPointUpdate.bind(this);
+        this.state = {};
+
     }
 
-    componentDidMount() {
-        this.loadSummary(this.state.daysOld);
+    componentWillMount() {
+        this.loadConfiguration();
+        this.loadSummary();
     }
 
-    handleChange(e) {
-        this.changeState("daysOld", e.target.value);
+    loadConfiguration(){
+        return getFacilityContext().getHealthCheckConfiguration("DataPurge").then((data)=>{
+            this.setState({"healthcheck": data});
+            return data;
+        });
+    }
+
+    handleChange(extensionPoint, active, e) {
+        return this.handleExtensionPointUpdate(extensionPoint.set("active", active));
+    }
+
+    handleExtensionPointUpdate(extensionPoint) {
+        return getFacilityContext().updateExtensionPoint(extensionPoint.toJS()).then((updatedExtensionPoint) => {
+                return this.loadConfiguration();
+        }).then(() => {
+            return this.loadSummary();
+        });
     }
 
     handleSubmit(e) {
         e && e.preventDefault();
-
-        return this.loadSummary(this.state.daysOld);
+        return this.loadSummary();
     }
 
     loadSummary() {
@@ -117,12 +135,52 @@ export default class DataObjectPurge extends React.Component{
         }.bind(this));
     }
 
+    addToEdit() {
+        return getFacilityContext().addExtensionPoint({type: "ParameterSetDataPurge"})
+            .then((newExtensionPoint) => {
+                return this.loadConfiguration();
+            }).then((healthcheck) => {
+                let {extensionPoint = {}} = healthcheck;
+                let params = this.props.router.getCurrentParams();
+                params.extensionPointId = extensionPoint.persistentId;
+                this.props.router.transitionTo("parametersetedit", params);
+            });
+    }
+
     render() {
-        let {daysOld, dataSummary = "Loading Summary"} = this.state;
-            return (<SingleCellIBox title="Database Object Purge">
-                        <Row>
-                            <Col md={8}><pre>{dataSummary}</pre></Col>
+        let {dataSummary = "Loading Summary",
+               healthcheck = {}} = this.state;
+        let {parameterSet = {}, extensionPoint} = healthcheck;
+        extensionPoint = fromJS(extensionPoint);
+        let {purgeAfterDays} = parameterSet;
+        let useDefaults = true;
+        var extensionPointId = null;
+        if (extensionPoint) {
+            useDefaults = !extensionPoint.get("active");
+            extensionPointId = extensionPoint.get("persistentId");
+        }
+        console.log("useDefaults", useDefaults );
+        return (<SingleCellIBox title="Database Object Purge">
+                    <RouteHandler extensionPoint={extensionPoint} onExtensionPointUpdate={this.handleExtensionPointUpdate} returnRoute="maintenance"/>
+                    <Row>
+                        <Col md={8}>
+                            <pre>{parameterSet.parametersDescription}</pre>
+                        </Col>
                             <Col md={4}>
+                            <form>
+                    <Checkbox name="useDefaults" id="useDefaults" label="Use Defaults" value={useDefaults} onChange={this.handleChange.bind(this, extensionPoint, useDefaults)} />
+                    {(extensionPointId) ?
+                        <EditButtonLink name="edit" to="parametersetedit" params={{extensionPointId: extensionPointId}} disabled={useDefaults} />
+                                        :
+                        <Button name="addFirst" bsStyle="primary" onClick={this.addToEdit.bind(this)}><Icon name="edit" /></Button>
+                                    }
+
+                            </form>
+                        </Col>
+                   </Row>
+                   <Row>
+                        <Col md={8}><pre>{dataSummary}</pre></Col>
+                        <Col md={4}>
                               <Row>
                                 <Col sm={12} md={6}>
                                 <ConfirmAction
@@ -131,7 +189,7 @@ export default class DataObjectPurge extends React.Component{
                                     onConfirm={this.triggerPurge.bind(this)}
                                     confirmLabel="Trigger Purge"
                                     confirmInProgressLabel="Triggering"
-                                    instructions={`Do you want to purge data older than ${daysOld} day(s)?`}>
+                                    instructions={`Do you want to purge data older than ${purgeAfterDays} day(s)?`}>
                                         Trigger Purge
                                 </ConfirmAction>
                             </Col>
@@ -142,7 +200,7 @@ export default class DataObjectPurge extends React.Component{
                );
     }
 };
-
+export default exposeRouter(DataObjectPurge);
 
 class ConfirmModal extends React.Component {
     render() {

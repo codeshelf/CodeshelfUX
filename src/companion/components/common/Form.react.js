@@ -204,7 +204,7 @@ export class Checkbox extends React.Component {
         return (<div className="form-group form-group-default" >
 
                     <div className="checkbox check-primary">
-                               <input id={nameAttr} name={nameAttr} type="checkbox" defaultChecked={checked} onChange={onChange} />
+                               <input id={nameAttr} name={nameAttr} type="checkbox" checked={checked} onChange={onChange} />
                                    <label htmlFor={nameAttr}>{label} </label>
                                 </div>
                     </div>

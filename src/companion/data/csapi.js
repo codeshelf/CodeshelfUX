@@ -226,6 +226,11 @@ export function getFacilityContext() {
             });
         },
 
+        getHealthCheckConfiguration: function(type) {
+            let path = facilityPath + `/healthchecks/${type}/configuration`;
+            return ajax(path);
+        },
+
         getEdiGateways: function() {
             let edipath = facilityPath + "/edigateways";
             return ajax(edipath);
