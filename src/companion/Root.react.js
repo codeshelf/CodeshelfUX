@@ -1,15 +1,13 @@
 /*eslint strict:0 */
-
-import DocumentTitle from 'react-document-title';
 import React from 'react';
 import {RouteHandler} from 'react-router';
 import {state} from './data/state';
 import storage from 'lib/storage';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd/modules/backends/HTML5';
 
 require('imports?this=>window!assets/plugins/modernizr.custom.js');
 require("imports?classie=assets/plugins/classie/classie.js!pages/js/pages");
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd/modules/backends/HTML5';
 
 
 class Root extends React.Component {
@@ -34,41 +32,38 @@ class Root extends React.Component {
                 storage.set("preferences", state.cursor(["preferences"])());
             }
         /*eslint-enable */
-    });
+       });
+   }
 
-}
+   componentWillUnmount() {
+       document.removeEventListener('keypress', this.onDocumentKeypress);
+   }
 
+   onDocumentKeypress(e) {
+       // Press shift+ctrl+s to save app state and shift+ctrl+l to load.
+       if (!e.shiftKey || !e.ctrlKey) return;
+       switch (e.keyCode) {
+       case 19:
+           window._appState = state.save();
+           window._appStateString = JSON.stringify(window._appState);
+           /*eslint-disable no-console */
+           console.log('app state saved');
+           console.log('copy the state to your clipboard by calling copy(_appStateString)');
+           console.log('for dev type _appState and press enter');
+           /*eslint-enable */
+           break;
+       case 12:
+           const stateStr = window.prompt('Path the serialized state into the input'); // eslint-disable-line no-alert
+           const newState = JSON.parse(stateStr);
+           if (!newState) return;
+           state.load(newState);
+           break;
+       }
+   }
 
+   render() {
+       return (<RouteHandler state={state}/>);
 
-componentWillUnmount() {
-    document.removeEventListener('keypress', this.onDocumentKeypress);
-}
-
-onDocumentKeypress(e) {
-    // Press shift+ctrl+s to save app state and shift+ctrl+l to load.
-    if (!e.shiftKey || !e.ctrlKey) return;
-    switch (e.keyCode) {
-    case 19:
-        window._appState = state.save();
-        window._appStateString = JSON.stringify(window._appState);
-        /*eslint-disable no-console */
-        console.log('app state saved');
-        console.log('copy the state to your clipboard by calling copy(_appStateString)');
-        console.log('for dev type _appState and press enter');
-        /*eslint-enable */
-        break;
-    case 12:
-        const stateStr = window.prompt('Path the serialized state into the input'); // eslint-disable-line no-alert
-        const newState = JSON.parse(stateStr);
-        if (!newState) return;
-        state.load(newState);
-        break;
-    }
-}
-
-render() {
-    return (<RouteHandler state={state}/>);
-
-}
+   }
 };
 export default DragDropContext(HTML5Backend)(Root);
