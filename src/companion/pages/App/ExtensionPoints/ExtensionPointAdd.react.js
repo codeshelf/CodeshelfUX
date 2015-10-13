@@ -14,16 +14,11 @@ export default class ExtensionPointAdd extends React.Component{
         let node = React.findDOMNode(this.refs.type);
         let select = node.getElementsByTagName("select")[0];
         let value = select.options[select.selectedIndex].value;
-        return getFacilityContext().addExtensionPoint({type: value}).then((newExtensionPoint) => {
-            this.props.extensionPoints.cursor().update((list) =>{
-                return list.push(fromJS(newExtensionPoint));
-            });
-        });
+        return this.props.onExtensionPointAdd({type: value});
     }
 
 
     render() {
-
         let {availableTypes} = this.props;
             return (<ModalForm title="Add Extension Point" formData={{}} returnRoute="extensionpoints" onSave={this.handleSave.bind(this)}>
                     <Select ref="type" options={availableTypes.toJS()}/>

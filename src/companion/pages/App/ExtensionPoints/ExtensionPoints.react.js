@@ -63,6 +63,7 @@ class ExtensionPoints extends React.Component{
             }
         ];
         this.handleExtensionPointUpdate = this.handleExtensionPointUpdate.bind(this);
+        this.handleExtensionPointAdd = this.handleExtensionPointAdd.bind(this);
     }
 
     componentWillMount() {
@@ -80,9 +81,18 @@ class ExtensionPoints extends React.Component{
             let {extensionPoints} = this.state;
             extensionPoints.cursor().update((pts) => {
                 let index = pts.findIndex((p) => p.get("persistentId") === updatedExtensionPoint.persistentId);
-            return pts.set(index, newExtensionPoint);
+                return pts.set(index, newExtensionPoint);
+            });
         });
-} );
+    }
+
+    handleExtensionPointAdd(extensionPoint) {
+        return getFacilityContext().addExtensionPoint(extensionPoint).then((newExtensionPoint) => {
+            let {extensionPoints} = this.state;
+            extensionPoints.cursor().update((list) =>{
+                return list.push(fromJS(newExtensionPoint));
+            });
+        });
 
     }
 
@@ -110,7 +120,10 @@ class ExtensionPoints extends React.Component{
                     </Col>
                 </Row>
                     <Table results={list} columnMetadata={this.columnMetadata} rowActionComponent={ExtensionPointEditButtonLink}/>
-                    <RouteHandler availableTypes={availableTypes} onExtensionPointUpdate={this.handleExtensionPointUpdate} extensionPoint={extensionPoint}/>
+                    <RouteHandler availableTypes={availableTypes}
+                            onExtensionPointUpdate={this.handleExtensionPointUpdate}
+                            onExtensionPointAdd={this.handleExtensionPointAdd}
+                            extensionPoint={extensionPoint}/>
                 </div>
         );
     }
