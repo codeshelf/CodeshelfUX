@@ -7,6 +7,10 @@ import _ from "lodash";
 import {List} from "immutable";
 require('./Form.styl');
 
+export function getRefInputValue(ref) {
+    return React.findDOMNode(ref).getElementsByTagName("input")[0].value;
+}
+
 export class ErrorDisplay extends PureComponent {
     render() {
         let {message} = this.props;

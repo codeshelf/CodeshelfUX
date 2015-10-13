@@ -6,11 +6,12 @@ import {getFacilityContext} from 'data/csapi';
 import {IBox, IBoxBody} from 'components/common/IBox';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
 import {Input, ListGroup, Modal} from 'react-bootstrap';
-    import {Button, List as BSList} from 'components/common/bootstrap';
+import {Button, List as BSList} from 'components/common/bootstrap';
 import {ErrorDisplay} from 'components/common/Form';
 import Icon from 'react-fa';
 import {Table} from 'components/common/Table';
 import Dropzone from 'react-dropzone';
+import TestFunctionExecution from "./TestFunctionExecution";
 
 class ConfirmAction extends React.Component {
 
@@ -117,6 +118,11 @@ export default class TestScript extends React.Component{
             let {scriptInputs} = this.state;
             return (<DocumentTitle title="Test Script">
                         <PageGrid>
+                            <Row>
+                                <Col sm={12}>
+                                        <TestFunctionExecution />
+                                </Col>
+                            </Row>
                             <Row>
                                 <Col sm={12} md={6}>
                 <IBox>

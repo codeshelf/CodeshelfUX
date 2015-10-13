@@ -410,6 +410,16 @@ export function getFacilityContext() {
                 }
             });
         },
+
+        executeTestFunction(functionName, parameters) {
+            let testFunction = facilityPath + "/test/" + functionName;
+            return ajax(testFunction, {
+                method: "POST",
+                query: parameters,
+                contentType: "form"
+            });
+        },
+
         processPickScript: function(formData) {
             var runpickscript = facilityPath + "/process_script";
             return ajax(runpickscript, {
