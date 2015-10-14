@@ -415,7 +415,7 @@ export function getFacilityContext() {
             let testFunction = facilityPath + "/test/" + functionName;
             return ajax(testFunction, {
                 method: "POST",
-                query: parameters,
+                data: parameters,
                 contentType: "form"
             });
         },

@@ -18,7 +18,15 @@ export default class TestFunctionExecution extends React.Component{
 
     handleSubmit() {
         let functionName = getRefInputValue(this.refs.functionName);
-        let parameters = getRefInputValue(this.refs.parameters);
+        let paramString = getRefInputValue(this.refs.parameters);
+        let parameters = {};
+        if (paramString) {
+            parameters = paramString.split('&').reduce((params, pair) => {
+                let nameValue = pair.split('=');
+                params[nameValue[0]] = nameValue[1];
+                return params;
+            }, {});
+        }
         return getFacilityContext().executeTestFunction(functionName, parameters).then((result) => {
             this.setState({"testFunctionResult" : result});
         });
