@@ -60,14 +60,23 @@ function ajax(path, options) {
         }
     }
 
+    if (options.accept) {
+        reqWithMethod = reqWithMethod.accept(options.accept);
+    } else {
+        reqWithMethod = reqWithMethod.accept('application/json');
+    }
+
     if (options.contentType) {
         reqWithMethod = reqWithMethod.type(options.contentType);
     }
     return reqWithMethod
         .withCredentials()
-        .accept('application/json')
         .then((response) => {
-            return response.body;
+            if (response.body) {
+                return response.body;
+            } else {
+                return response.text;
+            }
         }, (error) => {
             console.log("error occurred", error);
             if (error.status == null) {
@@ -416,7 +425,8 @@ export function getFacilityContext() {
             return ajax(testFunction, {
                 method: "POST",
                 data: parameters,
-                contentType: "form"
+                contentType: "form",
+                accept: "text/plain"
             });
         },
 
