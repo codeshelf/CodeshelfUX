@@ -68,7 +68,7 @@ class ParameterSetConfiguration extends React.Component{
                                     <EditButtonLink name="edit" to="parametersetedit" params={{parameterType: parameterType}} disabled={useDefaults} />
                                 </div>
                                :
-                                <WrapInput label="Change Configuration Defaults">
+                                <WrapInput label="Change Configuration">
                                     <Button name="addFirst" bsStyle="primary" onClick={this.addToEdit.bind(this)}><Icon name="edit" /></Button>
                                 </WrapInput>
                             }
