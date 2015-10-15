@@ -1,6 +1,5 @@
 import  React from 'react';
-import Immutable from 'immutable';
-
+import {fromJS} from 'immutable';
 import ModalForm from "components/common/ModalForm";
 import ExtensionPointForm from "./ExtensionPointForm.react.js";
 import {getFacilityContext} from "data/csapi";
@@ -17,7 +16,9 @@ export default class ExtensionPointEdit extends React.Component {
 
     handleSave() {
         let extensionPoint = this.refs.form.getExtensionPoint();
-        return this.props.onExtensionPointUpdate(extensionPoint);
+        return getFacilityContext().updateExtensionPoint(extensionPoint.toJS()).then((updatedExtensionPoint) => {
+            return this.props.onExtensionPointUpdate(fromJS(updatedExtensionPoint));
+        });
     }
 
     render() {

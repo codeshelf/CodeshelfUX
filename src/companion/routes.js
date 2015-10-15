@@ -51,7 +51,7 @@ export default (
                 <Route handler={WorkerDisplay} name="workerdisplay" path=":workerId" />
             </Route>
             <Route handler={Maintenance} name="maintenance">
-                <Route handler={ExtensionPointEdit} name="parametersetedit" path="parametersset/:extensionPointId" />
+                <Route handler={ExtensionPointEdit} name="parametersetedit" path="parametersset/:parameterType" />
             </Route>
             <Route handler={TestScript} name="testscript" />
             <Route handler={ExtensionPointsPage} name="extensionpoints">
