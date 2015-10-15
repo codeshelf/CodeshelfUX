@@ -401,13 +401,10 @@ export function getFacilityContext() {
         importInventoryFile: function(formData) {
             return this.importFile("inventory", formData);
         },
-        getImportReceipts: function(startTimestamp, endTimestamp) {
+        findImportReceipts: function(filter) {
             var receiptPath = facilityPath + "/import";
             return ajax(receiptPath, {
-                data: {
-                    "startTimestamp": startTimestamp,
-                    "endTimestamp": endTimestamp
-                }
+                    data: filter
             });
         },
         getPickRates: (startTimestamp, endTimestamp) => {

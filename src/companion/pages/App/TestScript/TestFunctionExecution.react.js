@@ -1,9 +1,7 @@
 import  React from "react";
 import {SingleCellIBox} from "components/common/IBox.react.js";
-
-import {Form, Input, getRefInputValue} from "components/common/Form";
+import {Form, Input, getRefInputValue, SubmitButton} from "components/common/Form";
 import {Row, Col} from "components/common/pagelayout";
-import {Button} from "components/common/bootstrap";
 import {getFacilityContext} from "data/csapi";
 
 export default class TestFunctionExecution extends React.Component{
@@ -40,7 +38,7 @@ export default class TestFunctionExecution extends React.Component{
                         <Form onSubmit={this.handleSubmit}>
                             <Input ref="functionName" label="Function Name" name="functionName" required={true} type="text" />
                             <Input ref="parameters" type="text" label="Function Parameters (name=value&name=value)" name="parameters"/>
-                            <Button type="submit" bsStyle="primary">Execute</Button>
+                            <SubmitButton label="Execute"/>
                         </Form>
                     </Col>
                     <Col sm={6}>

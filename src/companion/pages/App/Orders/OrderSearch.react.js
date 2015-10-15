@@ -1,7 +1,5 @@
 import {Row, Col} from 'components/common/pagelayout';
-import {Select, Input, WrapInput} from 'components/common/Form';
-import Promise from "bluebird";
-import _ from "lodash";
+import {Form, Input, WrapInput, SubmitButton, getRefInputValue} from 'components/common/Form';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
 
 export default class OrderSearch extends React.Component {
@@ -12,12 +10,13 @@ export default class OrderSearch extends React.Component {
     }
 
     getFilter() {
-        let interval = this.refs.dueDateFilter.getInterval();
-        let orderIdSubstring = React.findDOMNode(this.refs.orderId).getElementsByTagName("input")[0].value;
+
+        let orderIdSubstring = getRefInputValue(this.refs.orderId);
         let  filter = {
             orderId: orderIdSubstring,
             properties: ["orderId"]
         };
+        let interval = this.refs.dueDateFilter.getInterval();
         if (interval) {
             filter['dueDate'] = interval.toQueryParameterValue();
         }
@@ -26,30 +25,27 @@ export default class OrderSearch extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.fireFilterChange();
+        return this.fireFilterChange();
     }
 
-    handleDayChange(daysBack) {
+    handleChange(daysBack) {
         this.fireFilterChange();
     }
 
     fireFilterChange() {
         let  filter = this.getFilter();
-        this.props.onFilterChange(filter);
+        return this.props.onFilterChange(filter);
     }
 
     render() {
         return (
-            <Row>
-                <Col md={6}>
-                    <form onSubmit={this.handleSubmit.bind(this)}>
-                        <WrapInput label="Due Date">
-                            <DayOfWeekFilter ref="dueDateFilter" numDays={4} onChange={this.handleDayChange.bind(this)}/>
-                        </WrapInput>
-                        <Input ref="orderId" label="Order ID" name="orderId" type="text" />
-                    </form>
-
-                </Col>
-            </Row>);
+            <Form onSubmit={this.handleSubmit.bind(this)}>
+                <WrapInput label="Due Date">
+                    <DayOfWeekFilter ref="dueDateFilter" numDays={4} onChange={this.handleChange.bind(this)}/>
+                </WrapInput>
+                <Input ref="orderId" label="Order ID" name="orderId" type="text" />
+                <SubmitButton label="Search"/>
+            </Form>
+        );
     }
 }

@@ -1,7 +1,4 @@
-import {Row, Col} from 'components/common/pagelayout';
-import {Select, Input, WrapInput} from 'components/common/Form';
-import Promise from "bluebird";
-import _ from "lodash";
+import {Form, Select, Input, WrapInput, SubmitButton, getRefInputValue} from 'components/common/Form';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
 
 export default class WorkInstructionSearch extends React.Component {
@@ -12,14 +9,14 @@ export default class WorkInstructionSearch extends React.Component {
     }
 
     getFilter() {
-        let interval = this.refs.assignedFilter.getInterval();
-        let itemIdSubstring = React.findDOMNode(this.refs.sku).getElementsByTagName("input")[0].value;
-        let containerIdSubstring = React.findDOMNode(this.refs.containerId).getElementsByTagName("input")[0].value;
+        let itemIdSubstring = getRefInputValue(this.refs.sku);
+        let containerIdSubstring = getRefInputValue(this.refs.containerId);
         let  filter = {
             itemId: itemIdSubstring,
             containerId: containerIdSubstring
             //properties: ["orderId"]
         };
+        let interval = this.refs.assignedFilter.getInterval();
         if (interval) {
             filter['assigned'] = interval.toQueryParameterValue();
         }
@@ -28,31 +25,28 @@ export default class WorkInstructionSearch extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.fireFilterChange();
+        return this.fireFilterChange();
     }
 
-    handleDayChange(daysBack) {
+    handleChange(daysBack) {
         this.fireFilterChange();
     }
 
     fireFilterChange() {
         let  filter = this.getFilter();
-        this.props.onFilterChange(filter);
+        return this.props.onFilterChange(filter);
     }
 
     render() {
         return (
-            <Row>
-                <Col md={6}>
-                    <form onSubmit={this.handleSubmit.bind(this)}>
-                        <WrapInput label="Assigned Time">
-                            <DayOfWeekFilter ref="assignedFilter" numDays={4} onChange={this.handleDayChange.bind(this)}/>
-                        </WrapInput>
-                        <Input ref="sku" label="SKU" name="itemId" type="text" />
-                        <Input ref="containerId" label="Container ID" name="containerId" type="text" />
-                <input type="submit" style={{display: "none"}}/>
-                    </form>
-                </Col>
-            </Row>);
+            <Form onSubmit={this.handleSubmit.bind(this)}>
+                <WrapInput label="Assigned Time">
+                    <DayOfWeekFilter ref="assignedFilter" numDays={4} onChange={this.handleChange.bind(this)}/>
+                </WrapInput>
+                <Input ref="sku" label="SKU" name="itemId" type="text" />
+                <Input ref="containerId" label="Container ID" name="containerId" type="text" />
+                <SubmitButton label="Search"/>
+            </Form>
+            );
     }
 }

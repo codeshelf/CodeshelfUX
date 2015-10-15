@@ -4,48 +4,76 @@ import {Tabs, Tab} from 'react-bootstrap';
 import {SingleCellLayout} from 'components/common/pagelayout';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import UploadForm from 'components/common/UploadForm';
-import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
+
 import {Authz, authz, isAuthorized} from 'components/common/auth';
 import {getFacilityContext} from 'data/csapi';
 import ImportList from './ImportList';
-
-const priorDayInterval = DayOfWeekFilter.priorDayInterval;
+import ImportSearch from './ImportSearch';
+import search from "data/search";
+import Promise from "bluebird";
 export default class Imports extends React.Component{
 
     constructor() {
         super();
-        this.state = {interval: priorDayInterval(0),
-                      receipts: []};
+        this.state = {
+            refreshingAction: Promise.resolve([]),
+            receipts: []
+        };
     }
 
-    fetchImportReceipts() {
-        let {start, end} = this.state.interval;
-        getFacilityContext().getImportReceipts(start.toISOString(), end.toISOString()).then((receipts) => {
-            this.setState({"receipts": receipts});
+    handleRefresh() {
+        var promise = this.state.refreshingAction;
+
+        if (promise && promise.isPending()) {
+            console.log("refresh already happening, cancellable: ", promise.isCancellable());
+            return promise;
+        } else {
+            return this.handleFilterChange(this.refs.search.getFilter());
+        }
+
+    }
+
+    handleFilterChange(filter) {
+        let columns = this.columnsCursor;
+        let properties = []; //based on columns
+
+        var promise = this.state.refreshingAction;
+
+        if (promise && promise.isPending()) {
+            if (promise.isCancellable() == false) {
+                console.error("unable to cancel existing search");
+            } else {
+                console.log("cancelling order search");
+                promise.cancel();
+            }
+        }
+        promise =  getFacilityContext().findImportReceipts(filter).then((receipts) => {
+            this.handleResultsUpdated(receipts, receipts.length);
         });
+        promise.then(()=> this.forceUpdate());
+        this.setState({"refreshingAction" : promise});
+        return promise;
+    }
+
+    handleResultsUpdated(receipts, total) {
+        this.setState({"receipts": receipts});
     }
 
     getImportReceipts() {
         return this.state.receipts;
     }
 
-    componentWillMount() {
-        this.fetchImportReceipts();
-    }
-
-    handleChange(daysBack) {
-        this.setState({interval: priorDayInterval(daysBack)},
-                       () => {
-                           this.fetchImportReceipts();
-                       });
-
+    componentDidMount() {
+        window.requestAnimationFrame(() => {
+            this.handleRefresh();
+        }.bind(this));
     }
 
     handleImportSubmit(method, file) {
         var formData = new FormData();
         formData.append("file", file);
          return getFacilityContext()[method](formData).then(() => {
-            this.fetchImportReceipts();
+            this.handleRefresh();
         }.bind(this));
     }
 
@@ -60,9 +88,7 @@ export default class Imports extends React.Component{
                     </Authz>
 
                     <SingleCellIBox title="Order Files Imported">
-                        <IBoxSection>
-                            <DayOfWeekFilter numDays={4} onChange={this.handleChange.bind(this)} />
-                        </IBoxSection>
+                        <ImportSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
                         <IBoxSection>
                         {/**  passing state through is a hack until we can have something like sub cursors**/}
                             <ImportList receipts={receipts} state={this.props.state}/>

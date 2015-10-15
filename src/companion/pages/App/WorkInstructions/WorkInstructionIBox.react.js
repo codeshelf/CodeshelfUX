@@ -1,6 +1,6 @@
 import React from "react";
 import DocumentTitle from "react-document-title";
-import {SingleCellLayout} from "components/common/pagelayout";
+        import {SingleCellLayout, Row, Col} from "components/common/pagelayout";
 import {SingleCellIBox} from 'components/common/IBox';
 import {fromJS, Map, Set} from "immutable";
 import WorkInstructionSearch from "./WorkInstructionSearch";
@@ -149,8 +149,12 @@ export default class WorkInstructionIBox extends React.Component{
             <SingleCellIBox title={this.title}
                     style={{display: "inline-block"}}
                     isRefreshing={refreshingAction.isPending()}
-                    onRefresh={this.handleRefresh}>
-                <WorkInstructionSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
+                        onRefresh={this.handleRefresh}>
+                <Row>
+                    <Col md={6}>
+                            <WorkInstructionSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
+                    </Col>
+                </Row>
                 <SearchStatus {...{results}} />
                 <PivotTable results={resultValues} options={pivotOptions} onDrillDown={this.handleDrillDown}/>
                 <ListView results={selected}
