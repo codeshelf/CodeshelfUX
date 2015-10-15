@@ -34,7 +34,7 @@ class Maintenance extends React.Component{
     }
 
     handleConfigurationUpdate() {
-        let parameterSetTypes = ["ParameterEdiFreeSpaceHealthCheck", "ParameterSetDataPurge"];
+        let parameterSetTypes = ["ParameterEdiFreeSpaceHealthCheck", "ParameterSetDataPurge", "ParameterSetDataQuantityHealthCheck"];
         return Promise.reduce(parameterSetTypes, (configs, type) => {
             return getFacilityContext().getHealthCheckConfiguration(type).then((config) => {
                 configs[type] = config;
@@ -64,7 +64,13 @@ class Maintenance extends React.Component{
                             <PageGrid>
                                 <Row>
                                     <Col sm={12}>
-                                        {/** <DataObjectNotificationThreshold /> */}
+                                        <SingleCellIBox title="Data Quantity Health Check">
+                                            <ParameterSetConfiguration
+                                             parameterType="ParameterSetDataQuantityHealthCheck"
+                                             configuration={this.state.ParameterSetDataQuantityHealthCheck}
+                                                onUpdate={this.handleConfigurationUpdate.bind(this)}
+                                             />
+                                        </SingleCellIBox>
                                     </Col>
                                 </Row>
                                 <Row>
