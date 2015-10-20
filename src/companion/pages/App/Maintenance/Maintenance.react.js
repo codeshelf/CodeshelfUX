@@ -10,11 +10,28 @@ import DataObjectNotificationThreshold from "./DataObjectNotificationThreshold";
 import EdiNotificationThreshold from "./EdiNotificationThreshold";
 import {getFacilityContext} from 'data/csapi';
 import ParameterSetConfiguration from "./ParameterSetConfiguration.react.js";
+import DailyMetrics from "./DailyMetrics.react.js";
+
 import Promise from "bluebird";
 import {fromJS} from "immutable";
 
 
-
+class MaintenaceTabContent extends React.Component {
+    render() {
+        const {title} = this.props;
+        return (
+            <PageGrid>
+                <Row>
+                    <Col sm={12}>
+                        <SingleCellIBox title={title}>
+                            {this.props.children}
+                        </SingleCellIBox>
+                    </Col>
+                </Row>
+            </PageGrid>
+        );
+    }
+}
 
 class Maintenance extends React.Component{
 
@@ -56,6 +73,7 @@ class Maintenance extends React.Component{
     }
 
     render() {
+        let {state: appState} = this.props;
         let {extensionPoint} = this.state;
         return (<DocumentTitle title="Maintenance">
                 <SingleCellLayout>
@@ -97,6 +115,11 @@ class Maintenance extends React.Component{
                                     </Col>
                                 </Row>
                             </PageGrid>
+                        </Tab>
+                        <Tab eventKey="daily" title="Daily">
+                            <MaintenaceTabContent title="Daily Metrics" >
+                                <DailyMetrics appState={appState}/>
+                            </MaintenaceTabContent>
                         </Tab>
                     </Tabs>
                     {(extensionPoint) ? <RouteHandler extensionPoint={fromJS(extensionPoint)} onExtensionPointUpdate={this.handleConfigurationUpdate.bind(this)} returnRoute="maintenance"/> : null}

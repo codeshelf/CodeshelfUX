@@ -48,6 +48,11 @@ const data = {
                 dataFields: ["count"]
             }
         },
+        dailymetric: {
+            table: {
+                columns: ["date"]
+            }
+        },
         imports: {
             orders: {
                 table: {
