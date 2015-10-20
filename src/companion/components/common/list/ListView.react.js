@@ -119,6 +119,10 @@ export default class ListView extends React.Component{
             });
     }
 
+    getCSV() {
+        return this.refs.table.getCSV();
+    }
+
     render() {
 
         let {columns, columnMetadata, keyColumn, rowActionComponent, expand, onRowExpand, onRowCollapse} = this.props;
@@ -155,7 +159,7 @@ export default class ListView extends React.Component{
                  </Row>
 
 
-                <Table results={results}
+                <Table ref="table" results={results}
                     columns={columns()}
                     columnMetadata={columnMetadata}
                     keyColumn={keyColumn}

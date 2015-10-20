@@ -1,8 +1,8 @@
 import  React from "react";
 import DocumentTitle from "react-document-title";
 import {Row, Col} from 'components/common/pagelayout';
-import {Input} from 'react-bootstrap';
-
+import {Input, Button} from 'react-bootstrap';
+import Icon from 'react-fa';
 import {SingleCellIBox} from 'components/common/IBox';
 import PureComponent from 'components/common/PureComponent';
 import {EditButtonLink, AddButtonLink} from 'components/common/TableButtons';
@@ -75,17 +75,27 @@ export default class ListManagement extends React.Component{
 
     }
 
+    generateCsv(columnMetadata, results) {
+        var csv = encodeURIComponent(this.refs.listView.getCSV());
+        let anchor = React.findDOMNode(this.refs.export);
+        anchor.setAttribute("href", "data:attachment/csv," + csv);
+    }
+
     render() {
         let {columnMetadata
              , addButtonRoute
              , results
+             , allowExport = false
              , ...other} = this.props;
 
         var filteredResults = this.search(
             this.state.search,
             columnMetadata,
-            results);
-
+                    results);
+        let csvData = null;
+        if (allowExport) {
+            //csvData = this.generateCsv(columnMetadata, results);
+        }
         return (
             <SingleCellIBox>
                 <Row>
@@ -96,9 +106,14 @@ export default class ListManagement extends React.Component{
                         <div className="pull-right">
                             {(addButtonRoute) && <AddButtonLink to={addButtonRoute} />}
                         </div>
-                    </Col>
+                        {allowExport &&
+                            <div className="pull-right">
+                         <Button ref="export" onClick={this.generateCsv.bind(this, columnMetadata, results)} bsStyle="primary" href={""} target="_blank" download="export.csv" style={{marginRight: "1em"}}><Icon name="download"/></Button>
+                            </div>
+                        }
+                   </Col>
                 </Row>
-                <ListView {...other} results={filteredResults} columnMetadata={columnMetadata}/>
+                <ListView ref="listView" {...other} results={filteredResults} columnMetadata={columnMetadata}/>
             </SingleCellIBox>);
     }
 };

@@ -20,7 +20,7 @@ import {Authz} from 'components/common/auth';
 import {getFacilityContext} from 'data/csapi';
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkers} from 'data/workers/store';
-
+import DateDisplay from "components/common/DateDisplay";
 const keyColumn = "persistentId";
 
 export default class WorkerMgmt extends React.Component{
@@ -100,8 +100,8 @@ export default class WorkerMgmt extends React.Component{
                             onImportSubmit={this.handleImportSubmit.bind(this, "importWorkers")} />
                 </Authz>
                 <ListManagement
+                        allowExport={true}
                         addButtonRoute="workernew"
-
                         columns={this.columnsCursor}
                         columnMetadata={this.columnMetadata}
                         sortSpecs={this.columnSortSpecsCursor}
@@ -114,14 +114,3 @@ export default class WorkerMgmt extends React.Component{
 
 
 };
-
-import {formatTimestamp} from 'lib/timeformat';
-class DateDisplay extends React.Component {
-    static search(value) {
-        return formatTimestamp(value);
-    }
-
-    render() {
-        return (<span>{formatTimestamp(this.props.rowData.get("updated"))}</span>);
-    }
-}

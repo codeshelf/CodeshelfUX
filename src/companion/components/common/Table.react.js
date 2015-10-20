@@ -35,6 +35,24 @@ class Row extends PureComponent {
         return scrollWidth + 1;
     }
 
+    getDisplayedData() {
+        var {columns,
+             columnMetadata,
+             row} = this.props;
+        return toShownColumns(columnMetadata, columns).map((metadata) => {
+            let key = metadata.get("columnName");
+            let CustomComponent = metadata.get("customComponent");
+            let value = row.get(key);
+            let formattedValue = value;
+            formattedValue = (Immutable.Iterable.isIterable(value)) ? value.join(", ") : value;
+            formattedValue = (typeof value === "boolean") ? value.toString() : value;
+            if (CustomComponent && CustomComponent.renderExportValue) {
+                formattedValue = CustomComponent.renderExportValue(value);
+            }
+            return formattedValue;
+        });
+    }
+
     render() {
         var {columns,
              columnMetadata,
@@ -168,6 +186,15 @@ class Header extends React.Component {
         return sortSpec;
     }
 
+    getLabels() {
+        var {columns,
+             columnMetadata} = this.props;
+
+        return toShownColumns(columnMetadata, columns).map(function (metadata, index)  {
+            let {columnName, displayName = columnName} = metadata.toObject();
+            return displayName;
+        });
+    }
 
     render() {
         var {columns,
@@ -187,6 +214,7 @@ class Header extends React.Component {
                             var sortSpec = this.toSortSpec(sortedBy, columnName);
                             var width = columnWidths[columnName];
                             return (<DragDropColumnHeader
+                                ref={columnName}
                                  key={columnName}
                                  columnName={columnName}
                                  width={width}
@@ -221,6 +249,37 @@ var Table = React.createClass({
         return {
             widths: {}
         };
+    },
+
+    getCSV() {
+        function formatField(val) {
+            if (val == null) {
+                    return "";
+            }
+            else {
+                return "\"" + String(val).replace("\"", "\"\"") + "\"";
+            }
+        }
+
+        let {columnMetadata, results} = this.props;
+        //Iterate over column names and build the CSV header
+        var headers = this.refs.header.getLabels().map((label) => {
+            return formatField(label);
+        });
+        var csv = headers.join(",") + "\n";
+        var data = [];
+        for(var refName in this.refs) {
+            if (refName.startsWith("row")) {
+                var dataArray = this.refs[refName].getDisplayedData();
+                var dataRow = dataArray.map((data)=>{
+                    return formatField(data);
+                })
+                .join(',');
+                data.push(dataRow);
+            }
+        }
+        csv += data.join("\n");
+        return csv;
     },
 
     handleColumnClick: function(oldSortSpec, columnName, evt) {
@@ -310,7 +369,7 @@ var Table = React.createClass({
         return (
             <table className={classes} role="grid">
                     <caption>{caption}</caption>
-                            <Header
+                            <Header ref="header"
                                 columns={columns}
                                 columnMetadata={columnMetadata}
                                 columnWidths={this.state.widths}

@@ -11,6 +11,15 @@ moment.locale('en', {
     }
 });
 
+export function formatISO(momentCompatibleDate) {
+    if (momentCompatibleDate === null || momentCompatibleDate === "") {
+        return "";
+    }
+
+    var timeMoment = moment(momentCompatibleDate);
+    return timeMoment.toISOString();
+}
+
 export function formatTimestamp(momentCompatibleDate, opt_relativetime) {
     var referenceTime = moment();
     if (opt_relativetime != null) {
