@@ -81,7 +81,7 @@ export default class WorkInstructionIBox extends React.Component{
     }
 
     handleFilterChange(filter) {
-
+        this.setState({"errorMessage": null});
         let pivotOptions = this.pivotOptionsCursor;
         let columns = this.columnsCursor;
         let properties = new Set(columns())
@@ -104,7 +104,12 @@ export default class WorkInstructionIBox extends React.Component{
                           this.handleResultsUpdated.bind(this),
                           filter);
 
-        promise.then(()=> this.forceUpdate());
+        promise
+            .then(()=> this.forceUpdate())
+            .catch((e) => {
+                this.setState({"errorMessage": e.message});
+            });
+
         this.setState({"refreshingAction" : promise});
         return promise;
     }
@@ -138,7 +143,7 @@ export default class WorkInstructionIBox extends React.Component{
     }
 
     render() {
-        let {refreshingAction} = this.state;
+        let {refreshingAction, errorMessage} = this.state;
         let results = this.resultsCursor();
         let resultValues = results.get("values");
         let selected = this.selectedCursor();
@@ -155,7 +160,7 @@ export default class WorkInstructionIBox extends React.Component{
                             <WorkInstructionSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
                     </Col>
                 </Row>
-                <SearchStatus {...{results}} />
+                <SearchStatus {...{results, errorMessage}} />
                 <PivotTable results={resultValues} options={pivotOptions} onDrillDown={this.handleDrillDown}/>
                 <ListView results={selected}
                  columns={columns}

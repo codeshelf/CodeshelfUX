@@ -65,6 +65,7 @@ export default class OrdersIBox extends React.Component{
     }
 
     handleFilterChange(filter) {
+        this.setState({"errorMessage": null});
         let pivotOptions = this.pivotOptionsCursor;
         let columns = this.columnsCursor;
         let properties = new Set(columns())
@@ -87,7 +88,11 @@ export default class OrdersIBox extends React.Component{
                           this.handleResultsUpdated.bind(this),
                           filter);
 
-        promise.then(()=> this.forceUpdate());
+        promise
+            .then(()=> this.forceUpdate())
+            .catch((e) => {
+                this.setState({"errorMessage": e.message});
+            });
         this.setState({"refreshingAction" : promise});
         return promise;
     }
@@ -112,7 +117,7 @@ export default class OrdersIBox extends React.Component{
     }
 
     render() {
-        let {refreshingAction} = this.state;
+        let {refreshingAction, errorMessage} = this.state;
         let results = this.resultsCursor();
         let orders = results.get("values");
         let selectedOrders = this.selectedCursor();
@@ -127,7 +132,7 @@ export default class OrdersIBox extends React.Component{
                             <OrderSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
                     </Col>
                 </Row>
-                <SearchStatus {...{results}} />
+                <SearchStatus {...{results, errorMessage}} />
                 <PivotTable results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
                 <OrderReview orders={selectedOrders} columns={columns} sortSpecs={sortSpecs}/>
             </SingleCellIBox>);
