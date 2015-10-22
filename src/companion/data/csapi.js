@@ -411,6 +411,15 @@ export function getFacilityContext() {
             var metricUrl = facilityPath + "/metrics";
             return ajax(metricUrl);
         },
+
+        computeMetrics(date) {
+            var metricUrl = facilityPath + "/metrics";
+            return ajax(metricUrl, {
+                method: "POST",
+                data: {date: date},
+                contentType: "form"
+            });
+        },
         getPickRates: (startTimestamp, endTimestamp) => {
             var pickRateUrl = facilityPath + "/pickrate";
             return ajax(pickRateUrl, {
