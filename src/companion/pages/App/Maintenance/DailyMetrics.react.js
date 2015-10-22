@@ -3,7 +3,7 @@ import ListManagement from "components/common/list/ListManagement";
 import ListView from "components/common/list/ListView";
 import {properties, keyColumn} from "data/types/DailyMetric";
 import {fromJS, List} from "immutable";
-
+import {getFacilityContext} from "data/csapi";
 export default class DailyMetrics extends React.Component{
 
     constructor(props) {
@@ -12,6 +12,12 @@ export default class DailyMetrics extends React.Component{
             results: List(),
             columnMetadata: ListView.toColumnMetadataFromProperties(properties)
         };
+    }
+
+    componentDidMount() {
+        getFacilityContext().getMetrics().then((metrics) => {
+            this.setState({results: metrics});
+        });
     }
 
     render() {

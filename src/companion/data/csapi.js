@@ -407,6 +407,10 @@ export function getFacilityContext() {
                     data: filter
             });
         },
+        getMetrics() {
+            var metricUrl = facilityPath + "/metrics";
+            return ajax(metricUrl);
+        },
         getPickRates: (startTimestamp, endTimestamp) => {
             var pickRateUrl = facilityPath + "/pickrate";
             return ajax(pickRateUrl, {
