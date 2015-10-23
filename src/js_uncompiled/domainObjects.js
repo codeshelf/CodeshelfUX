@@ -752,7 +752,7 @@ domainobjects = {
 			'workSequence': {
 				'id':    'workSequence',
 				'title': 'Work Seq',
-				'width': 15
+				'width': 10
 			},
 			'gtinId': {
 				'id':	 'gtinId',
@@ -793,8 +793,8 @@ domainobjects = {
 			},
 			'workSequence': {
 				'id':    'workSequence',
-				'title': 'Work Seq',
-				'width': 15
+				'title': 'Group Seq',
+				'width': 10
 			},
 			'active': {
 				'id':    'active',
@@ -855,11 +855,6 @@ domainobjects = {
 			'destinationId':   {
 				'id':    'destination Id',
 				'title': 'Destination',
-				'width': 15
-			},
-			'workSequence': {
-				'id':    'workSequence',
-				'title': 'Work Seq',
 				'width': 15
 			},
 			'orderLocationAliasIds': {
@@ -1319,6 +1314,11 @@ domainobjects = {
 			'gtinId': {
 				'id':	'gtinId',
 				'title': 'GTIN',
+				'width': 10
+			},
+			'workSequenceUi': {
+				'id':    'workSequenceUi',
+				'title': 'Work Seq',
 				'width': 10
 			},
 			'needsScan': {
