@@ -18,14 +18,24 @@ export default class ExtensionPointEdit extends React.Component {
         let extensionPoint = this.refs.form.getExtensionPoint();
         return getFacilityContext().updateExtensionPoint(extensionPoint.toJS()).then((updatedExtensionPoint) => {
             return this.props.onExtensionPointUpdate(fromJS(updatedExtensionPoint));
+        })
+        .catch((e) =>{
+            if (e.body) {
+                    this.setState({errorMessage: e.body.errors[0]});
+            } else {
+                this.setState({errorMessage: e.message});
+            }
+
+            throw e;
         });
     }
 
     render() {
         var formData = this.props.extensionPoint;
         var {returnRoute = "extensionpoints"} = this.props;
-            return (<ModalForm title="Edit Extension Point" formData={formData} returnRoute={returnRoute} onSave={this.handleSave.bind(this)}>
-                    <ExtensionPointForm ref="form" formData={formData} />
+        const {errorMessage} = this.state;
+        return (<ModalForm title="Edit Extension Point" formData={formData} returnRoute={returnRoute} onSave={this.handleSave.bind(this)}>
+                    <ExtensionPointForm ref="form" errorMessage={errorMessage} formData={formData} />
                 </ModalForm>);
     }
 };

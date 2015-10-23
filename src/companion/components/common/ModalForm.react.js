@@ -30,7 +30,10 @@ class ModalForm extends React.Component{
         e.preventDefault();
         return this.props.onSave().then(() => {
             this.handleClose();
-        });
+        })
+        .catch((e) => {
+            this.forceUpdate();
+        }) ;
     }
 
     componentWillUnmount() {

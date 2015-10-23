@@ -85,13 +85,10 @@ class ExtensionPoints extends React.Component{
     }
 
     handleExtensionPointAdd(extensionPoint) {
-        return getFacilityContext().addExtensionPoint(extensionPoint).then((newExtensionPoint) => {
-            let {extensionPoints} = this.state;
-            extensionPoints.cursor().update((list) =>{
-                return list.push(fromJS(newExtensionPoint));
-            });
+        let {extensionPoints} = this.state;
+        extensionPoints.cursor().update((list) =>{
+            return list.push(fromJS(newExtensionPoint));
         });
-
     }
 
     render() {

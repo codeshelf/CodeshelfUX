@@ -1,5 +1,6 @@
 import  React from 'react';
 import FormFields from "components/common/FormFields";
+import {ErrorDisplay} from "components/common/Form";
 import Immutable from 'immutable';
 import {ExtensionPoint} from "data/types";
 import Text from "data/types/Text";
@@ -41,12 +42,14 @@ export default class ExtensionPointForm extends React.Component {
     }
 
     render() {
+        let {errorMessage} = this.props;
         let {formData} = this.state;
         return (
             <div>
+                <ErrorDisplay message={errorMessage} />
                 <FormFields formMetadata={formMetadata} formData={formData} handleChange={this.handleChange.bind(this)} />
 
-                </div>
+            </div>
             );
     }
 
