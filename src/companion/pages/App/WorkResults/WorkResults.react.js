@@ -8,7 +8,7 @@ var PickerEventsIBox = require('./PickerEventsIBox');
 export default class WorkResults extends React.Component{
     render() {
         var apiContext = getFacilityContext();
-        return (<DocumentTitle title="Work Results">
+        return (<DocumentTitle title="Picks By Hour">
                 <PageGrid>
                     <Row>
                         <Col sm={12}>
