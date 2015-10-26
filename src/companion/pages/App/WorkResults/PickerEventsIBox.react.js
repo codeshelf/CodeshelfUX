@@ -9,13 +9,13 @@ import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
 import _ from "lodash";
 import {getFacilityContext} from "data/csapi";
 import {fetchWorkers} from 'data/workers/actions';
-    import {getWorkersByBadgeId, toWorkerName} from 'data/workers/store';
+import {getWorkersByBadgeId, toWorkerName} from 'data/workers/store';
 
 
 const priorDayInterval = (daysBack) => {
     let interval = DayOfWeekFilter.priorDayInterval(daysBack);
-    interval.start = moment(interval.start).hour(6); //6am
-    interval.end = moment(interval.end).hour(20); //8pm
+        interval.start = moment(interval.start); //.hour(6); //6am
+        interval.end = moment(interval.end); //.hour(20); //8pm
     return interval;
 };
 
@@ -125,14 +125,6 @@ var PickerEventsIBox = React.createClass({
                            endTimestamp={interval.end}
                            pickRates={pickRates} />
                    </IBoxSection>
-                {/*
-                   <IBoxSection>
-                       <PickerEventsChart style={{width: '100%', height: '300px'}}
-                           apiContext={apiContext}
-                           startTimestamp={startTimestamp}
-                           endTimestamp={endTimestamp}/>
-                   </IBoxSection>
-                  */}
                 </IBox>
         );
     }
