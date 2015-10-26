@@ -88,8 +88,12 @@ var PickerEventsIBox = React.createClass({
             let d3Data = toD3Data(start, end, data);
             let withWorkerNames = d3Data.map((keyData) => {
                 let badgeId = keyData.key;
+                if (badgeId === "null") {
+                    badgeId = "";
+                }
                 let worker = workersByBadgeId.get(badgeId);
                 let name = toWorkerName(worker, badgeId);
+
                 keyData.key = name;
                 return keyData;
             });
