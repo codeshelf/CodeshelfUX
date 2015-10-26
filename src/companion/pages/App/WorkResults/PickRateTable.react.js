@@ -1,7 +1,10 @@
 import  React from "react";
 import {Table} from "components/common/Table";
+import ListManagement from "components/common/list/ListManagement";
+import ListView from "components/common/list/ListView";
 import moment from "moment";
 import {List} from "immutable";
+
 export default class PickRateTable extends React.Component{
 
     constructor(props) {
@@ -48,8 +51,10 @@ export default class PickRateTable extends React.Component{
             columnName: "total",
             displayName: "Total"
         });
+        columnMetadata = ListView.toColumnMetadata(columnMetadata);
         return (<div>
-                <Table results={tableData} columnMetadata={columnMetadata} sortedBy={this.sortBy} emptyMessage={""} />
+
+                <ListManagement allowExport={true} results={tableData} columnMetadata={columnMetadata} sortedBy={this.sortBy} emptyMessage={""} />
                 </div>
         );
     }

@@ -22,8 +22,12 @@ let ascFunc = (a, b) => {
     return 0;
 };
 
-
-var SortSpec = Record({
+const ColumnRecord = Record({
+    columnName: null,
+    displayName: null,
+    customComponent: null
+});
+const SortSpec = Record({
     property: null,
     direction: "asc",
     sortFunction: ascFunc
@@ -48,8 +52,6 @@ function toFullSortSpecs(columns = new Seq(), sortSpecs = new Map()) {
         }
     });;
 }
-
-const ColumnRecord = Record({columnName: null, displayName: null, customComponent: null });
 
 export default class ListView extends React.Component{
 
@@ -125,13 +127,31 @@ export default class ListView extends React.Component{
 
     render() {
 
-        let {columns, columnMetadata, keyColumn, rowActionComponent, expand, onRowExpand, onRowCollapse} = this.props;
+        let {columnMetadata,
+             columns,
+             keyColumn,
+             rowActionComponent,
+             expand,
+             onRowExpand,
+             onRowCollapse} = this.props;
 
-        var {results, sortSpecs = () => {}} = this.props;
+        var {results,
+             sortSpecs = () => {}} = this.props;
+
+
+        if (!columns) {
+            columns = columnMetadata.map((m) => { return m.columnName;});
+        }
+        let columnArray = [];
+        if (typeof columns === "function") {
+            columnArray = columns();
+        } else {
+            columnArray = columns;
+        }
 
         var sortBy = null;
         if (typeof sortSpecs === 'function') {
-            sortBy = Seq(toFullSortSpecs(columns(), sortSpecs()));
+            sortBy = Seq(toFullSortSpecs(columnArray, sortSpecs()));
             results = this.props.results.sort((a, b) => {
                 //find first non zero result as you run each sort function in order
                 let comp =  sortBy.map(({sortFunction, property}) => {
@@ -144,23 +164,23 @@ export default class ListView extends React.Component{
 
         return (<div>
                 <Row >
-                <Col sm={6} >
+                    <Col sm={6} >
                         <div className="pullLeft text-left">
                             Total: {results.count()}
                         </div>
                     </Col>
                     <Col sm={6} >
                         <div className="pullRight">
-                            <TableSettings onColumnsChange={columns}
-                                columns={columns()}
-                                columnMetadata={columnMetadata} />
+                            {(typeof columns === "function") &&
+                                <TableSettings onColumnsChange={columns}
+                                    columns={columnArray}
+                                    columnMetadata={columnMetadata} />
+                            }
                         </div>
                     </Col>
                  </Row>
-
-
                 <Table ref="table" results={results}
-                    columns={columns()}
+                    columns={columnArray}
                     columnMetadata={columnMetadata}
                     keyColumn={keyColumn}
                     rowActionComponent={rowActionComponent}

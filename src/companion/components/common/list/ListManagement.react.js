@@ -89,13 +89,9 @@ export default class ListManagement extends React.Component{
              , ...other} = this.props;
 
         var filteredResults = this.search(
-            this.state.search,
-            columnMetadata,
-                    results);
-        let csvData = null;
-        if (allowExport) {
-            //csvData = this.generateCsv(columnMetadata, results);
-        }
+                this.state.search,
+                columnMetadata,
+                results);
         return (
             <SingleCellIBox>
                 <Row>
@@ -106,7 +102,7 @@ export default class ListManagement extends React.Component{
                         <div className="pull-right">
                             {(addButtonRoute) && <AddButtonLink to={addButtonRoute} />}
                         </div>
-                        {allowExport &&
+                        {allowExport && filteredResults.count() > 0 &&
                             <div className="pull-right">
                          <Button ref="export" onClick={this.generateCsv.bind(this, columnMetadata, results)} bsStyle="primary" href={""} target="_blank" download="export.csv" style={{marginRight: "1em"}}><Icon name="download"/></Button>
                             </div>
