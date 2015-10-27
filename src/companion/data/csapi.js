@@ -361,16 +361,6 @@ export function getFacilityContext() {
             });
         },
 
-        getWorkResults: function(startTimestamp, endTimestamp) {
-            var workResults = facilityPath + "/work/results";
-            return ajax(workResults, {
-                data: {
-                   "startTimestamp": startTimestamp,
-                    "endTimestamp": endTimestamp
-                }
-            });
-
-        },
         getTopItems: function() {
             var topItems = facilityPath + "/work/topitems";
             return ajax(topItems);

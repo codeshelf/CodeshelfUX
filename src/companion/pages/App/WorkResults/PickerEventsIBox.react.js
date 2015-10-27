@@ -1,6 +1,5 @@
 import React from 'react';
 import {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} from "components/common/IBox";
-import PickerEventsChart from './PickerEventsChart';
 import PickRateChart from './PickRateChart';
 import PickRateTable from "./PickRateTable";
 import moment from 'moment';
