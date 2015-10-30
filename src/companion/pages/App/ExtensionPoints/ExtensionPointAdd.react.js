@@ -8,6 +8,7 @@ export default class ExtensionPointAdd extends React.Component{
 
     constructor(props) {
         super(props);
+        this.state = {};
     }
 
     handleSave() {
