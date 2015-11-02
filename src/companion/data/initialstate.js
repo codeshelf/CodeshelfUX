@@ -50,7 +50,8 @@ const data = {
         },
         dailymetric: {
             table: {
-                columns: ["date"]
+                columns: ["date"],
+                sortSpecs: {"date": {order:"desc"}}
             }
         },
         imports: {

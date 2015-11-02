@@ -31,6 +31,7 @@ export default class DailyMetrics extends React.Component{
     render() {
         const {results, columnMetadata} = this.state;
         let columnsCursor  = this.props.appState.cursor(["preferences", "dailymetric", "table", "columns"]);
+        let columnSortSpecsCursor = this.props.appState.cursor(["preferences", "dailymetric", "table", "sortSpecs"]);
 
         return (
             <div>
@@ -39,10 +40,13 @@ export default class DailyMetrics extends React.Component{
                     <SubmitButton label="Recompute" />
                 </Form>
                 <ListManagement
+
+                    allowExport={true}
                     results={results}
                     keyColumn="date"
                     columns={columnsCursor}
-                        columnMetadata={columnMetadata} />
+                    columnMetadata={columnMetadata}
+                    sortSpecs={columnSortSpecsCursor}/>
            </div>
         );
     }
