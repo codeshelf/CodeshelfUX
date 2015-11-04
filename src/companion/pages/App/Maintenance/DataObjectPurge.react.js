@@ -7,7 +7,7 @@ import {getFacilityContext} from 'data/csapi';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {Button, List as BSList} from 'components/common/bootstrap';
-import {Input, Checkbox, ErrorDisplay} from 'components/common/Form';
+import {Form, Input, Checkbox, ErrorDisplay, getRefInputValue} from 'components/common/Form';
 import Icon from 'react-fa';
 import {Table} from 'components/common/Table';
 import ParameterSetConfiguration from "./ParameterSetConfiguration";
@@ -22,16 +22,35 @@ function changeState(name, value, callback) {
 
 class DataObjectPurge extends React.Component{
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.changeState = changeState.bind(this);
+        this.state = {schedule: {cronExpression: ""}};
+    }
 
-        this.state = {};
+    findSchedule(type) {
+        getFacilityContext().findSchedule(type).then((schedule) => {
+            this.setState({schedule: schedule});
+        });
+    }
 
+    handleSubmit(type, schedule, e) {
+        e.preventDefault();
+        return getFacilityContext().updateSchedule(type, schedule).then((newSchedule) => {
+            this.setState({schedule: schedule});
+        }).catch((error) => {
+            console.error(error);
+        });
+
+    }
+
+        handleCronExpressionChange(e) {
+                this.setState({schedule: {cronExpression: e.target.value}});
     }
 
     componentWillMount() {
         this.loadSummary();
+        this.findSchedule("DatabasePurge");
     }
 
     componentWillReceiveProps() {
@@ -51,7 +70,8 @@ class DataObjectPurge extends React.Component{
     }
 
     render() {
-        let {configuration = {}, onConfigurationUpdate} = this.props;
+        let {configuration = {}, onConfigurationUpdate, onSaveSchedule} = this.props;
+        let {schedule} = this.state;
         let {dataSummary = "Loading Summary"} = this.state;
         let {parameterSet = {}} = configuration;
         let {purgeAfterDays} = parameterSet;
@@ -60,6 +80,13 @@ class DataObjectPurge extends React.Component{
                        <Row>
                            <Col md={8}><pre>{dataSummary}</pre></Col>
                            <Col md={4}>
+                               <Row>
+                                   <Col sm={12} md={6}>
+                                       <Form onSubmit={this.handleSubmit.bind(this, "DatabasePurge", schedule)}>
+                                               <Input ref="schedule" label="Schedule" value={schedule.cronExpression} onChange={this.handleCronExpressionChange.bind(this)} /><Button type="submit" bsStyle="primary" ><Icon name="save"/></Button>
+                                       </Form>
+                                   </Col>
+                               </Row>
                               <Row>
                                 <Col sm={12} md={6}>
                                     <ConfirmAction

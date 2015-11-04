@@ -453,9 +453,18 @@ export function getFacilityContext() {
                 processData: false,
                 contentType: false
             });
+        } ,
+        findSchedule(type) {
+            return ajax(facilityPath + "/scheduledjobs/" + type + "/schedule");
+        },
+        updateSchedule(type, schedule) {
+            return ajax(facilityPath + "/scheduledjobs/" + type + "/schedule", {
+                method: "POST",
+                data: schedule,
+                contentType: "form"
+            });
+
         }
-
-
 
     };
 };

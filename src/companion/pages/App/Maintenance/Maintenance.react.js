@@ -37,7 +37,9 @@ class Maintenance extends React.Component{
 
     constructor() {
         super();
-        this.state = {};
+        this.state = {
+
+        };
     }
 
     findExtensionPoint(props) {
@@ -64,6 +66,7 @@ class Maintenance extends React.Component{
         });
     }
 
+
     componentWillMount() {
         this.handleConfigurationUpdate();
     }
@@ -74,7 +77,9 @@ class Maintenance extends React.Component{
 
     render() {
         let {state: appState} = this.props;
-        let {extensionPoint} = this.state;
+        let {extensionPoint,
+            ParameterSetDataPurge,
+             ParameterSetDataQuantityHealthCheck} = this.state;
         return (<DocumentTitle title="Maintenance">
                 <SingleCellLayout>
                     <Tabs className="nav-tabs-simple" defaultActiveKey="database">
@@ -85,8 +90,8 @@ class Maintenance extends React.Component{
                                         <SingleCellIBox title="Data Quantity Health Check">
                                             <ParameterSetConfiguration
                                              parameterType="ParameterSetDataQuantityHealthCheck"
-                                             configuration={this.state.ParameterSetDataQuantityHealthCheck}
-                                                onUpdate={this.handleConfigurationUpdate.bind(this)}
+                                             configuration={ParameterSetDataQuantityHealthCheck}
+                                             onUpdate={this.handleConfigurationUpdate.bind(this)}
                                              />
                                         </SingleCellIBox>
                                     </Col>
@@ -95,8 +100,10 @@ class Maintenance extends React.Component{
                                     <Col sm={12}>
                                         <DataObjectPurge
                                             parameterType="ParameterSetDataPurge"
-                                            configuration={this.state.ParameterSetDataPurge}
-                                            onConfigurationUpdate={this.handleConfigurationUpdate.bind(this)}/>
+                                            configuration={ParameterSetDataPurge}
+                                            onConfigurationUpdate={this.handleConfigurationUpdate.bind(this)}
+
+                                         />
                                     </Col>
                                 </Row>
                             </PageGrid>
