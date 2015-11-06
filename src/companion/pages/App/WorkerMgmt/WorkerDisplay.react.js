@@ -89,6 +89,7 @@ class WorkerDisplay extends React.Component {
         var promise;
         if (id === NEWID) {
             promise = addWorker(selectedWorkerForm.set("persistentId", null));
+            this.storeSelectedWorkerForm(Worker());
         } else {
             promise = updateWorker(selectedWorkerForm);
         }
