@@ -64,7 +64,7 @@ class DataObjectPurge extends React.Component{
     }
 
     triggerPurge() {
-        return getFacilityContext().triggerDataPurge().then(() => {
+        return getFacilityContext().triggerSchedule("DatabasePurge").then(() => {
             return this.loadSummary();
         }.bind(this));
     }
