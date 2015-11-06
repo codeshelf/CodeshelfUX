@@ -70,13 +70,13 @@ class DataObjectPurge extends React.Component{
     }
 
     render() {
-        let {configuration = {}, onConfigurationUpdate, onSaveSchedule} = this.props;
+        let {parameterType, configuration = {}, onConfigurationUpdate, onSaveSchedule} = this.props;
         let {schedule} = this.state;
         let {dataSummary = "Loading Summary"} = this.state;
         let {parameterSet = {}} = configuration;
         let {purgeAfterDays} = parameterSet;
         return (<SingleCellIBox title="Database Object Purge">
-                <ParameterSetConfiguration parameterType="ParameterSetDataPurge" configuration={configuration} onUpdate={onConfigurationUpdate}/>
+                    <ParameterSetConfiguration parameterType={parameterType} configuration={configuration} onUpdate={onConfigurationUpdate}/>
                        <Row>
                            <Col md={8}><pre>{dataSummary}</pre></Col>
                            <Col md={4}>

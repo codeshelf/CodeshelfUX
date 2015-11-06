@@ -47,12 +47,12 @@ class Maintenance extends React.Component{
         let selectedParameterType = this.props.router.getCurrentParams().parameterType;
         if (selectedParameterType) {
             let configuration = this.state[selectedParameterType];
-            let extensionPoint = configuration.extensionPoint;
-            this.setState({extensionPoint: extensionPoint});
+            let extensionPoint = (configuration) ? configuration.extensionPoint : null;
+            return extensionPoint;
         }
     }
 
-    handleConfigurationUpdate() {
+    handleConfigurationUpdate(props) {
         let parameterSetTypes = ["ParameterEdiFreeSpaceHealthCheck", "ParameterSetDataPurge", "ParameterSetDataQuantityHealthCheck"];
         return Promise.reduce(parameterSetTypes, (configs, type) => {
             return getFacilityContext().getHealthCheckConfiguration(type).then((config) => {
@@ -60,25 +60,24 @@ class Maintenance extends React.Component{
                 return configs;
             });
         }, {}).then((finalConfigs) => {
-            this.setState(finalConfigs, () => {
-                this.findExtensionPoint(this.props);
-            });
+            this.setState(finalConfigs);
         });
     }
 
 
     componentWillMount() {
-        this.handleConfigurationUpdate();
+        this.handleConfigurationUpdate(this.props);
     }
 
     componentWillReceiveProps(nextProps) {
-        this.handleConfigurationUpdate();
+        this.handleConfigurationUpdate(nextProps);
     }
 
     render() {
         let {state: appState} = this.props;
-        let {extensionPoint,
-            ParameterSetDataPurge,
+        let extensionPoint = this.findExtensionPoint(this.props);
+        let {
+             ParameterSetDataPurge,
              ParameterSetDataQuantityHealthCheck} = this.state;
         return (<DocumentTitle title="Maintenance">
                 <SingleCellLayout>
