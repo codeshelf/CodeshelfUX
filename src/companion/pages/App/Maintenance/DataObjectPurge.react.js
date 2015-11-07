@@ -69,6 +69,12 @@ class DataObjectPurge extends React.Component{
         }.bind(this));
     }
 
+    cancelPurge() {
+        return getFacilityContext().cancelJob("DatabasePurge").then(() => {
+            return this.loadSummary();
+        }.bind(this));
+    }
+
     render() {
         let {parameterType, configuration = {}, onConfigurationUpdate, onSaveSchedule} = this.props;
         let {schedule} = this.state;
@@ -99,6 +105,19 @@ class DataObjectPurge extends React.Component{
                                         Trigger Purge
                                     </ConfirmAction>
                                 </Col>
+                                <Col sm={12} md={6}>
+                                    <ConfirmAction
+                                        id="cancelPurge"
+                                        style={{width: "100%", marginTop: "0.5em"}}
+                                        onConfirm={this.cancelPurge.bind(this)}
+                                        confirmLabel="Cancel Purge"
+                                        confirmInProgressLabel="Cancelling"
+                                        instructions="Do you want to cancel data purge">
+
+                                        Cancel Run
+                                    </ConfirmAction>
+                </Col>
+
                             </Row>
                       </Col>
                    </Row>
