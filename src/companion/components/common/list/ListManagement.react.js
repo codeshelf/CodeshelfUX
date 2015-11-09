@@ -96,7 +96,7 @@ export default class ListManagement extends React.Component{
             <SingleCellIBox>
                 <Row>
                     <Col sm={3}>
-                            <Search columns={columnMetadata} onChange={this.handleSearchChange}/>
+                        <Search columns={columnMetadata} onChange={this.handleSearchChange}/>
                     </Col>
                     <Col sm={9} >
                         <div className="pull-right">
@@ -113,6 +113,8 @@ export default class ListManagement extends React.Component{
             </SingleCellIBox>);
     }
 };
+ListManagement.toColumnMetadataFromProperties = ListView.toColumnMetadataFromProperties;
+
 
 class Search extends React.Component {
 
