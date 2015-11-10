@@ -431,7 +431,7 @@ codeshelf.mainpage = function() {
 						codeshelf.sessionGlobals.setWebsession(websession_);
 						codeshelf.sessionGlobals.setFacility(lastFacility);
 
-						var theDomainPropertiesCmd = websession_.createObjectPropertiesRequest('Facility', lastFacility['persistentId']);
+						var theDomainPropertiesCmd = websession_.createFacilityPropertiesRequest(lastFacility['persistentId']);
 				        websession_.sendCommand(theDomainPropertiesCmd, domainPropertiesCallback(websession_, lastFacility, authz), true);
 					}
 				}

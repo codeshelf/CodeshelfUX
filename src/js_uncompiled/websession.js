@@ -39,7 +39,7 @@ var kWebSessionCommandType = {
 	OBJECT_METHOD_REQ: 'OBJ_METH_RQ',
 	// OBJECT_METHOD_RESP: 'OBJ_METH_RS',
 	OBJECT_METHOD_RESP: 'ObjectMethodResponse',
-	OBJECT_PROPERTIES_RESP: 'ObjectPropertiesResponse'
+	OBJECT_PROPERTIES_RESP: 'FacilityPropertiesResponse'
 
 };
 
@@ -264,11 +264,10 @@ codeshelf.websession = function () {
 			return command;
 		},
 
-		// from v10, the objectPropertiesRequest
-		createObjectPropertiesRequest : function (className,facilityPersistentId) {
+		// from v10, the facilityPropertiesRequest
+		createFacilityPropertiesRequest : function (facilityPersistentId) {
 			var command = {
-				'ObjectPropertiesRequest' : {
-					'className':    className,
+				'FacilityPropertiesRequest' : {
 					'persistentId': facilityPersistentId
 				}
 			};

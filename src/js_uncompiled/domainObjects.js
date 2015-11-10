@@ -328,7 +328,7 @@ domainobjects = {
 	},
 
 	'DomainObjectProperty': {
-		'className':  'DomainObjectProperty',
+		'className':  'FacilityProperty',
 		'properties': {
 			'persistentId': {
 				'id': 'persistentId',

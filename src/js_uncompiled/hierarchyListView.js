@@ -622,7 +622,7 @@ codeshelf.hierarchylistview = function(websession, domainObject, hierarchyMap, v
             // New objectPropererties mechanism. This is not generic.
 			if (this.hasOwnProperty('doObjectProperitiesRequest')) {
 				var facilityPersistentIdStr = this['doObjectProperitiesRequest']();
-				var theDomainPropertiesCmd = websession_.createObjectPropertiesRequest('Facility', facilityPersistentIdStr);
+				var theDomainPropertiesCmd = websession_.createFacilityPropertiesRequest(facilityPersistentIdStr);
 				var sent2 = websession_.sendCommand(theDomainPropertiesCmd, domainPropertiesCallback(), false);
 			}
 			else {

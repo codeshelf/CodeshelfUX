@@ -145,7 +145,7 @@ codeshelfApp.ConfigNgController.prototype.ok = function(){
 	var domainobjectproperty = scope['domainobjectproperty'];
 	var facility = this.scope_['facility'];
 
-	this.websession_.callServiceMethod("com.codeshelf.service.PropertyService", 'changePropertyValueUI', [domainobjectproperty['facilityId'], domainobjectproperty['name'], domainobjectproperty['value']]).then(function(response) {
+	this.websession_.callServiceMethod("UiUpdateBehavior", 'updateFacilityProperty', [domainobjectproperty['facilityId'], domainobjectproperty['name'], domainobjectproperty['value']]).then(function(response) {
 		modalInstance.close();
 	})
 		.fail(function(response) {
