@@ -3,7 +3,6 @@ import {properties, keyColumn} from "data/types/EdiGateway";
 
 const title = "EDI Gateways";
 const stateProp = "edigateways";
-const addRoute = null;
 function editRouteFactory(row) {
     return {    to: "edigatewayedit",
                 params: {id: row.get(keyColumn)}
@@ -16,7 +15,6 @@ export default class EdiGateways extends React.Component {
                  appState={this.props.state}
                  title="EDI Gateways"
                  stateProp="edigateways"
-                 addRoute={null}
                  editRouteFactory={editRouteFactory}
                  listSource={getFacilityContext().getEdiGateways}
                  listProperties={properties}
@@ -75,13 +73,12 @@ class ListPage extends React.Component{
         return (<DocumentTitle title={title}>
                 <div>
                     <ListManagement
-                        addButtonRoute={addRoute}
                         results={list}
                         keyColumn={keyColumn}
-                        columns={columnsCursor}
-                        rowActionComponent={rowActionComponent}
-                        sortSpecs={columnSortSpecsCursor}
                         columnMetadata={columnMetadata} />
+                        rowActionComponent={rowActionComponent}
+                        columns={columnsCursor}
+                        sortSpecs={columnSortSpecsCursor}
 
                      <RouteHandler list={list}/>
                 </div>

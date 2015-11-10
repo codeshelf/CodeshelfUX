@@ -93,6 +93,14 @@ function toAbsoluteURL(path) {
     return endpoint + path;
 }
 
+function addResource(path, params) {
+    return ajax(path, {
+        method: "POST",
+        data: params,
+        contentType: "form"
+    });
+}
+
 export function recoverPassword(email) {
     let queryData = {u: email};
     var options = {
@@ -218,11 +226,7 @@ export function getFacilityContext() {
 
         addExtensionPoint: function(params) {
             let extensionPointsPath = facilityPath + "/extensionpoints";
-            return ajax(extensionPointsPath, {
-                method: "POST",
-                data: params,
-                contentType: "form"
-            });
+            return addResource(extensionPointsPath, params);
         },
 
 
@@ -297,6 +301,7 @@ export function getFacilityContext() {
             var workersPath = facilityPath + "/workers";
             return ajax(workersPath);
         },
+        //TODO: this should work like extension point and scheduledjob
         addWorker: function(worker) {
             if (worker.persistentId != null) {
                 console.warn("trying to add a worker with persistentId set");
@@ -445,11 +450,13 @@ export function getFacilityContext() {
                 processData: false,
                 contentType: false
             });
-        } ,
-
+        },
+        addScheduledJob(params) {
+            return addResource(facilityPath + "/scheduledjobs", params);
+        },
         getScheduledJobs() {
             return ajax(facilityPath + "/scheduledjobs");
-      },
+        },
         findSchedule(type) {
             return ajax(facilityPath + "/scheduledjobs/" + type + "/schedule");
         },

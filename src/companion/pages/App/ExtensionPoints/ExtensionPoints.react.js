@@ -1,33 +1,30 @@
 import  React from "react";
 import {RouteHandler} from "react-router";
 import exposeRouter from 'components/common/exposerouter';
+import DocumentTitle from "react-document-title";
+
 import {getFacilityContext} from "data/csapi";
 import ListManagement from "components/common/list/ListManagement";
 import {Row, Col} from "components/common/pagelayout";
 import {EditButtonLink, AddButtonLink} from "components/common/TableButtons";
 import {Button} from "react-bootstrap";
 import Icon from "react-fa";
-import {fromJS, Map, List} from "immutable";
 import immstruct from "immstruct";
-import ExtensionPointEditButtonLink from "./ExtensionPointEditButton";
+import {fromJS, Map, List} from "immutable";
+import {types, keyColumn} from "data/types/ExtensionPoint";
 
-
-const allTypes = fromJS([
-    {value: "OrderImportBeanTransformation",           label: "Import Order Record Change"},
-    {value: "OrderImportHeaderTransformation",         label: "Import Order Header Change"},
-    {value: "OrderImportCreateHeader",                 label: "Import Order Header Add"},
-    {value: "OrderImportLineTransformation",           label: "Import Order Line Change"},
-    {value: "OrderOnCartContent",                      label: "Export OrderOnCart Change"},
-    {value: "WorkInstructionExportContent",            label: "Export Work Inst. Content"},
-    {value: "WorkInstructionExportCreateHeader",       label: "Export Work Inst. Header Add"},
-    {value: "WorkInstructionExportCreateTrailer",      label: "Export Work Inst. Trailer Add"},
-    {value: "WorkInstructionExportLineTransformation", label: "Export Work Inst. Line Change"}
-]);
-
+const title = "Extension Points";
+const addRoute = "extensionpointadd";
+const editRoute = "extensionpointedit";
+const allTypes = fromJS(types);
 const typeLabelMap = allTypes.reduce((map, option) => {
         return map.set(option.get("value"), option.get("label"));
-    }, Map());
-
+}, Map());
+function toAvailableTypes(list, allTypes) {
+    let currentTypes = fromJS(list).map((pt) => pt.get("type"));
+    let availableTypes = allTypes.filter((t) => !currentTypes.includes(t.get("value")));
+    return availableTypes;
+}
 class Type extends React.Component {
     render() {
         var formData = this.props.rowData;
@@ -36,6 +33,14 @@ class Type extends React.Component {
     }
 
 }
+
+function editRouteFactory(row) {
+    return {
+        to: editRoute,
+        params: {extensionPointId: row.get("persistentId")}
+    };
+}
+
 
 class ExtensionPoints extends React.Component{
 
@@ -51,7 +56,7 @@ class ExtensionPoints extends React.Component{
         this.state = {
             extensionPoints: structure
         };
-
+        this.rowActionComponent = ListManagement.toEditButton(editRouteFactory);
         this.columnMetadata = [
             {
                 columnName: "type",
@@ -95,29 +100,35 @@ class ExtensionPoints extends React.Component{
     render() {
         let {extensionPoints} = this.state;
         let list = extensionPoints.cursor().deref();
-
-        let currentTypes = list.map((pt) => pt.get("type"));
-        let availableTypes = allTypes.filter((t) => {
-            return currentTypes.includes(t.get("value")) == false;
-        });
         let extensionPointId = this.props.router.getCurrentParams().extensionPointId;
         let extensionPoint = null;
         if (extensionPointId) {
             extensionPoint = extensionPoints.cursor().deref().find((extensionPoint) => extensionPoint.get("persistentId") === extensionPointId);
         }
-        let addButtonRoute = (availableTypes.count() <= 0) ? null : "extensionpointadd";
-        return (<div>
-                    <ListManagement
-                        columnMetadata={this.columnMetadata}
-                        addButtonRoute={addButtonRoute}
-                        rowActionComponent={ExtensionPointEditButtonLink}
-                        results={list}
-                        keyColumn="type"/>
-                    <RouteHandler availableTypes={availableTypes}
-                            onExtensionPointUpdate={this.handleExtensionPointUpdate}
-                            onExtensionPointAdd={this.handleExtensionPointAdd}
-                            extensionPoint={extensionPoint}/>
-                </div>
+
+        let {rowActionComponent, columnMetadata} = this;
+        let availableTypes = toAvailableTypes(list, allTypes);
+        let addButtonRoute = (availableTypes.count() <= 0) ? null : addRoute;
+        let lastRoute = this.props.router.getCurrentRoutes().slice(-1)[0];
+        return (<DocumentTitle title={title}>
+                    <div>
+                        <ListManagement
+                            results={list}
+                            keyColumn={keyColumn}
+                            columnMetadata={columnMetadata}
+                            rowActionComponent={rowActionComponent}
+                            addButtonRoute={addButtonRoute} />
+                         {(lastRoute.name === addRoute || lastRoute.name == editRoute)
+                          ? <RouteHandler
+                              availableTypes={availableTypes}
+                              returnRoute="extensionpoints"
+                              onExtensionPointUpdate={this.handleExtensionPointUpdate}
+                              onAdd={this.handleExtensionPointAdd}
+                              extensionPoint={extensionPoint}/>
+                           : null
+                         }
+                    </div>
+                </DocumentTitle>
         );
     }
 };

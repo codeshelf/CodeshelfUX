@@ -11,7 +11,7 @@ import EdiNotificationThreshold from "./EdiNotificationThreshold";
 import {getFacilityContext} from 'data/csapi';
 import ParameterSetConfiguration from "./ParameterSetConfiguration.react.js";
 import DailyMetrics from "./DailyMetrics.react.js";
-
+import ScheduledJobs from "./ScheduledJobs.react.js";
 import Promise from "bluebird";
 import {fromJS} from "immutable";
 
@@ -81,7 +81,10 @@ class Maintenance extends React.Component{
              ParameterSetDataQuantityHealthCheck} = this.state;
         return (<DocumentTitle title="Maintenance">
                 <SingleCellLayout>
-                    <Tabs className="nav-tabs-simple" defaultActiveKey="database">
+                    <Tabs className="nav-tabs-simple" defaultActiveKey="jobs">
+                        <Tab eventKey="jobs" title="Jobs">
+                            <ScheduledJobs />
+                        </Tab>
                         <Tab eventKey="database" title="Database">
                             <PageGrid>
                                 <Row>

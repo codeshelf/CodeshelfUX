@@ -25,8 +25,8 @@ export default class ListManagement extends React.Component{
     static toEditButton(editButtonPropsFn: Function) {
         class Edit extends React.Component {
             render() {
-                var row  = this.props.rowData;
-                return (<EditButtonLink {...editButtonPropsFn(row)}>
+                var {rowData, ...rest}  = this.props;
+                return (<EditButtonLink {...editButtonPropsFn(rowData)} {...rest}>
                         </EditButtonLink>);
             }
 
