@@ -475,6 +475,12 @@ export function getFacilityContext() {
             });
         },
 
+        deleteJob(type) {
+            return ajax(facilityPath + "/scheduledjobs/" + type, {
+                method: "DELETE"
+            });
+        },
+
         updateSchedule(type, schedule) {
             return ajax(facilityPath + "/scheduledjobs/" + type + "/schedule", {
                 method: "POST",

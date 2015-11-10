@@ -9,7 +9,7 @@ export class EditButtonLink extends React.Component{
     }
 
     render() {
-        return (<ButtonLink bsStyle="primary" {...this.props}>
+        return (<ButtonLink title="Edit" bsStyle="primary" {...this.props}>
                     <Icon name="edit" />
                 </ButtonLink>);
     }

@@ -45,10 +45,10 @@ export default class ConfirmAction extends React.Component {
     }
 
     render() {
-        let {id, confirmLabel, confirmInProgressLabel,  instructions, children, style} = this.props;
+            let {id, style, title,  confirmLabel, confirmInProgressLabel, instructions, children} = this.props;
         let {confirm, failure, inprogress} = this.state;
-        return (<div>
-                    <Button id={id} style={style} type="button" bsStyle="primary"
+        return (<span>
+                    <Button {...{id, style, title}} type="button" bsStyle="primary"
                             onClick={this.openConfirm}>
                         {children}
                     </Button>
@@ -65,7 +65,7 @@ export default class ConfirmAction extends React.Component {
                         <ErrorDisplay message={failure} />
                         <div>{instructions}</div>
                     </ConfirmModal>
-                </div>);
+                </span>);
     }
 }
 

@@ -5,12 +5,13 @@ import DocumentTitle from "react-document-title";
 import ListManagement from "components/common/list/ListManagement";
 import {getFacilityContext} from "data/csapi";
 import exposeRouter from 'components/common/exposerouter';
+import ConfirmAction from 'components/common/ConfirmAction';
 import {RouteHandler} from "react-router";
 import {Button} from 'react-bootstrap';
 import {fromJS, Map, List} from "immutable";
 import {types, keyColumn, properties} from "data/types/ScheduledJob";
 
-const title = "ScheduledJobs";
+const title = "Scheduled Jobs";
 const addRoute = "scheduledjobadd";
 const editRoute = "scheduledjobedit";
 const allTypes = fromJS(types);
@@ -55,15 +56,31 @@ function createRowActionComponent(onActionComplete) {
             });
         }
 
+        delete(type) {
+            return getFacilityContext().deleteJob(type).then(() => {
+            onActionComplete();
+            });
+        }
+
         render() {
             var row  = this.props.rowData;
             let type = row.get("type");
             var C = ListManagement.toEditButton(editRouteFactory);
             return (
-                <div>
-                    <C rowData={row} />
-                    <Button bsStyle="primary" style={{marginLeft: "1em"}} onClick={this.trigger.bind(this, type)}><Icon name="bolt"/></Button>
-                    <Button bsStyle="primary" style={{marginLeft: "1em"}} onClick={this.cancel.bind(this, type)}><Icon name="hand-stop-o"/></Button>
+            <div sytle={{whiteSpace: "nowrap"}}>
+                    <C rowData={rowData} />
+                    <Button bsStyle="primary" style={{marginLeft: "0.5em"}} onClick={this.trigger.bind(this, type)} title="Trigger"><Icon name="bolt"/></Button>
+                    <Button bsStyle="primary" style={{marginLeft: "0.5em"}} onClick={this.cancel.bind(this, type)} title="Stop Run"><Icon name="hand-stop-o"/></Button>
+                    <ConfirmAction
+                        onConfirm={this.delete.bind(this, type)}
+                        id="delete"
+                        style={{marginLeft: "0.5em"}}
+                        confirmLabel="Delete"
+                        confirmInProgressLabel="Deleting"
+                        instructions={`Click 'Delete' to remove ${type} job`}
+                        title="Delete">
+                        <Icon name="trash" />
+                    </ConfirmAction>
                 </div>);
         }
 
@@ -125,7 +142,7 @@ class ScheduledJobs extends React.Component{
                           <RouteHandler scheduledJob={selected}
                               availableTypes={availableTypes}
                               onUpdate={this.handleActionComplete.bind(this)}
-                              onAdd={console.log}
+                              onAdd={this.handleActionComplete.bind(this)}
                               returnRoute="maintenance"/>
                           : null}
                     </div>
