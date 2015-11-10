@@ -2,7 +2,7 @@ import  React from "react";
 import {RouteHandler} from "react-router";
 import exposeRouter from 'components/common/exposerouter';
 import {getFacilityContext} from "data/csapi";
-import {Table} from "components/common/Table";
+import ListManagement from "components/common/list/ListManagement";
 import {Row, Col} from "components/common/pagelayout";
 import {EditButtonLink, AddButtonLink} from "components/common/TableButtons";
 import {Button} from "react-bootstrap";
@@ -10,6 +10,7 @@ import Icon from "react-fa";
 import {fromJS, Map, List} from "immutable";
 import immstruct from "immstruct";
 import ExtensionPointEditButtonLink from "./ExtensionPointEditButton";
+
 
 const allTypes = fromJS([
     {value: "OrderImportBeanTransformation",           label: "Import Order Record Change"},
@@ -104,17 +105,14 @@ class ExtensionPoints extends React.Component{
         if (extensionPointId) {
             extensionPoint = extensionPoints.cursor().deref().find((extensionPoint) => extensionPoint.get("persistentId") === extensionPointId);
         }
-
+        let addButtonRoute = (availableTypes.count() <= 0) ? null : "extensionpointadd";
         return (<div>
-                <Row>
-                    <Col sm={12}>
-                        <div className="pull-right">
-                            <AddButtonLink to="extensionpointadd" disabled={(availableTypes.count() <= 0)}>
-                            </AddButtonLink>
-                        </div>
-                    </Col>
-                </Row>
-                    <Table results={list} columnMetadata={this.columnMetadata} rowActionComponent={ExtensionPointEditButtonLink}/>
+                    <ListManagement
+                        columnMetadata={this.columnMetadata}
+                        addButtonRoute={addButtonRoute}
+                        rowActionComponent={ExtensionPointEditButtonLink}
+                        results={list}
+                        keyColumn="type"/>
                     <RouteHandler availableTypes={availableTypes}
                             onExtensionPointUpdate={this.handleExtensionPointUpdate}
                             onExtensionPointAdd={this.handleExtensionPointAdd}
