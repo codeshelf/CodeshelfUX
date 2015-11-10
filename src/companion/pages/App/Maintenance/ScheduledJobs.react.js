@@ -1,4 +1,5 @@
 import  React from "react";
+import Icon from 'react-fa';
 import _ from "lodash";
 import DocumentTitle from "react-document-title";
 import ListManagement from "components/common/list/ListManagement";
@@ -6,6 +7,8 @@ import {properties, keyColumn} from "data/types/ScheduledJob";
 import {getFacilityContext} from "data/csapi";
 import exposeRouter from 'components/common/exposerouter';
 import {RouteHandler} from "react-router";
+import {Button} from 'react-bootstrap';
+
 
 function editRouteFactory(row) {
     return {
@@ -14,6 +17,37 @@ function editRouteFactory(row) {
     };
 }
 
+
+function createRowActionComponent(onActionComplete) {
+    class ScheduledJobActions extends React.Component {
+
+        trigger(type) {
+            return getFacilityContext().triggerSchedule(type).then(() => {
+                onActionComplete();
+            });
+        }
+
+        cancel(type) {
+            return getFacilityContext().cancelJob(type).then(() => {
+                onActionComplete();
+            });
+        }
+
+        render() {
+            var row  = this.props.rowData;
+            let type = row.get("type");
+            var C = ListManagement.toEditButton(editRouteFactory);
+            return (
+                <div>
+                    <C rowData={row} />
+                    <Button bsStyle="primary" style={{marginLeft: "1em"}} onClick={this.trigger.bind(this, type)}><Icon name="bolt"/></Button>
+                    <Button bsStyle="primary" style={{marginLeft: "1em"}} onClick={this.cancel.bind(this, type)}><Icon name="hand-stop-o"/></Button>
+                </div>);
+        }
+
+    }
+    return ScheduledJobActions;
+}
 class ScheduledJobs extends React.Component{
 
     constructor(props) {
@@ -21,6 +55,7 @@ class ScheduledJobs extends React.Component{
         this.state = {
             scheduledJobs: []
         };
+        this.rowActionComponent = createRowActionComponent(this.handleActionComplete.bind(this));
     }
 
     findSchedule(props) {
@@ -31,14 +66,14 @@ class ScheduledJobs extends React.Component{
         }
     }
 
-    handleUpdate() {
-        this.componentWillMount();
-    }
-
-    componentWillMount() {
+    handleActionComplete() {
         getFacilityContext().getScheduledJobs().then((jobs) => {
             this.setState({"scheduledJobs": jobs});
         });
+    }
+
+    componentWillMount() {
+        this.handleActionComplete();
         this.findSchedule(this.props);
     }
 
@@ -50,15 +85,16 @@ class ScheduledJobs extends React.Component{
         let columnMetadata = ListManagement.toColumnMetadataFromProperties(properties);
         let keyColumn = keyColumn;
         let {scheduledJobs = [], scheduledJob} = this.state;
-        let rowActionComponent = ListManagement.toEditButton(editRouteFactory);
+
+
         return (<DocumentTitle title="ScheduledJobs">
                     <div>
                         <ListManagement results={scheduledJobs}
                                     keyColumn={keyColumn}
                                     columnMetadata={columnMetadata}
-                                    rowActionComponent={rowActionComponent}/>
+                                    rowActionComponent={this.rowActionComponent}/>
                         {(scheduledJob) ?
-                            <RouteHandler scheduledJob={scheduledJob} onUpdate={this.handleUpdate.bind(this)} returnRoute="maintenance"/> : null}
+                            <RouteHandler scheduledJob={scheduledJob} onUpdate={this.handleActionComplete.bind(this)} returnRoute="maintenance"/> : null}
                     </div>
                 </DocumentTitle>
                );
