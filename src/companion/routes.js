@@ -30,6 +30,7 @@ import TestScript from './pages/App/TestScript/TestScript.react.js';
 import ExtensionPointsPage from "./pages/App/ExtensionPoints/ExtensionPointsPage.react.js";
 import ExtensionPointEdit from "./pages/App/ExtensionPoints/ExtensionPointEdit.react.js";
 import ExtensionPointAdd from "./pages/App/ExtensionPoints/ExtensionPointAdd.react.js";
+import ScheduledJobEdit from "./pages/App/Maintenance/ScheduledJobsEdit.react.js";
 
 export default (
   <Route handler={Root} path="/">
@@ -51,7 +52,8 @@ export default (
                 <Route handler={WorkerDisplay} name="workerdisplay" path=":workerId" />
             </Route>
             <Route handler={Maintenance} name="maintenance">
-                <Route handler={ExtensionPointEdit} name="parametersetedit" path="parametersset/:parameterType" />
+                    <Route handler={ExtensionPointEdit} name="parametersetedit" path="parametersset/:parameterType" />
+                    <Route handler={ScheduledJobEdit} name="scheduledjobedit" path="scheduledjobs/:type" />
             </Route>
             <Route handler={TestScript} name="testscript" />
             <Route handler={ExtensionPointsPage} name="extensionpoints">

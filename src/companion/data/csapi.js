@@ -446,6 +446,10 @@ export function getFacilityContext() {
                 contentType: false
             });
         } ,
+
+        getScheduledJobs() {
+            return ajax(facilityPath + "/scheduledjobs");
+      },
         findSchedule(type) {
             return ajax(facilityPath + "/scheduledjobs/" + type + "/schedule");
         },
