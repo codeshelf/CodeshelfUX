@@ -350,11 +350,6 @@ domainobjects = {
 				'title': 'Description',
 				'width': 40
 			},
-			'objectType': {
-				'id':    'objectType',
-				'title': 'Type',
-				'width': 12
-			},
 			// not so much a UI field, as we need the persistent ID for the feature to show all WIs for this item
 			'defaultValue': {
 				'id':    'defaultValue',
