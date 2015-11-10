@@ -284,17 +284,9 @@ export function getFacilityContext() {
             });
         },
 
-
         getDataSummary: function() {
             let dataSummary = facilityPath + "/data/summary";
             return ajax(dataSummary);
-        },
-
-        triggerDataPurge: function() {
-            let dataSummary = facilityPath + "/data/purge";
-            return ajax(dataSummary, {
-                method: "DELETE"
-            });
         },
 
         deleteOrders: () => {
@@ -457,6 +449,21 @@ export function getFacilityContext() {
         findSchedule(type) {
             return ajax(facilityPath + "/scheduledjobs/" + type + "/schedule");
         },
+
+        triggerSchedule(type) {
+            return ajax(facilityPath + "/scheduledjobs/" + type + "/trigger", {
+                method: "POST",
+                contentType: "form"
+            });
+        },
+
+        cancelJob(type) {
+            return ajax(facilityPath + "/scheduledjobs/" + type + "/cancel", {
+                method: "POST",
+                contentType: "form"
+            });
+        },
+
         updateSchedule(type, schedule) {
             return ajax(facilityPath + "/scheduledjobs/" + type + "/schedule", {
                 method: "POST",
