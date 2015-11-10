@@ -12,6 +12,8 @@ import Icon from "react-fa";
 import immstruct from "immstruct";
 import {fromJS, Map, List} from "immutable";
 import {types, keyColumn} from "data/types/ExtensionPoint";
+import ConfirmAction from 'components/common/ConfirmAction';
+
 
 const title = "Extension Points";
 const addRoute = "extensionpointadd";
@@ -41,6 +43,39 @@ function editRouteFactory(row) {
     };
 }
 
+function createRowActionComponent(onActionComplete) {
+    class ScheduledJobActions extends React.Component {
+
+        delete(rowData) {
+            return getFacilityContext().deleteExtensionPoint(rowData.toJS()).then(() => {
+                onActionComplete();
+            });
+        }
+
+        render() {
+            var {rowData}  = this.props;
+            var type = rowData.get("type");
+            var C = ListManagement.toEditButton(editRouteFactory);
+            return (
+            <div sytle={{whiteSpace: "nowrap"}}>
+                    <C rowData={rowData} />
+                    <ConfirmAction
+                        onConfirm={this.delete.bind(this, rowData)}
+                        id="delete"
+                        style={{marginLeft: "0.5em"}}
+                        confirmLabel="Delete"
+                        confirmInProgressLabel="Deleting"
+                        instructions={`Click 'Delete' to remove ${type} job`}
+                        title="Delete">
+                        <Icon name="trash" />
+                    </ConfirmAction>
+                </div>);
+        }
+
+    }
+    return ScheduledJobActions;
+}
+
 
 class ExtensionPoints extends React.Component{
 
@@ -56,7 +91,7 @@ class ExtensionPoints extends React.Component{
         this.state = {
             extensionPoints: structure
         };
-        this.rowActionComponent = ListManagement.toEditButton(editRouteFactory);
+
         this.columnMetadata = [
             {
                 columnName: "type",
@@ -67,18 +102,34 @@ class ExtensionPoints extends React.Component{
                 columnName: "active",
                 displayName: "Active"
             }
-        ];
+            ];
+        this.loadExtensionPoints = this.loadExtensionPoints.bind(this);
         this.handleExtensionPointUpdate = this.handleExtensionPointUpdate.bind(this);
         this.handleExtensionPointAdd = this.handleExtensionPointAdd.bind(this);
+        this.handleExtensionPointDelete = this.handleExtensionPointDelete.bind(this);
+        this.rowActionComponent = createRowActionComponent(this.loadExtensionPoints);
     }
 
     componentWillMount() {
+        this.loadExtensionPoints();
+    }
+
+    loadExtensionPoints() {
         getFacilityContext().getExtensionPoints().then((data) => {
             this.state.extensionPoints.cursor().update((pts) =>{
                 let newList = pts.clear().concat(fromJS(data));
                 return newList;
             });
         });
+    }
+
+    handleExtensionPointDelete(extensionPoint) {
+        let {extensionPoints} = this.state;
+        extensionPoints.cursor().update((pts) => {
+            let index = pts.findIndex((p) => p.get("persistentId") === extensionPoint.get("persistentId"));
+            return pts.delete(index);
+        });
+        return extensionPoint;
     }
 
     handleExtensionPointUpdate(extensionPoint) {

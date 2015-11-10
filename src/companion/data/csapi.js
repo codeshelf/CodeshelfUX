@@ -229,6 +229,12 @@ export function getFacilityContext() {
             return addResource(extensionPointsPath, params);
         },
 
+        deleteExtensionPoint: function(extensionPoint) {
+            let extensionPointsPath = facilityPath + "/extensionpoints/" + extensionPoint.persistentId;
+            return ajax(extensionPointsPath, {
+                method: "DELETE"
+            });
+        },
 
         updateExtensionPoint: function(extensionPoint) {
             let extensionPointsPath = facilityPath + "/extensionpoints/" + extensionPoint.persistentId;

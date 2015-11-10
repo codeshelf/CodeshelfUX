@@ -61,10 +61,16 @@ function createRowActionComponent(onActionComplete) {
             onActionComplete();
             });
         }
+        delete(rowData) {
+            let type = rowData.get("type");
+            return getFacilityContext().deleteExtensionPoint(rowData).then(() => {
+            onActionComplete();
+            });
+        }
 
         render() {
-            var row  = this.props.rowData;
-            let type = row.get("type");
+            var {rowData}  = this.props;
+                let type = rowData.get("type");
             var C = ListManagement.toEditButton(editRouteFactory);
             return (
             <div sytle={{whiteSpace: "nowrap"}}>
@@ -72,7 +78,7 @@ function createRowActionComponent(onActionComplete) {
                     <Button bsStyle="primary" style={{marginLeft: "0.5em"}} onClick={this.trigger.bind(this, type)} title="Trigger"><Icon name="bolt"/></Button>
                     <Button bsStyle="primary" style={{marginLeft: "0.5em"}} onClick={this.cancel.bind(this, type)} title="Stop Run"><Icon name="hand-stop-o"/></Button>
                     <ConfirmAction
-                        onConfirm={this.delete.bind(this, type)}
+                        onConfirm={this.delete.bind(this, rowData)}
                         id="delete"
                         style={{marginLeft: "0.5em"}}
                         confirmLabel="Delete"
