@@ -56,15 +56,10 @@ function createRowActionComponent(onActionComplete) {
             });
         }
 
-        delete(type) {
-            return getFacilityContext().deleteJob(type).then(() => {
-            onActionComplete();
-            });
-        }
         delete(rowData) {
             let type = rowData.get("type");
-            return getFacilityContext().deleteExtensionPoint(rowData).then(() => {
-            onActionComplete();
+            return getFacilityContext().deleteJob(type).then(() => {
+                onActionComplete();
             });
         }
 
