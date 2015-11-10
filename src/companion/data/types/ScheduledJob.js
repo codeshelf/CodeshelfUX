@@ -5,10 +5,13 @@ export const properties = toProperties([
     {id: 'type',
      title: 'Type'},
     {id: 'cronExpression',
-            title: "Schedule"},
+     title: "Schedule"},
     {id: 'nextScheduled',
-            title: "Next",
-     type: DateTime}
+     title: "Next",
+     type: DateTime},
+    {id: 'running',
+     title: 'Runnning',
+     type: Boolean}
 ]);
 
 export const ScheduleJobRecord = createTypeRecord(properties);
