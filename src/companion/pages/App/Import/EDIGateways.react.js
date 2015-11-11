@@ -75,10 +75,10 @@ class ListPage extends React.Component{
                     <ListManagement
                         results={list}
                         keyColumn={keyColumn}
-                        columnMetadata={columnMetadata} />
+                        columnMetadata={columnMetadata}
                         rowActionComponent={rowActionComponent}
                         columns={columnsCursor}
-                        sortSpecs={columnSortSpecsCursor}
+                        sortSpecs={columnSortSpecsCursor} />
 
                      <RouteHandler list={list}/>
                 </div>
