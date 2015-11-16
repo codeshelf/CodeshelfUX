@@ -1,6 +1,10 @@
 import {toProperties, createTypeRecord} from "./properties";
 import DateTime from "./DateTime.js";
 
+export function toLabel(property) {
+    return property.toUpperCase();
+}
+
 export const types = [
     {value: "AccumulateDailyMetrics", label: "Summarize previous day's completed work instructions."},
     {value: "DatabasePurge", label: "Purge old data."},
@@ -21,7 +25,11 @@ export const properties = toProperties([
      type: DateTime},
     {id: 'running',
      title: 'Runnning',
+     type: Boolean},
+    {id: 'active',
+     title: 'Active',
      type: Boolean}
+
 ]);
 
 export const ScheduleJobRecord = createTypeRecord(properties);

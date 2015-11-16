@@ -94,7 +94,6 @@ class ScheduledJobs extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            scheduledJobs: []
         };
         this.rowActionComponent = createRowActionComponent(this.handleActionComplete.bind(this));
         this.columnMetadata = ListManagement.toColumnMetadataFromProperties(properties);
@@ -104,13 +103,13 @@ class ScheduledJobs extends React.Component{
         let selectedScheduleType = this.props.router.getCurrentParams().type;
         if (selectedScheduleType) {
             let {scheduledJobs} = this.state;
-            this.setState({"scheduledJob": _.find(scheduledJobs, {type: selectedScheduleType})});
+            this.setState({"scheduledJob": scheduledJobs.find((j) => j.get("type") === selectedScheduleType)});
         }
     }
 
     handleActionComplete() {
         getFacilityContext().getScheduledJobs().then((jobs) => {
-            this.setState({"scheduledJobs": jobs});
+            this.setState({"scheduledJobs": fromJS(jobs)});
         });
     }
 
@@ -124,7 +123,7 @@ class ScheduledJobs extends React.Component{
     }
 
     render() {
-        let {scheduledJobs: list  = [], scheduledJob: selected} = this.state;
+        let {scheduledJobs: list = List(), scheduledJob: selected} = this.state;
 
         let {rowActionComponent, columnMetadata} = this;
         let availableTypes = toAvailableTypes(list, allTypes);

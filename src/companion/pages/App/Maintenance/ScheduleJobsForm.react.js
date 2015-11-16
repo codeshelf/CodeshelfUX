@@ -2,29 +2,27 @@ import  React from 'react';
 import FormFields from "components/common/FormFields";
 import {ErrorDisplay} from "components/common/Form";
 import Immutable from 'immutable';
-import {toLabel} from "data/types/ExtensionPoint";
+import {toLabel} from "data/types/ScheduledJob";
 import Text from "data/types/Text";
 
 const formMetadata = [
         {name: "type",
          label: toLabel("type"),
-        readOnly: true},
+         readOnly: true},
         {name: "active",
          label: toLabel("active"),
          type: Boolean
         },
-        {name: "script",
-        label: toLabel("script"),
-        type: Text
+        {name: "cronExpression",
+         label: toLabel("cronExpression")
         }
-
 ];
 
-export default class ExtensionPointForm extends React.Component {
+export default class ScheduledJobForm extends React.Component {
 
     constructor(props) {
         super(props);
-        //TODO local state hack
+        //TODO local state hack should be done differently
         this.state = {
             formData: props.formData
         };
@@ -37,7 +35,7 @@ export default class ExtensionPointForm extends React.Component {
         this.setState({formData: newFormData});
     }
 
-    getExtensionPoint() {
+    getFormData() {
         return this.state.formData;
     }
 

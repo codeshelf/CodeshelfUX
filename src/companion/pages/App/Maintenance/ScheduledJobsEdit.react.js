@@ -3,6 +3,7 @@ import {fromJS} from 'immutable';
 import ModalForm from "components/common/ModalForm";
 import {getFacilityContext} from "data/csapi";
 import {ErrorDisplay, Input} from "components/common/Form";
+import ScheduledJobForm from "./ScheduleJobsForm.react.js";
 
 export default class ScheduledJobEdit extends React.Component {
 
@@ -14,8 +15,8 @@ export default class ScheduledJobEdit extends React.Component {
     }
 
     handleSave() {
-        let {scheduledJob} = this.state;
-            return getFacilityContext().updateSchedule(scheduledJob.type, scheduledJob).then((newSchedule) => {
+        let scheduledJob = this.refs.form.getFormData();
+    return getFacilityContext().updateSchedule(scheduledJob.get("type"), scheduledJob.toJS()).then((newSchedule) => {
             return this.props.onUpdate(newSchedule);
         })
         .catch((e) =>{
@@ -39,8 +40,7 @@ export default class ScheduledJobEdit extends React.Component {
         var {returnRoute} = this.props;
         const {errorMessage, scheduledJob = {}} = this.state;
         return (<ModalForm title="Edit Job Schedule" formData={scheduledJob} returnRoute={returnRoute} onSave={this.handleSave.bind(this)}>
-                    <ErrorDisplay message={errorMessage} />
-                    <Input ref="schedule" label="Schedule" value={scheduledJob.cronExpression} onChange={this.handleCronExpressionChange.bind(this)} />
+                    <ScheduledJobForm ref="form" message={errorMessage} formData={scheduledJob}/>
                 </ModalForm>);
     }
 };

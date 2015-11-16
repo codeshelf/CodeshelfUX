@@ -19,4 +19,8 @@ export const properties = toProperties([
      title: "Active"}
 ]);
 
+export function toLabel(property) {
+    return property.toUpperCase();
+}
+
 export const ExtensionPoint = createTypeRecord(properties);

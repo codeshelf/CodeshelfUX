@@ -2,7 +2,7 @@ import  React from "react";
 import DocumentTitle from "react-document-title";
 import {Input, Checkbox, TextArea, MultiSelect} from "components/common/Form";
 import Text from "data/types/Text";
-import {Map} from "immutable";
+import {fromJS, Map} from "immutable";
 
 export default class FormFields extends React.Component{
 
@@ -91,6 +91,9 @@ export default class FormFields extends React.Component{
 
     render() {
         let {formMetadata, formData = Map(), savePending, handleChange = () => {}} = this.props;
+        if (!Map.isMap(formData)) {
+            formData = fromJS(formData);
+        }
         return (
                 <div>
                 {
