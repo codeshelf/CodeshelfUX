@@ -6,13 +6,13 @@ export function toLabel(property) {
 }
 
 export const types = [
-    {value: "AccumulateDailyMetrics", label: "Summarize previous day's completed work instructions."},
-    {value: "DatabasePurge", label: "Purge old data."},
-    {value: "DatabaseSizeCheck", label: "Gather total data size for health check."},
-    {value: "EdiSizeCheck", label: "Check EDI directories for health check."},
-    {value: "EdiPurge", label: "Clean old files out of EDI directories"},
-    {value: "PutWallLightRefresher", label: "Periodically make sure putwall lights are current."},
-    {value: "EdiImport", label: "Check each file-based importer for new files"},
+    {value: "AccumulateDailyMetrics", label: "Accumulate Daily Metrics"},
+    {value: "DatabasePurge", label: "Database Purge"},
+    {value: "DatabaseSizeCheck", label: "Database Size Check"},
+    {value: "EdiSizeCheck", label: "EDI Size Check"},
+    {value: "EdiPurge", label: "EDI Purge"}
+//    {value: "PutWallLightRefresher", label: "PutWall Light Refresher"},
+//    {value: "EdiImport", label: "EdiImport"},
 ];
 export const keyColumn = "type";
 export const properties = toProperties([
