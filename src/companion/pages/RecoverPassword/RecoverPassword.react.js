@@ -8,7 +8,7 @@ import {Map} from "immutable";
 import exposeRouter from 'components/common/exposerouter';
 
 const formMetadata = [
-    {name: "u",
+    {name: "username",
     label: "Email"}
 ];
 const title = "Forgot Password";
@@ -31,7 +31,7 @@ export default class RecoverPassword extends React.Component{
 
     handleSubmit(e) {
         e.preventDefault();
-        return recoverPassword(this.state.formData.get("u"))
+        return recoverPassword(this.state.formData.get("username"))
             .then(() => {
                 this.props.router.transitionTo("recoversuccess");
             });
