@@ -7,10 +7,15 @@ export function toLabel(property) {
 
 export const types = [
     {value: "AccumulateDailyMetrics", label: "Accumulate Daily Metrics"},
+    {value: "CheckActiveSiteControllerHealth", label: "Check Active Site Controller Health"},
+    {value: "DatabaseConnection", label: "Database Connection Check"},
     {value: "DatabasePurge", label: "Database Purge"},
     {value: "DatabaseSizeCheck", label: "Database Size Check"},
+    {value: "DropboxCheck", label: "Dropbox Connection Check"},
     {value: "EdiSizeCheck", label: "EDI Size Check"},
-    {value: "EdiPurge", label: "EDI Purge"}
+    {value: "EdiPurge", label: "EDI Purge"},
+    {value: "IsProductionServer", label: "Check if Production Property is Set"},
+    {value: "PicksActivity", label: "Check Picks Activity"}
 //    {value: "PutWallLightRefresher", label: "PutWall Light Refresher"},
 //    {value: "EdiImport", label: "EdiImport"},
 ];
