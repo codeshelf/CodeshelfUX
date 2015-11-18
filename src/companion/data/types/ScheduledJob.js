@@ -25,9 +25,9 @@ export const properties = toProperties([
      title: 'Type'},
     {id: 'cronExpression',
      title: "Schedule"},
-    {id: 'nextScheduled',
+    {id: 'futureScheduled',
      title: "Next",
-     type: DateTime},
+     type: DateTime}, //array TODO make an array<DateTime> style type
     {id: 'running',
      title: 'Runnning',
      type: Boolean},

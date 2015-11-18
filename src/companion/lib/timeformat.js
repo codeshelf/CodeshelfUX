@@ -3,7 +3,7 @@ var moment = require('moment');
 moment.locale('en', {
     calendar : {
         lastDay : 'dd LT',
-        sameDay : 'LT',
+        sameDay : 'LTS',
         nextDay : '[Tomorrow] LT',
         lastWeek : 'dd LT',
         nextWeek : '[next] dd [at] LT',
