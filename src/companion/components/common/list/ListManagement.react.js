@@ -114,6 +114,7 @@ export default class ListManagement extends React.Component{
     }
 };
 ListManagement.toColumnMetadataFromProperties = ListView.toColumnMetadataFromProperties;
+ListManagement.setCustomComponent = ListView.setCustomComponent;
 
 
 class Search extends React.Component {
