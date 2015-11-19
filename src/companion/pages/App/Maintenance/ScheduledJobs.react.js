@@ -10,6 +10,7 @@ import {RouteHandler} from "react-router";
 import {Button} from 'react-bootstrap';
 import {fromJS, Map, List} from "immutable";
 import {types, keyColumn, properties} from "data/types/ScheduledJob";
+import DateDisplay from "components/common/DateDisplay";
 
 const title = "Scheduled Jobs";
 const addRoute = "scheduledjobadd";
@@ -89,6 +90,20 @@ function createRowActionComponent(onActionComplete) {
     return ScheduledJobActions;
 }
 
+class DateTimeArray extends React.Component {
+    render() {
+        let {cellData, rowData} = this.props;
+        let style = (rowData.get("active")) ? {} : {textDecoration: "line-through"};
+        return (<span>
+            {
+                cellData.map((dt) => {
+                    return <div key={dt} style={style}><DateDisplay cellData={dt} /></div>;
+                })
+            }
+            </span>);
+    }
+}
+
 class ScheduledJobs extends React.Component{
 
     constructor(props) {
@@ -97,6 +112,7 @@ class ScheduledJobs extends React.Component{
         };
         this.rowActionComponent = createRowActionComponent(this.handleActionComplete.bind(this));
         this.columnMetadata = ListManagement.toColumnMetadataFromProperties(properties);
+        this.columnMetadata = ListManagement.setCustomComponent("futureScheduled", DateTimeArray, this.columnMetadata);
     }
 
     findSchedule(props) {

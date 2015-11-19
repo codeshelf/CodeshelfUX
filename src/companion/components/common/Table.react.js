@@ -70,14 +70,14 @@ class Row extends PureComponent {
                     toShownColumns(columnMetadata, columns).map((metadata) => {
                         let key = metadata.get("columnName");
                         var value = row.get(key);
-
-                        value = (Immutable.Iterable.isIterable(value)) ? value.join(", ") : value;
-                        value = (typeof value === "boolean") ? value.toString() : value;
-
-                        var valueRenderer = (<span>{value}</span>);
+                        var valueRenderer = null;
                         var CustomComponent = metadata.get("customComponent");
                         if (CustomComponent) {
                             valueRenderer = ( <CustomComponent rowData={row} cellData={value} />);
+                        } else {
+                            value = (Immutable.Iterable.isIterable(value)) ? value.join(", ") : value;
+                            value = (typeof value === "boolean") ? value.toString() : value;
+                            valueRenderer = (<span>{value}</span>);
                         }
                         return (<td ref={key} key={key}>{valueRenderer}</td>);
                     }).toList()

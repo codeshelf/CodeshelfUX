@@ -87,7 +87,15 @@ export default class ListView extends React.Component{
 
     }
 
-
+    static setCustomComponent(propertyName, CustomComponent, columnMetadata) {
+        return columnMetadata.map((c) => {
+            if (c.get('columnName') === propertyName) {
+                return c.set("customComponent", CustomComponent);
+            } else {
+                return c;
+            }
+        });
+    }
 
     getAllSelected(select) {
         var result = [];
