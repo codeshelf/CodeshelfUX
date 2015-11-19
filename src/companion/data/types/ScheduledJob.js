@@ -14,8 +14,8 @@ export const types = [
     {value: "DropboxCheck", label: "Dropbox Connection Check"},
     {value: "EdiSizeCheck", label: "EDI Size Check"},
     {value: "EdiPurge", label: "EDI Purge"},
-    {value: "IsProductionServer", label: "Check if Production Property is Set"},
-    {value: "PicksActivity", label: "Check Picks Activity"}
+    {value: "IsProductionServer", label: "Production Property Check"},
+    {value: "PicksActivity", label: "Picks Activity Check"}
 //    {value: "PutWallLightRefresher", label: "PutWall Light Refresher"},
 //    {value: "EdiImport", label: "EdiImport"},
 ];
