@@ -66,14 +66,17 @@ function createRowActionComponent(onActionComplete) {
 
         render() {
             var {rowData}  = this.props;
-                let type = rowData.get("type");
+            let type = rowData.get("type");
+            let usingDefaults = rowData.get("usingDefaults");
             var C = ListManagement.toEditButton(editRouteFactory);
             return (
             <div sytle={{whiteSpace: "nowrap"}}>
                     <C rowData={rowData} />
                     <Button bsStyle="primary" style={{marginLeft: "0.5em"}} onClick={this.trigger.bind(this, type)} title="Trigger"><Icon name="bolt"/></Button>
                     <Button bsStyle="primary" style={{marginLeft: "0.5em"}} onClick={this.cancel.bind(this, type)} title="Stop Run"><Icon name="hand-stop-o"/></Button>
-                    <ConfirmAction
+                    {
+                      (!usingDefaults) &&
+                      <ConfirmAction
                         onConfirm={this.delete.bind(this, rowData)}
                         id="delete"
                         style={{marginLeft: "0.5em"}}
@@ -82,7 +85,8 @@ function createRowActionComponent(onActionComplete) {
                         instructions={`Click 'Delete' to remove ${type} job`}
                         title="Delete">
                         <Icon name="trash" />
-                    </ConfirmAction>
+                      </ConfirmAction>
+                    }
                 </div>);
         }
 

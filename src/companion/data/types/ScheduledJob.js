@@ -33,8 +33,10 @@ export const properties = toProperties([
      type: Boolean},
     {id: 'active',
      title: 'Active',
+             type: Boolean},
+    {id: 'usingDefaults',
+     title: 'Default',
      type: Boolean}
-
 ]);
 
 export const ScheduleJobRecord = createTypeRecord(properties);
