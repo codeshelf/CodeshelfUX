@@ -108,6 +108,15 @@ class DateTimeArray extends React.Component {
     }
 }
 
+class TypeLabel extends React.Component {
+    render() {
+        let {cellData} = this.props;
+        let label = typeLabelMap.get(cellData);
+        return (<span data-type={cellData}>{label}</span>);
+    }
+}
+
+
 class ScheduledJobs extends React.Component{
 
     constructor(props) {
@@ -117,6 +126,7 @@ class ScheduledJobs extends React.Component{
         this.rowActionComponent = createRowActionComponent(this.handleActionComplete.bind(this));
         this.columnMetadata = ListManagement.toColumnMetadataFromProperties(properties);
         this.columnMetadata = ListManagement.setCustomComponent("futureScheduled", DateTimeArray, this.columnMetadata);
+        this.columnMetadata = ListManagement.setCustomComponent("type", TypeLabel, this.columnMetadata);
     }
 
     findSchedule(props) {
