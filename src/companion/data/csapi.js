@@ -201,6 +201,7 @@ export function getFacilityContext() {
         domainId: domainId,
         facilityId: facilityId,
         endpoint: endpoint,
+        facility: facility,
 
         recreateFacility() {
             return ajax("/api/facilities/recreate/" + facility.domainId, {

@@ -1,5 +1,5 @@
 import React from 'react';
-import {formatTimestamp, formatISO} from 'lib/timeformat';
+import {formatTimestamp, toTimeZone, formatISO} from 'lib/timeformat';
 
 
 export default class DateDisplay extends React.Component {
@@ -8,8 +8,9 @@ export default class DateDisplay extends React.Component {
     }
 
     render() {
-        let {cellData} = this.props;
-        let formattedData = (cellData) ? formatTimestamp(cellData) : "";
+        let {cellData, utcOffset /*in minutes */} = this.props;
+        let date = toTimeZone(cellData, utcOffset);
+        let formattedData = (cellData) ? formatTimestamp(date) : "";
         return (<span data-value={cellData}>{formattedData}</span>);
     }
 }

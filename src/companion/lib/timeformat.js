@@ -20,6 +20,10 @@ export function formatISO(momentCompatibleDate) {
     return timeMoment.toISOString();
 }
 
+export function toTimeZone(momentCompatibleDate, utcOffset) {
+    return moment(momentCompatibleDate).utcOffset(utcOffset);
+}
+
 export function formatTimestamp(momentCompatibleDate, opt_relativetime) {
     var referenceTime = moment();
     if (opt_relativetime != null) {

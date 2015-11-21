@@ -5,7 +5,7 @@ import {selectedFacilityCursor, facilitiesCursor} from 'data/state';
 import _ from 'lodash';
 
 // Isomorphic store has to be state-less.
-var Facility = Record({name: null, domainId: null, persistentId: null, description: null});
+    var Facility = Record({name: null, domainId: null, persistentId: null, description: null, utcOffset: null, timeZoneDisplay: null});
 
 function toFacility(facilityData) {
     facilityData.name = facilityData.domainId; //TODO temporary until name is returned for facility

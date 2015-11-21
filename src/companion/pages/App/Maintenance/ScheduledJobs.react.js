@@ -96,12 +96,13 @@ function createRowActionComponent(onActionComplete) {
 
 class DateTimeArray extends React.Component {
     render() {
+        let utcOffset = getFacilityContext().facility.utcOffset;
         let {cellData, rowData} = this.props;
         let style = (rowData.get("active")) ? {} : {textDecoration: "line-through"};
         return (<span>
             {
                 cellData.map((dt) => {
-                    return <div key={dt} style={style}><DateDisplay cellData={dt} /></div>;
+            return <div key={dt} style={style}><DateDisplay cellData={dt} utcOffset={utcOffset} /></div>;
                 })
             }
             </span>);
@@ -153,6 +154,8 @@ class ScheduledJobs extends React.Component{
     }
 
     render() {
+        let timeZoneDisplay = getFacilityContext().facility.timeZoneDisplay;
+
         let {scheduledJobs: list = List(), scheduledJob: selected} = this.state;
 
         let {rowActionComponent, columnMetadata} = this;
@@ -160,7 +163,8 @@ class ScheduledJobs extends React.Component{
         let addButtonRoute = (availableTypes.count() <= 0) ? null : addRoute;
         let lastRoute = this.props.router.getCurrentRoutes().slice(-1)[0];
         return (<DocumentTitle title={title}>
-                    <div>
+                   <div>
+                       <div>TimeZone: {timeZoneDisplay}</div>
                         <ListManagement
                             results={list}
                             keyColumn={keyColumn}

@@ -2,7 +2,6 @@ import React from 'react';
 import {RouteHandler} from "react-router";
 import exposeRouter from 'components/common/exposerouter';
 import {Tabs, Tab} from 'react-bootstrap';
-import DocumentTitle from 'react-document-title';
 import {SingleCellLayout, PageGrid, Row, Col} from 'components/common/pagelayout';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import DataObjectPurge from "./DataObjectPurge";
@@ -79,11 +78,13 @@ class Maintenance extends React.Component{
         let {
              ParameterSetDataPurge,
              ParameterSetDataQuantityHealthCheck} = this.state;
-        return (<DocumentTitle title="Maintenance">
-                <SingleCellLayout>
+        return (
+                <SingleCellLayout title="Maintenance">
                     <Tabs className="nav-tabs-simple" defaultActiveKey="jobs">
                         <Tab eventKey="jobs" title="Jobs">
-                            <ScheduledJobs />
+                            <SingleCellIBox>
+                                <ScheduledJobs />
+                            </SingleCellIBox>
                         </Tab>
                         <Tab eventKey="database" title="Database">
                             <PageGrid>
@@ -134,7 +135,6 @@ class Maintenance extends React.Component{
                     {(extensionPoint) ? <RouteHandler extensionPoint={fromJS(extensionPoint)} onExtensionPointUpdate={this.handleConfigurationUpdate.bind(this)} returnRoute="maintenance"/> : null}
 
                 </SingleCellLayout>
-                </DocumentTitle>
                );
     }
 };
