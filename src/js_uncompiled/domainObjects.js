@@ -764,6 +764,11 @@ domainobjects = {
 				'id':    'orderLocationAliasIds',
 				'title': 'Order Location',
 				'width': 10
+			},
+			'orderType': {
+				'id':    'parentOrderType',
+				'title': 'Order Type',
+				'width': 10
 			}
 		}
 	},

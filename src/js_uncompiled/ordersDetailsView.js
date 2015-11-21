@@ -95,6 +95,8 @@ goog.require('adhocDialogService');
 				return false;
 			else if (inProperty['id'] === 'preferredNominalUi')
 				return false;
+			else if (inProperty['id'] === 'parentOrderType')
+				return false;
 			else
 				return true;
 		}
