@@ -11,7 +11,7 @@ import {fetchUnresolvedIssuesByType, subscribe, unsubscribe} from 'data/issues/a
 import {getIssuesSummary} from 'data/issues/store';
 import {List} from 'immutable';
 
-export default class BlockedWorkPage extends React.Component {
+export default class BlockedWork extends React.Component {
     componentWillMount() {
         subscribe("blockedwork", fetchUnresolvedIssuesByType);
     }
@@ -24,7 +24,8 @@ export default class BlockedWorkPage extends React.Component {
             "SKIP_ITEM_SCAN": "Skipped",
             "SHORT": "Shorted",
             "BUTTON": "Button",
-            "COMPLETE": "Complete"
+            "COMPLETE": "Complete",
+            "LOW": "Low"
         }[type];
     }
 
@@ -45,7 +46,7 @@ export default class BlockedWorkPage extends React.Component {
                         let total = summary.get("count");
                         return (<TabPane eventKey={type}
                                  tab={<span>
-                                      {description.toUpperCase()}
+                                      {description && description.toUpperCase()}
                                       <Badge style={{marginLeft: "1em"}} className="badge-primary">{total}</Badge>
                                       </span>}>
                                 <IssuesIBox type={type} />
