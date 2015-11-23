@@ -9,7 +9,11 @@ export default class DateDisplay extends React.Component {
 
     render() {
         let {cellData, utcOffset /*in minutes */} = this.props;
-        let date = toTimeZone(cellData, utcOffset);
+        let date = cellData;
+        if (utcOffset) {
+            date = toTimeZone(cellData, utcOffset);
+        }
+
         let formattedData = (cellData) ? formatTimestamp(date) : "";
         return (<span data-value={cellData}>{formattedData}</span>);
     }
