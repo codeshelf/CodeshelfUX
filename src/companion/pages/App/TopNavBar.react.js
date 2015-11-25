@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "react-fa";
 import {DropdownButton, Nav, NavItem, Button, MenuItem} from "react-bootstrap";
-    import { NavItemLink, MenuItemLink, ButtonLink} from 'react-router-bootstrap';
+import { NavItemLink, MenuItemLink, ButtonLink} from 'react-router-bootstrap';
 import {loggedout} from "data/auth/actions";
 //todo turn clearStoredCredentials into an action
 import {getEmail, isCredentialsStored, clearStoredCredentials} from "data/user/store";
@@ -39,6 +39,11 @@ export default class TopNavBar extends React.Component {
                                     <ButtonLink bsStyle="link" to="facilities" id="home" name="home">
                                         <Icon name="home" size="lg"/>
                                     </ButtonLink>
+                            }
+                            {(facilities) &&
+                              <ButtonLink bsStyle="link" to="mobile-search-orders" id="mobile-search-orders" name="mobile-search-orders">
+                                <Icon name="search" size="lg"/>
+                              </ButtonLink>
                             }
                             {(facilities) &&
                                 <FacilitySelector facility={facility} facilities={facilities} />}
