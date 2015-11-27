@@ -41,7 +41,7 @@ export default class TopNavBar extends React.Component {
                                     </ButtonLink>
                             }
                             {(facilities) &&
-                              <ButtonLink bsStyle="link" to="mobile-search-orders" id="mobile-search-orders" name="mobile-search-orders">
+                              <ButtonLink bsStyle="link" to="mobile" id="mobile-search-orders" name="mobile">
                                 <Icon name="search" size="lg"/>
                               </ButtonLink>
                             }
