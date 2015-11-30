@@ -14,7 +14,7 @@ function mapDispatch(dispatch) {
   return bindActionCreators({acInitialLoadFacilities, acSelectFacility}, dispatch);
 }
 
-class FacilityWraper extends Component {
+class FacilityWrapper extends Component {
 
   componentDidMount() {
     const {availableFacilities} = this.props;
@@ -54,4 +54,4 @@ class FacilityWraper extends Component {
   }
 }
 
-export default exposeRouter(connect(mapState, mapDispatch)(FacilityWraper));
+export default exposeRouter(connect(mapState, mapDispatch)(FacilityWrapper));
