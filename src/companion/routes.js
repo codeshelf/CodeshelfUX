@@ -38,7 +38,7 @@ import mApp from './pages/Mobile/App.react.js';
 import mSearchOrders from './pages/Mobile/SearchOrders/SearchOrders.react.js';
 import mOrderDeatil from './pages/Mobile/OrderDetail/OrderDetail.react.js';
 import LoadFacility from './pages/Mobile/Facility/LoadFacility.react.js';
-import FacilityWraper from './pages/Mobile/Facility/FacilityWraper.react.js';
+import FacilityWrapper from './pages/Mobile/Facility/FacilityWrapper.react.js';
 import Mobile from './pages/Mobile/Mobile.react.js';
 
 export default (
@@ -75,11 +75,13 @@ export default (
 
     // Rotues for mobile version
 
-    <Redirect from="/mobile/" to="/mobile/facilities" />
     <Redirect from="/mobile" to="/mobile/facilities" />
+    <Redirect from="/mobile/" to="/mobile/facilities" />
+    <Redirect from="/mobile/facilities/" to="/mobile/facilities" />
+
     <Route handler={authn(Mobile)} name="mobile" path="mobile/facilities">
       <DefaultRoute handler={LoadFacility} />
-      <Route handler={FacilityWraper} name="mobile-facility" path=":facilityName">
+      <Route handler={FacilityWrapper} name="mobile-facility" path=":facilityName">
         <Route handler={mApp}>
           <Route handler={mSearchOrders} name="mobile-search-orders" path="search" />
           <Route handler={mOrderDeatil} name="mobile-order-datail" path="orderDetail/:id" />
