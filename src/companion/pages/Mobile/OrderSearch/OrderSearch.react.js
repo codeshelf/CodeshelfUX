@@ -134,7 +134,7 @@ function mapDispatch(dispatch) {
 
 
 @connect(getOrderSearch, mapDispatch)
-class SearchOrders extends Component {
+class OrderSearch extends Component {
 
   componentWillMount() {
     if (this.props.filter.text === null) {
@@ -145,7 +145,7 @@ class SearchOrders extends Component {
   }
 
   render() {
-    console.log(`Props for SearchOrders `, this.props);
+    console.log(`Props for OrderSearch `, this.props);
     const {whatIsLoading, error, orders, filter} = this.props;
     const {acChangeFilter, acSearch} = this.props;
 
@@ -172,8 +172,4 @@ class SearchOrders extends Component {
   }
 }
 
-SearchOrders.propTypes = {
-
-}
-
-export default SearchOrders;
+export default OrderSearch;

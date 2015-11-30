@@ -35,7 +35,7 @@ import ScheduledJobAdd from "./pages/App/Maintenance/ScheduledJobAdd.react.js";
 
 //Mobile components
 import mApp from './pages/Mobile/App.react.js';
-import mSearchOrders from './pages/Mobile/SearchOrders/SearchOrders.react.js';
+import mOrderSearch from './pages/Mobile/OrderSearch/OrderSearch.react.js';
 import mOrderDeatil from './pages/Mobile/OrderDetail/OrderDetail.react.js';
 import LoadFacility from './pages/Mobile/Facility/LoadFacility.react.js';
 import FacilityWrapper from './pages/Mobile/Facility/FacilityWrapper.react.js';
@@ -83,7 +83,7 @@ export default (
       <DefaultRoute handler={LoadFacility} />
       <Route handler={FacilityWrapper} name="mobile-facility" path=":facilityName">
         <Route handler={mApp}>
-          <Route handler={mSearchOrders} name="mobile-search-orders" path="search" />
+          <Route handler={mOrderSearch} name="mobile-search-orders" path="search" />
           <Route handler={mOrderDeatil} name="mobile-order-datail" path="orderDetail/:id" />
         </Route>
       </Route>

@@ -10,7 +10,7 @@ import createLogger from "redux-logger";
 
 // reducer imports
 import {facilityReducer} from './Facility/store';
-import {orderSearchReducer} from './SearchOrders/store';
+import {orderSearchReducer} from './OrderSearch/store';
 import {orderDetailReducer} from './OrderDetail/store';
 
 const rootReducer = combineReducers({
