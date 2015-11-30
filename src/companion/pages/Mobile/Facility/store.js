@@ -1,4 +1,3 @@
-import {selectFirstFacility, selectFacilityByName} from 'data/facilities/actions';
 import {getFacilities} from 'data/csapi';
 
 const SET_AVAILABLE_FACILITIES = 'SET_AVAILABLE_FACILITIES';
@@ -9,6 +8,10 @@ const initState = {
   loadingAvailableFacilities: false,
   availableFacilities: null,
   selectedFacility: null,
+}
+
+export function getSelectedFacility(state) {
+  return state.facility.selectedFacility;
 }
 
 export function facilityReducer(state = initState, action) {

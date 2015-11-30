@@ -10,12 +10,15 @@ import createLogger from "redux-logger";
 
 // reducer imports
 import {facilityReducer} from './Facility/store';
+import {orderSearchReducer} from './SearchOrders/store';
+import {orderDetailReducer} from './OrderDetail/store';
 
 const rootReducer = combineReducers({
 //  user: userReducer,
-//  orders: orderReducer,
 //  navigation: navigationReducer,
-  facility: facilityReducer
+  facility: facilityReducer,
+  orderSearch: orderSearchReducer,
+  orderDetail: orderDetailReducer,
 });
 
 
