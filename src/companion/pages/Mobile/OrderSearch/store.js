@@ -63,7 +63,6 @@ function filterChange(text) {
 export function acChangeFilter(newFilterText) {
   return (dispach) => {
     dispach(filterChange(newFilterText));
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + newFilterText);
     dispach(acSearch(newFilterText));
   };
 }

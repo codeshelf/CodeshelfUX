@@ -61,7 +61,7 @@ export class SearchInput extends Component {
          {this.renderInput(filterText, () => acChangeFilter(this.refs.input.getValue()))}
         </Col>
         <Col xs={4}>
-          <Button bsStyle="primary" ><Icon name="camera"/></Button>
+          <Button bsStyle="primary" disabled><Icon name="camera"/></Button>
           <Button bsStyle="primary" onClick={() => acSearch(filterText) }><Icon name="search"/></Button>
         </Col>
       </Row>
