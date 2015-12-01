@@ -6,8 +6,10 @@ import {Link} from '../links';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import {getOrderSearch} from './store';
+import {getOrderSearch} from './get';
 import {acChangeFilter, acSearch} from './store';
+import {DateDisplay} from "../DateDisplay.react.js";
+
 
 export class SearchType extends Component {
   constructor() {
@@ -30,8 +32,8 @@ export class SearchType extends Component {
       <Row>
         <Nav bsStyle="tabs" activeKey={this.state.tab} onSelect={this.handleChange}>
           <NavItem eventKey={1}>Order Id</NavItem>
-          <NavItem eventKey={2}>Container Id</NavItem>
-          <NavItem eventKey={3}>Barcode</NavItem>
+          <NavItem eventKey={2} disabled>Container Id</NavItem>
+          <NavItem eventKey={3} disabled>Barcode</NavItem>
         </Nav>
       </Row>
     );
@@ -57,11 +59,12 @@ export class SearchInput extends Component {
     const filterText = filter.text;
     return (
       <Row style={{"padding-top":"10px"}}>
-        <Col xs={8}>
+        <Col xs={10}>
          {this.renderInput(filterText, () => acChangeFilter(this.refs.input.getValue()))}
         </Col>
-        <Col xs={4}>
-          <Button bsStyle="primary" disabled><Icon name="camera"/></Button>
+        <Col xs={2}>
+          {/*TODO Camera button is not used in this iteration */}
+          {/*<Button bsStyle="primary" disabled><Icon name="camera"/></Button>*/}
           <Button bsStyle="primary" onClick={() => acSearch(filterText) }><Icon name="search"/></Button>
         </Col>
       </Row>
@@ -73,7 +76,14 @@ export class SearchInput extends Component {
 export class OrderItem extends Component {
   renderId(id, filterText) {
     if (filterText === "") return id;
+
+    const countOfStars = filterText.split("").filter((ch) => ch === "*").length
+    if (countOfStars > 0) {
+      //TODO no highlight for now
+      return id;
+    }
     let [first, ...rest] = id.split(filterText);
+
     // if text is not in id rest is empty array
     if (rest.length === 0) return id;
     // join rest for multiple occurances
@@ -94,11 +104,11 @@ export class OrderItem extends Component {
             </Row>
             <Row>
               {/* TODO format due date with some formater */}
-              {status} - {dueDate}
+              {status} - <DateDisplay date={dueDate} />
             </Row>
           </Col>
           <Col xs={2}>
-            <Button bsStyle="primary" onClick={() => console.log("click") }><Icon name="search"/></Button>
+              <Button bsStyle="primary" onClick={() => console.log("click") }><Icon name="chevron-right"/></Button>
           </Col>
         </Row>
       </Link>
@@ -155,18 +165,6 @@ class OrderSearch extends Component {
         {/*<SearchType />*/}
         <SearchInput  {...{filter, acChangeFilter, acSearch}} />
         <OrderList {...{isLoading, orders, filter}} />
-        {/*Dummy results:
-        <ul>
-          <li>
-            <Link to="mobile-order-datail" params={{id: 15}}>Link to order 15</Link>
-          </li>
-          <li>
-            <Link to="mobile-order-datail" params={{id: 14}}>Link to order 14</Link>
-          </li>
-          <li>
-            <Link to="mobile-order-datail" params={{id: 13}}>Link to order 13</Link>
-          </li>
-        </ul>*/}
       </div>
     );
   }

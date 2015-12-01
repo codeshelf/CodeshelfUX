@@ -1,5 +1,6 @@
 import {getFacilityContext} from 'data/csapi';
-import {getSelectedFacility} from "../Facility/store";
+import {getSelectedFacility} from "../Facility/get";
+import {getOrderSearch} from "./get";
 
 const FILTER_CHANGE = "filterChange";
 const LOADING_STARTED = "loading_of_orders_started";
@@ -19,28 +20,18 @@ const initState = {
 
 };
 
-export function getOrderSearch(state) {
-  return state.orderSearch;
-}
 
 export function orderSearchReducer(state = initState, action) {
   switch (action.type) {
     case FILTER_CHANGE: {
-      console.log("!!!!!!! FILTER_CHANGE !!!!");
       const {text} = action;
-      let s = {...state, filter: {...state.filter, text}};
-      console.log(s);
-      return s;
+      return {...state, filter: {...state.filter, text}};
     }
     case LOADING_STARTED: {
-      console.log("!!!!!!! search started !!!!");
       const {whatIsLoading} = action;
-      let s = {...state, orders: null, error: null, whatIsLoading: whatIsLoading}
-      console.log(s);
-      return s;
+      return {...state, orders: null, error: null, whatIsLoading: whatIsLoading}
     }
     case LOADING_OK: {
-      console.log("!!!!!!! LOADING_OK !!!!");
       const {orders} = action;
       return {...state, orders, error: null, whatIsLoading: null};
     }
@@ -98,16 +89,16 @@ const simpleProperties = ["orderId", "dueDate", "status"];
 export function acSearch(text) {
   return (dispatch, getState) => {
     dispatch(searchStated(text));
-    console.log("state at acSearch", getState());
     const selectedfacility = getSelectedFacility(getState());
     if (!selectedfacility || !(selectedfacility.persistentId)) {
       dispatch(searchError("Want to search for orders but no facility is provided"));
       return;
     }
     const findOrders = getFacilityContext(selectedfacility.persistentId).findOrders;
+    const filterText = text.includes("*")? text : `*${text}*`;
     const filter = {
       properties: simpleProperties,
-      orderId: `*${text}*` ,
+      orderId: filterText,
     }
     findOrders(filter).then((data) => {
       console.log("data from search orders", data);

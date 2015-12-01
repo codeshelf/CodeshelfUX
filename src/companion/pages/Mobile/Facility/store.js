@@ -1,5 +1,7 @@
 import {getFacilities} from 'data/csapi';
 
+import {getSelectedFacility} from "./get";
+
 const SET_AVAILABLE_FACILITIES = 'SET_AVAILABLE_FACILITIES';
 const LOAD_AVAILABLE_FACILITIES = 'LOAD_AVAILABLE_FACILITIES';
 const SELECT_FACILITY = 'SELECT_FACILITY';
@@ -8,10 +10,6 @@ const initState = {
   loadingAvailableFacilities: false,
   availableFacilities: null,
   selectedFacility: null,
-}
-
-export function getSelectedFacility(state) {
-  return state.facility.selectedFacility;
 }
 
 export function facilityReducer(state = initState, action) {
@@ -26,7 +24,7 @@ export function facilityReducer(state = initState, action) {
       // if i don't have facilities i can select one
 
       const selectedFacility = state.availableFacilities.find((f) => {
-        return f.persistentId === action.facilityName;
+        return f.domainId === action.domainId;
       });
       if (state.selectedFacility === selectedFacility) return state;
       return {...state, selectedFacility};
@@ -52,24 +50,24 @@ export function acInitialLoadFacilities() {
   }
 }
 
-export function acSelectFacility(facilityName) {
+export function acSelectFacility(domainId) {
   return (dispatch, getState) =>{
     const state = getState();
     // don't select facility if same is selected
     if (state.facility.selectedFacility &&
-           state.facility.selectedFacility.persistentId === facilityName) {
+           state.facility.selectedFacility.domainId === domainId) {
       console.log("selectFacility already selected")
       return;
     }
     // cant select facility if it's not availible
     if (!state.facility.availableFacilities) {
-      console.warn("Want to select " + facilityName + " but no available facilities", state);
+      console.warn("Want to select " + domainId + " but no available facilities", state);
       // TODO maybe call initialLoadFacility
       return;
     }
     dispatch({
       type: SELECT_FACILITY,
-      facilityName
+      domainId
     });
 
   }

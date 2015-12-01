@@ -4,17 +4,15 @@ import {bindActionCreators} from 'redux';
 import exposeRouter from 'components/common/exposerouter';
 
 import {acInitialLoadFacilities} from './store';
-
-function mapState(state) {
-  return {...state.facility};
-}
+import {getFacility} from "./get";
 
 function mapDispatch(dispatch) {
   return bindActionCreators({acInitialLoadFacilities}, dispatch);
 }
 
-@connect(mapState, mapDispatch)
+@connect(getFacility, mapDispatch)
 class LoadFacility extends Component {
+
   componentDidMount() {
     this.loadAndRedirect();
   }
@@ -30,7 +28,7 @@ class LoadFacility extends Component {
       this.props.acInitialLoadFacilities()
     } else {
       const router = this.props.router;
-      router.transitionTo("mobile-search-orders", {facilityName: availableFacilities[0].persistentId});
+      router.transitionTo("mobile-search-orders", {facilityName: availableFacilities[0].domainId});
     }
   }
 

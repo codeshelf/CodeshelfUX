@@ -83,6 +83,7 @@ export default (
       <DefaultRoute handler={LoadFacility} />
       <Route handler={FacilityWrapper} name="mobile-facility" path=":facilityName">
         <Route handler={mApp}>
+          <DefaultRoute handler={mOrderSearch} />
           <Route handler={mOrderSearch} name="mobile-search-orders" path="search" />
           <Route handler={mOrderDeatil} name="mobile-order-datail" path="orderDetail/:id" />
         </Route>

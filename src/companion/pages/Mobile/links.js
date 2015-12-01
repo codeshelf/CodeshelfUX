@@ -14,14 +14,18 @@ function wrapFacility(Component) {
   class WrapFacility extends React.Component {
     render() {
       let params = {};
-      if (this.props.params && this.props.facility) {
-        params = {
-         ...this.props.params,
-         facilityName: this.props.facility.persistentId,
-        }
+      if (this.props.params) {
+        params = {...this.props.params};
       }
-      console.log(params)
-      return <Component {...this.props} params={params} />;
+      if (!this.props.facility) {
+        // no links will be renderd without facility
+        return null;
+      } else {
+        if (!params["facilityName"]) {
+          params["facilityName"] = this.props.facility.domainId;
+        }
+        return <Component {...this.props} params={params} />;
+      }
     }
   }
 
