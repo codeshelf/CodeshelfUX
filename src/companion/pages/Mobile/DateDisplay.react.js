@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {getSelectedFacility} from './Facility/store';
+import {getSelectedFacility} from './Facility/get';
 
 import DateDisplayWithOfset from "components/common/DateDisplay";
 
