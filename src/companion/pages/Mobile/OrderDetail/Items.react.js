@@ -6,9 +6,9 @@ import Icon from 'react-fa';
 import {GROUP_ITEMS_WORKER, GROUP_ITEMS_TIMESTAMS, GROUP_ITEMS_STATUS} from './store';
 
 export class Items extends Component {
-  renderItem(item) {
-    // {"orderId":"2105497471","orderDetailId":"2105497471.1","uom":"EA","itemId":"F2277401","description":"SHU FAUX CILS SMOKY LAYERS SUB","planQuantity":1,"status":"INPROGRESS"},
-    const {itemId, orderDetailId, uom, description, planQuantity, status} = item;
+
+  // {"orderId":"2105497471","orderDetailId":"2105497471.1","uom":"EA","itemId":"F2277401","description":"SHU FAUX CILS SMOKY LAYERS SUB","planQuantity":1,"status":"INPROGRESS"},
+  renderItem({itemId, orderDetailId, uom, description, planQuantity, status}) {
     return (
       <div>
         <Row onClick={() => this.props.acExpandItem(orderDetailId)}>
@@ -25,18 +25,19 @@ export class Items extends Component {
     );
   }
 
-  rederExpandedItem(item) {
-    // {"orderId":"2105497471","orderDetailId":"2105497471.1","uom":"EA","itemId":"F2277401","description":"SHU FAUX CILS SMOKY LAYERS SUB","planQuantity":1,"status":"INPROGRESS"},
-    const {itemId, orderDetailId, uom, description, planQuantity, status} = item;
+  // {"orderId":"2105497471","orderDetailId":"2105497471.1","uom":"EA","itemId":"F2277401","description":"SHU FAUX CILS SMOKY LAYERS SUB","planQuantity":1,"status":"INPROGRESS"},
+  renderExpandedItem({itemId, orderDetailId, uom, description, planQuantity, status, preferredLocation, gtin}) {
     return (
       <div>
         <Row onClick={() => this.props.acExpandItem(null)}>
           <Col xs={10}>
             <div key="itemId">Item id: {itemId}</div>
-            <div key="status-plannedQuantity">Status - {status}</div>
+            <div key="status">Status - {status}</div>
             <div key="planQuantity">Planned quantity {planQuantity}</div>
-            <div key="orderDetailId">orderDetailId {orderDetailId}</div>
             <div key="uom">uom - {uom}</div>
+            {gtin && <div key="gtin">gtin - {gtin}</div>}
+            {preferredLocation && <div key="preferredLocation">Preferred Location - {preferredLocation}</div>}
+            <div key="orderDetailId">orderDetailId {orderDetailId}</div>
             <div key="description">description - {description}</div>
           </Col>
           <Col xs={2}>
@@ -64,7 +65,7 @@ export class Items extends Component {
         <hr />
         {items.map((item) =>
           (expandedItem && item.orderDetailId === expandedItem)?
-            this.rederExpandedItem(item)
+            this.renderExpandedItem(item)
             :
             this.renderItem(item)
         )}

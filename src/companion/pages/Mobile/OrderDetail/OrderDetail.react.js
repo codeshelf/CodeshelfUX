@@ -5,15 +5,18 @@ import {connect} from 'react-redux';
 
 import {Tabs, Tab} from 'react-bootstrap';
 
-import {getOrderDetail, TAB_DETAIL, TAB_ITEMS, TAB_PICKS} from './store';
-import {acSelectTab, acExpandItem} from './store';
+import {TAB_DETAIL, TAB_ITEMS, TAB_PICKS, TAB_IMPORTS} from './store';
+import {acSelectTab, acExpandItem, acExpandImport, acExpandPick} from './store';
+import {getOrderDetail} from "./get";
 
-import {Items} from "./Items.react.js";
 import {Basics} from "./Basics.react.js";
+import {Items} from "./Items.react.js";
+import {Picks} from "./Picks.react.js";
+import {Imports} from "./Imports.react.js";
 
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acSelectTab, acExpandItem}, dispatch);
+  return bindActionCreators({acSelectTab, acExpandItem, acExpandImport, acExpandPick}, dispatch);
 }
 
 @connect(getOrderDetail, mapDispatch)
@@ -33,8 +36,9 @@ class OrderDetail extends Component {
     return (
       <Tabs activeKey={activeTab} onSelect={(tab) => this.props.acSelectTab(tab, this.orderId)}>
         <Tab eventKey={TAB_DETAIL} title="Info">Basic info about order</Tab>
-        <Tab eventKey={TAB_ITEMS} title="Items">Items for order</Tab>
-        <Tab eventKey={TAB_PICKS} title="Picks" disabled>Picks for order</Tab>
+        <Tab eventKey={TAB_ITEMS} title="Lines">Lines for order</Tab>
+        <Tab eventKey={TAB_PICKS} title="History">History for order</Tab>
+        <Tab eventKey={TAB_IMPORTS} title="Imports">Imports for order</Tab>
       </Tabs>
     );
   }
@@ -49,13 +53,21 @@ class OrderDetail extends Component {
     if (showLoading) {
       contentElement = <div> Loading ... </div>;
     } else if (tab === TAB_DETAIL) {
-      contentElement = <Basics order={this.props[tab].order} />
+      contentElement = <Basics order={this.props[tab].data} />
     } else if (tab === TAB_ITEMS) {
-      contentElement = <Items items={this.props[tab].items}
+      contentElement = <Items items={this.props[tab].data}
                               expandedItem={this.props[tab].expandedItem}
                               acExpandItem={this.props.acExpandItem}
                               groupBy={this.props[tab].groupBy}
                               sortingOrder={this.props[tab].sortingOrder} />
+    } else if (tab === TAB_IMPORTS) {
+      contentElement = <Imports imports={this.props[tab].data}
+                              expandedImport={this.props[tab].expandedImport}
+                              acExpandImport={this.props.acExpandImport} />
+    } else if (tab === TAB_PICKS) {
+      contentElement = <Picks picks={this.props[tab].data}
+                              expandedPick={this.props[tab].expandedPick}
+                              acExpandPick={this.props.acExpandPick} />
     }
     return (
       <div>

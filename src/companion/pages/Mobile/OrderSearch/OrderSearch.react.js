@@ -6,8 +6,10 @@ import {Link} from '../links';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import {getOrderSearch} from './store';
+import {getOrderSearch} from './get';
 import {acChangeFilter, acSearch} from './store';
+import {DateDisplay} from "../DateDisplay.react.js";
+
 
 export class SearchType extends Component {
   constructor() {
@@ -73,7 +75,14 @@ export class SearchInput extends Component {
 export class OrderItem extends Component {
   renderId(id, filterText) {
     if (filterText === "") return id;
+
+    const countOfStars = filterText.split("").filter((ch) => ch === "*").length
+    if (countOfStars > 0) {
+      //TODO no highlight for now
+      return id;
+    }
     let [first, ...rest] = id.split(filterText);
+
     // if text is not in id rest is empty array
     if (rest.length === 0) return id;
     // join rest for multiple occurances
@@ -94,7 +103,7 @@ export class OrderItem extends Component {
             </Row>
             <Row>
               {/* TODO format due date with some formater */}
-              {status} - {dueDate}
+              {status} - <DateDisplay date={dueDate} />
             </Row>
           </Col>
           <Col xs={2}>
