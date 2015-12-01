@@ -54,7 +54,7 @@ class OrderDetail extends Component {
       contentElement = <Items items={this.props[tab].items}
                               expandedItem={this.props[tab].expandedItem}
                               acExpandItem={this.props.acExpandItem}
-                              groupBy={this.props[tab].groupBy},
+                              groupBy={this.props[tab].groupBy}
                               sortingOrder={this.props[tab].sortingOrder} />
     }
     return (
