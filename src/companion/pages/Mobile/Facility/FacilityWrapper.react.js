@@ -5,10 +5,8 @@ import exposeRouter from 'components/common/exposerouter';
 import {RouteHandler} from 'react-router';
 
 import {acInitialLoadFacilities, acSelectFacility} from './store';
+import {getFacility} from "./get";
 
-function mapState(state) {
-  return state.facility;
-}
 
 function mapDispatch(dispatch) {
   return bindActionCreators({acInitialLoadFacilities, acSelectFacility}, dispatch);
@@ -21,16 +19,16 @@ class FacilityWrapper extends Component {
     if (availableFacilities === null) {
       this.props.acInitialLoadFacilities();
     } else {
-      this.selectFacilityFromRoute();
+      this.selectFacilityFromRoute(this.props);
     }
   }
 
-  componentDidUpdate() {
-    this.selectFacilityFromRoute();
+  componentWillReceiveProps(nextProps) {
+    this.selectFacilityFromRoute(nextProps);
   }
 
-  selectFacilityFromRoute() {
-     const router = this.props.router;
+  selectFacilityFromRoute(props) {
+     const router = props.router;
      const facilityName = router.getCurrentParams().facilityName;
      this.props.acSelectFacility(facilityName);
   }
@@ -45,13 +43,18 @@ class FacilityWrapper extends Component {
     if (this.props.loadingAvailableFacilities) return this.renderLoading();
     // if haven't selected facility render loading
     // after loading this component will refresh and in DidUpdate we will select correct facility
-    const {selectedFacility} = this.props;
-    if (!selectedFacility) return this.renderLoading(".");
-
-    return (
-      <RouteHandler key={selectedFacility.persistentId} facility={selectedFacility}/>
-    );
+    const {selectedFacility, availableFacilities} = this.props;
+    if (!selectedFacility) {
+      return this.renderLoading(".");
+    } else {
+      return (
+       <RouteHandler key={selectedFacility.persistentId}
+                      facility={selectedFacility}
+                      availableFacilities={availableFacilities}
+                      acSelectFacility={this.props.acSelectFacility} />
+      );
+    }
   }
 }
 
-export default exposeRouter(connect(mapState, mapDispatch)(FacilityWrapper));
+export default exposeRouter(connect(getFacility, mapDispatch)(FacilityWrapper));

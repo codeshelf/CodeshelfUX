@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 
 import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
+import {DateDisplay} from "../DateDisplay.react.js";
+
 import Icon from 'react-fa';
 
 const propertiesDisplayName = {
@@ -23,21 +25,24 @@ const propertiesDisplayName = {
 
 // TODO add which properties should be shown
 const propertiesToDisplay = [
-  "status", "dueDate", "orderDate", "orderType", "customerId", "containerId", "shipperId",
+  "dueDate", "status", "orderDate", "orderType", "customerId", "containerId", "shipperId",
   "destinationId", "orderLocationAliasIds", "persistentId", "groupUi",
   "active", "fullDomainId", "wallUi"
 ];
 
 export class Basics extends Component {
 
-  generalPropertieRender(propertie, value) {
+  generalPropertieRender(property, value) {
     if (!value) return null;
     if (typeof value === 'boolean') {
       value = value.toString();
     }
+    if (property === "orderDate" || property === "dueDate") {
+      value = <DateDisplay date={value} />;
+    }
     return (
-      <div key={propertie}>
-        <div><small>{propertiesDisplayName[propertie]}</small></div>
+      <div key={property}>
+        <div><small>{propertiesDisplayName[property]}</small></div>
         <h4>{value}</h4>
         <hr />
       </div>
