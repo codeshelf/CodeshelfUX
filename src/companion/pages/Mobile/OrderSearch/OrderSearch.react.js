@@ -32,8 +32,8 @@ export class SearchType extends Component {
       <Row>
         <Nav bsStyle="tabs" activeKey={this.state.tab} onSelect={this.handleChange}>
           <NavItem eventKey={1}>Order Id</NavItem>
-          <NavItem eventKey={2}>Container Id</NavItem>
-          <NavItem eventKey={3}>Barcode</NavItem>
+          <NavItem eventKey={2} disabled>Container Id</NavItem>
+          <NavItem eventKey={3} disabled>Barcode</NavItem>
         </Nav>
       </Row>
     );
@@ -59,11 +59,12 @@ export class SearchInput extends Component {
     const filterText = filter.text;
     return (
       <Row style={{"padding-top":"10px"}}>
-        <Col xs={8}>
+        <Col xs={10}>
          {this.renderInput(filterText, () => acChangeFilter(this.refs.input.getValue()))}
         </Col>
-        <Col xs={4}>
-          <Button bsStyle="primary" disabled><Icon name="camera"/></Button>
+        <Col xs={2}>
+          {/*TODO Camera button is not used in this iteration */}
+          {/*<Button bsStyle="primary" disabled><Icon name="camera"/></Button>*/}
           <Button bsStyle="primary" onClick={() => acSearch(filterText) }><Icon name="search"/></Button>
         </Col>
       </Row>
@@ -107,7 +108,7 @@ export class OrderItem extends Component {
             </Row>
           </Col>
           <Col xs={2}>
-            <Button bsStyle="primary" onClick={() => console.log("click") }><Icon name="search"/></Button>
+              <Button bsStyle="primary" onClick={() => console.log("click") }><Icon name="chevron-right"/></Button>
           </Col>
         </Row>
       </Link>
@@ -164,18 +165,6 @@ class OrderSearch extends Component {
         {/*<SearchType />*/}
         <SearchInput  {...{filter, acChangeFilter, acSearch}} />
         <OrderList {...{isLoading, orders, filter}} />
-        {/*Dummy results:
-        <ul>
-          <li>
-            <Link to="mobile-order-datail" params={{id: 15}}>Link to order 15</Link>
-          </li>
-          <li>
-            <Link to="mobile-order-datail" params={{id: 14}}>Link to order 14</Link>
-          </li>
-          <li>
-            <Link to="mobile-order-datail" params={{id: 13}}>Link to order 13</Link>
-          </li>
-        </ul>*/}
       </div>
     );
   }

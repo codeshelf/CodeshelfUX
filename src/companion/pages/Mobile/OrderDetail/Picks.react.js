@@ -4,33 +4,76 @@ import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {DateDisplay} from "../DateDisplay.react.js";
 
+const fieldToDescription = {
+  "createdAt": "Created at",
+  "type": "Type",
+  "itemId": "Item id",
+  "itemLocation": "Item location",
+  "wiPlanQuantity": "Plan quantity",
+  "wiActualQuantity": "Actual quantity",
+  "itemUom": "Item uom",
+  "itemDescription": "Item description",
+  "workerName": "Worker name",
+  "deviceGuid": "Device GUID",
+  "persistentId": "Persistent id",
+  "orderId": "Order id",
+  "devicePersistentId": "Device persistent id",
+  "workerId": "Worker id",
+  "orderDetailId": "Order detail id",
+  "workInstructionId": "Worker instruction Id",
+  "resolved": "Resolved",
+  "resolvedAt": "Resolved at",
+  "resolvedBy": "Resolved by"
+}
+
 export class Picks extends Component {
   /* One pick
     {
-      "completed": 1448899968039,
-      "status": "COMPLETE",
-      "itemMasterId": "930-00020",
-      //-------------------------------------------------------------
-      "pickInstructionUi": "L18",
-      "pickerName": "K3WAMQ6ZUINX",
-      "assignedCheName": "Lunera 2",
-      "planQuantity": 1,
-      "actualQuantity": 1,
-      "description": "HN-V-G24D-26W-4000-G2",
-      //---- fields not shown in first iteration --------------------
-    };
+      "createdAt": 1447714271474,
+      "type": "COMPLETE",
+      "itemId": "883929463862",
+      "itemLocation": "P2001721",
+      "wiPlanQuantity": 1,
+      "wiActualQuantity": 1,
+      "itemUom": "EA",
+      "itemDescription": "",
+      "workerName": "008, CSLGO ",
+      "deviceGuid": "0x0000021d",
+      "persistentId": "d3e28f6c-e8d6-4da3-bc76-3c9c74faf100",
+      "orderId": "42910564",
+      "devicePersistentId": "0a7c4291-c47e-4ac9-9e01-ff1a19f81c04",
+      "workerId": "CSLGO008",
+      "orderDetailId": "6af21da7-6a3c-4947-87a8-a1a1aa5538af",
+      "workInstructionId": "c19de6b5-6531-41bd-80d9-2695b42dd48c",
+      "resolved": false,
+      "resolvedAt": null,
+      "resolvedBy": null
+    }
   */
 
-  renderPick({persistentId, completed, status, itemMasterId}) {
+  dateFormater(date) {
+    return <DateDisplay date={date} />;
+  }
+
+  renderValue(key, val, formater) {
     return (
-      <div>
+      <div key={key}>
+        {fieldToDescription[key]} - {!formater? val : formater(val)}
+      </div>
+    );
+  }
+
+  renderPick({persistentId, createdAt, type, itemId}) {
+    const {renderValue, dateFormater} = this;
+    return (
+      <div key={persistentId}>
         <Row onClick={() => this.props.acExpandPick(persistentId)}>
-          <Col xs={10}>
-            <div key="status">{status}</div>
-            <div key="itemMasterId">itemMasterId: {itemMasterId}</div>
-            <div key="completed">completed: <DateDisplay date={completed} /></div>
+          <Col xs={9}>
+            {renderValue("createdAt", createdAt, dateFormater)}
+            {renderValue("type", type)}
+            {renderValue("itemId", itemId)}
           </Col>
-          <Col xs={2}>
+          <Col xs={3}>
             <Button bsStyle="primary" ><Icon name="chevron-circle-down"/></Button>
           </Col>
         </Row>
@@ -39,25 +82,26 @@ export class Picks extends Component {
     );
   }
 
-  renderExpandedPick({persistentId, completed, status, itemMasterId,
-      pickInstructionUi, pickerName, assignedCheName, planQuantity, actualQuantity,
-      description}) {
+  renderExpandedPick({persistentId, createdAt, type, itemId,
+      itemLocation, wiPlanQuantity, wiActualQuantity, itemUom, itemDescription, workerName, deviceGuid}) {
+    const {renderValue, dateFormater} = this;
     return (
-      <div>
+      <div key={persistentId}>
         <Row onClick={() => this.props.acExpandPick(null)}>
-          <Col xs={10}>
-            <div key="status">{status}</div>
-            <div key="itemMasterId">itemMasterId: {itemMasterId}</div>
-            <div key="completed">completed: <DateDisplay date={completed} /></div>
+          <Col xs={9}>
+            {renderValue("createdAt", createdAt, dateFormater)}
+            {renderValue("type", type)}
+            {renderValue("itemId", itemId)}
             {/* aditional fields */}
-            <div key="pickInstructionUi">pickInstructionUi: {pickInstructionUi}</div>
-            <div key="pickerName">pickerName: {pickerName}</div>
-            <div key="assignedCheName">assignedCheName: {assignedCheName}</div>
-            <div key="planQuantity">planQuantity: {planQuantity}</div>
-            <div key="actualQuantity">actualQuantity: {actualQuantity}</div>
-            <div key="description">description: {description}</div>
+            {renderValue("itemLocation", itemLocation)}
+            {renderValue("wiPlanQuantity", wiPlanQuantity)}
+            {renderValue("wiActualQuantity", wiActualQuantity)}
+            {renderValue("itemUom", itemUom)}
+            {renderValue("itemDescription", itemDescription)}
+            {renderValue("workerName", workerName)}
+            {renderValue("deviceGuid", deviceGuid)}
           </Col>
-          <Col xs={2}>
+          <Col xs={3}>
             <Button bsStyle="primary" ><Icon name="chevron-circle-up"/></Button>
           </Col>
         </Row>

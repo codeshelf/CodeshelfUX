@@ -3,7 +3,7 @@ import exposeRouter from 'components/common/exposerouter';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import {Tabs, Tab} from 'react-bootstrap';
+import {Tabs, Tab, Row} from 'react-bootstrap';
 
 import {TAB_DETAIL, TAB_ITEMS, TAB_PICKS, TAB_IMPORTS} from './store';
 import {acSelectTab, acExpandItem, acExpandImport, acExpandPick} from './store';
@@ -34,8 +34,8 @@ class OrderDetail extends Component {
 
   renderTabs(activeTab) {
     return (
-      <Tabs activeKey={activeTab} onSelect={(tab) => this.props.acSelectTab(tab, this.orderId)}>
-        <Tab eventKey={TAB_DETAIL} title="Info">Basic info about order</Tab>
+      <Tabs activeKey={activeTab} onSelect={(tab) => this.props.acSelectTab(tab, this.orderId)} tabWidth={12}>
+        <Tab eventKey={TAB_DETAIL} title="HDR">Basic info about order</Tab>
         <Tab eventKey={TAB_ITEMS} title="Lines">Lines for order</Tab>
         <Tab eventKey={TAB_PICKS} title="History">History for order</Tab>
         <Tab eventKey={TAB_IMPORTS} title="Imports">Imports for order</Tab>
@@ -70,11 +70,13 @@ class OrderDetail extends Component {
                               acExpandPick={this.props.acExpandPick} />
     }
     return (
-      <div>
+      <Row>
         <h1>Order Id: {this.orderId}</h1>
         {this.renderTabs(tab)}
-        {contentElement}
-      </div>
+        <div style={{"padding-left": "15px"}}>
+          {contentElement}
+        </div>
+      </Row>
     );
   }
 }

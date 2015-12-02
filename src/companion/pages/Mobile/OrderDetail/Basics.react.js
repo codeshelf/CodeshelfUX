@@ -25,7 +25,7 @@ const propertiesDisplayName = {
 
 // TODO add which properties should be shown
 const propertiesToDisplay = [
-  "status", "dueDate", "orderDate", "orderType", "customerId", "containerId", "shipperId",
+  "dueDate", "status", "orderDate", "orderType", "customerId", "containerId", "shipperId",
   "destinationId", "orderLocationAliasIds", "persistentId", "groupUi",
   "active", "fullDomainId", "wallUi"
 ];

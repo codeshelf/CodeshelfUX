@@ -4,6 +4,23 @@ import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {DateDisplay} from "../DateDisplay.react.js";
 
+const fieldToDescription = {
+  completed: "Completed",
+  domainId: "Domain id",
+  filename: "Filename",
+  gtins: "Gtitns",
+  itemIds: "Items ids",
+  linesFailed: "Lines failed",
+  linesProcessed: "Lines processed",
+  orderIds: "Orders ids",
+  ordersProcessed: "Orders Processed",
+  persistentId: "Persistent id",
+  received: "Recived",
+  status: "Status",
+  transportType: "Transport type",
+  username: "Username",
+}
+
 export class Imports extends Component {
   /* One import
     {
@@ -24,17 +41,28 @@ export class Imports extends Component {
     }
   */
 
-  renderImport({persistentId, filename, status, received, completed}) {
+  dateFormater(date) {
+    return <DateDisplay date={date} />;
+  }
+
+  renderValue(key, val, formater) {
     return (
-      <div>
+      <div key={key}>
+        {fieldToDescription[key]} - {!formater? val : formater(val)}
+      </div>
+    );
+  }
+
+  renderImport({persistentId, filename, status, received, completed}) {
+    const  {renderValue, dateFormater} = this;
+    return (
+      <div key={persistentId}>
         <Row onClick={() => this.props.acExpandImport(persistentId)}>
-          <Col xs={10}>
-            <div key="filename">{filename}</div>
-            <div key="status">{status}</div>
-            <div key="received">Recived: <DateDisplay date={received} /></div>
-            <div key="completed">Completed: <DateDisplay date={completed} /></div>
+          <Col xs={9}>
+            {renderValue("received", received, dateFormater)}
+            {renderValue("filename", filename)}
           </Col>
-          <Col xs={2}>
+          <Col xs={3}>
             <Button bsStyle="primary" ><Icon name="chevron-circle-down"/></Button>
           </Col>
         </Row>
@@ -44,27 +72,29 @@ export class Imports extends Component {
   }
 
   renderExpandedImport({persistentId, filename, status, received, completed,
-      domainId, gtins, itemIds, linesFailed, linesProcessed, ordersProcessed,
+      domainId, gtins, itemIds, orderIds, linesFailed, linesProcessed, ordersProcessed,
       transportType, username}) {
+    const  {renderValue, dateFormater} = this;
     return (
-      <div>
+      <div key={persistentId}>
         <Row onClick={() => this.props.acExpandImport(null)}>
-          <Col xs={10}>
-            <div key="filename">{filename}</div>
-            <div key="status">{status}</div>
-            <div key="received">Recived: <DateDisplay date={received} /></div>
-            <div key="completed">Completed: <DateDisplay date={completed} /></div>
+          <Col xs={9}>
+            {renderValue("received", received, dateFormater)}
+            {renderValue("filename", filename)}
             {/* aditional fields */}
-            <div key="domainId">domainId: {domainId}</div>
-            <div key="gtins">gtins: {gtins}</div>
-            <div key="itemIds">itemIds: {itemIds}</div>
-            <div key="linesFailed">linesFailed: {linesFailed}</div>
-            <div key="linesProcessed">linesProcessed: {linesProcessed}</div>
-            <div key="ordersProcessed">ordersProcessed: {ordersProcessed}</div>
-            <div key="transportType">transportType: {transportType}</div>
-            <div key="username">username: {username}</div>
+            {/*renderValue("completed", completed, dateFormater)*/}
+            {/*renderValue("domainId", domainId)*/}
+            {/*renderValue("gtins", gtins)*/}
+            {/*renderValue("orderIds", orderIds)*/}
+            {/*renderValue("itemIds", itemIds)*/}
+            {renderValue("status", status)}
+            {renderValue("linesProcessed", linesProcessed)}
+            {renderValue("linesFailed", linesFailed)}
+            {renderValue("ordersProcessed", ordersProcessed)}
+            {renderValue("transportType", transportType)}
+            {renderValue("username", username)}
           </Col>
-          <Col xs={2}>
+          <Col xs={3}>
             <Button bsStyle="primary" ><Icon name="chevron-circle-up"/></Button>
           </Col>
         </Row>

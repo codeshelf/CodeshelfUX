@@ -5,18 +5,43 @@ import Icon from 'react-fa';
 
 import {GROUP_ITEMS_WORKER, GROUP_ITEMS_TIMESTAMS, GROUP_ITEMS_STATUS} from './store';
 
+
+const fieldToDescription = {
+  "itemId": "Item id",
+  "status": "Status",
+  "planQuantity": "Plan quantity",
+  "uom": "Uom",
+  "gtin": "Gtin",
+  "preferredLocation": "Preferred location",
+  "orderDetailId": "Order detail id",
+  "description": "Description",
+};
+
 export class Items extends Component {
 
-  // {"orderId":"2105497471","orderDetailId":"2105497471.1","uom":"EA","itemId":"F2277401","description":"SHU FAUX CILS SMOKY LAYERS SUB","planQuantity":1,"status":"INPROGRESS"},
-  renderItem({itemId, orderDetailId, uom, description, planQuantity, status}) {
+  dateFormater(date) {
+    return <DateDisplay date={date} />;
+  }
+
+  renderValue(key, val, formater) {
     return (
-      <div>
+      <div key={key}>
+        {fieldToDescription[key]} - {!formater? val : formater(val)}
+      </div>
+    );
+  }
+
+  renderItem({orderDetailId, itemId, status, planQuantity}) {
+    const {renderValue, dateFormater} = this;
+    return (
+      <div key={orderDetailId}>
         <Row onClick={() => this.props.acExpandItem(orderDetailId)}>
-          <Col xs={10}>
-            <div key="itemId">{itemId}</div>
-            <div key="status-quantity">{status} - planned quantity {planQuantity}</div>
+          <Col xs={9}>
+            {renderValue("itemId", itemId)}
+            {renderValue("status", status)}
+            {renderValue("planQuantity", planQuantity)}
           </Col>
-          <Col xs={2}>
+          <Col xs={3}>
             <Button bsStyle="primary" ><Icon name="chevron-circle-down"/></Button>
           </Col>
         </Row>
@@ -25,22 +50,23 @@ export class Items extends Component {
     );
   }
 
-  // {"orderId":"2105497471","orderDetailId":"2105497471.1","uom":"EA","itemId":"F2277401","description":"SHU FAUX CILS SMOKY LAYERS SUB","planQuantity":1,"status":"INPROGRESS"},
-  renderExpandedItem({itemId, orderDetailId, uom, description, planQuantity, status, preferredLocation, gtin}) {
+  renderExpandedItem({orderDetailId, itemId, status, planQuantity, uom, gtin, preferredLocation, description}) {
+    const {renderValue, dateFormater} = this;
     return (
-      <div>
+      <div key={orderDetailId}>
         <Row onClick={() => this.props.acExpandItem(null)}>
-          <Col xs={10}>
-            <div key="itemId">Item id: {itemId}</div>
-            <div key="status">Status - {status}</div>
-            <div key="planQuantity">Planned quantity {planQuantity}</div>
-            <div key="uom">uom - {uom}</div>
-            {gtin && <div key="gtin">gtin - {gtin}</div>}
-            {preferredLocation && <div key="preferredLocation">Preferred Location - {preferredLocation}</div>}
-            <div key="orderDetailId">orderDetailId {orderDetailId}</div>
-            <div key="description">description - {description}</div>
+          <Col xs={9}>
+            {renderValue("itemId", itemId)}
+            {renderValue("status", status)}
+            {renderValue("planQuantity", planQuantity)}
+            {/* Adtitional fields */}
+            {renderValue("uom", uom)}
+            {renderValue("gtin", gtin)}
+            {renderValue("preferredLocation", preferredLocation)}
+            {renderValue("orderDetailId", orderDetailId)}
+            {renderValue("description", description)}
           </Col>
-          <Col xs={2}>
+          <Col xs={3}>
             <Button bsStyle="primary" ><Icon name="chevron-circle-up"/></Button>
           </Col>
         </Row>
