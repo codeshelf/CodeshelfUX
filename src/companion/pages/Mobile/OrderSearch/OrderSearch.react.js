@@ -106,19 +106,17 @@ export class OrderItem extends Component {
   }
 }
 
-const MAX_NUMBER_OF_ORDERS_IN_LIST = 5;
-
 export class OrderList extends Component {
   render() {
-    const {isLoading, orders, filter: {text: filterText}} = this.props;
-    console.log(`!!!!!!!!! isLoading ${isLoading}, orders ${orders}`);
-    if (isLoading || orders === null) {
+    const {isLoading, resultOrders, filter: {text: filterText}} = this.props;
+    console.log(`!!!!!!!!! isLoading ${isLoading}, orders ${resultOrders}`);
+    if (isLoading || resultOrders === null) {
       return <div> Loading...</div>;
     }
     return (
       <div>
-        Number of results: { orders.length }
-        {orders.slice(0, MAX_NUMBER_OF_ORDERS_IN_LIST).map((order) => {
+        Number of results: { resultOrders.total }
+        {resultOrders.results.map((order) => {
           return <OrderItem {...order} filterText={filterText} />
         })}
         {/*Orders: {JSON.stringify(orders)}*/}
@@ -146,7 +144,7 @@ class OrderSearch extends Component {
 
   render() {
     console.log(`Props for OrderSearch `, this.props);
-    const {whatIsLoading, error, orders, filter} = this.props;
+    const {whatIsLoading, error, resultOrders, filter} = this.props;
     const {acChangeFilter, acSearch} = this.props;
 
     const isLoading = (whatIsLoading !== null);
@@ -154,7 +152,7 @@ class OrderSearch extends Component {
       <div>
         {/*<SearchType />*/}
         <SearchInput  {...{filter, acChangeFilter, acSearch}} />
-        <OrderList {...{isLoading, orders, filter}} />
+        <OrderList {...{isLoading, resultOrders, filter}} />
         {/*Dummy results:
         <ul>
           <li>
