@@ -19,6 +19,9 @@ const STATUS_STARTED = "started";
 const STATUS_OK = "ok";
 const STATUS_ERROR = "error";
 
+export const SETTING_PROPERTY_VISIBILITY = "set property visibility";
+export const PROPERTY_VISIBILITY_OVERVIEW = "overview";
+export const PROPERTY_VISIBILITY_DETAIL = "detail";
 
 const EXPAND_ITEM = "expand item";
 const EXPAND_IMPORT = "expand import";
@@ -39,6 +42,8 @@ const dataLoadingState = {
     whatIsLoading: null,
 }
 
+export const PERSIST_STATE_PART =[["orderDetail", TAB_ITEMS, "settings"]];
+
 const initState = {
   tab: TAB_DETAIL, // TAB_DETAIL, TAB_ITEMS, TAB_PICKS
   [TAB_DETAIL]: {
@@ -49,6 +54,12 @@ const initState = {
     expandedItem: null,
     groupBy: GROUP_ITEMS_TIMESTAMS, // GROUP_ITEMS_WORKER, GROUP_ITEMS_TIMESTAMS, GROUP_ITEMS_STATUS
     sortingOrder: 1, // can be 1 or -1
+    settings: {
+      properties: {
+        [PROPERTY_VISIBILITY_OVERVIEW]: ["itemId", "status", "planQuantity"],
+        [PROPERTY_VISIBILITY_DETAIL]: ["uom", "gtin", "preferredLocation", "orderDetailId", "description"],
+      },
+    },
   },
   [TAB_PICKS]: {
     ...dataLoadingState,
@@ -57,7 +68,7 @@ const initState = {
   [TAB_IMPORTS]: {
     ...dataLoadingState,
     expandedImport: null,
-  }
+  },
 };
 
 export function orderDetailReducer(state = initState, action) {
@@ -79,6 +90,34 @@ export function orderDetailReducer(state = initState, action) {
         }
       }
     }
+    case SETTING_PROPERTY_VISIBILITY: {
+      const {tab, view, field, visible} = action;
+      const oldProperties = state[tab]["settings"]["properties"][view];
+      const position = oldProperties.indexOf(field);
+      if ((position === -1 && !visible) || (position !== -1 && visible)) {
+        // no work is needed
+        return state
+      }
+      let newProperties;
+      if (visible) {
+        newProperties = [...oldProperties, field];
+      } else {
+        newProperties = oldProperties.filter((f) => f !== field)
+      }
+      return {
+        ...state,
+        [tab]: {
+          ...state[tab],
+          settings: {
+            ...state[tab]["settings"],
+            properties: {
+              ...state[tab]["settings"]["properties"],
+              [view]: newProperties
+            }
+          }
+        }
+      };
+    }
     case EXPAND_ITEM: {
       const {itemId: expandedItem} = action;
       return {...state, [TAB_ITEMS]: {...(state[TAB_ITEMS]), expandedItem}};
@@ -96,6 +135,19 @@ export function orderDetailReducer(state = initState, action) {
       return {...state, tab};
     }
     default: return state;
+  }
+}
+
+export function acSetFieldVisibility(tab, overview, field, visible) {
+  if (tab !== TAB_ITEMS) {
+    throw "seting field visibility not supported in tab:" + tab + "only in " + TAB_ITEMS;
+  }
+  return {
+    type: SETTING_PROPERTY_VISIBILITY,
+    tab,
+    view: (overview)? PROPERTY_VISIBILITY_OVERVIEW: PROPERTY_VISIBILITY_DETAIL,
+    field,
+    visible
   }
 }
 

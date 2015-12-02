@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {Tabs, Tab, Row} from 'react-bootstrap';
 
 import {TAB_DETAIL, TAB_ITEMS, TAB_PICKS, TAB_IMPORTS} from './store';
-import {acSelectTab, acExpandItem, acExpandImport, acExpandPick} from './store';
+import {acSelectTab, acExpandItem, acExpandImport, acExpandPick, acSetFieldVisibility} from './store';
 import {getOrderDetail} from "./get";
 
 import {Basics} from "./Basics.react.js";
@@ -16,7 +16,7 @@ import {Imports} from "./Imports.react.js";
 
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acSelectTab, acExpandItem, acExpandImport, acExpandPick}, dispatch);
+  return bindActionCreators({acSelectTab, acExpandItem, acExpandImport, acExpandPick, acSetFieldVisibility}, dispatch);
 }
 
 @connect(getOrderDetail, mapDispatch)
@@ -56,6 +56,8 @@ class OrderDetail extends Component {
       contentElement = <Basics order={this.props[tab].data} />
     } else if (tab === TAB_ITEMS) {
       contentElement = <Items items={this.props[tab].data}
+                              settings={this.props[tab].settings}
+                              acSetFieldVisibility={(o, f, v) => this.props.acSetFieldVisibility(TAB_ITEMS, o, f, v)}
                               expandedItem={this.props[tab].expandedItem}
                               acExpandItem={this.props.acExpandItem}
                               groupBy={this.props[tab].groupBy}
