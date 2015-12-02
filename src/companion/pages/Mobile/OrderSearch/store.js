@@ -16,7 +16,7 @@ const initState = {
   whatIsLoading: null, // store what we are loading. Currently text of filter
                        // null value means nothing is loading
   error: null,
-  orders : null,
+  resultOrders : null, //result object {total: ... results: ...}
 
 };
 
@@ -29,15 +29,15 @@ export function orderSearchReducer(state = initState, action) {
     }
     case LOADING_STARTED: {
       const {whatIsLoading} = action;
-      return {...state, orders: null, error: null, whatIsLoading: whatIsLoading}
+      return {...state, resultOrders: null, error: null, whatIsLoading: whatIsLoading}
     }
     case LOADING_OK: {
-      const {orders} = action;
-      return {...state, orders, error: null, whatIsLoading: null};
+      const {resultOrders} = action;
+      return {...state, resultOrders, error: null, whatIsLoading: null};
     }
     case LOADING_ERROR: {
       const {error} = action;
-      return {...state, orders: null, error, whatIsLoading: null};
+      return {...state, resultOrders: null, error, whatIsLoading: null};
     }
     default: return state;
   }
@@ -66,10 +66,10 @@ function searchStated(whatIsLoading) {
   };
 }
 
-function searchOk(orders) {
+function searchOk(resultOrders) {
   return {
     type: LOADING_OK,
-    orders,
+    resultOrders,
   };
 }
 
@@ -81,6 +81,7 @@ function searchError(error) {
 }
 
 // all avalible properties
+const MAX_RESULTS = 5;
 const properties = ["persistentId", "orderId", "customerId", "shipperId", "destinationId", "containerId",
     "status", "orderLocationAliasIds", "groupUi", "active", "fullDomainId", "wallUi", "orderType", "dueDate", "orderDate"];
 // proprties for search
@@ -99,7 +100,8 @@ export function acSearch(text) {
     const filter = {
       properties: simpleProperties,
       orderId: filterText,
-    }
+      limit: MAX_RESULTS
+    };
     findOrders(filter).then((data) => {
       console.log("data from search orders", data);
       // Check if i should dispach or other search has been issued
