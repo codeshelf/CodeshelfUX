@@ -176,11 +176,11 @@ class OrderSearch extends Component {
 
     const isLoading = (whatIsLoading !== null);
     return (
-      <Grid fluid className="sm-padding-10">
+      <div>
         {/*<SearchType />*/}
         <SearchInput  {...{filter, acChangeFilter, acSearch}} />
         <OrderList {...{isLoading, resultOrders, filter, error}} />
-      </Grid>
+      </div>
     );
   }
 }

@@ -49,9 +49,11 @@ class App extends Component {
                 <FacilitySelector {...this.props} />
             </NavigationMenu>
             <div className="page-content-wrapper">
-                <div className="content">
-                    <RouteHandler />
-                </div>
+              <div className="content">
+                <Grid fluid className="sm-padding-10">
+                  <RouteHandler />
+                </Grid>
+              </div>
             </div>
         </div>
     );

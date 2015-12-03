@@ -14,6 +14,12 @@
 *, ::after, ::before
   box-sizing border-box
 
+@media (max-width: 767px) {
+  .page-container .page-content-wrapper .content {
+     padding-top: 0px;
+  }
+}
+
 .modal-header.bg-primary
   background-color: $primary
 
@@ -177,5 +183,5 @@ input[type="file"].form-control {
 }
 
 .nav-tabs > li > a {
-  padding: 10px 15px;
+  padding: 10px 10px;
 }
