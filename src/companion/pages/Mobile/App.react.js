@@ -35,12 +35,16 @@ class NavigationMenu extends Component {
 class App extends Component {
   render() {
     return (
-      <Grid>
-        <NavigationMenu facility={this.props.facility}>
-          <FacilitySelector {...this.props} />
-        </NavigationMenu>
-        <RouteHandler />
-      </Grid>
+        <div id="page-wrapper" className="page-container">
+            <NavigationMenu facility={this.props.facility}>
+                <FacilitySelector {...this.props} />
+            </NavigationMenu>
+            <div className="page-content-wrapper">
+                <div className="content">
+                    <RouteHandler />
+                </div>
+            </div>
+        </div>
     );
   }
 }
