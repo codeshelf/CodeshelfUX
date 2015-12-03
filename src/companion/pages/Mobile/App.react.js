@@ -10,24 +10,33 @@ class NavigationMenu extends Component {
   render() {
     console.log("Render navigation menu", this.props.facility);
     return (
-      <Row>
-        <Col xs={2}>
-          <ButtonLink bsStyle="link" to="facility" id="home" name="home">
-            <Icon name="home" size="lg"/>
-          </ButtonLink>
-        </Col>
-        <Col xs={8}>
-          {this.props.children}
-        </Col>
-        <Col xs={2}>
-          <ButtonLink bsStyle="link"
-                      to="mobile-search-orders"
-                      id="mobile-search-orders"
-                      name="mobile-search-orders">
-            <Icon name="search" size="lg"/>
-          </ButtonLink>
-        </Col>
-      </Row>
+      <div className="header">
+        <div className="pull-left full-height visible-sm visible-xs">
+          <div className="sm-action-bar">
+            <ButtonLink bsStyle="link" to="facility" id="home" name="home">
+              <Icon name="home" size="lg"/>
+            </ButtonLink>
+          </div>
+        </div>
+        <div className="pull-right full-height visible-sm visible-xs">
+          <div className="sm-action-bar">
+            <ButtonLink bsStyle="link"
+              to="mobile-search-orders"
+              id="mobile-search-orders"
+              name="mobile-search-orders">
+                <Icon name="search" size="lg"/>
+            </ButtonLink>
+        </div>
+        </div>
+        <div className="pull-left sm-table">
+          <div className="header-inner">
+            <div className="brand inline">
+              {this.props.children}
+
+            </div>
+          </div>
+        </div>
+      </div>
     )
   }
 }
@@ -35,7 +44,7 @@ class NavigationMenu extends Component {
 class App extends Component {
   render() {
     return (
-        <div id="page-wrapper" className="page-container">
+        <div id="page-wrapper" className="page-container" style={{backgroundColor: "rgb(245, 245, 245)"}}>
             <NavigationMenu facility={this.props.facility}>
                 <FacilitySelector {...this.props} />
             </NavigationMenu>
