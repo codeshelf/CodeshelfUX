@@ -12,3 +12,4 @@ bin
 /build/user.build.properties/*
 .DS_Store
 /bower_components/
+jsconfig.json
