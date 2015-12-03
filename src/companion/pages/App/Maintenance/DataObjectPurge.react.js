@@ -64,13 +64,13 @@ class DataObjectPurge extends React.Component{
     }
 
     triggerPurge() {
-        return getFacilityContext().triggerSchedule("DatabasePurge").then(() => {
+        return getFacilityContext().triggerSchedule("DatabasePurge").then(function() {
             return this.loadSummary();
         }.bind(this));
     }
 
     cancelPurge() {
-        return getFacilityContext().cancelJob("DatabasePurge").then(() => {
+        return getFacilityContext().cancelJob("DatabasePurge").then(function() {
             return this.loadSummary();
         }.bind(this));
     }

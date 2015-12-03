@@ -39,7 +39,7 @@ class SetupPassword extends React.Component {
   handleSubmit(formCursor) {
     const nextPath = this.props.router.getCurrentQuery().nextPath;
     return  validate(formCursor().get("values").toJS()).prop("new").matchesProp("confirm").promise
-              .then(() =>{
+              .then(function() {
               return executePasswordAction(this.props, formCursor());
           }.bind(this))
           .then(() => {

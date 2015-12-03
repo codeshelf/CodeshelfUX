@@ -3,12 +3,12 @@ var _ = require('lodash');
 var $ = require('jquery');
 var Rx = require('rx');
 
-var csapi = require('data/csapi');
+import csapi from 'data/csapi';
 var {StatusSummary} = require('data/types');
 var el = React.createElement;
 
-var ibox = require('components/common/IBox');
-var SummaryList = require('components/common/SummaryList');
+import ibox from 'components/common/IBox';
+import SummaryList from 'components/common/SummaryList';
 var IBox = ibox.IBox;
 var IBoxData = ibox.IBoxData;
 var IBoxTitleBar = ibox.IBoxTitleBar;

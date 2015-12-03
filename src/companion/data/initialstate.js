@@ -5,14 +5,14 @@ const initialLocale = 'en';
 var endpoint = "";
 if (process.env.IS_BROWSER) {
     if (window.location.port === '8000') {
-        endpoint = `http://${window.location.hostname}:8181`;
-        //endpoint = "https://test.codeshelf.com";
+        //endpoint = `http://${window.location.hostname}:8181`;
+        endpoint = "https://test.codeshelf.com";
     }
 }
 
 
 
-const data = {
+export default {
     endpoint: endpoint,
     $pendingActions: {},
     $subscriptions: {},
@@ -210,5 +210,3 @@ const data = {
     workers: [],
     issues: {}
 };
-
-export default data;

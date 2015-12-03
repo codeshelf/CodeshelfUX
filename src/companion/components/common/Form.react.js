@@ -68,7 +68,7 @@ export class Form extends React.Component {
     }
 
     recursiveCloneChildren(children, newProps) {
-        return React.Children.map(children, (child) => {
+        return React.Children.map(children, function(child) {
             if(!_.isObject(child)) return child;
             var childProps = _.clone(newProps);
             childProps.children = this.recursiveCloneChildren(child.props.children, newProps);

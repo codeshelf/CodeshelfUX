@@ -1,7 +1,8 @@
 import State from '../lib/state';
 import storage from "../lib/storage";
 import {fromJS} from "immutable";
-const initialState = require('../data/initialstate');
+import initialState from "./initialstate";
+
 
 if (process.env.IS_BROWSER) {
    window._appState = initialState;

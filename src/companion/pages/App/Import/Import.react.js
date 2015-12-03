@@ -64,7 +64,7 @@ export default class Imports extends React.Component{
     }
 
     componentDidMount() {
-        window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(function () {
             this.handleRefresh();
         }.bind(this));
     }
@@ -72,7 +72,7 @@ export default class Imports extends React.Component{
     handleImportSubmit(method, file) {
         var formData = new FormData();
         formData.append("file", file);
-         return getFacilityContext()[method](formData).then(() => {
+         return getFacilityContext()[method](formData).then(function() {
             this.handleRefresh();
         }.bind(this));
     }

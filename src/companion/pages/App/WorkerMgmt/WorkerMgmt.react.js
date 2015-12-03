@@ -87,7 +87,7 @@ export default class WorkerMgmt extends React.Component{
         formData.append("file", file);
         return getFacilityContext()[method](formData).then(() => {
             fetchWorkers();
-        }.bind(this));
+        });
     }
 
     render() {

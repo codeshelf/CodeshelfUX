@@ -32,7 +32,7 @@ export default class OrdersIBox extends React.Component{
     }
 
     componentDidMount() {
-        window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(function(){
             if (this.resultsCursor().get("values").count() <= 0) {
                 this.handleRefresh();
             }
@@ -72,7 +72,6 @@ export default class OrdersIBox extends React.Component{
             .union(pivotOptions().get("fields").map((f) => f.get("name")))
             .add("persistentId")
             .toJS();
-
         var promise = this.state.refreshingAction;
 
         if (promise && promise.isPending()) {

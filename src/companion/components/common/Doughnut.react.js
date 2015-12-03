@@ -1,5 +1,5 @@
-var React = require("react");
-var Doughnut = require("lib/chart/doughnut.js");
+import React from "react";
+import Doughnut from "lib/chart/doughnut.js";
 
 var DoughnutChart = React.createClass({
     render: function() {

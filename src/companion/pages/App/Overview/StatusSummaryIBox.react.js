@@ -3,10 +3,10 @@ var Icon = require("react-fa");
 var Rx = require('rx');
 
 var {StatusSummary} = require("data/types");
-var SummaryFilter = require("./SummaryFilter");
-var SummaryList = require("components/common/SummaryList");
-var DoughnutSummary = require("components/common/DoughnutSummary");
-var ibox = require("components/common/IBox");
+import SummaryFilter from "./SummaryFilter";
+import SummaryList from "components/common/SummaryList";
+import DoughnutSummary from "components/common/DoughnutSummary";
+import ibox from "components/common/IBox";
 var IBox = ibox.IBox;
 var IBoxTitleBar = ibox.IBoxTitleBar;
 var IBoxTitleText = ibox.IBoxTitleText;

@@ -33,44 +33,73 @@ import ExtensionPointAdd from "./pages/App/ExtensionPoints/ExtensionPointAdd.rea
 import ScheduledJobEdit from "./pages/App/Maintenance/ScheduledJobsEdit.react.js";
 import ScheduledJobAdd from "./pages/App/Maintenance/ScheduledJobAdd.react.js";
 
+//Mobile components
+import mApp from './pages/Mobile/App.react.js';
+import mOrderSearch from './pages/Mobile/OrderSearch/OrderSearch.react.js';
+import mOrderDeatil from './pages/Mobile/OrderDetail/OrderDetail.react.js';
+import LoadFacility from './pages/Mobile/Facility/LoadFacility.react.js';
+import FacilityWrapper from './pages/Mobile/Facility/FacilityWrapper.react.js';
+import Mobile from './pages/Mobile/Mobile.react.js';
+
 export default (
   <Route handler={Root} path="/">
     <Redirect from="/" to="/facilities" />
     <Route handler={authn(App)} name="facilities"> //ensure auth and default facility
-        <Route handler={Facility} name="facility" path=":facilityName">
+      <Route handler={Facility} name="facility" path=":facilityName">
         <DefaultRoute handler={Overview} name="overview" />
-            <NotFoundRoute handler={NotFound} name="not-found" />
-            <Route handler={Orders} name="orders"></Route>
-            <Route handler={WorkInstructions} name="workinstructions"></Route>
-            <Route handler={BlockedWork} name="blockedwork"></Route>
-            <Route handler={WorkResults} name="workresults" />
-            <Route handler={Import} name="import" />
-            <Route handler={EDIGateways} name="edigateways">
-                <Route handler={EDIGatewayEdit} name="edigatewayedit" path=":id"/>
-            </Route>
-            <Route handler={WorkerMgmt} name="workermgmt">
-                <Route handler={WorkerDisplay} name="workernew" path="new" />
-                <Route handler={WorkerDisplay} name="workerdisplay" path=":workerId" />
-            </Route>
-            <Route handler={Maintenance} name="maintenance">
-                <Route handler={ExtensionPointEdit} name="parametersetedit" path="parametersset/:parameterType" />
-                <Route handler={ScheduledJobAdd} name="scheduledjobadd" path="newscheduledjob" />
-                <Route handler={ScheduledJobEdit} name="scheduledjobedit" path="scheduledjobs/:type" />
-            </Route>
-            <Route handler={TestScript} name="testscript" />
-            <Route handler={ExtensionPointsPage} name="extensionpoints">
-        <Route handler={ExtensionPointAdd} name="extensionpointadd" path="new" />
-                <Route handler={ExtensionPointEdit} name="extensionpointedit" path=":extensionPointId" />
-            </Route>
+        <NotFoundRoute handler={NotFound} name="not-found" />
+        <Route handler={Orders} name="orders" />
+        <Route handler={WorkInstructions} name="workinstructions" />
+        <Route handler={BlockedWork} name="blockedwork" />
+        <Route handler={WorkResults} name="workresults" />
+        <Route handler={Import} name="import" />
+        <Route handler={EDIGateways} name="edigateways">
+          <Route handler={EDIGatewayEdit} name="edigatewayedit" path=":id"/>
+        </Route>
+        <Route handler={WorkerMgmt} name="workermgmt">
+          <Route handler={WorkerDisplay} name="workernew" path="new" />
+          <Route handler={WorkerDisplay} name="workerdisplay" path=":workerId" />
+        </Route>
+        <Route handler={Maintenance} name="maintenance">
+          <Route handler={ExtensionPointEdit} name="parametersetedit" path="parametersset/:parameterType" />
+          <Route handler={ScheduledJobAdd} name="scheduledjobadd" path="newscheduledjob" />
+          <Route handler={ScheduledJobEdit} name="scheduledjobedit" path="scheduledjobs/:type" />
+        </Route>
+        <Route handler={TestScript} name="testscript" />
+        <Route handler={ExtensionPointsPage} name="extensionpoints">
+          <Route handler={ExtensionPointAdd} name="extensionpointadd" path="new" />
+          <Route handler={ExtensionPointEdit} name="extensionpointedit" path=":extensionPointId" />
+        </Route>
+      </Route>
+    </Route>
 
+    // Rotues for mobile version
+
+    <Redirect from="/mobile" to="/mobile/facilities" />
+    <Redirect from="/mobile/" to="/mobile/facilities" />
+    <Redirect from="/mobile/facilities/" to="/mobile/facilities" />
+
+    <Route handler={authn(Mobile)} name="mobile" path="mobile/facilities">
+      <DefaultRoute handler={LoadFacility} />
+      <Route handler={FacilityWrapper} name="mobile-facility" path=":facilityName">
+        <Route handler={mApp}>
+          <DefaultRoute handler={mOrderSearch} />
+          <Route handler={mOrderSearch} name="mobile-search-orders" path="search" />
+          <Route handler={mOrderDeatil} name="mobile-order-datail" path="orderDetail/:id" />
         </Route>
+      </Route>
     </Route>
+
+    // Routes from admin panel
+
     <Route handler={authn(Admin)} name="admin" path="admin">
-        <Route handler={Users} name="users">
-            <Route handler={UserAdd} name="usernew" path="new"/>
-            <Route handler={UserEdit} name="useredit" path=":userId"/>
-        </Route>
+      <Route handler={Users} name="users">
+        <Route handler={UserAdd} name="usernew" path="new"/>
+        <Route handler={UserEdit} name="useredit" path=":userId"/>
+      </Route>
     </Route>
+
+    // Routes for user credentials
 
     <Route handler={Login} name="login" />
     <Route handler={SetupPassword} name="setuppassword" path="setuppassword"/>

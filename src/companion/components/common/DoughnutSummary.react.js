@@ -1,8 +1,8 @@
-var React = require("react");
-var _ = require("lodash");
+import React from "react";
+import _ from "lodash";
 var {StatusSummary} = require("data/types");
-var DoughnutChart = require("./Doughnut");
-var pluralize = require("lib/pluralize");
+import DoughnutChart from "./Doughnut";
+import pluralize from "lib/pluralize";
 
 var DoughnutSummary = React.createClass({
 

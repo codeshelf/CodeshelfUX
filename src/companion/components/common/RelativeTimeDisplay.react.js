@@ -10,8 +10,8 @@ export default class RelativeTimeDisplay extends React.Component {
 
     componentDidMount(){
         let token = setInterval(() => {
-                this.forceUpdate();
-        }.bind(this), 1000 * 30);
+            this.forceUpdate();
+        }, 1000 * 30);
         this.setState({intervalToken: token});
     }
 

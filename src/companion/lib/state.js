@@ -40,7 +40,8 @@ export default class State extends EventEmitter {
   }
 
   cursor(path) {
-    return (update) => {
+    return function(update) {
+
         if (typeof update === "undefined") {
             return this._state.getIn(path);
         } else if (typeof update === "function") {
@@ -48,6 +49,6 @@ export default class State extends EventEmitter {
         } else {
                 return this.set(this._state.setIn(path, update), path);
         }
-    };
+    }.bind(this);
   }
 };

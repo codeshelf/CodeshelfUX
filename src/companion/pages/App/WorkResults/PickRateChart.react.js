@@ -1,8 +1,8 @@
-var React = require("react");
-var moment = require("moment");
-var d3 = require("d3");
+import React from "react";
+import moment from "moment";
+import d3 from "d3";
 require("nvd3/build/nv.d3.min.css");
-var nv = require("exports?nv!nvd3/build/nv.d3.min.js");
+import nv from "exports?nv!nvd3/build/nv.d3.min.js";
 
 function updateChart(el, chart, data) {
     d3.select(el).select("svg")

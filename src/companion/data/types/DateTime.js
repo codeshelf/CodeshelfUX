@@ -1,4 +1,4 @@
-var timeformat = require("lib/timeformat");
+import timeformat from "lib/timeformat";
 
 export default class DateTime {
     static getDefaultFormatter(value) {

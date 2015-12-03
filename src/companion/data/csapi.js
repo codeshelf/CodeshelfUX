@@ -189,14 +189,15 @@ export function getFacilities() {
     return ajax("/api/facilities");
 };
 
-export function getFacilityContext() {
+// facilityId can be injected(for mobile web) or will be taken from facility cursor if not provided(desktop web)
+export function getFacilityContext(facilityId) {
     var endpoint = state.cursor(["endpoint"])();
     var facility = state.cursor(["selectedFacility"])();
-    var facilityId = facility.get("persistentId");
+    facilityId = facilityId || facility.get("persistentId");
     var facilityPath = "/api/facilities/" + facilityId;
     let ordersPath = facilityPath + "/orders";
     let workInstructionsPath = facilityPath + "/work/instructions";
-    let domainId = facility.domainId;
+    let domainId = facility && facility.domainId;
     return {
         domainId: domainId,
         facilityId: facilityId,
@@ -217,6 +218,11 @@ export function getFacilityContext() {
 
         getOrderDetails(orderId) {
             let orderDetailsPath = facilityPath + "/orders/" + orderId + "/details";
+            return ajax(orderDetailsPath, {});
+        },
+
+        getOrderEvents(orderId) {
+            let orderDetailsPath = facilityPath + "/orders/" + orderId + "/events";
             return ajax(orderDetailsPath, {});
         },
 
