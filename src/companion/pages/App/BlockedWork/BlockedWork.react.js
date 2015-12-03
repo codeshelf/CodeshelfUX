@@ -1,11 +1,10 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
 var {Badge, TabbedArea, TabPane} = require('react-bootstrap');
-var _ = require('lodash');
-
+import _ from 'lodash';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
 var {IBox, IBoxBody} = require('components/common/IBox');
-var IssuesIBox = require('./IssuesIBox');
+import IssuesIBox from './IssuesIBox';
 var {getFacilityContext} = require('data/csapi');
 import {fetchUnresolvedIssuesByType, subscribe, unsubscribe} from 'data/issues/actions';
 import {getIssuesSummary} from 'data/issues/store';

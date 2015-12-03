@@ -3,9 +3,9 @@ var v1 = {"runsByGroup":{"undefined":[
 {"id":"2015-01-15 00:38:02.235+0000","groupId":"undefined","cheId":"7225dcb1-5953-48c2-b450-7399b0772f25","groupDomainId":"undefined","cheDomainId":"CHE-00000021","invalid":0,"inprogress":0,"complete":0,"revert":0,"new":0,"short":1},
 {"id":"2015-01-15 00:31:29.653+0000","groupId":"undefined","cheId":"7225dcb1-5953-48c2-b450-7399b0772f25","groupDomainId":"undefined","cheDomainId":"CHE-00000021","invalid":0,"inprogress":0,"complete":8,"revert":0,"new":0,"short":1}]}};
 
-var React = require('react');
-var timeformat = require("lib/timeformat");
-var _ = require('lodash');
+import React from 'react';
+import timeformat from "lib/timeformat";
+import _ from 'lodash';
 
 function toProgressBarData(run) {
     if (_.has(run, "id")) { //id was a field in the first version.

@@ -1,5 +1,5 @@
 import React from 'react';
-import {ButtonLink} from 'react-router-bootstrap';
+import {ButtonLink as RButtonLink} from 'react-router-bootstrap';
 import {Button as RButton} from 'react-bootstrap';
 import _ from 'lodash';
 import exposeRouter from 'components/common/exposerouter';
@@ -14,11 +14,12 @@ class CSButtonLink extends React.Component{
         _.merge(allParams, currentParams, params);
         _.merge(propsWithoutParams, this.props);
         delete propsWithoutParams.params;
-        return (<ButtonLink params={allParams} {...propsWithoutParams} />);
+        return (<RButtonLink params={allParams} {...propsWithoutParams} />);
     }
 };
-
-class List extends React.Component {
+export const ButtonLink = exposeRouter(CSButtonLink);
+export const Button = RButton;
+export class List extends React.Component {
     render() {
         let {values, label} = this.props;
         return (
@@ -35,10 +36,4 @@ class List extends React.Component {
             null
         );
     }
-}
-
-export default {
-    ButtonLink: exposeRouter(CSButtonLink),
-    Button: RButton,
-    List: List
 };

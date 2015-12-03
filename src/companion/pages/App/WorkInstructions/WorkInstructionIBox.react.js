@@ -49,7 +49,7 @@ export default class WorkInstructionIBox extends React.Component{
     }
 
     componentDidMount() {
-        window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(function() {
             if (this.resultsCursor().get("values").count() <= 0) {
                 this.handleRefresh();
             }

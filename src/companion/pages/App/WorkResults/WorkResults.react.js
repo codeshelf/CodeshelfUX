@@ -2,8 +2,7 @@ import DocumentTitle from 'react-document-title';
 import {getFacilityContext} from 'data/csapi';
 import  React from 'react';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
-
-var PickerEventsIBox = require('./PickerEventsIBox');
+import PickerEventsIBox from './PickerEventsIBox';
 
 export default class WorkResults extends React.Component{
     render() {

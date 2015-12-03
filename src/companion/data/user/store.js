@@ -4,7 +4,9 @@ import {register} from 'dispatcher';
 import {userCursor} from 'data/state';
 import storage from "lib/storage";
 
-const getIn = (path) => userCursor().getIn(path);
+const getIn = (path) => {
+    return userCursor().getIn(path);
+};
 
 export function getStoredCredentials() {
     return storage.get("authData");

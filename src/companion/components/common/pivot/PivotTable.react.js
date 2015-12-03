@@ -104,7 +104,7 @@ export default class PivotTable extends React.Component{
         let config = this.getConfig(this.props);
         config.dataSource = orders.toJS();
         this.pivotWidget = new orb.pgridwidget(config);
-        window.OrbReactClasses.PivotCell = selectableCell(window.OrbReactClasses.PivotCell, () => {
+        window.OrbReactClasses.PivotCell = selectableCell(window.OrbReactClasses.PivotCell, function(){
             return this.state.dimensions;
         }.bind(this));
 

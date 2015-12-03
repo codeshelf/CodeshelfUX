@@ -12,7 +12,7 @@ if (process.env.IS_BROWSER) {
 
 
 
-const data = {
+export default {
     endpoint: endpoint,
     $pendingActions: {},
     $subscriptions: {},
@@ -210,5 +210,3 @@ const data = {
     workers: [],
     issues: {}
 };
-
-export default data;

@@ -1,13 +1,13 @@
-var React = require("react");
-var _ = require("lodash");
-var ibox = require("components/common/IBox");
+import React from "react";
+import _ from "lodash";
+import ibox from "components/common/IBox";
 var IBox = ibox.IBox;
 var IBoxData = ibox.IBoxData;
 var IBoxTitleBar = ibox.IBoxTitleBar;
 var IBoxTitleText = ibox.IBoxTitleText;
 var IBoxSection = ibox.IBoxSection;
-var DoughnutSummary = require("components/common/DoughnutSummary");
-var ActiveRun = require("./ActiveRun");
+import DoughnutSummary from "components/common/DoughnutSummary";
+import ActiveRun from "./ActiveRun";
 
 var OrderDetailIBox = React.createClass({
 
