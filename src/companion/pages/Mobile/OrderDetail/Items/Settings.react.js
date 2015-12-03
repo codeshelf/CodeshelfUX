@@ -12,28 +12,28 @@ export class Settings extends Component {
   renderOneProperty({first, last, field, visibleOverview, visibleDetail, acSetFieldVisibility, acSetFieldOrder}) {
     return (
       <Row key={field}>
-        <Col xs={2}>
+        <Col xs={1}>
           <div className="checkbox check-primary" >
             <input id={field} type="checkbox" checked={visibleOverview} onChange={() => acSetFieldVisibility(true, field, !visibleOverview)} />
             <label style={{"margin-right": "0px"}} htmlFor={field}></label>
           </div>
         </Col>
-        <Col xs={2}>
+        <Col xs={1}>
           <div className="checkbox check-primary" >
             <input id={"detail" + field} name={"detail" + field} type="checkbox" checked={visibleDetail} onChange={() => acSetFieldVisibility(false, field, !visibleDetail)} />
             <label style={{"margin-right": "0px"}} htmlFor={"detail" + field}></label>
           </div>
         </Col>
-        <Col xs={3}>
+        <Col xs={5}>
           {fieldToDescription[field]}
         </Col>
-        <Col xs={2}>
-          {!first && <Button bsStyle="primary btn-sm" onClick={() => acSetFieldOrder(field, -1)}>
+        <Col xs={1}>
+          {!first && <Button bsStyle="primary" bsSize="xs" onClick={() => acSetFieldOrder(field, -1)}>
             <Icon name="arrow-circle-up"/>
           </Button>}
         </Col>
-        <Col xs={2}>
-          {!last && <Button bsStyle="primary btn-sm" onClick={() => acSetFieldOrder(field, +1)}>
+        <Col xs={1}>
+          {!last && <Button bsStyle="primary" bsSize="xs" onClick={() => acSetFieldOrder(field, +1)}>
             <Icon name="arrow-circle-down"/>
           </Button>}
         </Col>
@@ -53,7 +53,7 @@ export class Settings extends Component {
           onHide={onClose}
           dialogClassName="custom-modal-items">
         <Modal.Header closeButton>
-          <Modal.Title>Setting of visibility of properties</Modal.Title>
+          <Modal.Title>Set Property Display</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <h4>Some title</h4>
