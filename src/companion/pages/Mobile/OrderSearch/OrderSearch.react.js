@@ -45,7 +45,7 @@ export class SearchInput extends Component {
     return <Input
         type="text"
         value={value}
-        placeholder="Enter text"
+        placeholder="Enter Order ID"
         hasFeedback
         ref="input"
         groupClassName="group-class"

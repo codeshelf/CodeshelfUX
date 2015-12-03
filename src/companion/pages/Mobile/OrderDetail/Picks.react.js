@@ -5,7 +5,7 @@ import Icon from 'react-fa';
 import {DateDisplay} from "../DateDisplay.react.js";
 
 const fieldToDescription = {
-  "createdAt": "Created at",
+  "createdAt": "Time",
   "type": "Type",
   "itemId": "Item id",
   "itemLocation": "Item location",
