@@ -6,7 +6,6 @@ var bg = require('gulp-bg');
 var eslint = require('gulp-eslint');
 var gulp = require('gulp');
 var harmonize = require('harmonize');
-var jest = require('jest-cli');
 var makeWebpackConfig = require('./webpack/makeconfig');
 var runSequence = require('run-sequence');
 var webpackBuild = require('./webpack/build');
@@ -15,8 +14,6 @@ var yargs = require('yargs');
 var closureCompiler = require('gulp-closure-compiler');
 var path = require('path');
 var karma = require('karma');
-// Enables node's --harmony flag programmatically for jest.
-harmonize();
 
 var args = yargs
   .alias('p', 'production')
@@ -66,23 +63,6 @@ gulp.task('karma-ci', function(done) {
 
 gulp.task('karma', function(done) {
     runKarma({singleRun: false}, done);
-});
-
-gulp.task('jest', function(done) {
-  var rootDir = './src/companion';
-  jest.runCLI({config: {
-    'rootDir': rootDir,
-    'scriptPreprocessor': '../../node_modules/babel-jest',
-    'testFileExtensions': ['es6', 'js'],
-    'moduleFileExtensions': ['js', 'json', 'es6'],
-    "unmockedModulePathPatterns": ["react"]
-  }}, rootDir, function(success) {
-    /* eslint no-process-exit:0 */
-    done(success ? null : 'jest failed');
-    process.on('exit', function() {
-      process.exit(success ? 0 : 1);
-    });
-  });
 });
 
 gulp.task('test', function(done) {
