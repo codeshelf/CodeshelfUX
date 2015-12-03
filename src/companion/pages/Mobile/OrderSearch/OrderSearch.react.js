@@ -15,7 +15,7 @@ export class SearchType extends Component {
   constructor() {
     super();
     //bind this for handle change
-    this.handleChange = ::this.handleChange;
+    this.handleChange = this.handleChange.bind(this);
   }
 
   state = {
@@ -118,30 +118,39 @@ export class OrderItem extends Component {
 
 export class OrderList extends Component {
   render() {
-    const {isLoading, resultOrders, filter: {text: filterText}} = this.props;
+    const {isLoading, error, resultOrders, filter: {text: filterText}} = this.props;
     console.log(`!!!!!!!!! isLoading ${isLoading}, orders ${resultOrders}`);
-    if (isLoading || resultOrders === null) {
+    if (isLoading) {
+      return <div> Loading...</div>;
+    } else if (error) {
+      return <div> Error in loading orders</div>;
+    } else if (resultOrders === null) {
       return <div> Loading...</div>;
     }
-    return (
-      <div>
-        Number of results: { resultOrders.total }
-        {resultOrders.results.map((order) => {
-          return <OrderItem {...order} filterText={filterText} />
-        })}
-        {/*Orders: {JSON.stringify(orders)}*/}
-      </div>
-    );
+    if (resultOrders.total) {
+      return (
+        <div>
+          Number of results: { resultOrders.total }
+          {resultOrders.results.map((order) => {
+            return <OrderItem {...order} filterText={filterText} />
+          })}
+          {/*Orders: {JSON.stringify(orders)}*/}
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          Number of results: { resultOrders.length }
+          {resultOrders.slice(0,5).map((order) => {
+            return <OrderItem {...order} filterText={filterText} />
+          })}
+          {/*Orders: {JSON.stringify(orders)}*/}
+        </div>
+      );
+    }
   }
 }
 
-
-function mapDispatch(dispatch) {
-  return bindActionCreators({acChangeFilter, acSearch}, dispatch);
-}
-
-
-@connect(getOrderSearch, mapDispatch)
 class OrderSearch extends Component {
 
   componentWillMount() {
@@ -162,10 +171,14 @@ class OrderSearch extends Component {
       <div>
         {/*<SearchType />*/}
         <SearchInput  {...{filter, acChangeFilter, acSearch}} />
-        <OrderList {...{isLoading, resultOrders, filter}} />
+        <OrderList {...{isLoading, resultOrders, filter, error}} />
       </div>
     );
   }
 }
 
-export default OrderSearch;
+function mapDispatch(dispatch) {
+  return bindActionCreators({acChangeFilter, acSearch}, dispatch);
+}
+
+export default connect(getOrderSearch, mapDispatch)(OrderSearch);

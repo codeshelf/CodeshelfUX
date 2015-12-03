@@ -12,7 +12,7 @@ import createEngine from 'redux-storage/engines/localStorage';
 // reducer imports
 import {facilityReducer} from './Facility/store';
 import {orderSearchReducer} from './OrderSearch/store';
-import {orderDetailReducer, PERSIST_STATE_PART, SETTING_PROPERTY_VISIBILITY} from './OrderDetail/store';
+import {orderDetailReducer, PERSIST_STATE_PART, SETTING_PROPERTY_VISIBILITY, SETTING_PROPERTY_ORDER} from './OrderDetail/store';
 
 const rootReducer = storage.reducer(combineReducers({
 //  user: userReducer,
@@ -29,7 +29,7 @@ const storageEngine = storage.decorators.filter(
 const storageMiddleware = storage.createMiddleware(
   storageEngine,
   []/* black list action */,
-  [SETTING_PROPERTY_VISIBILITY] /* white list action */);
+  [SETTING_PROPERTY_VISIBILITY, SETTING_PROPERTY_ORDER] /* white list action */);
 
 const loggerMiddleware = createLogger();
 

@@ -221,6 +221,11 @@ export function getFacilityContext(facilityId) {
             return ajax(orderDetailsPath, {});
         },
 
+        getOrderEvents(orderId) {
+            let orderDetailsPath = facilityPath + "/orders/" + orderId + "/events";
+            return ajax(orderDetailsPath, {});
+        },
+
         getExtensionPoints: function() {
             let extensionPointsPath = facilityPath + "/extensionpoints";
             return ajax(extensionPointsPath);

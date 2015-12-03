@@ -5,8 +5,7 @@ import {getSelectedFacility} from './Facility/get';
 
 import DateDisplayWithOfset from "components/common/DateDisplay";
 
-@connect(getSelectedFacility)
-export class DateDisplay extends Component {
+class DateDisplayDumm extends Component {
  render() {
    if (!this.props.utcOffset) return null;
    return (
@@ -15,3 +14,5 @@ export class DateDisplay extends Component {
    );
  }
 }
+
+export const DateDisplay = connect(getSelectedFacility)(DateDisplayDumm);

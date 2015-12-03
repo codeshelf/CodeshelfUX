@@ -20,6 +20,7 @@ const STATUS_OK = "ok";
 const STATUS_ERROR = "error";
 
 export const SETTING_PROPERTY_VISIBILITY = "set property visibility";
+export const SETTING_PROPERTY_ORDER = "set property order";
 export const PROPERTY_VISIBILITY_OVERVIEW = "overview";
 export const PROPERTY_VISIBILITY_DETAIL = "detail";
 
@@ -56,8 +57,27 @@ const initState = {
     sortingOrder: 1, // can be 1 or -1
     settings: {
       properties: {
-        [PROPERTY_VISIBILITY_OVERVIEW]: ["itemId", "status", "planQuantity"],
-        [PROPERTY_VISIBILITY_DETAIL]: ["uom", "gtin", "preferredLocation", "orderDetailId", "description"],
+        [PROPERTY_VISIBILITY_OVERVIEW]: {
+          "itemId": true,
+          "status": true,
+          "planQuantity": true,
+          "uom": false,
+          "gtin": false,
+          "preferredLocation": false,
+          "orderDetailId": false,
+          "description": false,
+        },
+        [PROPERTY_VISIBILITY_DETAIL]: {
+          "itemId": true,
+          "status": true,
+          "planQuantity": true,
+          "uom": true,
+          "gtin": true,
+          "preferredLocation": true,
+          "orderDetailId": true,
+          "description": true,
+        },
+        order: ["itemId", "status", "planQuantity", "uom", "gtin", "preferredLocation", "orderDetailId", "description"],
       },
     },
   },
@@ -93,17 +113,14 @@ export function orderDetailReducer(state = initState, action) {
     case SETTING_PROPERTY_VISIBILITY: {
       const {tab, view, field, visible} = action;
       const oldProperties = state[tab]["settings"]["properties"][view];
-      const position = oldProperties.indexOf(field);
-      if ((position === -1 && !visible) || (position !== -1 && visible)) {
-        // no work is needed
-        return state
+      const newProperties = {...oldProperties, [field]: visible};
+      let newPropertiesDetail = {...state[tab]["settings"]["properties"][PROPERTY_VISIBILITY_DETAIL]};
+      if (visible && view != PROPERTY_VISIBILITY_DETAIL) {
+        newPropertiesDetail[field] = visible;
       }
-      let newProperties;
-      if (visible) {
-        newProperties = [...oldProperties, field];
-      } else {
-        newProperties = oldProperties.filter((f) => f !== field)
-      }
+      const checked = Object.keys(newProperties).reduce((prev, curr) => prev + (0 + newProperties[curr]), 0);
+      // disable unchecking last value
+      if (checked === 0) return state;
       return {
         ...state,
         [tab]: {
@@ -112,11 +129,41 @@ export function orderDetailReducer(state = initState, action) {
             ...state[tab]["settings"],
             properties: {
               ...state[tab]["settings"]["properties"],
-              [view]: newProperties
+              [PROPERTY_VISIBILITY_DETAIL]: newPropertiesDetail,
+              [view]: newProperties,
             }
           }
         }
       };
+    }
+    case SETTING_PROPERTY_ORDER: {
+      const {tab, field, diff} = action;
+      const oldOrder = state[tab]["settings"]["properties"]["order"];
+      const index = oldOrder.indexOf(field);
+      // if field is not in order then do nothing
+      if (index === -1) return state;
+      // if field is first cant move it up
+      if (index === 0 && diff === -1) return state;
+      // if field is last cant move it down
+      if (index === (oldOrder.length-1) && diff === 1) return state;
+      let newOrder = [...oldOrder];
+      newOrder[index+diff] = oldOrder[index];
+      newOrder[index] = oldOrder[index+diff];
+      console.log("NEW ORDER ", newOrder);
+      return {
+        ...state,
+        [tab]: {
+          ...state[tab],
+          settings: {
+            ...state[tab]["settings"],
+            properties: {
+              ...state[tab]["settings"]["properties"],
+              order: newOrder,
+            }
+          }
+        }
+      };
+
     }
     case EXPAND_ITEM: {
       const {itemId: expandedItem} = action;
@@ -140,14 +187,26 @@ export function orderDetailReducer(state = initState, action) {
 
 export function acSetFieldVisibility(tab, overview, field, visible) {
   if (tab !== TAB_ITEMS) {
-    throw "seting field visibility not supported in tab:" + tab + "only in " + TAB_ITEMS;
+    throw "seting field visibility not supported in tab:" + tab + "only in tab " + TAB_ITEMS;
   }
   return {
     type: SETTING_PROPERTY_VISIBILITY,
     tab,
     view: (overview)? PROPERTY_VISIBILITY_OVERVIEW: PROPERTY_VISIBILITY_DETAIL,
     field,
-    visible
+    visible,
+  }
+}
+
+export function acSetFieldOrder(tab, field, diff) {
+  if (tab !== TAB_ITEMS) {
+    throw "seting field visibility not supported in tab:" + tab + "only in tab " + TAB_ITEMS;
+  }
+  return {
+    type: SETTING_PROPERTY_ORDER,
+    tab,
+    field,
+    diff,
   }
 }
 
@@ -219,7 +278,7 @@ function tabToApi(facilityId, tab) {
   return {
     [TAB_DETAIL]: (orderId) => getFacilityContext(facilityId).getOrder(orderDetailProperties, orderId),
     [TAB_ITEMS]:  getFacilityContext(facilityId).getOrderDetails,
-    [TAB_PICKS]: getPicks,
+    [TAB_PICKS]: getFacilityContext(facilityId).getOrderEvents,
     [TAB_IMPORTS]: (orderId) => {
       const nowTime = new Date();
       const monthBefore = new Date();

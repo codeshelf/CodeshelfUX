@@ -10,7 +10,6 @@ function mapDispatch(dispatch) {
   return bindActionCreators({acInitialLoadFacilities}, dispatch);
 }
 
-@connect(getFacility, mapDispatch)
 class LoadFacility extends Component {
 
   componentDidMount() {
@@ -41,4 +40,4 @@ class LoadFacility extends Component {
   }
 }
 
-export default exposeRouter(LoadFacility);
+export default exposeRouter(connect(getFacility, mapDispatch)(LoadFacility));
