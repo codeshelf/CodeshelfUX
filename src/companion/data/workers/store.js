@@ -82,7 +82,7 @@ export function toWorkerName(worker, defaultName) {
 }
 
 export function getWorkers() {
-    return workersCursor().toJS();
+   return workersCursor();
 }
 
 export function getWorkersByBadgeId() {

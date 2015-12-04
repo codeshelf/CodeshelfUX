@@ -9,7 +9,7 @@ import {EditButtonLink, AddButtonLink} from 'components/common/TableButtons';
 import ListView from "./ListView";
 import Immutable from 'immutable';
 
-export default class ListManagement extends React.Component{
+export default class ListManagement extends PureComponent {
 
     constructor(props) {
         super(props);
