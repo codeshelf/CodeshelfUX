@@ -7,11 +7,11 @@ import Icon from 'react-fa';
 
 const propertiesDisplayName = {
  "persistentId": "Persistent Id",
- "orderId": "Order Id",
- "customerId": "Customer Id",
- "shipperId": "Shipper Id",
- "destinationId": "Destination Id",
- "containerId": "Assigned container",
+ "orderId": "Order",
+ "customerId": "Customer",
+ "shipperId": "Shipper",
+ "destinationId": "Destination",
+ "containerId": "Container",
  "status": "Status",
  "orderLocationAliasIds": "Order location alias id",
  "groupUi": "Group Ui",
@@ -19,15 +19,15 @@ const propertiesDisplayName = {
  "fullDomainId": "Full Domain Id",
  "wallUi": "Wall Ui",
  "orderType": "Order Type",
- "dueDate": "Due date",
- "orderDate": "Order date"
+ "dueDate": "Due Date",
+ "orderDate": "Order Date"
 };
 
 // TODO add which properties should be shown
 const propertiesToDisplay = [
-  "dueDate", "status", "orderDate", "orderType", "customerId", "containerId", "shipperId",
-  "destinationId", "orderLocationAliasIds", "persistentId", "groupUi",
-  "active", "fullDomainId", "wallUi"
+  "dueDate", "status", "orderDate", "customerId", "containerId", "shipperId",
+  "destinationId", "orderLocationAliasIds", "groupUi",
+  "wallUi"
 ];
 
 export class Basics extends Component {
