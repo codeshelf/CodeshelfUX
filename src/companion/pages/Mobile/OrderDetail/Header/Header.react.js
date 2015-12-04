@@ -52,7 +52,7 @@ export class Header extends Component {
       <div>
         <Row>
           <Col xs={3} xsOffset={9}>
-            <Button bsStyle="primary" onClick={acSettingOpen}><Icon name="gears" /></Button>
+            <Button bsStyle="primary" bsSize="xs" onClick={acSettingOpen}><Icon name="gears" /></Button>
           </Col>
         </Row>
         <Settings title="Set field visibility"

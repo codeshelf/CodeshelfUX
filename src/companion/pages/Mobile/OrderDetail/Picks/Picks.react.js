@@ -40,7 +40,7 @@ export class Picks extends Component {
             )}
           </Col>
           <Col xs={3}>
-            <Button bsStyle="primary" ><Icon name={expanded? "chevron-circle-up" : "chevron-circle-down"} /></Button>
+            <Button bsStyle="primary" bsSize="xs"><Icon name={expanded? "chevron-circle-up" : "chevron-circle-down"} /></Button>
           </Col>
         </Row>
         <hr />
@@ -62,7 +62,7 @@ export class Picks extends Component {
       <div>
         <Row>
           <Col xs={3} xsOffset={9}>
-            <Button bsStyle="primary" onClick={acSettingOpen}><Icon name="gears" /></Button>
+            <Button bsStyle="primary" bsSize="xs" onClick={acSettingOpen}><Icon name="gears" /></Button>
           </Col>
         </Row>
         <Settings title="Set field visibility"
