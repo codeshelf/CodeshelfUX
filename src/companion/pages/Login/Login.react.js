@@ -100,11 +100,18 @@ class Login extends React.Component {
                     </Col>
                 </Row>
           <Row>
-          <Col sm={12} >
-              <Link to="recoverpassword" className="pull-right">Forgot Password</Link>
-          </Col>
+            <Col sm={12} >
+              <Link to="recoverpassword" >Forgot Password</Link>
+            </Col>
           </Row>
+          <Row>
+            <Col sm={12}>
+              <div className="pull-right">
                 <SubmitButton label="Login" />
+              </div>
+            </Col>
+          </Row>
+
             </Form>
             <p className="m-t"> <small>Codeshelf &copy; 2015</small> </p>
             </FormPageLayout>
