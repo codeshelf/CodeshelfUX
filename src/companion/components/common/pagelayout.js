@@ -47,14 +47,16 @@ class FormGrid extends React.Component {
         let {title} = this.props;
         return (
             <div className="register-container full-height sm-p-t-30">
-                <div className="container-sm-height full-height">
-                    <Row className="row-sm-height">
-                        <Col sm={12} className="col-sm-height col-middle">
-                            <h1>{title}</h1>
-                            {this.props.children}
-                        </Col>
-                    </Row>
-                </div>
+              <div className="container-sm-height full-height">
+                <Row className="row-sm-height">
+                  <Col sm={12} className="col-sm-height col-middle">
+                    <div className="text-center">
+                     <h1>{title}</h1>
+                    </div>
+                    {this.props.children}
+                  </Col>
+                </Row>
+              </div>
             </div>
             );
     }
