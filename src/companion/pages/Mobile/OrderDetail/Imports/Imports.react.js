@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 
-import {Tabs, Tab, Row, Col, Button, Modal} from 'react-bootstrap';
+import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
+import {dateFormater} from "../../DateDisplay.react.js";
 import {FieldRenderer} from "../common/FieldRenderer.react.js";
 import {Settings} from '../common/Settings.react.js';
 
@@ -9,7 +10,12 @@ import {PROPERTY_VISIBILITY_OVERVIEW, PROPERTY_VISIBILITY_DETAIL} from '../store
 
 import {fieldToDescription} from "./intl";
 
-export class Items extends Component {
+const fieldFormater = {
+    received: dateFormater,
+    completed: dateFormater,
+};
+
+export class Imports extends Component {
 
   componentWillUnmount() {
     if (this.props.expanded) {
@@ -17,20 +23,21 @@ export class Items extends Component {
     }
   }
 
-  renderItem(expanded, fieldSettings, itemData) {
-    const {orderDetailId} = itemData;
-    const {renderValue} = this;
+  renderImport(expanded, fieldSettings, importData) {
+    const {persistentId} = importData;
+    const  {renderValue, dateFormater} = this;
     const isVisible = (field) => fieldSettings[(expanded)? PROPERTY_VISIBILITY_DETAIL: PROPERTY_VISIBILITY_OVERVIEW][field];
     const {order: fieldsOrder} = fieldSettings;
     return (
-      <div key={orderDetailId}>
-        <Row onClick={() => this.props.acExpand((!expanded)? orderDetailId : null)}>
+      <div key={persistentId}>
+        <Row onClick={() => this.props.acExpand((!expanded)? persistentId : null)}>
           <Col xs={9}>
             {fieldsOrder.map((field) =>
               (isVisible(field) &&
                 <FieldRenderer key={field}
                                description={fieldToDescription[field]}
-                               value={itemData[field]} />)
+                               value={importData[field]}
+                               formater={fieldFormater[field]} />)
             )}
           </Col>
           <Col xs={3}>
@@ -43,11 +50,12 @@ export class Items extends Component {
   }
 
   render() {
-    const {items, expanded, groupBy, sortingOrder} = this.props;
-    const count = items.length;
+    const {imports, expanded} = this.props;
+    const count = imports.length;
     if (count === 0) {
-      return <div> Not item in this order</div>;
+      return <div>No imports for this order</div>;
     }
+
     const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
     const {acSettingOpen, acSettingClose, acSetFieldVisibility, acSetFieldOrder} = this.props;
 
@@ -55,7 +63,7 @@ export class Items extends Component {
       <div>
         <Row>
           <Col xs={3} xsOffset={9}>
-            <Button bsStyle="primary" bsSize="xs" onClick={acSettingOpen}><Icon name="gears" /></Button>
+              <Button bsStyle="primary" bsSize="xs" onClick={acSettingOpen}><Icon name="gears" /></Button>
           </Col>
         </Row>
         <Settings title="Set field visibility"
@@ -66,11 +74,11 @@ export class Items extends Component {
                     acSetFieldVisibility,
                     acSetFieldOrder}} />
         <hr />
-        {items.map((item) =>
-          (expanded && item.orderDetailId === expanded)?
-            this.renderItem(true, fieldSettings, item)
+        {imports.map((oneImport) =>
+          (expanded && oneImport.persistentId === expanded)?
+            this.renderImport(true, fieldSettings, oneImport)
             :
-            this.renderItem(false, fieldSettings, item)
+            this.renderImport(false, fieldSettings, oneImport)
         )}
       </div>
     );

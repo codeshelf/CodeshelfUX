@@ -1,0 +1,16 @@
+export const fieldToDescription = {
+  completed: "Completed",
+  domainId: "Domain id",
+  filename: "Filename",
+  gtins: "Gtitns",
+  itemIds: "Items ids",
+  linesFailed: "Lines failed",
+  linesProcessed: "Lines processed",
+  orderIds: "Orders ids",
+  ordersProcessed: "Orders Processed",
+  persistentId: "Persistent id",
+  received: "Recived",
+  status: "Status",
+  transportType: "Transport type",
+  username: "Username",
+}

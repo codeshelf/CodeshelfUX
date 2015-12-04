@@ -1,0 +1,17 @@
+export const fieldToDescription = {
+ "persistentId": "Persistent Id",
+ "orderId": "Order",
+ "customerId": "Customer",
+ "shipperId": "Shipper",
+ "destinationId": "Destination",
+ "containerId": "Container",
+ "status": "Status",
+ "orderLocationAliasIds": "Order location alias id",
+ "groupUi": "Group Ui",
+ "active": "Active",
+ "fullDomainId": "Full Domain Id",
+ "wallUi": "Wall Ui",
+ "orderType": "Order Type",
+ "dueDate": "Due Date",
+ "orderDate": "Order Date",
+};

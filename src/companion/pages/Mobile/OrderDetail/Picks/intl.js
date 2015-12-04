@@ -1,0 +1,21 @@
+export const fieldToDescription = {
+  "createdAt": "Time",
+  "type": "Type",
+  "itemId": "Item ID",
+  "itemLocation": "Location",
+  "wiPlanQuantity": "Plan Qty",
+  "wiActualQuantity": "Actual Qty",
+  "itemUom": "UOM",
+  "itemDescription": "Description",
+  "workerName": "Worker",
+  "deviceGuid": "Cart",
+  "persistentId": "Persistent id",
+  "orderId": "Order id",
+  "devicePersistentId": "Device persistent id",
+  "workerId": "Badge",
+  "orderDetailId": "Order detail id",
+  "workInstructionId": "Worker instruction Id",
+  "resolved": "Resolved",
+  "resolvedAt": "Resolved at",
+  "resolvedBy": "Resolved by"
+}
