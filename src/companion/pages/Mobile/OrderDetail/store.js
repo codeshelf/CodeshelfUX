@@ -284,7 +284,7 @@ function tabToApi(facilityId, tab) {
       const monthBefore = new Date();
       monthBefore.setTime(nowTime.getTime()-MILISECONDS_IN_MONTH);
       return getFacilityContext(facilityId).findImportReceipts({
-        orderId,
+        orderIds: orderId,
         itemIds: "",
         gtins: "",
         properties: ["orderId"],
