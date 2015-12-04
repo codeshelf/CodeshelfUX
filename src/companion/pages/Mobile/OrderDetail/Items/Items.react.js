@@ -77,7 +77,11 @@ export class Items extends Component {
     const fieldsOrder = this.getVisibleProperties()["order"];
     return (
       <div>
-        <Button onClick={() => this.openModal()}>Setting</Button>
+        <Row>
+          <Col xs={3} xsOffset={9}>
+            <Button bsStyle="primary" onClick={() => this.openModal()}><Icon name="gears" /></Button>
+          </Col>
+        </Row>
         <Settings visible={this.state.modalOpen} onClose={() => this.closeModal()}
             acSetFieldVisibility={this.props.acSetFieldVisibility}
             acSetFieldOrder={this.props.acSetFieldOrder}

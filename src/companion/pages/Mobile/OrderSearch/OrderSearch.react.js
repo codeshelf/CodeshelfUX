@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {RouteHandler} from 'react-router';
-import {Nav, NavItem, Row, Col, Button, Input} from 'react-bootstrap';
+import {Nav, NavItem, Grid, Row, Col, Button, Input} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {Link} from '../links';
 import {bindActionCreators} from 'redux';
@@ -45,7 +45,7 @@ export class SearchInput extends Component {
     return <Input
         type="text"
         value={value}
-        placeholder="Enter text"
+        placeholder="Enter Order ID"
         hasFeedback
         ref="input"
         groupClassName="group-class"
@@ -59,10 +59,10 @@ export class SearchInput extends Component {
     const filterText = filter.text;
     return (
       <Row style={{"padding-top":"10px"}}>
-        <Col xs={10}>
+        <Col xs={9}>
          {this.renderInput(filterText, () => acChangeFilter(this.refs.input.getValue()))}
         </Col>
-        <Col xs={2}>
+        <Col xs={3}>
           {/*TODO Camera button is not used in this iteration */}
           {/*<Button bsStyle="primary" disabled><Icon name="camera"/></Button>*/}
           <Button bsStyle="primary" onClick={() => acSearch(filterText) }><Icon name="search"/></Button>
@@ -98,16 +98,20 @@ export class OrderItem extends Component {
     return (
       <Link to="mobile-order-datail" params={{id: orderId}}>
         <Row>
-          <Col xs={10}>
+          <Col xs={9}>
             <Row>
-              <h2>{this.renderId(orderId, filterText)}</h2>
+              <Col xs={12}>
+                  <h2>{this.renderId(orderId, filterText)}</h2>
+              </Col>
             </Row>
             <Row>
-              {/* TODO format due date with some formater */}
-              {status} - <DateDisplay date={dueDate} />
+              <Col xs={12}>
+                {/* TODO format due date with some formater */}
+                {status} - <DateDisplay date={dueDate} />
+              </Col>
             </Row>
           </Col>
-          <Col xs={2}>
+          <Col xs={3}>
               <Button bsStyle="primary" onClick={() => console.log("click") }><Icon name="chevron-right"/></Button>
           </Col>
         </Row>
@@ -129,23 +133,27 @@ export class OrderList extends Component {
     }
     if (resultOrders.total) {
       return (
-        <div>
-          Number of results: { resultOrders.total }
-          {resultOrders.results.map((order) => {
-            return <OrderItem {...order} filterText={filterText} />
-          })}
-          {/*Orders: {JSON.stringify(orders)}*/}
-        </div>
+        <Row>
+          <Col sm={12}>
+            Number of results: { resultOrders.total }
+            {resultOrders.results.map((order) => {
+              return <OrderItem {...order} filterText={filterText} />
+            })}
+            {/*Orders: {JSON.stringify(orders)}*/}
+          </Col>
+        </Row>
       );
     } else {
       return (
-        <div>
-          Number of results: { resultOrders.length }
-          {resultOrders.slice(0,5).map((order) => {
-            return <OrderItem {...order} filterText={filterText} />
-          })}
-          {/*Orders: {JSON.stringify(orders)}*/}
-        </div>
+        <Row>
+          <Col sm={12}>
+            Number of results: { resultOrders.length }
+            {resultOrders.slice(0,5).map((order) => {
+              return <OrderItem {...order} filterText={filterText} />
+            })}
+            {/*Orders: {JSON.stringify(orders)}*/}
+          </Col>
+        </Row>
       );
     }
   }

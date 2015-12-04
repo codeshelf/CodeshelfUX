@@ -1,10 +1,10 @@
 export const fieldToDescription = {
-  "itemId": "Item id",
+  "itemId": "Item ID",
   "status": "Status",
-  "planQuantity": "Plan quantity",
-  "uom": "Uom",
-  "gtin": "Gtin",
-  "preferredLocation": "Preferred location",
-  "orderDetailId": "Order detail id",
+  "planQuantity": "Plan Qty",
+  "uom": "UOM",
+  "gtin": "GTIN",
+  "preferredLocation": "Location",
+  "orderDetailId": "Order Detail ID",
   "description": "Description",
 };
