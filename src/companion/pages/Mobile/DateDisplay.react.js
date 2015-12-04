@@ -15,4 +15,8 @@ class DateDisplayDumm extends Component {
  }
 }
 
+function dateFormater(date) {
+  return <DateDisplay date={date} />;
+}
+
 export const DateDisplay = connect(getSelectedFacility)(DateDisplayDumm);

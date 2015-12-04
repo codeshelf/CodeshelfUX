@@ -3,7 +3,7 @@ import {getSelectedFacility} from "../Facility/get";
 import {getOrderDetail} from "./get";
 import {getPicks} from "./mockGetPicks";
 
-
+import * as fieldSetting from './storeFieldConfig';
 
 
 const SELECT_TAB = 'select tab for order detail';
@@ -19,21 +19,15 @@ const STATUS_STARTED = "started";
 const STATUS_OK = "ok";
 const STATUS_ERROR = "error";
 
+const SETTING_OPEN = "open settings";
+const SETTING_CLOSE = "close settings";
+
 export const SETTING_PROPERTY_VISIBILITY = "set property visibility";
 export const SETTING_PROPERTY_ORDER = "set property order";
 export const PROPERTY_VISIBILITY_OVERVIEW = "overview";
 export const PROPERTY_VISIBILITY_DETAIL = "detail";
 
-const EXPAND_ITEM = "expand item";
-const EXPAND_IMPORT = "expand import";
-const EXPAND_PICK = "expand pick";
-
-
-const GROUP_ITEMS = "group items";
-export const GROUP_ITEMS_WORKER = "group by workers";
-export const GROUP_ITEMS_TIMESTAMS = "group by timestamp";
-export const GROUP_ITEMS_STATUS = "group by status";
-
+const EXPAND_SOMETHING = "expand something";
 
 const dataLoadingState = {
     whatIsLoaded: null, // store what we are loading. Currently idOfItem
@@ -43,51 +37,40 @@ const dataLoadingState = {
     whatIsLoading: null,
 }
 
-export const PERSIST_STATE_PART =[["orderDetail", TAB_ITEMS, "settings"]];
+export const PERSIST_STATE_PART =[["orderDetail", TAB_ITEMS, "settings", "properties"]];
 
 const initState = {
   tab: TAB_DETAIL, // TAB_DETAIL, TAB_ITEMS, TAB_PICKS
   [TAB_DETAIL]: {
     ...dataLoadingState,
+    settings: {
+      properties: fieldSetting.headerFieldsSetting,
+      open: false,
+    }
   },
   [TAB_ITEMS]: {
     ...dataLoadingState,
-    expandedItem: null,
-    groupBy: GROUP_ITEMS_TIMESTAMS, // GROUP_ITEMS_WORKER, GROUP_ITEMS_TIMESTAMS, GROUP_ITEMS_STATUS
-    sortingOrder: 1, // can be 1 or -1
+    expanded: null,
     settings: {
-      properties: {
-        [PROPERTY_VISIBILITY_OVERVIEW]: {
-          "itemId": true,
-          "status": true,
-          "planQuantity": true,
-          "uom": false,
-          "gtin": false,
-          "preferredLocation": false,
-          "orderDetailId": false,
-          "description": false,
-        },
-        [PROPERTY_VISIBILITY_DETAIL]: {
-          "itemId": true,
-          "status": true,
-          "planQuantity": true,
-          "uom": true,
-          "gtin": true,
-          "preferredLocation": true,
-          "orderDetailId": true,
-          "description": true,
-        },
-        order: ["itemId", "status", "planQuantity", "uom", "gtin", "preferredLocation", "orderDetailId", "description"],
-      },
+      properties: fieldSetting.itemsFieldsSetting,
+      open: false,
     },
   },
   [TAB_PICKS]: {
     ...dataLoadingState,
-    expandedPick: null,
+    expanded: null,
+    settings: {
+      properties: fieldSetting.picksFieldsSetting,
+      open: false,
+    },
   },
   [TAB_IMPORTS]: {
     ...dataLoadingState,
-    expandedImport: null,
+    expanded: null,
+    settings: {
+      properties: fieldSetting.importFieldsSetting,
+      open: false,
+    },
   },
 };
 
@@ -107,6 +90,32 @@ export function orderDetailReducer(state = initState, action) {
         case STATUS_ERROR: {
           const {error} = action;
           return {...state, [tab]: {...(state[tab]), data: null, error, whatIsLoading: null, whatIsLoaded: null}};
+        }
+      }
+    }
+    case SETTING_OPEN: {
+      const {tab} = action;
+      return {
+        ...state,
+        [tab]: {
+          ...state[tab],
+          settings: {
+            ...state[tab]["settings"],
+            open: true,
+          }
+        }
+      }
+    }
+    case SETTING_CLOSE: {
+      const {tab} = action;
+      return {
+        ...state,
+        [tab]: {
+          ...state[tab],
+          settings: {
+            ...state[tab]["settings"],
+            open: false,
+          }
         }
       }
     }
@@ -165,17 +174,9 @@ export function orderDetailReducer(state = initState, action) {
       };
 
     }
-    case EXPAND_ITEM: {
-      const {itemId: expandedItem} = action;
-      return {...state, [TAB_ITEMS]: {...(state[TAB_ITEMS]), expandedItem}};
-    }
-    case EXPAND_IMPORT: {
-      const {importId: expandedImport} = action;
-      return {...state, [TAB_IMPORTS]: {...(state[TAB_IMPORTS]), expandedImport}};
-    }
-    case EXPAND_PICK: {
-      const {pickId: expandedPick} = action;
-      return {...state, [TAB_PICKS]: {...(state[TAB_PICKS]), expandedPick}};
+    case EXPAND_SOMETHING: {
+      const {what: expanded, tab} = action;
+      return {...state, [tab]: {...(state[tab]), expanded}};
     }
     case SELECT_TAB: {
       const {tab} = action;
@@ -185,9 +186,23 @@ export function orderDetailReducer(state = initState, action) {
   }
 }
 
+export function acSettingOpen(tab) {
+  return {
+    type: SETTING_OPEN,
+    tab,
+  }
+}
+
+export function acSettingClose(tab) {
+  return {
+    type: SETTING_CLOSE,
+    tab,
+  }
+}
+
 export function acSetFieldVisibility(tab, overview, field, visible) {
-  if (tab !== TAB_ITEMS) {
-    throw "seting field visibility not supported in tab:" + tab + "only in tab " + TAB_ITEMS;
+  if (ALL_TABS.indexOf(tab) === -1) {
+    throw "Unexpected tab setting: " + tab;
   }
   return {
     type: SETTING_PROPERTY_VISIBILITY,
@@ -199,8 +214,8 @@ export function acSetFieldVisibility(tab, overview, field, visible) {
 }
 
 export function acSetFieldOrder(tab, field, diff) {
-  if (tab !== TAB_ITEMS) {
-    throw "seting field visibility not supported in tab:" + tab + "only in tab " + TAB_ITEMS;
+  if (ALL_TABS.indexOf(tab) === -1) {
+    throw "Unexpected tab setting: " + tab;
   }
   return {
     type: SETTING_PROPERTY_ORDER,
@@ -210,27 +225,13 @@ export function acSetFieldOrder(tab, field, diff) {
   }
 }
 
-export function acExpandItem(itemId) {
+export function acExpand(tab, what) {
   return {
-    type: EXPAND_ITEM,
-    itemId
+    type: EXPAND_SOMETHING,
+    tab,
+    what,
   }
 }
-
-export function acExpandImport(importId) {
-  return {
-    type: EXPAND_IMPORT,
-    importId
-  }
-}
-
-export function acExpandPick(pickId) {
-  return {
-    type: EXPAND_PICK,
-    pickId
-  }
-}
-
 
 export function acSelectTab(tab, orderId, forceLoad = false) {
   return (dispatch, getState) => {
@@ -278,6 +279,7 @@ function tabToApi(facilityId, tab) {
   return {
     [TAB_DETAIL]: (orderId) => getFacilityContext(facilityId).getOrder(orderDetailProperties, orderId),
     [TAB_ITEMS]:  getFacilityContext(facilityId).getOrderDetails,
+    //[TAB_PICKS]: getPicks,
     [TAB_PICKS]: getFacilityContext(facilityId).getOrderEvents,
     [TAB_IMPORTS]: (orderId) => {
       const nowTime = new Date();

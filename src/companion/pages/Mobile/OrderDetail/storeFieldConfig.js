@@ -1,0 +1,177 @@
+//TODO remove duplicity with store
+const PROPERTY_VISIBILITY_OVERVIEW = "overview";
+const PROPERTY_VISIBILITY_DETAIL = "detail";
+
+export const headerFieldsSetting = {
+  order: ["dueDate", "status", "orderDate", "customerId", "containerId", "shipperId",
+  "destinationId", "orderLocationAliasIds", "groupUi",
+  "wallUi"],
+  [PROPERTY_VISIBILITY_OVERVIEW]: {
+    "dueDate": true,
+    "status": true,
+    "orderDate": true,
+    "customerId": true,
+    "containerId": true,
+    "shipperId": true,
+    "destinationId": false,
+    "orderLocationAliasIds": false,
+    "groupUi": false,
+    "wallUi": false,
+  },
+};
+
+
+export const itemsFieldsSetting = {
+  order: ["itemId", "status", "planQuantity", "uom", "gtin", "preferredLocation",
+      "orderDetailId", "description"],
+  [PROPERTY_VISIBILITY_OVERVIEW]: {
+    "itemId": true,
+    "status": true,
+    "planQuantity": true,
+    "uom": false,
+    "gtin": false,
+    "preferredLocation": false,
+    "orderDetailId": false,
+    "description": false,
+  },
+  [PROPERTY_VISIBILITY_DETAIL]: {
+    "itemId": true,
+    "status": true,
+    "planQuantity": true,
+    "uom": true,
+    "gtin": true,
+    "preferredLocation": true,
+    "orderDetailId": true,
+    "description": true,
+  },
+};
+
+/* One import
+  {
+    completed: 1447943430477
+    domainId: "Import-Thu Nov 19 14:30:30 UTC 2015"
+    filename: "ordersOnePerDay.csv"
+    gtins: null
+    itemIds: "CUL-CS-16,CUL-CS-10,CUL-CS-12,CUL-CS-6"
+    linesFailed: 0
+    linesProcessed: 8
+    orderIds: "444444,22222,555555,33333,11111"
+    ordersProcessed: 5
+    persistentId: "1c434091-3f0e-4c16-aed7-4715177b9a69"
+    received: 1447943430225
+    status: "Completed"
+    transportType: "APP"
+    username: "mfedak@gmail.com"
+  }
+*/
+
+export const importFieldsSetting = {
+  order: ["received", "filename", "status", "linesProcessed", "linesFailed",
+    "ordersProcessed", "transportType", "username", "completed", "domainId",
+     "gtins", "itemIds", "orderIds", "persistentId"],
+  [PROPERTY_VISIBILITY_OVERVIEW]: {
+    "received": true,
+    "filename": true,
+    "status": false,
+    "linesProcessed": false,
+    "linesFailed": false,
+    "ordersProcessed": false,
+    "transportType": false,
+    "username": false,
+    "completed": false,
+    "domainId": false,
+    "gtins": false,
+    "itemIds": false,
+    "orderIds": false,
+    "persistentId": false,
+  },
+  [PROPERTY_VISIBILITY_DETAIL]: {
+    "received": true,
+    "filename": true,
+    "status": true,
+    "linesProcessed": true,
+    "linesFailed": true,
+    "ordersProcessed": true,
+    "transportType": true,
+    "username": true,
+    "completed": false,
+    "domainId": false,
+    "gtins": false,
+    "itemIds": false,
+    "orderIds": false,
+    "persistentId": false,
+  },
+};
+
+/* One pick
+  {
+    "createdAt": 1447714271474,
+    "type": "COMPLETE",
+    "itemId": "883929463862",
+    "itemLocation": "P2001721",
+    "wiPlanQuantity": 1,
+    "wiActualQuantity": 1,
+    "itemUom": "EA",
+    "itemDescription": "",
+    "workerName": "008, CSLGO ",
+    "deviceGuid": "0x0000021d",
+    "persistentId": "d3e28f6c-e8d6-4da3-bc76-3c9c74faf100",
+    "orderId": "42910564",
+    "devicePersistentId": "0a7c4291-c47e-4ac9-9e01-ff1a19f81c04",
+    "workerId": "CSLGO008",
+    "orderDetailId": "6af21da7-6a3c-4947-87a8-a1a1aa5538af",
+    "workInstructionId": "c19de6b5-6531-41bd-80d9-2695b42dd48c",
+    "resolved": false,
+    "resolvedAt": null,
+    "resolvedBy": null
+  }
+*/
+
+export const picksFieldsSetting = {
+  order: ["createdAt", "type", "itemId", "itemLocation", "wiPlanQuantity",
+   "wiActualQuantity", "itemUom", "itemDescription", "workerName", "deviceGuid",
+   "persistentId", "orderId", "devicePersistentId", "workerId", "orderDetailId",
+   "workInstructionId", "resolved", "resolvedAt", "resolvedBy"],
+  [PROPERTY_VISIBILITY_OVERVIEW]: {
+    "createdAt": true,
+    "type": true,
+    "itemId": true,
+    "itemLocation": false,
+    "wiPlanQuantity": false,
+    "wiActualQuantity": false,
+    "itemUom": false,
+    "itemDescription": false,
+    "workerName": false,
+    "deviceGuid": false,
+    "persistentId": false,
+    "orderId": false,
+    "devicePersistentId": false,
+    "workerId": false,
+    "orderDetailId": false,
+    "workInstructionId": false,
+    "resolved": false,
+    "resolvedAt": false,
+    "resolvedBy": false,
+  },
+  [PROPERTY_VISIBILITY_DETAIL]: {
+    "createdAt": true,
+    "type": true,
+    "itemId": true,
+    "itemLocation": true,
+    "wiPlanQuantity": true,
+    "wiActualQuantity": true,
+    "itemUom": true,
+    "itemDescription": true,
+    "workerName": true,
+    "deviceGuid": true,
+    "persistentId": false,
+    "orderId": false,
+    "devicePersistentId": false,
+    "workerId": false,
+    "orderDetailId": false,
+    "workInstructionId": false,
+    "resolved": false,
+    "resolvedAt": false,
+    "resolvedBy": false,
+  },
+}

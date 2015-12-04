@@ -31,5 +31,5 @@ const picks = [
 ];
 
 export function getPicks(orderId) {
-  return Promise.delay(Promise.resolve(picks), 2000);
+  return Promise.delay(Promise.resolve(picks), 500);
 }

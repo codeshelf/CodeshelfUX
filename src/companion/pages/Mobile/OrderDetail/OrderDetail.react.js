@@ -6,13 +6,14 @@ import {connect} from 'react-redux';
 import {Tabs, Tab, Row, Col} from 'react-bootstrap';
 
 import {TAB_DETAIL, TAB_ITEMS, TAB_PICKS, TAB_IMPORTS} from './store';
-import {acSelectTab, acExpandItem, acExpandImport, acExpandPick, acSetFieldVisibility, acSetFieldOrder} from './store';
+import {acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
+    acSettingOpen, acSettingClose} from './store';
 import {getOrderDetail} from "./get";
 
-import {Basics} from "./Basics.react.js";
+import {Header} from "./Header/Header.react.js";
 import {Items} from "./Items/Items.react.js";
-import {Picks} from "./Picks.react.js";
-import {Imports} from "./Imports.react.js";
+import {Picks} from "./Picks/Picks.react.js";
+import {Imports} from "./Imports/Imports.react.js";
 
 class OrderDetail extends Component {
 
@@ -25,7 +26,7 @@ class OrderDetail extends Component {
   componentWillMount() {
     const {id: orderId} = this.props.router.getCurrentParams();
     this.orderId = orderId;
-    this.props.acSelectTab(TAB_ITEMS, orderId, true);
+    this.props.acSelectTab(TAB_DETAIL, orderId, true);
     console.log("After will mount");
   }
 
@@ -48,30 +49,39 @@ class OrderDetail extends Component {
     const {whatIsLoading, whatIsLoaded, error} = this.props[tab];
     const showLoading = (whatIsLoading !== null || whatIsLoaded === null);
     let contentElement = null;
+
     if (showLoading) {
       contentElement = <div> Loading ... </div>;
-    } else if (tab === TAB_DETAIL) {
-      contentElement = <Basics order={this.props[tab].data} />
-    } else if (tab === TAB_ITEMS) {
-      const acSetFieldVisibility = (o, f, v) => this.props.acSetFieldVisibility(TAB_ITEMS, o, f, v);
-      const acSetFieldOrder = (f, v) => this.props.acSetFieldOrder(TAB_ITEMS, f, v);
-      contentElement = <Items items={this.props[tab].data}
-                              settings={this.props[tab].settings}
-                              acSetFieldVisibility={acSetFieldVisibility}
-                              acSetFieldOrder={acSetFieldOrder}
-                              expandedItem={this.props[tab].expandedItem}
-                              acExpandItem={this.props.acExpandItem}
-
-                              /*groupBy={this.props[tab].groupBy} NOT USED RIGHT NOW
-                              sortingOrder={this.props[tab].sortingOrder}*/ />
-    } else if (tab === TAB_IMPORTS) {
-      contentElement = <Imports imports={this.props[tab].data}
-                              expandedImport={this.props[tab].expandedImport}
-                              acExpandImport={this.props.acExpandImport} />
-    } else if (tab === TAB_PICKS) {
-      contentElement = <Picks picks={this.props[tab].data}
-                              expandedPick={this.props[tab].expandedPick}
-                              acExpandPick={this.props.acExpandPick} />
+    } else {
+      const {[tab]: {settings, expanded}} = this.props;
+      // creacte closures over action creators for selected tab
+      const acSettingOpen = () => this.props.acSettingOpen(tab);
+      const acSettingClose = () => this.props.acSettingClose(tab);
+      const acSetFieldVisibility = (o, f, v) => this.props.acSetFieldVisibility(tab, o, f, v);
+      const acSetFieldOrder = (f, v) => this.props.acSetFieldOrder(tab, f, v);
+      const acExpand = (i) => this.props.acExpand(tab, i);
+      const commonProps = {
+        expanded,
+        acExpand,
+        settings,
+        acSetFieldVisibility,
+        acSetFieldOrder,
+        acSettingOpen,
+        acSettingClose,
+      };
+      if (tab === TAB_DETAIL) {
+        contentElement = <Header order={this.props[tab].data}
+                                 {...commonProps} />
+      } else if (tab === TAB_ITEMS) {
+        contentElement = <Items items={this.props[tab].data}
+                                {...commonProps} />
+      } else if (tab === TAB_IMPORTS) {
+        contentElement = <Imports imports={this.props[tab].data}
+                                  {...commonProps} />
+      } else if (tab === TAB_PICKS) {
+        contentElement = <Picks picks={this.props[tab].data}
+                                {...commonProps} />
+     }
     }
     return (
       <div>
@@ -94,8 +104,8 @@ class OrderDetail extends Component {
 }
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acSelectTab, acExpandItem, acExpandImport,
-      acExpandPick, acSetFieldVisibility, acSetFieldOrder}, dispatch);
+  return bindActionCreators({acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
+      acSettingOpen, acSettingClose}, dispatch);
 }
 
 export default exposeRouter(connect(getOrderDetail, mapDispatch)(OrderDetail));
