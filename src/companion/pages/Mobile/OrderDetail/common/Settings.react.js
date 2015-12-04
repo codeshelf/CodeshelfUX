@@ -10,6 +10,27 @@ export class Settings extends Component {
     showDetailCheckbox: true,
   }
 
+  renderHeader(showDetailCheckbox) {
+    return (
+      <Row>
+        <Col xs={1}>
+          <Icon name="minus" />
+        </Col>
+        <Col xs={1}>
+          {showDetailCheckbox &&
+              <Icon name="reorder" />
+          }
+        </Col>
+        <Col xs={5}>
+          FIELD
+        </Col>
+        <Col xs={1}>
+        </Col>
+        <Col xs={1}>
+        </Col>
+      </Row>);
+  }
+
   renderOneProperty(showDetailCheckbox, {first, last, field, visibleOverview, visibleDetail, acSetFieldVisibility, acSetFieldOrder}) {
     return (
       <Row key={field}>
@@ -58,6 +79,7 @@ export class Settings extends Component {
           <Modal.Title>{this.props.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {this.renderHeader(showDetailCheckbox)}
           {order.map((field, index) => {
             const visibleOverview = fieldSettings[PROPERTY_VISIBILITY_OVERVIEW][field];
             const visibleDetail = fieldSettings[PROPERTY_VISIBILITY_DETAIL] && fieldSettings[PROPERTY_VISIBILITY_DETAIL][field];
