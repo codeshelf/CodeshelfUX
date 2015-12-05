@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {RouteHandler} from 'react-router';
-import {Nav, NavItem, Grid, Row, Col, Button, Input} from 'react-bootstrap';
+  import {Nav, NavItem, Grid, Row, Col, ButtonGroup, Button, Input} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {Link} from '../links';
 import {bindActionCreators} from 'redux';
@@ -27,14 +27,16 @@ export class SearchType extends Component {
   }
 
   render() {
-    console.log("Render state", this.state);
+    const {selectedKey} = this.state;
     return (
       <Row>
-        <Nav bsStyle="tabs" activeKey={this.state.tab} onSelect={this.handleChange}>
-          <NavItem eventKey={1}>Order Id</NavItem>
-          <NavItem eventKey={2} disabled>Container Id</NavItem>
-          <NavItem eventKey={3} disabled>Barcode</NavItem>
-        </Nav>
+          <Col xs={12}>
+          <Nav bsStyle="tabs" activeKey={this.state.tab} onSelect={this.handleChange}>
+            <NavItem eventKey={1}><div><Icon name="truck" size="lg"/></div><div>Orders</div></NavItem>
+              <NavItem eventKey={2}><div><Icon name="shopping-cart" size="lg"/></div><div>Carts</div></NavItem>
+            <NavItem eventKey={3}><div><Icon name="user" size="lg"/></div><div>Workers</div></NavItem>
+          </Nav>
+        </Col>
       </Row>
     );
   }
@@ -177,7 +179,7 @@ class OrderSearch extends Component {
     const isLoading = (whatIsLoading !== null);
     return (
       <div>
-        {/*<SearchType />*/}
+        <SearchType />
         <SearchInput  {...{filter, acChangeFilter, acSearch}} />
         <OrderList {...{isLoading, resultOrders, filter, error}} />
       </div>
