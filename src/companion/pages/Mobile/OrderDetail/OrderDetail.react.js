@@ -40,22 +40,22 @@ class OrderDetail extends Component {
     return (
       <Tabs className="nav-tabs-simple" activeKey={activeTab} onSelect={(tab) => this.props.acSelectTab(tab, this.orderId)} tabWidth={1}>
         <Tab eventKey={TAB_DETAIL} title="HDR">
-          Basic info about order
+          Order Header
           {loadedTime && " - loaded "}
           <TimeFromNow time={loadedTime}/>
         </Tab>
         <Tab eventKey={TAB_ITEMS} title="Lines">
-          Lines for order
+          Line Items
           {loadedTime && " - loaded "}
           <TimeFromNow time={loadedTime}/>
         </Tab>
         <Tab eventKey={TAB_PICKS} title="History">
-          History for order
+          Pick History
           {loadedTime && " - loaded "}
           <TimeFromNow time={loadedTime}/>
         </Tab>
         <Tab eventKey={TAB_IMPORTS} title="Imports">
-          Imports for order
+          Files
           {loadedTime && " - loaded "}
           <TimeFromNow time={loadedTime}/>
         </Tab>
@@ -99,7 +99,7 @@ class OrderDetail extends Component {
       const acSetFieldVisibility = (o, f, v) => this.props.acSetFieldVisibility(tab, o, f, v);
       const acSetFieldOrder = (f, v) => this.props.acSetFieldOrder(tab, f, v);
       const acExpand = (i) => this.props.acExpand(tab, i);
-      const acRelaodTab = () => this.props.acSelectTab(tab, this.orderId, true);
+      const acReloadTab = () => this.props.acSelectTab(tab, this.orderId, true);
       const commonProps = {
         expanded,
         acExpand,
@@ -108,7 +108,7 @@ class OrderDetail extends Component {
         acSetFieldOrder,
         acSettingOpen,
         acSettingClose,
-        acRelaodTab,
+        acReloadTab,
       };
       if (tab === TAB_DETAIL) {
         contentElement = <Header order={this.props[tab].data}

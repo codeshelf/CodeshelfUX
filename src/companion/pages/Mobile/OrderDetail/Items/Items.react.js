@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {Tabs, Tab, Row, Col, Button, Modal} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {FieldRenderer} from "../common/FieldRenderer.react.js";
+import {SettingsRow} from "../common/SettingsRow.react.js";
 import {Settings} from '../common/Settings.react.js';
 
 import {PROPERTY_VISIBILITY_OVERVIEW, PROPERTY_VISIBILITY_DETAIL} from '../store';
@@ -50,18 +51,11 @@ export class Items extends Component {
     }
     const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
     const {acSettingOpen, acSettingClose, acSetFieldVisibility,
-     acSetFieldOrder, acRelaodTab} = this.props;
+     acSetFieldOrder, acReloadTab} = this.props;
 
     return (
       <div>
-        <Row>
-          <Col xs={2} xsOffset={7}>
-            <Button bsStyle="primary" bsSize="xs" onClick={acRelaodTab}><Icon name="refresh" /></Button>
-          </Col>
-          <Col xs={3}>
-            <Button bsStyle="primary" bsSize="xs" onClick={acSettingOpen}><Icon name="gears" /></Button>
-          </Col>
-        </Row>
+        <SettingsRow onClickReload={acReloadTab} onClickSettings={acSettingOpen} />
         <Settings title="Set field visibility"
                   visible={settingOpen}
                   onClose={acSettingClose}
