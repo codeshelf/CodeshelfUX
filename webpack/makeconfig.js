@@ -95,7 +95,8 @@ module.exports = function(isDevelopment, isTest) {
         new webpack.DefinePlugin({
           'process.env': {
             NODE_ENV: JSON.stringify(isDevelopment || isTest ? 'development' : 'production'),
-            IS_BROWSER: true
+            IS_BROWSER: true,
+            USE_TEST: process.env.USE_TEST,
           }
         }),
         new webpack.ProvidePlugin({
