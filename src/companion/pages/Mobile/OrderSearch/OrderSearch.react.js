@@ -6,6 +6,7 @@ import {Link} from '../links';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
+import * as csapi from 'data/csapi';
 import {getOrderSearch} from './get';
 import {acChangeFilter, acSearch} from './store';
 import {DateDisplay} from "../DateDisplay.react.js";
@@ -127,7 +128,20 @@ export class OrderList extends Component {
     if (isLoading) {
       return <div> Loading...</div>;
     } else if (error) {
-      return <div> Error in loading orders</div>;
+      let text = "Can't load request";
+      if (error instanceof csapi.ConnectionError || error.message) {
+        text = error.message;
+      }
+      return (
+        <Row>
+          <Col xs={8}>
+            Error: {text}
+          </Col>
+          <Col xs={4}>
+            <Button bsStyle="primary" bsSize="xs" onClick={() => this.props.acChangeFilter(this.props.filter.text)}><Icon name="refresh" /></Button>
+          </Col>
+        </Row>
+      );
     } else if (resultOrders === null) {
       return <div> Loading...</div>;
     }
@@ -179,7 +193,7 @@ class OrderSearch extends Component {
       <div>
         {/*<SearchType />*/}
         <SearchInput  {...{filter, acChangeFilter, acSearch}} />
-        <OrderList {...{isLoading, resultOrders, filter, error}} />
+        <OrderList {...{isLoading, resultOrders, filter, error, acChangeFilter}} />
       </div>
     );
   }

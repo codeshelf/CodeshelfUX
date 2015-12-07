@@ -56,12 +56,16 @@ export class Picks extends Component {
     }
 
     const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
-    const {acSettingOpen, acSettingClose, acSetFieldVisibility, acSetFieldOrder} = this.props;
+    const {acSettingOpen, acSettingClose, acSetFieldVisibility,
+     acSetFieldOrder, acRelaodTab} = this.props;
 
     return (
       <div>
         <Row>
-          <Col xs={3} xsOffset={9}>
+          <Col xs={2} xsOffset={7}>
+            <Button bsStyle="primary" bsSize="xs" onClick={acRelaodTab}><Icon name="refresh" /></Button>
+          </Col>
+          <Col xs={3}>
             <Button bsStyle="primary" bsSize="xs" onClick={acSettingOpen}><Icon name="gears" /></Button>
           </Col>
         </Row>

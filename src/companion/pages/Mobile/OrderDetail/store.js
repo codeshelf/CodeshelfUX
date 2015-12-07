@@ -1,4 +1,6 @@
-import {getFacilityContext} from 'data/csapi';
+import moment from "moment";
+
+import {getFacilityContext, ConnectionError} from 'data/csapi';
 import {getSelectedFacility} from "../Facility/get";
 import {getOrderDetail} from "./get";
 import {getPicks} from "./mockGetPicks";
@@ -35,6 +37,7 @@ const dataLoadingState = {
     data: null,
     error: null,
     whatIsLoading: null,
+    loadedTime: null,
 }
 
 export const PERSIST_STATE_PART =[["orderDetail", TAB_ITEMS, "settings", "properties"]];
@@ -81,15 +84,17 @@ export function orderDetailReducer(state = initState, action) {
       switch (action.status) {
         case STATUS_STARTED: {
           const {whatIsLoading} = action;
-          return {...state, [tab]: {...(state[tab]), data: null, error: null, whatIsLoading: whatIsLoading, whatIsLoaded: null}};
+          return {...state, [tab]: {...(state[tab]), data: null, error: null, whatIsLoading: whatIsLoading, whatIsLoaded: null, loadedTime: null}};
         }
         case STATUS_OK: {
           const {data, orderId} = action;
-          return {...state, [tab]: {...(state[tab]), data, error: null, whatIsLoading: null, whatIsLoaded: orderId}};
+          const loadedTime = moment();
+          return {...state, [tab]: {...(state[tab]), data, error: null, whatIsLoading: null, whatIsLoaded: orderId, loadedTime}};
         }
         case STATUS_ERROR: {
           const {error} = action;
-          return {...state, [tab]: {...(state[tab]), data: null, error, whatIsLoading: null, whatIsLoaded: null}};
+          const loadedTime = moment();
+          return {...state, [tab]: {...(state[tab]), data: null, error, whatIsLoading: null, whatIsLoaded: null, loadedTime}};
         }
       }
     }
@@ -314,7 +319,6 @@ export function acSearch(tab, orderId, forceLoad) {
 
     getRequest(orderId).catch((error) => {
       console.error("Error from search orders", error);
-      // Check if i should dispach
       dispatch(search(tab, STATUS_ERROR, {error}));
     })
     .then((data) => {

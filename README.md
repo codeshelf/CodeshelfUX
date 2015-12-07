@@ -15,12 +15,19 @@ Codeshelf Companion
 
 ## (Optional) When not running a local data server
 
-For the time being edit endpoint in
+Using test.codeshelf.com server instead of local server
 
-    src/companion/data/initialstate.js
+1. For the time being edit endpoint in
+```
+  src/companion/data/initialstate.js
 
-    //endpoint = `http://${window.location.hostname}:8181`;
-    endpoint = "https://test.codeshelf.com";
+  //endpoint = `http://${window.location.hostname}:8181`;
+  endpoint = "https://test.codeshelf.com";
+```
+2. run dev server with env variable USE_TEST
+```
+  USE_TEST=true npm run dev`
+```
 
 
 
@@ -32,4 +39,4 @@ Sign in with your credentials for the data server
 
 All source code and configuration for building the Companion web application are at:
 
-   ./src/companion 
+   ./src/companion

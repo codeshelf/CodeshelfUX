@@ -19,4 +19,28 @@ function dateFormater(date) {
   return <DateDisplay date={date} />;
 }
 
+export class TimeFromNow extends Component {
+
+  componentDidMount() {
+    // refresh every few second
+    this.timer = setInterval(() => {
+      this.setState({});
+    }, 15000);
+  }
+
+  componentWillUnmount() {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+  }
+
+  render() {
+    if (!this.props.time) return null;
+    return <span>{this.props.time.fromNow().toString()}</span>
+    // for debug purpouse render this
+    //return <span>{this.props.time.fromNow().toString()} - {this.props.time.format()}</span>
+  }
+}
+
 export const DateDisplay = connect(getSelectedFacility)(DateDisplayDumm);

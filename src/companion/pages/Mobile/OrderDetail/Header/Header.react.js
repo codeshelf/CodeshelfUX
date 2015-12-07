@@ -44,14 +44,18 @@ export class Header extends Component {
     const {order, expanded} = this.props;
 
     const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
-    const {acSettingOpen, acSettingClose, acSetFieldVisibility, acSetFieldOrder, acExpand} = this.props;
+    const {acSettingOpen, acSettingClose, acSetFieldVisibility,
+     acSetFieldOrder, acExpand, acRelaodTab} = this.props;
 
   const {order: fieldsOrder} = fieldSettings;
     const isVisible = (field) => fieldSettings[PROPERTY_VISIBILITY_OVERVIEW][field];
     return (
       <div>
         <Row>
-          <Col xs={3} xsOffset={9}>
+          <Col xs={2} xsOffset={7}>
+            <Button bsStyle="primary" bsSize="xs" onClick={acRelaodTab}><Icon name="refresh" /></Button>
+          </Col>
+          <Col xs={3}>
             <Button bsStyle="primary" bsSize="xs" onClick={acSettingOpen}><Icon name="gears" /></Button>
           </Col>
         </Row>

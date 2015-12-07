@@ -68,8 +68,8 @@ class FacilitySelector extends React.Component {
 
     renderDropdownLabel(facility) {
         if (facility) {
-          const {description} = facility;
-            return (<span><Icon name="building" />{description}</span>);
+          const {description, timeZoneDisplay} = facility;
+            return (<span><Icon name="building" />{description}({timeZoneDisplay})</span>);
         } else {
             return null;
         }
