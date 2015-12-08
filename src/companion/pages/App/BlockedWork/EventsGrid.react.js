@@ -6,7 +6,7 @@ import PureComponent from 'components/common/PureComponent';
 import DateDisplay from 'components/common/DateDisplay';
 import {Table} from 'components/common/Table';
 import _ from 'lodash';
-import {resolveIssue} from 'data/issues/actions';
+  import {resolveIssue, replenItem} from 'data/issues/actions';
 
 class EventsGrid extends React.Component {
     constructor() {
@@ -71,7 +71,7 @@ EventsGrid.propTypes = {
 export class UnresolvedEvents extends EventsGrid {
     constructor() {
         super();
-        this.rowActionComponent = Resolve;
+        this.rowActionComponent = IssueActions;
     }
 }
 
@@ -87,7 +87,6 @@ export class ResolvedEvents extends EventsGrid {
             },
             {
                 columnName: "resolution",
-                displayName: "Resolution"
             },
             {
                 columnName: "resolver",
@@ -97,16 +96,27 @@ export class ResolvedEvents extends EventsGrid {
 
 };
 
+class IssueButton extends React.Component {
+  handleClick(rowData) {
+    replenItem(rowData);
+  }
 
-class Resolve extends React.Component {
+  render() {
+      let {rowData, style, onClick, iconName} = this.props;
+    let clickHandler = _.partial(onClick, rowData).bind(this);
+      return (<Button bsStyle="primary" style={style} onClick={clickHandler}><Icon name={iconName} /></Button>);
+  }
+}
 
-    handleClick(rowData) {
-        resolveIssue(rowData);
-    }
+class IssueActions extends React.Component {
 
-    render() {
-        let {rowData} = this.props;
-        let clickHandler = _.partial(this.handleClick, rowData).bind(this);
-        return (<Button bsStyle="primary" onClick={clickHandler}><Icon name="check" /></Button>);
-    }
+  render() {
+    let {rowData} = this.props;
+    return (
+      <div>
+        {(rowData.get("type") === "LOW" || rowData.get("type") === "SHORT") &&
+          <IssueButton rowData={rowData} onClick={replenItem} iconName="retweet"/> }
+        <IssueButton rowData={rowData} onClick={resolveIssue} iconName="check" style={{marginLeft: ".5em"}}/>
+      </div>);
+   }
 }

@@ -21,6 +21,22 @@ export function getSubscriptions(key) : KeyedIterable {
     return dispatcher.getSubscriptions(key);
 };
 
+export function replenItem(issue) {
+  dispatch(replenItem, getFacilityContext().replenishItem(issue)).then(() => {
+    //onsuccess
+    let subscriptions = getSubscriptions("issues");
+    subscriptions.map((v, k) => {
+      if (typeof(v) === "function") {
+        v.call();
+      } else {
+        console.warn("found subscription at ", k , "that was not a function was ", v);
+      }
+    });
+
+});
+
+}
+
 export function resolveIssue(issue) {
     dispatch(resolveIssue, getFacilityContext().resolveIssue(issue)).then(() => {
         //onsuccess
@@ -95,5 +111,5 @@ export function selectFirstIssue() {
 
 // Override actions toString for logging.
 setToString('issues', {
-  resolveIssue, fetchTypeIssues, fetchItemIssues, fetchUnresolvedIssuesByType, selectFirstIssue, selectIssueByName, issueSelected
+    resolveIssue, replenItem, fetchTypeIssues, fetchItemIssues, fetchUnresolvedIssuesByType, selectFirstIssue, selectIssueByName, issueSelected
 });

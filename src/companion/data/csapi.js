@@ -352,6 +352,15 @@ export function getFacilityContext(facilityId) {
             });
         },
 
+        replenishItem: (issue) => {
+          let persistentId = issue.get("persistentId");
+          let resolvePath = `/api/events/${persistentId}/replenish`;
+          return ajax(resolvePath, {
+            method: "POST",
+            contentType: "form" //superagent forum url encoded
+          });
+        },
+
         resolveIssue: (issue) => {
             let persistentId = issue.get("persistentId");
             let resolvePath = `/api/events/${persistentId}/resolve`;
