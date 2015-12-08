@@ -61,11 +61,9 @@ export function fetchItemIssues(storageKeys, criteria) {
     }));
 };
 
-export function fetchUnresolvedIssuesByType() {
+export function fetchUnresolvedIssuesByType(filter) {
     let criteria = {
-        filterBy: {
-            "resolved" : false
-        },
+        filterBy: filter,
         groupBy: "type"
     };
     dispatch(fetchUnresolvedIssuesByType, getFacilityContext().getIssues(criteria));

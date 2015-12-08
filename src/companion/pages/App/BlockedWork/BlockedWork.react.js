@@ -1,22 +1,35 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-var {Badge, TabbedArea, TabPane} = require('react-bootstrap');
+import {Badge, TabbedArea, TabPane} from 'react-bootstrap';
 import _ from 'lodash';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
-var {IBox, IBoxBody} = require('components/common/IBox');
+import {IBox, IBoxBody} from 'components/common/IBox';
+import {Form, WrapInput, Input, SubmitButton, getRefInputValue} from 'components/common/Form';
+import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
+
 import IssuesIBox from './IssuesIBox';
-var {getFacilityContext} = require('data/csapi');
+import {getFacilityContext} from 'data/csapi';
 import {fetchUnresolvedIssuesByType, subscribe, unsubscribe} from 'data/issues/actions';
 import {getIssuesSummary} from 'data/issues/store';
 import {List} from 'immutable';
 
 export default class BlockedWork extends React.Component {
-    componentWillMount() {
-        subscribe("blockedwork", fetchUnresolvedIssuesByType);
+
+    constructor(props){
+      super(props);
+      this.state = {};
+      this.subscribeWithFilter = this.subscribeWithFilter.bind(this);
     }
+
+    componentDidMount() {
+      this.subscribeWithFilter();
+    }
+
     componentWillUnmount() {
+
         unsubscribe("blockedwork");
     }
+
 
     toDescription(type) {
         return {
@@ -28,14 +41,26 @@ export default class BlockedWork extends React.Component {
         }[type];
     }
 
+    subscribeWithFilter() {
+      let interval = this.refs.createdFilter.getInterval();
+      var filter = {
+        resolved: false
+      };
+      if (interval) {
+        filter['created'] = interval.toQueryParameterValue();
+      }
+      this.setState({filter: filter});
+      subscribe("blockedwork", fetchUnresolvedIssuesByType.bind(null, filter));
+    }
+
     renderTabbedArea(issuesSummary) {
         let sortedSummary = issuesSummary
             .sortBy((summary) => summary.get("eventType"));
         let firstType = sortedSummary.first().get("eventType");
+        const {filter} = this.state;
         return (
                 <IBox>
                 <IBoxBody>
-
                 <TabbedArea className="nav-tabs-simple" defaultActiveKey={firstType}>
                 {
 
@@ -48,7 +73,7 @@ export default class BlockedWork extends React.Component {
                                       {description && description.toUpperCase()}
                                       <Badge style={{marginLeft: "1em"}} className="badge-primary">{total}</Badge>
                                       </span>}>
-                                <IssuesIBox type={type} />
+                                   <IssuesIBox type={type} filter={filter}/>
                                 </TabPane>);
                                 }).toArray()
                     }
@@ -70,7 +95,10 @@ export default class BlockedWork extends React.Component {
         <PageGrid>
             <Row>
                 <Col sm={12}>
-                {(filteredIssueSummaryResults.count() > 0) ?
+                  <WrapInput label="Created Date">
+                    <DayOfWeekFilter ref="createdFilter" numDays={4} onChange={this.subscribeWithFilter} />
+                  </WrapInput>
+                  {(filteredIssueSummaryResults.count() > 0) ?
                     this.renderTabbedArea(filteredIssueSummaryResults) :
                     <IBox className="bg-primary">
                         <IBoxBody>

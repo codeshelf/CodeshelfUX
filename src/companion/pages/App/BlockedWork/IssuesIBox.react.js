@@ -28,7 +28,7 @@ export default class IssuesIBox extends React.Component {
     }
 
     render() {
-        let {type} = this.props;
+        let {type, filter} = this.props;
         let {groupBy, resolved} = this.state;
         return (
                    <IBox>
@@ -45,9 +45,9 @@ export default class IssuesIBox extends React.Component {
                           </form>
                           {
                               (groupBy === "item") ?
-                                  <IssuesByItem  groupBy="item" type={type} resolved={resolved} />
-                                      :
-                                  <IssuesByWorker groupBy="worker" type={type} resolved={resolved} />
+                          <IssuesByItem  groupBy="item" type={type} resolved={resolved} filter={filter} />
+                                :
+                          <IssuesByWorker groupBy="worker" type={type} resolved={resolved} filter={filter} />
                           }
                       </IBoxBody>
                       </IBox>

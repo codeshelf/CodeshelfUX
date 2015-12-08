@@ -52,7 +52,7 @@ export default class IssuesByItem extends React.Component{
     }
 
     getIssuesByItem(item) {
-        let {type, resolved} = this.props;
+let {type, resolved, filter} = this.props;
         return getItemIssues(itemKeys(item, type, resolved)).get("results");
     }
 
@@ -60,12 +60,13 @@ export default class IssuesByItem extends React.Component{
         if (expanded) {
             this.setState({"selectedGroup" : item});
 
-            let {type, resolved} = this.props;
+            let {type, resolved, filter} = this.props;
             let itemId = item.get("itemId");
             let location = item.get("location");
             var partialFunc = fetchItemIssues.bind(null,
                                   itemKeys(item, type, resolved),
                                   {filterBy: {
+                                      ...filter,
                                       type: type,
                                       itemId: itemId,
                                       resolved: resolved,
@@ -93,11 +94,12 @@ export default class IssuesByItem extends React.Component{
     }
 
         subscribeToIssues() {
-            let {type, resolved, groupBy} = this.props;
+            let {type, resolved, groupBy, filter} = this.props;
             let partialFunc = fetchTypeIssues.bind(null,
                                                    [type, resolved.toString(), groupBy],
                                                    {groupBy: groupBy,
                                                     filterBy: {
+                                                        ...filter,
                                                         type: type,
                                                         resolved: resolved
                                                     }});
