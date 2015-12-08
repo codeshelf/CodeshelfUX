@@ -7,7 +7,7 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd/modules/backends/HTML5';
 
 require('imports?this=>window!assets/plugins/modernizr.custom.js');
-require("imports?classie=assets/plugins/classie/classie.js!pages/js/pages");
+require("imports?classie=assets/plugins/classie/classie.js!pages/js/pages.js");
 
 
 class Root extends React.Component {

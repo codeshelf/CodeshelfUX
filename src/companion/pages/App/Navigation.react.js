@@ -69,6 +69,10 @@ class Navigation extends React.Component {
       document.body.classList.add("fixed-sidebar");
   }
 
+  componentWillUnmount() {
+    document.body.classList.remove("fixed-sidebar");
+  }
+
   getUXUrl() {
       let uxURL = "/ux/?facilityId=" + getSelectedFacility().get("domainId");
       return uxURL;

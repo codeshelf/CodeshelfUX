@@ -10,7 +10,11 @@ import {getSelectedFacility, getFacilities} from 'data/facilities/store';
 
 export default class Facility extends React.Component {
     componentWillMount() {
-        document.body.classList.add("fixed-header", "dashboard", "sidebar-visible", "menu-pin");
+      document.body.classList.add("fixed-header", "dashboard", "sidebar-visible", "menu-pin");
+    }
+
+    componentWillUnmount() {
+      document.body.classList.remove("fixed-header", "dashboard", "sidebar-visible", "menu-pin");
     }
 
     render() {
