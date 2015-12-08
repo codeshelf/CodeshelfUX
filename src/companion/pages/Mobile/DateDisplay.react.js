@@ -15,7 +15,7 @@ class DateDisplayDumm extends Component {
  }
 }
 
-function dateFormater(date) {
+export function dateFormater(date) {
   return <DateDisplay date={date} />;
 }
 

@@ -13,6 +13,7 @@ import {fieldToDescription} from "./intl";
 
 const fieldFormater = {
     createdAt: dateFormater,
+    resolvedAt: dateFormater,
 };
 
 export class Picks extends Component {
