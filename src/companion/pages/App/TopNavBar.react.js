@@ -41,11 +41,6 @@ export default class TopNavBar extends React.Component {
                                     </ButtonLink>
                             }
                             {(facilities) &&
-                              <ButtonLink bsStyle="link" to="mobile" id="mobile-search-orders" name="mobile">
-                                <Icon name="search" size="lg"/>
-                              </ButtonLink>
-                            }
-                            {(facilities) &&
                                 <FacilitySelector facility={facility} facilities={facilities} />}
                                 <UserProfileMenu user={user}/>
                             </div>
