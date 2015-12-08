@@ -4,12 +4,29 @@ import ModalForm from "components/common/ModalForm";
 import FormFields from "components/common/FormFields";
 import {Map} from "immutable";
 import _ from "lodash";
+import {getEmail} from "data/user/store";
 
-export const formMetadata = [
+
+export function getFormMetadata() {
+
+  const commonRoles = [{value: "Admin", label: "Admin"},
+               {value: "Upload", label: "Upload"},
+               {value: "View", label: "View"},
+               {value: "Supervise", label: "Supervise"},
+               {value: "Dashboard", label: "Dashboard"},
+  ];
+  const csRoles = [{value: "CsDeveloper", label: "CsDeveloper"},
+                   {value: "CsSupport", label: "CsSupport"}];
+  let roles = commonRoles;
+  if (getEmail() && getEmail().indexOf("@codeshelf.com") > 0) {
+    roles = commonRoles.concat(csRoles);
+  }
+
+  return [
     {name: "id",
      label: "ID",
      hidden: true},
-     {name: "username",
+    {name: "username",
      label: "Email",
      required: true},
     {name: "active",
@@ -18,17 +35,14 @@ export const formMetadata = [
      required: true},
     {name: "roles",
      label: "Roles",
-     options:[{value: "Admin", label: "Admin"},
-              {value: "Upload", label: "Upload"},
-              {value: "View", label: "View"},
-              {value: "Supervise", label: "Supervise"},
-              {value: "Dashboard", label: "Dashboard"}
-             ],
+     options:roles,
      type: Array,
      required: false}
-];
+  ];
+}
 
-export function toUserModalForm(defaultTitle, formMetadata, returnRoute, handleSave) {
+export function toUserModalForm(defaultTitle, formMetadataFn, returnRoute, handleSave) {
+
     class UserForm extends React.Component{
 
         constructor(props) {
@@ -50,7 +64,7 @@ export function toUserModalForm(defaultTitle, formMetadata, returnRoute, handleS
                      onSave={_.partial(handleSave, formData)}
                      formData={formData}>
 
-                    <FormFields formMetadata={formMetadata}
+                    <FormFields formMetadata={formMetadataFn()}
                      formData={formData}
                      handleChange={this.handleChange}/>
                     </ModalForm>
