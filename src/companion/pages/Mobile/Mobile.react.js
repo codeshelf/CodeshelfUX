@@ -8,11 +8,12 @@ import thunk from "redux-thunk";
 import createLogger from "redux-logger";
 import * as storage from 'redux-storage'
 import createEngine from 'redux-storage/engines/localStorage';
+import * as storageConfig from './storage';
 
 // reducer imports
 import {facilityReducer} from './Facility/store';
 import {orderSearchReducer} from './OrderSearch/store';
-import {orderDetailReducer, PERSIST_STATE_PART, SETTING_PROPERTY_VISIBILITY, SETTING_PROPERTY_ORDER} from './OrderDetail/store';
+import {orderDetailReducer} from './OrderDetail/store';
 
 const rootReducer = storage.reducer(combineReducers({
 //  user: userReducer,
@@ -23,13 +24,13 @@ const rootReducer = storage.reducer(combineReducers({
 }));
 
 const storageEngine = storage.decorators.filter(
-  createEngine('codeshelfus-mobile-web'),
-  [...PERSIST_STATE_PART]);
-//const storageEngine = createEngine('codeshelfus-mobile-web');
+  createEngine(storageConfig.STORAGE_KEY),
+  storageConfig.PERSIST_STATE_PART);
+
 const storageMiddleware = storage.createMiddleware(
   storageEngine,
   []/* black list action */,
-  [SETTING_PROPERTY_VISIBILITY, SETTING_PROPERTY_ORDER] /* white list action */);
+  storageConfig.ACTIONS /* white list action */);
 
 const loggerMiddleware = createLogger();
 
@@ -46,8 +47,14 @@ const createStoreWithMiddleware = compose(
 
 let store = createStoreWithMiddleware(rootReducer)
 
-// load data from local storage
-storage.createLoader(storageEngine)(store);
+// load data from local storage but only if version is greater than actual version
+const versionInStorage = localStorage.getItem(storageConfig.STORAGE_KEY_VERSION);
+if (versionInStorage >= storageConfig.VERSION) {
+  storage.createLoader(storageEngine)(store);
+} else {
+  localStorage.removeItem(storageConfig.STORAGE_KEY);
+  localStorage.setItem(storageConfig.STORAGE_KEY_VERSION, storageConfig.VERSION);
+}
 
 
 

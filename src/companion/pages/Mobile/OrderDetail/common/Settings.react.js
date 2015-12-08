@@ -14,7 +14,7 @@ export class Settings extends Component {
     return (
       <Row>
         <Col xs={1}>
-          <Icon name="minus" />
+          <Icon name="eye" />
         </Col>
         <Col xs={1}>
           {showDetailCheckbox &&
@@ -31,32 +31,24 @@ export class Settings extends Component {
       </Row>);
   }
 
-  renderOneProperty(showDetailCheckbox, {first, last, field, visibleOverview, visibleDetail, acSetFieldVisibility, acSetFieldOrder}) {
+  renderOneProperty(showDetailCheckbox, {first, last, field, visible, acSetFieldVisibility, acSetFieldOrder}) {
     return (
       <Row key={field}>
-        <Col xs={1}>
+        <Col key="visibility" xs={1}>
           <div className="checkbox check-primary" >
-            <input id={field} type="checkbox" checked={visibleOverview} onChange={() => acSetFieldVisibility(true, field, !visibleOverview)} />
+            <input id={field} type="checkbox" checked={visible} onChange={() => acSetFieldVisibility(field, !visible)} />
             <label style={{"margin-right": "0px"}} htmlFor={field}></label>
           </div>
         </Col>
-        <Col xs={1}>
-          {showDetailCheckbox &&
-            <div className="checkbox check-primary" >
-              <input id={"detail" + field} name={"detail" + field} type="checkbox" checked={visibleDetail} onChange={() => acSetFieldVisibility(false, field, !visibleDetail)} />
-              <label style={{"margin-right": "0px"}} htmlFor={"detail" + field}></label>
-            </div>
-          }
-        </Col>
-        <Col xs={5}>
+        <Col key="desc" xs={6}>
           {this.props.fieldToDescription[field]}
         </Col>
-        <Col xs={1}>
+        <Col key="movedown" xs={1}>
           {!first && <Button bsStyle="primary" bsSize="xs" onClick={() => acSetFieldOrder(field, -1)}>
             <Icon name="arrow-circle-up"/>
           </Button>}
         </Col>
-        <Col xs={1}>
+        <Col key="moveup" xs={1}>
           {!last && <Button bsStyle="primary" bsSize="xs" onClick={() => acSetFieldOrder(field, +1)}>
             <Icon name="arrow-circle-down"/>
           </Button>}
@@ -81,11 +73,13 @@ export class Settings extends Component {
         <Modal.Body>
           {this.renderHeader(showDetailCheckbox)}
           {order.map((field, index) => {
-            const visibleOverview = fieldSettings[PROPERTY_VISIBILITY_OVERVIEW][field];
-            const visibleDetail = fieldSettings[PROPERTY_VISIBILITY_DETAIL] && fieldSettings[PROPERTY_VISIBILITY_DETAIL][field];
+            if (field === "-") {
+              return <hr />;
+            }
+            const visible = fieldSettings["visibility"][field];
             const first = index === 0;
             const last = index === order.length - 1;
-            return this.renderOneProperty(showDetailCheckbox, {first, last, field, visibleOverview, visibleDetail, acSetFieldVisibility, acSetFieldOrder})
+            return this.renderOneProperty(showDetailCheckbox, {first, last, field, visible, acSetFieldVisibility, acSetFieldOrder})
           })}
         </Modal.Body>
         <Modal.Footer>

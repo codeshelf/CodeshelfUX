@@ -26,8 +26,7 @@ const SETTING_CLOSE = "close settings";
 
 export const SETTING_PROPERTY_VISIBILITY = "set property visibility";
 export const SETTING_PROPERTY_ORDER = "set property order";
-export const PROPERTY_VISIBILITY_OVERVIEW = "overview";
-export const PROPERTY_VISIBILITY_DETAIL = "detail";
+
 
 const EXPAND_SOMETHING = "expand something";
 
@@ -40,7 +39,12 @@ const dataLoadingState = {
     loadedTime: null,
 }
 
-export const PERSIST_STATE_PART =[["orderDetail", TAB_ITEMS, "settings", "properties"]];
+export const PERSIST_STATE_PART = [
+  ["orderDetail", TAB_DETAIL, "settings", "properties"],
+  ["orderDetail", TAB_ITEMS, "settings", "properties"],
+  ["orderDetail", TAB_PICKS, "settings", "properties"],
+  ["orderDetail", TAB_IMPORTS, "settings", "properties"],
+ ];
 
 const initState = {
   tab: TAB_DETAIL, // TAB_DETAIL, TAB_ITEMS, TAB_PICKS
@@ -125,15 +129,13 @@ export function orderDetailReducer(state = initState, action) {
       }
     }
     case SETTING_PROPERTY_VISIBILITY: {
-      const {tab, view, field, visible} = action;
-      const oldProperties = state[tab]["settings"]["properties"][view];
+      const {tab, field, visible} = action;
+      const order = state[tab]["settings"]["properties"]["order"];
+      const oldProperties = state[tab]["settings"]["properties"]["visibility"];
       const newProperties = {...oldProperties, [field]: visible};
-      let newPropertiesDetail = {...state[tab]["settings"]["properties"][PROPERTY_VISIBILITY_DETAIL]};
-      if (visible && view != PROPERTY_VISIBILITY_DETAIL) {
-        newPropertiesDetail[field] = visible;
-      }
-      const checked = Object.keys(newProperties).reduce((prev, curr) => prev + (0 + newProperties[curr]), 0);
-      // disable unchecking last value
+      const filedsInOverview = (order.indexOf("-") === -1)? order : order.slice(0, order.indexOf("-"));
+      const checked = filedsInOverview.reduce((prev, curr) => prev + (0 + newProperties[curr]), 0);
+      // disable unchecking last value in overview
       if (checked === 0) return state;
       return {
         ...state,
@@ -143,8 +145,7 @@ export function orderDetailReducer(state = initState, action) {
             ...state[tab]["settings"],
             properties: {
               ...state[tab]["settings"]["properties"],
-              [PROPERTY_VISIBILITY_DETAIL]: newPropertiesDetail,
-              [view]: newProperties,
+              visibility: newProperties,
             }
           }
         }
@@ -163,6 +164,8 @@ export function orderDetailReducer(state = initState, action) {
       let newOrder = [...oldOrder];
       newOrder[index+diff] = oldOrder[index];
       newOrder[index] = oldOrder[index+diff];
+      // at least one thing has to be in overview
+      if (newOrder[0] === "-") return state;
       console.log("NEW ORDER ", newOrder);
       return {
         ...state,
@@ -205,14 +208,13 @@ export function acSettingClose(tab) {
   }
 }
 
-export function acSetFieldVisibility(tab, overview, field, visible) {
+export function acSetFieldVisibility(tab, field, visible) {
   if (ALL_TABS.indexOf(tab) === -1) {
     throw "Unexpected tab setting: " + tab;
   }
   return {
     type: SETTING_PROPERTY_VISIBILITY,
     tab,
-    view: (overview)? PROPERTY_VISIBILITY_OVERVIEW: PROPERTY_VISIBILITY_DETAIL,
     field,
     visible,
   }

@@ -48,8 +48,10 @@ export class Header extends Component {
     const {acSettingOpen, acSettingClose, acSetFieldVisibility,
      acSetFieldOrder, acExpand, acReloadTab} = this.props;
 
-  const {order: fieldsOrder} = fieldSettings;
-    const isVisible = (field) => fieldSettings[PROPERTY_VISIBILITY_OVERVIEW][field];
+    const {order: fieldsOrder} = fieldSettings;
+    const inOverview = (field) => fieldsOrder.indexOf(field) < fieldsOrder.indexOf("-");
+    const isVisibleOverview = (field) => fieldSettings["visibility"] && (inOverview(field)) ;
+    const isVisibleDetail = (field) => fieldSettings["visibility"][field] && field !== "-" && (!inOverview(field)) ;
     return (
       <div>
         <SettingsRow onClickReload={acReloadTab} onClickSettings={acSettingOpen} />
@@ -63,7 +65,7 @@ export class Header extends Component {
                     acSetFieldOrder}} />
         <hr />
         {fieldsOrder.map((field) =>
-          (isVisible(field) &&
+          (isVisibleOverview(field) &&
             this.generalPropertieRender(field, order[field]))
         )}
         <Row>
@@ -74,7 +76,7 @@ export class Header extends Component {
           </Button>
         </Row>
         {expanded && fieldsOrder.map((field) =>
-            (!isVisible(field) &&
+            (isVisibleDetail(field) &&
               this.generalPropertieRender(field, order[field]))
         )}
       </div>

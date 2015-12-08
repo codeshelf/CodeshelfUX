@@ -1,40 +1,26 @@
-//TODO remove duplicity with store
-const PROPERTY_VISIBILITY_OVERVIEW = "overview";
-const PROPERTY_VISIBILITY_DETAIL = "detail";
-
 export const headerFieldsSetting = {
   order: ["dueDate", "status", "orderDate", "customerId", "containerId", "shipperId",
-  "destinationId", "orderLocationAliasIds", "groupUi",
+  "-", "destinationId", "orderLocationAliasIds", "groupUi",
   "wallUi"],
-  [PROPERTY_VISIBILITY_OVERVIEW]: {
+  visibility: {
     "dueDate": true,
     "status": true,
     "orderDate": true,
     "customerId": true,
     "containerId": true,
     "shipperId": true,
-    "destinationId": false,
-    "orderLocationAliasIds": false,
-    "groupUi": false,
-    "wallUi": false,
+    "destinationId": true,
+    "orderLocationAliasIds": true,
+    "groupUi": true,
+    "wallUi": true,
   },
 };
 
 
 export const itemsFieldsSetting = {
-  order: ["itemId", "status", "planQuantity", "uom", "gtin", "preferredLocation",
+  order: ["itemId", "status", "planQuantity", "-", "uom", "gtin", "preferredLocation",
       "orderDetailId", "description"],
-  [PROPERTY_VISIBILITY_OVERVIEW]: {
-    "itemId": true,
-    "status": true,
-    "planQuantity": true,
-    "uom": false,
-    "gtin": false,
-    "preferredLocation": false,
-    "orderDetailId": false,
-    "description": false,
-  },
-  [PROPERTY_VISIBILITY_DETAIL]: {
+  visibility: {
     "itemId": true,
     "status": true,
     "planQuantity": true,
@@ -66,26 +52,10 @@ export const itemsFieldsSetting = {
 */
 
 export const importFieldsSetting = {
-  order: ["received", "filename", "status", "linesProcessed", "linesFailed",
+  order: ["received", "filename", "-", "status", "linesProcessed", "linesFailed",
     "ordersProcessed", "transportType", "username", "completed", "domainId",
      "gtins", "itemIds", "orderIds", "persistentId"],
-  [PROPERTY_VISIBILITY_OVERVIEW]: {
-    "received": true,
-    "filename": true,
-    "status": false,
-    "linesProcessed": false,
-    "linesFailed": false,
-    "ordersProcessed": false,
-    "transportType": false,
-    "username": false,
-    "completed": false,
-    "domainId": false,
-    "gtins": false,
-    "itemIds": false,
-    "orderIds": false,
-    "persistentId": false,
-  },
-  [PROPERTY_VISIBILITY_DETAIL]: {
+  visibility: {
     "received": true,
     "filename": true,
     "status": true,
@@ -128,32 +98,11 @@ export const importFieldsSetting = {
 */
 
 export const picksFieldsSetting = {
-  order: ["createdAt", "type", "itemId", "itemLocation", "wiPlanQuantity",
+  order: ["createdAt", "type", "itemId", "-","itemLocation", "wiPlanQuantity",
    "wiActualQuantity", "itemUom", "itemDescription", "workerName", "deviceGuid",
    "persistentId", "orderId", "devicePersistentId", "workerId", "orderDetailId",
    "workInstructionId", "resolved", "resolvedAt", "resolvedBy"],
-  [PROPERTY_VISIBILITY_OVERVIEW]: {
-    "createdAt": true,
-    "type": true,
-    "itemId": true,
-    "itemLocation": false,
-    "wiPlanQuantity": false,
-    "wiActualQuantity": false,
-    "itemUom": false,
-    "itemDescription": false,
-    "workerName": false,
-    "deviceGuid": false,
-    "persistentId": false,
-    "orderId": false,
-    "devicePersistentId": false,
-    "workerId": false,
-    "orderDetailId": false,
-    "workInstructionId": false,
-    "resolved": false,
-    "resolvedAt": false,
-    "resolvedBy": false,
-  },
-  [PROPERTY_VISIBILITY_DETAIL]: {
+  visibility: {
     "createdAt": true,
     "type": true,
     "itemId": true,
