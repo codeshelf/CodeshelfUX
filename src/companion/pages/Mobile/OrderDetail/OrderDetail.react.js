@@ -96,7 +96,7 @@ class OrderDetail extends Component {
       // creacte closures over action creators for selected tab
       const acSettingOpen = () => this.props.acSettingOpen(tab);
       const acSettingClose = () => this.props.acSettingClose(tab);
-      const acSetFieldVisibility = (o, f, v) => this.props.acSetFieldVisibility(tab, o, f, v);
+      const acSetFieldVisibility = (f, v) => this.props.acSetFieldVisibility(tab, f, v);
       const acSetFieldOrder = (f, v) => this.props.acSetFieldOrder(tab, f, v);
       const acExpand = (i) => this.props.acExpand(tab, i);
       const acReloadTab = () => this.props.acSelectTab(tab, this.orderId, true);

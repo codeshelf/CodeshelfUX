@@ -6,8 +6,6 @@ import {FieldRenderer} from "../common/FieldRenderer.react.js";
 import {SettingsRow} from "../common/SettingsRow.react.js";
 import {Settings} from '../common/Settings.react.js';
 
-import {PROPERTY_VISIBILITY_OVERVIEW, PROPERTY_VISIBILITY_DETAIL} from '../store';
-
 import {fieldToDescription} from "./intl";
 
 export class Items extends Component {
@@ -20,14 +18,14 @@ export class Items extends Component {
 
   renderItem(expanded, fieldSettings, itemData) {
     const {orderDetailId} = itemData;
-    const {renderValue} = this;
-    const isVisible = (field) => fieldSettings[(expanded)? PROPERTY_VISIBILITY_DETAIL: PROPERTY_VISIBILITY_OVERVIEW][field];
     const {order: fieldsOrder} = fieldSettings;
+    const inOverview = (field) => fieldsOrder.indexOf(field) < fieldsOrder.indexOf("-");
+    const isVisible = (field) => fieldSettings["visibility"][field] && (expanded || inOverview(field)) ;
     return (
       <div key={orderDetailId}>
         <Row onClick={() => this.props.acExpand((!expanded)? orderDetailId : null)}>
           <Col xs={9}>
-            {fieldsOrder.map((field) =>
+            {fieldsOrder.filter((f) => f !== "-").map((field) =>
               (isVisible(field) &&
                 <FieldRenderer key={field}
                                description={fieldToDescription[field]}

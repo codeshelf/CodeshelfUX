@@ -7,8 +7,6 @@ import {FieldRenderer} from "../common/FieldRenderer.react.js";
 import {SettingsRow} from "../common/SettingsRow.react.js";
 import {Settings} from '../common/Settings.react.js';
 
-import {PROPERTY_VISIBILITY_OVERVIEW, PROPERTY_VISIBILITY_DETAIL} from '../store';
-
 import {fieldToDescription} from "./intl";
 
 const fieldFormater = {
@@ -26,14 +24,15 @@ export class Picks extends Component {
 
   renderPick(expanded, fieldSettings, pickData) {
     const {persistentId} = pickData;
-    const {renderValue, dateFormater} = this;
-    const isVisible = (field) => fieldSettings[(expanded)? PROPERTY_VISIBILITY_DETAIL: PROPERTY_VISIBILITY_OVERVIEW][field];
     const {order: fieldsOrder} = fieldSettings;
+    const {renderValue, dateFormater} = this;
+    const inOverview = (field) => fieldsOrder.indexOf(field) < fieldsOrder.indexOf("-");
+    const isVisible = (field) => fieldSettings["visibility"][field] && (expanded || inOverview(field)) ;
     return (
       <div key={persistentId}>
         <Row onClick={() => this.props.acExpand((!expanded)? persistentId : null)}>
           <Col xs={9}>
-            {fieldsOrder.map((field) =>
+            {fieldsOrder.filter((f) => f !== "-").map((field) =>
               (isVisible(field) &&
                 <FieldRenderer key={field}
                                description={fieldToDescription[field]}
