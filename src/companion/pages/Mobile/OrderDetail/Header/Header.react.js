@@ -50,7 +50,7 @@ export class Header extends Component {
 
     const {order: fieldsOrder} = fieldSettings;
     const inOverview = (field) => fieldsOrder.indexOf(field) < fieldsOrder.indexOf("-");
-    const isVisibleOverview = (field) => fieldSettings["visibility"] && (inOverview(field)) ;
+    const isVisibleOverview = (field) => fieldSettings["visibility"][field] && (inOverview(field)) ;
     const isVisibleDetail = (field) => fieldSettings["visibility"][field] && field !== "-" && (!inOverview(field)) ;
     return (
       <div>
