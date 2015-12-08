@@ -5,20 +5,19 @@ import {Grid, Row, Col, DropdownButton} from 'react-bootstrap';
 
 import { NavItemLink, MenuItemLink, ButtonLink} from './links';
 
-
 class NavigationMenu extends Component {
   render() {
     console.log("Render navigation menu", this.props.facility);
     return (
-      <div className="header">
-        <div className="pull-left full-height visible-sm visible-xs">
+      <div className="header" style={{height: 48}}>
+        <div className="pull-left full-height">
           <div className="sm-action-bar">
             <ButtonLink bsStyle="link" to="facility" id="home" name="home">
               <Icon name="home" size="lg"/>
             </ButtonLink>
           </div>
         </div>
-        <div className="pull-right full-height visible-sm visible-xs">
+        <div className="pull-right full-height">
           <div className="sm-action-bar">
             <ButtonLink bsStyle="link"
               to="mobile-search-orders"
@@ -28,8 +27,8 @@ class NavigationMenu extends Component {
             </ButtonLink>
         </div>
         </div>
-        <div className="pull-left sm-table">
-          <div className="header-inner">
+        <div className="pull-right sm-table">
+          <div className="header-inner" style={{height: 48}}>
             <div className="brand inline">
               {this.props.children}
 
