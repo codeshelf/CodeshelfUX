@@ -33,6 +33,9 @@ import ExtensionPointAdd from "./pages/App/ExtensionPoints/ExtensionPointAdd.rea
 import ScheduledJobEdit from "./pages/App/Maintenance/ScheduledJobsEdit.react.js";
 import ScheduledJobAdd from "./pages/App/Maintenance/ScheduledJobAdd.react.js";
 
+// Redirect to mobile or to desktop web
+import DetectMobile from "./components/common/DetectMobile.react.js";
+
 //Mobile components
 import mApp from './pages/Mobile/App.react.js';
 import mOrderSearch from './pages/Mobile/OrderSearch/OrderSearch.react.js';
@@ -43,7 +46,8 @@ import Mobile from './pages/Mobile/Mobile.react.js';
 
 export default (
   <Route handler={Root} path="/">
-    <Redirect from="/" to="/facilities" />
+    {/* Redirect to mobile or desktop web component */}
+    <DefaultRoute handler={DetectMobile} />
     <Route handler={authn(App)} name="facilities"> //ensure auth and default facility
       <Route handler={Facility} name="facility" path=":facilityName">
         <DefaultRoute handler={Overview} name="overview" />
