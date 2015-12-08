@@ -59,7 +59,7 @@ export class SearchInput extends Component {
     const {filter, acChangeFilter, acSearch} = this.props;
     const filterText = filter.text;
     return (
-      <Row style={{"padding-top":"10px"}}>
+      <Row style={{"paddingTop":"10px"}}>
         <Col xs={9}>
          {this.renderInput(filterText, () => acChangeFilter(this.refs.input.getValue()))}
         </Col>
@@ -151,7 +151,7 @@ export class OrderList extends Component {
           <Col sm={12}>
             Number of results: { resultOrders.total }
             {resultOrders.results.map((order) => {
-              return <OrderItem {...order} filterText={filterText} />
+              return <OrderItem key={order.orderId} {...order} filterText={filterText} />
             })}
             {/*Orders: {JSON.stringify(orders)}*/}
           </Col>

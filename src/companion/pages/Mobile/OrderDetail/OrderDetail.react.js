@@ -134,7 +134,7 @@ class OrderDetail extends Component {
         <Row>
           <Col xs={12}>
             {this.renderTabs(tab, loadedTime)}
-            <div style={{"padding-left": "15px"}}>
+            <div style={{"paddingLeft": "15px"}}>
               {contentElement}
             </div>
           </Col>
