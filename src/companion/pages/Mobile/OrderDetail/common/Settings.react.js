@@ -6,22 +6,14 @@ import Icon from 'react-fa';
 import {PROPERTY_VISIBILITY_OVERVIEW, PROPERTY_VISIBILITY_DETAIL} from '../store';
 
 export class Settings extends Component {
-  static defaultProps = {
-    showDetailCheckbox: true,
-  }
 
-  renderHeader(showDetailCheckbox) {
+  renderHeader() {
     return (
       <Row>
         <Col xs={1}>
           <Icon name="eye" />
         </Col>
-        <Col xs={1}>
-          {showDetailCheckbox &&
-              <Icon name="reorder" />
-          }
-        </Col>
-        <Col xs={5}>
+        <Col xs={6}>
           FIELD
         </Col>
         <Col xs={1}>
@@ -31,7 +23,7 @@ export class Settings extends Component {
       </Row>);
   }
 
-  renderOneProperty(showDetailCheckbox, {first, last, field, visible, acSetFieldVisibility, acSetFieldOrder}) {
+  renderOneProperty({first, last, field, visible, acSetFieldVisibility, acSetFieldOrder}) {
     return (
       <Row key={field}>
         <Col key="visibility" xs={1}>
@@ -58,7 +50,7 @@ export class Settings extends Component {
   }
 
   render() {
-    const {visible, onClose, fieldSettings, showDetailCheckbox} = this.props;
+    const {visible, onClose, fieldSettings} = this.props;
     const {acSetFieldVisibility, acSetFieldOrder} = this.props;
     const {order} = fieldSettings;
     if (!visible) return null;
@@ -71,7 +63,7 @@ export class Settings extends Component {
           <Modal.Title>{this.props.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {this.renderHeader(showDetailCheckbox)}
+          {this.renderHeader()}
           {order.map((field, index) => {
             if (field === "-") {
               return <hr />;
@@ -79,7 +71,7 @@ export class Settings extends Component {
             const visible = fieldSettings["visibility"][field];
             const first = index === 0;
             const last = index === order.length - 1;
-            return this.renderOneProperty(showDetailCheckbox, {first, last, field, visible, acSetFieldVisibility, acSetFieldOrder})
+            return this.renderOneProperty({first, last, field, visible, acSetFieldVisibility, acSetFieldOrder})
           })}
         </Modal.Body>
         <Modal.Footer>

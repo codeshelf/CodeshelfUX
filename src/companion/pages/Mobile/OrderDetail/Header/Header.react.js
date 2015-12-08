@@ -58,7 +58,6 @@ export class Header extends Component {
         <Settings title="Set field visibility"
                   visible={settingOpen}
                   onClose={acSettingClose}
-                  showDetailCheckbox={false}
                   {...{fieldToDescription,
                     fieldSettings,
                     acSetFieldVisibility,
