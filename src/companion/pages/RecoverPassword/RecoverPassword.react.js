@@ -1,4 +1,5 @@
 import  React from "react";
+import {Link} from "react-router";
 import DocumentTitle from "react-document-title";
 import {FormPageLayout, Row, Col} from 'components/common/pagelayout';
 import FormFields from "components/common/FormFields";
@@ -42,7 +43,20 @@ export default class RecoverPassword extends React.Component{
         return (<FormPageLayout title={title}>
                     <Form id="recoverpassword-form" className="p-t-15" role="form" onSubmit={this.handleSubmit}>
                         <FormFields ref="fields" formMetadata={formMetadata} formData={formData} handleChange={this.handleChange}/>
-                        <SubmitButton label={title} />
+                <Row>
+                <Col sm={12} >
+                <Link to="login" >Back to Login</Link>
+                </Col>
+                </Row>
+
+                <Row>
+                <Col sm={12}>
+                <div className="pull-right">
+                <SubmitButton label={title} />
+                </div>
+                </Col>
+                </Row>
+
                     </Form>
         </FormPageLayout>
     );
