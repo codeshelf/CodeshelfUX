@@ -27,7 +27,7 @@ class LoadFacility extends Component {
       this.props.acInitialLoadFacilities()
     } else {
       const router = this.props.router;
-      router.transitionTo("mobile-search-orders", {facilityName: availableFacilities[0].domainId});
+      router.transitionTo("mobile-facility", {facilityName: availableFacilities[0].domainId});
     }
   }
 

@@ -38,8 +38,10 @@ import DetectMobile from "./components/common/DetectMobile.react.js";
 
 //Mobile components
 import mApp from './pages/Mobile/App.react.js';
+import mHomeSearch from  './pages/Mobile/HomeSearch/HomeSearch.react.js';
 import mOrderSearch from './pages/Mobile/OrderSearch/OrderSearch.react.js';
 import mOrderDeatil from './pages/Mobile/OrderDetail/OrderDetail.react.js';
+import mWorkerSearch from './pages/Mobile/WorkerSearch/WorkerSearch.react.js';
 import LoadFacility from './pages/Mobile/Facility/LoadFacility.react.js';
 import FacilityWrapper from './pages/Mobile/Facility/FacilityWrapper.react.js';
 import Mobile from './pages/Mobile/Mobile.react.js';
@@ -87,9 +89,10 @@ export default (
       <DefaultRoute handler={LoadFacility} />
       <Route handler={FacilityWrapper} name="mobile-facility" path=":facilityName">
         <Route handler={mApp}>
-          <DefaultRoute handler={mOrderSearch} />
-          <Route handler={mOrderSearch} name="mobile-search-orders" path="search" />
+          <DefaultRoute handler={mHomeSearch} />
+          <Route handler={mOrderSearch} name="mobile-search-orders" path="search/order" />
           <Route handler={mOrderDeatil} name="mobile-order-datail" path="orderDetail/:id" />
+          <Route handler={mWorkerSearch} name="mobile-search-workers" path="search/worker" />
         </Route>
       </Route>
     </Route>

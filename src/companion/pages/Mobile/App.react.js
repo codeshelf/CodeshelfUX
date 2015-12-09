@@ -20,9 +20,9 @@ class NavigationMenu extends Component {
         <div className="pull-right full-height">
           <div className="sm-action-bar">
             <ButtonLink bsStyle="link"
-              to="mobile-search-orders"
-              id="mobile-search-orders"
-              name="mobile-search-orders">
+              to="mobile-facility"
+              id="mobile-facility"
+              name="mobile-facility">
                 <Icon name="search" size="lg"/>
             </ButtonLink>
         </div>
