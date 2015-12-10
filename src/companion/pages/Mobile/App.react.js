@@ -10,13 +10,15 @@ class NavigationMenu extends Component {
     console.log("Render navigation menu", this.props.facility);
     return (
       <div className="header" style={{height: 48}}>
-        <div className="pull-left full-height">
+{/**
+       <div className="pull-left full-height">
           <div className="sm-action-bar">
             <ButtonLink bsStyle="link" to="facility" id="home" name="home">
               <Icon name="home" size="lg"/>
             </ButtonLink>
           </div>
         </div>
+  **/}
         <div className="pull-right full-height">
           <div className="sm-action-bar">
             <ButtonLink bsStyle="link"
