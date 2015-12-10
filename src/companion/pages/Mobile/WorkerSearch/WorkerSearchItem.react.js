@@ -27,7 +27,7 @@ export class WorkerSearchItem extends Component {
   render() {
     const {badgeId, updated, firstName, lastName, filterText} = this.props;
     return (
-      //<Link to="mobile-worker-datail" params={{id: badgeId}}>
+      <Link to="mobile-worker-datail" params={{id: badgeId}}>
         <Row>
           <Col xs={9}>
             <Row>
@@ -46,7 +46,7 @@ export class WorkerSearchItem extends Component {
               <Button bsStyle="primary"><Icon name="chevron-right"/></Button>
           </Col>
         </Row>
-      //</Link>
+      </Link>
     );
   }
 }

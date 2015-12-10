@@ -1,4 +1,4 @@
-import {getFacilityContext} from 'data/csapi';
+import {getFacilityContext, ConnectionError} from 'data/csapi';
 import {getSelectedFacility} from "../Facility/get";
 
 export function createStore(storeName, getLocalStore, searchApiCall) {
