@@ -45,7 +45,7 @@ export default class WorkInstructionIBox extends React.Component{
     }
 
     componentWillMount() {
-        fetchWorkers();
+        fetchWorkers({limit: 5000});
     }
 
     componentDidMount() {

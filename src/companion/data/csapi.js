@@ -310,9 +310,11 @@ export function getFacilityContext(facilityId) {
             return ajax(ordersPath, {method: "DELETE"});
         },
 
-        getWorkers: function() {
+        getWorkers: function(params) {
             var workersPath = facilityPath + "/workers";
-            return ajax(workersPath);
+            return ajax(workersPath, {
+              data: params
+            });
         },
         //TODO: this should work like extension point and scheduledjob
         addWorker: function(worker) {

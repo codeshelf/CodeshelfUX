@@ -101,7 +101,7 @@ var PickerEventsIBox = React.createClass({
     },
 
     componentWillMount: function() {
-        fetchWorkers();
+        fetchWorkers({limit: 5000});
         this.updateViews(this.state);
     },
 

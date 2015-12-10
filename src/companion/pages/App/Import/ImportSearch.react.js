@@ -2,6 +2,14 @@ import  React from "react";
 import {Form, WrapInput, Input, SubmitButton, getRefInputValue} from 'components/common/Form';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
 
+function globSubstring(substring) {
+  if (substring && substring.indexOf('*') < 0) {
+    return "*" + substring + "*";
+  } else {
+    return substring;
+  }
+}
+
 export default class ImportSearch extends React.Component{
 
     constructor(props){
@@ -10,10 +18,9 @@ export default class ImportSearch extends React.Component{
     }
 
     getFilter() {
-
-        let orderIdsSubstring = getRefInputValue(this.refs.orderIds);
-        let itemIdsSubstring = getRefInputValue(this.refs.itemIds);
-        let gtinsSubstring = getRefInputValue(this.refs.gtins);
+        let orderIdsSubstring = globSubstring(getRefInputValue(this.refs.orderIds));
+        let itemIdsSubstring = globSubstring(getRefInputValue(this.refs.itemIds));
+        let gtinsSubstring = globSubstring(getRefInputValue(this.refs.gtins));
         let  filter = {
             orderIds: orderIdsSubstring,
             itemIds: itemIdsSubstring,

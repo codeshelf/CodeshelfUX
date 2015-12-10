@@ -5,8 +5,8 @@ import _ from 'lodash';
 import {selectedWorkerCursor, workersCursor} from 'data/state';
 
 
-export function fetchWorkers() {
-    return dispatch(fetchWorkers, getFacilityContext().getWorkers());
+export function fetchWorkers(params) {
+    return dispatch(fetchWorkers, getFacilityContext().getWorkers(params));
 };
 
 export function addWorker(selectedWorkerForm) {
