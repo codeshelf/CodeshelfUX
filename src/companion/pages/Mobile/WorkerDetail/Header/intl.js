@@ -1,11 +1,10 @@
 export const fieldToDescription = {
-    "domainId": "domainId",
     "persistentId":"persistentId",
     "active":"active",
     "firstName": "firstName",
     "lastName": "lastName",
     "middleInitial": "middleInitial",
-    "badgeId": "badgeId",
+    "domainId": "Badge ID",
     "groupName": "groupName",
     "hrId": "hrId",
     "updated": "updated",

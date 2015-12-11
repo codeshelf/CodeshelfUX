@@ -20,12 +20,12 @@ const tabToSetting = {
 };
 
 // TODO optimize for speed
-function tabToApi(facilityContext, tab, badgeId) {
+function tabToApi(facilityContext, tab, domainId) {
   const call = {
     [TAB_DETAIL]: getWorker,
     [TAB_HISTORY]:  getWorkerHistory,
   }[tab];
-  return call(badgeId);
+  return call(domainId);
 }
 
 const store = createStore("workerDetail", getWorkerDetail, ALL_TABS, tabToSetting, tabToApi);

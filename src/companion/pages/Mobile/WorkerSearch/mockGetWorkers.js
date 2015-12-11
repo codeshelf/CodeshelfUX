@@ -8,7 +8,6 @@ const workers = [
     "firstName":"Lei",
     "lastName":"Shi",
     "middleInitial":null,
-    "badgeId":"Lshi",
     "groupName":"IT",
     "hrId":"Lshi",
     "updated":1443706098583,
@@ -25,7 +24,6 @@ const workers = [
     "firstName":"Temp",
     "lastName":"Lego 09",
     "middleInitial":null,
-    "badgeId":"SD1XUBVL6HK7",
     "groupName":null,
     "hrId":null,
     "updated":1443705504428,
@@ -42,7 +40,6 @@ const workers = [
     "firstName":"Kimberly",
     "lastName":"B",
     "middleInitial":null,
-    "badgeId":"Kimberly B",
     "groupName":null,
     "hrId":null,
     "updated":1443706050275,
@@ -59,7 +56,6 @@ const workers = [
     "firstName":"Jaime",
     "lastName":"B",
     "middleInitial":null,
-    "badgeId":"Jaime B",
     "groupName":null,
     "hrId":null,
     "updated":1443706054824,
@@ -73,7 +69,7 @@ const workers = [
 
 function filterWorkers(badge) {
   return workers.filter(w =>
-    new RegExp(badge.replace("*", ".*"), "i").test(w.badgeId));
+    new RegExp(badge.replace("*", ".*"), "i").test(w.domainId));
 }
 
 export function getWorkersByBadge(badge) {

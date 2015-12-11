@@ -1,5 +1,5 @@
 export const headerFieldsSetting = {
-  order: ["domainId", "persistentId", "active", "-", "firstName", "lastName", "middleInitial", "badgeId", "groupName", "hrId", "updated", "lastLogin", "lastLogout", "lastChePersistentId", "badgeUnique", "className"],
+  order: ["domainId", "persistentId", "active", "-", "firstName", "lastName", "middleInitial", "groupName", "hrId", "updated", "lastLogin", "lastLogout", "lastChePersistentId", "badgeUnique", "className"],
   visibility: {
     "domainId":true,
     "persistentId":true,
@@ -7,7 +7,6 @@ export const headerFieldsSetting = {
     "firstName": true,
     "lastName": true,
     "middleInitial": true,
-    "badgeId": true,
     "groupName": true,
     "hrId": true,
     "updated": true,

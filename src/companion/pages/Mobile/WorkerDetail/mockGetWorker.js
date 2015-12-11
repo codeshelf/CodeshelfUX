@@ -7,7 +7,6 @@ const workerInfo = {
   "firstName":"Lei",
   "lastName":"Shi",
   "middleInitial":null,
-  "badgeId":"Lshi",
   "groupName":"IT",
   "hrId":"Lshi",
   "updated":1443706098583,
