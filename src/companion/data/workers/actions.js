@@ -5,8 +5,9 @@ import _ from 'lodash';
 import {selectedWorkerCursor, workersCursor} from 'data/state';
 
 
-export function fetchWorkers(params) {
-    return dispatch(fetchWorkers, getFacilityContext().getWorkers(params));
+export function fetchWorkers() {
+  //set default for this UI at 2000 until paging is handled
+  return dispatch(fetchWorkers, getFacilityContext().getWorkers({limit: 2000}));
 };
 
 export function addWorker(selectedWorkerForm) {

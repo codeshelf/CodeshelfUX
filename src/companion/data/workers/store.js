@@ -27,7 +27,7 @@ export const dispatchToken = register(({action, data}) => {
   switch (action) {
     case actions.fetchWorkers:
       if (data) {
-          var results = data.results; //TODO can be limited so this may not be all of the workers
+          var results = data.results;
           workersCursor((workers) => {
               return _.reduce(results, (list, workerData) =>{
                   return list.push(Worker(workerData));
