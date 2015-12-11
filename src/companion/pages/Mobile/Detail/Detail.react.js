@@ -35,7 +35,6 @@ export class Detail extends Component {
   }
 
   render() {
-    console.log("~~~", this.props);
     const {id: itemId} = this.props.router.getCurrentParams();
     const {tab} = this.props;
     const {[tab]: {loadedTime}} = this.props;

@@ -310,6 +310,13 @@ export function getFacilityContext(facilityId) {
             return ajax(ordersPath, {method: "DELETE"});
         },
 
+        findWorkers: function(filter) {
+          var workersPath = facilityPath + "/workers";
+          return ajax(workersPath, {
+              data: filter
+          });
+        },
+
         getWorkers: function() {
             var workersPath = facilityPath + "/workers";
             return ajax(workersPath);

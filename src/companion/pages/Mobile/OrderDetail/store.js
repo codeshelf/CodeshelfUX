@@ -36,8 +36,8 @@ function tabToApi(facilityContext, tab, orderId) {
   const call = {
     [TAB_DETAIL]: (orderId) => facilityContext.getOrder(orderDetailProperties, orderId),
     [TAB_ITEMS]:  facilityContext.getOrderDetails,
-    [TAB_PICKS]: getPicks,
-    //[TAB_PICKS]: facilityContext.getOrderEvents,
+    //[TAB_PICKS]: getPicks,
+    [TAB_PICKS]: facilityContext.getOrderEvents,
     [TAB_IMPORTS]: (orderId) => {
       const nowTime = new Date();
       const monthBefore = new Date();
