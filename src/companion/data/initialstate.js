@@ -20,7 +20,7 @@ export default {
     $pendingActions: {},
     $subscriptions: {},
     preferences: {
-        version: "1.4",
+        version: "1.5",
         workInstructions: {
             table: {
                 columns: ["itemMasterId", "status"],
@@ -75,7 +75,7 @@ export default {
         },
         workers: {
             table: {
-                columns: ["lastName", "firstName", "badgeId", "updated"],
+                columns: ["lastName", "firstName", "domainId", "updated"],
                 sortSpecs: {"lastName": {order: "asc"}}
             }
         },

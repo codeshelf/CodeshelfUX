@@ -13,7 +13,7 @@ export const Worker = Record(
         "middleInitial": null,
         "lastName": null,
         "firstName": null,
-        "badgeId": null,
+        "domainId": null,
         "hrId": null,
         "groupName": null,
         "updated": null,
@@ -66,8 +66,8 @@ export const dispatchToken = register(({action, data}) => {
 export function toWorkerName(worker, defaultName) {
     let name = defaultName;
     if (worker) {
-        let {badgeId, lastName, firstName, middleInitial} = worker;
-        name = badgeId;
+        let {domainId, lastName, firstName, middleInitial} = worker;
+        name = domainId;
         if (lastName) {
             name = lastName;
             if (firstName) {
@@ -88,6 +88,6 @@ export function getWorkers() {
 
 export function getWorkersByBadgeId() {
     return workersCursor().reduce((indexedWorkers, worker) => {
-        return indexedWorkers.set(worker.badgeId, worker);
+        return indexedWorkers.set(worker.domainId, worker);
     }, new Map());
 }

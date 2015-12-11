@@ -46,7 +46,7 @@ export default class WorkerMgmt extends React.Component{
                 displayName: "M"
             },
             {
-                columnName: "badgeId",
+                columnName: "domainId",
                 displayName: "Badge"
             },
             {

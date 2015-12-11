@@ -121,9 +121,9 @@ export default class WorkInstructionIBox extends React.Component{
                 return previousResults.set("updated", moment())
                                       .set("total", total)
                                       .set("values", fromJS(updatedResultsList).map((wi) => {
-                                          let badgeId = wi.get("pickerId");
-                                          let worker = workersByBadgeId.get(badgeId);
-                                          let name = toWorkerName(worker, badgeId);
+                                          let domainId = wi.get("pickerId");
+                                          let worker = workersByBadgeId.get(domainId);
+                                          let name = toWorkerName(worker, domainId);
                                           let wiWithName = wi.set("pickerId", name);
 
                                           let gtin = wi.get("gtin");

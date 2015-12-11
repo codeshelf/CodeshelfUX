@@ -28,8 +28,8 @@ class WorkerDisplay extends React.Component {
             {name: "firstName", label: "First"},
             {name: "middleInitial", label: "Middle Initial"},
             {name: "lastName", label: "Last", required: true},
-            {name: "badgeId", label: "Badge ID", required: true,
-                    addOnAfter: this.renderBarcodeGeneratorComponent("badgeId")},
+            {name: "domainId", label: "Badge ID", required: true,
+                    addOnAfter: this.renderBarcodeGeneratorComponent("domainId")},
             {name: "hrId", label: "HR ID"},
             {name: "groupName", label: "Group"},
             {name: "active", label: "Active", type: Boolean}];
