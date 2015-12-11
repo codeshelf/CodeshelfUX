@@ -25,7 +25,7 @@ const tabToComponent = {
 }
 
 const tabToHeaderText = {
-  [TAB_DETAIL]: "HDR",
+  [TAB_DETAIL]: "Order",
   [TAB_ITEMS]: "Lines",
   [TAB_PICKS]: "History",
   [TAB_IMPORTS]: "Imports",
