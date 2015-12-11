@@ -39,7 +39,7 @@ class OrderDetail extends Component {
     console.log("loaded time", loadedTime);
     return (
       <Tabs className="nav-tabs-simple" activeKey={activeTab} onSelect={(tab) => this.props.acSelectTab(tab, this.orderId)} tabWidth={1}>
-        <Tab eventKey={TAB_DETAIL} title="HDR">
+        <Tab eventKey={TAB_DETAIL} title="Order">
           Order Header
           {loadedTime && " - loaded "}
           <TimeFromNow time={loadedTime}/>
