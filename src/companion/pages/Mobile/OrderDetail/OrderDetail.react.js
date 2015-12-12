@@ -128,7 +128,7 @@ class OrderDetail extends Component {
       <div>
         <Row>
           <Col xs={12}>
-            <h1>Order: {this.orderId}</h1>
+            <h3>Order: {this.orderId}</h3>
           </Col>
         </Row>
         <Row>

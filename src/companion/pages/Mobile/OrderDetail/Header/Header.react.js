@@ -35,8 +35,8 @@ export class Header extends Component {
     return (
       <div key={property}>
         <div><small>{fieldToDescription[property]}</small></div>
-        <h4>{value}</h4>
-        <hr />
+        <h6>{value}</h6>
+          <hr style={{marginTop: "0.5em", marginBottom: "0.5em"}} />
       </div>
     );
   }
