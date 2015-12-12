@@ -11,7 +11,7 @@ export function createStore(storeName, getLocalStore, searchApiCall) {
 
   const initState = {
     filter: {
-      text: null, //if we show filter first time we need
+      text: "", //if we show filter first time we need
                 // to distinguish between empty string filter and not inicialized
     },
     whatIsLoading: null, // store what we are loading. Currently text of filter

@@ -39,8 +39,9 @@ export class SearchType extends Component {
 }
 */
 
+function getIdForItem(item) { return  item.orderId }
 
-const OrderSearch = createSearchComponent(OrderSearchItem, "Enter Order ID");
+const OrderSearch = createSearchComponent(OrderSearchItem, "Enter Order ID", getIdForItem);
 
 function mapDispatch(dispatch) {
   return bindActionCreators({acChangeFilter, acSearch}, dispatch);

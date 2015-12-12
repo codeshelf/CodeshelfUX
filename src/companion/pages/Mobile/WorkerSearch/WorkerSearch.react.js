@@ -8,7 +8,9 @@ import {getWorkerSearch} from './get';
 import {acChangeFilter, acSearch} from './store';
 import {DateDisplay} from "../DateDisplay.react.js";
 
-const WorkerSearch = createSearchComponent(WorkerSearchItem, "Enter Badge");
+function getIdForItem(item) { return  item.persistentId }
+
+const WorkerSearch = createSearchComponent(WorkerSearchItem, "Enter Badge", getIdForItem);
 
 function mapDispatch(dispatch) {
   return bindActionCreators({acChangeFilter, acSearch}, dispatch);

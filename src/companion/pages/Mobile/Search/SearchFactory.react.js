@@ -5,7 +5,7 @@ import {Link} from '../links';
 import {SearchInput} from "./SearchInput.react.js";
 import * as csapi from 'data/csapi';
 
-export function createSearchComponent(ItemComponent, searchFieldText) {
+export function createSearchComponent(ItemComponent, searchFieldText, getIdForItem) {
 
   class SearchList extends Component {
     render() {
@@ -29,14 +29,14 @@ export function createSearchComponent(ItemComponent, searchFieldText) {
           </Row>
         );
       } else if (result === null) {
-        return <div> Loading...</div>;
+        return <div>No results</div>;
       }
       return (
         <Row>
           <Col sm={12}>
             Number of results: { result.total }
             {result.results.map((oneResult) => {
-              return <ItemComponent key={oneResult.orderId} {...oneResult} filterText={filterText} />
+              return <ItemComponent key={getIdForItem(oneResult)} {...oneResult} filterText={filterText} />
             })}
             {/*"Orders:" + JSON.stringify(result)*/}
           </Col>
@@ -47,7 +47,7 @@ export function createSearchComponent(ItemComponent, searchFieldText) {
 
 
   class SearchComponent extends Component {
-
+/*
     componentWillMount() {
       if (this.props.filter.text === null) {
         this.props.acChangeFilter("");
@@ -55,7 +55,7 @@ export function createSearchComponent(ItemComponent, searchFieldText) {
         this.props.acChangeFilter(this.props.filter.text);
       }
     }
-
+*/
     render() {
       console.log(`Props for OrderSearch `, this.props);
       const {whatIsLoading, error, result, filter} = this.props;
