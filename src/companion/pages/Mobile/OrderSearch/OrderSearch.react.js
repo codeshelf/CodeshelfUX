@@ -125,9 +125,7 @@ export class OrderList extends Component {
   render() {
     const {isLoading, error, resultOrders, filter: {text: filterText}} = this.props;
     console.log(`!!!!!!!!! isLoading ${isLoading}, orders ${resultOrders}`);
-    if (isLoading) {
-      return <div> Loading...</div>;
-    } else if (error) {
+    if (error) {
       let text = "Can't load request";
       if (error instanceof csapi.ConnectionError || error.message) {
         text = error.message;
@@ -142,10 +140,9 @@ export class OrderList extends Component {
           </Col>
         </Row>
       );
-    } else if (resultOrders === null) {
+    } else if (isLoading && resultOrders === null) {
       return <div> Loading...</div>;
-    }
-    if (resultOrders.total) {
+    } else if (resultOrders && resultOrders.total >= 0) {
       return (
         <Row>
           <Col sm={12}>
@@ -157,18 +154,20 @@ export class OrderList extends Component {
           </Col>
         </Row>
       );
-    } else {
+    } else if (resultOrders){ //This might be able to be removed
       return (
         <Row>
           <Col sm={12}>
             Number of results: { resultOrders.length }
             {resultOrders.slice(0,5).map((order) => {
-              return <OrderItem {...order} filterText={filterText} />
+            return <OrderItem key={order.orderId} {...order} filterText={filterText} />
             })}
             {/*Orders: {JSON.stringify(orders)}*/}
           </Col>
         </Row>
       );
+    } else {
+      return <div></div>;
     }
   }
 }
@@ -176,9 +175,7 @@ export class OrderList extends Component {
 class OrderSearch extends Component {
 
   componentWillMount() {
-    if (this.props.filter.text === null) {
-      this.props.acChangeFilter("");
-    } else {
+    if (this.props.filter.text != null) {
       this.props.acChangeFilter(this.props.filter.text);
     }
   }
