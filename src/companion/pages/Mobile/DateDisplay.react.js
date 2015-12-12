@@ -10,7 +10,9 @@ class DateDisplayDumm extends Component {
    if (!this.props.utcOffset) return null;
    return (
      <DateDisplayWithOfset cellData={this.props.date}
-                  utcOffset={this.props.utcOffset} />
+         utcOffset={this.props.utcOffset}
+         granularity={this.props.granularity}
+      />
    );
  }
 }
@@ -18,6 +20,12 @@ class DateDisplayDumm extends Component {
 export function dateFormater(date) {
   return <DateDisplay date={date} />;
 }
+
+//only supports 'seconds' right now
+export function datetimeFormatter(granularity, date) {
+  return <DateDisplay date={date} granularity={granularity}/>;
+}
+
 
 export class TimeFromNow extends Component {
 

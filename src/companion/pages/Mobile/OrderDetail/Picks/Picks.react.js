@@ -2,16 +2,18 @@ import React, {Component} from 'react';
 
 import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
-import {dateFormater} from "../../DateDisplay.react.js";
+import {dateFormater, datetimeFormatter} from "../../DateDisplay.react.js";
 import {FieldRenderer} from "../common/FieldRenderer.react.js";
 import {SettingsRow} from "../common/SettingsRow.react.js";
 import {Settings} from '../common/Settings.react.js';
 
 import {fieldToDescription} from "./intl";
 
+const secondsFormatter = datetimeFormatter.bind(null, 'second');
+
 const fieldFormater = {
-    createdAt: dateFormater,
-    resolvedAt: dateFormater,
+  createdAt: secondsFormatter,
+  resolvedAt: secondsFormatter,
 };
 
 export class Picks extends Component {
