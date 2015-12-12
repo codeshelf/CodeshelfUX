@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import {dateFormater} from "../../DateDisplay.react.js";
+import {datetimeFormatter} from "../../DateDisplay.react.js";
 import {TabWithItemList} from "../../Detail/TabWithItemList.react.js";
 import {fieldToDescription} from "./intl";
 
+const secondsFormatter = datetimeFormatter.bind(null, 'second');
+
 const fieldFormater = {
-    createdAt: dateFormater,
-    resolvedAt: dateFormater,
+  createdAt: secondsFormatter,
+  resolvedAt: secondsFormatter,
 };
 
 function getIdFromItem(data) {

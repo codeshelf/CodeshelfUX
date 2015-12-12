@@ -24,6 +24,15 @@ export function toTimeZone(momentCompatibleDate, utcOffset) {
     return moment(momentCompatibleDate).utcOffset(utcOffset);
 }
 
+export function formatToSeconds(momentCompatibleDate) {
+  if (momentCompatibleDate === null || momentCompatibleDate === "") {
+    return "";
+  }
+
+  var timeMoment = moment(momentCompatibleDate);
+  return timeMoment.format("DD MMM HH:mm:ss");
+}
+
 export function formatTimestamp(momentCompatibleDate, opt_relativetime) {
     var referenceTime = moment();
     if (opt_relativetime != null) {
