@@ -10,15 +10,15 @@ export class Settings extends Component {
   renderHeader() {
     return (
       <Row>
-        <Col xs={1}>
+        <Col xs={2}>
           <Icon name="eye" />
         </Col>
         <Col xs={6}>
           FIELD
         </Col>
-        <Col xs={1}>
+        <Col xs={2}>
         </Col>
-        <Col xs={1}>
+        <Col xs={2}>
         </Col>
       </Row>);
   }
@@ -26,8 +26,8 @@ export class Settings extends Component {
   renderOneProperty({first, last, field, visible, acSetFieldVisibility, acSetFieldOrder}) {
     return (
       <Row key={field}>
-        <Col key="visibility" xs={1}>
-          <div className="checkbox check-primary" >
+        <Col key="visibility" xs={2}>
+        <div className="checkbox check-primary" style={{verticalAlign: "top", marginTop: 0}} >
             <input id={field} type="checkbox" checked={visible} onChange={() => acSetFieldVisibility(field, !visible)} />
             <label style={{"margin-right": "0px"}} htmlFor={field}></label>
           </div>
@@ -35,12 +35,12 @@ export class Settings extends Component {
         <Col key="desc" xs={6}>
           {this.props.fieldToDescription[field]}
         </Col>
-        <Col key="movedown" xs={1}>
+        <Col key="moveup" xs={2}>
           {!first && <Button bsStyle="primary" bsSize="xs" onClick={() => acSetFieldOrder(field, -1)}>
             <Icon name="arrow-circle-up"/>
-          </Button>}
+            </Button>}
         </Col>
-        <Col key="moveup" xs={1}>
+        <Col key="movedown" xs={2}>
           {!last && <Button bsStyle="primary" bsSize="xs" onClick={() => acSetFieldOrder(field, +1)}>
             <Icon name="arrow-circle-down"/>
           </Button>}
