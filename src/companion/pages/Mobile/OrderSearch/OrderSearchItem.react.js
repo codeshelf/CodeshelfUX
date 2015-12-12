@@ -32,7 +32,7 @@ export class OrderSearchItem extends Component {
           <Col xs={9}>
             <Row>
               <Col xs={12}>
-                  <h2>{this.renderId(orderId, filterText)}</h2>
+                  <h3>{this.renderId(orderId, filterText)}</h3>
               </Col>
             </Row>
             <Row>
@@ -43,9 +43,10 @@ export class OrderSearchItem extends Component {
             </Row>
           </Col>
           <Col xs={3}>
-              <Button bsStyle="primary" ><Icon name="chevron-right"/></Button>
+              <Button bsStyle="link" ><Icon name="chevron-right"/></Button>
           </Col>
         </Row>
+        <Row><Col xs={12}><hr style={{marginTop: "0.5em", marginBottom: "0.5em"}} /></Col></Row>
       </Link>
     );
   }

@@ -92,7 +92,7 @@ export class Detail extends Component {
       <div>
         <Row>
           <Col xs={12}>
-            <h1>{this.props.headerText}: {this.itemId}</h1>
+            <h3>{this.props.headerText}: {this.itemId}</h3>
           </Col>
         </Row>
         <Row>

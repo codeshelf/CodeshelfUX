@@ -39,6 +39,7 @@ export class SearchType extends Component {
 }
 */
 
+
 function getIdForItem(item) { return  item.orderId }
 
 const OrderSearch = createSearchComponent(OrderSearchItem, "Enter Order ID", getIdForItem);

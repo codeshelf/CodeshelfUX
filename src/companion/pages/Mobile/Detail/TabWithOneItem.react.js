@@ -19,8 +19,8 @@ export class TabWithOneItem extends Component {
     return (
       <div key={property}>
         <div><small>{this.props.fieldToDescription[property]}</small></div>
-        <h4>{!renderer? (!value? value : value.toString()) : renderer(value)}</h4>
-        <hr />
+        <h6>{!renderer? (!value? value : value.toString()) : renderer(value)}</h6>
+        <hr style={{marginTop: "0.5em", marginBottom: "0.5em"}} />
       </div>
     );
   }
