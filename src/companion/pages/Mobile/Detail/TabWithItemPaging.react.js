@@ -47,7 +47,7 @@ export class TabWithItemPaging extends Component {
     const {getIdFromItem} = this.props;
     const count = items.total;
     if (count === 0) {
-      return this.props.childern;
+      return this.props.children;
     }
 
     const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
