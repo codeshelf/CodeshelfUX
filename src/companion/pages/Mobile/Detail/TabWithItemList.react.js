@@ -47,7 +47,7 @@ export class TabWithItemList extends Component {
     const {getIdFromItem} = this.props;
     const count = items.length;
     if (count === 0) {
-      return this.props.childern;
+      return <div>{this.props.childern}</div>;
     }
 
     const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
