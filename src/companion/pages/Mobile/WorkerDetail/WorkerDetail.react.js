@@ -32,11 +32,13 @@ const tabToDescriptionText = {
 }
 
 const headerText = "Badge id";
+const defaultSelectTab = TAB_HISTORY;
 
 export class WorkerDetail extends Component {
   render() {
     return (
       <Detail {...this.props} {...{
+        defaultSelectTab,
         ALL_TABS,
         tabToComponent,
         tabToHeaderText,
