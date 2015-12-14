@@ -16,7 +16,8 @@ export class Detail extends Component {
   componentWillMount() {
     const {id: itemId} = this.props.router.getCurrentParams();
     this.itemId = itemId;
-    this.props.acSelectTab(0, itemId, true);
+    const defaultSelectTab = this.props.defaultSelectTab || 0;
+    this.props.acSelectTab(defaultSelectTab, itemId, true);
   }
 
 
@@ -70,6 +71,7 @@ export class Detail extends Component {
       const acSetFieldOrder = (f, v) => this.props.acSetFieldOrder(tab, f, v);
       const acExpand = (i) => this.props.acExpand(tab, i);
       const acReloadTab = () => this.props.acSelectTab(tab, this.itemId, true);
+      const acLoadPage = (page) => this.props.acSelectTab(tab, "token" + page, true);
       const commonProps = {
         expanded,
         acExpand,
@@ -79,6 +81,7 @@ export class Detail extends Component {
         acSettingOpen,
         acSettingClose,
         acReloadTab,
+        acLoadPage,
         data: this.props[tab].data
       };
       const Component = this.props.tabToComponent[tab];

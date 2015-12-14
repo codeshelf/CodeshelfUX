@@ -22,7 +22,8 @@ const tabToSetting = {
 // TODO optimize for speed
 function tabToApi(facilityContext, tab, domainId) {
   const call = {
-    [TAB_DETAIL]: getWorker,
+    //[TAB_DETAIL]: getWorker,
+    [TAB_DETAIL]: facilityContext.getWorker,
     [TAB_HISTORY]:  getWorkerHistory,
   }[tab];
   return call(domainId);
