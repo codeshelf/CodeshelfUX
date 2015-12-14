@@ -3,7 +3,8 @@ import DateTime from "./DateTime.js";
 export const keyColumn = "date";
 
 export const properties = toProperties([
-    {'id': 'date', title: 'Date', type: DateTime},
+    //{'id': 'date', title: 'Date', type: DateTime},
+    {'id': 'dateLocalUI', title: 'Date'}, //preformatted string for now
     {'id': 'ordersPicked', 'title': 'Orders Picked'},
     {'id': 'linesPicked', 'title': 'Lines Picked'},
     {'id': 'linesPickedEach', 'title': 'Lines Picked Each'},
