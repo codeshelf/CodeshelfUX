@@ -5,20 +5,18 @@ import {fieldToDescription} from "./intl";
 
 const fieldFormater = {
     createdAt: dateFormater,
-    resolvedAt: dateFormater,
 };
 
 function getIdFromItem(data) {
   return data.persistentId;
 };
 
-
-export class Picks extends Component {
+export class History extends Component {
 
   render() {
     return (
       <TabWithItemList {...this.props} {...{fieldToDescription, getIdFromItem, fieldFormater}}>
-        <div>No history for this order</div>
+        <div>No history for this worker</div>
       </TabWithItemList>
     );
   }

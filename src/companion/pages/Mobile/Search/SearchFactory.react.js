@@ -31,7 +31,6 @@ export function createSearchComponent(ItemComponent, searchFieldText) {
       } else if (result === null) {
         return <div> Loading...</div>;
       }
-      console.log("~~~~~~~~~~", ItemComponent);
       return (
         <Row>
           <Col sm={12}>

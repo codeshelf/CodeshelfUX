@@ -25,14 +25,14 @@ export class WorkerSearchItem extends Component {
   }
 
   render() {
-    const {badgeId, updated, firstName, lastName, filterText} = this.props;
+    const {domainId, updated, firstName, lastName, filterText} = this.props;
     return (
-      //<Link to="mobile-worker-datail" params={{id: badgeId}}>
+      <Link to="mobile-worker-datail" params={{id: domainId}}>
         <Row>
           <Col xs={9}>
             <Row>
               <Col xs={12}>
-                  <h2>{this.renderId(badgeId, filterText)}</h2>
+                  <h2>{this.renderId(domainId, filterText)}</h2>
               </Col>
             </Row>
             <Row>
@@ -46,7 +46,7 @@ export class WorkerSearchItem extends Component {
               <Button bsStyle="primary"><Icon name="chevron-right"/></Button>
           </Col>
         </Row>
-      //</Link>
+      </Link>
     );
   }
 }

@@ -1,12 +1,6 @@
 import React, {Component} from 'react';
-
-import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
-import Icon from 'react-fa';
 import {dateFormater} from "../../DateDisplay.react.js";
-import {FieldRenderer} from "../common/FieldRenderer.react.js";
-import {SettingsRow} from "../common/SettingsRow.react.js";
-import {Settings} from '../common/Settings.react.js';
-
+import {TabWithItemList} from "../../Detail/TabWithItemList.react.js";
 import {fieldToDescription} from "./intl";
 
 const fieldFormater = {
@@ -14,70 +8,17 @@ const fieldFormater = {
     completed: dateFormater,
 };
 
+function getIdFromItem(data) {
+  return data.persistentId;
+};
+
 export class Imports extends Component {
 
-  componentWillUnmount() {
-    if (this.props.expanded) {
-      this.props.acExpand(null);
-    }
-  }
-
-  renderImport(expanded, fieldSettings, importData) {
-    const {persistentId} = importData;
-    const {order: fieldsOrder} = fieldSettings;
-    const  {renderValue, dateFormater} = this;
-    const inOverview = (field) => fieldsOrder.indexOf(field) < fieldsOrder.indexOf("-");
-    const isVisible = (field) => fieldSettings["visibility"][field] && (expanded || inOverview(field)) ;
-    return (
-      <div key={persistentId}>
-        <Row onClick={() => this.props.acExpand((!expanded)? persistentId : null)}>
-          <Col xs={9}>
-            {fieldsOrder.filter((f) => f !== "-").map((field) =>
-              (isVisible(field) &&
-                <FieldRenderer key={field}
-                               description={fieldToDescription[field]}
-                               value={importData[field]}
-                               formater={fieldFormater[field]} />)
-            )}
-          </Col>
-          <Col xs={3}>
-            <Button bsStyle="primary" bsSize="xs"><Icon name={expanded? "chevron-circle-up" : "chevron-circle-down"} /></Button>
-          </Col>
-        </Row>
-        <hr />
-      </div>
-    );
-  }
-
   render() {
-    const {imports, expanded} = this.props;
-    const count = imports.length;
-    if (count === 0) {
-      return <div>No imports for this order</div>;
-    }
-
-    const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
-    const {acSettingOpen, acSettingClose, acSetFieldVisibility,
-     acSetFieldOrder, acReloadTab} = this.props;
-
     return (
-      <div>
-        <SettingsRow onClickReload={acReloadTab} onClickSettings={acSettingOpen} />
-        <Settings title="Set field visibility"
-                  visible={settingOpen}
-                  onClose={acSettingClose}
-                  {...{fieldToDescription,
-                    fieldSettings,
-                    acSetFieldVisibility,
-                    acSetFieldOrder}} />
-        <hr />
-        {imports.map((oneImport) =>
-          (expanded && oneImport.persistentId === expanded)?
-            this.renderImport(true, fieldSettings, oneImport)
-            :
-            this.renderImport(false, fieldSettings, oneImport)
-        )}
-      </div>
+      <TabWithItemList {...this.props} {...{fieldToDescription, getIdFromItem, fieldFormater}}>
+        <div>No imports for this order</div>
+      </TabWithItemList>
     );
   }
 }

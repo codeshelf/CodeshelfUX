@@ -3,8 +3,6 @@ import React, {Component} from 'react';
 import {Tabs, Tab, Row, Col, Button, Modal} from 'react-bootstrap';
 import Icon from 'react-fa';
 
-import {PROPERTY_VISIBILITY_OVERVIEW, PROPERTY_VISIBILITY_DETAIL} from '../store';
-
 export class Settings extends Component {
 
   renderHeader() {
