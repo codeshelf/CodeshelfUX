@@ -1,5 +1,7 @@
 import React from 'react';
 import {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} from "components/common/IBox";
+import {MultiSelect} from 'components/common/Form';
+
 import PickRateChart from './PickRateChart';
 import PickRateTable from "./PickRateTable";
 import moment from 'moment';
@@ -67,6 +69,7 @@ var PickerEventsIBox = React.createClass({
     getInitialState: function() {
         return {
             "interval": priorDayInterval(0),
+              "purposes": [],
             "pickRates" : []
         };
     },
@@ -76,14 +79,26 @@ var PickerEventsIBox = React.createClass({
                        });
     },
 
-    getPickRates: (startTimestamp, endTimestamp) => {
-        return getFacilityContext().getPickRates(startTimestamp.toISOString(), endTimestamp.toISOString());
+    handlePurposeChange(selectedValues) {
+      this.setState({purposes: selectedValues.toJS()}, () => {
+        this.updateViews(this.state);
+      });
+    },
+
+    getPickRates: (purposes, startTimestamp, endTimestamp) => {
+      var filter = {
+        purpose: purposes,
+        startTimestamp: startTimestamp.toISOString(),
+        endTimestamp: endTimestamp.toISOString()
+      };
+      return getFacilityContext().getPickRates(filter);
     },
 
     updateViews: function(state) {
         let {start, end} = state.interval;
+        let {purposes} = state;
         let workersByBadgeId = getWorkersByBadgeId();
-        this.getPickRates(start,  end).then((data) => {
+          this.getPickRates(purposes, start,  end).then((data) => {
             let d3Data = toD3Data(start, end, data);
             let withWorkerNames = d3Data.map((keyData) => {
                 let domainId = keyData.key;
@@ -114,7 +129,9 @@ var PickerEventsIBox = React.createClass({
                      </IBoxTitleText>
                    </IBoxTitleBar>
                    <IBoxSection>
-                       <DayOfWeekFilter numDays={4} onChange={this.handleChange}/>
+                     <DayOfWeekFilter numDays={4} onChange={this.handleChange}/>
+                       <input type="text" onChange={(e) => {this.handleChange(e.target.value);}} />
+                         <MultiSelect options={[{value: "WiPurposeOutboundPick"}, {value: "WiPurposePalletizerPut"}]} onChange={this.handlePurposeChange}/>
                    </IBoxSection>
                    <IBoxSection>
                        <PickRateChart style={{width: '100%', height: '300px'}}

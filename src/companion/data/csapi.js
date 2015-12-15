@@ -431,13 +431,10 @@ export function getFacilityContext(facilityId) {
                 contentType: "form"
             });
         },
-        getPickRates: (startTimestamp, endTimestamp) => {
+        getPickRates: (filter) => {
             var pickRateUrl = facilityPath + "/pickrate";
             return ajax(pickRateUrl, {
-                data: {
-                    startTimestamp: startTimestamp,
-                    endTimestamp: endTimestamp
-                }
+                data: filter
             });
         },
 
