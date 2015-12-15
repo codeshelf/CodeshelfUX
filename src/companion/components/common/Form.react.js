@@ -243,6 +243,7 @@ export class MultiSelectUnwrapped extends PureComponent {
             {
                 options.map((option) =>{
                     let {label, value } = option;
+                    label = label || value;
                     let id = selectLabel + value;
                         return <div key={value} className="checkbox check-primary">
                                 <input type="checkbox" value={value}  id={id} name={id} defaultChecked={values.includes(value)}
