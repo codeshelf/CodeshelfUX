@@ -156,9 +156,11 @@ const workerHistory = {
 
 
 export function getWorkerHistory(workerId) {
-  let result = workerHistory["noToken"]
-  if (typeof workerId === "string" && workerId.startsWith("token")) {
-    result = workerHistory[workerId.substring("token".length)];
-  }
+  let result = workerHistory["noToken"];
+  return Promise.delay(Promise.resolve(result), 500);
+}
+
+export function getWorkerHistoryAditional(token) {
+  let result = workerHistory[token];
   return Promise.delay(Promise.resolve(result), 500);
 }

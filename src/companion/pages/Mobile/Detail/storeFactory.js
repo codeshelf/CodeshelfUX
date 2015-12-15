@@ -11,6 +11,9 @@ const STATUS_STARTED = "started";
 const STATUS_OK = "ok";
 const STATUS_ERROR = "error";
 
+const LOADING_ADITIONAL_DATA = "loading of aditional data for some tab";
+// use same status as LOADING_DATA
+
 const SETTING_OPEN = "open settings";
 const SETTING_CLOSE = "close settings";
 
@@ -19,7 +22,8 @@ export const SETTING_PROPERTY_ORDER = "set property order";
 
 const EXPAND_SOMETHING = "expand something";
 
-export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting, tabToApi) {
+export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
+  tabToApi, tabToAditionalApi, mergeAditionalData) {
 
   const initState = {
     tab: ALL_TABS[0], // TAB_DETAIL, TAB_ITEMS, TAB_PICKS
@@ -32,6 +36,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting, ta
       error: null,
       whatIsLoading: null,
       loadedTime: null,
+      aditionalDataLoading: null,
   }
 
   ALL_TABS.forEach((tab) => {
@@ -53,18 +58,88 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting, ta
         switch (action.status) {
           case STATUS_STARTED: {
             const {whatIsLoading} = action;
-            return {...state, [tab]: {...(state[tab]), data: null, error: null, whatIsLoading: whatIsLoading, whatIsLoaded: null, loadedTime: null}};
+            return {
+              ...state,
+              [tab]: {
+                ...(state[tab]),
+                data: null,
+                error: null,
+                whatIsLoading: whatIsLoading,
+                whatIsLoaded: null,
+                loadedTime: null,
+                aditionalDataLoading: null,
+              }
+            };
           }
           case STATUS_OK: {
             const {data, itemId} = action;
             const loadedTime = moment();
-            return {...state, [tab]: {...(state[tab]), data, error: null, whatIsLoading: null, whatIsLoaded: itemId, loadedTime}};
+            return {
+              ...state,
+              [tab]: {
+                ...(state[tab]),
+                data,
+                error: null,
+                whatIsLoading: null,
+                whatIsLoaded: itemId,
+                loadedTime,
+                aditionalDataLoading: null,
+              }
+            };
           }
           case STATUS_ERROR: {
             const {error} = action;
             const loadedTime = moment();
-            return {...state, [tab]: {...(state[tab]), data: null, error, whatIsLoading: null, whatIsLoaded: null, loadedTime}};
+            return {
+              ...state,
+              [tab]: {
+                ...(state[tab]),
+                data: null,
+                error,
+                whatIsLoading: null,
+                whatIsLoaded: null,
+                loadedTime,
+                aditionalDataLoading: null,
+              }
+            };
           }
+        }
+      }
+      case LOADING_ADITIONAL_DATA: {
+        const {tab} = action;
+        switch (action.status) {
+          case STATUS_STARTED: {
+            const {whatIsLoading: aditionalDataLoading} = action;
+            return {
+              ...state,
+              [tab]: {
+                ...(state[tab]),
+                aditionalDataLoading,
+              }
+            }
+          }
+          case STATUS_OK: {
+            const {data} = action;
+            const mergedData = mergeAditionalData[tab](state[tab].data, data);
+            return {
+              ...state,
+              [tab]: {
+                ...(state[tab]),
+                data: mergedData,
+                aditionalDataLoading: null,
+              }
+            }
+          }
+          case STATUS_ERROR: {
+            return {
+              ...state,
+              [tab]: {
+                ...(state[tab]),
+                aditionalDataLoading: null,
+              }
+            }
+          }
+
         }
       }
       case SETTING_OPEN: {
@@ -270,8 +345,43 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting, ta
     }
   }
 
+  function searchAditional(tab, status, data) {
+    return {
+      type: LOADING_ADITIONAL_DATA,
+      tab,
+      status,
+      storeName,
+      ...data
+    };
+  }
+
+    function acSearchAditional(tab, itemId) {
+    return (dispatch, getState) => {
+      dispatch(searchAditional(tab, STATUS_STARTED, {whatIsLoading: itemId}));
+
+      const selectedfacility = getSelectedFacility(getState());
+      if (!selectedfacility || !(selectedfacility.persistentId)) {
+        dispatch(searchAditional(tab, STATUS_ERROR, {error: "Want to search for orders but no facility is provided"}));
+        return;
+      }
+      const facilityContext = getFacilityContext(selectedfacility.persistentId);
+
+      tabToAditionalApi(facilityContext, tab, itemId).catch((error) => {
+        console.error(`Error from search for ${storeName}`, error);
+        dispatch(searchAditional(tab, STATUS_ERROR, {error}));
+      })
+      .then((data) => {
+        const aditionalDataLoading = getLocalStore(getState())[tab].aditionalDataLoading;
+        if (aditionalDataLoading === itemId) {
+          dispatch(searchAditional(tab, STATUS_OK, {data, itemId}));
+        }
+      });
+    }
+  }
+
   return {
     acSearch,
+    acSearchAditional,
     acSelectTab,
     acExpand,
     acSetFieldOrder,

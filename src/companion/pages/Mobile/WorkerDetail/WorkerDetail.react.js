@@ -9,7 +9,7 @@ import {Detail} from "../Detail/Detail.react.js";
 
 import {TAB_DETAIL, TAB_HISTORY, ALL_TABS} from './store';
 import {acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
-    acSettingOpen, acSettingClose} from './store';
+    acSettingOpen, acSettingClose, acSearchAditional} from './store';
 import {getWorkerDetail} from "./get";
 
 import {Header} from "./Header/Header.react.js";
@@ -50,8 +50,8 @@ export class WorkerDetail extends Component {
 }
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
-      acSettingOpen, acSettingClose}, dispatch);
+  return bindActionCreators({acSelectTab, acExpand, acSetFieldVisibility,
+   acSetFieldOrder, acSearchAditional, acSettingOpen, acSettingClose}, dispatch);
 }
 
 export default exposeRouter(connect(getWorkerDetail, mapDispatch)(WorkerDetail));

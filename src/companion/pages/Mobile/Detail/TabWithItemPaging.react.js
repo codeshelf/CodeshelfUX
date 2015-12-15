@@ -42,7 +42,7 @@ export class TabWithItemPaging extends Component {
   }
 
   render() {
-    const {data: items, expanded} = this.props;
+    const {data: items, expanded, aditionalDataLoading} = this.props;
     const {fieldToDescription} = this.props;
     const {getIdFromItem} = this.props;
     const count = items.total;
@@ -52,21 +52,11 @@ export class TabWithItemPaging extends Component {
 
     const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
     const {acSettingOpen, acSettingClose, acSetFieldVisibility,
-     acSetFieldOrder, acReloadTab, acLoadPage} = this.props;
-    const {prev, next} = items;
+     acSetFieldOrder, acReloadTab, acSearchAditional} = this.props;
+    const {next} = items;
     return (
       <div>
         <SettingsRow onClickReload={acReloadTab} onClickSettings={acSettingOpen}>
-          {prev &&
-            <Button bsStyle="primary" bsSize="xs" onClick={() => acLoadPage(prev)}>
-              <Icon name="long-arrow-left" />
-            </Button>
-          }
-          {next &&
-            <Button bsStyle="primary" bsSize="xs" onClick={() => acLoadPage(next)}>
-              <Icon name="long-arrow-right" />
-            </Button>
-          }
         </SettingsRow>
         <Settings title="Set field visibility"
                   visible={settingOpen}
@@ -84,6 +74,14 @@ export class TabWithItemPaging extends Component {
             oneItem
           )
         )}
+        {aditionalDataLoading &&
+          <Icon name="spinner " />
+        }
+        {(next && !aditionalDataLoading) &&
+            <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchAditional(next)}>
+              <Icon name="long-arrow-right" />
+            </Button>
+        }
       </div>
     );
   }
