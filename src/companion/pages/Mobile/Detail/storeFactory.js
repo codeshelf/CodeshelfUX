@@ -1,5 +1,5 @@
 import moment from "moment";
-
+import _ from "lodash";
 import {getFacilityContext, ConnectionError} from 'data/csapi';
 import {getSelectedFacility} from "../Facility/get";
 
@@ -332,13 +332,17 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
       }
       const facilityContext = getFacilityContext(selectedfacility.persistentId);
 
-      tabToApi(facilityContext, tab, itemId).catch((error) => {
-        console.error(`Error from search for ${storeName}`, error);
-        dispatch(search(tab, STATUS_ERROR, {error}));
+      tabToApi(facilityContext, tab, itemId)
+      .catch((error) => {
+        const whatIsLoading = getLocalStore(getState())[tab].whatIsLoading;
+        if (_.isEqual(whatIsLoading,itemId)) {
+          console.error(`Error from search for ${storeName}`, error);
+          dispatch(search(tab, STATUS_ERROR, {error}));
+        }
       })
       .then((data) => {
         const whatIsLoading = getLocalStore(getState())[tab].whatIsLoading;
-        if (whatIsLoading === itemId) {
+        if (_.isEqual(whatIsLoading,itemId)) {
           dispatch(search(tab, STATUS_OK, {data, itemId}));
         }
       });
@@ -366,13 +370,17 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
       }
       const facilityContext = getFacilityContext(selectedfacility.persistentId);
 
-      tabToAdditionalApi(facilityContext, tab, itemId).catch((error) => {
-        console.error(`Error from search for ${storeName}`, error);
-        dispatch(searchAdditional(tab, STATUS_ERROR, {error}));
+      tabToAdditionalApi(facilityContext, tab, itemId)
+      .catch((error) => {
+        const additionalDataLoading = getLocalStore(getState())[tab].additionalDataLoading;
+        if  (_.isEqual(additionalDataLoading,itemId)) {
+          console.error(`Error from search for ${storeName}`, error);
+          dispatch(searchAdditional(tab, STATUS_ERROR, {error}));
+        }
       })
       .then((data) => {
         const additionalDataLoading = getLocalStore(getState())[tab].additionalDataLoading;
-        if (additionalDataLoading === itemId) {
+        if  (_.isEqual(additionalDataLoading,itemId)) {
           dispatch(searchAdditional(tab, STATUS_OK, {data, itemId}));
         }
       });

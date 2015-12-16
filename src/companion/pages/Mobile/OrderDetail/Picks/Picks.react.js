@@ -1,14 +1,28 @@
 import React, {Component} from 'react';
 import {datetimeFormatter} from "../../DateDisplay.react.js";
 import {TabWithItemList} from "../../Detail/TabWithItemList.react.js";
+import {Link} from '../../links';
+import {Button} from 'react-bootstrap';
+import Icon from 'react-fa';
 
 import {fieldToDescription} from "./intl";
 
 const secondsFormatter = datetimeFormatter.bind(null, 'second');
 
+function workerComponent(workerId) {
+  if (!workerId) return workerId;
+  return (
+    <Link to="mobile-worker-datail" params={{id: workerId}}>
+      {workerId}
+      <Button bsStyle="link"><Icon name="chevron-right"/></Button>
+    </Link>
+  );
+}
+
 const fieldFormater = {
   createdAt: secondsFormatter,
   resolvedAt: secondsFormatter,
+  workerId: workerComponent
 };
 
 function getIdFromItem(data) {

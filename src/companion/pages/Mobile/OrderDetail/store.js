@@ -4,19 +4,19 @@ import {getPicks} from "./mockGetPicks";
 import * as fieldSetting from './storeFieldConfig';
 import {createStore} from "../Detail/storeFactory";
 
-export const PERSIST_STATE_PART = [
-  ["orderDetail", TAB_DETAIL, "settings", "properties"],
-  ["orderDetail", TAB_ITEMS, "settings", "properties"],
-  ["orderDetail", TAB_PICKS, "settings", "properties"],
-  ["orderDetail", TAB_IMPORTS, "settings", "properties"],
- ];
-
 export const TAB_DETAIL = "tab detail";
 export const TAB_ITEMS = "tab items";
 export const TAB_PICKS = "tab picks";
 export const TAB_IMPORTS = "tab imports";
 
 export const ALL_TABS = [TAB_DETAIL, TAB_ITEMS, TAB_PICKS, TAB_IMPORTS];
+
+export const PERSIST_STATE_PART = [
+  ["orderDetail", TAB_DETAIL, "settings", "properties"],
+  ["orderDetail", TAB_ITEMS, "settings", "properties"],
+  ["orderDetail", TAB_PICKS, "settings", "properties"],
+  ["orderDetail", TAB_IMPORTS, "settings", "properties"],
+];
 
 const tabToSetting = {
   [TAB_DETAIL]: fieldSetting.headerFieldsSetting,

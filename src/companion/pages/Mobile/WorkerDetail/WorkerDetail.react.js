@@ -15,7 +15,6 @@ import {getWorkerDetail} from "./get";
 import {Header} from "./Header/Header.react.js";
 import {History} from "./History/History.react.js";
 
-
 const tabToComponent = {
   [TAB_DETAIL]: Header,
   [TAB_HISTORY]: History,

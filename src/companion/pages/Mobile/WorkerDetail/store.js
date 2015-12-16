@@ -4,15 +4,15 @@ import {getWorker, getWorkerHistory, getWorkerHistoryAdditional} from "./mockGet
 import * as fieldSetting from './storeFieldConfig';
 import {createStore} from "../Detail/storeFactory";
 
-export const PERSIST_STATE_PART = [
-  ["workerDetail", TAB_DETAIL, "settings", "properties"],
-  ["workerDetail", TAB_HISTORY, "settings", "properties"],
- ];
-
 export const TAB_DETAIL = "worker tab detail";
 export const TAB_HISTORY = "worker tab history";
 
 export const ALL_TABS = [TAB_DETAIL, TAB_HISTORY];
+
+export const PERSIST_STATE_PART = [
+  ["workerDetail", TAB_DETAIL, "settings", "properties"],
+  ["workerDetail", TAB_HISTORY, "settings", "properties"],
+ ];
 
 const tabToSetting = {
   [TAB_DETAIL]: fieldSetting.headerFieldsSetting,
