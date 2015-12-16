@@ -33,7 +33,7 @@ export default class EventSearch extends React.Component {
       let {filter, purposeOptions} = this.state;
       return (
         <Form onSubmit={(e) => {e.preventDefault(); return onSubmit(filter);}} >
-          <WrapInput label="Timestamp">
+          <WrapInput label="Date">
             <DayOfWeekFilter  numDays={4} onChange={this.handleChange.bind(this, "createdInterval")}/>
           </WrapInput>
           {purposeOptions.length > 0 &&
