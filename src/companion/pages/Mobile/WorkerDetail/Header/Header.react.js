@@ -4,12 +4,11 @@ import {TabWithOneItem} from "../../Detail/TabWithOneItem.react.js";
 import {fieldToDescription} from "./intl";
 
 const fieldFormater = {
-  orderDate: dateFormater,
-  dueDate: dateFormater,
+  updated: dateFormater,
 };
 
 function getIdFromItem(data) {
-  return data.orderId;
+  return data.persistentId;
 }
 
 export class Header extends Component {

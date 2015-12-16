@@ -30,6 +30,7 @@ export function formatToSeconds(momentCompatibleDate) {
   }
 
   var timeMoment = moment(momentCompatibleDate);
+
   return timeMoment.format("L LT");
 }
 

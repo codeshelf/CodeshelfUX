@@ -14,6 +14,8 @@ import * as storageConfig from './storage';
 import {facilityReducer} from './Facility/store';
 import {orderSearchReducer} from './OrderSearch/store';
 import {orderDetailReducer} from './OrderDetail/store';
+import {workerSearchReducer} from './WorkerSearch/store';
+import {workerDetailReducer} from './WorkerDetail/store';
 
 const rootReducer = storage.reducer(combineReducers({
 //  user: userReducer,
@@ -21,6 +23,8 @@ const rootReducer = storage.reducer(combineReducers({
   facility: facilityReducer,
   orderSearch: orderSearchReducer,
   orderDetail: orderDetailReducer,
+  workerSearch: workerSearchReducer,
+  workerDetail: workerDetailReducer,
 }));
 
 const storageEngine = storage.decorators.filter(
