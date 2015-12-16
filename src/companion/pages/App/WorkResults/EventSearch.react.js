@@ -34,7 +34,7 @@ export default class EventSearch extends React.Component {
       return (
         <Form onSubmit={(e) => {e.preventDefault(); return onSubmit(filter);}} >
           <WrapInput label="Date">
-            <DayOfWeekFilter  numDays={4} onChange={this.handleChange.bind(this, "createdInterval")}/>
+            <DayOfWeekFilter  onChange={this.handleChange.bind(this, "createdInterval")}/>
           </WrapInput>
           {purposeOptions.length > 0 &&
             <MultiSelect

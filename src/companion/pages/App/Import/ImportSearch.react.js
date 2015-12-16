@@ -53,7 +53,7 @@ export default class ImportSearch extends React.Component{
         return (
                 <Form onSubmit={this.handleSubmit.bind(this)}>
                     <WrapInput label="Received Date">
-                        <DayOfWeekFilter ref="receivedFilter" numDays={4} onChange={this.handleChange.bind(this)} />
+                        <DayOfWeekFilter ref="receivedFilter" onChange={this.handleChange.bind(this)} />
                     </WrapInput>
                     <Input type="text" ref="orderIds" label="Order IDs" name="orderIds" />
                     <Input type="text" ref="itemIds" label="Item IDs" name="itemIds" />

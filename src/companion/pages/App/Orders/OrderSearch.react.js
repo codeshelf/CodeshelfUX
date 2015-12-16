@@ -50,7 +50,7 @@ export default class OrderSearch extends React.Component {
         return (
             <Form onSubmit={this.handleSubmit.bind(this)}>
                 <WrapInput label="Due Date">
-                    <DayOfWeekFilter ref="dueDateFilter" numDays={4} onChange={this.handleChange.bind(this)}/>
+                    <DayOfWeekFilter ref="dueDateFilter" onChange={this.handleChange.bind(this)}/>
                 </WrapInput>
                 <Input ref="orderId" label="Order ID" name="orderId" type="text" />
                 <SubmitButton label="Search"/>
