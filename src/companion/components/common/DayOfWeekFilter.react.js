@@ -56,6 +56,15 @@ export default class DayOfWeekFilter extends React.Component {
         return DayOfWeekFilter.priorDayInterval(this.state.value);
     }
 
+    handleDateChange(e) {
+      const dateValue = e.target.value;
+      let days = 0;
+      if (dateValue != null) {
+        days = moment().diff(moment(dateValue), 'days');
+      }
+      this.handleButtonClick(days);
+    }
+
     handleButtonClick(value, e) {
         this.setState({value: value}, () => {
           this.props.onChange(value);
@@ -65,13 +74,11 @@ export default class DayOfWeekFilter extends React.Component {
     render() {
         var {numDays} = this.props;
         var {value} = this.state;
+        var date = moment().subtract(value, 'days').format("YYYY-MM-DD");
         return (
-          <div>
-            <div>
-              <label style={{display: "inline", marginRight: "0.5em"}}>Days Ago</label>
-                <input type="number" value={value} onChange={(e) => {this.handleButtonClick(e.target.value, e);}} style={{width: "3.5em", paddingLeft: "0.5em"}}/>
-              </div>
-              <ButtonGroup>
+          <div style={{display: "inline-block", textAlign: "center"}}>
+            <input type="date" value={date} onChange={this.handleDateChange.bind(this)} style={{display: "block", margin: "0 auto"}}/>
+            <ButtonGroup>
 
                 {
                     _.range(1,numDays+1).reverse().map(function(index){
@@ -82,8 +89,8 @@ export default class DayOfWeekFilter extends React.Component {
 
                 }
                 <ButtonFilter key="today" onClick={this.handleButtonClick.bind(this, this.today)} selectedValue={value} value={this.today}>Today</ButtonFilter>
-              </ButtonGroup>
-            </div>
+            </ButtonGroup>
+          </div>
         );
 
     }
