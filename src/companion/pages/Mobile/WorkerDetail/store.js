@@ -1,5 +1,5 @@
 import {getWorkerDetail} from "./get";
-import {getWorker, getWorkerHistory, getWorkerHistoryAditional} from "./mockGetWorker";
+import {getWorker, getWorkerHistory, getWorkerHistoryAdditional} from "./mockGetWorker";
 
 import * as fieldSetting from './storeFieldConfig';
 import {createStore} from "../Detail/storeFactory";
@@ -29,14 +29,14 @@ function tabToApi(facilityContext, tab, domainId) {
   return call(domainId);
 }
 
-function tabToAditionalApi(facilityContext, tab, itemId) {
+function tabToAdditionalApi(facilityContext, tab, itemId) {
   const call = {
-    [TAB_HISTORY]: getWorkerHistoryAditional,
+    [TAB_HISTORY]: getWorkerHistoryAdditional,
   }[tab];
   return call(itemId);
 }
 
-const mergeAditionalData = {
+const mergeAdditionalData = {
   [TAB_HISTORY]: (oldData, newData) => {
     return {
       ...oldData,
@@ -49,11 +49,11 @@ const mergeAditionalData = {
 
 
 const store = createStore("workerDetail", getWorkerDetail,
-    ALL_TABS, tabToSetting, tabToApi, tabToAditionalApi, mergeAditionalData);
+    ALL_TABS, tabToSetting, tabToApi, tabToAdditionalApi, mergeAdditionalData);
 
 export const workerDetailReducer = store.detailReducer;
 export const acSearch = store.acSearch;
-export const acSearchAditional = store.acSearchAditional;
+export const acSearchAdditional = store.acSearchAdditional;
 export const acSelectTab = store.acSelectTab;
 export const acExpand = store.acExpand;
 export const acSetFieldOrder = store.acSetFieldOrder;

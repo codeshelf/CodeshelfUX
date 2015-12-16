@@ -53,7 +53,7 @@ export class TabWithOneItem extends Component {
         )}
         <Row>
           <Button onClick={() => acExpand((!expanded)? true : null)}>
-             Aditional fields
+             Additional fields
              {"  "}
              <Icon name={expanded? "chevron-circle-up" : "chevron-circle-down"} />
           </Button>

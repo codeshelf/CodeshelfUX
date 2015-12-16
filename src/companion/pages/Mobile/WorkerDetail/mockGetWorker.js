@@ -160,7 +160,7 @@ export function getWorkerHistory(workerId) {
   return Promise.delay(Promise.resolve(result), 500);
 }
 
-export function getWorkerHistoryAditional(token) {
+export function getWorkerHistoryAdditional(token) {
   let result = workerHistory[token];
   return Promise.delay(Promise.resolve(result), 500);
 }

@@ -42,7 +42,7 @@ export class TabWithItemPaging extends Component {
   }
 
   render() {
-    const {data: items, expanded, aditionalDataLoading} = this.props;
+    const {data: items, expanded, additionalDataLoading} = this.props;
     const {fieldToDescription} = this.props;
     const {getIdFromItem} = this.props;
     const count = items.total;
@@ -52,7 +52,7 @@ export class TabWithItemPaging extends Component {
 
     const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
     const {acSettingOpen, acSettingClose, acSetFieldVisibility,
-     acSetFieldOrder, acReloadTab, acSearchAditional} = this.props;
+     acSetFieldOrder, acReloadTab, acSearchAdditional} = this.props;
     const {next} = items;
     return (
       <div>
@@ -74,11 +74,11 @@ export class TabWithItemPaging extends Component {
             oneItem
           )
         )}
-        {aditionalDataLoading &&
+        {additionalDataLoading &&
           <Icon name="spinner " />
         }
-        {(next && !aditionalDataLoading) &&
-            <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchAditional(next)}>
+        {(next && !additionalDataLoading) &&
+            <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchAdditional(next)}>
               <Icon name="long-arrow-right" />
             </Button>
         }

@@ -11,7 +11,7 @@ const STATUS_STARTED = "started";
 const STATUS_OK = "ok";
 const STATUS_ERROR = "error";
 
-const LOADING_ADITIONAL_DATA = "loading of aditional data for some tab";
+const LOADING_ADDITIONAL_DATA = "loading of additional data for some tab";
 // use same status as LOADING_DATA
 
 const SETTING_OPEN = "open settings";
@@ -23,7 +23,7 @@ export const SETTING_PROPERTY_ORDER = "set property order";
 const EXPAND_SOMETHING = "expand something";
 
 export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
-  tabToApi, tabToAditionalApi, mergeAditionalData) {
+  tabToApi, tabToAdditionalApi, mergeAdditionalData) {
 
   const initState = {
     tab: ALL_TABS[0], // TAB_DETAIL, TAB_ITEMS, TAB_PICKS
@@ -36,7 +36,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
       error: null,
       whatIsLoading: null,
       loadedTime: null,
-      aditionalDataLoading: null,
+      additionalDataLoading: null,
   }
 
   ALL_TABS.forEach((tab) => {
@@ -67,7 +67,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
                 whatIsLoading: whatIsLoading,
                 whatIsLoaded: null,
                 loadedTime: null,
-                aditionalDataLoading: null,
+                additionalDataLoading: null,
               }
             };
           }
@@ -83,7 +83,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
                 whatIsLoading: null,
                 whatIsLoaded: itemId,
                 loadedTime,
-                aditionalDataLoading: null,
+                addtionalDataLoading: null,
               }
             };
           }
@@ -99,34 +99,34 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
                 whatIsLoading: null,
                 whatIsLoaded: null,
                 loadedTime,
-                aditionalDataLoading: null,
+                additionalDataLoading: null,
               }
             };
           }
         }
       }
-      case LOADING_ADITIONAL_DATA: {
+      case LOADING_ADDITIONAL_DATA: {
         const {tab} = action;
         switch (action.status) {
           case STATUS_STARTED: {
-            const {whatIsLoading: aditionalDataLoading} = action;
+            const {whatIsLoading: additionalDataLoading} = action;
             return {
               ...state,
               [tab]: {
                 ...(state[tab]),
-                aditionalDataLoading,
+                additionalDataLoading,
               }
             }
           }
           case STATUS_OK: {
             const {data} = action;
-            const mergedData = mergeAditionalData[tab](state[tab].data, data);
+            const mergedData = mergeAdditionalData[tab](state[tab].data, data);
             return {
               ...state,
               [tab]: {
                 ...(state[tab]),
                 data: mergedData,
-                aditionalDataLoading: null,
+                additionalDataLoading: null,
               }
             }
           }
@@ -135,7 +135,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
               ...state,
               [tab]: {
                 ...(state[tab]),
-                aditionalDataLoading: null,
+                additionalDataLoading: null,
               }
             }
           }
@@ -345,9 +345,9 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
     }
   }
 
-  function searchAditional(tab, status, data) {
+  function searchAdditional(tab, status, data) {
     return {
-      type: LOADING_ADITIONAL_DATA,
+      type: LOADING_ADDITIONAL_DATA,
       tab,
       status,
       storeName,
@@ -355,25 +355,25 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
     };
   }
 
-    function acSearchAditional(tab, itemId) {
+    function acSearchAdditional(tab, itemId) {
     return (dispatch, getState) => {
-      dispatch(searchAditional(tab, STATUS_STARTED, {whatIsLoading: itemId}));
+      dispatch(searchAdditional(tab, STATUS_STARTED, {whatIsLoading: itemId}));
 
       const selectedfacility = getSelectedFacility(getState());
       if (!selectedfacility || !(selectedfacility.persistentId)) {
-        dispatch(searchAditional(tab, STATUS_ERROR, {error: "Want to search for orders but no facility is provided"}));
+        dispatch(searchAdditional(tab, STATUS_ERROR, {error: "Want to search for orders but no facility is provided"}));
         return;
       }
       const facilityContext = getFacilityContext(selectedfacility.persistentId);
 
-      tabToAditionalApi(facilityContext, tab, itemId).catch((error) => {
+      tabToAdditionalApi(facilityContext, tab, itemId).catch((error) => {
         console.error(`Error from search for ${storeName}`, error);
-        dispatch(searchAditional(tab, STATUS_ERROR, {error}));
+        dispatch(searchAdditional(tab, STATUS_ERROR, {error}));
       })
       .then((data) => {
-        const aditionalDataLoading = getLocalStore(getState())[tab].aditionalDataLoading;
-        if (aditionalDataLoading === itemId) {
-          dispatch(searchAditional(tab, STATUS_OK, {data, itemId}));
+        const additionalDataLoading = getLocalStore(getState())[tab].additionalDataLoading;
+        if (additionalDataLoading === itemId) {
+          dispatch(searchAdditional(tab, STATUS_OK, {data, itemId}));
         }
       });
     }
@@ -381,7 +381,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
 
   return {
     acSearch,
-    acSearchAditional,
+    acSearchAdditional,
     acSelectTab,
     acExpand,
     acSetFieldOrder,
