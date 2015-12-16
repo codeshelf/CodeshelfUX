@@ -72,13 +72,14 @@ export default class DayOfWeekFilter extends React.Component {
     }
 
     render() {
-        var {numDays} = this.props;
+        let {numDays} = this.props;
+        numDays = numDays || 4;
         var {value} = this.state;
         var date = moment().subtract(value, 'days').format("YYYY-MM-DD");
         return (
           <div style={{display: "inline-block", textAlign: "center"}}>
             <input type="date" value={date} onChange={this.handleDateChange.bind(this)} style={{display: "block", margin: "0 auto"}}/>
-            <ButtonGroup>
+          <ButtonGroup style={{whiteSpace: "nowrap"}}>
 
                 {
                     _.range(1,numDays+1).reverse().map(function(index){

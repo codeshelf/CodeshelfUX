@@ -96,7 +96,7 @@ export default class BlockedWork extends React.Component {
             <Row>
                 <Col sm={12}>
                   <WrapInput label="Created Date">
-                    <DayOfWeekFilter ref="createdFilter" numDays={4} onChange={this.subscribeWithFilter} />
+                    <DayOfWeekFilter ref="createdFilter" onChange={this.subscribeWithFilter} />
                   </WrapInput>
                   {(filteredIssueSummaryResults.count() > 0) ?
                     this.renderTabbedArea(filteredIssueSummaryResults) :

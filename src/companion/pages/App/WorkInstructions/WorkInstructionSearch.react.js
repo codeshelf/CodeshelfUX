@@ -50,7 +50,7 @@ export default class WorkInstructionSearch extends React.Component {
         return (
             <Form onSubmit={this.handleSubmit.bind(this)}>
                 <WrapInput label="Assigned Time">
-                    <DayOfWeekFilter ref="assignedFilter" numDays={4} onChange={this.handleChange.bind(this)}/>
+                    <DayOfWeekFilter ref="assignedFilter" onChange={this.handleChange.bind(this)}/>
                 </WrapInput>
                 <Input ref="sku" label="SKU" name="itemId" type="text" />
                 <Input ref="containerId" label="Container ID" name="containerId" type="text" />
