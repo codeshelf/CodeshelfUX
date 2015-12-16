@@ -72,7 +72,7 @@ var PickerEventsIBox = React.createClass({
       let params = filter.merge({
           createdInterval: createdInterval.toQueryParameterValue()
       }).toJS();
-
+      this.setState({interval: createdInterval});
       return getFacilityContext().getPickRates(params).then((data) => {
         let workersByBadgeId = getWorkersByBadgeId();
         let d3Data = toD3Data(createdInterval, data);

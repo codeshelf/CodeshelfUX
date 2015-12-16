@@ -2,20 +2,20 @@ import {Map} from "immutable";
 import {Row, Col} from 'components/common/pagelayout';
 import {Form, Input, WrapInput, MultiSelect, SubmitButton, getRefInputValue} from 'components/common/Form';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
+import {getFacilityContext} from "data/csapi";
 
 export default class EventSearch extends React.Component {
 
     constructor(props){
         super(props);
-        this.state = {filter: Map()};
-        this.purposeOptions = [
-          {label: "Pick Outbound", value: "WiPurposeOutboundPick"},
-          {label: "Put Palletizer", value: "WiPurposePalletizerPut"},
-          {label: "<Unspecified>", value: null}
-        ];
+        this.state = {filter: Map(),
+                      purposeOptions: []};
     }
 
     componentWillMount() {
+        getFacilityContext().getEventPurposes().then((searchSpec) => {
+          this.setState({purposeOptions: searchSpec.purpose});
+        });
         this.handleChange("createdInterval", 0);
     }
 
@@ -30,17 +30,19 @@ export default class EventSearch extends React.Component {
 
     render() {
       let {onSubmit} = this.props;
-      let {filter} = this.state;
+      let {filter, purposeOptions} = this.state;
       return (
         <Form onSubmit={(e) => {e.preventDefault(); return onSubmit(filter);}} >
           <WrapInput label="Timestamp">
             <DayOfWeekFilter  numDays={4} onChange={this.handleChange.bind(this, "createdInterval")}/>
           </WrapInput>
-          <MultiSelect
+          {purposeOptions.length > 0 &&
+            <MultiSelect
               label="Purpose"
-              options={this.purposeOptions}
-              values={this.purposeOptions.map((o) => o.value)}
+              options={purposeOptions}
+              values={purposeOptions.map((o) => o.value)}
               onChange={this.handleChange.bind(this, "purpose")}/>
+          }
             <SubmitButton label="Search"/>
         </Form>
         );

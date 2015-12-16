@@ -431,6 +431,14 @@ export function getFacilityContext(facilityId) {
                 contentType: "form"
             });
         },
+
+        getEventPurposes() {
+          var pickRatePurposesUrl = facilityPath + "/pickrate/search";
+          return ajax(pickRatePurposesUrl, {
+
+          });
+
+        },
         getPickRates: (filter) => {
             var pickRateUrl = facilityPath + "/pickrate";
             return ajax(pickRateUrl, {
