@@ -317,6 +317,11 @@ export function getFacilityContext(facilityId) {
           });
         },
 
+        getWorker: function(domainId) {
+          var workerPath = facilityPath + "/workers/" + domainId;
+          return ajax(workerPath, {});
+        },
+
         getWorkers: function() {
             var workersPath = facilityPath + "/workers";
             return ajax(workersPath);

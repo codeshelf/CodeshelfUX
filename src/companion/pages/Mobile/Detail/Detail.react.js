@@ -16,7 +16,8 @@ export class Detail extends Component {
   componentWillMount() {
     const {id: itemId} = this.props.router.getCurrentParams();
     this.itemId = itemId;
-    this.props.acSelectTab(0, itemId, true);
+    const defaultSelectTab = this.props.defaultSelectTab || 0;
+    this.props.acSelectTab(defaultSelectTab, itemId, true);
   }
 
 
@@ -62,7 +63,7 @@ export class Detail extends Component {
     } else if (showLoading) {
       contentElement = <div> Loading ... </div>;
     } else {
-      const {[tab]: {settings, expanded}} = this.props;
+      const {[tab]: {settings, expanded, additionalDataLoading}} = this.props;
       // creacte closures over action creators for selected tab
       const acSettingOpen = () => this.props.acSettingOpen(tab);
       const acSettingClose = () => this.props.acSettingClose(tab);
@@ -70,8 +71,10 @@ export class Detail extends Component {
       const acSetFieldOrder = (f, v) => this.props.acSetFieldOrder(tab, f, v);
       const acExpand = (i) => this.props.acExpand(tab, i);
       const acReloadTab = () => this.props.acSelectTab(tab, this.itemId, true);
+      const acSearchAdditional = (token) => this.props.acSearchAdditional(tab, token);
       const commonProps = {
         expanded,
+        additionalDataLoading,
         acExpand,
         settings,
         acSetFieldVisibility,
@@ -79,6 +82,7 @@ export class Detail extends Component {
         acSettingOpen,
         acSettingClose,
         acReloadTab,
+        acSearchAdditional,
         data: this.props[tab].data
       };
       const Component = this.props.tabToComponent[tab];

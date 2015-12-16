@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {dateFormater} from "../../DateDisplay.react.js";
-import {TabWithItemList} from "../../Detail/TabWithItemList.react.js";
+import {TabWithItemPaging} from "../../Detail/TabWithItemPaging.react.js";
 import {fieldToDescription} from "./intl";
 
 const fieldFormater = {
@@ -15,9 +15,9 @@ export class History extends Component {
 
   render() {
     return (
-      <TabWithItemList {...this.props} {...{fieldToDescription, getIdFromItem, fieldFormater}}>
+      <TabWithItemPaging {...this.props} {...{fieldToDescription, getIdFromItem, fieldFormater}}>
         <div>No history for this worker</div>
-      </TabWithItemList>
+      </TabWithItemPaging>
     );
   }
 }

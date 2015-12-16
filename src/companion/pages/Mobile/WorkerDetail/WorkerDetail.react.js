@@ -9,7 +9,7 @@ import {Detail} from "../Detail/Detail.react.js";
 
 import {TAB_DETAIL, TAB_HISTORY, ALL_TABS} from './store';
 import {acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
-    acSettingOpen, acSettingClose} from './store';
+    acSettingOpen, acSettingClose, acSearchAdditional} from './store';
 import {getWorkerDetail} from "./get";
 
 import {Header} from "./Header/Header.react.js";
@@ -32,11 +32,13 @@ const tabToDescriptionText = {
 }
 
 const headerText = "Badge id";
+const defaultSelectTab = TAB_HISTORY;
 
 export class WorkerDetail extends Component {
   render() {
     return (
       <Detail {...this.props} {...{
+        defaultSelectTab,
         ALL_TABS,
         tabToComponent,
         tabToHeaderText,
@@ -48,8 +50,8 @@ export class WorkerDetail extends Component {
 }
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
-      acSettingOpen, acSettingClose}, dispatch);
+  return bindActionCreators({acSelectTab, acExpand, acSetFieldVisibility,
+   acSetFieldOrder, acSearchAdditional, acSettingOpen, acSettingClose}, dispatch);
 }
 
 export default exposeRouter(connect(getWorkerDetail, mapDispatch)(WorkerDetail));

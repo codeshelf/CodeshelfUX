@@ -8,7 +8,7 @@ import {SettingsRow} from "./common/SettingsRow.react.js";
 import {Settings} from './common/Settings.react.js';
 
 // need fieldToDescription, fieldFormater, getIdFromItem,
-export class TabWithItemList extends Component {
+export class TabWithItemPaging extends Component {
 
   componentWillUnmount() {
     if (this.props.expanded) {
@@ -42,21 +42,22 @@ export class TabWithItemList extends Component {
   }
 
   render() {
-    const {data: items, expanded} = this.props;
+    const {data: items, expanded, additionalDataLoading} = this.props;
     const {fieldToDescription} = this.props;
     const {getIdFromItem} = this.props;
-    const count = items.length;
+    const count = items.total;
     if (count === 0) {
-      return <div>{this.props.children}</div>;
+      return this.props.children;
     }
 
     const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
     const {acSettingOpen, acSettingClose, acSetFieldVisibility,
-     acSetFieldOrder, acReloadTab} = this.props;
-
+     acSetFieldOrder, acReloadTab, acSearchAdditional} = this.props;
+    const {next} = items;
     return (
       <div>
-        <SettingsRow onClickReload={acReloadTab} onClickSettings={acSettingOpen} />
+        <SettingsRow onClickReload={acReloadTab} onClickSettings={acSettingOpen}>
+        </SettingsRow>
         <Settings title="Set field visibility"
                   visible={settingOpen}
                   onClose={acSettingClose}
@@ -65,7 +66,7 @@ export class TabWithItemList extends Component {
                     acSetFieldVisibility,
                     acSetFieldOrder}} />
         <hr />
-        {items.map((oneItem) =>
+        {items.results.map((oneItem) =>
           this.renderItem(
             (expanded && getIdFromItem(oneItem) === expanded),
             fieldSettings,
@@ -73,6 +74,14 @@ export class TabWithItemList extends Component {
             oneItem
           )
         )}
+        {additionalDataLoading &&
+          <Icon name="spinner " />
+        }
+        {(next && !additionalDataLoading) &&
+            <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchAdditional(next)}>
+              <Icon name="long-arrow-right" />
+            </Button>
+        }
       </div>
     );
   }
