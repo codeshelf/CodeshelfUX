@@ -102,9 +102,9 @@ class IssueButton extends React.Component {
   }
 
   render() {
-      let {rowData, style, onClick, iconName} = this.props;
+let {rowData, style, onClick, iconName, title} = this.props;
     let clickHandler = _.partial(onClick, rowData).bind(this);
-      return (<Button bsStyle="primary" style={style} onClick={clickHandler}><Icon name={iconName} /></Button>);
+        return (<Button bsStyle="primary" style={style} onClick={clickHandler} title={title}><Icon name={iconName} /></Button>);
   }
 }
 
@@ -115,8 +115,8 @@ class IssueActions extends React.Component {
     return (
       <div>
         {(rowData.get("type") === "LOW" || rowData.get("type") === "SHORT") &&
-          <IssueButton rowData={rowData} onClick={replenItem} iconName="retweet"/> }
-        <IssueButton rowData={rowData} onClick={resolveIssue} iconName="check" style={{marginLeft: ".5em"}}/>
+          <IssueButton rowData={rowData} onClick={replenItem} iconName="retweet" title="Replenish"/> }
+          <IssueButton rowData={rowData} onClick={resolveIssue} iconName="check" title="Resolve" style={{marginLeft: ".5em"}}/>
       </div>);
    }
 }

@@ -30,7 +30,17 @@ export function formatToSeconds(momentCompatibleDate) {
   }
 
   var timeMoment = moment(momentCompatibleDate);
-  return timeMoment.format("DD MMM HH:mm:ss");
+
+  return timeMoment.format("L LT");
+}
+
+export function formatToDate(momentCompatibleDate) {
+  if (momentCompatibleDate === null || momentCompatibleDate === "") {
+    return "";
+  }
+
+  var timeMoment = moment(momentCompatibleDate);
+  return timeMoment.format("L");
 }
 
 export function formatTimestamp(momentCompatibleDate, opt_relativetime) {

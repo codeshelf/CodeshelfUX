@@ -1,5 +1,7 @@
 import React from 'react';
-import {formatTimestamp, formatToSeconds, toTimeZone, formatISO} from 'lib/timeformat';
+
+import {formatTimestamp, formatToSeconds, formatToDate, toTimeZone, formatISO} from 'lib/timeformat';
+
 
 
 export default class DateDisplay extends React.Component {
@@ -18,6 +20,8 @@ export default class DateDisplay extends React.Component {
 
           if (granularity == 'second') {
             formattedDate = formatToSeconds(date);
+          } else if (granularity == 'date') {
+            formattedDate = formatToDate(date);
           } else {
             formattedDate = (cellData) ? formatTimestamp(date) : "";
           }

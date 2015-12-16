@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {datetimeFormatter} from "../../DateDisplay.react.js";
 import {TabWithItemList} from "../../Detail/TabWithItemList.react.js";
+
 import {fieldToDescription} from "./intl";
 
 const secondsFormatter = datetimeFormatter.bind(null, 'second');

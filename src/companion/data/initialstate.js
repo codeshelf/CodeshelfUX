@@ -20,7 +20,7 @@ export default {
     $pendingActions: {},
     $subscriptions: {},
     preferences: {
-        version: "1.4",
+        version: "1.6",
         workInstructions: {
             table: {
                 columns: ["itemMasterId", "status"],
@@ -54,8 +54,8 @@ export default {
         },
         dailymetric: {
             table: {
-                columns: ["date"],
-                sortSpecs: {"date": {order:"desc"}}
+        columns: ["localDateUI", "ordersPicked"],
+                sortSpecs: {"localDateUI": {order:"desc"}}
             }
         },
         imports: {
@@ -75,7 +75,7 @@ export default {
         },
         workers: {
             table: {
-                columns: ["lastName", "firstName", "badgeId", "updated"],
+                columns: ["lastName", "firstName", "domainId", "updated"],
                 sortSpecs: {"lastName": {order: "asc"}}
             }
         },

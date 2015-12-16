@@ -46,7 +46,7 @@ export default class WorkerMgmt extends React.Component{
                 displayName: "M"
             },
             {
-                columnName: "badgeId",
+                columnName: "domainId",
                 displayName: "Badge"
             },
             {
@@ -79,14 +79,14 @@ export default class WorkerMgmt extends React.Component{
 
 
     componentWillMount() {
-        fetchWorkers();
+        fetchWorkers({limit: 5000});
     }
 
     handleImportSubmit(method, file) {
         var formData = new FormData();
         formData.append("file", file);
         return getFacilityContext()[method](formData).then(() => {
-            fetchWorkers();
+          fetchWorkers({limit: 5000});
         });
     }
 

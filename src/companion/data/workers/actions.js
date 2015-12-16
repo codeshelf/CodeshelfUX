@@ -6,7 +6,8 @@ import {selectedWorkerCursor, workersCursor} from 'data/state';
 
 
 export function fetchWorkers() {
-    return dispatch(fetchWorkers, getFacilityContext().getWorkers());
+  //set default for this UI at 2000 until paging is handled
+  return dispatch(fetchWorkers, getFacilityContext().getWorkers({limit: 2000}));
 };
 
 export function addWorker(selectedWorkerForm) {
