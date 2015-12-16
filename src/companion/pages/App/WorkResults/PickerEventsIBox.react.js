@@ -1,7 +1,11 @@
 import React from 'react';
+import {Row, Col} from 'components/common/pagelayout';
 import {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} from "components/common/IBox";
+import {MultiSelect} from 'components/common/Form';
+
 import PickRateChart from './PickRateChart';
 import PickRateTable from "./PickRateTable";
+import EventSearch from "./EventSearch";
 import moment from 'moment';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
 
@@ -10,18 +14,10 @@ import {getFacilityContext} from "data/csapi";
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkersByBadgeId, toWorkerName} from 'data/workers/store';
 
-
-const priorDayInterval = (daysBack) => {
-    let interval = DayOfWeekFilter.priorDayInterval(daysBack);
-        interval.start = moment(interval.start); //.hour(6); //6am
-        interval.end = moment(interval.end); //.hour(20); //8pm
-    return interval;
-};
-
-function toD3Data(startTimestamp, endTimestamp, apiData) {
+function toD3Data(createdInterval, apiData) {
     var hoursOfOperation = _.range(
-        moment(startTimestamp).hour(),
-        moment(endTimestamp).hour()+1);
+      moment(createdInterval.start).hour(),
+      moment(createdInterval.end).hour()+1);
 
     var yProperty = "picks"; //or "quantity";
     return _.chain(apiData)
@@ -29,7 +25,7 @@ function toD3Data(startTimestamp, endTimestamp, apiData) {
         .transform((result, workerHourlyRates, key) => {
             let transformed =  _.map(workerHourlyRates, (v) => {
                 let utcHour = v.hour;
-                let localHour = moment(startTimestamp).utc().hour(utcHour).local().hour();
+                  let localHour = moment(createdInterval.start).utc().hour(utcHour).local().hour();
 
                 return {
                     key: v.workerId,
@@ -66,43 +62,38 @@ function toD3Data(startTimestamp, endTimestamp, apiData) {
 var PickerEventsIBox = React.createClass({
     getInitialState: function() {
         return {
-            "interval": priorDayInterval(0),
-            "pickRates" : []
+          "pickRates" : [],
+          "interval" : {}
         };
     },
-    handleChange: function(daysBack) {
-        this.setState({interval: priorDayInterval(daysBack)}, () => {
-                           this.updateViews(this.state);
-                       });
-    },
 
-    getPickRates: (startTimestamp, endTimestamp) => {
-        return getFacilityContext().getPickRates(startTimestamp.toISOString(), endTimestamp.toISOString());
-    },
-
-    updateViews: function(state) {
-        let {start, end} = state.interval;
+    handleSubmit: function(filter) {
+      let createdInterval = filter.get("createdInterval");
+      let params = filter.merge({
+          createdInterval: createdInterval.toQueryParameterValue()
+      }).toJS();
+      this.setState({interval: createdInterval});
+      return getFacilityContext().getPickRates(params).then((data) => {
         let workersByBadgeId = getWorkersByBadgeId();
-        this.getPickRates(start,  end).then((data) => {
-            let d3Data = toD3Data(start, end, data);
-            let withWorkerNames = d3Data.map((keyData) => {
-                let domainId = keyData.key;
-                if (domainId === "null") {
-                    domainId = "";
-                }
-                let worker = workersByBadgeId.get(domainId);
-                let name = toWorkerName(worker, domainId);
+        let d3Data = toD3Data(createdInterval, data);
+        let withWorkerNames = d3Data.map((keyData) => {
+          let domainId = keyData.key;
+          if (domainId === "null") {
+            domainId = "";
+          }
+          let worker = workersByBadgeId.get(domainId);
+          let name = toWorkerName(worker, domainId);
 
-                keyData.key = name;
-                return keyData;
-            });
-            this.setState({"pickRates": withWorkerNames});
+          keyData.key = name;
+          return keyData;
         });
+        this.setState({"pickRates": withWorkerNames});
+        return withWorkerNames;
+      });
     },
 
     componentWillMount: function() {
         fetchWorkers({limit: 5000});
-        this.updateViews(this.state);
     },
 
     render: function() {
@@ -113,9 +104,11 @@ var PickerEventsIBox = React.createClass({
                          Pick Summary
                      </IBoxTitleText>
                    </IBoxTitleBar>
-                   <IBoxSection>
-                       <DayOfWeekFilter numDays={4} onChange={this.handleChange}/>
-                   </IBoxSection>
+                   <Row>
+                     <Col md={6}>
+                         <EventSearch onSubmit={this.handleSubmit} />
+                     </Col>
+                   </Row>
                    <IBoxSection>
                        <PickRateChart style={{width: '100%', height: '300px'}}
                            startTimestamp={interval.start}

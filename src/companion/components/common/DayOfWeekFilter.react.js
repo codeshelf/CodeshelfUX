@@ -56,18 +56,30 @@ export default class DayOfWeekFilter extends React.Component {
         return DayOfWeekFilter.priorDayInterval(this.state.value);
     }
 
+    handleDateChange(e) {
+      const dateValue = e.target.value;
+      let days = 0;
+      if (dateValue != null) {
+        days = moment().diff(moment(dateValue), 'days');
+      }
+      this.handleButtonClick(days);
+    }
+
     handleButtonClick(value, e) {
         this.setState({value: value}, () => {
-            var {onChange} = this.props;
-            onChange(value);
+          this.props.onChange(value);
         });
     }
 
     render() {
-        var {numDays} = this.props;
+        let {numDays} = this.props;
+        numDays = numDays || 4;
         var {value} = this.state;
+        var date = moment().subtract(value, 'days').format("YYYY-MM-DD");
         return (
-            <ButtonGroup>
+          <div style={{display: "inline-block", textAlign: "center"}}>
+            <input type="date" value={date} onChange={this.handleDateChange.bind(this)} style={{display: "block", margin: "0 auto"}}/>
+          <ButtonGroup style={{whiteSpace: "nowrap"}}>
 
                 {
                     _.range(1,numDays+1).reverse().map(function(index){
@@ -79,6 +91,7 @@ export default class DayOfWeekFilter extends React.Component {
                 }
                 <ButtonFilter key="today" onClick={this.handleButtonClick.bind(this, this.today)} selectedValue={value} value={this.today}>Today</ButtonFilter>
             </ButtonGroup>
+          </div>
         );
 
     }
