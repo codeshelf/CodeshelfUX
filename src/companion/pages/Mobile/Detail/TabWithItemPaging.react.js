@@ -20,7 +20,7 @@ export class TabWithItemPaging extends Component {
 
   componentWillMount() {
     if (this.props.filter === null) {
-      this.props.acSetFilter(moment().format("YYYY/MM/DD HH:MM"));
+      this.props.acSetFilter(moment().format("YYYY/MM/DD HH:mm"));
     }
   }
 

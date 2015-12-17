@@ -168,7 +168,7 @@ export function getWorkerHistoryAdditional(token) {
 
 export function getWorkerHistoryWithTime({id: workerId, filter}) {
   let result = workerHistory["noToken"];
-  const endAt = moment(filter, "YYYY/MM/DD HH:MM");
+  const endAt = moment(filter, "YYYY/MM/DD HH:mm");
   const startAt = moment(endAt).subtract(1, "M");
   const time= startAt.toISOString() + "/" + endAt.toISOString();
   console.log("Will fetch results with startAt", time);
