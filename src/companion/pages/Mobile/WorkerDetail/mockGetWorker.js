@@ -1,4 +1,5 @@
 import Promise from "bluebird";
+import moment from "moment";
 
 const workerInfo = {
   "domainId":"Lshi",
@@ -162,5 +163,14 @@ export function getWorkerHistory(workerId) {
 
 export function getWorkerHistoryAdditional(token) {
   let result = workerHistory[token];
+  return Promise.delay(Promise.resolve(result), 500);
+}
+
+export function getWorkerHistoryWithTime({id: workerId, filter}) {
+  let result = workerHistory["noToken"];
+  const endAt = moment(filter, "YYYY/MM/DD HH:MM");
+  const startAt = endAt.subtract(1, "M");
+  const time= startAt.toISOString() + "/" + endAt.toISOString();
+  console.log("Will fetch results with startAt", time);
   return Promise.delay(Promise.resolve(result), 500);
 }

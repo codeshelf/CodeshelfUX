@@ -7,13 +7,31 @@ import {FieldRenderer} from "./common/FieldRenderer.react.js";
 import {SettingsRow} from "./common/SettingsRow.react.js";
 import {Settings} from './common/Settings.react.js';
 
+import moment from "moment";
+
 // need fieldToDescription, fieldFormater, getIdFromItem,
 export class TabWithItemPaging extends Component {
+
+  constructor() {
+    super()
+    this.onChangeFilter = this.onChangeFilter.bind(this);
+    this.onReload = this.onReload.bind(this);
+  }
+
+  componentWillMount() {
+    if (this.props.filter === null) {
+      this.props.acSetFilter(moment().format("YYYY/MM/DD HH:MM"));
+    }
+  }
 
   componentWillUnmount() {
     if (this.props.expanded) {
       this.props.acExpand(null);
     }
+  }
+
+  onChangeFilter(e) {
+    this.props.acSetFilter(e.target.value);
   }
 
   renderItem(expanded, fieldSettings, id, itemData) {
@@ -52,8 +70,13 @@ export class TabWithItemPaging extends Component {
     );
   }
 
+  onReload() {
+    this.props.acSetFilter(moment().format("YYYY/MM/DD HH:MM"));
+    this.props.acReloadTab();
+  }
+
   render() {
-    const {data: items, expanded, additionalDataLoading} = this.props;
+    const {data: items, expanded, additionalDataLoading, filter} = this.props;
     const {fieldToDescription} = this.props;
     const {getIdFromItem} = this.props;
     const count = items.total;
@@ -63,11 +86,11 @@ export class TabWithItemPaging extends Component {
 
     const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
     const {acSettingOpen, acSettingClose, acSetFieldVisibility,
-     acSetFieldOrder, acReloadTab, acSearchAdditional} = this.props;
+     acSetFieldOrder, acReloadTab, acSearchAdditional, acSearchFilter} = this.props;
     const {next} = items;
     return (
       <div>
-        <SettingsRow onClickReload={acReloadTab} onClickSettings={acSettingOpen}>
+        <SettingsRow onClickReload={this.onReload} onClickSettings={acSettingOpen}>
         </SettingsRow>
         <Settings title="Set field visibility"
                   visible={settingOpen}
@@ -76,6 +99,10 @@ export class TabWithItemPaging extends Component {
                     fieldSettings,
                     acSetFieldVisibility,
                     acSetFieldOrder}} />
+        <input type="text" value={filter} onChange={this.onChangeFilter}/>
+        <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchFilter(filter)}>
+          <Icon name="search" />
+        </Button>
         <hr />
         {items.results.map((oneItem) =>
           this.renderItem(
