@@ -5,7 +5,7 @@ import {Link} from '../../links';
 import {Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 
-import {fieldToDescription} from "./intl";
+import {fieldToDescription} from "../../common/historyItemIntl";
 
 function orderIdComponent(orderId) {
   if (!orderId) return orderId;
