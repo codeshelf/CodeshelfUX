@@ -9,7 +9,7 @@ import {Detail} from "../Detail/Detail.react.js";
 
 import {TAB_DETAIL, TAB_ITEMS, TAB_PICKS, TAB_IMPORTS, ALL_TABS} from './store';
 import {acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
-    acSettingOpen, acSettingClose} from './store';
+    acSettingOpen, acSettingClose, acSetFilter, acSearch} from './store';
 import {getOrderDetail} from "./get";
 
 import {Header} from "./Header/Header.react.js";
@@ -56,7 +56,7 @@ export class OrderDetail extends Component {
 
 function mapDispatch(dispatch) {
   return bindActionCreators({acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
-      acSettingOpen, acSettingClose}, dispatch);
+      acSettingOpen, acSettingClose, acSetFilter, acSearch}, dispatch);
 }
 
 export default exposeRouter(connect(getOrderDetail, mapDispatch)(OrderDetail));

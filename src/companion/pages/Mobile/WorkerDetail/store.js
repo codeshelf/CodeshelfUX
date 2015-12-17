@@ -1,5 +1,5 @@
 import {getWorkerDetail} from "./get";
-import {getWorker, getWorkerHistory, getWorkerHistoryAdditional} from "./mockGetWorker";
+import {getWorker, getWorkerHistory, getWorkerHistoryAdditional, getWorkerHistoryWithTime} from "./mockGetWorker";
 
 import * as fieldSetting from './storeFieldConfig';
 import {createStore} from "../Detail/storeFactory";
@@ -24,7 +24,15 @@ function tabToApi(facilityContext, tab, domainId) {
   const call = {
     //[TAB_DETAIL]: getWorker,
     [TAB_DETAIL]: facilityContext.getWorker,
-    [TAB_HISTORY]:  getWorkerHistory,
+    [TAB_HISTORY]:  (arg) => {
+      if (typeof arg === 'string') {
+        // arg is just worker id
+          return getWorkerHistory(arg);
+      } else {
+        // arg is map with id and filter
+          return getWorkerHistoryWithTime(arg);
+      }
+    },
   }[tab];
   return call(domainId);
 }
@@ -60,3 +68,4 @@ export const acSetFieldOrder = store.acSetFieldOrder;
 export const acSetFieldVisibility = store.acSetFieldVisibility;
 export const acSettingClose = store.acSettingClose;
 export const acSettingOpen = store.acSettingOpen;
+export const acSetFilter = store.acSetFilter;

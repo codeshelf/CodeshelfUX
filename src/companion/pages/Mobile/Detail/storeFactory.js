@@ -11,6 +11,8 @@ const STATUS_STARTED = "started";
 const STATUS_OK = "ok";
 const STATUS_ERROR = "error";
 
+const SET_FILTER = "set filter for some tab";
+
 const LOADING_ADDITIONAL_DATA = "loading of additional data for some tab";
 // use same status as LOADING_DATA
 
@@ -32,6 +34,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
   const dataLoadingState = {
       whatIsLoaded: null, // store what we are loading. Currently idOfItem
                           // null value means nothing is loading
+      filter: null,
       data: null,
       error: null,
       whatIsLoading: null,
@@ -140,6 +143,16 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
             }
           }
 
+        }
+      }
+      case SET_FILTER: {
+        const {filter, tab} = action;
+        return {
+          ...state,
+          [tab]: {
+            ...state[tab],
+            filter,
+          }
         }
       }
       case SETTING_OPEN: {
@@ -316,6 +329,15 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
     };
   }
 
+  function acSetFilter(tab, filter) {
+    return {
+      type: SET_FILTER,
+      tab,
+      filter,
+      storeName,
+    }
+  }
+
   function acSearch(tab, itemId, forceLoad) {
     return (dispatch, getState) => {
       const whatIsLoaded = getLocalStore(getState())[tab].whatIsLoaded;
@@ -388,6 +410,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
   }
 
   return {
+    acSetFilter,
     acSearch,
     acSearchAdditional,
     acSelectTab,
