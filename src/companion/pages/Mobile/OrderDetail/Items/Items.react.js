@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {dateFormater} from "../../DateDisplay.react.js";
+import {datetimeToSecondsFormater} from "../../DateDisplay.react.js";
 import {TabWithItemList} from "../../Detail/TabWithItemList.react.js";
 import {fieldToDescription} from "./intl";
 

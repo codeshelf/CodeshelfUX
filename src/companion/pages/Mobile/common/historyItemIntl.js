@@ -17,5 +17,6 @@ export const fieldToDescription = {
   "workInstructionId": "Worker instruction Id",
   "resolved": "Resolved",
   "resolvedAt": "Resolved at",
-  "resolvedBy": "Resolved by"
+  "resolvedBy": "Resolved by",
+  "workerId+workerName": "Worker with link",
 }

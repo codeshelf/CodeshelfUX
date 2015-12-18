@@ -64,3 +64,4 @@ export const acSetFieldOrder = store.acSetFieldOrder;
 export const acSetFieldVisibility = store.acSetFieldVisibility;
 export const acSettingClose = store.acSettingClose;
 export const acSettingOpen = store.acSettingOpen;
+export const acSetFilter = store.acSetFilter;

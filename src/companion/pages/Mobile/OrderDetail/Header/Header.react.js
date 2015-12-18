@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {dateFormater} from "../../DateDisplay.react.js";
+import {datetimeToSecondsFormater} from "../../DateDisplay.react.js";
 import {TabWithOneItem} from "../../Detail/TabWithOneItem.react.js";
 import {fieldToDescription} from "./intl";
 
 const fieldFormater = {
-  orderDate: dateFormater,
-  dueDate: dateFormater,
+  orderDate: datetimeToSecondsFormater,
+  dueDate: datetimeToSecondsFormater,
 };
 
 function getIdFromItem(data) {

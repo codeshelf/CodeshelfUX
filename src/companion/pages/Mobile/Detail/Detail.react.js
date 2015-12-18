@@ -37,6 +37,7 @@ export class Detail extends Component {
 
   render() {
     const {id: itemId} = this.props.router.getCurrentParams();
+    this.itemId = itemId;
     const {tab} = this.props;
     const {[tab]: {loadedTime}} = this.props;
     const {whatIsLoading, whatIsLoaded, error} = this.props[tab];
@@ -63,8 +64,9 @@ export class Detail extends Component {
     } else if (showLoading) {
       contentElement = <div> Loading ... </div>;
     } else {
-      const {[tab]: {settings, expanded, additionalDataLoading}} = this.props;
+      const {[tab]: {settings, expanded, additionalDataLoading, filter}} = this.props;
       // creacte closures over action creators for selected tab
+      const acSetFilter = (filter) => this.props.acSetFilter(tab, filter);
       const acSettingOpen = () => this.props.acSettingOpen(tab);
       const acSettingClose = () => this.props.acSettingClose(tab);
       const acSetFieldVisibility = (f, v) => this.props.acSetFieldVisibility(tab, f, v);
@@ -72,18 +74,25 @@ export class Detail extends Component {
       const acExpand = (i) => this.props.acExpand(tab, i);
       const acReloadTab = () => this.props.acSelectTab(tab, this.itemId, true);
       const acSearchAdditional = (token) => this.props.acSearchAdditional(tab, token);
+      const acSearchFilter = (filter) => this.props.acSearch(tab, {id: itemId, filter});
       const commonProps = {
+        //data
         expanded,
+        filter,
         additionalDataLoading,
-        acExpand,
         settings,
+        data: this.props[tab].data,
+        //action creators
+        acExpand,
         acSetFieldVisibility,
         acSetFieldOrder,
         acSettingOpen,
         acSettingClose,
         acReloadTab,
         acSearchAdditional,
-        data: this.props[tab].data
+        acSetFilter,
+        acSearchFilter,
+        id: itemId,
       };
       const Component = this.props.tabToComponent[tab];
       contentElement = <Component {...commonProps} />
@@ -92,7 +101,7 @@ export class Detail extends Component {
       <div>
         <Row>
           <Col xs={12}>
-            <h3>{this.props.headerText}: {this.itemId}</h3>
+            {(this.props.getTitleComponent && this.props.getTitleComponent(this.props, this.itemId))}
           </Col>
         </Row>
         <Row>

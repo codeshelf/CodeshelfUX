@@ -9,10 +9,11 @@ import {Detail} from "../Detail/Detail.react.js";
 
 import {TAB_DETAIL, TAB_ITEMS, TAB_PICKS, TAB_IMPORTS, ALL_TABS} from './store';
 import {acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
-    acSettingOpen, acSettingClose} from './store';
+    acSettingOpen, acSettingClose, acSetFilter, acSearch} from './store';
 import {getOrderDetail} from "./get";
 
 import {Header} from "./Header/Header.react.js";
+import {fieldToDescription} from "./Header/intl";
 import {Items} from "./Items/Items.react.js";
 import {Picks} from "./Picks/Picks.react.js";
 import {Imports} from "./Imports/Imports.react.js";
@@ -38,7 +39,25 @@ const tabToDescriptionText = {
   [TAB_IMPORTS]: "Files",
 }
 
-const headerText = "Order";
+// is called inide render of Detail component so have access to props
+function getTitleComponent(props, itemId) {
+  if (props && props[TAB_DETAIL] && props[TAB_DETAIL].data) {
+    const {orderId, status} = props[TAB_DETAIL].data;
+    return (
+      <div>
+        <h3>{fieldToDescription.orderId}: {orderId}</h3>
+        <h4>{fieldToDescription.status}: {status}</h4>
+      </div>
+    );
+  }
+  // we don'y have data yet
+  return (
+    <div>
+      <h3>{fieldToDescription.orderId}: {itemId}</h3>
+      <h4>{fieldToDescription.status}: </h4>
+    </div>
+  );
+}
 
 export class OrderDetail extends Component {
   render() {
@@ -48,7 +67,7 @@ export class OrderDetail extends Component {
         tabToComponent,
         tabToHeaderText,
         tabToDescriptionText,
-        headerText,
+        getTitleComponent,
       }} />
     );
   }
@@ -56,7 +75,7 @@ export class OrderDetail extends Component {
 
 function mapDispatch(dispatch) {
   return bindActionCreators({acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
-      acSettingOpen, acSettingClose}, dispatch);
+      acSettingOpen, acSettingClose, acSetFilter, acSearch}, dispatch);
 }
 
 export default exposeRouter(connect(getOrderDetail, mapDispatch)(OrderDetail));

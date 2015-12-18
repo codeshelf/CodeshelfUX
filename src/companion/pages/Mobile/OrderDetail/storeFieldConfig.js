@@ -98,7 +98,7 @@ export const importFieldsSetting = {
 */
 
 export const picksFieldsSetting = {
-  order: ["createdAt", "type", "itemId", "-","itemLocation", "wiPlanQuantity",
+  order: ["createdAt", "type", "itemId", "workerId+workerName", "-","itemLocation", "wiPlanQuantity",
    "wiActualQuantity", "itemUom", "itemDescription", "workerName", "deviceGuid",
    "persistentId", "orderId", "devicePersistentId", "workerId", "orderDetailId",
    "workInstructionId", "resolved", "resolvedAt", "resolvedBy"],
@@ -122,5 +122,6 @@ export const picksFieldsSetting = {
     "resolved": false,
     "resolvedAt": false,
     "resolvedBy": false,
+    "workerId+workerName": true,
   },
 }
