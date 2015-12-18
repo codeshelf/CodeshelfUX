@@ -17,14 +17,20 @@ class DateDisplayDumm extends Component {
  }
 }
 
+
+//only supports 'second' right now
+export function datetimeFormatter(granularity, date) {
+  return <DateDisplay date={date} granularity={granularity}/>;
+}
+
 export function dateFormater(date) {
   return <DateDisplay date={date} />;
 }
 
-//only supports 'seconds' right now
-export function datetimeFormatter(granularity, date) {
-  return <DateDisplay date={date} granularity={granularity}/>;
+export function datetimeToSecondsFormater(date) {
+  return datetimeFormatter("second", date);
 }
+
 
 
 export class TimeFromNow extends Component {

@@ -322,6 +322,25 @@ export function getFacilityContext(facilityId) {
           return ajax(workerPath, {});
         },
 
+        getWorkerEvents: function(domainId) {
+          var workerPath = facilityPath + "/workers/" + domainId + "/events";
+          return ajax(workerPath, {});
+        },
+
+        getWorkerEventsNext: function({id, next}) {
+          var workerPath = facilityPath + "/workers/" + id + "/events";
+          return ajax(workerPath, {
+            data: {next}
+          });
+        },
+
+        getWorkerEventsWithTime: function({id, created}) {
+          var workerPath = facilityPath + "/workers/" + id + "/events";
+          return ajax(workerPath, {
+            data: {created}
+          });
+        },
+
         getWorkers: function(params) {
             var workersPath = facilityPath + "/workers";
             return ajax(workersPath, {
