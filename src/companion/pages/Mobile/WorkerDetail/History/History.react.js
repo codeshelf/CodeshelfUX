@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {dateFormater} from "../../DateDisplay.react.js";
+import {datetimeToSecondsFormater} from "../../DateDisplay.react.js";
 import {TabWithItemPaging} from "../../Detail/TabWithItemPaging.react.js";
 import {Link} from '../../links';
 import {Button} from 'react-bootstrap';
@@ -18,7 +18,7 @@ function orderIdComponent(orderId) {
 }
 
 const fieldFormater = {
-    createdAt: dateFormater,
+    createdAt: datetimeToSecondsFormater,
     orderId: orderIdComponent,
 };
 

@@ -99,7 +99,7 @@ export class Detail extends Component {
       <div>
         <Row>
           <Col xs={12}>
-            <h3>{this.props.headerText}: {this.itemId}</h3>
+            {(this.props.getTitleComponent && this.props.getTitleComponent(this.props, this.itemId))}
           </Col>
         </Row>
         <Row>

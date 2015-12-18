@@ -27,7 +27,8 @@ function tabToApi(facilityContext, tab, domainId) {
     [TAB_HISTORY]:  (arg) => {
       if (typeof arg === 'string') {
         // arg is just worker id
-          return getWorkerHistory(arg);
+        return getWorkerHistory(arg);
+        //return facilityContext.getWorkerEvents(arg);
       } else {
         // arg is map with id and filter
           return getWorkerHistoryWithTime(arg);
