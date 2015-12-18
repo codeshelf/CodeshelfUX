@@ -50,12 +50,12 @@ export default (
     <DefaultRoute handler={DetectMobile} />
     <Route handler={authn(App)} name="facilities"> //ensure auth and default facility
       <Route handler={Facility} name="facility" path=":facilityName">
-        <DefaultRoute handler={Overview} name="overview" />
+        <DefaultRoute handler={WorkResults} name="workresults" />
         <NotFoundRoute handler={NotFound} name="not-found" />
         <Route handler={Orders} name="orders" />
         <Route handler={WorkInstructions} name="workinstructions" />
         <Route handler={BlockedWork} name="blockedwork" />
-        <Route handler={WorkResults} name="workresults" />
+        <Route handler={Overview} name="overview" />
         <Route handler={Import} name="import" />
         <Route handler={EDIGateways} name="edigateways">
           <Route handler={EDIGatewayEdit} name="edigatewayedit" path=":id"/>
