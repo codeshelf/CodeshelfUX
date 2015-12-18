@@ -327,6 +327,13 @@ export function getFacilityContext(facilityId) {
           return ajax(workerPath, {});
         },
 
+        getWorkerEventsNext: function({id, next}) {
+          var workerPath = facilityPath + "/workers/" + id + "/events";
+          return ajax(workerPath, {
+            data: {next}
+          });
+        },
+
         getWorkers: function(params) {
             var workersPath = facilityPath + "/workers";
             return ajax(workersPath, {

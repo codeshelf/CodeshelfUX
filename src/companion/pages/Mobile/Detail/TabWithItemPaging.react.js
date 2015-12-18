@@ -75,7 +75,7 @@ export class TabWithItemPaging extends Component {
   }
 
   render() {
-    const {data: items, expanded, additionalDataLoading, filter} = this.props;
+    const {data: items, expanded, additionalDataLoading, filter, id} = this.props;
     const {fieldToDescription} = this.props;
     const {getIdFromItem} = this.props;
     const count = items.total;
@@ -115,7 +115,7 @@ export class TabWithItemPaging extends Component {
           <Icon name="spinner " />
         }
         {(next && !additionalDataLoading) &&
-            <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchAdditional(next)}>
+            <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchAdditional({id, next})}>
               <Icon name="long-arrow-right" />
             </Button>
         }

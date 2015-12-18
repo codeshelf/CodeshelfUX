@@ -27,11 +27,11 @@ function tabToApi(facilityContext, tab, domainId) {
     [TAB_HISTORY]:  (arg) => {
       if (typeof arg === 'string') {
         // arg is just worker id
-        return getWorkerHistory(arg);
-        //return facilityContext.getWorkerEvents(arg);
+        //return getWorkerHistory(arg);
+        return facilityContext.getWorkerEvents(arg);
       } else {
         // arg is map with id and filter
-          return getWorkerHistoryWithTime(arg);
+        return getWorkerHistoryWithTime(arg);
       }
     },
   }[tab];
@@ -40,7 +40,7 @@ function tabToApi(facilityContext, tab, domainId) {
 
 function tabToAdditionalApi(facilityContext, tab, itemId) {
   const call = {
-    [TAB_HISTORY]: getWorkerHistoryAdditional,
+    [TAB_HISTORY]: facilityContext.getWorkerEventsNext,
   }[tab];
   return call(itemId);
 }
