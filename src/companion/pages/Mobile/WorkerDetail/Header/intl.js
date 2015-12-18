@@ -12,5 +12,6 @@ export const fieldToDescription = {
     "lastLogout": "lastLogout",
     "lastChePersistentId": "lastChePersistentId",
     "badgeUnique": "badgeUnique",
-    "className": "className"
+    "className": "className",
+    "firstName+middleInitial+lastName": "Name",
 };

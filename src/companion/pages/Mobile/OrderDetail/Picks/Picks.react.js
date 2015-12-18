@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
-import {datetimeFormatter} from "../../DateDisplay.react.js";
+import {datetimeToSecondsFormater} from "../../DateDisplay.react.js";
 import {TabWithItemList} from "../../Detail/TabWithItemList.react.js";
 import {Link} from '../../links';
 import {Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 
 import {fieldToDescription} from "../../common/historyItemIntl";
-
-const secondsFormatter = datetimeFormatter.bind(null, 'second');
 
 function workerComponent(workerId) {
   if (!workerId) return workerId;
@@ -30,8 +28,8 @@ function workerNameComponent({workerId, workerName}) {
 }
 
 const fieldFormater = {
-  createdAt: secondsFormatter,
-  resolvedAt: secondsFormatter,
+  createdAt: datetimeToSecondsFormater,
+  resolvedAt: datetimeToSecondsFormater,
   workerId: workerComponent,
   "workerId+workerName" : workerNameComponent,
 };

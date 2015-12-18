@@ -13,6 +13,7 @@ import {acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
 import {getWorkerDetail} from "./get";
 
 import {Header} from "./Header/Header.react.js";
+import {fieldToDescription} from "./Header/intl";
 import {History} from "./History/History.react.js";
 
 const tabToComponent = {
@@ -21,7 +22,7 @@ const tabToComponent = {
 }
 
 const tabToHeaderText = {
-  [TAB_DETAIL]: "HDR",
+  [TAB_DETAIL]: "Worker",
   [TAB_HISTORY]: "History",
 }
 
@@ -30,19 +31,35 @@ const tabToDescriptionText = {
   [TAB_HISTORY]: "Worker History",
 }
 
-const headerText = "Badge id";
-const defaultSelectTab = TAB_HISTORY;
+// is called inide render of Detail component so have access to props
+function getTitleComponent(props, itemId) {
+  if (props && props[TAB_DETAIL] && props[TAB_DETAIL].data) {
+    const {domainId, firstName, middleInitial, lastName} = props[TAB_DETAIL].data;
+    return (
+      <div>
+        <h3>{fieldToDescription["firstName+middleInitial+lastName"]}: {firstName} {middleInitial} {lastName}</h3>
+        <h4>{fieldToDescription.domainId}: {domainId}</h4>
+      </div>
+    );
+  }
+  // we don'y have data yet
+  return (
+    <div>
+      <h3>{fieldToDescription["firstName+middleInitial+lastName"]}:</h3>
+      <h4>{fieldToDescription.domainId}: {itemId}</h4>
+    </div>
+  );
+}
 
 export class WorkerDetail extends Component {
   render() {
     return (
       <Detail {...this.props} {...{
-        defaultSelectTab,
         ALL_TABS,
         tabToComponent,
         tabToHeaderText,
         tabToDescriptionText,
-        headerText,
+        getTitleComponent,
       }} />
     );
   }

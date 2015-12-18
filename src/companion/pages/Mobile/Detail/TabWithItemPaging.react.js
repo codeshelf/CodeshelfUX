@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
-import {dateFormater} from "../DateDisplay.react.js";
 import {FieldRenderer} from "./common/FieldRenderer.react.js";
 import {SettingsRow} from "./common/SettingsRow.react.js";
 import {Settings} from './common/Settings.react.js';
@@ -76,12 +75,12 @@ export class TabWithItemPaging extends Component {
   }
 
   render() {
-    const {data: items, expanded, additionalDataLoading, filter} = this.props;
+    const {data: items, expanded, additionalDataLoading, filter, id} = this.props;
     const {fieldToDescription} = this.props;
     const {getIdFromItem} = this.props;
     const count = items.total;
     if (count === 0) {
-      return <div>this.props.noEntriesText</div>;
+      return <div>{this.props.noEntriesText}</div>;
     }
 
     const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
@@ -116,7 +115,7 @@ export class TabWithItemPaging extends Component {
           <Icon name="spinner " />
         }
         {(next && !additionalDataLoading) &&
-            <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchAdditional(next)}>
+            <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchAdditional({id, next})}>
               <Icon name="long-arrow-right" />
             </Button>
         }

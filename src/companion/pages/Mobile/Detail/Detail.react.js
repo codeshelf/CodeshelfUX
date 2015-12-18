@@ -37,6 +37,7 @@ export class Detail extends Component {
 
   render() {
     const {id: itemId} = this.props.router.getCurrentParams();
+    this.itemId = itemId;
     const {tab} = this.props;
     const {[tab]: {loadedTime}} = this.props;
     const {whatIsLoading, whatIsLoaded, error} = this.props[tab];
@@ -91,6 +92,7 @@ export class Detail extends Component {
         acSearchAdditional,
         acSetFilter,
         acSearchFilter,
+        id: itemId,
       };
       const Component = this.props.tabToComponent[tab];
       contentElement = <Component {...commonProps} />
@@ -99,7 +101,7 @@ export class Detail extends Component {
       <div>
         <Row>
           <Col xs={12}>
-            <h3>{this.props.headerText}: {this.itemId}</h3>
+            {(this.props.getTitleComponent && this.props.getTitleComponent(this.props, this.itemId))}
           </Col>
         </Row>
         <Row>
