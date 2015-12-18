@@ -334,6 +334,13 @@ export function getFacilityContext(facilityId) {
           });
         },
 
+        getWorkerEventsWithTime: function({id, created}) {
+          var workerPath = facilityPath + "/workers/" + id + "/events";
+          return ajax(workerPath, {
+            data: {created}
+          });
+        },
+
         getWorkers: function(params) {
             var workersPath = facilityPath + "/workers";
             return ajax(workersPath, {

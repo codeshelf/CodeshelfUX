@@ -3,6 +3,7 @@ import {getWorker, getWorkerHistory, getWorkerHistoryAdditional, getWorkerHistor
 
 import * as fieldSetting from './storeFieldConfig';
 import {createStore} from "../Detail/storeFactory";
+import moment from "moment";
 
 export const TAB_DETAIL = "worker tab detail";
 export const TAB_HISTORY = "worker tab history";
@@ -31,7 +32,11 @@ function tabToApi(facilityContext, tab, domainId) {
         return facilityContext.getWorkerEvents(arg);
       } else {
         // arg is map with id and filter
-        return getWorkerHistoryWithTime(arg);
+        const {id, filter} = arg;
+        const endAt = moment(filter, "YYYY/MM/DD HH:mm");
+        const startAt = moment(endAt).subtract(1, "M");
+        const created= startAt.toISOString() + "/" + endAt.toISOString();
+        return facilityContext.getWorkerEventsWithTime({id, created});
       }
     },
   }[tab];
