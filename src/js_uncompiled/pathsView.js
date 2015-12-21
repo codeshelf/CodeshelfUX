@@ -49,6 +49,8 @@ codeshelf.pathsview = function(websession, facility) {
 				return true;
 			else if (inProperty['id'] ===  'associatedLocationCount')
 				return true;
+			else if (inProperty['id'] ===  'pathNameUi')
+				return true;
 			else
 				return false;
 		},

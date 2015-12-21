@@ -923,6 +923,13 @@ domainobjects = {
 				'id':    'pathScript',
 				'title': 'Path Script',
 				'width': 100
+			},
+			'pathName': {
+				'id': 'pathNameUi',
+				'title': 'Path Name',
+				'width': 20,
+				'editor': Slick.Editors.Text,
+				'focusable': true
 			}
 		}
 	},
