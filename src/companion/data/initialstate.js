@@ -20,7 +20,7 @@ export default {
     $pendingActions: {},
     $subscriptions: {},
     preferences: {
-        version: "1.6",
+        version: "1.7",
         workInstructions: {
             table: {
                 columns: ["itemMasterId", "status"],
@@ -34,7 +34,7 @@ export default {
                     {name: 'pickerId', caption: "Worker"},
                     {name: 'status', caption: 'Status'},
                     {name: 'type', caption: 'Type'}, //pseudo field
-                    //{name: 'store', caption: 'Store'}, //pseudo field
+                    {name: 'store', caption: 'Store'}, //pseudo field
                     {name: 'containerId', caption: 'Container'}, //pseudo field
                     {
                     name: "count",
