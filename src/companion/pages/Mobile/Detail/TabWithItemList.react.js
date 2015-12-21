@@ -43,7 +43,9 @@ export class TabWithItemList extends Component {
             })}
           </Col>
           <Col xs={3}>
-            <Button bsStyle="primary" bsSize="xs"><Icon name={expanded? "chevron-circle-up" : "chevron-circle-down"} /></Button>
+            <div className="thumbnail-wrapper d32 circular bg-primary text-white inline">
+              <Icon name={expanded? "chevron-up" : "chevron-down"}/>
+            </div>
           </Col>
         </Row>
         <hr />
