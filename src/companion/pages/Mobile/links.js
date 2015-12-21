@@ -35,4 +35,5 @@ function wrapFacility(Component) {
 export const NavItemLink = wrapFacility(rrb.NavItemLink);
 export const MenuItemLink = wrapFacility(rrb.MenuItemLink);
 export const ButtonLink = wrapFacility(rrb.ButtonLink);
+export const ListGroupItemLink = wrapFacility(rrb.ListGroupItemLink);
 export const Link = wrapFacility(rr.Link);
