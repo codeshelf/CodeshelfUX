@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {OrderSearchItem} from "./OrderSearchItem.react.js";
 import {createSearchComponent} from "../Search/SearchFactory.react.js";
 
-import {getOrderSearch} from './get';
+import {getOrderSearchMutable} from './get';
 import {acChangeFilter, acSearch} from './store';
 import {DateDisplay} from "../DateDisplay.react.js";
 
@@ -48,4 +48,4 @@ function mapDispatch(dispatch) {
   return bindActionCreators({acChangeFilter, acSearch}, dispatch);
 }
 
-export default connect(getOrderSearch, mapDispatch)(OrderSearch);
+export default connect(getOrderSearchMutable, mapDispatch)(OrderSearch);

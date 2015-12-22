@@ -1,4 +1,4 @@
 {
   "presets": ["es2015", "react"],
-  "plugins" : ["transform-object-rest-spread", "transform-decorators", "transform-class-properties"]
+  "plugins" : ["extensible-destructuring", "transform-object-rest-spread", "transform-decorators", "transform-class-properties"]
 }

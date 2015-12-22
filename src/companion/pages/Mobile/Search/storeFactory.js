@@ -1,5 +1,6 @@
 import {getFacilityContext} from 'data/csapi';
 import {getSelectedFacility} from "../Facility/get";
+import {Map, Record} from 'immutable';
 
 export function createStore(storeName, getLocalStore, searchApiCall) {
 
@@ -9,17 +10,17 @@ export function createStore(storeName, getLocalStore, searchApiCall) {
   const LOADING_ERROR = "loading_of_error";
 
 
-  const initState = {
-    filter: {
+  const initState = new (Record({
+    filter: new (Record({
       text: "", //if we show filter first time we need
                 // to distinguish between empty string filter and not inicialized
-    },
+    })),
     whatIsLoading: null, // store what we are loading. Currently text of filter
                         // null value means nothing is loading
     error: null,
     result : null, //result object {total: ... results: ...}
 
-  };
+  }));
 
 
   function searchReducer(state = initState, action) {
@@ -27,19 +28,26 @@ export function createStore(storeName, getLocalStore, searchApiCall) {
     switch (action.type) {
       case FILTER_CHANGE: {
         const {text} = action;
-        return {...state, filter: {...state.filter, text}};
+        //return {...state, filter: {...state.filter, text}};
+        return state.setIn(["filter", "text"], text);
       }
       case LOADING_STARTED: {
         const {whatIsLoading} = action;
-        return {...state, result: null, error: null, whatIsLoading: whatIsLoading}
+        //return {...state, result: null, error: null, whatIsLoading: whatIsLoading}
+        return state.merge({result: null, error: null, whatIsLoading: whatIsLoading})
       }
       case LOADING_OK: {
         const {result} = action;
-        return {...state, result, error: null, whatIsLoading: null};
+        console.log("???", result);
+        //return {...state, result, error: null, whatIsLoading: null};
+        const tmp =  state.merge(new Map({result, error: null, whatIsLoading: null}));
+        console.log("???", tmp.result);
+        return tmp;
       }
       case LOADING_ERROR: {
         const {error} = action;
-        return {...state, result: null, error, whatIsLoading: null};
+        //return {...state, result: null, error, whatIsLoading: null};
+        return state.merge({result: null, error, whatIsLoading: null});
       }
       default: return state;
     }
