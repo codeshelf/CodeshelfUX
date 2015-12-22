@@ -126,9 +126,9 @@ export default class WorkInstructionIBox extends React.Component{
                                           let name = toWorkerName(worker, domainId);
                                           let wiWithName = wi.set("pickerId", name);
 
-                                          let gtin = wi.get("gtin");
-                                          if (gtin && gtin.length >= 4) {
-                                              return wiWithName.set("store", gtin.substring(0,4));
+                                          let itemMasterId = wi.get("itemMasterId");
+                                          if (itemMasterId && itemMasterId.length >= 4) {
+                                              return wiWithName.set("store", itemMasterId.substring(0,4));
                                           } else {
                                               return wiWithName;
                                           }
