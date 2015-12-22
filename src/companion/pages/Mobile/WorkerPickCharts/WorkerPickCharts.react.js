@@ -7,6 +7,7 @@ import {Panel, Tabs, Tab, Row, Col, Button, ListGroup, ListGroupItem, Badge} fro
 import Icon from 'react-fa';
 import PickRateChart from '../../App/WorkResults/PickRateChart.react.js';
 import moment from 'moment';
+
 import { Sparklines, SparklinesBars, SparklinesReferenceLine} from 'react-sparklines';
 
 import {getWorkerPickChartMutable} from "./get";
