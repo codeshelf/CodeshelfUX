@@ -21,7 +21,7 @@ function chartSpec() {
                     .duration(50)
                     //.reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
                     .rotateLabels(0)      //Angle to rotate x-axis labels.
-                    .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
+                    .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
                     .groupSpacing(0.1)    //Distance between each group of bars.
             ;
 
@@ -32,7 +32,7 @@ function chartSpec() {
             });
 */                //.xScale(d3.time.scale()); // use a time scale instead of plain numbers in order to get nice round default values in the axi
 
-            chart.xAxis.tickFormat((x) => x+":00");
+            chart.xAxis.tickFormat((x) => moment("2015-12-03T07:00").add((x-1)*5 , "m").format('HH:mm'));
 
             chart.yAxis
                 .tickFormat(d3.format('d'));
@@ -77,8 +77,13 @@ var PickRateChart = React.createClass({
     },
 
     updateViews: function(props, el) {
-        var {pickRates} = props;
+        var {pickRates, showControls, showXAxis, showYAxis, showLegend} = props;
+        showLegend = (showLegend != null) ? showLegend : true;
         var chart = chartSpec();
+        chart.showControls(showControls);
+        chart.showLegend(showLegend);
+        chart.showXAxis(showXAxis);
+        chart.showYAxis(showYAxis);
         updateChart(el, chart, pickRates);
     }
 });
