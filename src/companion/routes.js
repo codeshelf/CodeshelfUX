@@ -43,6 +43,7 @@ import mOrderSearch from './pages/Mobile/OrderSearch/OrderSearch.react.js';
 import mOrderDeatil from './pages/Mobile/OrderDetail/OrderDetail.react.js';
 import mWorkerSearch from './pages/Mobile/WorkerSearch/WorkerSearch.react.js';
 import mWorkerDetail from './pages/Mobile/WorkerDetail/WorkerDetail.react.js';
+import mWorkerPickCharts from './pages/Mobile/WorkerPickCharts/WorkerPickCharts.react.js';
 import LoadFacility from './pages/Mobile/Facility/LoadFacility.react.js';
 import FacilityWrapper from './pages/Mobile/Facility/FacilityWrapper.react.js';
 import Mobile from './pages/Mobile/Mobile.react.js';
@@ -95,6 +96,7 @@ export default (
           <Route handler={mOrderDeatil} name="mobile-order-datail" path="orderDetail/:id" />
           <Route handler={mWorkerSearch} name="mobile-search-workers" path="search/worker" />
           <Route handler={mWorkerDetail} name="mobile-worker-datail" path="workerDetail/:id" />
+          <Route handler={mWorkerPickCharts} name="mobile-worker-pick-charts" path="workerpicks" />
         </Route>
       </Route>
     </Route>
