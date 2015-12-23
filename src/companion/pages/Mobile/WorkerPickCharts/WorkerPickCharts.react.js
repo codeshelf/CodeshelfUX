@@ -60,6 +60,7 @@ class WidthWrapper extends Component {
 
 
 
+
 function renderRadio(name, v, value) {
   return <input type="radio" value={v} name={name} id={v} defaultChecked={v === value}/>
 }
@@ -143,7 +144,6 @@ class WorkerPickCharts extends Component {
     return (
       <div>
         <div><Icon name="caret-right" style={{marginRight: "0.5em"}}/><span>Count/5m,  2 hrs to &lt;1m ago, Ref: 80/hr</span><Icon name="refresh" className="pull-right"/></div>
-
         {/*<div>
         <div>Count per:
           <div className="radio radio-primary">
