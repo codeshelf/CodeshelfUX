@@ -7,7 +7,14 @@ import {Panel, Tabs, Tab, Row, Col, Button, ListGroup, ListGroupItem, Badge} fro
 import Icon from 'react-fa';
 import PickRateChart from '../../App/WorkResults/PickRateChart.react.js';
 import moment from 'moment';
-import { Sparklines, SparklinesBars} from 'react-sparklines';
+import { Sparklines, SparklinesBars, SparklinesReferenceLine} from 'react-sparklines';
+
+function renderRadio(name, v, value) {
+  return <input type="radio" value={v} name={name} id={v} defaultChecked={v === value}/>
+}
+function renderLabel(v) {
+  return    <label for={v}>{v}</label>
+}
 
 export class WorkerPickCharts extends Component {
   render() {
@@ -62,9 +69,38 @@ export class WorkerPickCharts extends Component {
 
     ];
 
+    //Count/5m,  2 hrs to &lt;1m ago, Ref: 80/hr
     return (
       <div>
-        <div>Interval: 5m, Last: 2h,  Ending: Now <Icon name="refresh" className="pull-right"/></div>
+        <div><Icon name="caret-right" style={{marginRight: "0.5em"}}/><span>Count/5m,  2 hrs to &lt;1m ago, Ref: 80/hr</span><Icon name="refresh" className="pull-right"/></div>
+        <div style={{display: "none"}}>
+        <div>Count per:
+          <div className="radio radio-primary">
+            {renderRadio("countper", "1m")}
+            {renderLabel("1m")}
+            {renderRadio("countper", "5m", "5m")}
+            {renderLabel("5m")}
+            {renderRadio("countper", "15m")}
+            {renderLabel("15m")}
+            {renderRadio("countper", "1h")}
+            {renderLabel("1h")}
+          </div>
+        </div>
+        <div>Time Span:
+        <div className="radio radio-primary">
+          {renderRadio("window", "1h")}
+          {renderLabel("1h")}
+          {renderRadio("window", "2h", "2h")}
+          {renderLabel("2h")}
+          {renderRadio("window", "4h")}
+          {renderLabel("4h")}
+          {renderRadio("window", "8h")}
+          {renderLabel("8h")}
+      </div>
+        </div>
+        <div> Ending: <input type="datetime" value="2015-12-03 07:00"/><a>Now</a></div>
+        <div>Reference: <input type="number" defaultValue={80} style={{width: "2.5em"}}/> /hr</div>
+        </div>
         <Panel header="Facility Picks">
         <PickRateChart style={{width: '100%', height: '150px'}}
          startTimestamp={interval.start}
@@ -85,6 +121,7 @@ export class WorkerPickCharts extends Component {
                     <span style={{marginRight: "0.5em"}}>{sum}</span>
                     <Sparklines data={d} limit={24} min={0} width={350} height={20} margin={0} >
                       <SparklinesBars />
+                      <SparklinesReferenceLine type="custom" value={6.6}/>
                     </Sparklines>
                     <Icon name="chevron-right" className="pull-right" style={{marginTop: "0.5em"}}/>
                   </ListGroupItemLink>);
