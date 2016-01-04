@@ -4,7 +4,7 @@ import DocumentTitle from "react-document-title";
 import {SingleCellIBox} from 'components/common/IBox';
 import {fromJS, Map, Set} from "immutable";
 import WorkInstructionSearch from "./WorkInstructionSearch";
-import ListView from "components/common/list/ListView";
+import ListManagement from "components/common/list/ListManagement";
 import PivotTable from "components/common/pivot/PivotTable";
 import {Table} from "components/common/Table";
 import {keyColumn, properties} from 'data/types/WorkInstruction';
@@ -41,7 +41,7 @@ export default class WorkInstructionIBox extends React.Component{
         this.handleDrillDown = this.handleDrillDown.bind(this);
 
         this.title = "Work Instructions";
-        this.columnMetadata = ListView.toColumnMetadataFromProperties(properties);
+        this.columnMetadata = ListManagement.toColumnMetadataFromProperties(properties);
     }
 
     componentWillMount() {
@@ -162,11 +162,12 @@ export default class WorkInstructionIBox extends React.Component{
                 </Row>
                 <SearchStatus {...{results, errorMessage}} />
                 <PivotTable results={resultValues} options={pivotOptions} onDrillDown={this.handleDrillDown}/>
-                <ListView results={selected}
+                <ListManagement results={selected}
                  columns={columns}
                  columnMetadata={this.columnMetadata}
                  keyColumn={keyColumn}
-                 sortSpecs={sortSpecs}/>
+                 sortSpecs={sortSpecs}
+                 allowExport={true}/>
             </SingleCellIBox>);
     }
 };
