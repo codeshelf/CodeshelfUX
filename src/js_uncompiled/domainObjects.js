@@ -266,6 +266,11 @@ domainobjects = {
 				'id': 'scannerType',
 				'title': 'Scanner Type',
 				'width': 16
+			},
+			'cheLighting': {
+				'id': 'cheLighting',
+				'title': 'Lighting Type',
+				'width': 16
 			}
 		}
 	},
