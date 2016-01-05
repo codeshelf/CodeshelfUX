@@ -60,7 +60,6 @@ class WidthWrapper extends Component {
 
 
 
-
 function renderRadio(name, v, value) {
   return <input type="radio" value={v} name={name} id={v} defaultChecked={v === value}/>
 }
