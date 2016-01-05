@@ -419,7 +419,8 @@ codeshelfApp.CheNgController = function($scope, $modalInstance, websession, data
     var scannerType = data['che']['scannerType'];
     $scope['che']['scannerType'] = (scannerType == undefined)?"ORIGINALSERIAL" : scannerType;
     //Set Che Lighting Type
-    $scope['che']['cheLighting'] = data['che']['cheLighting'];
+    var cheLighting = data['che']['cheLighting'];
+    $scope['che']['cheLighting'] = (cheLighting == undefined)?"POSCON_V1" : cheLighting;
 };
 goog.inherits(codeshelfApp.CheNgController, codeshelfApp.AbstractCheController);
 
