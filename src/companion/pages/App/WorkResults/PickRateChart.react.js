@@ -17,6 +17,7 @@ function updateChart(el, chart, data) {
 
 
 function chartSpec() {
+  console.log("!!!! redrawq of chart");
             var chart = nv.models.multiBarChart()
                     .duration(50)
                     //.reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
@@ -36,6 +37,8 @@ function chartSpec() {
 
             chart.yAxis
                 .tickFormat(d3.format('d'));
+
+            chart.margin({"left":25, "right":0});
 
 /*
             //Axis settings

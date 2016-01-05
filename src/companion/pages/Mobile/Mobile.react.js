@@ -16,6 +16,7 @@ import {orderSearchReducer} from './OrderSearch/store';
 import {orderDetailReducer} from './OrderDetail/store';
 import {workerSearchReducer} from './WorkerSearch/store';
 import {workerDetailReducer} from './WorkerDetail/store';
+import {workerPickChartReducer} from './WorkerPickCharts/store';
 
 import {Iterable} from 'immutable';
 Iterable.prototype[Symbol.for('get')] = function(value) {return this.get(value) }
@@ -28,7 +29,8 @@ const rootReducer = combineReducers({
   orderDetail: orderDetailReducer,
   workerSearch: workerSearchReducer,
   workerDetail: workerDetailReducer,
-});
+  workerPickChart: workerPickChartReducer,
+}));
 
 const storageEngine = storage.decorators.filter(
   createEngine(storageConfig.STORAGE_KEY),
