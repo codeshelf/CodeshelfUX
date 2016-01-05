@@ -16,6 +16,7 @@ import {orderSearchReducer} from './OrderSearch/store';
 import {orderDetailReducer} from './OrderDetail/store';
 import {workerSearchReducer} from './WorkerSearch/store';
 import {workerDetailReducer} from './WorkerDetail/store';
+import {workerPickChartReducer} from './WorkerPickCharts/store';
 
 const rootReducer = storage.reducer(combineReducers({
 //  user: userReducer,
@@ -25,6 +26,7 @@ const rootReducer = storage.reducer(combineReducers({
   orderDetail: orderDetailReducer,
   workerSearch: workerSearchReducer,
   workerDetail: workerDetailReducer,
+  workerPickChart: workerPickChartReducer,
 }));
 
 const storageEngine = storage.decorators.filter(
