@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import exposeRouter from 'components/common/exposerouter';
 
 import {acInitialLoadFacilities} from './store';
-import {getFacility} from "./get";
+import {getFacilityMutable} from "./get";
 
 function mapDispatch(dispatch) {
   return bindActionCreators({acInitialLoadFacilities}, dispatch);
@@ -40,4 +40,4 @@ class LoadFacility extends Component {
   }
 }
 
-export default exposeRouter(connect(getFacility, mapDispatch)(LoadFacility));
+export default exposeRouter(connect(getFacilityMutable, mapDispatch)(LoadFacility));

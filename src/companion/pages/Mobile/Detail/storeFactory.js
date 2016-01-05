@@ -1,5 +1,7 @@
 import moment from "moment";
 import _ from "lodash";
+import {Map, Record} from 'immutable';
+
 import {getFacilityContext, ConnectionError} from 'data/csapi';
 import {getSelectedFacility} from "../Facility/get";
 
@@ -27,7 +29,8 @@ const EXPAND_SOMETHING = "expand something";
 export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
   tabToApi, tabToAdditionalApi, mergeAdditionalData) {
 
-  const initState = {
+  // construction of mutable state which we will transform into immutable
+  let _initState = {
     tab: ALL_TABS[0], // TAB_DETAIL, TAB_ITEMS, TAB_PICKS
   };
 
@@ -43,68 +46,59 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
   }
 
   ALL_TABS.forEach((tab) => {
-    initState[tab] = {
+    _initState[tab] = new (Record({
       ...dataLoadingState,
       expanded: null,
-      settings: {
-        properties: tabToSetting[tab],
+      settings: new (Record({
+        properties: new (Record(tabToSetting[tab])),
         open: false,
-      },
-    }
+      })),
+    }));
   });
 
+  const initState = new (Record(_initState));
+  window.test = initState;
+
   function detailReducer(state = initState, action) {
-    if (action.storeName !== storeName) return state;
+    if (action.storeName !== storeName && action.type !== 'REDUX_STORAGE_LOAD') return state;
     switch (action.type) {
       case LOADING_DATA: {
         const {tab} = action;
         switch (action.status) {
           case STATUS_STARTED: {
             const {whatIsLoading} = action;
-            return {
-              ...state,
-              [tab]: {
-                ...(state[tab]),
+            return state.mergeIn([tab], new Map({
                 data: null,
                 error: null,
                 whatIsLoading: whatIsLoading,
                 whatIsLoaded: null,
                 loadedTime: null,
                 additionalDataLoading: null,
-              }
-            };
+            }));
           }
           case STATUS_OK: {
             const {data, itemId} = action;
             const loadedTime = moment();
-            return {
-              ...state,
-              [tab]: {
-                ...(state[tab]),
+            return state.mergeIn([tab], new Map({
                 data,
                 error: null,
                 whatIsLoading: null,
                 whatIsLoaded: itemId,
                 loadedTime,
-                addtionalDataLoading: null,
-              }
-            };
+                additionalDataLoading: null,
+            }));
           }
           case STATUS_ERROR: {
             const {error} = action;
             const loadedTime = moment();
-            return {
-              ...state,
-              [tab]: {
-                ...(state[tab]),
+            return state.mergeIn([tab], new Map({
                 data: null,
                 error,
                 whatIsLoading: null,
                 whatIsLoaded: null,
                 loadedTime,
                 additionalDataLoading: null,
-              }
-            };
+            }));
           }
         }
       }
@@ -113,73 +107,38 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
         switch (action.status) {
           case STATUS_STARTED: {
             const {whatIsLoading: additionalDataLoading} = action;
-            return {
-              ...state,
-              [tab]: {
-                ...(state[tab]),
+            return state.mergeIn([tab], new Map({
                 additionalDataLoading,
-              }
-            }
+            }));
           }
           case STATUS_OK: {
             const {data} = action;
             const mergedData = mergeAdditionalData[tab](state[tab].data, data);
-            return {
-              ...state,
-              [tab]: {
-                ...(state[tab]),
+            return state.mergeIn([tab], new Map({
                 data: mergedData,
                 additionalDataLoading: null,
-              }
-            }
+            }));
           }
           case STATUS_ERROR: {
-            return {
-              ...state,
-              [tab]: {
-                ...(state[tab]),
+            return state.mergeIn([tab], new Map({
                 additionalDataLoading: null,
-              }
-            }
+            }));
           }
-
         }
       }
       case SET_FILTER: {
         const {filter, tab} = action;
-        return {
-          ...state,
-          [tab]: {
-            ...state[tab],
+        return state.mergeIn([tab], new Map({
             filter,
-          }
-        }
+        }));
       }
       case SETTING_OPEN: {
         const {tab} = action;
-        return {
-          ...state,
-          [tab]: {
-            ...state[tab],
-            settings: {
-              ...state[tab]["settings"],
-              open: true,
-            }
-          }
-        }
+        return state.setIn([tab, "settings", "open"], true);
       }
       case SETTING_CLOSE: {
         const {tab} = action;
-        return {
-          ...state,
-          [tab]: {
-            ...state[tab],
-            settings: {
-              ...state[tab]["settings"],
-              open: false,
-            }
-          }
-        }
+        return state.setIn([tab, "settings", "open"], false);
       }
       case SETTING_PROPERTY_VISIBILITY: {
         const {tab, field, visible} = action;
@@ -190,19 +149,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
         const checked = filedsInOverview.reduce((prev, curr) => prev + (0 + newProperties[curr]), 0);
         // disable unchecking last value in overview
         if (checked === 0) return state;
-        return {
-          ...state,
-          [tab]: {
-            ...state[tab],
-            settings: {
-              ...state[tab]["settings"],
-              properties: {
-                ...state[tab]["settings"]["properties"],
-                visibility: newProperties,
-              }
-            }
-          }
-        };
+        return state.setIn([tab, "settings", "properties", "visibility"], newProperties);
       }
       case SETTING_PROPERTY_ORDER: {
         const {tab, field, diff} = action;
@@ -220,28 +167,24 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
         // at least one thing has to be in overview
         if (newOrder[0] === "-") return state;
         console.log("NEW ORDER ", newOrder);
-        return {
-          ...state,
-          [tab]: {
-            ...state[tab],
-            settings: {
-              ...state[tab]["settings"],
-              properties: {
-                ...state[tab]["settings"]["properties"],
-                order: newOrder,
-              }
-            }
-          }
-        };
-
+        return state.setIn([tab, "settings", "properties", "order"], newOrder);
       }
       case EXPAND_SOMETHING: {
         const {what: expanded, tab} = action;
-        return {...state, [tab]: {...(state[tab]), expanded}};
+        return state.setIn([tab, "expanded"], expanded);
       }
       case SELECT_TAB: {
         const {tab} = action;
-        return {...state, tab};
+        return state.setIn(["tab"], tab);
+      }
+      case 'REDUX_STORAGE_LOAD': {
+        const {payload} = action;
+        const savedStorage = getLocalStore(payload);
+        let newState = state;
+        ALL_TABS.forEach((tab) => {
+          newState = newState.mergeIn([tab, "settings", "properties"], new Map(savedStorage[tab]["settings"]["properties"]));
+        });
+        return newState;
       }
       default: return state;
     }

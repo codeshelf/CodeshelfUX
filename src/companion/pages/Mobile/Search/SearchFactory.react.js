@@ -10,7 +10,6 @@ export function createSearchComponent(ItemComponent, searchFieldText, getIdForIt
   class SearchList extends Component {
     render() {
       const {isLoading, error, result, filter: {text: filterText}} = this.props;
-      console.log(`!!!!!!!!! isLoading ${isLoading}, orders ${result}`);
       if (isLoading) {
         return <div> Loading...</div>;
       } else if (error) {
@@ -57,7 +56,6 @@ export function createSearchComponent(ItemComponent, searchFieldText, getIdForIt
     }
 */
     render() {
-      console.log(`Props for OrderSearch `, this.props);
       const {whatIsLoading, error, result, filter} = this.props;
       const {acChangeFilter, acSearch} = this.props;
 

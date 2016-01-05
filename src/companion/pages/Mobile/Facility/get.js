@@ -1,11 +1,12 @@
 // Helpers to extract part of store state from global state
+import {asMutable} from "pages/Mobile/asMutable";
 
-export function getFacility(state) {
-  const {facility} = state;
+export function getFacility({facility}) {
   return facility;
 }
 
-export function getSelectedFacility(state) {
-  const {facility: {selectedFacility}} = state;
+export const getFacilityMutable = asMutable(getFacility);
+
+export function getSelectedFacility({facility: {selectedFacility}}) {
   return selectedFacility;
 }

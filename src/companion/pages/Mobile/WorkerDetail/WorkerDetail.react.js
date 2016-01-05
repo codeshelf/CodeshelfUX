@@ -10,7 +10,7 @@ import {Detail} from "../Detail/Detail.react.js";
 import {TAB_DETAIL, TAB_HISTORY, ALL_TABS} from './store';
 import {acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
     acSettingOpen, acSettingClose, acSearchAdditional, acSetFilter, acSearch} from './store';
-import {getWorkerDetail} from "./get";
+import {getWorkerDetailMutable} from "./get";
 
 import {Header} from "./Header/Header.react.js";
 import {fieldToDescription} from "./Header/intl";
@@ -71,4 +71,4 @@ function mapDispatch(dispatch) {
    acSetFilter, acSearch}, dispatch);
 }
 
-export default exposeRouter(connect(getWorkerDetail, mapDispatch)(WorkerDetail));
+export default exposeRouter(connect(getWorkerDetailMutable, mapDispatch)(WorkerDetail));

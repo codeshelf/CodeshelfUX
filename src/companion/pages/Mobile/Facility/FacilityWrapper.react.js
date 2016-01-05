@@ -5,7 +5,7 @@ import exposeRouter from 'components/common/exposerouter';
 import {RouteHandler} from 'react-router';
 
 import {acInitialLoadFacilities, acSelectFacility} from './store';
-import {getFacility} from "./get";
+import {getFacilityMutable} from "./get";
 
 
 function mapDispatch(dispatch) {
@@ -38,7 +38,7 @@ class FacilityWrapper extends Component {
   }
 
   render() {
-
+    console.log("~~~~~ facility wraper");
     // if we are going directly to this route we must first load facilities
     if (this.props.loadingAvailableFacilities) return this.renderLoading();
     // if haven't selected facility render loading
@@ -57,4 +57,4 @@ class FacilityWrapper extends Component {
   }
 }
 
-export default exposeRouter(connect(getFacility, mapDispatch)(FacilityWrapper));
+export default exposeRouter(connect(getFacilityMutable, mapDispatch)(FacilityWrapper));
