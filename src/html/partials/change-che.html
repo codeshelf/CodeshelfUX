@@ -33,8 +33,11 @@
                 <option value="ORIGINALSERIAL">ORIGINAL SERIAL</option>
                 <option value="CODECORPS3600">CODECORPS 3600</option>
         </select></p>
-        
-
+        <p>Lighting Type: <select name="cheLighting" ng-model="che.cheLighting">
+                <option value="POSCON_V1">POSCON</option>
+                <option value="LABEL_V1">LABEL</option>
+                <option value="NOLIGHTING">NO LIGHTING</option>
+        </select></p>
 	</div>
 	<div class="modal-footer">
 		<button class="btn" ng-click="controller.cancel()">Cancel</button>

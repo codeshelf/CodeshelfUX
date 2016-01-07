@@ -105,12 +105,13 @@ class WorkerPickCharts extends Component {
     }
   }
 
-  getBotomChart() {
+  getBottomChart() {
     if (this.props.whatIsLoading !== null) {
       return null;
     } else {
       return (
-        <Panel header="Worker Breakdown">
+        <Panel header="Worker Picks">
+          <span className="h6">Totals - Reference Line: 80/hr</span>
           <WidthWrapper>{(width) =>
           <ListGroup>
             {
@@ -173,7 +174,7 @@ class WorkerPickCharts extends Component {
         </div>
         */}
         {this.getTopChart()}
-        {this.getBotomChart()}
+        {this.getBottomChart()}
       </div>
     );
   }
