@@ -4,6 +4,8 @@ import _ from 'lodash';
 import {Map} from 'immutable';
 var {state} = require('data/state.js');
 import {loggedout} from "data/auth/actions";
+import moment from "moment";
+
 
 export class ConnectionError extends Error {
     constructor(message) {
@@ -190,10 +192,10 @@ export function getFacilities() {
 };
 
 // facilityId can be injected(for mobile web) or will be taken from facility cursor if not provided(desktop web)
-export function getFacilityContext(facilityId) {
+export function getFacilityContext(selectedFacility) {
     var endpoint = state.cursor(["endpoint"])();
     var facility = state.cursor(["selectedFacility"])();
-    facilityId = facilityId || facility.get("persistentId");
+    var facilityId = (selectedFacility && selectedFacility.persistentId) || facility.get("persistentId");
     var facilityPath = "/api/facilities/" + facilityId;
     let ordersPath = facilityPath + "/orders";
     let workInstructionsPath = facilityPath + "/work/instructions";
@@ -203,6 +205,7 @@ export function getFacilityContext(facilityId) {
         facilityId: facilityId,
         endpoint: endpoint,
         facility: facility,
+        utcOffset: (selectedFacility && selectedFacility.utcOffset) || 0,
 
         recreateFacility() {
             return ajax("/api/facilities/recreate/" + facility.domainId, {
@@ -334,8 +337,11 @@ export function getFacilityContext(facilityId) {
           });
         },
 
-        getWorkerEventsWithTime: function({id, created}) {
+        getWorkerEventsWithTime: function({id, startAt, endAt}) {
           var workerPath = facilityPath + "/workers/" + id + "/events";
+          startAt = moment(startAt).add(utcOffset, "minutes");
+          endAt = moment(endAt).add(utcOffset, "minutes");
+          const created = startAt.toISOString() + "/" + endAt.toISOString();
           return ajax(workerPath, {
             data: {created}
           });

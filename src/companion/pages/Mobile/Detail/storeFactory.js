@@ -295,7 +295,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
         dispatch(search(tab, STATUS_ERROR, {error: "Want to search for orders but no facility is provided"}));
         return;
       }
-      const facilityContext = getFacilityContext(selectedfacility.persistentId);
+      const facilityContext = getFacilityContext(selectedfacility);
 
       tabToApi(facilityContext, tab, itemId)
       .catch((error) => {
@@ -333,7 +333,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
         dispatch(searchAdditional(tab, STATUS_ERROR, {error: "Want to search for orders but no facility is provided"}));
         return;
       }
-      const facilityContext = getFacilityContext(selectedfacility.persistentId);
+      const facilityContext = getFacilityContext(selectedfacility);
 
       tabToAdditionalApi(facilityContext, tab, itemId)
       .catch((error) => {

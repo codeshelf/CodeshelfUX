@@ -85,7 +85,7 @@ export function createStore(storeName, getLocalStore, searchApiCall) {
         dispatch(searchError(`Want to search for ${storeName} for but no facility is provided`));
         return;
       }
-      const facilityContext = getFacilityContext(selectedfacility.persistentId);
+      const facilityContext = getFacilityContext(selectedfacility);
       searchApiCall(facilityContext, text).then((data) => {
         console.log(`data from search ${storeName}`, data);
         // Check if i should dispach or other search has been issued
