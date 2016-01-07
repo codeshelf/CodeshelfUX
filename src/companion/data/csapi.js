@@ -341,6 +341,16 @@ export function getFacilityContext(facilityId) {
           });
         },
 
+        getWorkerPicksWithnWindow: function({startAt, endAt, interval}) {
+          var path = facilityPath + "/picks/workers/histogram";
+          // TODO for andrej after mergo of ofset use it here ;-)
+          const created = startAt.toISOString() + "/" + endAt.toISOString();
+          const createdBin = interval.toISOString();
+          return ajax(path, {
+            data: {created, createdBin}
+          });
+        },
+
         getWorkers: function(params) {
             var workersPath = facilityPath + "/workers";
             return ajax(workersPath, {
