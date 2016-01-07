@@ -10,3 +10,7 @@ export const getFacilityMutable = asMutable(getFacility);
 export function getSelectedFacility({facility: {selectedFacility}}) {
   return selectedFacility;
 }
+
+export function getFacilityContextFromState({facility: {facilityContext}}) {
+  return facilityContext;
+}

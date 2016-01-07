@@ -1,6 +1,7 @@
 import {getFacilities} from 'data/csapi';
 import {Record, Map} from 'immutable';
 import {getSelectedFacility} from "./get";
+import {getFacilityContext} from 'data/csapi';
 
 const SET_AVAILABLE_FACILITIES = 'SET_AVAILABLE_FACILITIES';
 const LOAD_AVAILABLE_FACILITIES = 'LOAD_AVAILABLE_FACILITIES';
@@ -10,6 +11,7 @@ const initState = new (Record({
   loadingAvailableFacilities: false,
   availableFacilities: null,
   selectedFacility: null,
+  facilityContext: null,
 }));
 
 export function facilityReducer(state = initState, action) {
@@ -29,8 +31,9 @@ export function facilityReducer(state = initState, action) {
         return f.domainId === action.domainId;
       });
       if (state.selectedFacility === selectedFacility) return state;
+      const facilityContext = getFacilityContext(selectedFacility.persistentId);
       //return {...state, selectedFacility};
-      return state.set("selectedFacility", selectedFacility);
+      return state.merge(new Map({selectedFacility, facilityContext}));
     }
     default: return state;
   }
@@ -70,7 +73,7 @@ export function acSelectFacility(domainId) {
     }
     dispatch({
       type: SELECT_FACILITY,
-      domainId
+      domainId,
     });
 
   }
