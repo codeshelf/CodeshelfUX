@@ -79,10 +79,6 @@ export class TabWithItemPaging extends Component {
     const {fieldToDescription} = this.props;
     const {getIdFromItem} = this.props;
     const count = items.total;
-    if (count === 0) {
-      return <div>{this.props.noEntriesText}</div>;
-    }
-
     const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
     const {acSettingOpen, acSettingClose, acSetFieldVisibility,
      acSetFieldOrder, acReloadTab, acSearchAdditional, acSearchFilter} = this.props;
@@ -102,22 +98,27 @@ export class TabWithItemPaging extends Component {
         <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchFilter(filter)}>
           <Icon name="search" />
         </Button>
-        <hr />
-        {items.results.map((oneItem) =>
-          this.renderItem(
-            (expanded && getIdFromItem(oneItem) === expanded),
-            fieldSettings,
-            getIdFromItem(oneItem),
-            oneItem
-          )
-        )}
-        {additionalDataLoading &&
-          <Icon name="spinner " />
-        }
-        {(next && !additionalDataLoading) &&
-            <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchAdditional({id, next})}>
-              <Icon name="long-arrow-right" />
-            </Button>
+        { count === 0
+          ? <div>{this.props.noEntriesText}</div>
+          : <div>
+              <hr />
+              {items.results.map((oneItem) =>
+                this.renderItem(
+                  (expanded && getIdFromItem(oneItem) === expanded),
+                  fieldSettings,
+                  getIdFromItem(oneItem),
+                  oneItem
+                )
+              )}
+              {additionalDataLoading &&
+                <Icon name="spinner " />
+              }
+              {(next && !additionalDataLoading) &&
+                  <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchAdditional({id, next})}>
+                    <Icon name="long-arrow-right" />
+                  </Button>
+              }
+          </div>
         }
       </div>
     );

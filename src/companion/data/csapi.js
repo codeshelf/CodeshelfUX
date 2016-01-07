@@ -205,7 +205,7 @@ export function getFacilityContext(selectedFacility) {
         facilityId: facilityId,
         endpoint: endpoint,
         facility: facility,
-        utcOffset: (selectedFacility && selectedFacility.utcOffset) || 0,
+        utcOffset: (selectedFacility && selectedFacility.utcOffset) || facility.get("utcOffset"),
 
         recreateFacility() {
             return ajax("/api/facilities/recreate/" + facility.domainId, {
@@ -339,8 +339,8 @@ export function getFacilityContext(selectedFacility) {
 
         getWorkerEventsWithTime: function({id, startAt, endAt}) {
           var workerPath = facilityPath + "/workers/" + id + "/events";
-          startAt = moment(startAt).add(utcOffset, "minutes");
-          endAt = moment(endAt).add(utcOffset, "minutes");
+          startAt = moment(startAt).add(this.utcOffset, "minutes");
+          endAt = moment(endAt).add(this.utcOffset, "minutes");
           const created = startAt.toISOString() + "/" + endAt.toISOString();
           return ajax(workerPath, {
             data: {created}
