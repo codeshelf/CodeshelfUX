@@ -3,7 +3,7 @@ import _ from "lodash";
 import {Map, Record} from 'immutable';
 
 import {getFacilityContext, ConnectionError} from 'data/csapi';
-import {getSelectedFacility} from "../Facility/get";
+import {getSelectedFacility, getFacilityContextFromState} from "../Facility/get";
 
 const SELECT_TAB = 'select tab for detail tab';
 
@@ -333,7 +333,8 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
         dispatch(searchAdditional(tab, STATUS_ERROR, {error: "Want to search for orders but no facility is provided"}));
         return;
       }
-      const facilityContext = getFacilityContext(selectedfacility.persistentId);
+
+      const facilityContext = getFacilityContextFromState(getState());
 
       tabToAdditionalApi(facilityContext, tab, itemId)
       .catch((error) => {
