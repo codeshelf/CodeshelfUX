@@ -31,7 +31,7 @@ export function facilityReducer(state = initState, action) {
         return f.domainId === action.domainId;
       });
       if (state.selectedFacility === selectedFacility) return state;
-      const facilityContext = getFacilityContext(selectedFacility.persistentId);
+      const facilityContext = getFacilityContext(selectedFacility);
       //return {...state, selectedFacility};
       return state.merge(new Map({selectedFacility, facilityContext}));
     }
