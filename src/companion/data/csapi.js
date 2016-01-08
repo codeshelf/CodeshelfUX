@@ -347,6 +347,28 @@ export function getFacilityContext(selectedFacility) {
           });
         },
 
+        getWorkerPicksWithnWindow: function({startAt, endAt, interval}) {
+          var path = facilityPath + "/picks/histogram";
+          startAt = moment(startAt).add(this.utcOffset, "minutes");
+          endAt = moment(endAt).add(this.utcOffset, "minutes");
+          const created = startAt.toISOString() + "/" + endAt.toISOString();
+          const createdBin = interval.toISOString();
+          return ajax(path, {
+            data: {created, createdBin}
+          });
+        },
+
+        getWorkerPicksWithnWindowAllWorkers: function({startAt, endAt, interval}) {
+          var path = facilityPath + "/picks/workers/histogram";
+          startAt = moment(startAt).add(this.utcOffset, "minutes");
+          endAt = moment(endAt).add(this.utcOffset, "minutes");
+          const created = startAt.toISOString() + "/" + endAt.toISOString();
+          const createdBin = interval.toISOString();
+          return ajax(path, {
+            data: {created, createdBin}
+          });
+        },
+
         getWorkers: function(params) {
             var workersPath = facilityPath + "/workers";
             return ajax(workersPath, {
