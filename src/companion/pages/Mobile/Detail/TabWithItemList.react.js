@@ -58,9 +58,6 @@ export class TabWithItemList extends Component {
     const {fieldToDescription} = this.props;
     const {getIdFromItem} = this.props;
     const count = items.length;
-    if (count === 0) {
-      return <div>{this.props.children}</div>;
-    }
 
     const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
     const {acSettingOpen, acSettingClose, acSetFieldVisibility,
@@ -76,15 +73,20 @@ export class TabWithItemList extends Component {
                     fieldSettings,
                     acSetFieldVisibility,
                     acSetFieldOrder}} />
-        <hr />
-        {items.map((oneItem) =>
-          this.renderItem(
-            (expanded && getIdFromItem(oneItem) === expanded),
-            fieldSettings,
-            getIdFromItem(oneItem),
-            oneItem
-          )
-        )}
+        { count === 0
+          ? <div>{this.props.children}</div>
+          : <div>
+              <hr />
+              {items.map((oneItem) =>
+                this.renderItem(
+                  (expanded && getIdFromItem(oneItem) === expanded),
+                  fieldSettings,
+                  getIdFromItem(oneItem),
+                  oneItem
+                )
+              )}
+            </div>
+        }
       </div>
     );
   }

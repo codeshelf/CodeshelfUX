@@ -35,8 +35,7 @@ function tabToApi(facilityContext, tab, domainId) {
         const {id, filter} = arg;
         const endAt = moment(filter, "YYYY/MM/DD HH:mm");
         const startAt = moment(endAt).subtract(1, "M");
-        const created= startAt.toISOString() + "/" + endAt.toISOString();
-        return facilityContext.getWorkerEventsWithTime({id, created});
+        return facilityContext.getWorkerEventsWithTime({id, startAt, endAt});
       }
     },
   }[tab];

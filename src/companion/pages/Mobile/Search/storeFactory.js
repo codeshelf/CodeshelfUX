@@ -1,5 +1,4 @@
-import {getFacilityContext} from 'data/csapi';
-import {getSelectedFacility, getFacilityContextFromState} from "../Facility/get";
+import {getFacilityContextFromState} from "../Facility/get";
 
 import {Map, Record} from 'immutable';
 
@@ -81,12 +80,13 @@ export function createStore(storeName, getLocalStore, searchApiCall) {
   function acSearch(text) {
     return (dispatch, getState) => {
       dispatch(searchStated(text));
-      const selectedfacility = getSelectedFacility(getState());
-      if (!selectedfacility || !(selectedfacility.persistentId)) {
-        dispatch(searchError(`Want to search for ${storeName} for but no facility is provided`));
+
+      const facilityContext = getFacilityContextFromState(getState());
+      if (!facilityContext) {
+        dispatch(searchError(`Want to search for ${storeName} for but no facility context is provided`));
         return;
       }
-      const facilityContext = getFacilityContextFromState(getState());
+
       searchApiCall(facilityContext, text).then((data) => {
         console.log(`data from search ${storeName}`, data);
         // Check if i should dispach or other search has been issued

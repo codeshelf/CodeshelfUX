@@ -2,8 +2,8 @@ import moment from "moment";
 import _ from "lodash";
 import {Map, Record} from 'immutable';
 
-import {getFacilityContext, ConnectionError} from 'data/csapi';
-import {getSelectedFacility, getFacilityContextFromState} from "../Facility/get";
+import {ConnectionError} from 'data/csapi';
+import {getFacilityContextFromState} from "../Facility/get";
 
 const SELECT_TAB = 'select tab for detail tab';
 
@@ -290,12 +290,11 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
       }
       dispatch(search(tab, STATUS_STARTED, {whatIsLoading: itemId}));
 
-      const selectedfacility = getSelectedFacility(getState());
-      if (!selectedfacility || !(selectedfacility.persistentId)) {
-        dispatch(search(tab, STATUS_ERROR, {error: "Want to search for orders but no facility is provided"}));
+      const facilityContext = getFacilityContextFromState(getState());
+      if (!facilityContext) {
+        dispatch(search(tab, STATUS_ERROR, {error: "Want to search for orders but no facility context is provided"}));
         return;
       }
-      const facilityContext = getFacilityContext(selectedfacility.persistentId);
 
       tabToApi(facilityContext, tab, itemId)
       .catch((error) => {
@@ -328,13 +327,11 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
     return (dispatch, getState) => {
       dispatch(searchAdditional(tab, STATUS_STARTED, {whatIsLoading: itemId}));
 
-      const selectedfacility = getSelectedFacility(getState());
-      if (!selectedfacility || !(selectedfacility.persistentId)) {
-        dispatch(searchAdditional(tab, STATUS_ERROR, {error: "Want to search for orders but no facility is provided"}));
+      const facilityContext = getFacilityContextFromState(getState());
+      if (!facilityContext) {
+        dispatch(searchAdditional(tab, STATUS_ERROR, {error: "Want to search for orders but no facility context is provided"}));
         return;
       }
-
-      const facilityContext = getFacilityContextFromState(getState());
 
       tabToAdditionalApi(facilityContext, tab, itemId)
       .catch((error) => {
