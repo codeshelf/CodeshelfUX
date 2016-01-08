@@ -79,8 +79,8 @@ class WorkerPickCharts extends Component {
     }
   }
 
-  renderTopChart({whatIsLoading, acMoveGrahToLeft, acMoveGrahToRight}) {
-    if (whatIsLoading !== null) {
+  renderTopChart({whatIsLoading, whatIsLoaded, acMoveGrahToLeft, acMoveGrahToRight}) {
+    if (whatIsLoading !== null || whatIsLoaded === null) {
       return (
         <div>
           Loading charts...
@@ -117,25 +117,8 @@ class WorkerPickCharts extends Component {
     }
   }
 
-  renderBottomChart() {
-    let workerData =[
-       [7, 8, 23, 0, 24, 0, 0, 2, 3, 3, 2, 3, 5, 2, 1, 0, 0, 0, 0, 0, 1, 7, 7, 2], //016
-       [0, 0, 0, 0, 0, 6, 1, 11, 4, 5, 0, 0, 4, 10, 5, 6, 13, 9, 13, 6, 3, 0, 0, 0], //023
-       [8, 14, 6, 11, 19, 4, 11, 0, 3, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //218
-       [16, 14, 0, 3, 17, 12, 11, 0, 0, 8, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //231
-       [0, 0, 8, 5, 10, 0, 3, 7, 5, 1, 6, 2, 3, 7, 17, 3, 5, 1, 0, 0, 0, 0, 3, 5], //030
-       [0, 0, 0, 1, 23, 19, 8, 0, 7, 17, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //242
-       [0, 3, 1, 5, 2, 2, 0, 7, 7, 3, 6, 5, 0, 0, 0, 0, 0, 2, 4, 6, 4, 0, 0, 0], //331//
-       [0, 0, 0, 6, 2, 7, 7, 0, 0, 0, 0, 0, 0, 2, 1, 0, 3, 1, 0, 0, 0, 0, 0, 0], //315//
-       [0, 0, 0, 10, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //243//
-       [2, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //020
-       [14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //128
-
-
-      ];
-
-    const MIN_NUMBER_OF_PICKS_PER_WORKER = 10;
-    if (this.props.whatIsLoading !== null) {
+  renderBottomChart({whatIsLoading, whatIsLoaded}) {
+    if (whatIsLoading !== null || whatIsLoaded === null) {
       return null;
     } else {
       return (

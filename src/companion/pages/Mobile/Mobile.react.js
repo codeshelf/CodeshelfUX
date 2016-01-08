@@ -30,7 +30,7 @@ const rootReducer = combineReducers({
   workerSearch: workerSearchReducer,
   workerDetail: workerDetailReducer,
   workerPickChart: workerPickChartReducer,
-}));
+});
 
 const storageEngine = storage.decorators.filter(
   createEngine(storageConfig.STORAGE_KEY),

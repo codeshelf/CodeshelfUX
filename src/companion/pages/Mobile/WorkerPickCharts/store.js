@@ -2,8 +2,7 @@ import moment from "moment";
 import _ from "lodash";
 import {Map, Record} from 'immutable';
 import {getWorkerPickChart} from "./get";
-import {getFacilityContext} from 'data/csapi';
-import {getSelectedFacility} from "../Facility/get";
+import {getFacilityContextFromState} from "../Facility/get";
 
 import {getWorkerPickCharts, getWorkerPickByWorker} from "./mockGetWorkerPickCharts";
 
@@ -171,14 +170,11 @@ export function acSearch(forceLoad) {
     }
     dispatch(search(STATUS_STARTED, {whatIsLoading: filter}));
 
-    const selectedfacility = getSelectedFacility(getState());
-    if (!selectedfacility || !(selectedfacility.persistentId)) {
-      dispatch(search(STATUS_ERROR, {error: "Want to search for worker pick chart but no facility is provided"}));
+    const facilityContext = getFacilityContextFromState(getState());
+    if (!facilityContext) {
+      dispatch(search(STATUS_ERROR, {error: "Want to search for worker pick chart but no facility context is provided"}));
       return;
     }
-
-    // TODO use this instead of mocks
-    const facilityContext = getFacilityContext(selectedfacility.persistentId);
 
     // make api call
     Promise.all([
