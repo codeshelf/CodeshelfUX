@@ -3,11 +3,15 @@ import {Panel, Tabs, Tab, Row, Col, Button, ListGroup,
   ListGroupItem, Badge, DropdownButton, MenuItem} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {WidthWrapper} from "./WidthWrapper.react.js";
-import PickRateChart from '../../App/WorkResults/PickRateChart.react.js';
+import {PickRateChart} from './tmpPickRateChart.react.js';
 
 import moment from 'moment';
 
+import * as csapi from 'data/csapi';
+
 import {data} from "./mockGetWorkerPickCharts";
+
+import {DateDisplay} from "../DateDisplay.react.js";
 
 export class DurationPicker extends Component {
   render() {
@@ -38,15 +42,36 @@ const WINDOW_DURATIONS= [
 
 export class TopChart extends Component {
   render() {
-    const {filter, whatIsLoading, whatIsLoaded, acMoveGrahToLeft,
-      acMoveGrahToRight, acSetFilterAndRefresh} = this.props;
-    const isLoading = (whatIsLoading !== null || whatIsLoaded === null);
+    const {filter, error, whatIsLoading, whatIsLoaded, acMoveGrahToLeft,
+      acMoveGrahToRight, acSetFilterAndRefresh, acSearch} = this.props;
 
+    const showLoading = (whatIsLoading !== null || (whatIsLoaded === null && !error));
+    const showError = (whatIsLoading === null && !!error);
+    let errorText = "Can't load request";
+    if (error && (error instanceof csapi.ConnectionError || error.message)) {
+      errorText = error.message;
+    }
+    //console.log(`!!!!!!!!!!!!!!!!!!!! ${showLoading} ${showError}`)
+    //console.log(`!!!!!!!!!!!!!!!!!!!! ${whatIsLoading !== null} ${showError}`)
     //TODO Andrej remove after proper implementaion of d3 chart
     let interval = {
       start: 10, //moment().startOf('day'),
       end: 13//moment().endOf('day')
     };
+
+    //TODO delete after we have better component for showing data
+    function formatData(data) {
+      let res = [{
+        key: 'facility',
+        values: data.bins.map((el, index) => ({
+          key: "facility",
+          x: index,
+          y: el.value,
+        }))
+      }];
+      console.log("new Data !!!!!!!!!!!!!!!", res);
+      return res;
+    }
 
     return (
       <div>
@@ -66,23 +91,36 @@ export class TopChart extends Component {
             <Icon name="step-forward" />
           </Button>
         </Row>
-        <Row>
-          <div>{moment(filter.endtime).subtract(filter.window).format()}</div>
-          <div>{filter.endtime.format()}</div>
+        <Row style={{"padding-left": "10px"}}>
+          <div><DateDisplay date={moment(filter.endtime).subtract(filter.window)} /></div>
+          <div><DateDisplay date={filter.endtime.format()} /></div>
         </Row>
-        {isLoading
-        ? <div style={{minHeight:"200px"}}>
+        {showLoading &&
+          <div style={{minHeight:"200px"}}>
             Loading chart...
-          </div>
-        : <WidthWrapper>{(width) =>
+          </div>}
+        {showError &&
+          <Row>
+            <Col xs={8}>
+              Error: {text}
+            </Col>
+            <Col xs={4}>
+              <Button bsStyle="primary" bsSize="xs" onClick={()=> acSearch(true)}><Icon name="refresh" /></Button>
+            </Col>
+          </Row>
+        }
+        {!showLoading && !showError &&
+          <WidthWrapper>{(width) =>
             <PickRateChart style={{width: width, height: width/2.5}}
+              startTime={this.props.data[0].startTime}
+              interval={filter.interval}
               startTimestamp={interval.start}
               endTimestamp={interval.end}
-              pickRates={/*this.props.data[0]*/data}
+              pickRates={/*this.props.data[0]  data*/formatData(this.props.data[0])}
               showControls={false}
               showLegend={false}
               showXAxis={true}
-              showYAxis={true}/>
+              showYAxis={true} />
           }</WidthWrapper>}
       </div>
     );

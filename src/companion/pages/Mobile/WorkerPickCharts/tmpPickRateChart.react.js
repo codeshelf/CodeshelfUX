@@ -4,6 +4,9 @@ import d3 from "d3";
 require("nvd3/build/nv.d3.min.css");
 import nv from "exports?nv!nvd3/build/nv.d3.min.js";
 
+import {connect} from 'react-redux';
+import {getSelectedFacility} from '../Facility/get';
+
 function updateChart(el, chart, data) {
     d3.select(el).select("svg")
         .datum(data)
@@ -16,12 +19,15 @@ function updateChart(el, chart, data) {
 }
 
 
-function chartSpec() {
+function chartSpec(startTime, interval, utcOffset) {
+  console.log("!!!! redrawq of chart", startTime);
+  console.log("!!!!!!!!!!!!", moment(startTime).format());
+  startTime = moment(startTime);
             var chart = nv.models.multiBarChart()
                     .duration(50)
                     //.reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
                     .rotateLabels(0)      //Angle to rotate x-axis labels.
-                    .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
+                    .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
                     .groupSpacing(0.1)    //Distance between each group of bars.
             ;
 
@@ -32,10 +38,16 @@ function chartSpec() {
             });
 */                //.xScale(d3.time.scale()); // use a time scale instead of plain numbers in order to get nice round default values in the axi
 
-            chart.xAxis.tickFormat((x) => x+":00");
+            console.log("!!!!! ofset", moment(startTime).add(utcOffset, "minutes").format("YYYY-MMMM-Do h:mm:ss a"));
+            console.log("!!!!! ofset", moment(startTime).add(utcOffset, "minutes").format());
+            console.log("!!!!! noofset", moment(startTime).format("YYYY-MMMM-Do h:mm:ss a"));
+            console.log("!!!!! noofset", moment(startTime).format());
+            chart.xAxis.tickFormat((x) => moment(startTime).add((x-1)*(interval.asMinutes()) , "m").format('HH:mm'));
 
             chart.yAxis
                 .tickFormat(d3.format('d'));
+
+            chart.margin({"left":25, "right":0});
 
 /*
             //Axis settings
@@ -62,7 +74,7 @@ function chartSpec() {
        return chart;
 }
 
-var PickRateChart = React.createClass({
+const PickRateChartDummy = React.createClass({
     render: function() {
         return (<div className="nvd3"><svg style={this.props.style}></svg></div>);
     },
@@ -77,9 +89,14 @@ var PickRateChart = React.createClass({
     },
 
     updateViews: function(props, el) {
-        var {pickRates} = props;
-        var chart = chartSpec();
+        var {pickRates, showControls, showXAxis, showYAxis, showLegend, startTime, interval, utcOffset} = props;
+        showLegend = (showLegend != null) ? showLegend : true;
+        var chart = chartSpec(startTime, interval, utcOffset);
+        chart.showControls(showControls);
+        chart.showLegend(showLegend);
+        chart.showXAxis(showXAxis);
+        chart.showYAxis(showYAxis);
         updateChart(el, chart, pickRates);
     }
 });
-module.exports = PickRateChart;
+export const PickRateChart = connect(getSelectedFacility)(PickRateChartDummy);
