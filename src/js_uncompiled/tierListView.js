@@ -129,6 +129,24 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 
 			});
 		},
+		
+		setLedOffsetForTier: function(tier, inAllTiers) {
+			var theLogger = goog.debug.Logger.getLogger('Tier view');
+			var theTier = tier;
+			if (theTier === null){
+				theLogger.info("null tier in context menu choice"); //why? saw this.
+			}
+			var tierName = theTier['nominalLocationId'];
+			theLogger.info("setting LED offset for selected Tier " + tierName);
+
+			var offset = prompt("Enter LED offset for tier: " + tierName);
+			if (offset != null && offset != ""){
+				var methodArgs = [{ 'name': 'offset', 'value': offset, 'classType': 'int'}];
+				websession_.callMethod(tier, 'Tier', 'offSetTierLeds', methodArgs);
+			} else {
+				theLogger.info("Received meaningless result " + offset + " from the Tiel LED offset dialog.");
+			}
+		},
 
 		setControllerForTierOnly: function(item) {
 			self.setControllerForTier(item, false);
@@ -187,6 +205,13 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
 			"permission": "slot:edit",
 			"action": function(itemContext) {
 				self.setPosconsForTier(itemContext);
+			}
+		},
+		{
+			"label" : "Offset LED",
+			"permission": "slot:edit",
+			"action": function(itemContext) {
+				self.setLedOffsetForTier(itemContext);
 			}
 		},
 		{
