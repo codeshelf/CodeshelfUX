@@ -15,7 +15,6 @@ const initState = new (Record({
   error: null,
   whatIsLoading: null,
   loadedTime: null,
-  filterOpen: false,
 }));
 
 function getDefaultFilter() {
@@ -32,8 +31,6 @@ const STATUS_OK = "ok";
 const STATUS_ERROR = "error";
 
 const SET_FILTER = "WPCH - set filter ";
-const OPEN_FILTER = "WPCH - open filter ";
-const CLOSE_FILTER = "WPCH - close filter ";
 
 export function workerPickChartReducer(state = initState, action) {
   switch (action.type) {
@@ -80,12 +77,6 @@ export function workerPickChartReducer(state = initState, action) {
       }
       return state.mergeIn(["filter"], new Map(filter));
     }
-    case OPEN_FILTER: {
-      return state.set("filterOpen", true);
-    }
-    case CLOSE_FILTER: {
-      return state.set("filterOpen", false);
-    }
     default: return state;
   }
 }
@@ -127,18 +118,12 @@ export function acRefresh() {
   }
 }
 
-export function acSetFilterCloseAndRefresh(filter) {
+export function acSetFilterAndRefresh(filter) {
   return function(dispatch) {
     dispatch(acSetFilter(filter))
-    dispatch(acCloseFilter())
     dispatch(acSearch(true))
   }
 }
-
-
-export const acOpenFilter = () => ({type: OPEN_FILTER});
-export const acCloseFilter = () => ({type: CLOSE_FILTER});
-
 
 function search(status, data) {
   return {
@@ -149,11 +134,6 @@ function search(status, data) {
 }
 
 function filterToParams({endtime, window, interval}) {
-  return {
-    startAt: moment("2015-12-18 13:00:00"),
-    endAt: moment("2015-12-18 15:00:00"),
-    interval: moment.duration(5, 'minutes'),
-  }
   return {
     startAt: moment(endtime).subtract(window),
     endAt: endtime,
@@ -179,9 +159,10 @@ export function acSearch(forceLoad) {
 
     // make api call
     Promise.all([
-      getWorkerPickCharts(filter),
-      //facilityContext.getWorkerPicksWithnWindow(filterToParams(filter)),
-      getWorkerPickByWorker(filter)
+      //getWorkerPickCharts(filter),
+      facilityContext.getWorkerPicksWithnWindow(filterToParams(filter)),
+      //getWorkerPickByWorker(filter)
+      facilityContext.getWorkerPicksWithnWindowAllWorkers(filterToParams(filter)),
     ])
     .catch((error) => {
       const whatIsLoading = getWorkerPickChart(getState()).whatIsLoading;

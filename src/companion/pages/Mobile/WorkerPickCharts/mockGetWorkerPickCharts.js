@@ -2,7 +2,7 @@
 import Promise from "bluebird";
 import moment from "moment";
 
-let data = [{
+export let data = [{
   key: 'facility',
   values: [
 
