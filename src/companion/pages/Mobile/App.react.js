@@ -25,7 +25,7 @@ class NavigationMenu extends Component {
               to="mobile-facility"
               id="mobile-facility"
               name="mobile-facility">
-                <Icon name="search" size="lg"/>
+                <Icon name="home" size="lg"/>
             </ButtonLink>
         </div>
         </div>

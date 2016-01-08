@@ -4,33 +4,28 @@ import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../link
 import Icon from "react-fa";
 
 class HomeSearch extends Component {
+
+  renderItem(to, iconName, title) {
+    return (
+        <ListGroupItemLink to={to} id={to} name={to}>
+          <div className="thumbnail-wrapper d48 circular bg-primary text-white inline">
+            <Icon name={iconName} size="lg"/>
+          </div>
+          <div className="p-l-10 inline">
+            <h3>{title}</h3>
+          </div>
+        </ListGroupItemLink>
+    );
+  }
+
   render() {
     return (
         <Row>
           <Col>
             <ListGroup>
-              <ListGroupItemLink
-                    to="mobile-search-orders"
-                    id="mobile-search-orders"
-                    name="mobile-search-orders">
-                <div className="thumbnail-wrapper d48 circular bg-primary text-white inline">
-                  <Icon name="shopping-cart" size="lg"/>
-                </div>
-                <div className="p-l-10 inline">
-                  <h3>Orders</h3>
-                </div>
-              </ListGroupItemLink>
-              <ListGroupItemLink
-                  to="mobile-search-workers"
-                  id="mobile-search-workers"
-                  name="mobile-search-workers">
-                <div className="thumbnail-wrapper d48 circular bg-primary text-white inline">
-                  <Icon name="users" size="lg"/>
-                </div>
-                <div className="p-l-10 inline">
-                  <h3>Workers</h3>
-                </div>
-              </ListGroupItemLink>
+              {this.renderItem("mobile-events", "bar-chart", "Productivity")}
+              {this.renderItem("mobile-search-workers", "shopping-cart", "Orders")}
+              {this.renderItem("mobile-search-workers", "users", "Workers")}
             </ListGroup>
           </Col>
         </Row>
