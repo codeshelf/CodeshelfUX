@@ -1,0 +1,21 @@
+<!-- change-che-description.html file
+-->
+<form name="che-form">
+	<div class="modal-header">
+		<h3>Adjust Slot LEDs</h3>
+	</div>
+	<div class="modal-body">
+      	<div class="alert alert-danger" ng-repeat="msg in slotLedForm.messages">{{msg}}</div>
+		<div id='instructions'>
+			<!-- forcing separate lines on these instructions-->
+			<p>Adjust First and Last LED for this slot.</p>
+		</div>
+
+		<p>First LED: <input type="text" name="firstLed" ng-model="slot.firstLed"></p>
+		<p>Last LED: <input type="text" name="lastLed" ng-model="slot.lastLed"></p>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" ng-click="controller.close()">Cancel</button>
+		<button class="btn btn-primary" ng-click="controller.ok()">Save</button>
+	</div>
+</form>

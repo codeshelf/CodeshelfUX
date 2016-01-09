@@ -57,6 +57,18 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 
 		'getViewTypeName': function() {
 			return 'Slots List';
+		},
+		
+		adjustSlotLeds: function(slot) {
+            var data = {
+                'slot': slot
+            };
+
+            logger_.info("about to call dialog to edit Slot LEDs: " + slot['domainId']);
+
+
+            // See codeshelfApp.SlotLEDController defined below. And then referenced in angular.module
+            var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-slot-leds.html", "SlotLEDController as controller", data);
 		}
 	};
 
@@ -66,6 +78,13 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 			"permission": "inventory:view",
 			"action": function(itemContext) {
 				codeshelf.windowLauncher.loadItemsListView(itemContext);
+			}
+		},
+		{
+			"label" : "Adjust Slot LEDs",
+			"permission": "slot:edit",
+			"action": function(itemContext) {
+				self.adjustSlotLeds(itemContext);
 			}
 		}
 	];
@@ -126,3 +145,39 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 
 	return view;
 };
+
+codeshelfApp.SlotLEDController = function($scope, $modalInstance, websession, data){
+	this.scope_ = $scope;
+    this.modalInstance_ = $modalInstance;
+    this.websession_ = websession;
+    $scope['slot'] = data['slot']
+    $scope['slot']['firstLed'] = data['slot']['firstLedNumAlongPath'];
+    $scope['slot']['lastLed'] = data['slot']['lastLedNumAlongPath'];    
+};
+
+
+/**
+ * @export
+ */
+codeshelfApp.SlotLEDController.prototype.ok = function(){
+    var slot = this.scope_['slot'];
+	var methodArgs = [
+		{ 'name': 'firstLed', 'value': slot['firstLed'] + "", 'classType': 'java.lang.String'},
+		{ 'name': 'lastLed',  'value': slot['lastLed'] + "",  'classType': 'java.lang.String'}
+	];
+    var self = this;
+    this.websession_.callMethod(slot, 'Slot', 'setSlotLeds', methodArgs)
+        .then(function(response) {
+            self.close();
+        }, function(error) {
+            self.scope_['slotLedForm'] = {"messages":[error["statusMessage"]]};
+            self.scope_.$apply();
+            console.error(error);
+        });
+};
+
+codeshelfApp.SlotLEDController.prototype.close = function(){
+	this.modalInstance_.close();
+}
+
+angular.module('codeshelfApp').controller('SlotLEDController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.SlotLEDController]);
