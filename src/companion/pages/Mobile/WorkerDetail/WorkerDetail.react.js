@@ -26,11 +26,6 @@ const tabToHeaderText = {
   [TAB_HISTORY]: "History",
 }
 
-const tabToDescriptionText = {
-  [TAB_DETAIL]: "Worker Header",
-  [TAB_HISTORY]: "Worker History",
-}
-
 // is called inide render of Detail component so have access to props
 function getTitleComponent(props, itemId) {
   if (props && props[TAB_DETAIL] && props[TAB_DETAIL].data) {
@@ -58,7 +53,6 @@ export class WorkerDetail extends Component {
         ALL_TABS,
         tabToComponent,
         tabToHeaderText,
-        tabToDescriptionText,
         getTitleComponent,
       }} />
     );

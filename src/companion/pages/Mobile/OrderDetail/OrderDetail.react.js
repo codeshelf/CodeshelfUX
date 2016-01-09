@@ -32,13 +32,6 @@ const tabToHeaderText = {
   [TAB_IMPORTS]: "Imports",
 }
 
-const tabToDescriptionText = {
-  [TAB_DETAIL]: "Order Header",
-  [TAB_ITEMS]: "Line Items",
-  [TAB_PICKS]: "Pick History",
-  [TAB_IMPORTS]: "Files",
-}
-
 // is called inide render of Detail component so have access to props
 function getTitleComponent(props, itemId) {
   if (props && props[TAB_DETAIL] && props[TAB_DETAIL].data) {
@@ -66,7 +59,6 @@ export class OrderDetail extends Component {
         ALL_TABS,
         tabToComponent,
         tabToHeaderText,
-        tabToDescriptionText,
         getTitleComponent,
       }} />
     );

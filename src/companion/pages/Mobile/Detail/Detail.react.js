@@ -26,8 +26,7 @@ export class Detail extends Component {
       <Tabs className="nav-tabs-simple" activeKey={activeTab} onSelect={(tab) => this.props.acSelectTab(tab, this.itemId)} tabWidth={1}>
         {this.props.ALL_TABS.map(tab =>
           <Tab eventKey={tab} title={this.props.tabToHeaderText[tab]}>
-            {this.props.tabToDescriptionText[tab]}
-            {loadedTime && " - loaded "}
+            {loadedTime && "loaded "}
             <TimeFromNow time={loadedTime}/>
           </Tab>
         )}
