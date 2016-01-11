@@ -1,102 +1,102 @@
 import React from "react";
 import moment from "moment";
 import d3 from "d3";
-require("nvd3/build/nv.d3.min.css");
-import nv from "exports?nv!nvd3/build/nv.d3.min.js";
-
+import ReactFauxDOM from 'react-faux-dom';
 import {connect} from 'react-redux';
 import {getSelectedFacility} from '../Facility/get';
 
-function updateChart(el, chart, data) {
-    d3.select(el).select("svg")
-        .datum(data)
-//        .transition().duration(500)
-        .call(chart);
+require('./histogramChart.styl');
 
-    //nv.utils.windowResize(chart.update);
+function printChart(node, interval, utcOffset, data, style) {
+  const duration = interval.asMilliseconds();
+  const bins = (data.endTime - data.startTime) / duration;
 
-    return chart;
-}
+  const {height, width, margins} = style;
+  const barWidth = width/bins;
 
+  /* Define ranges */
+  let max = 0;
+  const xRange = d3.scale.linear()
+      .domain([0, bins])
+      .range([margins.left, width - margins.right])
+  const yRange = d3.scale.linear().range([height - (margins.top + margins.bottom), 20]).domain([ 0,
+    d3.max(data.bins, (d) => {
+      max = Math.max(d.value === 0 ? d.value + 1 : d.value, max); 
+      return d.value === 0 ? d.value + 1 : d.value;
+    })
+  ])
 
-function chartSpec(startTime, interval, utcOffset) {
-  console.log("!!!! redrawq of chart", startTime);
-  console.log("!!!!!!!!!!!!", moment(startTime).format());
-  startTime = moment(startTime);
-            var chart = nv.models.multiBarChart()
-                    .duration(50)
-                    //.reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
-                    .rotateLabels(0)      //Angle to rotate x-axis labels.
-                    .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
-                    .groupSpacing(0.1)    //Distance between each group of bars.
-            ;
+  /* Define axis */
+  const xAxis = d3.svg.axis()
+    .scale(xRange)
+    .ticks(Math.min(bins, 12))
+    .tickSize(10)
+    .tickPadding(5)
+    .tickFormat((x) => moment.utc(data.startTime).add((x)*(interval.asMinutes()) , "m").format('HH:mm'));
 
+  const yAxis = d3.svg.axis()
+    .scale(yRange)
+    .ticks(max)
+    .orient("left")
+    .tickSubdivide(false)
+    .tickFormat((d) => d);
 
-/*
-            chart.xAxis.tickFormat(function(d) {
-                return d3.time.format("%-I:%M%p")(moment.unix(d).toDate());
-            });
-*/                //.xScale(d3.time.scale()); // use a time scale instead of plain numbers in order to get nice round default values in the axi
+  /* Create basic svg with specific dimensions */
+  const svg = d3.select(node)
+    .attr("width", width)
+    .attr("height", height);
 
-            console.log("!!!!! ofset", moment(startTime).add(utcOffset, "minutes").format("YYYY-MMMM-Do h:mm:ss a"));
-            console.log("!!!!! ofset", moment(startTime).add(utcOffset, "minutes").format());
-            console.log("!!!!! noofset", moment(startTime).format("YYYY-MMMM-Do h:mm:ss a"));
-            console.log("!!!!! noofset", moment(startTime).format());
-            chart.xAxis.tickFormat((x) => moment(startTime).add((x-1)*(interval.asMinutes()) , "m").format('HH:mm'));
+  /* Show horizontal grid */
+  svg.selectAll("line.horizontalGrid").data(yRange.ticks(max)).enter()
+      .append("line")
+          .attr(
+          {
+              "class": "horizontalGrid",
+              "x1" : margins.left,
+              "x2" : width -  margins.right,
+              "y1" : (d) => yRange(d),
+              "y2" : (d) => yRange(d),
+          });
 
-            chart.yAxis
-                .tickFormat(d3.format('d'));
+  /* Create axis */
+  svg.append("g")
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0,' + (height - (margins.bottom + margins.top)) + ')')
+      .call(xAxis);
 
-            chart.margin({"left":25, "right":0});
+  svg.append("g")
+      .attr('class', 'y axis')
+      .attr('transform', 'translate(' + (margins.left) + ', 0)')
+      .call(yAxis);
 
-/*
-            //Axis settings
-            var tickMultiFormat = d3.time.format.multi([
-                ["%-I:%M%:%S%p", function(d) { return d.getSeconds(); }], // not the beginning of the hour
-                ["%-I:%M%p", function(d) { return d.getMinutes(); }], // not the beginning of the hour
-                ["%-I%p", function(d) { return d.getHours(); }], // not midnight
-                ["%b %-d", function(d) { return d.getDate() != 1; }], // not the first of the month
-                ["%b %-d", function(d) { return d.getMonth(); }], // not Jan 1st
-                ["%Y", function() { return true; }]
-            ]);
-*/
-/*
-            chart.xAxis
-            //    .showMaxMin(false)
-            //.rotateLabels(-25) // Want longer labels? Try rotating them to fit easier.
-                .tickPadding(10)
-                .tickFormat(function (d) {
-                    return tickMultiFormat(new Date(d));
-                })
-;
+  /* Create bars */
+  let bar = svg.selectAll(".bar")
+      .data(data.bins)
+    .enter().append("g")
+      .attr("class", "bar")
+      .attr("transform", (d) => "translate(" + xRange((d.start - data.startTime)/duration) + "," + yRange(d.value) + ")")
+      
+  bar.append("rect")
+        .attr("width", (width -  margins.right - margins.left)/bins)
+        .attr("height", (d) => ((height - (margins.bottom + margins.top)) - yRange(d.value)))
+        .attr('fill', 'steelblue');
 
-*/
-       return chart;
+  /* Add text over each bar with its value (except 0) */
+  bar.append("text")
+            .attr("dy", ".75em")
+            .attr("y", -15)
+            .attr("x", barWidth/2)
+            .attr("text-anchor", "middle")
+            .text((d) => d.value !== 0 ? d.value : null);
+
+  return node;
 }
 
 const PickRateChartDummy = React.createClass({
     render: function() {
-        return (<div className="nvd3"><svg style={this.props.style}></svg></div>);
+     const {chartStyle, pickRates, interval, utcOffset} = this.props;
+     const svg = printChart(ReactFauxDOM.createElement('svg'), interval, utcOffset, pickRates, chartStyle);
+     return (<div className="d3">{svg.toReact()}</div>);
     },
-    componentDidMount: function() {
-        this.updateViews(this.props, this.getDOMNode());
-    },
-    componentWillUnmount: function() {
-
-    },
-    componentWillUpdate: function(nextProps, nextState) {
-        this.updateViews(nextProps, this.getDOMNode());
-    },
-
-    updateViews: function(props, el) {
-        var {pickRates, showControls, showXAxis, showYAxis, showLegend, startTime, interval, utcOffset} = props;
-        showLegend = (showLegend != null) ? showLegend : true;
-        var chart = chartSpec(startTime, interval, utcOffset);
-        chart.showControls(showControls);
-        chart.showLegend(showLegend);
-        chart.showXAxis(showXAxis);
-        chart.showYAxis(showYAxis);
-        updateChart(el, chart, pickRates);
-    }
 });
 export const PickRateChart = connect(getSelectedFacility)(PickRateChartDummy);

@@ -59,20 +59,6 @@ export class TopChart extends Component {
       end: 13//moment().endOf('day')
     };
 
-    //TODO delete after we have better component for showing data
-    function formatData(data) {
-      let res = [{
-        key: 'facility',
-        values: data.bins.map((el, index) => ({
-          key: "facility",
-          x: index,
-          y: el.value,
-        }))
-      }];
-      console.log("new Data !!!!!!!!!!!!!!!", res);
-      return res;
-    }
-
     return (
       <div>
         <h4>Facility Picks</h4>
@@ -111,16 +97,19 @@ export class TopChart extends Component {
         }
         {!showLoading && !showError &&
           <WidthWrapper>{(width) =>
-            <PickRateChart style={{width: width, height: width/2.5}}
-              startTime={this.props.data[0].startTime}
+            <PickRateChart
               interval={filter.interval}
-              startTimestamp={interval.start}
-              endTimestamp={interval.end}
-              pickRates={/*this.props.data[0]  data*/formatData(this.props.data[0])}
-              showControls={false}
-              showLegend={false}
-              showXAxis={true}
-              showYAxis={true} />
+              pickRates={this.props.data[0]}
+              chartStyle={{
+                height: width/2.5,
+                width: width,
+                margins: {
+                  top: 20,
+                  right: 20,
+                  bottom: 20,
+                  left: 50,
+                },
+              }} />
           }</WidthWrapper>}
       </div>
     );
