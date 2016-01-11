@@ -139,7 +139,7 @@ codeshelf.tierlistview = function(websession, facility, aisle) {
             var data = {
                 'tier': tier
             };
-			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-tier-leds.html", "TierLEDController as controller", data);
+			var promise = codeshelf.simpleDlogService.showCustomDialog("partials/change-tier-leds.html", "TierController as controller", data);
 		},
 
 		setControllerForTierOnly: function(item) {
@@ -321,7 +321,6 @@ codeshelfApp.TierController.prototype.ok = function(){
  * @export
  */
 codeshelfApp.TierController.prototype.setPoscons = function(){
-
 	var tier = this.scope_['tier'];
 	var tierName = tier['domainId'];
 	var startIndex = this.scope_['poscon']['startIndex'];
@@ -340,31 +339,15 @@ codeshelfApp.TierController.prototype.setPoscons = function(){
 /**
  * @export
  */
-codeshelfApp.TierController.prototype.cancel = function(){
-	this.modalInstance_['dismiss']();
-};
-angular.module('codeshelfApp').controller('TierController', ['$scope', '$modalInstance', 'websession', 'data', 'ledcontrollers', codeshelfApp.TierController]);
-
-
-//Tier LET Offset------------------------------------------------------------------- 
-codeshelfApp.TierLEDController = function($scope, $modalInstance, websession, data){
-	this.scope_ = $scope;
-    this.modalInstance_ = $modalInstance;
-    this.websession_ = websession;
-    $scope['tier'] = data['tier'];
-};
-
-/**
- * @export
- */
-codeshelfApp.TierLEDController.prototype.ok = function(){
+codeshelfApp.TierController.prototype.setLedOffset = function(){
     var tier = this.scope_['tier'];
     var offset = tier['offset'];
     var self = this;
     var methodArgs = [{ 'name': 'offset', 'value': offset, 'classType': 'int'}];
+    var modalInstance_ = this.modalInstance_;
 	this.websession_.callMethod(tier, 'Tier', 'offSetTierLeds', methodArgs)
         .then(function(response) {
-            self.close();
+        	modalInstance_.close();
         }, function(error) {
             self.scope_['tierLedForm'] = {"messages":[error["statusMessage"]]};
             self.scope_.$apply();
@@ -372,9 +355,11 @@ codeshelfApp.TierLEDController.prototype.ok = function(){
         });
 };
 
-codeshelfApp.TierLEDController.prototype.close = function(){
-	this.modalInstance_.close();
-}
 
-angular.module('codeshelfApp').controller('TierLEDController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.TierLEDController]);
-//----------------------------------------------------------------------------------
+/**
+ * @export
+ */
+codeshelfApp.TierController.prototype.cancel = function(){
+	this.modalInstance_['dismiss']();
+};
+angular.module('codeshelfApp').controller('TierController', ['$scope', '$modalInstance', 'websession', 'data', 'ledcontrollers', codeshelfApp.TierController]);

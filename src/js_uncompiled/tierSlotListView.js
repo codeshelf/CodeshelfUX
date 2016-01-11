@@ -146,15 +146,21 @@ codeshelf.tierslotlistview = function(websession, facility, inTier) {
 	return view;
 };
 
+/**
+ *  @param {!angular.Scope} $scope
+ *  @param  $modalInstance
+ *  @constructor
+ *  @ngInject
+ *  @export
+ */
 codeshelfApp.SlotLEDController = function($scope, $modalInstance, websession, data){
 	this.scope_ = $scope;
     this.modalInstance_ = $modalInstance;
     this.websession_ = websession;
-    $scope['slot'] = data['slot']
+    $scope['slot'] = data['slot'];
     $scope['slot']['firstLed'] = data['slot']['firstLedNumAlongPath'];
     $scope['slot']['lastLed'] = data['slot']['lastLedNumAlongPath'];    
 };
-
 
 /**
  * @export
@@ -176,8 +182,11 @@ codeshelfApp.SlotLEDController.prototype.ok = function(){
         });
 };
 
+/**
+ * @export
+ */
 codeshelfApp.SlotLEDController.prototype.close = function(){
 	this.modalInstance_.close();
-}
+};
 
 angular.module('codeshelfApp').controller('SlotLEDController', ['$scope', '$modalInstance', 'websession', 'data', codeshelfApp.SlotLEDController]);
