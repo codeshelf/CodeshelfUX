@@ -1,0 +1,17 @@
+<form name="tier-leds-form">
+	<div class="modal-header">
+		<h3>Tier LED Offset</h3>
+	</div>
+	<div class="modal-body">
+      	<div class="alert alert-danger" ng-repeat="msg in tierLedForm.messages">{{msg}}</div>
+		<div id='instructions'>
+			<!-- forcing separate lines on these instructions-->
+			<p>Enter LED Offset for Tier {{tier.nominalLocationId}}.</p>
+		</div>
+		<p><input type="text" name="offset" ng-model="tier.offset"></p>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" ng-click="controller.close()">Cancel</button>
+		<button class="btn btn-primary" ng-click="controller.ok()">Save</button>
+	</div>
+</form>
