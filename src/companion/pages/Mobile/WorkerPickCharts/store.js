@@ -15,6 +15,7 @@ const initState = new (Record({
   error: null,
   whatIsLoading: null,
   loadedTime: null,
+  expanded: false,
 }));
 
 function getDefaultFilter() {
@@ -31,6 +32,7 @@ const STATUS_OK = "ok";
 const STATUS_ERROR = "error";
 
 const SET_FILTER = "WPCH - set filter ";
+const TOGGLE_EXPAND = "toggle expand";
 
 export function workerPickChartReducer(state = initState, action) {
   switch (action.type) {
@@ -77,14 +79,25 @@ export function workerPickChartReducer(state = initState, action) {
       }
       return state.mergeIn(["filter"], new Map(filter));
     }
+    case TOGGLE_EXPAND: {
+      return state.set("expanded", !state.expanded);
+    }
     default: return state;
   }
 }
 
 export function acSetDefaultFilter() {
   return (dispatch, getState) => {
-    dispatch(acSetFilter(getDefaultFilter()))
+    dispatch(acSetFilter(getDefaultFilter()));
     dispatch(acSearch(true));
+  }
+}
+
+export function acToggleExpand() {
+  return (dispatch, getState) => {
+    dispatch({
+      type: TOGGLE_EXPAND,
+    })
   }
 }
 
@@ -98,9 +111,9 @@ function moveGraphToFactory(howToMove) {
   }
 }
 
-export const acMoveGrahToLeft = () => moveGraphToFactory(
+export const acMoveGraphToLeft = () => moveGraphToFactory(
   (end, window) => moment(end).subtract(window));
-export const acMoveGrahToRight = () => moveGraphToFactory(
+export const acMoveGraphToRight = () => moveGraphToFactory(
   (end, window) => moment(end).add(window));
 
 

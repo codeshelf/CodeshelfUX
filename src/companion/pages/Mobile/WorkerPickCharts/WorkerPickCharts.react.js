@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import {getWorkerPickChartMutable} from "./get";
 import {acSetDefaultFilter, acSetFilter, acSearch, acRefresh,
- acMoveGrahToRight, acMoveGrahToLeft, acSetFilterAndRefresh} from "./store";
+ acMoveGraphToRight, acMoveGraphToLeft, acSetFilterAndRefresh, acToggleExpand} from "./store";
 
 
 import {TopChart} from "./TopChart";
@@ -35,7 +35,7 @@ class WorkerPickCharts extends Component {
 
 function mapDispatch(dispatch) {
   return bindActionCreators({acSetDefaultFilter, acSetFilter, acSearch,
-   acRefresh, acMoveGrahToLeft, acMoveGrahToRight, acSetFilterAndRefresh}, dispatch);
+   acRefresh, acMoveGraphToLeft, acMoveGraphToRight, acSetFilterAndRefresh, acToggleExpand}, dispatch);
 }
 
 export default connect(getWorkerPickChartMutable, mapDispatch)(WorkerPickCharts);
