@@ -7,12 +7,14 @@ import {getSelectedFacility} from '../Facility/get';
 
 require('./histogramChart.styl');
 
-function printChart(node, interval, utcOffset, data, style) {
+function printChart(node, expanded, limit, interval, utcOffset, data, style) {
   const duration = interval.asMilliseconds();
   const bins = (data.endTime - data.startTime) / duration;
 
-  const {height, width, margins} = style;
-  const barWidth = width/bins;
+  const {height, margins} = style;
+  const binCount = expanded ? bins: Math.min(bins, 12);
+  const barWidth = expanded ? style.barWidth: (style.width - margins.left - margins.right)/bins;
+  const width = expanded ? Math.max(style.width, bins * barWidth): style.width;
 
   /* Define ranges */
   let max = 0;
@@ -25,11 +27,10 @@ function printChart(node, interval, utcOffset, data, style) {
       return d.value === 0 ? d.value + 1 : d.value;
     })
   ])
-
   /* Define axis */
   const xAxis = d3.svg.axis()
     .scale(xRange)
-    .ticks(Math.min(bins, 12))
+    .ticks(binCount)
     .tickSize(10)
     .tickPadding(5)
     .tickFormat((x) => moment.utc(data.startTime).add((x)*(interval.asMinutes()) , "m").format('HH:mm'));
@@ -77,7 +78,7 @@ function printChart(node, interval, utcOffset, data, style) {
       .attr("transform", (d) => "translate(" + xRange((d.start - data.startTime)/duration) + "," + yRange(d.value) + ")")
       
   bar.append("rect")
-        .attr("width", (width -  margins.right - margins.left)/bins)
+        .attr("width", barWidth)
         .attr("height", (d) => ((height - (margins.bottom + margins.top)) - yRange(d.value)))
         .attr('fill', 'steelblue');
 
@@ -96,9 +97,14 @@ function printChart(node, interval, utcOffset, data, style) {
 
 const HistogramChartDummy = React.createClass({
     render: function() {
-     const {chartStyle, pickRates, interval, utcOffset} = this.props;
-     const svg = printChart(ReactFauxDOM.createElement('svg'), interval, utcOffset, pickRates, chartStyle);
-     return (<div className="d3">{svg.toReact()}</div>);
+     const {chartStyle, pickRates, interval, utcOffset, expanded, limit} = this.props;
+     const svg = printChart(ReactFauxDOM.createElement('svg'), expanded, limit, interval, utcOffset, pickRates, chartStyle);
+     return (
+        <div
+          className={expanded ? "histogram": null}>
+          {svg.toReact()}
+        </div>
+      );
     },
 });
 export const HistogramChart = connect(getSelectedFacility)(HistogramChartDummy);

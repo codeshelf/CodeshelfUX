@@ -42,8 +42,8 @@ const WINDOW_DURATIONS= [
 
 export class TopChart extends Component {
   render() {
-    const {filter, error, whatIsLoading, whatIsLoaded, acMoveGrahToLeft,
-      acMoveGrahToRight, acSetFilterAndRefresh, acSearch} = this.props;
+    const {filter, error, expanded, whatIsLoading, whatIsLoaded, acMoveGrahToLeft,
+      acMoveGrahToRight, acSetFilterAndRefresh, acSearch, acToggleExpand} = this.props;
 
     const showLoading = (whatIsLoading !== null || (whatIsLoaded === null && !error));
     const showError = (whatIsLoading === null && !!error);
@@ -58,7 +58,6 @@ export class TopChart extends Component {
       start: 10, //moment().startOf('day'),
       end: 13//moment().endOf('day')
     };
-
     return (
       <div>
         <h4>Facility Picks</h4>
@@ -72,6 +71,10 @@ export class TopChart extends Component {
 
           <DurationPicker bsStyle="pull-right" value={ filter.window }
             durations={WINDOW_DURATIONS} onChange={(d) => acSetFilterAndRefresh({window: d})} />
+
+          <Button bsStyle="primary pull-left" bsSize="s" onClick={acToggleExpand}>
+            {expanded ? "Shrink": "Expand"}
+          </Button>
 
           <Button bsStyle="primary pull-right" bsSize="xs" onClick={acMoveGrahToRight}>
             <Icon name="step-forward" />
@@ -98,11 +101,14 @@ export class TopChart extends Component {
         {!showLoading && !showError &&
           <WidthWrapper>{(width) =>
             <HistogramChart
+              expanded={expanded}
+              limit={12}
               interval={filter.interval}
               pickRates={this.props.data[0]}
               chartStyle={{
                 height: width/2.5,
                 width: width,
+                barWidth: 60,
                 margins: {
                   top: 20,
                   right: 20,
