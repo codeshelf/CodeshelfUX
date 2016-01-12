@@ -33,7 +33,10 @@ function printChart(node, expanded, limit, interval, utcOffset, data, style) {
     .ticks(binCount)
     .tickSize(10)
     .tickPadding(5)
-    .tickFormat((x) => moment.utc(data.startTime).add((x)*(interval.asMinutes()) , "m").format('HH:mm'));
+    .tickFormat((x) => moment.utc(data.startTime)
+                             .add((x)*(interval.asMinutes()) , "m")
+                             .add(utcOffset, "m")
+                             .format('HH:mm'));
 
   const yAxis = d3.svg.axis()
     .scale(yRange)
