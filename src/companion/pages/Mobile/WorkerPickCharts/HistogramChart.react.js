@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 import moment from "moment";
 import d3 from "d3";
 import ReactFauxDOM from 'react-faux-dom';
@@ -95,16 +95,17 @@ function printChart(node, expanded, limit, interval, utcOffset, data, style) {
   return node;
 }
 
-const HistogramChartDummy = React.createClass({
-    render: function() {
-     const {chartStyle, pickRates, interval, utcOffset, expanded, limit} = this.props;
-     const svg = printChart(ReactFauxDOM.createElement('svg'), expanded, limit, interval, utcOffset, pickRates, chartStyle);
-     return (
-        <div
-          className={expanded ? "histogram": null}>
-          {svg.toReact()}
-        </div>
-      );
-    },
-});
+class HistogramChartDummy extends Component {
+  render() {
+   const {chartStyle, pickRates, interval, utcOffset, expanded, limit} = this.props;
+   const svg = printChart(ReactFauxDOM.createElement('svg'), expanded, limit, interval, utcOffset, pickRates, chartStyle);
+   return (
+      <div
+        className={expanded ? "histogram": null}>
+        {svg.toReact()}
+      </div>
+    );
+  }
+};
+
 export const HistogramChart = connect(getSelectedFacility)(HistogramChartDummy);
