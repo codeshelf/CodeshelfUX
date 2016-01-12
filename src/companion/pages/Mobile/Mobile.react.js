@@ -57,12 +57,7 @@ const createStoreWithMiddleware = compose(
 let store = createStoreWithMiddleware(rootReducer)
 
 // load data from local storage but only if version is greater than actual version
-let versionInStorage = -1;
-try {
-  versionInStorage = localStorage.getItem(storageConfig.STORAGE_KEY_VERSION);
-} catch (e) {
-  console.info("Error loading from storage. " + e.message);
-}
+const versionInStorage = localStorage.getItem(storageConfig.STORAGE_KEY_VERSION);
 
 if (versionInStorage >= storageConfig.VERSION) {
   storage.createLoader(storageEngine)(store);
