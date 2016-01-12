@@ -178,13 +178,17 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
         return state.setIn(["tab"], tab);
       }
       case 'REDUX_STORAGE_LOAD': {
-        const {payload} = action;
-        const savedStorage = getLocalStore(payload);
-        let newState = state;
-        ALL_TABS.forEach((tab) => {
-          newState = newState.mergeIn([tab, "settings", "properties"], new Map(savedStorage[tab]["settings"]["properties"]));
-        });
-        return newState;
+        try {
+          const {payload} = action;
+          const savedStorage = getLocalStore(payload);
+          let newState = state;
+          ALL_TABS.forEach((tab) => {
+            newState = newState.mergeIn([tab, "settings", "properties"], new Map(savedStorage[tab]["settings"]["properties"]));
+          });
+          return newState;
+        } catch(e) {
+          return state;
+        }
       }
       default: return state;
     }
