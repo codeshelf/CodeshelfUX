@@ -63,8 +63,10 @@ class Login extends React.Component {
 
   render() {
     const form = getForm().toJS();
-
-    return (<FormPageLayout title="Codeshelf Companion">
+    const title = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      ? "Pocket Codeshelf"
+      : "Codeshelf Companion";
+    return (<FormPageLayout title={title}>
                         {form.error &&
                             <ErrorDisplay message={form.error.message} />}
 
