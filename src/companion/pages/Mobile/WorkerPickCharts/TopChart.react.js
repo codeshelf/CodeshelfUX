@@ -3,7 +3,7 @@ import {Panel, Tabs, Tab, Row, Col, Button, ListGroup,
   ListGroupItem, Badge, DropdownButton, MenuItem} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {WidthWrapper} from "./WidthWrapper.react.js";
-import {PickRateChart} from './tmpPickRateChart.react.js';
+import {HistogramChart} from './HistogramChart.react.js';
 
 import moment from 'moment';
 
@@ -97,7 +97,7 @@ export class TopChart extends Component {
         }
         {!showLoading && !showError &&
           <WidthWrapper>{(width) =>
-            <PickRateChart
+            <HistogramChart
               interval={filter.interval}
               pickRates={this.props.data[0]}
               chartStyle={{

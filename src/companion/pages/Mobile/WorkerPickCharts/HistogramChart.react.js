@@ -82,21 +82,23 @@ function printChart(node, interval, utcOffset, data, style) {
         .attr('fill', 'steelblue');
 
   /* Add text over each bar with its value (except 0) */
-  bar.append("text")
-            .attr("dy", ".75em")
-            .attr("y", -15)
-            .attr("x", barWidth/2)
-            .attr("text-anchor", "middle")
-            .text((d) => d.value !== 0 ? d.value : null);
+  if (barWidth > 25) {
+    bar.append("text")
+              .attr("dy", ".75em")
+              .attr("y", -15)
+              .attr("x", barWidth/2)
+              .attr("text-anchor", "middle")
+              .text((d) => d.value !== 0 ? d.value : null);
+  }
 
   return node;
 }
 
-const PickRateChartDummy = React.createClass({
+const HistogramChartDummy = React.createClass({
     render: function() {
      const {chartStyle, pickRates, interval, utcOffset} = this.props;
      const svg = printChart(ReactFauxDOM.createElement('svg'), interval, utcOffset, pickRates, chartStyle);
      return (<div className="d3">{svg.toReact()}</div>);
     },
 });
-export const PickRateChart = connect(getSelectedFacility)(PickRateChartDummy);
+export const HistogramChart = connect(getSelectedFacility)(HistogramChartDummy);
