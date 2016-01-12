@@ -15,30 +15,25 @@ import {DateDisplay} from "../DateDisplay.react.js";
 
 export class DurationPicker extends Component {
   render() {
-    const {value, onChange, durations} = this.props;
+    const {value, onChange, durations, } = this.props;
     return (
-      <DropdownButton bsStyle="default" bsSize="small" title={value.humanize()}
+      <DropdownButton bsStyle="default" bsSize="small" title={value['interval'].humanize() + " " + value['window'].humanize()}
         onSelect={(ev, dur) => onChange(dur)}>
         {durations.map((d, index) => (
-          <MenuItem key={index} eventKey={d}>{d.humanize()}</MenuItem>
+          <MenuItem key={index} eventKey={d}>{d['interval'].humanize() + " " + d['window'].humanize()}</MenuItem>
         ))}
       </DropdownButton>
     );
   }
 }
 
-const INTERVAL_DURATIONS = [
-  moment.duration(5, 'minutes'),
-  moment.duration(15, 'minutes'),
-  moment.duration(1, 'hours'),
+const DURATIONS = [
+  { interval: moment.duration(5, 'minutes'), window: moment.duration(1, 'hours')},
+  { interval: moment.duration(15, 'minutes'), window:moment.duration(6, 'hours')},
+  { interval: moment.duration(1, 'hours'), window: moment.duration(1, 'days')},
+  { interval: moment.duration(6, 'hours'), window: moment.duration(6, 'days')},
 ];
 
-const WINDOW_DURATIONS= [
-  moment.duration(2, 'hours'),
-  moment.duration(4, 'hours'),
-  moment.duration(24, 'hours'),
-  moment.duration(7, 'days')
-]
 
 export class TopChart extends Component {
   render() {
@@ -51,13 +46,6 @@ export class TopChart extends Component {
     if (error && (error instanceof csapi.ConnectionError || error.message)) {
       errorText = error.message;
     }
-    //console.log(`!!!!!!!!!!!!!!!!!!!! ${showLoading} ${showError}`)
-    //console.log(`!!!!!!!!!!!!!!!!!!!! ${whatIsLoading !== null} ${showError}`)
-    //TODO Andrej remove after proper implementaion of d3 chart
-    let interval = {
-      start: 10, //moment().startOf('day'),
-      end: 13//moment().endOf('day')
-    };
     return (
       <div>
         <h4>Facility Picks</h4>
@@ -66,12 +54,8 @@ export class TopChart extends Component {
             <Icon name="step-backward" />
           </Button>
 
-          <DurationPicker bsStyle="pull-left" value={ filter.interval }
-            durations={INTERVAL_DURATIONS} onChange={(d) => acSetFilterAndRefresh({interval: d})} />
-
-          <DurationPicker bsStyle="pull-right" value={ filter.window }
-            durations={WINDOW_DURATIONS} onChange={(d) => acSetFilterAndRefresh({window: d})} />
-
+          <DurationPicker bsStyle="pull-left" value={filter}
+            durations={DURATIONS} onChange={acSetFilterAndRefresh} />
           <Button bsStyle="primary pull-left" bsSize="s" onClick={acToggleExpand}>
             {expanded ? "Shrink": "Expand"}
           </Button>

@@ -12,7 +12,7 @@ function printChart(node, expanded, limit, interval, utcOffset, data, style) {
   const bins = (data.endTime - data.startTime) / duration;
 
   const {height, margins} = style;
-  const binCount = expanded ? bins: Math.min(bins, 12);
+  const binCount = expanded ? bins: Math.min(bins, style.width/60);
   const barWidth = expanded ? style.barWidth: (style.width - margins.left - margins.right)/bins;
   const width = expanded ? Math.max(style.width, bins * barWidth): style.width;
 
