@@ -75,7 +75,7 @@ export class TopChart extends Component {
         {showError &&
           <Row>
             <Col xs={8}>
-              Error: {text}
+              Error: {errorText}
             </Col>
             <Col xs={4}>
               <Button bsStyle="primary" bsSize="xs" onClick={()=> acSearch(true)}><Icon name="refresh" /></Button>
