@@ -88,7 +88,7 @@ export function workerPickChartReducer(state = initState, action) {
 
 export function acSetDefaultFilter() {
   return (dispatch, getState) => {
-    dispatch(acSetFilter(getDefaultFilter()))
+    dispatch(acSetFilter(getDefaultFilter()));
     dispatch(acSearch(true));
   }
 }
@@ -111,9 +111,9 @@ function moveGraphToFactory(howToMove) {
   }
 }
 
-export const acMoveGrahToLeft = () => moveGraphToFactory(
+export const acMoveGraphToLeft = () => moveGraphToFactory(
   (end, window) => moment(end).subtract(window));
-export const acMoveGrahToRight = () => moveGraphToFactory(
+export const acMoveGraphToRight = () => moveGraphToFactory(
   (end, window) => moment(end).add(window));
 
 

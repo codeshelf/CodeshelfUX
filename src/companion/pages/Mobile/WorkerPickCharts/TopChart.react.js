@@ -37,8 +37,8 @@ const DURATIONS = [
 
 export class TopChart extends Component {
   render() {
-    const {filter, error, expanded, whatIsLoading, whatIsLoaded, acMoveGrahToLeft,
-      acMoveGrahToRight, acSetFilterAndRefresh, acSearch, acToggleExpand} = this.props;
+    const {filter, error, expanded, whatIsLoading, whatIsLoaded, acMoveGraphToLeft,
+      acMoveGraphToRight, acSetFilterAndRefresh, acSearch, acToggleExpand} = this.props;
 
     const showLoading = (whatIsLoading !== null || (whatIsLoaded === null && !error));
     const showError = (whatIsLoading === null && !!error);
@@ -50,7 +50,7 @@ export class TopChart extends Component {
       <div>
         <h4>Facility Picks</h4>
         <Row>
-          <Button bsStyle="primary pull-left" bsSize="xs" onClick={acMoveGrahToLeft}>
+          <Button bsStyle="primary pull-left" bsSize="xs" onClick={acMoveGraphToLeft}>
             <Icon name="step-backward" />
           </Button>
 
@@ -60,7 +60,7 @@ export class TopChart extends Component {
             {expanded ? "Shrink": "Expand"}
           </Button>
 
-          <Button bsStyle="primary pull-right" bsSize="xs" onClick={acMoveGrahToRight}>
+          <Button bsStyle="primary pull-right" bsSize="xs" onClick={acMoveGraphToRight}>
             <Icon name="step-forward" />
           </Button>
         </Row>
