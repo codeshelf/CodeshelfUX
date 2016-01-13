@@ -21,7 +21,7 @@ export class SearchType extends Component {
 
   state = {
     tab: 1,
-  }
+  };
 
   handleChange(selectedKey) {
     this.setState({tab: selectedKey});
