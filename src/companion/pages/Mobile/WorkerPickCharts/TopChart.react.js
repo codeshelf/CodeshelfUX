@@ -48,7 +48,16 @@ export class TopChart extends Component {
     }
     return (
       <div>
-        <h4>Facility Picks</h4>
+        <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
+          <Col xs={6}>
+            <h4 >Facility Picks</h4>
+          </Col>
+          <Col xs={6} style={{lineHeight: "53px", verticalAlign:"middle", textAlign: "right"}}>
+              <Button  bsStyle="primary"  bsSize="xs" onClick={()=> acSearch(true)}>
+                <Icon name="refresh" />
+              </Button>
+        </Col>
+        </Row>
         <Row>
           <Col>
             <div className="text-center">
@@ -64,9 +73,6 @@ export class TopChart extends Component {
           <Row>
             <Col xs={8}>
               Error: {errorText}
-            </Col>
-            <Col xs={4}>
-              <Button bsStyle="primary" bsSize="xs" onClick={()=> acSearch(true)}><Icon name="refresh" /></Button>
             </Col>
           </Row>
         }
