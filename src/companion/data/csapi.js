@@ -360,8 +360,8 @@ export function getFacilityContext(selectedFacility) {
 
         getWorkerPicksWithnWindowAllWorkers: function({startAt, endAt, interval}) {
           var path = facilityPath + "/picks/workers/histogram";
-          startAt = moment(startAt).add(this.utcOffset, "minutes");
-          endAt = moment(endAt).add(this.utcOffset, "minutes");
+          startAt = moment(startAt);
+          endAt = moment(endAt);
           const created = startAt.toISOString() + "/" + endAt.toISOString();
           const createdBin = interval.toISOString();
           return ajax(path, {
