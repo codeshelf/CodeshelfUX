@@ -9,7 +9,7 @@ class DateDisplayDumm extends Component {
  render() {
    if (!this.props.utcOffset) return null;
    return (
-     <DateDisplayWithOfset cellData={this.props.date}
+     <DateDisplayWithOfset style={this.props.style} cellData={this.props.date}
          utcOffset={this.props.utcOffset}
          granularity={this.props.granularity}
       />

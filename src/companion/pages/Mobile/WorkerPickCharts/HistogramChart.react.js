@@ -20,13 +20,20 @@ function printChart(node, expanded, limit, interval, utcOffset, data, style) {
   let max = 0;
   const xRange = d3.scale.linear()
       .domain([0, bins])
-      .range([margins.left, width - margins.right])
+      .range([margins.left, width - margins.right]);
   const yRange = d3.scale.linear().range([height - (margins.top + margins.bottom), 20]).domain([ 0,
     d3.max(data.bins, (d) => {
-      max = Math.max(d.value === 0 ? d.value + 1 : d.value, max); 
+      max = Math.max(d.value === 0 ? d.value + 1 : d.value, max);
       return d.value === 0 ? d.value + 1 : d.value;
     })
   ])
+
+  let yGridValues = [0, max];
+  if (max %2 == 0) {
+    yGridValues = [0, max/2, max];
+  } else {
+    yGridValues = [0, Math.floor(max/2) +1, max];
+  }
   /* Define axis */
   const xAxis = d3.svg.axis()
     .scale(xRange)
@@ -40,7 +47,7 @@ function printChart(node, expanded, limit, interval, utcOffset, data, style) {
 
   const yAxis = d3.svg.axis()
     .scale(yRange)
-    .ticks(max)
+    .tickValues(yGridValues)
     .orient("left")
     .tickSubdivide(false)
     .tickFormat((d) => d);
@@ -51,8 +58,10 @@ function printChart(node, expanded, limit, interval, utcOffset, data, style) {
     .attr("height", height);
 
   /* Show horizontal grid */
-  svg.selectAll("line.horizontalGrid").data(yRange.ticks(max)).enter()
-      .append("line")
+  svg.selectAll("line.horizontalGrid")
+     .data(yGridValues)
+     .enter()
+     .append("line")
           .attr(
           {
               "class": "horizontalGrid",
@@ -79,7 +88,7 @@ function printChart(node, expanded, limit, interval, utcOffset, data, style) {
     .enter().append("g")
       .attr("class", "bar")
       .attr("transform", (d) => "translate(" + xRange((d.start - data.startTime)/duration) + "," + yRange(d.value) + ")")
-      
+
   bar.append("rect")
         .attr("width", barWidth)
         .attr("height", (d) => ((height - (margins.bottom + margins.top)) - yRange(d.value)))

@@ -10,7 +10,7 @@ export default class DateDisplay extends React.Component {
     }
 
     render() {
-        let {cellData, utcOffset /*in minutes */, granularity} = this.props;
+        let {cellData, utcOffset /*in minutes */, granularity, style} = this.props;
         let formattedDate = "";
         if (cellData) {
           let date = cellData;
@@ -26,6 +26,6 @@ export default class DateDisplay extends React.Component {
             formattedDate = (cellData) ? formatTimestamp(date) : "";
           }
         }
-        return (<span data-value={cellData}>{formattedDate}</span>);
+        return (<span style={style} data-value={cellData}>{formattedDate}</span>);
     }
 }
