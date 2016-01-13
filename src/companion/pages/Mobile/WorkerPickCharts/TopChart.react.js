@@ -17,7 +17,7 @@ export class DurationPicker extends Component {
   render() {
     const {value, onChange, durations, } = this.props;
     return (
-      <DropdownButton bsStyle="default" bsSize="small" title={value['interval'].humanize() + " " + value['window'].humanize()}
+      <DropdownButton bsStyle="default" bsSize="small" title={`events per ${value['interval'].humanize()} ${value['window'].humanize()}`}
         onSelect={(ev, dur) => onChange(dur)}>
         {durations.map((d, index) => (
           <MenuItem key={index} eventKey={d}>{d['interval'].humanize() + " " + d['window'].humanize()}</MenuItem>
@@ -50,23 +50,11 @@ export class TopChart extends Component {
       <div>
         <h4>Facility Picks</h4>
         <Row>
-          <Button bsStyle="primary pull-left" bsSize="xs" onClick={acMoveGraphToLeft}>
-            <Icon name="step-backward" />
-          </Button>
-
-          <DurationPicker bsStyle="pull-left" value={filter}
-            durations={DURATIONS} onChange={acSetFilterAndRefresh} />
-          <Button bsStyle="primary pull-left" bsSize="s" onClick={acToggleExpand}>
-            {expanded ? "Shrink": "Expand"}
-          </Button>
-
-          <Button bsStyle="primary pull-right" bsSize="xs" onClick={acMoveGraphToRight}>
-            <Icon name="step-forward" />
-          </Button>
-        </Row>
-        <Row style={{"padding-left": "10px"}}>
-          <div><DateDisplay date={moment(filter.endtime).subtract(filter.window)} /></div>
-          <div><DateDisplay date={filter.endtime.format()} /></div>
+          <Col>
+            <div className="text-center">
+            <DurationPicker  value={filter} durations={DURATIONS} onChange={acSetFilterAndRefresh} />
+            </div>
+          </Col>
         </Row>
         {showLoading &&
           <div style={{minHeight:"200px"}}>
@@ -82,6 +70,14 @@ export class TopChart extends Component {
             </Col>
           </Row>
         }
+        <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
+          <Col>
+            <Button bsStyle="link" className="pull-right" bsSize="sm" onClick={acToggleExpand}>
+              <Icon name={expanded ? "compress": "expand"} />
+            </Button>
+          </Col>
+        </Row>
+        <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
         {!showLoading && !showError &&
           <WidthWrapper>{(width) =>
             <HistogramChart
@@ -101,6 +97,23 @@ export class TopChart extends Component {
                 },
               }} />
           }</WidthWrapper>}
+          </Row>
+          <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
+            <Col>
+              <div className="pull-left" style={{display: "table"}}>
+                <Button bsStyle="link" className="pull-left" bsSize="md" onClick={acMoveGraphToLeft}>
+                  <Icon name="step-backward" />
+                </Button>
+                <DateDisplay style={{display: "table-cell",  verticalAlign:"middle"}} date={moment(filter.endtime).subtract(filter.window)} />
+              </div>
+              <div className="pull-right" style={{display: "table"}}>
+               <DateDisplay style={{display: "table-cell", verticalAlign: "middle"}} date={filter.endtime.format()} />
+                <Button bsStyle="link" bsSize="md" onClick={acMoveGraphToRight}>
+                  <Icon name="step-forward" />
+                </Button>
+              </div>
+            </Col>
+          </Row>
       </div>
     );
   }
