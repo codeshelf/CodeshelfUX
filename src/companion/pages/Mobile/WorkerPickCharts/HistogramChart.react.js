@@ -27,6 +27,13 @@ function printChart(node, expanded, limit, interval, utcOffset, data, style) {
       return d.value === 0 ? d.value + 1 : d.value;
     })
   ])
+
+  let yGridValues = [0, max];
+  if (max %2 == 0) {
+    yGridValues = [0, max/2, max];
+  } else {
+    yGridValues = [0, Math.floor(max/2) +1, max];
+  }
   /* Define axis */
   const xAxis = d3.svg.axis()
     .scale(xRange)
