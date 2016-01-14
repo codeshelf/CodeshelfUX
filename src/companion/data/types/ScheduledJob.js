@@ -12,7 +12,6 @@ export const types = [
     {value: "DatabasePurge", label: "Database Purge"},
     {value: "DatabaseSizeCheck", label: "Database Size Check"},
     {value: "DropboxCheck", label: "Dropbox Connection Check"},
-    {value: "EdiFilesPurge", label: "EDI Files Purge"},
     {value: "EdiSizeCheck", label: "EDI Size Check"},
     {value: "EdiPurge", label: "EDI Purge"},
     {value: "IsProductionServer", label: "Production Property Check"},
