@@ -312,7 +312,12 @@ export function getFacilityContext(selectedFacility) {
         deleteOrders: () => {
             return ajax(ordersPath, {method: "DELETE"});
         },
-
+        getChes: (params) => {
+          var chesPath = facilityPath + "/ches";
+          return ajax(chesPath, {
+            data: params
+          });
+        },
         findWorkers: function(filter) {
           var workersPath = facilityPath + "/workers";
           return ajax(workersPath, {
@@ -490,7 +495,19 @@ export function getFacilityContext(selectedFacility) {
                 contentType: "form"
             });
         },
-
+        createEvent(cheName, workerId, type, createTime) {
+          let eventPath = facilityPath + "/ches/" + cheName + "/events";
+          return ajax(eventPath, {
+            method: "POST",
+            data: {
+              workerId: workerId,
+              type: type,
+              created: createTime
+            },
+            contentType: "form",
+            accept: "text/plain"
+          });
+        },
         getEventPurposes() {
           var pickRatePurposesUrl = facilityPath + "/pickrate/search";
           return ajax(pickRatePurposesUrl, {

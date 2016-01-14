@@ -7,6 +7,7 @@ import {Iterable} from 'immutable';
 
 Iterable.prototype[Symbol.for('get')] = function(value) {return this.get(value); };
 
+require("expose?cli!./scripting/index.js");
 
 // Never render to body. Everybody updates it.
 // https://medium.com/@dan_abramov/two-weird-tricks-that-fix-react-7cf9bbdef375
