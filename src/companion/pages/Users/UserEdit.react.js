@@ -24,7 +24,9 @@ const returnRoute = "users";
 function handleSave(formMap: Map) {
     let user = formMap.toJS();
     let subFields = _.difference(fields, ["id", "username"]);
-    return updateUser(user.id, _.pick(user, subFields));
+    let params = _.pick(user, subFields);
+    params.roles = (params.roles.join) ? params.roles.join(",") : '';
+    return updateUser(user.id, params);
 }
 
 function toSelectedUser(ComponentForm) {
