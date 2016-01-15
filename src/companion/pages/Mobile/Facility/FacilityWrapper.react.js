@@ -53,6 +53,7 @@ class FacilityWrapper extends Component {
                       availableFacilities={availableFacilities}
                       acSelectFacility={this.props.acSelectFacility}
                       acToggleSidebar={this.props.acToggleSidebar}
+                      isOpen={this.props.isOpen}
                       />
       );
     }

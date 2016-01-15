@@ -75,11 +75,10 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.props)
     return (
         <div id="outer-wrapper">
           <Sidebar sidebar={this.getSidebarContent()}
-            open={this.props.sidebar.isOpen}
+            open={this.props.isOpen}
             docked={false}
             onSetOpen={(open) => this.props.acToggleSidebar(open)}
             style={{

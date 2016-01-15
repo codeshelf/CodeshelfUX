@@ -1,7 +1,12 @@
 // Helpers to extract part of store state from global state
 import {asMutable} from "pages/Mobile/asMutable";
+import {Record} from 'immutable';
 
-export function getFacility({facility}) {
+export function getFacility(state) {
+  let {facility} = state;
+  facility = facility.toObject();
+  facility['isOpen'] = state.sidebar.isOpen;
+  facility = new (Record(facility));
   return facility;
 }
 
