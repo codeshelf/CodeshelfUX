@@ -3,10 +3,11 @@
 
 import * as api from "data/csapi";
 import * as jsp from "jspath";
-import moment from "moment";
+import * as momentjs from "moment";
 
 export const csapi = api;
 export const jspath = jsp.apply;
+export const moment = momentjs;
 
 export function log(promise) {
     promise.then(x => console.log(x));

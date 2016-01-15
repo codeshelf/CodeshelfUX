@@ -374,6 +374,17 @@ export function getFacilityContext(selectedFacility) {
           });
         },
 
+        getWorkerEventHistogram({id, startAt, endAt, interval}) {
+          var workerPath = facilityPath + "/workers/" + id + "/events/histogram";
+          startAt = moment(startAt);
+          endAt = moment(endAt);
+          const created = startAt.toISOString() + "/" + endAt.toISOString();
+          const createdBin = interval.toISOString();
+          return ajax(workerPath, {
+            data: {created, createdBin}
+          });
+        },
+
         getWorkers: function(params) {
             var workersPath = facilityPath + "/workers";
             return ajax(workersPath, {
