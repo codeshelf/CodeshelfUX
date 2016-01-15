@@ -5,11 +5,11 @@ import exposeRouter from 'components/common/exposerouter';
 import {RouteHandler} from 'react-router';
 
 import {acInitialLoadFacilities, acSelectFacility} from './store';
+import {acToggleSidebar} from '../Sidebar/store';
 import {getFacilityMutable} from "./get";
 
-
 function mapDispatch(dispatch) {
-  return bindActionCreators({acInitialLoadFacilities, acSelectFacility}, dispatch);
+  return bindActionCreators({acInitialLoadFacilities, acSelectFacility, acToggleSidebar}, dispatch);
 }
 
 class FacilityWrapper extends Component {
@@ -51,7 +51,9 @@ class FacilityWrapper extends Component {
        <RouteHandler key={selectedFacility.persistentId}
                       facility={selectedFacility}
                       availableFacilities={availableFacilities}
-                      acSelectFacility={this.props.acSelectFacility} />
+                      acSelectFacility={this.props.acSelectFacility}
+                      acToggleSidebar={this.props.acToggleSidebar}
+                      />
       );
     }
   }
