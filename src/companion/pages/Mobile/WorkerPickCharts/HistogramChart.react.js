@@ -10,9 +10,10 @@ require('./histogramChart.styl');
 function printChart(node, expanded, limit, interval, utcOffset, data, style) {
   const duration = interval.asMilliseconds();
   const bins = (data.endTime - data.startTime) / duration;
-
+  // Larger barSize if we show also day names, which is needed when interval size is more than hour
+  const barSize = interval.asMinutes() >= 60 ? 85: 60;
   const {height, margins} = style;
-  const binCount = expanded ? bins: Math.min(bins, style.width/60);
+  const binCount = expanded ? bins: Math.min(bins, style.width/barSize);
   const barWidth = expanded ? style.barWidth: (style.width - margins.left - margins.right)/bins;
   const width = expanded ? Math.max(style.width, bins * barWidth): style.width;
 
@@ -40,10 +41,14 @@ function printChart(node, expanded, limit, interval, utcOffset, data, style) {
     .ticks(binCount)
     .tickSize(10)
     .tickPadding(5)
-    .tickFormat((x) => moment.utc(data.startTime)
-                             .add((x)*(interval.asMinutes()) , "m")
-                             .add(utcOffset, "m")
-                             .format('HH:mm'));
+    .tickFormat((x) => {
+      const time = moment.utc(data.startTime)
+           .add((x)*(interval.asMinutes()) , "m")
+           .add(utcOffset, "m")
+      return interval.asMinutes() >= 60
+      ?  time.format('dd HH:mm')
+      :  time.format('HH:mm')
+    });
 
   const yAxis = d3.svg.axis()
     .scale(yRange)

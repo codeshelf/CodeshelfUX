@@ -326,24 +326,24 @@ export function getFacilityContext(selectedFacility) {
         },
 
         getWorker: function(domainId) {
-          var workerPath = facilityPath + "/workers/" + domainId;
+          var workerPath = facilityPath + "/workers/" + encodeURIComponent(domainId);
           return ajax(workerPath, {});
         },
 
         getWorkerEvents: function(domainId) {
-          var workerPath = facilityPath + "/workers/" + domainId + "/events";
+          var workerPath = facilityPath + "/workers/" + encodeURIComponent(domainId) + "/events";
           return ajax(workerPath, {});
         },
 
         getWorkerEventsNext: function({id, next}) {
-          var workerPath = facilityPath + "/workers/" + id + "/events";
+          var workerPath = facilityPath + "/workers/" + encodeURIComponent(id) + "/events";
           return ajax(workerPath, {
             data: {next}
           });
         },
 
         getWorkerEventsWithTime: function({id, startAt, endAt}) {
-          var workerPath = facilityPath + "/workers/" + id + "/events";
+          var workerPath = facilityPath + "/workers/" + encodeURIComponent(id) + "/events";
           startAt = moment(startAt).add(this.utcOffset, "minutes");
           endAt = moment(endAt).add(this.utcOffset, "minutes");
           const created = startAt.toISOString() + "/" + endAt.toISOString();

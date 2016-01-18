@@ -78,4 +78,12 @@ class Mobile extends Component {
   }
 }
 
+window.onerror = (errorMsg, url, lineNumber, columnNumber, error) => {
+  if (error instanceof URIError) {
+    console.error("Error occured: " + errorMsg, error);//or any message
+    window.location = "/"
+  }
+  return false;
+}
+
 export default Mobile;
