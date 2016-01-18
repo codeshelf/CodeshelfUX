@@ -774,6 +774,11 @@ domainobjects = {
 				'id':    'parentOrderType',
 				'title': 'Order Type',
 				'width': 10
+			},
+			'orderType': {
+				'id':    'substituteAllowed',
+				'title': 'Substitute Allowed',
+				'width': 10
 			}
 		}
 	},
@@ -1337,7 +1342,12 @@ domainobjects = {
 				'id':	 'needsScan',
 				'title': 'Needs Scan',
 				'width': 10
-			}			
+			},
+			'orderType': {
+				'id':    'substituteAllowed',
+				'title': 'Substitute Allowed',
+				'width': 10
+			}
 		}
 	}
 };

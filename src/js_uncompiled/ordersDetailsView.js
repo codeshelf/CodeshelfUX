@@ -97,6 +97,8 @@ goog.require('adhocDialogService');
 				return false;
 			else if (inProperty['id'] === 'parentOrderType')
 				return false;
+			else if (inProperty['id'] === 'substituteAllowed')
+				return false;
 			else
 				return true;
 		}
