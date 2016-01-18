@@ -57,9 +57,9 @@ class App extends Component {
           Productivity
         </MenuItemLink>
         <MenuItemLink
-            to="mobile-search-workers"
-            id="mobile-search-workers"
-            name="mobile-search-workers"
+            to="mobile-search-orders"
+            id="mobile-search-orders"
+            name="mobile-search-orders"
           >
             Orders
           </MenuItemLink>
