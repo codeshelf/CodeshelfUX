@@ -60,7 +60,7 @@ export class BottomChart extends Component {
                   };
                   const chart = this.printChart(ReactFauxDOM.createElement('svg'), eventBins, style);
                   return (
-                    <ListGroupItemLink to="mobile-worker-datail" params={{id: workerId}}>
+                    <ListGroupItemLink to="mobile-worker-datail" params={{id: encodeURIComponent(workerId)}}>
                       <span style={{marginRight: "0.5em"}}>{totalEvents}</span>
                       {chart.toReact()}
                       <Icon name="chevron-right" className="pull-right" style={{marginTop: "0.5em"}}/>

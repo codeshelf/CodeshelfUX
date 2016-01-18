@@ -11,6 +11,11 @@ export function authn(Component) {
             if (!isLoggedIn()) {
                 var nextPath = transition.path;
                 console.log("not authenticated to reach " + nextPath);
+                // escaping is not working in currnet router 13.2 so if % is in url redirect to home
+                if (nextPath.indexOf("%") !== -1) {
+                  nextPath = "/";
+                }
+                console.log("will redirect to " + nextPath);
                 transition.redirect('/login', {}, {nextPath: nextPath});
             }
         }
@@ -30,6 +35,11 @@ export function authn(Component) {
             if (!isLoggedIn()) {
                 var nextPath = currentPath;
                 console.log("not authenticated to reach " + nextPath);
+                // escaping is not working in currnet router 13.2 so if % is in url redirect to home
+                if (nextPath.indexOf("%") !== -1) {
+                  nextPath = "/";
+                }
+                console.log("will redirect to " + nextPath);
                 router.transitionTo("login", {}, {nextPath: nextPath});
             }
         }
