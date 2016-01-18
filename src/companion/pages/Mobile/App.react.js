@@ -44,7 +44,7 @@ class NavigationMenu extends Component {
 
 
 class App extends Component {
-  
+
   getSidebarContent() {
     return (
       <div>
@@ -92,7 +92,7 @@ class App extends Component {
             }}/>
           <div id="page-wrapper" className="page-container" style={{backgroundColor: "rgb(245, 245, 245)"}}>
               <NavigationMenu facility={this.props.facility}>
-                <div 
+                <div
                   style={{position: 'absolute', left: 0}}
                   onClick={() => this.props.acToggleSidebar(true)}>
                     <Icon name="bars" size="lg"/>

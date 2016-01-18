@@ -2,11 +2,7 @@
 import {asMutable} from "pages/Mobile/asMutable";
 import {Record} from 'immutable';
 
-export function getFacility(state) {
-  let {facility} = state;
-  facility = facility.toObject();
-  facility['isOpen'] = state.sidebar.isOpen;
-  facility = new (Record(facility));
+export function getFacility({facility}) {
   return facility;
 }
 
