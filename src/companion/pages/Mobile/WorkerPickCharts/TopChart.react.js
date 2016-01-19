@@ -34,6 +34,27 @@ const DURATIONS = [
   { interval: moment.duration(6, 'hours'), window: moment.duration(6, 'days')},
 ];
 
+class ChartNavigation extends Component {
+  render() {
+    const {filter, acMoveGraphToLeft, acMoveGraphToRight} = this.props;
+    const margin = ".5em";
+    return (
+      <div>
+        <div className="pull-left">
+          <Button bsStyle="link" className="pull-left" bsSize="md" onClick={acMoveGraphToLeft}>
+              <Icon name="step-backward" style={{marginRight: margin}}/>
+              <DateDisplay date={moment(filter.endtime).subtract(filter.window)} />
+          </Button>
+        </div>
+        <div className="pull-right">
+          <Button bsStyle="link" bsSize="md" onClick={acMoveGraphToRight}>
+            <DateDisplay  date={filter.endtime.format()} />
+        <Icon name="step-forward" style={{marginLeft: margin}}/>
+          </Button>
+        </div>
+      </div>);
+  }
+}
 
 export class TopChart extends Component {
   render() {
@@ -106,18 +127,7 @@ export class TopChart extends Component {
           </Row>
           <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
             <Col>
-              <div className="pull-left" style={{display: "table"}}>
-                <Button bsStyle="link" className="pull-left" bsSize="md" onClick={acMoveGraphToLeft}>
-                  <Icon name="step-backward" />
-                </Button>
-                <DateDisplay style={{display: "table-cell",  verticalAlign:"middle"}} date={moment(filter.endtime).subtract(filter.window)} />
-              </div>
-              <div className="pull-right" style={{display: "table"}}>
-               <DateDisplay style={{display: "table-cell", verticalAlign: "middle"}} date={filter.endtime.format()} />
-                <Button bsStyle="link" bsSize="md" onClick={acMoveGraphToRight}>
-                  <Icon name="step-forward" />
-                </Button>
-              </div>
+              <ChartNavigation {...{filter, acMoveGraphToLeft, acMoveGraphToRight}} />
             </Col>
           </Row>
       </div>
