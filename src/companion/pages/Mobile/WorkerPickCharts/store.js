@@ -175,7 +175,12 @@ export function acSearch(forceLoad) {
       //getWorkerPickCharts(filter),
       facilityContext.getWorkerPicksWithnWindow(filterToParams(filter)),
       //getWorkerPickByWorker(filter)
-      facilityContext.getWorkerPicksWithnWindowAllWorkers(filterToParams(filter)),
+      facilityContext.getWorkerPicksWithnWindowAllWorkers(filterToParams(filter)).then((result) => {
+        result.sort((a,b) => {
+           return (a.events.total -  b.events.total) * -1; //descending
+        });
+        return result;
+      }),
     ])
     .catch((error) => {
       const whatIsLoading = getWorkerPickChart(getState()).whatIsLoading;
