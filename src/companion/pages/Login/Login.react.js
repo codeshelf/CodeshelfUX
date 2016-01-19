@@ -115,7 +115,7 @@ class Login extends React.Component {
           </Row>
 
             </Form>
-            <p className="m-t"> <small>Codeshelf &copy; 2015</small> </p>
+            <p className="m-t"> <small>Codeshelf &copy; 2016</small> </p>
             </FormPageLayout>
     );
   }
