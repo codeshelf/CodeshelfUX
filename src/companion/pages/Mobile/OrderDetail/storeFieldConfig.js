@@ -1,6 +1,5 @@
 export const headerFieldsSetting = {
-  order: ["dueDate", "status", "orderDate", "customerId", "containerId", "shipperId",
-  "-", "destinationId", "orderLocationAliasIds", "groupUi",
+  order: ["dueDate", "status", "-", "orderDate", "customerId", "containerId", "shipperId", "destinationId", "orderLocationAliasIds", "groupUi",
   "wallUi"],
   visibility: {
     "dueDate": true,
@@ -27,8 +26,8 @@ export const itemsFieldsSetting = {
     "uom": true,
     "gtin": true,
     "preferredLocation": true,
-    "orderDetailId": true,
     "description": true,
+    "orderDetailId": false,
   },
 };
 
@@ -45,16 +44,15 @@ export const itemsFieldsSetting = {
     ordersProcessed: 5
     persistentId: "1c434091-3f0e-4c16-aed7-4715177b9a69"
     received: 1447943430225
-    status: "Completed"
+    status: "Complete"d
     transportType: "APP"
     username: "mfedak@gmail.com"
   }
 */
 
 export const importFieldsSetting = {
-  order: ["received", "filename", "-", "status", "linesProcessed", "linesFailed",
-    "ordersProcessed", "transportType", "username", "completed", "domainId",
-     "gtins", "itemIds", "orderIds", "persistentId"],
+  order: ["received", "filename", "linesProcessed", "-", "status",  "linesFailed",
+    "ordersProcessed", "transportType", "username", "completed", "domainId"],
   visibility: {
     "received": true,
     "filename": true,
@@ -65,11 +63,6 @@ export const importFieldsSetting = {
     "transportType": true,
     "username": true,
     "completed": false,
-    "domainId": false,
-    "gtins": false,
-    "itemIds": false,
-    "orderIds": false,
-    "persistentId": false,
   },
 };
 
@@ -99,9 +92,8 @@ export const importFieldsSetting = {
 
 export const picksFieldsSetting = {
   order: ["createdAt", "type", "itemId", "workerId+workerName", "-","itemLocation", "wiPlanQuantity",
-   "wiActualQuantity", "itemUom", "itemDescription", "workerName", "deviceGuid",
-   "persistentId", "orderId", "devicePersistentId", "workerId", "orderDetailId",
-   "workInstructionId", "resolved", "resolvedAt", "resolvedBy"],
+   "wiActualQuantity", "itemUom", "itemDescription", "deviceGuid",
+   "orderId", "workerId"],
   visibility: {
     "createdAt": true,
     "type": true,
@@ -111,17 +103,8 @@ export const picksFieldsSetting = {
     "wiActualQuantity": true,
     "itemUom": true,
     "itemDescription": true,
-    "workerName": true,
     "deviceGuid": true,
-    "persistentId": false,
-    "orderId": false,
-    "devicePersistentId": false,
     "workerId": false,
-    "orderDetailId": false,
-    "workInstructionId": false,
-    "resolved": false,
-    "resolvedAt": false,
-    "resolvedBy": false,
     "workerId+workerName": true,
   },
 }
