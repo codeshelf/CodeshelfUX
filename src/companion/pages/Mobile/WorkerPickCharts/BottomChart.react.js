@@ -51,19 +51,21 @@ export class BottomChart extends Component {
               {
                 this.props.data[1].map((oneWorkerData) => {
                   const workerId = oneWorkerData.worker.domainId;
+                  const workerName = oneWorkerData.worker.name;
                   const eventBins = oneWorkerData.events.bins.map(({value}) => value);
                   const totalEvents = oneWorkerData.events.total;
                   const style = {
-                    width: width-80,
+                    width: width-85,
                     height:20,
                     margin:0
                   };
                   const chart = this.printChart(ReactFauxDOM.createElement('svg'), eventBins, style);
                   return (
                     <ListGroupItemLink to="mobile-worker-datail" params={{id: encodeURIComponent(workerId)}}>
-                      <span style={{marginRight: "0.5em"}}>{totalEvents}</span>
+                      <div style={{fontSize: "75%"}}>{workerName}</div>
+                      <span style={{width: "4em" ,marginRight: "0.5em"}}>{totalEvents}</span>
                       {chart.toReact()}
-                      <Icon name="chevron-right" className="pull-right" style={{marginTop: "0.5em"}}/>
+                      <Icon name="chevron-right" className="pull-right" style={{marginTop: "-.25em"}}/>
                     </ListGroupItemLink>
                   );
                 })
