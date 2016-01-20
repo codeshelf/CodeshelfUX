@@ -15,16 +15,30 @@ export class Detail extends Component {
   itemId = null;
 
   componentWillMount() {
-    const {id: itemId} = this.props.router.getCurrentParams();
+    const {id: itemId, tab} = this.props.router.getCurrentParams();
     this.itemId = itemId;
-    const defaultSelectTab = this.props.defaultSelectTab || 0;
-    this.props.acSelectTab(defaultSelectTab, itemId, true);
+    const selectTab = this.props.tabToConstant[tab] || this.props.defaultSelectTab || 0;
+    this.props.acSelectTab(selectTab, itemId, true);
+    this.props.acSetFilter(selectTab, {id: itemId});
   }
 
 
   renderTabs(activeTab, loadedTime) {
     return (
-      <Tabs className="nav-tabs-simple" activeKey={activeTab} onSelect={(tab) => this.props.acSelectTab(tab, this.itemId)} tabWidth={1}>
+      <Tabs
+        className="nav-tabs-simple"
+        activeKey={activeTab}
+        onSelect={(tab) => {
+          this.props.acSelectTab(tab, this.itemId, true);
+          this.props.router.transitionTo('mobile-worker-detail',
+            {
+              facilityName: this.props.router.getCurrentParams().facilityName,
+              id: this.props.router.getCurrentParams().id,
+              tab: this.props.constantToTab[tab],
+            }
+          )
+        }}
+        tabWidth={1}>
         {this.props.ALL_TABS.map(tab =>
           <Tab key={tab} eventKey={tab} title={this.props.tabToHeaderText[tab]}>
             {loadedTime && "loaded "}
@@ -46,7 +60,7 @@ export class Detail extends Component {
     let contentElement = null;
 
     if (showError) {
-      const acRelaodTab = () => this.props.acSelectTab(tab, this.itemId, true);
+      const acReloadTab = () => this.props.acSelectTab(tab, this.itemId, true);
       let text = "Can't load request";
       if (error instanceof csapi.ConnectionError || error.message) {
         text = error.message;
@@ -57,7 +71,7 @@ export class Detail extends Component {
             Error: {text}
           </Col>
           <Col xs={4}>
-            <Button bsStyle="primary" bsSize="xs" onClick={acRelaodTab}><Icon name="refresh" /></Button>
+            <Button bsStyle="primary" bsSize="xs" onClick={acReloadTab}><Icon name="refresh" /></Button>
           </Col>
         </Row>
       );
@@ -74,7 +88,7 @@ export class Detail extends Component {
       const acExpand = (i) => this.props.acExpand(tab, i);
       const acReloadTab = () => this.props.acSelectTab(tab, this.itemId, true);
       const acSearchAdditional = (token) => this.props.acSearchAdditional(tab, token);
-      const acSearchFilter = (filter) => this.props.acSearch(tab, {id: itemId, filter});
+      const acSearchFilter = (filter) => this.props.acSearch(tab, itemId, filter);
       const commonProps = {
         //data
         expanded,
@@ -92,10 +106,11 @@ export class Detail extends Component {
         acSearchAdditional,
         acSetFilter,
         acSearchFilter,
+        acSetFilterAndRefresh: this.props.acSetFilterAndRefresh,
         id: itemId,
       };
       const Component = this.props.tabToComponent[tab];
-      contentElement = <Component {...commonProps} />
+      contentElement = <Component {...commonProps} {...this.props.tabSpecific[tab]}/>
     }
     return (
       <div>

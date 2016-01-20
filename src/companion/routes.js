@@ -94,8 +94,8 @@ export default (
           <Route handler={mOrderSearch} name="mobile-search-orders" path="search/order" />
           <Route handler={mOrderDeatil} name="mobile-order-datail" path="orderDetail/:id" />
           <Route handler={mWorkerSearch} name="mobile-search-workers" path="search/worker" />
-          <Route handler={mWorkerDetail} name="mobile-worker-datail" path="workerDetail/:id" />
-          <DefaultRoute handler={mWorkerPickCharts} name="mobile-events" path="events" />
+          <Route handler={mWorkerDetail} name="mobile-worker-detail" path="workerDetail/:id/:tab" />
+          <Route handler={mWorkerPickCharts} name="mobile-events" path="events" />
         </Route>
       </Route>
     </Route>

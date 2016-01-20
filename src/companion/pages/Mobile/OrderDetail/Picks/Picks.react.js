@@ -11,7 +11,7 @@ import {fieldToDescription} from "../../common/historyItemIntl";
 function workerComponent(workerId) {
   if (!workerId) return workerId;
   return (
-    <Link to="mobile-worker-datail" params={{id: encodeURIComponent(workerId)}}>
+    <Link to="mobile-worker-detail-default" params={{id: encodeURIComponent(workerId)}}>
       {workerId}
       <Button bsStyle="link"><Icon name="chevron-right"/></Button>
     </Link>
@@ -21,8 +21,9 @@ function workerComponent(workerId) {
 function workerNameComponent({workerId, workerName}) {
   if (!workerId) return <span>{workerName}</span>;
   return (
-    <Link to="mobile-worker-datail" params={{id: encodeURIComponent(workerId)}} onClick={(e) => e.stopPropagation()}>
-      {workerName}
+    <Link to="mobile-worker-detail-default" params={{id: encodeURIComponent(workerId)}} onClick={(e) => e.stopPropagation()}>
+      Worker: {workerName}
+      <Button bsStyle="link"><Icon name="chevron-right"/></Button>
     </Link>
   );
 }

@@ -4,6 +4,7 @@ import Icon from 'react-fa';
 import {WidthWrapper} from "./WidthWrapper.react.js";
 import d3 from "d3";
 import ReactFauxDOM from 'react-faux-dom';
+import {TAB_PRODUCTIVITY} from '../WorkerDetail/store';
 
 import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../links';
 
@@ -61,9 +62,13 @@ export class BottomChart extends Component {
                   };
                   const chart = this.printChart(ReactFauxDOM.createElement('svg'), eventBins, style);
                   return (
-                    <ListGroupItemLink to="mobile-worker-datail" params={{id: encodeURIComponent(workerId)}}>
-                      <div style={{fontSize: "75%"}}>{workerName}</div>
-                      <span style={{width: "4em" ,marginRight: "0.5em"}}>{totalEvents}</span>
+                    <ListGroupItemLink 
+                      to="mobile-worker-detail"
+                      params={
+                        {id: encodeURIComponent(workerId),
+                         tab: TAB_PRODUCTIVITY,
+                      }}>
+                      <span style={{marginRight: "0.5em"}}>{totalEvents}</span>
                       {chart.toReact()}
                       <Icon name="chevron-right" className="pull-right" style={{marginTop: "-.25em"}}/>
                     </ListGroupItemLink>

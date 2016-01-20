@@ -18,8 +18,8 @@ export class TabWithItemPaging extends Component {
   }
 
   componentWillMount() {
-    if (this.props.filter === null) {
-      this.props.acSetFilter(moment().format("YYYY/MM/DD HH:mm"));
+    if (this.props.filter.date === null) {
+      this.props.acSetFilter({ date: moment().format("YYYY/MM/DD HH:mm")});
     }
   }
 
@@ -30,7 +30,7 @@ export class TabWithItemPaging extends Component {
   }
 
   onChangeFilter(e) {
-    this.props.acSetFilter(e.target.value);
+    this.props.acSetFilter({ date: e.target.value});
   }
 
   renderItem(expanded, fieldSettings, id, itemData) {
@@ -59,7 +59,7 @@ export class TabWithItemPaging extends Component {
   }
 
   onReload() {
-    this.props.acSetFilter(moment().format("YYYY/MM/DD HH:MM"));
+    this.props.acSetFilter({ date: moment().format("YYYY/MM/DD HH:MM")});
     this.props.acReloadTab();
   }
 
@@ -83,8 +83,8 @@ export class TabWithItemPaging extends Component {
                     fieldSettings,
                     acSetFieldVisibility,
                     acSetFieldOrder}} />
-        <input type="text" value={filter} onChange={this.onChangeFilter}/>
-        <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchFilter(filter)}>
+        <input type="text" value={filter.date} onChange={this.onChangeFilter}/>
+        <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchFilter(filter.date)}>
           <Icon name="search" />
         </Button>
         { count === 0
