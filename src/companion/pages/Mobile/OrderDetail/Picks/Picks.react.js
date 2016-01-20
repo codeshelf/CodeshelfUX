@@ -12,7 +12,6 @@ function workerComponent(workerId) {
   if (!workerId) return workerId;
   return (
     <Link to="mobile-worker-detail-default" params={{id: encodeURIComponent(workerId)}}>
-      {workerId}
       <Button bsStyle="link"><Icon name="chevron-right"/></Button>
     </Link>
   );

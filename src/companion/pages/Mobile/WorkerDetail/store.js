@@ -80,6 +80,11 @@ const mergeAdditionalData = {
       prev: newData.prev,
     }
   },
+  [TAB_PRODUCTIVITY]: () => {
+    return {
+      expandGraph: false,
+    }
+  }
 };
 
 const store = createStore("workerDetail", getWorkerDetail,
@@ -96,7 +101,6 @@ export const acSettingClose = store.acSettingClose;
 export const acSettingOpen = store.acSettingOpen;
 export const acSetFilter = store.acSetFilter;
 export const acSetFilterAndRefresh = store.acSetFilterAndRefresh;
-
 
 function moveGraphToFactory(howToMove) {
   return (dispatch, getState) => {
