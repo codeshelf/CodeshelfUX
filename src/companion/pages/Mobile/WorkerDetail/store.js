@@ -1,5 +1,4 @@
 import {getWorkerDetail} from "./get";
-import {Record} from 'immutable';
 import {getWorker, getWorkerHistory, getWorkerHistoryAdditional, getWorkerHistoryWithTime} from "./mockGetWorker";
 
 import * as fieldSetting from './storeFieldConfig';
@@ -81,11 +80,6 @@ const mergeAdditionalData = {
       prev: newData.prev,
     }
   },
-  [TAB_PRODUCTIVITY]: () => {
-    return {
-      expandGraph: false,
-    }
-  }
 };
 
 const store = createStore("workerDetail", getWorkerDetail,
@@ -103,12 +97,6 @@ export const acSettingOpen = store.acSettingOpen;
 export const acSetFilter = store.acSetFilter;
 export const acSetFilterAndRefresh = store.acSetFilterAndRefresh;
 
-export const toggleExpand = (value) => {
-    return {
-      type: TOGGLE_EXPAND,
-      value,
-    }
-}
 
 function moveGraphToFactory(howToMove) {
   return (dispatch, getState) => {
