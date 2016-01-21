@@ -17,8 +17,9 @@ export class SettingsRow extends Component {
           {/*TODO probably styling should look different*/}
           <Col xs={numberOfButtons === 2? 4: 7} xsOffset={numberOfButtons === 2? 8: 5}>
             {this.props.children}
-            <Button bsStyle="primary" bsSize="xs" onClick={onClickReload}><Icon name="refresh" /></Button>
             <Button bsStyle="primary" bsSize="xs" onClick={onClickSettings}><Icon name="gears" /></Button>
+            <Button bsStyle="primary" bsSize="xs" onClick={onClickReload}><Icon name="refresh" /></Button>
+
           </Col>
         </Row>
     );
