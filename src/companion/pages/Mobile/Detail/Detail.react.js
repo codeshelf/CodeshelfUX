@@ -19,7 +19,13 @@ export class Detail extends Component {
     this.itemId = itemId;
     const selectTab = this.props.tabToConstant[tab] || this.props.defaultSelectTab || 0;
     this.props.acSelectTab(selectTab, itemId, true);
-    this.props.acSetFilter(selectTab, {id: itemId});
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {id: itemId, tab} = this.props.router.getCurrentParams();
+    if (this.props.router.getCurrentParams().tab !== nextProps.router.getCurrentParams().tab) {
+      this.props.acSelectTab(tab, itemId, true);
+    }
   }
 
 
@@ -29,7 +35,6 @@ export class Detail extends Component {
         className="nav-tabs-simple"
         activeKey={activeTab}
         onSelect={(tab) => {
-          this.props.acSelectTab(tab, this.itemId, true);
           this.props.router.transitionTo('mobile-worker-detail',
             {
               facilityName: this.props.router.getCurrentParams().facilityName,
@@ -78,7 +83,7 @@ export class Detail extends Component {
     } else if (showLoading) {
       contentElement = <div> Loading ... </div>;
     } else {
-      const {[tab]: {settings, expanded, additionalDataLoading, filter}} = this.props;
+      const {[tab]: {settings, expanded, additionalDataLoading, filter, error, whatIsLoading, whatIsLoaded,}} = this.props;
       // creacte closures over action creators for selected tab
       const acSetFilter = (filter) => this.props.acSetFilter(tab, filter);
       const acSettingOpen = () => this.props.acSettingOpen(tab);
@@ -88,9 +93,12 @@ export class Detail extends Component {
       const acExpand = (i) => this.props.acExpand(tab, i);
       const acReloadTab = () => this.props.acSelectTab(tab, this.itemId, true);
       const acSearchAdditional = (token) => this.props.acSearchAdditional(tab, token);
-      const acSearchFilter = (filter) => this.props.acSearch(tab, itemId, filter);
+      const acSearchFilter = (filter) => this.props.acSearch(tab, filter);
       const commonProps = {
         //data
+        error,
+        whatIsLoading,
+        whatIsLoaded,
         expanded,
         filter,
         additionalDataLoading,
@@ -110,7 +118,7 @@ export class Detail extends Component {
         id: itemId,
       };
       const Component = this.props.tabToComponent[tab];
-      contentElement = <Component {...commonProps} {...this.props.tabSpecific[tab]}/>
+      contentElement = <Component {...commonProps}/>
     }
     return (
       <div>

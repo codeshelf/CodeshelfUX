@@ -10,7 +10,7 @@ import {Detail, TitleComponent, TitleCol} from "../Detail/Detail.react.js";
 import {TAB_DETAIL, TAB_HISTORY, TAB_PRODUCTIVITY, ALL_TABS} from './store';
 import {acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
     acSettingOpen, acSettingClose, acSearchAdditional, acSetFilter, acSearch,
-    acSetFilterAndRefresh, acMoveGraphToLeft, acMoveGraphToRight} from './store';
+    acSetFilterAndRefresh} from './store';
 import {getWorkerDetailMutable} from "./get";
 
 import {Header} from "./Header/Header.react.js";
@@ -38,9 +38,9 @@ const tabToConstant = {
 }
 
 const constantToTab = {
-  "worker tab detail": "detail",
-  "worker tab history": "history",
-  "worker tab productivity": "productivity",
+  [TAB_DETAIL]: "detail",
+  [TAB_HISTORY]: "history",
+  [TAB_PRODUCTIVITY]: "productivity",
 }
 
 // is called inide render of Detail component so have access to props
@@ -62,22 +62,13 @@ export class WorkerDetail extends Component {
   render() {
     const {tab} = this.props;
     const {error, whatIsLoading, whatIsLoaded} = this.props[tab];
-    const tabSpecific = {
-      [TAB_PRODUCTIVITY] : {
-        error,
-        whatIsLoading,
-        whatIsLoaded,
-      }
-    };
-    const defaultSelectTab = TAB_PRODUCTIVITY;
+
     return (
       <Detail {...this.props} {...{
         ALL_TABS,
         tabToComponent,
         tabToHeaderText,
         getTitleComponent,
-        tabSpecific,
-        defaultSelectTab,
         tabToConstant,
         constantToTab,
       }} />
@@ -88,7 +79,7 @@ export class WorkerDetail extends Component {
 function mapDispatch(dispatch) {
   return bindActionCreators({acSelectTab, acExpand, acSetFieldVisibility,
    acSetFieldOrder, acSearchAdditional, acSettingOpen, acSettingClose,
-   acSetFilter, acSearch, acSetFilterAndRefresh, acMoveGraphToLeft, acMoveGraphToRight}, dispatch);
+   acSetFilter, acSearch, acSetFilterAndRefresh}, dispatch);
 }
 
 export default exposeRouter(connect(getWorkerDetailMutable, mapDispatch)(WorkerDetail));
