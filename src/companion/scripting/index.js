@@ -3,7 +3,7 @@
 
 import * as api from "data/csapi";
 import * as jsp from "jspath";
-import * as momentjs from "moment";
+import momentjs from "moment";
 
 export const csapi = api;
 export const jspath = jsp.apply;
