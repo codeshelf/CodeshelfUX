@@ -1,4 +1,5 @@
 import {getWorkerDetail} from "./get";
+import {Record} from 'immutable';
 import {getWorker, getWorkerHistory, getWorkerHistoryAdditional, getWorkerHistoryWithTime} from "./mockGetWorker";
 
 import * as fieldSetting from './storeFieldConfig';
@@ -21,6 +22,24 @@ const tabToSetting = {
   [TAB_DETAIL]: fieldSetting.headerFieldsSetting,
   [TAB_HISTORY]: fieldSetting.historyFieldsSetting,
 };
+
+function getDefaultFilter(tab) {
+    return {
+      [TAB_DETAIL]: {
+        id: null,
+      },
+      [TAB_HISTORY]: {
+        id: null,
+        date: null,
+      },
+      [TAB_PRODUCTIVITY]: {
+        interval: moment.duration(5, 'minutes'),
+        window: moment.duration(2, 'hours'),
+        endtime: moment(),
+        id: null,
+      },
+    }[tab]
+  }
 
 // TODO optimize for speed
 function tabToApi(facilityContext, tab, filter) {
@@ -70,7 +89,7 @@ const mergeAdditionalData = {
 };
 
 const store = createStore("workerDetail", getWorkerDetail,
-    ALL_TABS, tabToSetting, tabToApi, tabToAdditionalApi, mergeAdditionalData);
+    ALL_TABS, tabToSetting, tabToApi, tabToAdditionalApi, mergeAdditionalData, getDefaultFilter);
 
 export const workerDetailReducer = store.detailReducer;
 export const acSearch = store.acSearch;

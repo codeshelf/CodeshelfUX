@@ -64,14 +64,9 @@ export class TopChart extends Component {
     this.state = {expanded: false};
   }
 
-  searchOrSearchFilter(acSearch, acSearchFilter) {
-    if (acSearch) acSearch(true);
-    if (acSearchFilter) acSearchFilter(this.props.filter);
-  }
-
   render() {
     const {filter, data, error, whatIsLoading, whatIsLoaded, acMoveGraphToLeft,
-      acSearchFilter, acMoveGraphToRight, acSetFilterAndRefresh, acSearch} = this.props;
+      acMoveGraphToRight, acSetFilterAndRefresh, acSearch} = this.props;
     const showLoading = (whatIsLoading !== null || (whatIsLoaded === null && !error));
     const showError = (whatIsLoading === null && !!error);
     let errorText = "Can't load request";
@@ -85,7 +80,7 @@ export class TopChart extends Component {
             <h4 >{this.props.title}</h4>
           </Col>
           <Col xs={6} style={{lineHeight: "53px", verticalAlign:"middle", textAlign: "right"}}>
-              <Button  bsStyle="primary"  bsSize="xs" onClick={()=> this.searchOrSearchFilter(acSearch, acSearchFilter)}>
+              <Button  bsStyle="primary"  bsSize="xs" onClick={()=> acSearch()}>
                 <Icon name="refresh" />
               </Button>
         </Col>

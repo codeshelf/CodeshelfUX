@@ -33,6 +33,21 @@ const tabToHeaderText = {
   [TAB_IMPORTS]: "Imports",
 }
 
+export const convertTab = {
+  fromURL: {
+    order: TAB_DETAIL,
+    lines: TAB_ITEMS,
+    history: TAB_PICKS,
+    imports: TAB_IMPORTS,
+  },
+  toURL: {
+    [TAB_DETAIL]: "order",
+    [TAB_ITEMS]: "lines",
+    [TAB_PICKS]: "history",
+    [TAB_IMPORTS]: "imports",
+  },
+}
+
 // is called inide render of Detail component so have access to props
 function getTitleComponent(props, itemId) {
   let [leftValue, rightValue] = [itemId, null];
@@ -55,6 +70,7 @@ export class OrderDetail extends Component {
         tabToComponent,
         tabToHeaderText,
         getTitleComponent,
+        convertTab,
       }} />
     );
   }

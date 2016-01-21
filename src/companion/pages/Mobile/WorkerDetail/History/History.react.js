@@ -11,9 +11,10 @@ import {fieldToDescription} from "../../common/historyItemIntl";
 function orderIdComponent(orderId) {
   if (!orderId) return <span>{orderId}</span>;
   return (
-      <Link to="mobile-order-datail" params={{id: encodeURIComponent(orderId)}} onClick={(e) => e.stopPropagation()}>
-        {orderId}
-      </Link>
+    <Link to="mobile-order-datail-default" params={{id: orderId}}>
+      {orderId}
+      <Button bsStyle="link"><Icon name="chevron-right"/></Button>
+    </Link>
   );
 }
 

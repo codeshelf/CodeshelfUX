@@ -27,7 +27,7 @@ export class WorkerSearchItem extends Component {
   render() {
     const {domainId, updated, firstName, lastName, filterText} = this.props;
     return (
-      <Link to="mobile-worker-detail" params={{id: encodeURIComponent(domainId)}}>
+      <Link to="mobile-worker-detail-default" params={{id: encodeURIComponent(domainId)}}>
         <Row>
           <Col xs={9}>
             <Row>

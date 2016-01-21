@@ -31,16 +31,17 @@ const tabToHeaderText = {
   [TAB_PRODUCTIVITY]: "Productivity",
 }
 
-const tabToConstant = {
-  "detail": TAB_DETAIL,
-  "history": TAB_HISTORY,
-  "productivity": TAB_PRODUCTIVITY,
-}
-
-const constantToTab = {
-  [TAB_DETAIL]: "detail",
-  [TAB_HISTORY]: "history",
-  [TAB_PRODUCTIVITY]: "productivity",
+export const convertTab = {
+  fromURL: {
+    detail: TAB_DETAIL,
+    history: TAB_HISTORY,
+    productivity: TAB_PRODUCTIVITY,
+  },
+  toURL: {
+    [TAB_DETAIL]: "detail",
+    [TAB_HISTORY]: "history",
+    [TAB_PRODUCTIVITY]: "productivity",
+  },
 }
 
 // is called inide render of Detail component so have access to props
@@ -69,8 +70,7 @@ export class WorkerDetail extends Component {
         tabToComponent,
         tabToHeaderText,
         getTitleComponent,
-        tabToConstant,
-        constantToTab,
+        convertTab,
       }} />
     );
   }

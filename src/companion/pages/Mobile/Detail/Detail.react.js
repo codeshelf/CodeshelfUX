@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {TimeFromNow} from "../DateDisplay.react.js";
+import _ from "lodash";
 
 import * as csapi from 'data/csapi';
 import "./Detail.styl";
@@ -13,18 +14,21 @@ export class Detail extends Component {
   }
 
   itemId = null;
+  previousUrl = null;
 
   componentWillMount() {
+    this.previousUrl = this.props.router.getCurrentParams();
     const {id: itemId, tab} = this.props.router.getCurrentParams();
     this.itemId = itemId;
-    const selectTab = this.props.tabToConstant[tab] || this.props.defaultSelectTab || 0;
+    const selectTab = this.props.convertTab.fromURL[tab] || this.props.defaultSelectTab || 0;
     this.props.acSelectTab(selectTab, itemId, true);
   }
 
   componentWillReceiveProps(nextProps) {
-    const {id: itemId, tab} = this.props.router.getCurrentParams();
-    if (this.props.router.getCurrentParams().tab !== nextProps.router.getCurrentParams().tab) {
-      this.props.acSelectTab(tab, itemId, true);
+    const {id: itemId, tab} = nextProps.router.getCurrentParams();
+    if (!_.isEqual(this.previousUrl, nextProps.router.getCurrentParams())) {
+      this.previousUrl = nextProps.router.getCurrentParams();
+      this.props.acSelectTab(this.props.convertTab.fromURL[tab], itemId, true);
     }
   }
 
@@ -39,7 +43,7 @@ export class Detail extends Component {
             {
               facilityName: this.props.router.getCurrentParams().facilityName,
               id: this.props.router.getCurrentParams().id,
-              tab: this.props.constantToTab[tab],
+              tab: this.props.convertTab.toURL[tab],
             }
           )
         }}
@@ -93,9 +97,10 @@ export class Detail extends Component {
       const acExpand = (i) => this.props.acExpand(tab, i);
       const acReloadTab = () => this.props.acSelectTab(tab, this.itemId, true);
       const acSearchAdditional = (token) => this.props.acSearchAdditional(tab, token);
-      const acSearchFilter = (filter) => this.props.acSearch(tab, filter);
+      const acSearch = (forceLoad) => this.props.acSearch(tab, forceLoad);
       const commonProps = {
         //data
+        //error, whatIsLoading, whatIsLoaded, just temporary Productiviy tab needs them
         error,
         whatIsLoading,
         whatIsLoaded,
@@ -113,7 +118,7 @@ export class Detail extends Component {
         acReloadTab,
         acSearchAdditional,
         acSetFilter,
-        acSearchFilter,
+        acSearch,
         acSetFilterAndRefresh: this.props.acSetFilterAndRefresh,
         id: itemId,
       };

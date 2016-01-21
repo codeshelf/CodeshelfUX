@@ -27,25 +27,8 @@ export const SETTING_PROPERTY_ORDER = "set property order";
 const EXPAND_SOMETHING = "expand something";
 
 export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
-  tabToApi, tabToAdditionalApi, mergeAdditionalData) {
+  tabToApi, tabToAdditionalApi, mergeAdditionalData, getDefaultFilter) {
 
-  function getDefaultFilter(tab) {
-    return {
-      [ALL_TABS[0]]: new (Record({
-        id: null,
-      })),
-      [ALL_TABS[1]]: new (Record({
-        id: null,
-        date: null,
-      })),
-      [ALL_TABS[2]]: new (Record({
-        interval: moment.duration(5, 'minutes'),
-        window: moment.duration(2, 'hours'),
-        endtime: moment(),
-        id: null,
-      })),
-    }[tab]
-  }
   // construction of mutable state which we will transform into immutable
   let _initState = {
     tab: ALL_TABS[0], // TAB_DETAIL, TAB_ITEMS, TAB_PICKS
@@ -72,8 +55,6 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
       })),
     }));
   });
-
-   _initState[ALL_TABS[2]] = _initState[ALL_TABS[2]].set("filter", getDefaultFilter());
 
 
   const initState = new (Record(_initState));
@@ -193,8 +174,9 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
       }
       case SELECT_TAB: {
         const {tab, itemId} = action;
-        if (!state[tab].filter) {
-          state = state.setIn([tab, "filter"], getDefaultFilter(tab))
+        console.info(getDefaultFilter);
+        if (!state[tab].filter || state[tab].filter.id !== itemId) {
+          state = state.setIn([tab, "filter"], new (Record(getDefaultFilter(tab))))
         }
         //if (state[tab].filter.id === itemId) return state;
         return state
@@ -287,7 +269,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
         forceLoad,
         storeName,
       });
-      return dispatch(acSearch(tab, itemId, forceLoad));
+      return dispatch(acSearch(tab, forceLoad));
     }
   }
 
@@ -385,7 +367,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
     tab = tab || ALL_TABS[2];
     return function(dispatch) {
       dispatch(acSetFilter(tab, filter))
-      dispatch(acSearch(tab, itemId, true))
+      dispatch(acSearch(tab, true))
     }
   }
 

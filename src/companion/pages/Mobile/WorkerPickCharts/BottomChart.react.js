@@ -5,6 +5,7 @@ import {WidthWrapper} from "./WidthWrapper.react.js";
 import d3 from "d3";
 import ReactFauxDOM from 'react-faux-dom';
 import {TAB_PRODUCTIVITY} from '../WorkerDetail/store';
+import {convertTab} from '../WorkerDetail/WorkerDetail.react.js';
 
 import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../links';
 
@@ -66,7 +67,7 @@ export class BottomChart extends Component {
                       to="mobile-worker-detail"
                       params={
                         {id: encodeURIComponent(workerId),
-                         tab: TAB_PRODUCTIVITY,
+                         tab: convertTab.toURL[TAB_PRODUCTIVITY],
                       }}>
                       <span style={{marginRight: "0.5em"}}>{totalEvents}</span>
                       {chart.toReact()}

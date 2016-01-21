@@ -70,7 +70,7 @@ export class TabWithItemPaging extends Component {
     const count = items.total;
     const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
     const {acSettingOpen, acSettingClose, acSetFieldVisibility,
-     acSetFieldOrder, acReloadTab, acSearchAdditional, acSearchFilter} = this.props;
+     acSetFieldOrder, acReloadTab, acSearchAdditional, acSearch} = this.props;
     const {next} = items;
     return (
       <div>
@@ -84,7 +84,7 @@ export class TabWithItemPaging extends Component {
                     acSetFieldVisibility,
                     acSetFieldOrder}} />
         <input type="text" value={filter.date} onChange={this.onChangeFilter}/>
-        <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchFilter(filter.date)}>
+        <Button bsStyle="primary" bsSize="xs" onClick={() => acSearch()}>
           <Icon name="search" />
         </Button>
         { count === 0
