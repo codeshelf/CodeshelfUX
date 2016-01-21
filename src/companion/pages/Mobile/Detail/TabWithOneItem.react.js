@@ -16,12 +16,14 @@ export class TabWithOneItem extends Component {
 
   generalPropertieRender(property, value) {
     const renderer = this.props.fieldFormater[property];
+    const label = this.props.fieldToDescription[property];
+    const stringValue = (value) ? value.toString() : value;
+    const renderedValue = (!renderer ) ? stringValue :  renderer(value);
     return (
-      <div key={property}>
-        <div><small>{this.props.fieldToDescription[property]}</small></div>
-        <h6>{!renderer? (!value? value : value.toString()) : renderer(value)}</h6>
-        <hr style={{marginTop: "0.5em", marginBottom: "0.5em"}} />
-      </div>
+      [
+        (<dt key={label}>{label}</dt>),
+        (<dd key={label + "-v"}>{renderedValue}</dd>)
+      ]
     );
   }
 
@@ -36,6 +38,7 @@ export class TabWithOneItem extends Component {
     const inOverview = (field) => fieldsOrder.indexOf(field) < fieldsOrder.indexOf("-");
     const isVisibleOverview = (field) => fieldSettings["visibility"][field] && (inOverview(field)) ;
     const isVisibleDetail = (field) => fieldSettings["visibility"][field] && field !== "-" && (!inOverview(field)) ;
+    const isVisible = (field) => isVisibleOverview(field) || isVisibleDetail(field);
     return (
       <div>
         <SettingsRow onClickReload={acReloadTab} onClickSettings={acSettingOpen} />
@@ -47,21 +50,12 @@ export class TabWithOneItem extends Component {
                     acSetFieldVisibility,
                     acSetFieldOrder}} />
         <hr />
+        <dl>
         {fieldsOrder.map((field) =>
-          (isVisibleOverview(field) &&
+          (isVisible(field) &&
             this.generalPropertieRender(field, item[field]))
         )}
-        <Row>
-          <Button onClick={() => acExpand((!expanded)? true : null)}>
-             Additional fields
-             {"  "}
-             <Icon name={expanded? "chevron-circle-up" : "chevron-circle-down"} />
-          </Button>
-        </Row>
-        {expanded && fieldsOrder.map((field) =>
-            (isVisibleDetail(field) &&
-              this.generalPropertieRender(field, item[field]))
-        )}
+        </dl>
       </div>
     );
   }

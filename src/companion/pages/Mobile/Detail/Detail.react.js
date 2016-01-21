@@ -4,6 +4,7 @@ import Icon from 'react-fa';
 import {TimeFromNow} from "../DateDisplay.react.js";
 
 import * as csapi from 'data/csapi';
+import "./Detail.styl";
 
 export class Detail extends Component {
 

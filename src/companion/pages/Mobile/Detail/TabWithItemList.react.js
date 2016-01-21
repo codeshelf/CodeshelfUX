@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 
 import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
-import {FieldRenderer} from "./common/FieldRenderer.react.js";
+import {renderField} from "./common/FieldRenderer.react.js";
 import {SettingsRow} from "./common/SettingsRow.react.js";
+
 import {Settings} from './common/Settings.react.js';
 
 // need fieldToDescription, fieldFormater, getIdFromItem,
@@ -21,34 +22,31 @@ export class TabWithItemList extends Component {
     const isVisible = (field) => fieldSettings["visibility"][field] && (expanded || inOverview(field)) ;
     return (
       <div key={id}>
+        <hr style={{marginTop: "0.5em", marginBottom: "0.5em"}}/>
         <Row onClick={() => this.props.acExpand((!expanded)? id : null)}>
           <Col xs={9}>
+            <dl className="inline">
             {fieldsOrder.filter((f) => f !== "-").map((field) => {
               if (field.indexOf("+") === -1) {
                 // normal field
                 return (isVisible(field) &&
-                  <FieldRenderer key={field}
-                               description={this.props.fieldToDescription[field]}
-                               value={itemData[field]}
-                               formater={this.props.fieldFormater[field]} />
-                );
+                    renderField(this.props.fieldToDescription[field], itemData[field], this.props.fieldFormater[field]));
               } else {
                 // multi field
                 const formater = this.props.fieldFormater[field];
                 if (!formater) throw "Missing formater for multifield" + field;
                 const values = {};
                  field.split("+").forEach((oneField) => values[oneField] = itemData[oneField]);
-                return isVisible(field) && formater(values);
+                return isVisible(field) &&
+                renderField(this.props.fieldToDescription[field], values, formater);
               }
             })}
+            </dl>
           </Col>
-          <Col xs={3}>
-            <div className="thumbnail-wrapper d32 circular bg-primary text-white inline">
-              <Icon name={expanded? "chevron-up" : "chevron-down"}/>
-            </div>
+          <Col xs={3} >
+            <Icon className="pull-right" name={expanded? "chevron-up" : "chevron-down"}/>
           </Col>
         </Row>
-        <hr />
       </div>
     );
   }
@@ -76,7 +74,6 @@ export class TabWithItemList extends Component {
         { count === 0
           ? <div>{this.props.children}</div>
           : <div>
-              <hr />
               {items.map((oneItem) =>
                 this.renderItem(
                   (expanded && getIdFromItem(oneItem) === expanded),

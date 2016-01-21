@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 
-export class FieldRenderer extends Component {
-  render() {
-    const {description, value, formater} = this.props;
-    return (
-      <div>
-        {description} - {!formater? value : formater(value)}
-      </div>
+export function renderField(description, value, formatter) {
+  return (
+    [
+        <dt key={description} >{description}</dt>,
+        <dd key={description + "-v"} >{!formatter? value : formatter(value)}</dd>
+                                                                                  ]
     );
-  }
 }
