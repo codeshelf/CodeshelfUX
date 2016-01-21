@@ -40,6 +40,7 @@ export class TabWithOneItem extends Component {
     const isVisibleDetail = (field) => fieldSettings["visibility"][field] && field !== "-" && (!inOverview(field)) ;
     const isVisible = (field) => isVisibleOverview(field) || isVisibleDetail(field);
     return (
+      //TODO same structure as TabWithItemList
       <div>
         <SettingsRow onClickReload={acReloadTab} onClickSettings={acSettingOpen} />
         <Settings title="Set field visibility"
@@ -49,13 +50,17 @@ export class TabWithOneItem extends Component {
                     fieldSettings,
                     acSetFieldVisibility,
                     acSetFieldOrder}} />
-        <hr />
-        <dl>
-        {fieldsOrder.map((field) =>
-          (isVisible(field) &&
-            this.generalPropertieRender(field, item[field]))
-        )}
-        </dl>
+        <Row>
+          <Col xs={12} style={{paddingLeft: "0px"}}>
+            <hr />
+            <dl>
+              {fieldsOrder.map((field) =>
+               (isVisible(field) &&
+               this.generalPropertieRender(field, item[field]))
+              )}
+            </dl>
+          </Col>
+        </Row>
       </div>
     );
   }

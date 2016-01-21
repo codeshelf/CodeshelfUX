@@ -19,7 +19,7 @@ export class TabWithItemList extends Component {
   renderItem(expanded, fieldSettings, id, itemData) {
     const {order: fieldsOrder} = fieldSettings;
     const inOverview = (field) => fieldsOrder.indexOf(field) < fieldsOrder.indexOf("-");
-    const isVisible = (field) => fieldSettings["visibility"][field] && (expanded || inOverview(field)) ;
+    const isVisible = (field) => fieldSettings["visibility"][field] && (expanded || inOverview(field));
     return (
       <div key={id}>
         <hr style={{marginTop: "0.5em", marginBottom: "0.5em"}}/>
@@ -62,6 +62,7 @@ export class TabWithItemList extends Component {
      acSetFieldOrder, acReloadTab} = this.props;
 
     return (
+      //TODO same structure as TabWithOneItem
       <div>
         <SettingsRow onClickReload={acReloadTab} onClickSettings={acSettingOpen} />
         <Settings title="Set field visibility"
@@ -71,19 +72,22 @@ export class TabWithItemList extends Component {
                     fieldSettings,
                     acSetFieldVisibility,
                     acSetFieldOrder}} />
-        { count === 0
-          ? <div>{this.props.children}</div>
-          : <div>
-              {items.map((oneItem) =>
+        <Row>
+          <Col xs={12} style={{paddingLeft: "0px"}}>
+          { count === 0
+            ? this.props.children
+            :
+              items.map((oneItem) =>
                 this.renderItem(
                   (expanded && getIdFromItem(oneItem) === expanded),
                   fieldSettings,
                   getIdFromItem(oneItem),
                   oneItem
                 )
-              )}
-            </div>
-        }
+              )
+          }
+          </Col>
+        </Row>
       </div>
     );
   }
