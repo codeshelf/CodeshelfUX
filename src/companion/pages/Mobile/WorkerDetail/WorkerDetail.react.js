@@ -42,6 +42,7 @@ export const convertTab = {
     [TAB_HISTORY]: "history",
     [TAB_PRODUCTIVITY]: "productivity",
   },
+}
 
 // is called inide render of Detail component so have access to props
 function getTitleComponent(props, itemId) {

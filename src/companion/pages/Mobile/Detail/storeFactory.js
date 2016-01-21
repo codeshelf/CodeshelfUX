@@ -279,7 +279,6 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
       if (ALL_TABS.indexOf(tab) === -1) {
         throw "Unexpected tab setting: " + tab;
       }
-      console.info('!!!!!!!!!!!!!!!!!!', tab);
       dispatch({
         type: SELECT_TAB,
         tab,
