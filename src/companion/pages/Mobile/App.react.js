@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Link, RouteHandler} from 'react-router';
 import Icon from "react-fa";
 import {Grid, Row, Col, DropdownButton} from 'react-bootstrap';
-import { NavItemLink, MenuItemLink, ButtonLink} from './links';
+import { NavItemLink, MenuItemLink, ButtonLink, SidebarLink} from './links';
 import Sidebar from './Sidebar/Sidebar.react';
 
 class NavigationMenu extends Component {
@@ -49,27 +49,27 @@ class App extends Component {
     return (
       <div>
         <FacilitySelector {...this.props} />
-        <MenuItemLink
+        <SidebarLink
           to="mobile-events"
           id="mobile-events"
           name="mobile-events"
-        >
-          Productivity
-        </MenuItemLink>
-        <MenuItemLink
-            to="mobile-search-orders"
-            id="mobile-search-orders"
-            name="mobile-search-orders"
-          >
-            Orders
-          </MenuItemLink>
-          <MenuItemLink
-            to="mobile-search-workers"
-            id="mobile-search-workers"
-            name="mobile-search-workers"
-          >
-            Workers
-          </MenuItemLink>
+          onclick={() => this.props.acToggleSidebar(false)}
+          label="Productivity"
+        />
+        <SidebarLink
+          to="mobile-search-orders"
+          id="mobile-search-orders"
+          name="mobile-search-orders"
+          onclick={() => this.props.acToggleSidebar(false)}
+          label="Orders"
+        />
+        <SidebarLink
+          to="mobile-search-workers"
+          id="mobile-search-workers"
+          name="mobile-search-workers"
+          onclick={() => this.props.acToggleSidebar(false)}
+          label="Workers"
+        />
       </div>
     )
   }
@@ -133,12 +133,12 @@ class FacilitySelector extends React.Component {
                     availableFacilities.map((facility) => {
                         const {name, persistentId, domainId, description} = facility;
 
-                        return <MenuItemLink key={domainId}
+                        return <SidebarLink key={domainId}
                                              to="mobile-facility"
                                              params={{facilityName: domainId}}
-                                             data-persistentid={persistentId}>
-                                         {description}
-                               </MenuItemLink>;
+                                             data-persistentid={persistentId}
+                                             onclick={() => this.props.acToggleSidebar(false)}
+                                             label={description}/>;
                     })
                }
         </DropdownButton>);
