@@ -30,23 +30,6 @@ const EXPAND_SOMETHING = "expand something";
 export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
   tabToApi, tabToAdditionalApi, mergeAdditionalData, getDefaultFilter) {
 
-  function getDefaultFilter(tab) {
-    return {
-      [ALL_TABS[0]]: new (Record({
-        id: null,
-      })),
-      [ALL_TABS[1]]: new (Record({
-        id: null,
-        date: null,
-      })),
-      [ALL_TABS[2]]: new (Record({
-        interval: moment.duration(5, 'minutes'),
-        window: moment.duration(2, 'hours'),
-        endtime: moment(),
-        id: null,
-      })),
-    }[tab]
-  }
   // construction of mutable state which we will transform into immutable
   let _initState = {
     tab: ALL_TABS[0], // TAB_DETAIL, TAB_ITEMS, TAB_PICKS

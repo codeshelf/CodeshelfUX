@@ -1,4 +1,5 @@
 import {getWorkerDetail} from "./get";
+import {Record} from 'immutable';
 import {getWorker, getWorkerHistory, getWorkerHistoryAdditional, getWorkerHistoryWithTime} from "./mockGetWorker";
 
 import * as fieldSetting from './storeFieldConfig';
