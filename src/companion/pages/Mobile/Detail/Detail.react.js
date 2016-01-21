@@ -62,6 +62,7 @@ export class Detail extends Component {
     const {id: itemId} = this.props.router.getCurrentParams();
     this.itemId = itemId;
     const {tab} = this.props;
+    if (this.props[tab].filter === null) return null;
     const {[tab]: {loadedTime}} = this.props;
     const {whatIsLoading, whatIsLoaded, error} = this.props[tab];
     const showLoading = (whatIsLoading !== null || whatIsLoaded === null);

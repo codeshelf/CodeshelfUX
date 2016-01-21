@@ -53,8 +53,8 @@ function tabToApi(facilityContext, tab, filter) {
   const call = {
     [TAB_DETAIL]: (filter) => facilityContext.getOrder(orderDetailProperties, filter.id),
     [TAB_ITEMS]:  facilityContext.getOrderDetails,
-    [TAB_PICKS]: getPicks,
-    //[TAB_PICKS]: facilityContext.getOrderEvents,
+    //[TAB_PICKS]: getPicks,
+    [TAB_PICKS]: facilityContext.getOrderEvents,
     [TAB_IMPORTS]: (filter) => {
       const nowTime = new Date();
       const monthBefore = new Date();
@@ -68,10 +68,10 @@ function tabToApi(facilityContext, tab, filter) {
       })
     }
   }[tab];
-  return call(filter.id);
+  return call(filter);
 }
 
-const store = createStore("orderDetail", getOrderDetail, ALL_TABS, tabToSetting,  tabToApi, getDefaultFilter);
+const store = createStore("orderDetail", getOrderDetail, ALL_TABS, tabToSetting,  tabToApi, null, null, getDefaultFilter);
 
 export const orderDetailReducer = store.detailReducer;
 export const acSearch = store.acSearch;

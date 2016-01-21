@@ -4,7 +4,7 @@ import {Map, Record, fromJS} from 'immutable';
 
 import {ConnectionError} from 'data/csapi';
 import {getFacilityContextFromState} from "../Facility/get";
-
+import {TAB_PRODUCTIVITY} from '../WorkerDetail/store';
 const SELECT_TAB = 'select tab for detail tab';
 
 const LOADING_DATA = "loading of data for some tab"; // should have setted
@@ -23,6 +23,7 @@ const SETTING_CLOSE = "close settings";
 
 export const SETTING_PROPERTY_VISIBILITY = "set property visibility";
 export const SETTING_PROPERTY_ORDER = "set property order";
+
 
 const EXPAND_SOMETHING = "expand something";
 
@@ -174,7 +175,6 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
       }
       case SELECT_TAB: {
         const {tab, itemId} = action;
-        console.info(getDefaultFilter);
         if (!state[tab].filter || state[tab].filter.id !== itemId) {
           state = state.setIn([tab, "filter"], new (Record(getDefaultFilter(tab))))
         }
@@ -364,7 +364,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
   }
 
   function acSetFilterAndRefresh(filter, itemId, tab) {
-    tab = tab || ALL_TABS[2];
+    tab = tab || TAB_PRODUCTIVITY;
     return function(dispatch) {
       dispatch(acSetFilter(tab, filter))
       dispatch(acSearch(tab, true))
