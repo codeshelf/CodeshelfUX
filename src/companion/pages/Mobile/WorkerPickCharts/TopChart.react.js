@@ -17,10 +17,10 @@ export class DurationPicker extends Component {
   render() {
     const {value, onChange, durations, } = this.props;
     return (
-      <DropdownButton bsStyle="default" bsSize="small" title={`events per ${value['interval'].humanize()} ${value['window'].humanize()}`}
+      <DropdownButton bsStyle="default" bsSize="small" title={`events per ${value['interval'].humanize()} / ${value['window'].humanize()}`}
         onSelect={(ev, dur) => onChange(dur)}>
         {durations.map((d, index) => (
-          <MenuItem key={index} eventKey={d}>{d['interval'].humanize() + " " + d['window'].humanize()}</MenuItem>
+          <MenuItem key={index} eventKey={d}>{d['interval'].humanize() + " / " + d['window'].humanize()}</MenuItem>
         ))}
       </DropdownButton>
     );
@@ -28,7 +28,7 @@ export class DurationPicker extends Component {
 }
 
 const DURATIONS = [
-  { interval: moment.duration(5, 'minutes'), window: moment.duration(1, 'hours')},
+  { interval: moment.duration(5, 'minutes'), window: moment.duration(2, 'hours')},
   { interval: moment.duration(15, 'minutes'), window:moment.duration(6, 'hours')},
   { interval: moment.duration(1, 'hours'), window: moment.duration(1, 'days')},
   { interval: moment.duration(6, 'hours'), window: moment.duration(6, 'days')},
@@ -59,8 +59,8 @@ class ChartNavigation extends Component {
 export class TopChart extends Component {
   render() {
     const {filter, error, expanded, whatIsLoading, whatIsLoaded, acMoveGraphToLeft,
-      acMoveGraphToRight, acSetFilterAndRefresh, acSearch, acToggleExpand} = this.props;
-
+      acMoveGraphToRight, acSetFilterAndRefresh, acSearch, acToggleExpand, data} = this.props;
+    const chartData = data && data[0];
     const showLoading = (whatIsLoading !== null || (whatIsLoaded === null && !error));
     const showError = (whatIsLoading === null && !!error);
     let errorText = "Can't load request";
@@ -86,51 +86,52 @@ export class TopChart extends Component {
             </div>
           </Col>
         </Row>
-        {showLoading &&
-          <div style={{minHeight:"200px"}}>
-            Loading chart...
-          </div>}
-        {showError &&
-          <Row>
-            <Col xs={8}>
-              Error: {errorText}
-            </Col>
-          </Row>
-        }
         <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
-          <Col>
+          <Col xs={10}>
+            {showLoading && <span>Loading chart...</span>}
+            {showError && <span>Error: {errorText}</span>}
+          </Col>
+          <Col xs={2}>
             <Button bsStyle="link" className="pull-right" bsSize="sm" onClick={acToggleExpand}>
               <Icon name={expanded ? "compress": "expand"} />
             </Button>
           </Col>
         </Row>
+        <Row style={{paddingLeft: "1em", paddingRight: "1em" }}>
+          <Col>
+            <WidthWrapper>{(width) => {
+              const minHeight = Math.round(width/2.5);
+              if (!showLoading && !showError && chartData) {
+                return (
+                    <HistogramChart
+                     expanded={expanded}
+                     limit={12}
+                     interval={filter.interval}
+                     pickRates={chartData}
+                     chartStyle={{
+                       height: minHeight,
+                       width: width,
+                       barWidth: 60,
+                       margins: {
+                         top: 20,
+                         right: 20,
+                         bottom: 20,
+                         left: 50,
+                       },
+                     }} />
+                );
+              } else {
+                return (<div style={{minHeight: minHeight + 6}} />);
+              }
+            }}</WidthWrapper>
+          </Col>
+        </Row>
         <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
-        {!showLoading && !showError &&
-          <WidthWrapper>{(width) =>
-            <HistogramChart
-              expanded={expanded}
-              limit={12}
-              interval={filter.interval}
-              pickRates={this.props.data[0]}
-              chartStyle={{
-                height: width/2.5,
-                width: width,
-                barWidth: 60,
-                margins: {
-                  top: 20,
-                  right: 20,
-                  bottom: 20,
-                  left: 50,
-                },
-              }} />
-          }</WidthWrapper>}
-          </Row>
-          <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
-            <Col>
-              <ChartNavigation {...{filter, acMoveGraphToLeft, acMoveGraphToRight}} />
-            </Col>
-          </Row>
-      </div>
+          <Col>
+            <ChartNavigation {...{filter, acMoveGraphToLeft, acMoveGraphToRight}} />
+          </Col>
+        </Row>
+    </div>
     );
   }
 }

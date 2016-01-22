@@ -7,7 +7,7 @@ export const fieldToDescription = {
   "wiActualQuantity": "Actual Qty",
   "itemUom": "UOM",
   "itemDescription": "Description",
-  "workerName": "Worker",
+  "workerName": "Worker Name",
   "deviceGuid": "Cart",
   "persistentId": "Persistent id",
   "orderId": "Order id",
@@ -18,5 +18,5 @@ export const fieldToDescription = {
   "resolved": "Resolved",
   "resolvedAt": "Resolved at",
   "resolvedBy": "Resolved by",
-  "workerId+workerName": "Worker with link",
+  "workerId+workerName": "Worker",
 }

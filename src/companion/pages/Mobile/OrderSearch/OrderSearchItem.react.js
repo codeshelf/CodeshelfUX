@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {Nav, NavItem, Grid, Row, Col, Button, Input} from 'react-bootstrap';
 import Icon from 'react-fa';
-import {Link} from '../links';
+import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../links';
 import {DateDisplay} from "../DateDisplay.react.js";
 
 export class OrderSearchItem extends Component {
@@ -27,27 +27,19 @@ export class OrderSearchItem extends Component {
   render() {
     const {orderId, dueDate, status, filterText} = this.props;
     return (
-      <Link to="mobile-order-datail" params={{id: orderId}}>
-        <Row>
-          <Col xs={9}>
-            <Row>
-              <Col xs={12}>
-                  <h3>{this.renderId(orderId, filterText)}</h3>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                {/* TODO format due date with some formater */}
-                {status} - <DateDisplay date={dueDate} />
-              </Col>
-            </Row>
+      <ListGroupItemLink to="mobile-order-datail" params={{id: orderId}}>
+        <Row className="searchResult">
+          <Col xs={9} >
+            <dl>
+              <dt>{this.renderId(orderId, filterText)}</dt>
+              <dd>{status} - <DateDisplay date={dueDate} /></dd>
+            </dl>
           </Col>
-          <Col xs={3}>
+          <Col xs={3} className="verticalCenter">
               <Button bsStyle="link" ><Icon name="chevron-right"/></Button>
           </Col>
         </Row>
-        <Row><Col xs={12}><hr style={{marginTop: "0.5em", marginBottom: "0.5em"}} /></Col></Row>
-      </Link>
+      </ListGroupItemLink>
     );
   }
 }

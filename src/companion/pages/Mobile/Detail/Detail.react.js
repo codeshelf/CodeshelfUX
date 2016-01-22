@@ -4,6 +4,7 @@ import Icon from 'react-fa';
 import {TimeFromNow} from "../DateDisplay.react.js";
 
 import * as csapi from 'data/csapi';
+import "./Detail.styl";
 
 export class Detail extends Component {
 
@@ -25,7 +26,7 @@ export class Detail extends Component {
     return (
       <Tabs className="nav-tabs-simple" activeKey={activeTab} onSelect={(tab) => this.props.acSelectTab(tab, this.itemId)} tabWidth={1}>
         {this.props.ALL_TABS.map(tab =>
-          <Tab eventKey={tab} title={this.props.tabToHeaderText[tab]}>
+          <Tab key={tab} eventKey={tab} title={this.props.tabToHeaderText[tab]}>
             {loadedTime && "loaded "}
             <TimeFromNow time={loadedTime}/>
           </Tab>

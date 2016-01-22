@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {Nav, NavItem, Grid, Row, Col, Button, Input} from 'react-bootstrap';
+import {Nav, NavItem, Grid, Row, Col, Button, Input, ListGroup} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {Link} from '../links';
 import {SearchInput} from "./SearchInput.react.js";
@@ -34,9 +34,11 @@ export function createSearchComponent(ItemComponent, searchFieldText, getIdForIt
         <Row>
           <Col sm={12}>
             Number of results: { result.total }
+            <ListGroup>
             {result.results.map((oneResult) => {
               return <ItemComponent key={getIdForItem(oneResult)} {...oneResult} filterText={filterText} />
             })}
+            </ListGroup>
             {/*"Orders:" + JSON.stringify(result)*/}
           </Col>
         </Row>
