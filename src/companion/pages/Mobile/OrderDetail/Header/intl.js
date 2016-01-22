@@ -14,4 +14,6 @@ export const fieldToDescription = {
  "orderType": "Order Type",
  "dueDate": "Due Date",
  "orderDate": "Order Date",
+ "completeLines+totalLines": "Lines Complete",
+ "completeQuantity+totalQuantity": "Quantity Complete"
 };

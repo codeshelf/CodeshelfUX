@@ -1,5 +1,5 @@
 export const headerFieldsSetting = {
-  order: ["dueDate", "status", "-", "orderDate", "customerId", "containerId", "shipperId", "destinationId", "orderLocationAliasIds", "groupUi",
+  order: ["dueDate", "status", "completeQuantity+totalQuantity", "completeLines+totalLines", "-", "orderDate", "customerId", "containerId", "shipperId", "destinationId", "orderLocationAliasIds", "groupUi, ",
   "wallUi"],
   visibility: {
     "dueDate": true,
@@ -12,6 +12,8 @@ export const headerFieldsSetting = {
     "orderLocationAliasIds": true,
     "groupUi": true,
     "wallUi": true,
+    "completeQuantity+totalQuantity": true,
+    "completeLines+totalLines": true
   },
 };
 

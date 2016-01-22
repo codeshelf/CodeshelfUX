@@ -5,6 +5,7 @@ import {DateDisplay} from "../DateDisplay.react.js";
 import Icon from 'react-fa';
 import {SettingsRow} from "./common/SettingsRow.react.js";
 import {Settings} from './common/Settings.react.js';
+import {renderField} from "./common/FieldRenderer.react.js";
 
 export class TabWithOneItem extends Component {
 
@@ -12,19 +13,6 @@ export class TabWithOneItem extends Component {
     if (this.props.expanded) {
       this.props.acExpand(null);
     }
-  }
-
-  generalPropertieRender(property, value) {
-    const renderer = this.props.fieldFormater[property];
-    const label = this.props.fieldToDescription[property];
-    const stringValue = (value) ? value.toString() : value;
-    const renderedValue = (!renderer ) ? stringValue :  renderer(value);
-    return (
-      [
-        (<dt key={label}>{label}</dt>),
-        (<dd key={label + "-v"}>{renderedValue}</dd>)
-      ]
-    );
   }
 
   render() {
@@ -54,10 +42,13 @@ export class TabWithOneItem extends Component {
           <Col xs={12} style={{paddingLeft: "0px"}}>
             <hr />
             <dl>
-              {fieldsOrder.map((field) =>
-               (isVisible(field) &&
-               this.generalPropertieRender(field, item[field]))
-              )}
+              {fieldsOrder.map((field) => {
+                if (isVisible(field)) {
+                  return renderField(field, item, this.props.fieldToDescription, this.props.fieldFormater);
+                } else {
+                  return null;
+                }
+              })}
             </dl>
           </Col>
         </Row>

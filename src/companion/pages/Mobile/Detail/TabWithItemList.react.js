@@ -27,18 +27,10 @@ export class TabWithItemList extends Component {
           <Col xs={9}>
             <dl className="inline">
             {fieldsOrder.filter((f) => f !== "-").map((field) => {
-              if (field.indexOf("+") === -1) {
-                // normal field
-                return (isVisible(field) &&
-                    renderField(this.props.fieldToDescription[field], itemData[field], this.props.fieldFormater[field]));
+              if (isVisible(field)) {
+                return renderField(field, itemData, this.props.fieldToDescription, this.props.fieldFormater);
               } else {
-                // multi field
-                const formater = this.props.fieldFormater[field];
-                if (!formater) throw "Missing formater for multifield" + field;
-                const values = {};
-                 field.split("+").forEach((oneField) => values[oneField] = itemData[oneField]);
-                return isVisible(field) &&
-                renderField(this.props.fieldToDescription[field], values, formater);
+                return null;
               }
             })}
             </dl>
