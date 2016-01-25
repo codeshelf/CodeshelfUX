@@ -1343,9 +1343,14 @@ domainobjects = {
 				'title': 'Needs Scan',
 				'width': 10
 			},
-			'orderType': {
+			'substituteAllowed': {
 				'id':    'substituteAllowed',
 				'title': 'Substitute Allowed',
+				'width': 10
+			},
+			'substitution': {
+				'id':    'substitution',
+				'title': 'Substitution',
 				'width': 10
 			}
 		}
