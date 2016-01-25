@@ -325,15 +325,21 @@ codeshelfApp.TierController.prototype.setPoscons = function(){
 	var tierName = tier['domainId'];
 	var startIndex = this.scope_['poscon']['startIndex'];
 	var reverse = this.scope_['poscon']['reverse'];
-
+	var self = this;
+	var modalInstance_ = this.modalInstance_;
 	var methodArgs = [
 		{ 'name': 'startIndex', 'value': startIndex, 'classType': 'int'},
 		{ 'name': 'reverse', 'value': reverse, 'classType': 'boolean'}
 	];
 
-	this.websession_.callMethod(tier, 'Tier', 'setPoscons', methodArgs);
-	this.modalInstance_.close();
-
+	this.websession_.callMethod(tier, 'Tier', 'setPoscons', methodArgs)
+    .then(function(response) {
+    	modalInstance_.close();
+    }, function(error) {
+    	self.scope_.$apply(function() {
+			self.scope_['response'] = error;
+		});
+    });
 };
 
 /**
@@ -349,9 +355,9 @@ codeshelfApp.TierController.prototype.setLedOffset = function(){
         .then(function(response) {
         	modalInstance_.close();
         }, function(error) {
-            self.scope_['tierLedForm'] = {"messages":[error["statusMessage"]]};
-            self.scope_.$apply();
-            console.error(error);
+        	self.scope_.$apply(function() {
+				self.scope_['response'] = error;
+			});
         });
 };
 

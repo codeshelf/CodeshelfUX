@@ -176,9 +176,9 @@ codeshelfApp.SlotLEDController.prototype.ok = function(){
         .then(function(response) {
             self.close();
         }, function(error) {
-            self.scope_['slotLedForm'] = {"messages":[error["statusMessage"]]};
-            self.scope_.$apply();
-            console.error(error);
+        	self.scope_.$apply(function() {
+				self.scope_['response'] = error;
+			});
         });
 };
 
