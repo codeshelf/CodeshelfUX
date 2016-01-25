@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
-import {FieldRenderer} from "./common/FieldRenderer.react.js";
+import {renderField} from "./common/FieldRenderer.react.js";
 import {SettingsRow} from "./common/SettingsRow.react.js";
 import {Settings} from './common/Settings.react.js';
 
@@ -42,21 +42,10 @@ export class TabWithItemPaging extends Component {
         <Row onClick={() => this.props.acExpand((!expanded)? id : null)}>
           <Col xs={9}>
             {fieldsOrder.filter((f) => f !== "-").map((field) => {
-              if (field.indexOf("+") === -1) {
-                // normal field
-                return (isVisible(field) &&
-                  <FieldRenderer key={field}
-                               description={this.props.fieldToDescription[field]}
-                               value={itemData[field]}
-                               formater={this.props.fieldFormater[field]} />
-                );
+              if (isVisible(field)) {
+                return renderField(field, itemData, this.props.fieldToDescription, this.props.fieldFormater);
               } else {
-                // multi field
-                const formater = this.props.fieldFormater[field];
-                if (!formater) throw "Missing formater for multifield" + field;
-                const values = {};
-                 field.split("+").forEach((oneField) => values[oneField] = itemData[oneField]);
-                return isVisible(field) && formater(values);
+                return null;
               }
             })}
           </Col>
