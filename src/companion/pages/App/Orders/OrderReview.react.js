@@ -6,7 +6,7 @@ import {Map, List, fromJS, Record, Seq} from "immutable";
 import {getFacilityContext} from "data/csapi";
 import {StatusSummary} from "data/types";
 import {Table} from "components/common/Table";
-import ListView from "components/common/list/ListView";
+import ListManagement from "components/common/list/ListManagement";
 import DateDisplay from 'components/common/DateDisplay';
 import PureComponent from 'components/common/PureComponent';
 import {Row, Col} from 'components/common/pagelayout';
@@ -79,6 +79,7 @@ export default class OrderReview extends React.Component{
         };
         this.handleRowExpand = this.handleRowExpand.bind(this);
         this.handleRowCollapse = this.handleRowCollapse.bind(this);
+        this.shouldExpand = this.shouldExpand.bind(this);
     }
 
     handleRowExpand(row) {
@@ -148,28 +149,20 @@ export default class OrderReview extends React.Component{
 
     render() {
 
-        let {columns, sortSpecs} = this.props;
-        let sortBy = Seq(toFullSortSpecs(columns(), sortSpecs()));
-        let orders = this.props.orders.sort((a, b) => {
-                //find first non zero result as you run each sort function in order
-            let comp =  sortBy.map(({sortFunction, property}) => {
-                    return sortFunction(a.get(property), b.get(property));
-                })
-                .find((result) => result !=0) || 0;
-            return comp;
-        });
-
+        let {columns, sortSpecs, orders} = this.props;
         let {columnMetadata} = this;
 
-            return (<ListView
-                        results={orders}
-                        columns={columns}
-                        columnMetadata={columnMetadata}
-                        keyColumn="orderId"
-                        sortSpecs={sortBy}
-                        expand={this.shouldExpand.bind(this)}
-                        onRowExpand={this.handleRowExpand}
-                        onRowCollapse={this.handleRowCollapse} />);
+            return (
+                <ListManagement results={orders}
+                 columns={columns}
+                 columnMetadata={columnMetadata}
+                 keyColumn="orderId"
+                 sortSpecs={sortSpecs}
+                 expand={this.shouldExpand}
+                 onRowExpand={this.handleRowExpand}
+                 onRowCollapse={this.handleRowCollapse}
+                 allowExport={true}/>
+            );
     }
 };
 OrderReview.displayName = "OrderReview";

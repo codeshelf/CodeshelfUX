@@ -17,18 +17,24 @@ export default class OrdersIBox extends React.Component{
 
     constructor(props) {
         super(props);
+        var rootPath = ["preferences", "orders"];
+        var selectedPath = ["pivot", "selectedOrders"];
+        var resultsPath = ["pivot", "orders"];
+
         this.state = {
             refreshingAction: Promise.resolve([])
         };
         let {state}=  this.props;
-        this.columnsCursor  = state.cursor(["preferences", "orders", "table", "columns"]);
-        this.columnSortSpecsCursor = state.cursor(["preferences", "orders", "table", "sortSpecs"]);
-        this.pivotOptionsCursor = state.cursor(["preferences", "orders", "pivot"]);
-        this.selectedCursor = state.cursor(["pivot", "selectedOrders"]);
+        this.columnsCursor  = state.cursor(rootPath.concat(["table", "columns"]));
+        this.columnSortSpecsCursor = state.cursor(rootPath.concat(["table", "sortSpecs"]));
+        this.pivotOptionsCursor = state.cursor(rootPath.concat(["pivot"]));
+        this.selectedCursor = state.cursor(selectedPath);
+        this.resultsCursor = state.cursor(resultsPath);
 
-        this.resultsCursor = state.cursor(["pivot", "orders"]);
         this.handleRefresh = this.handleRefresh.bind(this);
         this.cancelRefresh = this.cancelRefresh.bind(this);
+
+        this.title = "Orders";
     }
 
     componentDidMount() {
@@ -124,7 +130,10 @@ export default class OrdersIBox extends React.Component{
         let columns = this.columnsCursor;
         let sortSpecs = this.columnSortSpecsCursor;
         return (
-            <SingleCellIBox ref="ibox" title="Orders" style={{display: "inline-block"}} isRefreshing={refreshingAction.isPending()} onRefresh={this.handleRefresh}>
+            <SingleCellIBox
+              title={this.title}
+              style={{display: "inline-block"}}
+              isRefreshing={refreshingAction.isPending()} onRefresh={this.handleRefresh}>
                 <Row>
                     <Col md={6}>
 
