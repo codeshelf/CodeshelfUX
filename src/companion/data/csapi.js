@@ -506,6 +506,19 @@ export function getFacilityContext(selectedFacility) {
                 contentType: "form"
             });
         },
+
+        computeWorkInstructions(cheName, containerArray) {
+          let wiComputePath = facilityPath + "/ches/" + cheName + "/workinstructions/compute";
+          return ajax(wiComputePath, {
+            method: "POST",
+            data: {
+              containers: containerArray.join(",")
+            },
+            contentType: "form",
+            accept: "application/json"
+          });
+
+        },
         createEvent(cheName, workerId, type, createTime) {
           let eventPath = facilityPath + "/ches/" + cheName + "/events";
           return ajax(eventPath, {
