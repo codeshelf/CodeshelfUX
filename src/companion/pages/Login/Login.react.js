@@ -77,7 +77,7 @@ class Login extends React.Component {
                 <input type="hidden" name="store" defaultValue={form.fields.store} />
                 <Row>
                     <Col sm={12}>
-                        <Input id="u"
+                        <Input id="email"
                                label="Username"
                                type="email"
                                autoFocus="true"
@@ -91,7 +91,7 @@ class Login extends React.Component {
                 </Row>
                 <Row>
                     <Col sm={12}>
-                            <Input id="p"
+                            <Input id="password"
                                label="Password"
                                disabled={login.pending}
                                name="password"

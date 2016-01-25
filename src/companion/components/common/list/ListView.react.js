@@ -170,7 +170,7 @@ export default class ListView extends React.Component{
             });
         }
 
-        return (<div>
+        return (<div className="listview">
                 <Row >
                     <Col sm={6} >
                         <div className="pullLeft text-left">
@@ -210,7 +210,7 @@ class TableSettings extends PureComponent {
         });
 
         return (
-                <DropdownButton className="pull-right" title={<Icon name="gear" />}>
+                <DropdownButton className="settings pull-right" title={<Icon name="gear" />}>
                     <MultiSelectUnwrapped options={options} values={columns} onChange={onColumnsChange}/>
                 </DropdownButton>
         );
