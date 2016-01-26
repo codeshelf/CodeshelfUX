@@ -90,6 +90,11 @@ domainobjects = {
 				'title': 'Meters Along Path',
 				'width': 10
 			},
+			'locationWidthUi': {
+				'id':    'locationWidthUi',
+				'title': 'Loc. Width Meters',
+				'width': 15
+			},
 			'primaryAliasId': {
 				'id':    'primaryAliasId',
 				'title': 'Alias',
@@ -160,6 +165,16 @@ domainobjects = {
 				'id':    'posAlongPathui',
 				'title': 'Meters Along Path',
 				'width': 10
+			},
+			'metersFromLeft': {
+				'id':    'metersFromLeft',
+				'title': 'Meters From Left',
+				'width': 15
+			},
+			'locationWidthUi': {
+				'id':    'locationWidthUi',
+				'title': 'Loc. Width Meters',
+				'width': 15
 			},
 			'primaryAliasId': {
 				'id':    'primaryAliasId',
@@ -1050,6 +1065,16 @@ domainobjects = {
 				'title': 'Meters Along Path',
 				'width': 10
 			},
+			'metersFromLeft': {
+				'id':    'metersFromLeft',
+				'title': 'Meters From Left',
+				'width': 15
+			},
+			'locationWidthUi': {
+				'id':    'locationWidthUi',
+				'title': 'Loc. Width Meters',
+				'width': 15
+			},
 			'anchorPosXui': {
 				'id':    'anchorPosXui',
 				'title': 'Anchor X',
@@ -1165,6 +1190,16 @@ domainobjects = {
 				'id':    'posAlongPathui',
 				'title': 'Meters Along Path',
 				'width': 10
+			},
+			'metersFromLeft': {
+				'id':    'metersFromLeft',
+				'title': 'Meters From Left',
+				'width': 15
+			},
+			'locationWidthUi': {
+				'id':    'locationWidthUi',
+				'title': 'Loc. Width Meters',
+				'width': 15
 			},
 			'primaryAliasId': {
 				'id':    'primaryAliasId',
