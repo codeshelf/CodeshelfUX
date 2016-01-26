@@ -116,3 +116,34 @@ export class Detail extends Component {
     );
   }
 }
+
+export class TitleCol extends Component {
+
+  render() {
+    const {property, value, className} = this.props;
+    return (
+        <dl className={className}>
+        <dt>{property}</dt>
+        <dd property={property + "-v"}>
+        {value}
+      </dd>
+        </dl>);
+  }
+}
+
+export class TitleComponent extends Component {
+
+  render() {
+    return (
+        <Row className={this.props.className}>
+        <Col xs={6}>
+        {this.props.children[0]}
+      </Col>
+        <Col xs={6} style={{}}>
+        {this.props.children[1]}
+      </Col>
+        </Row>
+    );
+  }
+
+}

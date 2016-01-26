@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {Nav, NavItem, Grid, Row, Col, Button, Input} from 'react-bootstrap';
 import Icon from 'react-fa';
-import {Link} from '../links';
+import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../links';
 import {DateDisplay} from "../DateDisplay.react.js";
 
 export class WorkerSearchItem extends Component {
@@ -27,27 +27,19 @@ export class WorkerSearchItem extends Component {
   render() {
     const {domainId, updated, firstName, lastName, filterText} = this.props;
     return (
-      <Link to="mobile-worker-datail" params={{id: encodeURIComponent(domainId)}}>
-        <Row>
-          <Col xs={9}>
-            <Row>
-              <Col xs={12}>
-                  <h3>{this.renderId(domainId, filterText)}</h3>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                {/* TODO format due date with some formater */}
-                {firstName} {lastName} - <DateDisplay date={updated} />
-              </Col>
-            </Row>
-          </Col>
-          <Col xs={3}>
-              <Button bsStyle="link"><Icon name="chevron-right"/></Button>
-          </Col>
-        </Row>
-        <Row><Col xs={12}><hr style={{marginTop: "0.5em", marginBottom: "0.5em"}} /></Col></Row>
-      </Link>
+        <ListGroupItemLink to="mobile-worker-datail" params={{id: encodeURIComponent(domainId)}}>
+          <Row className="searchResult">
+            <Col xs={9} >
+              <dl>
+                <dt>{this.renderId(domainId, filterText)}</dt>
+                <dd>{firstName} {lastName} - <DateDisplay date={updated} /></dd>
+              </dl>
+            </Col>
+            <Col xs={3} className="verticalCenter">
+              <Button bsStyle="link" ><Icon name="chevron-right"/></Button>
+            </Col>
+          </Row>
+        </ListGroupItemLink>
     );
   }
 }

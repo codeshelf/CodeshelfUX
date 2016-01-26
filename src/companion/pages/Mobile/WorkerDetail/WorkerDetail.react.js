@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 
 import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
-import {Detail} from "../Detail/Detail.react.js";
+import {Detail, TitleComponent, TitleCol} from "../Detail/Detail.react.js";
 
 import {TAB_DETAIL, TAB_HISTORY, ALL_TABS} from './store';
 import {acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
@@ -28,22 +28,17 @@ const tabToHeaderText = {
 
 // is called inide render of Detail component so have access to props
 function getTitleComponent(props, itemId) {
+  let [leftValue, rightValue] = [null, itemId];
+
   if (props && props[TAB_DETAIL] && props[TAB_DETAIL].data) {
     const {domainId, firstName, middleInitial, lastName} = props[TAB_DETAIL].data;
-    return (
-      <div>
-        <h3>{fieldToDescription["firstName+middleInitial+lastName"]}: {firstName} {middleInitial} {lastName}</h3>
-        <h4>{fieldToDescription.domainId}: {domainId}</h4>
-      </div>
-    );
+    leftValue = `${firstName || ''} ${middleInitial || ''} ${lastName}`;
+    rightValue = domainId;
   }
-  // we don'y have data yet
-  return (
-    <div>
-      <h3>{fieldToDescription["firstName+middleInitial+lastName"]}:</h3>
-      <h4>{fieldToDescription.domainId}: {itemId}</h4>
-    </div>
-  );
+  return (<TitleComponent className="detail-title">
+            <TitleCol property={fieldToDescription["firstName+middleInitial+lastName"]} value={leftValue} />
+            <TitleCol property={fieldToDescription.domainId} value={rightValue} />
+          </TitleComponent>);
 }
 
 export class WorkerDetail extends Component {
