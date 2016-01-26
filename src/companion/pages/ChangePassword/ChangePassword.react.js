@@ -38,6 +38,7 @@ class ChangePassword extends React.Component {
 
   handleSubmit(formCursor) {
     const nextPath = this.props.router.getCurrentQuery().nextPath;
+    console.info(nextPath, this.props.router.getCurrentQuery(),'!!!!!!!PATH');
     return validate(formCursor().get("values").toJS()).prop("new").matchesProp("confirm").promise
           .then(function() {
               return executePasswordAction(this.props, formCursor());

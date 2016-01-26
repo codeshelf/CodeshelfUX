@@ -1,11 +1,16 @@
 import React, {Component} from 'react';
 import {Link, RouteHandler} from 'react-router';
 import Icon from "react-fa";
-import {Grid, Row, Col, DropdownButton} from 'react-bootstrap';
+import {Grid, Row, Col, DropdownButton, MenuItem} from 'react-bootstrap';
 import { NavItemLink, MenuItemLink, ButtonLink, SidebarLink} from './links';
+import {clearStoredCredentials} from "data/user/store";
+import {loggedout} from "data/auth/actions";
 import Sidebar from './Sidebar/Sidebar.react';
+import exposeRouter from 'components/common/exposerouter';
+
 
 class NavigationMenu extends Component {
+
   render() {
     console.log("Render navigation menu", this.props.facility);
     return (
@@ -45,6 +50,12 @@ class NavigationMenu extends Component {
 
 class App extends Component {
 
+  handleLogoutClick(e) {
+      e.preventDefault();
+      clearStoredCredentials();
+      loggedout(false);
+  }
+
   getSidebarContent() {
     return (
       <div>
@@ -70,6 +81,23 @@ class App extends Component {
           onclick={() => this.props.acToggleSidebar(false)}
           label="Workers"
         />
+        <MenuItem
+          onSelect={() => {
+            const currentPath = this.props.router.getCurrentPath();
+            this.props.acToggleSidebar(false);
+            this.props.router.transitionTo("changepassword", {}, {nextPath: currentPath});
+          }}
+          id="changepassword">
+            <Icon name="edit" />Change Password
+        </MenuItem>
+        <MenuItem
+          onSelect={(e) => {
+            this.props.acToggleSidebar(false);
+            this.handleLogoutClick(e);
+          }}
+          id="logout">
+            <Icon name="sign-out" />Log out
+        </MenuItem>
       </div>
     )
   }
@@ -111,7 +139,7 @@ class App extends Component {
   }
 }
 
-export default App;
+export default exposeRouter(App);
 
 
 
