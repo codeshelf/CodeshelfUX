@@ -97,6 +97,7 @@ export const acSettingOpen = store.acSettingOpen;
 export const acSetFilter = store.acSetFilter;
 export const acSetFilterAndRefresh = store.acSetFilterAndRefresh;
 
+
 function moveGraphToFactory(howToMove) {
   return (dispatch, getState) => {
     const localState = getWorkerDetail(getState())[TAB_PRODUCTIVITY];
