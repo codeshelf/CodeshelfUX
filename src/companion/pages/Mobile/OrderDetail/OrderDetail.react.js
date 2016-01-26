@@ -64,6 +64,7 @@ function getTitleComponent(props, itemId) {
 
 export class OrderDetail extends Component {
   render() {
+    const transitionTo = 'mobile-order-datail';
     return (
       <Detail {...this.props} {...{
         ALL_TABS,
@@ -71,6 +72,7 @@ export class OrderDetail extends Component {
         tabToHeaderText,
         getTitleComponent,
         convertTab,
+        transitionTo,
       }} />
     );
   }

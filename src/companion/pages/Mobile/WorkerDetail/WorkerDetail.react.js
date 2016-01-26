@@ -63,7 +63,7 @@ export class WorkerDetail extends Component {
   render() {
     const {tab} = this.props;
     const {error, whatIsLoading, whatIsLoaded} = this.props[tab];
-
+    const transitionTo = 'mobile-worker-detail';
     return (
       <Detail {...this.props} {...{
         ALL_TABS,
@@ -71,6 +71,7 @@ export class WorkerDetail extends Component {
         tabToHeaderText,
         getTitleComponent,
         convertTab,
+        transitionTo,
       }} />
     );
   }

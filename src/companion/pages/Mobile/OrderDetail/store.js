@@ -52,9 +52,9 @@ const MILISECONDS_IN_MONTH = 1000*60*60*24*31;
 function tabToApi(facilityContext, tab, filter) {
   const call = {
     [TAB_DETAIL]: (filter) => facilityContext.getOrder(orderDetailProperties, filter.id),
-    [TAB_ITEMS]:  facilityContext.getOrderDetails,
+    [TAB_ITEMS]:  (filter) => facilityContext.getOrderDetails(filter.id),
     //[TAB_PICKS]: getPicks,
-    [TAB_PICKS]: facilityContext.getOrderEvents,
+    [TAB_PICKS]: (filter) => facilityContext.getOrderEvents(filter.id),
     [TAB_IMPORTS]: (filter) => {
       const nowTime = new Date();
       const monthBefore = new Date();

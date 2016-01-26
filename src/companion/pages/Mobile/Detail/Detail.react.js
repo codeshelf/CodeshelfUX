@@ -39,7 +39,7 @@ export class Detail extends Component {
         className="nav-tabs-simple"
         activeKey={activeTab}
         onSelect={(tab) => {
-          this.props.router.transitionTo('mobile-worker-detail',
+          this.props.router.transitionTo(this.props.transitionTo,
             {
               facilityName: this.props.router.getCurrentParams().facilityName,
               id: this.props.router.getCurrentParams().id,
