@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {Nav, NavItem, Grid, Row, Col, Button, Input} from 'react-bootstrap';
 import Icon from 'react-fa';
-import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../links';
+import {Link, NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../links';
 import {DateDisplay} from "../DateDisplay.react.js";
 
 export class WorkerSearchItem extends Component {

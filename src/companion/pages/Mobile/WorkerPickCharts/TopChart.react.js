@@ -99,35 +99,6 @@ export class TopChart extends Component {
             </Button>
           </Col>
         </Row>
-        <Row style={{paddingLeft: "1em", paddingRight: "1em" }}>
-          <Col>
-            <WidthWrapper>{(width) => {
-              const minHeight = Math.round(width/2.5);
-              if (!showLoading && !showError && chartData) {
-                return (
-                    <HistogramChart
-                     expanded={expanded}
-                     limit={12}
-                     interval={filter.interval}
-                     pickRates={chartData}
-                     chartStyle={{
-                       height: minHeight,
-                       width: width,
-                       barWidth: 60,
-                       margins: {
-                         top: 20,
-                         right: 20,
-                         bottom: 20,
-                         left: 50,
-                       },
-                     }} />
-                );
-              } else {
-                return (<div style={{minHeight: minHeight + 6}} />);
-              }
-            }}</WidthWrapper>
-          </Col>
-        </Row>
         <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
         {!showLoading && !showError &&
           <WidthWrapper>{(width) =>
