@@ -4,7 +4,7 @@ import {Panel, Tabs, Tab, Row, Col, Button, ListGroup,
 import Icon from 'react-fa';
 import {WidthWrapper} from "./WidthWrapper.react.js";
 import {HistogramChart} from './HistogramChart.react.js';
-
+import {TAB_PRODUCTIVITY} from '../WorkerDetail/store.js';
 import moment from 'moment';
 
 import * as csapi from 'data/csapi';
@@ -80,7 +80,7 @@ export class TopChart extends Component {
             <h4 >{this.props.title}</h4>
           </Col>
           <Col xs={6} style={{lineHeight: "53px", verticalAlign:"middle", textAlign: "right"}}>
-              <Button  bsStyle="primary"  bsSize="xs" onClick={()=> acSearch()}>
+              <Button  bsStyle="primary"  bsSize="xs" onClick={()=> acSearch(TAB_PRODUCTIVITY, true)}>
                 <Icon name="refresh" />
               </Button>
         </Col>
