@@ -20,7 +20,7 @@ export default {
     $pendingActions: {},
     $subscriptions: {},
     preferences: {
-        version: "1.7",
+        version: "1.8",
         workInstructions: {
             table: {
                 columns: ["itemMasterId", "status"],
@@ -135,6 +135,11 @@ export default {
                         name: "dueTime",
                         caption: "Time Due",
                         sort: { order: "asc"}
+                    },
+                    {
+                      name: "orderType",
+                      caption: "Type",
+                      sort: { order: "asc"}
                     },
                     {
                         name: "count",
