@@ -31,3 +31,9 @@ export function renderField(field, itemData, fieldDescriptions, fieldFormatters)
     return renderMultiField(field, itemData, description, formatter);
   }
 }
+
+export function deviceFormatter({deviceName, deviceGuid}) {
+  const shortGuid = deviceGuid && parseInt(deviceGuid, 16).toString(16).toUpperCase();
+  return (<span>{`${deviceName}/0x${shortGuid}`}</span>);
+  return (<span>{`${deviceName}/0x${shortGuid}`}</span>);
+}

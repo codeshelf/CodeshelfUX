@@ -93,9 +93,8 @@ export const importFieldsSetting = {
 */
 
 export const picksFieldsSetting = {
-  order: ["createdAt", "type", "itemId", "workerId+workerName", "-","itemLocation", "wiPlanQuantity",
-   "wiActualQuantity", "itemUom", "itemDescription", "deviceGuid",
-   "orderId", "workerId"],
+  order: ["createdAt", "type", "itemId", "workerId+workerName", "deviceName+deviceGuid", "-","itemLocation", "wiPlanQuantity",
+   "wiActualQuantity", "itemUom", "itemDescription", "orderId", "workerId"],
   visibility: {
     "createdAt": true,
     "type": true,
@@ -105,7 +104,7 @@ export const picksFieldsSetting = {
     "wiActualQuantity": true,
     "itemUom": true,
     "itemDescription": true,
-    "deviceGuid": true,
+    "deviceName+deviceGuid": true,
     "workerId": false,
     "workerId+workerName": true,
   },

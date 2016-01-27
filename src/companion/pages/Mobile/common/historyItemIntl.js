@@ -8,8 +8,9 @@ export const fieldToDescription = {
   "itemUom": "UOM",
   "itemDescription": "Description",
   "workerName": "Worker Name",
-  "deviceGuid": "Cart",
-  "persistentId": "Persistent id",
+  "deviceGuid": "Cart ID",
+  "deviceName": "Cart Name",
+  "persistentId": "Persistent ID",
   "orderId": "Order id",
   "devicePersistentId": "Device persistent id",
   "workerId": "Badge",
@@ -19,4 +20,5 @@ export const fieldToDescription = {
   "resolvedAt": "Resolved at",
   "resolvedBy": "Resolved by",
   "workerId+workerName": "Worker",
+  "deviceName+deviceGuid": "Cart"
 }

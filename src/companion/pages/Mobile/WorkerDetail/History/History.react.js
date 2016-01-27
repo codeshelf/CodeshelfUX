@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {datetimeToSecondsFormater} from "../../DateDisplay.react.js";
+import {deviceFormatter} from "../../Detail/common/FieldRenderer";
 import {TabWithItemPaging} from "../../Detail/TabWithItemPaging.react.js";
 import {Link} from '../../links';
 import {Button} from 'react-bootstrap';
@@ -17,9 +18,15 @@ function orderIdComponent(orderId) {
   );
 }
 
+function deviceComponent({deviceName, deviceGuid}) {
+  const shortGuid = deviceGuid && parseInt(deviceGuid, 16).toString(16).toUpperCase();
+  return (<span>{`${deviceName}/0x${shortGuid}`}</span>);
+}
+
 const fieldFormater = {
     createdAt: datetimeToSecondsFormater,
     orderId: orderIdComponent,
+    "deviceName+deviceGuid": deviceFormatter
 };
 
 function getIdFromItem(data) {

@@ -16,7 +16,7 @@ export const headerFieldsSetting = {
 };
 
 export const historyFieldsSetting = {
-  order: ["createdAt", "type", "itemId", "-", "itemUom", "itemDescription", "itemLocation", "wiPlanQuantity", "wiActualQuantity", "orderId", "deviceGuid"],
+  order: ["createdAt", "type", "itemId", "deviceName+deviceGuid", "-", "itemUom", "itemDescription", "itemLocation", "wiPlanQuantity", "wiActualQuantity", "orderId"],
   visibility: {
     "type": true,
     "itemId": true,
@@ -26,7 +26,7 @@ export const historyFieldsSetting = {
     "wiPlanQuantity": true,
     "wiActualQuantity": true,
     "orderId": true,
-    "deviceGuid": true,
+    "deviceName+deviceGuid": true,
     "createdAt": true,
   },
 };

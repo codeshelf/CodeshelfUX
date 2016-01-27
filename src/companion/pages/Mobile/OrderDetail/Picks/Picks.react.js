@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {datetimeToSecondsFormater} from "../../DateDisplay.react.js";
+import {deviceFormatter} from "../../Detail/common/FieldRenderer";
 import {TabWithItemList} from "../../Detail/TabWithItemList.react.js";
 import {Link} from '../../links';
 import {Button} from 'react-bootstrap';
@@ -31,6 +32,7 @@ const fieldFormater = {
   resolvedAt: datetimeToSecondsFormater,
   workerId: workerComponent,
   "workerId+workerName" : workerNameComponent,
+  "deviceName+deviceGuid": deviceFormatter
 };
 
 function getIdFromItem(data) {
