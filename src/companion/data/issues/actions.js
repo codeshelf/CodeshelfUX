@@ -6,7 +6,7 @@ import {KeyedIterable} from 'immutable';
 import _ from 'lodash';
 
 function dispatch(action, data) {
-    return dispatcher.dispatch(action, data);
+  return dispatcher.dispatch(action, data);
 }
 
 export function subscribe(key, func) {
@@ -22,17 +22,8 @@ export function getSubscriptions(key) : KeyedIterable {
 };
 
 export function replenItem(issue) {
-  dispatch(replenItem, getFacilityContext().replenishItem(issue)).then(() => {
-    //onsuccess
-    let subscriptions = getSubscriptions("issues");
-    subscriptions.map((v, k) => {
-      if (typeof(v) === "function") {
-        v.call();
-      } else {
-        console.warn("found subscription at ", k , "that was not a function was ", v);
-      }
-    });
-
+  return dispatch(replenItem, getFacilityContext().replenishItem(issue)).then((result) => {
+    return result;
 });
 
 }

@@ -11,6 +11,7 @@
     "node": "0.10.x"
   },
   "dependencies": {
+    "bardcode": "git+https://github.com/froatsnook/bardcode.git",
     "bluebird": "^2.10.2",
     "bootstrap": "^3.3.6",
     "chance": "^0.7.3",
