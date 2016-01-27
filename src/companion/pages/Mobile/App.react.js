@@ -14,7 +14,7 @@ class Header extends Component {
     return (
         <div className="header ">
           <div className="">
-            <div className="pull-left full-height visible-sm visible-xs">
+            <div className="pull-left full-height visible-sm visible-xs" style={{zIndex: 10, position: "relative"}}>
               <div className="header-inner">
                 {this.props.children}
               </div>
@@ -22,6 +22,7 @@ class Header extends Component {
             <div className="pull-center">
               <div className="header-inner">
                 <div className="brand inline">
+                  {this.props.facility.description}
                 </div>
               </div>
             </div>
