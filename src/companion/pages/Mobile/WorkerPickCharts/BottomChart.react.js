@@ -68,7 +68,9 @@ export class BottomChart extends Component {
                       params={
                         {id: encodeURIComponent(workerId),
                          tab: convertTab.toURL[TAB_PRODUCTIVITY],
-                      }}>
+                      }}
+                      onClick={() => this.props.acSetProductivityFilter(TAB_PRODUCTIVITY, this.props.filter)}
+                      >
                       <span style={{marginRight: "0.5em"}}>{totalEvents}</span>
                       {chart.toReact()}
                       <Icon name="chevron-right" className="pull-right" style={{marginTop: "-.25em"}}/>
