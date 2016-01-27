@@ -1,104 +1,130 @@
 import React, {Component} from 'react';
-import {Link, RouteHandler} from 'react-router';
+import {RouteHandler} from 'react-router';
 import Icon from "react-fa";
-import {Grid, Row, Col, DropdownButton, MenuItem} from 'react-bootstrap';
-import { NavItemLink, MenuItemLink, ButtonLink, SidebarLink} from './links';
+import {Grid, Row, Col, DropdownButton, MenuItem, Button} from 'react-bootstrap';
+import { NavItemLink, MenuItemLink, ButtonLink, Link} from './links';
 import {clearStoredCredentials} from "data/user/store";
 import {loggedout} from "data/auth/actions";
 import Sidebar from './Sidebar/Sidebar.react';
 import exposeRouter from 'components/common/exposerouter';
+import classnames from 'classnames';
 
-
-class NavigationMenu extends Component {
-
+class Header extends Component {
   render() {
-    console.log("Render navigation menu", this.props.facility);
     return (
-      <div className="header" style={{height: 48}}>
-{/**
-       <div className="pull-left full-height">
-          <div className="sm-action-bar">
-            <ButtonLink bsStyle="link" to="facility" id="home" name="home">
-              <Icon name="home" size="lg"/>
-            </ButtonLink>
-          </div>
-        </div>
-  **/}
-        <div className="pull-right full-height">
-          <div className="sm-action-bar">
-            <ButtonLink bsStyle="link"
-              to="mobile-facility"
-              id="mobile-facility"
-              name="mobile-facility">
-                <Icon name="home" size="lg"/>
-            </ButtonLink>
-        </div>
-        </div>
-        <div className="pull-right sm-table">
-          <div className="header-inner" style={{height: 48}}>
-            <div className="brand inline">
-              {this.props.children}
+        <div className="header ">
+          <div className="container-fluid relative">
+            <div className="pull-left full-height visible-sm visible-xs">
+              <div className="header-inner">
+                {this.props.children}
+              </div>
+            </div>
+            <div className="pull-center">
+              <div className="header-inner">
+                <div className="brand inline">
+                </div>
+              </div>
+            </div>
+
+            <div className="pull-right full-height visible-sm visible-xs">
+              <div className="header-inner">
+              </div>
+
             </div>
           </div>
         </div>
-      </div>
-    )
+    );
   }
 }
 
+class NavMenuItem extends Component {
+  render() {
+    var classes = classnames(this.props.className, {
+      "active": this.props.active
+    });
 
+    var propsToPass = _.clone(this.props);
+    delete propsToPass.className; //pass everything but className
+
+    return (<li className={classes}>
+              {this.props.children}
+            </li>
+    );
+  }
+}
+
+function menuIcon(iconName) {
+  return <span className="icon-thumbnail"><Icon name={iconName}></Icon></span>;
+}
+
+function menuTitle(title) {
+  return <span className="title">{title}</span>;
+}
+
+class PagesNavigation extends Component {
+  render() {
+    return (
+        <nav className="page-sidebar visible" data-pages="sidebar">
+          <div className="sidebar-header">
+            <FacilitySelector {...this.props} />
+          </div>
+          <div className="m-t-30 sidebar-menu">
+            <ul className="menu-items">
+              {this.props.children}
+            </ul>
+          </div>
+        </nav>
+    );
+  }
+}
 
 class App extends Component {
 
+  sidebarLink(route, title) {
+    return (
+        <Link
+         to={route}
+         id={route}
+         name={route}
+         onClick={() => this.props.acToggleSidebar(false)}>
+      {menuTitle(title)}
+    </Link>
+    );
+  }
+
+  sidebarFunction(onClick, title) {
+    return (
+      <a onClick={onClick} href="#">{menuTitle(title)}</a>
+    );
+  }
+
   handleLogoutClick(e) {
       e.preventDefault();
+      this.props.acToggleSidebar(false);
       clearStoredCredentials();
       loggedout(false);
   }
 
   getSidebarContent() {
     return (
-      <div>
-        <FacilitySelector {...this.props} />
-        <SidebarLink
-          to="mobile-events"
-          id="mobile-events"
-          name="mobile-events"
-          onclick={() => this.props.acToggleSidebar(false)}
-          label="Productivity"
-        />
-        <SidebarLink
-          to="mobile-search-orders"
-          id="mobile-search-orders"
-          name="mobile-search-orders"
-          onclick={() => this.props.acToggleSidebar(false)}
-          label="Orders"
-        />
-        <SidebarLink
-          to="mobile-search-workers"
-          id="mobile-search-workers"
-          name="mobile-search-workers"
-          onclick={() => this.props.acToggleSidebar(false)}
-          label="Workers"
-        />
-        <MenuItem
-          onSelect={() => {
-            const currentPath = this.props.router.getCurrentPath();
-            this.props.acToggleSidebar(false);
-            this.props.router.transitionTo("changepassword", {}, {nextPath: currentPath});
-          }}
-          id="changepassword">
-            <Icon name="edit" />Change Password
-        </MenuItem>
-        <MenuItem
-          onSelect={(e) => {
-            this.props.acToggleSidebar(false);
-            this.handleLogoutClick(e);
-          }}
-          id="logout">
-            <Icon name="sign-out" />Log out
-        </MenuItem>
-      </div>
+      <PagesNavigation {...this.props}>
+        <NavMenuItem active={false}>
+          {this.sidebarLink("mobile-events", "Productivity")}
+          {menuIcon("bar-chart")}
+        </NavMenuItem>
+        <NavMenuItem active={false}>
+          {this.sidebarLink("mobile-search-orders", "Orders")}
+          {menuIcon("shopping-cart")}
+        </NavMenuItem>
+        <NavMenuItem active={false}>
+          {this.sidebarLink("mobile-search-workers", "Workers")}
+          {menuIcon("users")}
+        </NavMenuItem>
+        <NavMenuItem>
+          {this.sidebarFunction(this.handleLogoutClick.bind(this), "Logout")}
+          {menuIcon("sign-out")}
+        </NavMenuItem>
+      </PagesNavigation>
     )
   }
 
@@ -112,20 +138,21 @@ class App extends Component {
             style={{
               sidebar: {
                 zIndex: 999,
-                width: 280,
+                width: 250,
               },
               overlay: {
                 zIndex: 998,
               }
             }}/>
           <div id="page-wrapper" className="page-container" style={{backgroundColor: "rgb(245, 245, 245)"}}>
-              <NavigationMenu facility={this.props.facility}>
-                <div
-                  style={{position: 'absolute', left: 0}}
-                  onClick={() => this.props.acToggleSidebar(true)}>
-                    <Icon name="bars" size="lg"/>
-                </div>
-              </NavigationMenu>
+              <Header facility={this.props.facility}>
+                <Button
+                    bsStyle="link"
+                    className="visible-sm-inline-block visible-xs-inline-block padding-5"
+                    onClick={() => this.props.acToggleSidebar(true)}>
+                      <Icon name="bars" size="lg"/>
+                </Button>
+              </Header>
               <div className="page-content-wrapper">
                 <div className="content">
                   <Grid fluid className="sm-padding-10">
@@ -161,12 +188,14 @@ class FacilitySelector extends React.Component {
                     availableFacilities.map((facility) => {
                         const {name, persistentId, domainId, description} = facility;
 
-                        return <SidebarLink key={domainId}
+                        return <MenuItemLink key={domainId}
                                              to="mobile-facility"
                                              params={{facilityName: domainId}}
                                              data-persistentid={persistentId}
-                                             onclick={() => this.props.acToggleSidebar(false)}
-                                             label={description}/>;
+                                             onclick={() => this.props.acToggleSidebar(false)}>
+                                 {description}
+                               </MenuItemLink>
+
                     })
                }
         </DropdownButton>);

@@ -53,4 +53,3 @@ export const MenuItemLink = wrapFacility(rrb.MenuItemLink);
 export const ButtonLink = wrapFacility(rrb.ButtonLink);
 export const ListGroupItemLink = wrapFacility(rrb.ListGroupItemLink);
 export const Link = wrapFacility(rr.Link);
-export const SidebarLink = wrapSidebar(wrapFacility(rrb.MenuItemLink));
