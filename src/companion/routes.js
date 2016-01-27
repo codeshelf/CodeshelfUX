@@ -83,20 +83,19 @@ export default (
 
     // Rotues for mobile version
 
-    <Redirect from="/mobile" to="/mobile/facilities" />
-    <Redirect from="/mobile/" to="/mobile/facilities" />
-    <Redirect from="/mobile/facilities/" to="/mobile/facilities" />
+    <Redirect from="/mobile" to="mobile" />
+    <Redirect from="/mobile/" to="mobile" />
+    <Redirect from="/mobile/facilities/" to="mobile" />
 
     <Route handler={authn(Mobile)} name="mobile" path="mobile/facilities">
       <DefaultRoute handler={LoadFacility} />
       <Route handler={FacilityWrapper} name="mobile-facility" path=":facilityName">
         <Route handler={mApp}>
-          <DefaultRoute handler={mHomeSearch} />
           <Route handler={mOrderSearch} name="mobile-search-orders" path="search/order" />
           <Route handler={mOrderDeatil} name="mobile-order-datail" path="orderDetail/:id" />
           <Route handler={mWorkerSearch} name="mobile-search-workers" path="search/worker" />
           <Route handler={mWorkerDetail} name="mobile-worker-datail" path="workerDetail/:id" />
-          <Route handler={mWorkerPickCharts} name="mobile-events" path="events" />
+          <DefaultRoute handler={mWorkerPickCharts} name="mobile-events" path="events" />
         </Route>
       </Route>
     </Route>
