@@ -32,8 +32,25 @@ function wrapFacility(Component) {
   return connect(mapState)(WrapFacility);
 }
 
+function wrapSidebar(Component) {
+
+  class WrapSidebar extends React.Component {
+    render() {
+      return (
+        <Component {...this.props}>
+          <div onClick={this.props.onclick}>{this.props.label}</div>
+        </Component>
+      )
+    }
+
+  }
+
+  return WrapSidebar;
+}
+
 export const NavItemLink = wrapFacility(rrb.NavItemLink);
 export const MenuItemLink = wrapFacility(rrb.MenuItemLink);
 export const ButtonLink = wrapFacility(rrb.ButtonLink);
 export const ListGroupItemLink = wrapFacility(rrb.ListGroupItemLink);
 export const Link = wrapFacility(rr.Link);
+export const SidebarLink = wrapSidebar(wrapFacility(rrb.MenuItemLink));

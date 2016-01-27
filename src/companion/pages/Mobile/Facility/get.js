@@ -1,5 +1,6 @@
 // Helpers to extract part of store state from global state
 import {asMutable} from "pages/Mobile/asMutable";
+import {Record} from 'immutable';
 
 export function getFacility({facility}) {
   return facility;

@@ -5,12 +5,10 @@ import exposeRouter from 'components/common/exposerouter';
 import {RouteHandler} from 'react-router';
 
 import {acInitialLoadFacilities, acSelectFacility} from './store';
+import {acToggleSidebar} from '../Sidebar/store';
 import {getFacilityMutable} from "./get";
+import {getSidebarMutable} from "../Sidebar/get";
 
-
-function mapDispatch(dispatch) {
-  return bindActionCreators({acInitialLoadFacilities, acSelectFacility}, dispatch);
-}
 
 class FacilityWrapper extends Component {
 
@@ -38,7 +36,6 @@ class FacilityWrapper extends Component {
   }
 
   render() {
-    console.log("~~~~~ facility wraper");
     // if we are going directly to this route we must first load facilities
     if (this.props.loadingAvailableFacilities) return this.renderLoading();
     // if haven't selected facility render loading
@@ -51,10 +48,24 @@ class FacilityWrapper extends Component {
        <RouteHandler key={selectedFacility.persistentId}
                       facility={selectedFacility}
                       availableFacilities={availableFacilities}
-                      acSelectFacility={this.props.acSelectFacility} />
+                      acSelectFacility={this.props.acSelectFacility}
+                      acToggleSidebar={this.props.acToggleSidebar}
+                      isOpen={this.props.isOpen}
+                      />
       );
     }
   }
 }
 
-export default exposeRouter(connect(getFacilityMutable, mapDispatch)(FacilityWrapper));
+function getState(state) {
+  return {
+    ...getFacilityMutable(state),
+    ...getSidebarMutable(state),
+  }
+}
+
+function mapDispatch(dispatch) {
+  return bindActionCreators({acInitialLoadFacilities, acSelectFacility, acToggleSidebar}, dispatch);
+}
+
+export default exposeRouter(connect(getState, mapDispatch)(FacilityWrapper));
