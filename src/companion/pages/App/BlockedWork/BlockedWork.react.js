@@ -34,6 +34,7 @@ export default class BlockedWork extends React.Component {
     toDescription(type) {
         return {
             "SKIP_ITEM_SCAN": "Skipped",
+            "SUBSTITUTION": "Substitution",
             "SHORT": "Shorted",
             "BUTTON": "Button",
             "COMPLETE": "Complete",
@@ -54,8 +55,13 @@ export default class BlockedWork extends React.Component {
     }
 
     renderTabbedArea(issuesSummary) {
-        let sortedSummary = issuesSummary
-            .sortBy((summary) => summary.get("eventType"));
+        let sortedSummary = issuesSummary.filter(summary => {
+            let type = summary.get("eventType");
+            let description = this.toDescription(type);
+            const hasDescription =  !(typeof description === 'undefined' || description == null);
+            return hasDescription;
+          }).sortBy((summary) => summary.get("eventType"));
+
         let firstType = sortedSummary.first().get("eventType");
         const {filter} = this.state;
         return (
@@ -63,12 +69,12 @@ export default class BlockedWork extends React.Component {
                 <IBoxBody>
                 <TabbedArea className="nav-tabs-simple" defaultActiveKey={firstType}>
                 {
-
                     sortedSummary.map((summary) => {
                         let type = summary.get("eventType");
                         let description = this.toDescription(type);
                         let total = summary.get("count");
                         return (<TabPane eventKey={type}
+                                 key={type}
                                  tab={<span>
                                       {description && description.toUpperCase()}
                                       <Badge style={{marginLeft: "1em"}} className="badge-primary">{total}</Badge>
@@ -85,7 +91,7 @@ export default class BlockedWork extends React.Component {
     }
 
     render() {
-        let title = "Blocked Work";
+        let title = "Issues";
         let issuesSummary = getIssuesSummary();
         let issuesSummaryResults = issuesSummary.get("results") || List();
         let filteredIssueSummaryResults = issuesSummaryResults

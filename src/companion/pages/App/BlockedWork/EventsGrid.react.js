@@ -132,7 +132,7 @@ class IssueButton extends React.Component {
 
           </Button>
           <Overlay
-            show={result}
+            show={(result != null)}
             placement="left"
             target={()=> React.findDOMNode(this)}
             rootClose={true}
@@ -153,7 +153,7 @@ class IssueActions extends React.Component {
     return (
 
         <div>
-        {(type === "LOW" || type === "SHORT" || type === "SUBSTITUTE") &&
+        {(type === "LOW" || type === "SHORT" || type === "SUBSTITUTION") &&
          <IssueButton className="replen" rowData={rowData} onClick={replenItem} iconName="retweet" title="Replenish"/> }
         <IssueButton rowData={rowData} onClick={resolveIssue} iconName="check" title="Resolve" style={{marginLeft: ".5em"}}/>
 
