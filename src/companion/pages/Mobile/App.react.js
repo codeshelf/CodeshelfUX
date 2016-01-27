@@ -9,6 +9,16 @@ import Sidebar from './Sidebar/Sidebar.react';
 import exposeRouter from 'components/common/exposerouter';
 import classnames from 'classnames';
 
+function renderFacilityLabel(facility) {
+  if (facility) {
+    const {description, timeZoneDisplay} = facility;
+    return (<span><Icon name="building" style={{marginRight: ".25em"}}/>{description}({timeZoneDisplay})</span>);
+  } else {
+    return null;
+  }
+}
+
+
 class Header extends Component {
   render() {
     return (
@@ -22,7 +32,7 @@ class Header extends Component {
             <div className="pull-center">
               <div className="header-inner">
                 <div className="brand inline">
-                  {this.props.facility.description}
+                  {renderFacilityLabel(this.props.facility)}
                 </div>
               </div>
             </div>
@@ -173,18 +183,9 @@ export default exposeRouter(App);
 
 class FacilitySelector extends React.Component {
 
-    renderDropdownLabel(facility) {
-        if (facility) {
-          const {description, timeZoneDisplay} = facility;
-            return (<span><Icon name="building" />{description}({timeZoneDisplay})</span>);
-        } else {
-            return null;
-        }
-    }
-
     render() {
         let {facility, availableFacilities} = this.props;
-        return (<DropdownButton className="facility-dropdown" bsStyle="link" title={this.renderDropdownLabel(facility)}>
+        return (<DropdownButton className="facility-dropdown" bsStyle="link" title={renderFacilityLabel(facility)}>
                 {
                     availableFacilities.map((facility) => {
                         const {name, persistentId, domainId, description} = facility;
