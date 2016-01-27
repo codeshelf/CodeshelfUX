@@ -13,7 +13,7 @@ class Header extends Component {
   render() {
     return (
         <div className="header ">
-          <div className="container-fluid relative">
+          <div className="">
             <div className="pull-left full-height visible-sm visible-xs">
               <div className="header-inner">
                 {this.props.children}
