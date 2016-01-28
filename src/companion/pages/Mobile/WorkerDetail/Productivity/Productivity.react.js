@@ -13,7 +13,7 @@ import {TopChart} from '../../WorkerPickCharts/TopChart.react.js';
 import {DurationPicker} from '../../WorkerPickCharts/TopChart.react.js';
 import {SettingsRow} from "../../Detail/common/SettingsRow.react.js";
 import {Settings} from '../../Detail/common/Settings.react.js';
-import {renderField} from "../../Detail/common/FieldRenderer.react.js";
+import {renderField, deviceFormatter} from "../../Detail/common/FieldRenderer.react.js";
 
 import {fieldToDescription} from "../../common/historyItemIntl";
 import {acMoveGraphToLeft, acMoveGraphToRight} from '../store';
@@ -34,6 +34,7 @@ function orderIdComponent(orderId) {
 const fieldFormater = {
     createdAt: datetimeToSecondsFormater,
     orderId: orderIdComponent,
+    'deviceName+deviceGuid': deviceFormatter,  
 };
 
 function getIdFromItem(data) {
