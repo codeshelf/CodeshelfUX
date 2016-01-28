@@ -88,7 +88,7 @@ export class TopChart extends Component {
         <Row>
           <Col>
             <div className="text-center">
-            <DurationPicker  value={filter} durations={DURATIONS} onChange={acSetFilterAndRefresh} />
+            <DurationPicker value={filter} durations={DURATIONS} onChange={acSetFilterAndRefresh} />
             </div>
           </Col>
         </Row>

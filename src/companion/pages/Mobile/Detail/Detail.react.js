@@ -97,7 +97,7 @@ export class Detail extends Component {
       const acSetFieldOrder = (f, v) => this.props.acSetFieldOrder(tab, f, v);
       const acExpand = (i) => this.props.acExpand(tab, i);
       const acReloadTab = () => this.props.acSelectTab(tab, this.itemId, true);
-      const acSearchAdditional = (token) => this.props.acSearchAdditional(tab, token);
+      const acSearchAdditional = (filter) => this.props.acSearchAdditional(tab, filter);
       const acSearch = (forceLoad) => this.props.acSearch(tab, forceLoad);
       const commonProps = {
         //data

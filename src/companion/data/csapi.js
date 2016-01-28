@@ -71,6 +71,7 @@ function ajax(path, options) {
     if (options.contentType) {
         reqWithMethod = reqWithMethod.type(options.contentType);
     }
+
     return reqWithMethod
         .withCredentials()
         .then((response) => {

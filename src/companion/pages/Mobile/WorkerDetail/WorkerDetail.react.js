@@ -7,7 +7,7 @@ import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {Detail, TitleComponent, TitleCol} from "../Detail/Detail.react.js";
 
-import {TAB_DETAIL, TAB_HISTORY, TAB_PRODUCTIVITY, ALL_TABS} from './store';
+import {TAB_DETAIL, TAB_PRODUCTIVITY, ALL_TABS} from './store';
 import {acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
     acSettingOpen, acSettingClose, acSearchAdditional, acSetFilter, acSearch,
     acSetFilterAndRefresh} from './store';
@@ -15,31 +15,26 @@ import {getWorkerDetailMutable} from "./get";
 
 import {Header} from "./Header/Header.react.js";
 import {fieldToDescription} from "./Header/intl";
-import {History} from "./History/History.react.js";
 import {Productivity} from "./Productivity/Productivity.react.js";
 
 
 const tabToComponent = {
   [TAB_DETAIL]: Header,
-  [TAB_HISTORY]: History,
   [TAB_PRODUCTIVITY]: Productivity,
 }
 
 const tabToHeaderText = {
   [TAB_DETAIL]: "Worker",
-  [TAB_HISTORY]: "History",
   [TAB_PRODUCTIVITY]: "Productivity",
 }
 
 export const convertTab = {
   fromURL: {
     detail: TAB_DETAIL,
-    history: TAB_HISTORY,
     productivity: TAB_PRODUCTIVITY,
   },
   toURL: {
     [TAB_DETAIL]: "detail",
-    [TAB_HISTORY]: "history",
     [TAB_PRODUCTIVITY]: "productivity",
   },
 }
@@ -65,14 +60,14 @@ export class WorkerDetail extends Component {
     const {error, whatIsLoading, whatIsLoaded} = this.props[tab];
     const transitionTo = 'mobile-worker-detail';
     return (
-      <Detail {...this.props} {...{
-        ALL_TABS,
-        tabToComponent,
-        tabToHeaderText,
-        getTitleComponent,
-        convertTab,
-        transitionTo,
-      }} />
+        <Detail {...this.props} {...{
+          ALL_TABS,
+          tabToComponent,
+          tabToHeaderText,
+          getTitleComponent,
+          convertTab,
+          transitionTo,
+        }} />
     );
   }
 }

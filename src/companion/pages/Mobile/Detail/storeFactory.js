@@ -335,9 +335,8 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
     };
   }
 
-    function acSearchAdditional(tab) {
+    function acSearchAdditional(tab, filter) {
     return (dispatch, getState) => {
-      const filter = getLocalStore(getState())[tab].filter;
       dispatch(searchAdditional(tab, STATUS_STARTED, {whatIsLoading: filter}));
 
       const facilityContext = getFacilityContextFromState(getState());
@@ -345,7 +344,6 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
         dispatch(searchAdditional(tab, STATUS_ERROR, {error: "Want to search for orders but no facility context is provided"}));
         return;
       }
-
       tabToAdditionalApi(facilityContext, tab, filter)
       .catch((error) => {
         const additionalDataLoading = getLocalStore(getState())[tab].additionalDataLoading;
