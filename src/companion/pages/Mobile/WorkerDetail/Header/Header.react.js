@@ -5,6 +5,8 @@ import {fieldToDescription} from "./intl";
 
 const fieldFormater = {
   updated: datetimeToSecondsFormater,
+  lastLogin: datetimeToSecondsFormater,
+  lastLogout: datetimeToSecondsFormater
 };
 
 function getIdFromItem(data) {
