@@ -97,7 +97,7 @@ export default (
           <Route handler={mWorkerSearch} name="mobile-search-workers" path="search/worker" />
           <Route handler={mWorkerDetail} name="mobile-worker-detail" path="workerDetail/:id/:tab" />
           <Route handler={mWorkerDetail} name="mobile-worker-detail-default" path="workerDetail/:id" />
-          <Route handler={mWorkerPickCharts} name="mobile-events" path="events" />
+          <DefaultRoute handler={mWorkerPickCharts} name="mobile-events" path="events" />
         </Route>
       </Route>
     </Route>

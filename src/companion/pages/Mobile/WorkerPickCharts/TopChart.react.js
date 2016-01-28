@@ -93,47 +93,48 @@ export class TopChart extends Component {
           </Col>
         </Row>
         <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
-          <Col>
+          <Col xs={10}>
+            {showLoading && <span>Loading chart...</span>}
+            {showError && <span>Error: {errorText}</span>}
+          </Col>
+          <Col xs={2}>
             <Button bsStyle="link" className="pull-right" bsSize="sm" onClick={() => this.setState({expanded: !this.state.expanded})}>
               <Icon name={this.state.expanded ? "compress": "expand"} />
             </Button>
           </Col>
         </Row>
-        <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
-        {!showLoading && !showError &&
-          <WidthWrapper>{(width) =>
-            <HistogramChart
-              expanded={this.state.expanded}
-              limit={12}
-              interval={filter.interval}
-              pickRates={data}
-              chartStyle={{
-                height: width/2.5,
-                width: width,
-                barWidth: 60,
-                margins: {
-                  top: 20,
-                  right: 20,
-                  bottom: 20,
-                  left: 50,
-                },
-              }} />
-          }</WidthWrapper>}
+        <Row style={{paddingLeft: "1em", paddingRight: "1em" }}>
+          <Col>
+           <WidthWrapper>{(width) => {
+             const minHeight = Math.round(width/2.5);
+             if (!showLoading && !showError && data) {
+               return (
+                   <HistogramChart
+                      expanded={this.state.expanded}
+                      limit={12}
+                      interval={filter.interval}
+                      pickRates={data}
+                      chartStyle={{
+                        height: minHeight,
+                        width: width,
+                        barWidth: 60,
+                        margins: {
+                          top: 20,
+                          right: 20,
+                          bottom: 20,
+                          left: 50,
+                        },
+                      }} />
+                   );
+               } else {
+                 return (<div style={{minHeight: minHeight + 6}} />);
+               }
+             }}</WidthWrapper>
+            </Col>
           </Row>
           <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
             <Col>
-              <div className="pull-left" style={{display: "table"}}>
-                <Button bsStyle="link" className="pull-left" bsSize="md" onClick={acMoveGraphToLeft}>
-                  <Icon name="step-backward" />
-                </Button>
-                <DateDisplay style={{display: "table-cell",  verticalAlign:"middle"}} date={moment(filter.endtime).subtract(filter.window)} />
-              </div>
-              <div className="pull-right" style={{display: "table"}}>
-               <DateDisplay style={{display: "table-cell", verticalAlign: "middle"}} date={filter.endtime.format()} />
-                <Button bsStyle="link" bsSize="md" onClick={acMoveGraphToRight}>
-                  <Icon name="step-forward" />
-                </Button>
-              </div>
+              <ChartNavigation {...{filter, acMoveGraphToLeft, acMoveGraphToRight}} />
             </Col>
           </Row>
       </div>
