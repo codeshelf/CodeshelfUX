@@ -6,7 +6,7 @@ import d3 from "d3";
 import ReactFauxDOM from 'react-faux-dom';
 import {TAB_PRODUCTIVITY} from '../WorkerDetail/store';
 import {convertTab} from '../WorkerDetail/WorkerDetail.react.js';
-
+import {Map, Record} from "immutable";
 import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../links';
 
 export class BottomChart extends Component {
@@ -41,11 +41,12 @@ export class BottomChart extends Component {
 
 
   render() {
-    const {whatIsLoading, whatIsLoaded} = this.props;
+    const {whatIsLoading, whatIsLoaded, filter} = this.props;
     if (whatIsLoading !== null || whatIsLoaded === null) {
       return null;
     } else {
       //return <div>{this.props.data && JSON.stringify(this.props.data[1])}</div>;
+      const WorkerHistogramFilter = Record(Map(filter).set("id", null).toJS());
       return (
         <Panel header="Worker Picks">
           <WidthWrapper>{(width) => (
@@ -62,14 +63,15 @@ export class BottomChart extends Component {
                     margin:0
                   };
                   const chart = this.printChart(ReactFauxDOM.createElement('svg'), eventBins, style);
+                  const filterWithId = WorkerHistogramFilter(filter).set("id");
                   return (
-                    <ListGroupItemLink 
+                    <ListGroupItemLink
                       to="mobile-worker-detail"
                       params={
                         {id: encodeURIComponent(workerId),
                          tab: convertTab.toURL[TAB_PRODUCTIVITY],
                       }}
-                      onClick={() => this.props.acSetProductivityFilter(TAB_PRODUCTIVITY, this.props.filter)}
+                      onClick={() => this.props.acSetProductivityFilter(TAB_PRODUCTIVITY, filterWithId)}
                       >
                       <div style={{fontSize: "75%"}}>{workerName}</div>
                       <span style={{width: "4em" ,marginRight: "0.5em"}}>{totalEvents}</span>

@@ -130,6 +130,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
       }
       case SET_FILTER: {
         const {filter, tab} = action;
+        state = initTabFilter(state, tab);
         return state.mergeIn([tab, "filter"], fromJS(filter));
       }
       case SETTING_OPEN: {
@@ -175,13 +176,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
       }
       case SELECT_TAB: {
         const {tab, itemId} = action;
-        if (!state[tab].filter || state[tab].filter.id !== itemId) {
-          state = state.setIn([tab, "filter"], new (Record(getDefaultFilter(tab))))
-        }
-        //if (state[tab].filter.id === itemId) return state;
-        return state
-                .setIn([tab, "filter", "id"], itemId)
-                .setIn(["tab"], tab);
+        return initTabFilter(state, tab, itemId);
       }
       case 'REDUX_STORAGE_LOAD': {
         try {
@@ -197,6 +192,18 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
         }
       }
       default: return state;
+    }
+  }
+
+  function initTabFilter(state, tab, itemId) {
+    const filterPath = [tab, "filter"];
+    if (!state.getIn(filterPath) || (itemId && state.getIn(filterPath).get("id") !== itemId)) {
+      return state
+        .setIn([tab, "filter"], new (Record(getDefaultFilter(tab))))
+        .setIn([tab, "filter", "id"], itemId)
+        .setIn(["tab"], tab);
+    } else {
+      return state;
     }
   }
 
