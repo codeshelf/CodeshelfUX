@@ -8,18 +8,21 @@ export class SettingsRow extends Component {
 
   render() {
     const {onClickReload , onClickSettings} = this.props;
-    let numberOfButtons = 2;
+    let numberOfButtons = 1;
+    if (onClickReload) numberOfButtons++;
     if (Array.isArray(this.props.children)) {
       numberOfButtons += this.props.children.length;
     }
     return (
         <Row className="settings">
           {/*TODO probably styling should look different*/}
-          <Col xs={numberOfButtons === 2? 4: 7} xsOffset={numberOfButtons === 2? 8: 5}>
+          <Col xs={12}>
+            <span className="pull-right">
             {this.props.children}
             <Button bsStyle="primary" bsSize="xs" onClick={onClickSettings}><Icon name="gears" /></Button>
-            <Button bsStyle="primary" bsSize="xs" onClick={onClickReload}><Icon name="refresh" /></Button>
-
+            {onClickReload &&
+               <Button bsStyle="primary" bsSize="xs" onClick={onClickReload}><Icon name="refresh" /></Button>}
+            </span>
           </Col>
         </Row>
     );

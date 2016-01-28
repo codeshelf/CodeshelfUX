@@ -5,12 +5,9 @@ import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import {Link} from '../../links';
 
 import {datetimeToSecondsFormater} from "../../DateDisplay.react.js";
-import {TabWithOneItem} from "../../Detail/TabWithOneItem.react.js";
-import {getWorkerDetailMutable} from '../get.js';
+import {TabWithItemList} from "../../Detail/TabWithItemList.react.js";
 
-import {HistogramChart} from '../../WorkerPickCharts/HistogramChart.react.js';
 import {TopChart} from '../../WorkerPickCharts/TopChart.react.js';
-import {DurationPicker} from '../../WorkerPickCharts/TopChart.react.js';
 import {SettingsRow} from "../../Detail/common/SettingsRow.react.js";
 import {Settings} from '../../Detail/common/Settings.react.js';
 import {renderField, deviceFormatter} from "../../Detail/common/FieldRenderer.react.js";
@@ -33,7 +30,7 @@ function orderIdComponent(orderId) {
 const fieldFormater = {
     createdAt: datetimeToSecondsFormater,
     orderId: orderIdComponent,
-    'deviceName+deviceGuid': deviceFormatter,  
+    'deviceName+deviceGuid': deviceFormatter,
 };
 
 function getIdFromItem(data) {
@@ -76,12 +73,11 @@ export class ProductivityDump extends Component {
   }
 
   render() {
-    const {data: {events, histogram}, expanded, additionalDataLoading, filter, id} = this.props;
+    //consume acReloadTab so that the list does not show Refresh button
+    const {data: {events, histogram}, additionalDataLoading,
+           filter, id, acReloadTab, acSearchAdditional, ...other} = this.props;
+
     if (filter === null) return null;
-    const count = events.total;
-    const {settings: {open: settingOpen, properties: fieldSettings}} = this.props;
-    const {acSettingOpen, acSettingClose, acSetFieldVisibility,
-     acSetFieldOrder, acReloadTab, acSearchAdditional, acSearch} = this.props;
     const {next} = events;
     return (
       <div>
@@ -89,36 +85,21 @@ export class ProductivityDump extends Component {
           data={histogram}
           title={"Worker Picks"}
         />
-        <Button bsStyle="primary" bsSize="xs" onClick={acSettingOpen}><Icon name="gears" /></Button>
-        <Settings title="Set field visibility"
-                  visible={settingOpen}
-                  onClose={acSettingClose}
-                  {...{fieldToDescription,
-                    fieldSettings,
-                    acSetFieldVisibility,
-                    acSetFieldOrder}} />
-        { count === 0
-          ? <div>{noEntriesText}</div>
-          : <div>
-              <hr />
-              {events.results.map((oneItem) =>
-                this.renderItem(
-                  (expanded && getIdFromItem(oneItem) === expanded),
-                  fieldSettings,
-                  getIdFromItem(oneItem),
-                  oneItem
-                )
-              )}
-              {additionalDataLoading &&
-                <Icon name="spinner " />
-              }
-              {(next && !additionalDataLoading) &&
-                  <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchAdditional({id, next})}>
-                    <Icon name="long-arrow-right" />
-                  </Button>
-              }
-          </div>
-        }
+        <TabWithItemList data={events.results} {...{getIdFromItem, fieldToDescription, fieldFormater}} {...other}>
+          {noEntriesText}
+        </TabWithItemList>
+        <Row>
+          <Col>
+            {additionalDataLoading &&
+              <Icon name="spinner" spin />
+            }
+            {(events.results.length > 0 && next && !additionalDataLoading) &&
+              <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchAdditional({id, next})}>
+                <Icon name="long-arrow-right" />
+              </Button>
+            }
+          </Col>
+        </Row>
       </div>
     );
   }
