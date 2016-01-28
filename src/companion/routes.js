@@ -92,10 +92,12 @@ export default (
       <Route handler={FacilityWrapper} name="mobile-facility" path=":facilityName">
         <Route handler={mApp}>
           <Route handler={mOrderSearch} name="mobile-search-orders" path="search/order" />
-          <Route handler={mOrderDeatil} name="mobile-order-datail" path="orderDetail/:id" />
+          <Route handler={mOrderDeatil} name="mobile-order-datail" path="orderDetail/:id/:tab" />
+          <Route handler={mOrderDeatil} name="mobile-order-datail-default" path="orderDetail/:id" />
           <Route handler={mWorkerSearch} name="mobile-search-workers" path="search/worker" />
-          <Route handler={mWorkerDetail} name="mobile-worker-datail" path="workerDetail/:id" />
-          <DefaultRoute handler={mWorkerPickCharts} name="mobile-events" path="events" />
+          <Route handler={mWorkerDetail} name="mobile-worker-detail" path="workerDetail/:id/:tab" />
+          <Route handler={mWorkerDetail} name="mobile-worker-detail-default" path="workerDetail/:id" />
+          <Route handler={mWorkerPickCharts} name="mobile-events" path="events" />
         </Route>
       </Route>
     </Route>

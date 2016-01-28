@@ -25,6 +25,23 @@ const tabToSetting = {
   [TAB_IMPORTS]: fieldSetting.importFieldsSetting,
 };
 
+function getDefaultFilter(tab) {
+  return {
+    [TAB_DETAIL]: {
+      id: null,
+    },
+    [TAB_ITEMS]: {
+      id: null,
+    },
+    [TAB_PICKS]: {
+      id: null,
+    },
+    [TAB_IMPORTS]: {
+      id: null,
+    },
+  }[tab]
+}
+
 // all avalible properties for order detail
 const orderDetailProperties = ["persistentId", "orderId", "customerId", "shipperId", "destinationId", "containerId",
     "status", "orderLocationAliasIds", "groupUi", "active", "fullDomainId", "wallUi", "orderType", "dueDate", "orderDate"];
@@ -32,18 +49,18 @@ const orderDetailProperties = ["persistentId", "orderId", "customerId", "shipper
 const MILISECONDS_IN_MONTH = 1000*60*60*24*31;
 
 // TODO optimize for speed
-function tabToApi(facilityContext, tab, orderId) {
+function tabToApi(facilityContext, tab, filter) {
   const call = {
-    [TAB_DETAIL]: (orderId) => facilityContext.getOrder(orderDetailProperties, orderId),
-    [TAB_ITEMS]:  facilityContext.getOrderDetails,
+    [TAB_DETAIL]: (filter) => facilityContext.getOrder(orderDetailProperties, filter.id),
+    [TAB_ITEMS]:  (filter) => facilityContext.getOrderDetails(filter.id),
     //[TAB_PICKS]: getPicks,
-    [TAB_PICKS]: facilityContext.getOrderEvents,
-    [TAB_IMPORTS]: (orderId) => {
+    [TAB_PICKS]: (filter) => facilityContext.getOrderEvents(filter.id),
+    [TAB_IMPORTS]: (filter) => {
       const nowTime = new Date();
       const monthBefore = new Date();
       monthBefore.setTime(nowTime.getTime()-MILISECONDS_IN_MONTH);
       return facilityContext.findImportReceipts({
-        orderIds: `*${orderId}*`,
+        orderIds: `*${filter.id}*`,
         itemIds: "",
         gtins: "",
         properties: ["orderId"],
@@ -51,10 +68,10 @@ function tabToApi(facilityContext, tab, orderId) {
       })
     }
   }[tab];
-  return call(orderId);
+  return call(filter);
 }
 
-const store = createStore("orderDetail", getOrderDetail, ALL_TABS, tabToSetting,  tabToApi);
+const store = createStore("orderDetail", getOrderDetail, ALL_TABS, tabToSetting,  tabToApi, null, null, getDefaultFilter);
 
 export const orderDetailReducer = store.detailReducer;
 export const acSearch = store.acSearch;

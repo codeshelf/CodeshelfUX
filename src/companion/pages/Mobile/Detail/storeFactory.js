@@ -1,10 +1,10 @@
 import moment from "moment";
 import _ from "lodash";
-import {Map, Record} from 'immutable';
+import {Map, Record, fromJS} from 'immutable';
 
 import {ConnectionError} from 'data/csapi';
 import {getFacilityContextFromState} from "../Facility/get";
-
+import {TAB_PRODUCTIVITY} from '../WorkerDetail/store';
 const SELECT_TAB = 'select tab for detail tab';
 
 const LOADING_DATA = "loading of data for some tab"; // should have setted
@@ -24,10 +24,11 @@ const SETTING_CLOSE = "close settings";
 export const SETTING_PROPERTY_VISIBILITY = "set property visibility";
 export const SETTING_PROPERTY_ORDER = "set property order";
 
+
 const EXPAND_SOMETHING = "expand something";
 
 export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
-  tabToApi, tabToAdditionalApi, mergeAdditionalData) {
+  tabToApi, tabToAdditionalApi, mergeAdditionalData, getDefaultFilter) {
 
   // construction of mutable state which we will transform into immutable
   let _initState = {
@@ -50,11 +51,12 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
       ...dataLoadingState,
       expanded: null,
       settings: new (Record({
-        properties: new (Record(tabToSetting[tab])),
+        properties: new (Record(tabToSetting[tab] ? tabToSetting[tab]: {})),
         open: false,
       })),
     }));
   });
+
 
   const initState = new (Record(_initState));
   window.test = initState;
@@ -77,13 +79,13 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
             }));
           }
           case STATUS_OK: {
-            const {data, itemId} = action;
+            const {data, filter} = action;
             const loadedTime = moment();
             return state.mergeIn([tab], new Map({
                 data,
                 error: null,
                 whatIsLoading: null,
-                whatIsLoaded: itemId,
+                whatIsLoaded: filter,
                 loadedTime,
                 additionalDataLoading: null,
             }));
@@ -128,9 +130,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
       }
       case SET_FILTER: {
         const {filter, tab} = action;
-        return state.mergeIn([tab], new Map({
-            filter,
-        }));
+        return state.mergeIn([tab, "filter"], fromJS(filter));
       }
       case SETTING_OPEN: {
         const {tab} = action;
@@ -174,8 +174,14 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
         return state.setIn([tab, "expanded"], expanded);
       }
       case SELECT_TAB: {
-        const {tab} = action;
-        return state.setIn(["tab"], tab);
+        const {tab, itemId} = action;
+        if (!state[tab].filter || state[tab].filter.id !== itemId) {
+          state = state.setIn([tab, "filter"], new (Record(getDefaultFilter(tab))))
+        }
+        //if (state[tab].filter.id === itemId) return state;
+        return state
+                .setIn([tab, "filter", "id"], itemId)
+                .setIn(["tab"], tab);
       }
       case 'REDUX_STORAGE_LOAD': {
         try {
@@ -236,6 +242,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
     }
   }
 
+
   function acExpand(tab, what) {
     return {
       type: EXPAND_SOMETHING,
@@ -262,7 +269,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
         forceLoad,
         storeName,
       });
-      return dispatch(acSearch(tab, itemId, forceLoad));
+      return dispatch(acSearch(tab, forceLoad));
     }
   }
 
@@ -285,14 +292,15 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
     }
   }
 
-  function acSearch(tab, itemId, forceLoad) {
+  function acSearch(tab, forceLoad) {
     return (dispatch, getState) => {
       const whatIsLoaded = getLocalStore(getState())[tab].whatIsLoaded;
-      if ((whatIsLoaded === itemId) && (!forceLoad)) {
-        console.info(`Skip loading order info for ${itemId} beacuse is already loaded`);
+      const filter = getLocalStore(getState())[tab].filter;
+      if ((whatIsLoaded === filter) && (!forceLoad)) {
+        console.info(`Skip loading order info for ${filter} beacuse is already loaded`);
         return;
       }
-      dispatch(search(tab, STATUS_STARTED, {whatIsLoading: itemId}));
+      dispatch(search(tab, STATUS_STARTED, {whatIsLoading: filter}));
 
       const facilityContext = getFacilityContextFromState(getState());
       if (!facilityContext) {
@@ -300,18 +308,18 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
         return;
       }
 
-      tabToApi(facilityContext, tab, itemId)
+      tabToApi(facilityContext, tab, filter)
       .catch((error) => {
         const whatIsLoading = getLocalStore(getState())[tab].whatIsLoading;
-        if (_.isEqual(whatIsLoading,itemId)) {
+        if (whatIsLoading === filter) {
           console.error(`Error from search for ${storeName}`, error);
           dispatch(search(tab, STATUS_ERROR, {error}));
         }
       })
       .then((data) => {
         const whatIsLoading = getLocalStore(getState())[tab].whatIsLoading;
-        if (_.isEqual(whatIsLoading,itemId)) {
-          dispatch(search(tab, STATUS_OK, {data, itemId}));
+        if (whatIsLoading === filter) {
+          dispatch(search(tab, STATUS_OK, {data, filter}));
         }
       });
     }
@@ -327,35 +335,43 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
     };
   }
 
-    function acSearchAdditional(tab, itemId) {
+    function acSearchAdditional(tab, filter) {
     return (dispatch, getState) => {
-      dispatch(searchAdditional(tab, STATUS_STARTED, {whatIsLoading: itemId}));
+      dispatch(searchAdditional(tab, STATUS_STARTED, {whatIsLoading: filter}));
 
       const facilityContext = getFacilityContextFromState(getState());
       if (!facilityContext) {
         dispatch(searchAdditional(tab, STATUS_ERROR, {error: "Want to search for orders but no facility context is provided"}));
         return;
       }
-
-      tabToAdditionalApi(facilityContext, tab, itemId)
+      tabToAdditionalApi(facilityContext, tab, filter)
       .catch((error) => {
         const additionalDataLoading = getLocalStore(getState())[tab].additionalDataLoading;
-        if  (_.isEqual(additionalDataLoading,itemId)) {
+        if  (additionalDataLoading === filter) {
           console.error(`Error from search for ${storeName}`, error);
           dispatch(searchAdditional(tab, STATUS_ERROR, {error}));
         }
       })
       .then((data) => {
         const additionalDataLoading = getLocalStore(getState())[tab].additionalDataLoading;
-        if  (_.isEqual(additionalDataLoading,itemId)) {
-          dispatch(searchAdditional(tab, STATUS_OK, {data, itemId}));
+        if  (additionalDataLoading === filter) {
+          dispatch(searchAdditional(tab, STATUS_OK, {data, filter}));
         }
       });
     }
   }
 
+  function acSetFilterAndRefresh(filter, itemId, tab) {
+    tab = tab || TAB_PRODUCTIVITY;
+    return function(dispatch) {
+      dispatch(acSetFilter(tab, filter))
+      dispatch(acSearch(tab, true))
+    }
+  }
+
   return {
     acSetFilter,
+    acSetFilterAndRefresh,
     acSearch,
     acSearchAdditional,
     acSelectTab,

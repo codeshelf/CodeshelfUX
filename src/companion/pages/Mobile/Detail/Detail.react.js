@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {TimeFromNow} from "../DateDisplay.react.js";
+import _ from "lodash";
 
 import * as csapi from 'data/csapi';
 import "./Detail.styl";
@@ -13,18 +14,40 @@ export class Detail extends Component {
   }
 
   itemId = null;
+  previousUrl = null;
 
   componentWillMount() {
-    const {id: itemId} = this.props.router.getCurrentParams();
+    this.previousUrl = this.props.router.getCurrentParams();
+    const {id: itemId, tab} = this.props.router.getCurrentParams();
     this.itemId = itemId;
-    const defaultSelectTab = this.props.defaultSelectTab || 0;
-    this.props.acSelectTab(defaultSelectTab, itemId, true);
+    const selectTab = this.props.convertTab.fromURL[tab] || this.props.defaultSelectTab || 0;
+    this.props.acSelectTab(selectTab, itemId, true);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {id: itemId, tab} = nextProps.router.getCurrentParams();
+    if (!_.isEqual(this.previousUrl, nextProps.router.getCurrentParams())) {
+      this.previousUrl = nextProps.router.getCurrentParams();
+      this.props.acSelectTab(this.props.convertTab.fromURL[tab], itemId, true);
+    }
   }
 
 
   renderTabs(activeTab, loadedTime) {
     return (
-      <Tabs className="nav-tabs-simple" activeKey={activeTab} onSelect={(tab) => this.props.acSelectTab(tab, this.itemId)} tabWidth={1}>
+      <Tabs
+        className="nav-tabs-simple"
+        activeKey={activeTab}
+        onSelect={(tab) => {
+          this.props.router.transitionTo(this.props.transitionTo,
+            {
+              facilityName: this.props.router.getCurrentParams().facilityName,
+              id: this.props.router.getCurrentParams().id,
+              tab: this.props.convertTab.toURL[tab],
+            }
+          )
+        }}
+        tabWidth={1}>
         {this.props.ALL_TABS.map(tab =>
           <Tab key={tab} eventKey={tab} title={this.props.tabToHeaderText[tab]}>
             {loadedTime && "loaded "}
@@ -39,6 +62,7 @@ export class Detail extends Component {
     const {id: itemId} = this.props.router.getCurrentParams();
     this.itemId = itemId;
     const {tab} = this.props;
+    if (this.props[tab].filter === null) return null;
     const {[tab]: {loadedTime}} = this.props;
     const {whatIsLoading, whatIsLoaded, error} = this.props[tab];
     const showLoading = (whatIsLoading !== null || whatIsLoaded === null);
@@ -46,7 +70,7 @@ export class Detail extends Component {
     let contentElement = null;
 
     if (showError) {
-      const acRelaodTab = () => this.props.acSelectTab(tab, this.itemId, true);
+      const acReloadTab = () => this.props.acSelectTab(tab, this.itemId, true);
       let text = "Can't load request";
       if (error instanceof csapi.ConnectionError || error.message) {
         text = error.message;
@@ -57,14 +81,14 @@ export class Detail extends Component {
             Error: {text}
           </Col>
           <Col xs={4}>
-            <Button bsStyle="primary" bsSize="xs" onClick={acRelaodTab}><Icon name="refresh" /></Button>
+            <Button bsStyle="primary" bsSize="xs" onClick={acReloadTab}><Icon name="refresh" /></Button>
           </Col>
         </Row>
       );
     } else if (showLoading) {
       contentElement = <div> Loading ... </div>;
     } else {
-      const {[tab]: {settings, expanded, additionalDataLoading, filter}} = this.props;
+      const {[tab]: {settings, expanded, additionalDataLoading, filter, error, whatIsLoading, whatIsLoaded,}} = this.props;
       // creacte closures over action creators for selected tab
       const acSetFilter = (filter) => this.props.acSetFilter(tab, filter);
       const acSettingOpen = () => this.props.acSettingOpen(tab);
@@ -73,10 +97,14 @@ export class Detail extends Component {
       const acSetFieldOrder = (f, v) => this.props.acSetFieldOrder(tab, f, v);
       const acExpand = (i) => this.props.acExpand(tab, i);
       const acReloadTab = () => this.props.acSelectTab(tab, this.itemId, true);
-      const acSearchAdditional = (token) => this.props.acSearchAdditional(tab, token);
-      const acSearchFilter = (filter) => this.props.acSearch(tab, {id: itemId, filter});
+      const acSearchAdditional = (filter) => this.props.acSearchAdditional(tab, filter);
+      const acSearch = (forceLoad) => this.props.acSearch(tab, forceLoad);
       const commonProps = {
         //data
+        //error, whatIsLoading, whatIsLoaded, just temporary Productiviy tab needs them
+        error,
+        whatIsLoading,
+        whatIsLoaded,
         expanded,
         filter,
         additionalDataLoading,
@@ -91,11 +119,12 @@ export class Detail extends Component {
         acReloadTab,
         acSearchAdditional,
         acSetFilter,
-        acSearchFilter,
+        acSearch,
+        acSetFilterAndRefresh: this.props.acSetFilterAndRefresh,
         id: itemId,
       };
       const Component = this.props.tabToComponent[tab];
-      contentElement = <Component {...commonProps} />
+      contentElement = <Component {...commonProps}/>
     }
     return (
       <div>

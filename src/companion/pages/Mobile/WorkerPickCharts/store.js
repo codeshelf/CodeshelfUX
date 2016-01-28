@@ -15,7 +15,6 @@ const initState = new (Record({
   error: null,
   whatIsLoading: null,
   loadedTime: null,
-  expanded: false,
 }));
 
 function getDefaultFilter() {
@@ -79,9 +78,6 @@ export function workerPickChartReducer(state = initState, action) {
       }
       return state.mergeIn(["filter"], new Map(filter));
     }
-    case TOGGLE_EXPAND: {
-      return state.set("expanded", !state.expanded);
-    }
     default: return state;
   }
 }
@@ -93,13 +89,6 @@ export function acSetDefaultFilter() {
   }
 }
 
-export function acToggleExpand() {
-  return (dispatch, getState) => {
-    dispatch({
-      type: TOGGLE_EXPAND,
-    })
-  }
-}
 
 function moveGraphToFactory(howToMove) {
   return (dispatch, getState) => {
@@ -146,7 +135,7 @@ function search(status, data) {
   };
 }
 
-function filterToParams({endtime, window, interval}) {
+export function filterToParams({endtime, window, interval}) {
   return {
     startAt: moment(endtime).subtract(window),
     endAt: endtime,
