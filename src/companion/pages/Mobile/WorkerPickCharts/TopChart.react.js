@@ -73,29 +73,25 @@ export class TopChart extends Component {
     if (error && (error instanceof csapi.ConnectionError || error.message)) {
       errorText = error.message;
     }
+    const title = this.props.title && <h4>{this.props.title}</h4>;
+    const lineHeight = (title) ? "53px" : null;
     return (
       <div>
         <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
           <Col xs={6}>
-            <h4 >{this.props.title}</h4>
+            {title}
           </Col>
-          <Col xs={6} style={{lineHeight: "53px", verticalAlign:"middle", textAlign: "right"}}>
+          <Col xs={6} style={{lineHeight: lineHeight, verticalAlign:"middle", textAlign: "right"}}>
               <Button  bsStyle="primary"  bsSize="xs" onClick={()=> acSearch(TAB_PRODUCTIVITY, true)}>
                 <Icon name="refresh" />
               </Button>
         </Col>
         </Row>
-        <Row>
-          <Col>
+        <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
+          <Col xs={10}>
             <div className="text-center">
             <DurationPicker value={filter} durations={DURATIONS} onChange={acSetFilterAndRefresh} />
             </div>
-          </Col>
-        </Row>
-        <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
-          <Col xs={10}>
-            {showLoading && <span>Loading chart...</span>}
-            {showError && <span>Error: {errorText}</span>}
           </Col>
           <Col xs={2}>
             <Button bsStyle="link" className="pull-right" bsSize="sm" onClick={() => this.setState({expanded: !this.state.expanded})}>
@@ -107,7 +103,13 @@ export class TopChart extends Component {
           <Col>
            <WidthWrapper>{(width) => {
              const minHeight = Math.round(width/2.5);
-             if (!showLoading && !showError && data) {
+             if (showLoading || showError) {
+               return (<div style={{minHeight: minHeight + 6}}>
+                         {showLoading && <span><Icon name="spinner" spin/> Loading chart...</span>}
+                         {showError && <span>Error: {errorText}</span>}
+                       </div>);
+             }
+             else {
                return (
                    <HistogramChart
                       expanded={this.state.expanded}
@@ -126,9 +128,7 @@ export class TopChart extends Component {
                         },
                       }} />
                    );
-               } else {
-                 return (<div style={{minHeight: minHeight + 6}} />);
-               }
+             }
              }}</WidthWrapper>
             </Col>
           </Row>

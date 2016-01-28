@@ -83,7 +83,6 @@ export class ProductivityDump extends Component {
       <div>
         <TopChart {...this.props}
           data={histogram}
-          title={"Worker Picks"}
         />
         <TabWithItemList data={events.results} {...{getIdFromItem, fieldToDescription, fieldFormater}} {...other}>
           {noEntriesText}
