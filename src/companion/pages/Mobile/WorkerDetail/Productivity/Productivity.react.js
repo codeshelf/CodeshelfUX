@@ -26,7 +26,6 @@ function orderIdComponent(orderId) {
   return (
     <Link to="mobile-order-datail-default" params={{id: orderId}}>
       {orderId}
-      <Button bsStyle="link"><Icon name="chevron-right"/></Button>
     </Link>
   );
 }
