@@ -131,6 +131,10 @@ class App extends Component {
           {this.sidebarLink("mobile-search-workers", "Workers")}
           {menuIcon("users")}
         </NavMenuItem>
+        <NavMenuItem active={false}>
+          {this.sidebarLink("mobile-search-carts", "Carts")}
+          {menuIcon("shopping-cart")}
+        </NavMenuItem>
         <NavMenuItem>
           {this.sidebarFunction(this.handleLogoutClick.bind(this), "Logout")}
           {menuIcon("sign-out")}

@@ -312,12 +312,29 @@ export function getFacilityContext(selectedFacility) {
         deleteOrders: () => {
             return ajax(ordersPath, {method: "DELETE"});
         },
-        getChes: (params) => {
-          var chesPath = facilityPath + "/ches";
-          return ajax(chesPath, {
-            data: params
-          });
+
+        getChe: (domainId) => {
+          var chesPath = facilityPath + "/ches/" + encodeURIComponent(domainId);
+          return ajax(chesPath, {});
         },
+
+        findChes: function(filter) {
+            var chesPath = facilityPath + "/ches";
+            // to be removed later, hardcoded for now
+            filter = {
+                cheId: "*",
+                limit: 5,
+            }
+            return ajax(chesPath, {
+                data: filter
+            });
+        },
+
+        getCheEvents: function(domainId) {
+          var chesPath = facilityPath + "/ches/" + encodeURIComponent(domainId) + "/events";
+          return ajax(chesPath, {});
+        },
+
         findWorkers: function(filter) {
           var workersPath = facilityPath + "/workers";
           return ajax(workersPath, {

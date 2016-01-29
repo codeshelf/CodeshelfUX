@@ -12,6 +12,8 @@ import * as storageConfig from './storage';
 
 // reducer imports
 import {facilityReducer} from './Facility/store';
+import {cartSearchReducer} from './CartSearch/store';
+import {cartDetailReducer} from './CartDetail/store';
 import {orderSearchReducer} from './OrderSearch/store';
 import {orderDetailReducer} from './OrderDetail/store';
 import {workerSearchReducer} from './WorkerSearch/store';
@@ -25,6 +27,8 @@ Iterable.prototype[Symbol.for('get')] = function(value) {return this.get(value) 
 const rootReducer = combineReducers({
 //  user: userReducer,
 //  navigation: navigationReducer,
+  cartSearch: cartSearchReducer,
+  cartDetail: cartDetailReducer,
   facility: facilityReducer,
   orderSearch: orderSearchReducer,
   orderDetail: orderDetailReducer,
