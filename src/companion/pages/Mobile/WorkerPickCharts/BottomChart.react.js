@@ -63,7 +63,7 @@ export class BottomChart extends Component {
                     margin:0
                   };
                   const chart = this.printChart(ReactFauxDOM.createElement('svg'), eventBins, style);
-                  const filterWithId = WorkerHistogramFilter(filter).set("id");
+                  const filterWithId = WorkerHistogramFilter(filter).set("id", workerId);
                   return (
                     <ListGroupItemLink
                       to="mobile-worker-detail"
