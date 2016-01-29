@@ -196,15 +196,13 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
   }
 
   function initTabFilter(state, tab, itemId) {
-    const filterPath = [tab, "filter"];
-    if (!state.getIn(filterPath) || (itemId && state.getIn(filterPath).get("id") !== itemId)) {
+      if (!state[tab].filter || state[tab].filter.id !== itemId) {
+        state = state.setIn([tab, "filter"], new (Record(getDefaultFilter(tab))));
+      }
+      //if (state[tab].filter.id === itemId) return state;
       return state
-        .setIn([tab, "filter"], new (Record(getDefaultFilter(tab))))
-        .setIn([tab, "filter", "id"], itemId)
-        .setIn(["tab"], tab);
-    } else {
-      return state;
-    }
+                 .setIn([tab, "filter", "id"], itemId)
+                 .setIn(["tab"], tab);
   }
 
   function acSettingOpen(tab) {
