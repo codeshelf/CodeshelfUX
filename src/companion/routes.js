@@ -43,6 +43,8 @@ import mOrderSearch from './pages/Mobile/OrderSearch/OrderSearch.react.js';
 import mOrderDeatil from './pages/Mobile/OrderDetail/OrderDetail.react.js';
 import mWorkerSearch from './pages/Mobile/WorkerSearch/WorkerSearch.react.js';
 import mWorkerDetail from './pages/Mobile/WorkerDetail/WorkerDetail.react.js';
+import mCartSearch from './pages/Mobile/CartSearch/CartSearch.react.js';
+import mCartDetail from './pages/Mobile/CartDetail/CartDetail.react.js';
 import mWorkerPickCharts from './pages/Mobile/WorkerPickCharts/WorkerPickCharts.react.js';
 import LoadFacility from './pages/Mobile/Facility/LoadFacility.react.js';
 import FacilityWrapper from './pages/Mobile/Facility/FacilityWrapper.react.js';
@@ -97,6 +99,9 @@ export default (
           <Route handler={mWorkerSearch} name="mobile-search-workers" path="search/worker" />
           <Route handler={mWorkerDetail} name="mobile-worker-detail" path="workerDetail/:id/:tab" />
           <Route handler={mWorkerDetail} name="mobile-worker-detail-default" path="workerDetail/:id" />
+          <Route handler={mCartSearch} name="mobile-search-carts" path="search/cart" />
+          <Route handler={mCartDetail} name="mobile-cart-detail" path="cartDetail/:id/:tab" />
+          <Route handler={mCartDetail} name="mobile-cart-detail-default" path="cartDetail/:id" />
           <DefaultRoute handler={mWorkerPickCharts} name="mobile-events" path="events" />
         </Route>
       </Route>

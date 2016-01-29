@@ -37,3 +37,12 @@ export function deviceFormatter({deviceName, deviceGuid}) {
   return (<span>{`${deviceName}/0x${shortGuid}`}</span>);
   return (<span>{`${deviceName}/0x${shortGuid}`}</span>);
 }
+
+export function orderLinkFormatter(orderId) {
+  if (!orderId) return orderId;
+  return (
+      <Link to="mobile-order-datail-default" params={{id: orderId}}>
+      {orderId}
+    </Link>
+  );
+}

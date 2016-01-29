@@ -26,6 +26,7 @@ class HomeSearch extends Component {
               {this.renderItem("mobile-events", "bar-chart", "Productivity")}
               {this.renderItem("mobile-search-orders", "shopping-cart", "Orders")}
               {this.renderItem("mobile-search-workers", "users", "Workers")}
+              {this.renderItem("mobile-search-carts", "shopping-cart", "Carts")}
             </ListGroup>
           </Col>
         </Row>

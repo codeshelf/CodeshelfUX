@@ -20,14 +20,14 @@ import Icon from 'react-fa';
 const fieldFormater = {
     createdAt: datetimeToSecondsFormater,
     orderId: orderLinkFormatter,
-    'deviceName+deviceGuid': deviceFormatter,
+    "deviceName+deviceGuid": deviceFormatter
 };
 
 function getIdFromItem(data) {
   return data.persistentId;
 };
 
-const noEntriesText = "No history for this worker";
+const noEntriesText = "No history for this cart";
 
 export class ProductivityDump extends Component {
 
@@ -102,4 +102,4 @@ function mapDispatch(dispatch) {
   return bindActionCreators({acMoveGraphToLeft, acMoveGraphToRight}, dispatch);
 }
 
-export const Productivity = connect(mapStateToProps, mapDispatch)(ProductivityDump);
+export const History = connect(mapStateToProps, mapDispatch)(ProductivityDump);

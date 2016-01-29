@@ -1,0 +1,16 @@
+export const fieldToDescription = {
+    "persistentId":"persistentId",
+    "deviceGuid": "deviceGuid",
+    "className": "className",
+    "description": "description",
+    "domainId": "Cart ID",
+    "lastBaterryLevel": "lastBaterryLevel",
+    "lastContactTime": "lastContactTime",
+    "color": "color",
+    "cheLighting": "cheLighting",
+    "lastScannedLocation": "lastScannedLocation",
+    "networkAddress": "networkAddress",
+    "networkDeviceStatus": "networkDeviceStatus",
+    "processMode": "processMode",
+    "scannerType": "scannerType",
+};
