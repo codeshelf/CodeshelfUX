@@ -13,7 +13,7 @@ import {Settings} from '../../Detail/common/Settings.react.js';
 import {renderField, deviceFormatter, orderLinkFormatter} from "../../Detail/common/FieldRenderer.react.js";
 
 import {fieldToDescription} from "../../common/historyItemIntl";
-import {acMoveGraphToLeft, acMoveGraphToRight} from '../store';
+import {TAB_PRODUCTIVITY, acMoveGraphToLeft, acMoveGraphToRight} from '../store';
 import moment from "moment";
 import Icon from 'react-fa';
 
@@ -72,6 +72,7 @@ export class ProductivityDump extends Component {
     return (
       <div>
         <TopChart {...this.props}
+          tab={TAB_PRODUCTIVITY}
           data={histogram}
         />
         <TabWithItemList data={events.results} {...{getIdFromItem, fieldToDescription, fieldFormater}} {...other}>

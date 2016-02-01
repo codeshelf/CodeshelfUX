@@ -4,7 +4,7 @@ import {Map, Record, fromJS} from 'immutable';
 
 import {ConnectionError} from 'data/csapi';
 import {getFacilityContextFromState} from "../Facility/get";
-import {TAB_PRODUCTIVITY} from '../WorkerDetail/store';
+import {TAB_PRODUCTIVITY} from '../CartDetail/store';
 const SELECT_TAB = 'select tab for detail tab';
 
 const LOADING_DATA = "loading of data for some tab"; // should have setted

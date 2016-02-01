@@ -4,12 +4,9 @@ import {Panel, Tabs, Tab, Row, Col, Button, ListGroup,
 import Icon from 'react-fa';
 import {WidthWrapper} from "./WidthWrapper.react.js";
 import {HistogramChart} from './HistogramChart.react.js';
-import {TAB_PRODUCTIVITY} from '../WorkerDetail/store.js';
 import moment from 'moment';
 
 import * as csapi from 'data/csapi';
-
-import {data} from "./mockGetWorkerPickCharts";
 
 import {DateDisplay} from "../DateDisplay.react.js";
 
@@ -66,7 +63,7 @@ export class TopChart extends Component {
 
   render() {
     const {filter, data, error, whatIsLoading, whatIsLoaded, acMoveGraphToLeft,
-      acMoveGraphToRight, acSetFilterAndRefresh, acSearch} = this.props;
+      acMoveGraphToRight, acSetFilterAndRefresh, acSearch, tab} = this.props;
     const showLoading = (whatIsLoading !== null || (whatIsLoaded === null && !error));
     const showError = (whatIsLoading === null && !!error);
     let errorText = "Can't load request";
@@ -82,7 +79,7 @@ export class TopChart extends Component {
             {title}
           </Col>
           <Col xs={6} style={{lineHeight: lineHeight, verticalAlign:"middle", textAlign: "right"}}>
-              <Button  bsStyle="primary"  bsSize="xs" onClick={()=> acSearch(TAB_PRODUCTIVITY, true)}>
+              <Button  bsStyle="primary"  bsSize="xs" onClick={()=> acSearch(tab, true)}>
                 <Icon name="refresh" />
               </Button>
         </Col>
