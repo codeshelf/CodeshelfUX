@@ -1,45 +1,16 @@
 import React, {Component, PropTypes} from 'react';
-import {Nav, NavItem, Grid, Row, Col, Button, Input} from 'react-bootstrap';
-import Icon from 'react-fa';
-import {Link, NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../links';
 import {DateDisplay} from "../DateDisplay.react.js";
+import {SearchItem, renderMatch} from "../Search/SearchItem.react.js";
 
 export class WorkerSearchItem extends Component {
-  renderId(id, filterText) {
-    if (filterText === "") return id;
-
-    const countOfStars = filterText.split("").filter((ch) => ch === "*").length
-    if (countOfStars > 0) {
-      //TODO no highlight for now
-      return id;
-    }
-    let [first, ...rest] = id.split(filterText);
-
-    // if text is not in id rest is empty array
-    if (rest.length === 0) return id;
-    // join rest for multiple occurances
-    rest = rest.join(filterText);
-    return (
-      <span>{first}<b>{filterText}</b>{rest}</span>
-    );
-  }
 
   render() {
     const {domainId, updated, firstName, lastName, filterText} = this.props;
+    const subtitle = <span>{firstName} {lastName} - <DateDisplay date={updated} /></span>;
     return (
-      <ListGroupItemLink to="mobile-worker-detail-default" params={{id: encodeURIComponent(domainId)}}>
-        <Row className="searchResult">
-          <Col xs={9} >
-            <dl>
-              <dt>{this.renderId(domainId, filterText)}</dt>
-              <dd>{firstName} {lastName} - <DateDisplay date={updated} /></dd>
-            </dl>
-          </Col>
-          <Col xs={3} className="verticalCenter">
-            <Button bsStyle="link" ><Icon name="chevron-right"/></Button>
-          </Col>
-        </Row>
-      </ListGroupItemLink>
+        <SearchItem to="mobile-worker-detail-default" params={{id: encodeURIComponent(domainId)}}
+         title={renderMatch(domainId, filterText)}
+         subtitle={subtitle} />
     );
   }
 }
