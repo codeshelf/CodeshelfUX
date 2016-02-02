@@ -24,7 +24,7 @@ export class TabWithItemList extends Component {
       <div key={id}>
         <hr style={{marginTop: "0.5em", marginBottom: "0.5em"}}/>
         <Row onClick={() => this.props.acExpand((!expanded)? id : null)}>
-          <Col xs={9}>
+          <Col xs={10}>
             <dl className="inline">
             {fieldsOrder.filter((f) => f !== "-").map((field) => {
               if (isVisible(field)) {
@@ -35,7 +35,7 @@ export class TabWithItemList extends Component {
             })}
             </dl>
           </Col>
-          <Col xs={3} >
+          <Col xs={2} >
             <Icon className="pull-right" name={expanded? "chevron-up" : "chevron-down"}/>
           </Col>
         </Row>

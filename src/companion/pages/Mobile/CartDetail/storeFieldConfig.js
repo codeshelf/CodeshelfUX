@@ -18,9 +18,7 @@ export const detailFieldsSetting = {
 };
 
 export const historyFieldsSetting = {
-  order: ["type", "itemId", "itemUom", "itemDescription", "itemLocation", "wiPlanQuantity",
-  "wiActualQuantity", "workerName", "orderId", "deviceName", "deviceGuid", "createdAt", "workerId",
-  "orderDetailId", "workInstructionId", "resolved", "resolvedAt", "resolvedBy"],
+  order: ["createdAt", "type", "itemId", "orderId", "workerId+workerName", "-", "itemUom", "itemDescription", "itemLocation", "wiPlanQuantity", "wiActualQuantity"],
   visibility: {
     "type": true,
     "itemId": true,
@@ -30,15 +28,10 @@ export const historyFieldsSetting = {
     "wiPlanQuantity": true,
     "wiActualQuantity": true,
     "orderId": true,
-    "orderDetailId": true,
-    "workerName": true,
-    "workInstructionId": true,
-    "resolved": true,
-    "resolvedAt": true,
-    "resolvedBy": true,
-    "deviceName": true,
-    "deviceGuid": true,
-    "workerId": true,
+    "deviceName+deviceGuid": true,
     "createdAt": true,
+    "workerId": false,
+    "workerId+workerName": true,
+
   },
 };

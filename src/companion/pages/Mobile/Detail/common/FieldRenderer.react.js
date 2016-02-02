@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+import {Link} from '../../links.js';
+import {Button} from 'react-bootstrap';
+import Icon from 'react-fa';
+
 
 function renderSingleField(value, description, formatter) {
   const stringValue = (value) ? value.toString() : value;
@@ -30,6 +34,26 @@ export function renderField(field, itemData, fieldDescriptions, fieldFormatters)
     const description = fieldDescriptions[field];
     return renderMultiField(field, itemData, description, formatter);
   }
+}
+
+export function workerIdFormatter(workerId) {
+  if (!workerId) return workerId;
+  return (
+      <Link to="mobile-worker-detail-default" params={{id: encodeURIComponent(workerId)}}>
+        {workerId}
+        <Button bsStyle="link"><Icon name="chevron-right"/></Button>
+      </Link>
+  );
+}
+
+export function workerNameFormatter({workerId, workerName}) {
+  if (!workerId) return <span>{workerName}</span>;
+  return (
+      <Link to="mobile-worker-detail-default" params={{id: encodeURIComponent(workerId)}} onClick={(e) => e.stopPropagation()}>
+        {workerName}
+        <Button bsStyle="link"><Icon name="chevron-right"/></Button>
+    </Link>
+);
 }
 
 export function deviceFormatter({deviceName, deviceGuid}) {
