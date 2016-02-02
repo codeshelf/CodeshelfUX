@@ -63,7 +63,12 @@ export class TopChart extends Component {
 
   render() {
     const {filter, data, error, whatIsLoading, whatIsLoaded, acMoveGraphToLeft,
-      acMoveGraphToRight, acSetFilterAndRefresh, acSearch, tab} = this.props;
+      acMoveGraphToRight, acSetFilterAndRefresh, acSearch, id, tab} = this.props;
+    const durationPickerHandler = (dur) => {
+      dur.id= id;
+      acSetFilterAndRefresh(dur, id, tab);
+    };
+
     const showLoading = (whatIsLoading !== null || (whatIsLoaded === null && !error));
     const showError = (whatIsLoading === null && !!error);
     let errorText = "Can't load request";
@@ -87,7 +92,7 @@ export class TopChart extends Component {
         <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
           <Col xs={10}>
             <div className="text-center">
-            <DurationPicker value={filter} durations={DURATIONS} onChange={acSetFilterAndRefresh} />
+            <DurationPicker value={filter} durations={DURATIONS} onChange={durationPickerHandler} />
             </div>
           </Col>
           <Col xs={2}>

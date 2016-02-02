@@ -4,7 +4,6 @@ import {Map, Record, fromJS} from 'immutable';
 
 import {ConnectionError} from 'data/csapi';
 import {getFacilityContextFromState} from "../Facility/get";
-import {TAB_PRODUCTIVITY} from '../CartDetail/store';
 const SELECT_TAB = 'select tab for detail tab';
 
 const LOADING_DATA = "loading of data for some tab"; // should have setted
@@ -299,8 +298,8 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
 
   function acSearch(tab, forceLoad) {
     return (dispatch, getState) => {
-      const whatIsLoaded = getLocalStore(getState())[tab].whatIsLoaded;
-      const filter = getLocalStore(getState())[tab].filter;
+      const localStore = getLocalStore(getState())[tab];
+      const {whatIsLoaded, filter} = localStore;
       if ((whatIsLoaded === filter) && (!forceLoad)) {
         console.info(`Skip loading order info for ${filter} beacuse is already loaded`);
         return;
@@ -367,9 +366,8 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
   }
 
   function acSetFilterAndRefresh(filter, itemId, tab) {
-    tab = tab || TAB_PRODUCTIVITY;
     return function(dispatch) {
-      dispatch(acSetFilter(tab, filter))
+      dispatch(acSetFilter(tab, filter, itemId))
       dispatch(acSearch(tab, true))
     }
   }
