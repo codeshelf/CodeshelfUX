@@ -27,7 +27,7 @@ export class Settings extends Component {
         <Col key="visibility" xs={2}>
         <div className="checkbox check-primary" style={{verticalAlign: "top", marginTop: 0}} >
             <input id={field} type="checkbox" checked={visible} onChange={() => acSetFieldVisibility(field, !visible)} />
-            <label style={{"margin-right": "0px"}} htmlFor={field}></label>
+            <label style={{"marginRight": "0px"}} htmlFor={field}></label>
           </div>
         </Col>
         <Col key="desc" xs={6}>
@@ -64,7 +64,7 @@ export class Settings extends Component {
           {this.renderHeader()}
           {order.map((field, index) => {
             if (field === "-") {
-              return <hr />;
+              return <hr key="-" />;
             }
             const visible = fieldSettings["visibility"][field];
             const first = index === 0;
