@@ -13,7 +13,7 @@ import {Settings} from '../../Detail/common/Settings.react.js';
 import {renderField, deviceFormatter, orderLinkFormatter} from "../../Detail/common/FieldRenderer.react.js";
 
 import {fieldToDescription} from "../../common/historyItemIntl";
-import {TAB_PRODUCTIVITY, acMoveGraphToLeft, acMoveGraphToRight} from '../store';
+import {acSetFilterAndRefresh, acSearch} from '../store';
 import moment from "moment";
 import Icon from 'react-fa';
 
@@ -72,7 +72,7 @@ export class ProductivityDump extends Component {
     return (
       <div>
         <TopChart {...this.props}
-          tab={TAB_PRODUCTIVITY}
+
           data={histogram}
 
         />
@@ -101,7 +101,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acMoveGraphToLeft, acMoveGraphToRight}, dispatch);
+  return bindActionCreators({}, dispatch);
 }
 
 export const Productivity = connect(mapStateToProps, mapDispatch)(ProductivityDump);

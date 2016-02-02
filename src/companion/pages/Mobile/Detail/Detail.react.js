@@ -90,7 +90,7 @@ export class Detail extends Component {
     } else {
       const {[tab]: {settings, expanded, additionalDataLoading, filter, error, whatIsLoading, whatIsLoaded,}} = this.props;
       // creacte closures over action creators for selected tab
-      const acSetFilter = (filter) => this.props.acSetFilter(tab, filter);
+      const acSetFilter = (filter) => this.props.acSetFilter(tab, itemId, filter);
       const acSettingOpen = () => this.props.acSettingOpen(tab);
       const acSettingClose = () => this.props.acSettingClose(tab);
       const acSetFieldVisibility = (f, v) => this.props.acSetFieldVisibility(tab, f, v);
@@ -99,6 +99,7 @@ export class Detail extends Component {
       const acReloadTab = () => this.props.acSelectTab(tab, this.itemId, true);
       const acSearchAdditional = (filter) => this.props.acSearchAdditional(tab, filter);
       const acSearch = (forceLoad) => this.props.acSearch(tab, forceLoad);
+      const acSetFilterAndRefresh = (filter) => this.props.acSetFilterAndRefresh(tab, itemId, filter);
       const commonProps = {
         //data
         //error, whatIsLoading, whatIsLoaded, just temporary Productiviy tab needs them
@@ -120,7 +121,7 @@ export class Detail extends Component {
         acSearchAdditional,
         acSetFilter,
         acSearch,
-        acSetFilterAndRefresh: this.props.acSetFilterAndRefresh,
+        acSetFilterAndRefresh,
         id: itemId,
       };
       const Component = this.props.tabToComponent[tab];

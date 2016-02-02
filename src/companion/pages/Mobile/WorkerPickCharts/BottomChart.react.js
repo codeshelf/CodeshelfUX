@@ -71,7 +71,7 @@ export class BottomChart extends Component {
                         {id: encodeURIComponent(workerId),
                          tab: convertTab.toURL[TAB_PRODUCTIVITY],
                       }}
-                      onClick={() => this.props.acSetProductivityFilter(TAB_PRODUCTIVITY, filterWithId)}
+                      onClick={() => this.props.acSetProductivityFilter(workerId, filterWithId)}
                       >
                       <div style={{fontSize: "75%"}}>{workerName}</div>
                       <span style={{width: "4em" ,marginRight: "0.5em"}}>{totalEvents}</span>

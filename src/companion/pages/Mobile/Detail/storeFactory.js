@@ -128,8 +128,8 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
         }
       }
       case SET_FILTER: {
-        const {filter, tab} = action;
-        state = initTabFilter(state, tab);
+        const {filter, tab, itemId} = action;
+        state = initTabFilter(state, tab, itemId);
         return state.mergeIn([tab, "filter"], fromJS(filter));
       }
       case SETTING_OPEN: {
@@ -287,10 +287,11 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
     };
   }
 
-  function acSetFilter(tab, filter) {
+  function acSetFilter(tab, itemId, filter) {
     return {
       type: SET_FILTER,
       tab,
+      itemId,
       filter,
       storeName,
     }
@@ -365,9 +366,9 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
     }
   }
 
-  function acSetFilterAndRefresh(filter, itemId, tab) {
+  function acSetFilterAndRefresh(tab, itemId, filter) {
     return function(dispatch) {
-      dispatch(acSetFilter(tab, filter, itemId))
+      dispatch(acSetFilter(tab, itemId, filter))
       dispatch(acSearch(tab, true))
     }
   }

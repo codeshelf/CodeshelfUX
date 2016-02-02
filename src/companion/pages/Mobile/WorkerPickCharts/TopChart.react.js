@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {Panel, Tabs, Tab, Row, Col, Button, ListGroup,
   ListGroupItem, Badge, DropdownButton, MenuItem} from 'react-bootstrap';
 import Icon from 'react-fa';
@@ -12,12 +12,22 @@ import {DateDisplay} from "../DateDisplay.react.js";
 
 export class DurationPicker extends Component {
 
+  durations = [
+    { interval: moment.duration(5, 'minutes'), window: moment.duration(2, 'hours')},
+    { interval: moment.duration(15, 'minutes'), window:moment.duration(6, 'hours')},
+    { interval: moment.duration(1, 'hours'), window: moment.duration(1, 'days')},
+    { interval: moment.duration(6, 'hours'), window: moment.duration(6, 'days')},
+  ];
+
   render() {
-    const {value, onChange, durations} = this.props;
+    const {filter, onChange} = this.props;
     return (
-      <DropdownButton bsStyle="default" bsSize="small" title={`events per ${value['interval'].humanize()} / ${value['window'].humanize()}`}
-        onSelect={(ev, dur) => onChange(dur)}>
-        {durations.map((d, index) => (
+      <DropdownButton bsStyle="default" bsSize="small" title={`events per ${filter['interval'].humanize()} / ${filter['window'].humanize()}`}
+        onSelect={(ev, dur) => {
+          const newFilter = filter.merge(dur);
+          onChange(newFilter);
+        }}>
+        {this.durations.map((d, index) => (
           <MenuItem key={index} eventKey={d}>{d['interval'].humanize() + " / " + d['window'].humanize()}</MenuItem>
         ))}
       </DropdownButton>
@@ -25,34 +35,39 @@ export class DurationPicker extends Component {
   }
 }
 
-const DURATIONS = [
-  { interval: moment.duration(5, 'minutes'), window: moment.duration(2, 'hours')},
-  { interval: moment.duration(15, 'minutes'), window:moment.duration(6, 'hours')},
-  { interval: moment.duration(1, 'hours'), window: moment.duration(1, 'days')},
-  { interval: moment.duration(6, 'hours'), window: moment.duration(6, 'days')},
-];
 
 class ChartNavigation extends Component {
+
+  changeEndTime(filter, momentMethod, e) {
+    const {endtime, window} = filter;
+    const newEndTime = moment(endtime)[momentMethod](window);
+    this.props.onChange(filter.set('endtime', newEndTime));
+  }
+
   render() {
-    const {filter, acMoveGraphToLeft, acMoveGraphToRight} = this.props;
+    const {filter} = this.props;
     const margin = ".5em";
     return (
       <div>
         <div className="pull-left">
-          <Button bsStyle="link" className="pull-left" bsSize="md" onClick={acMoveGraphToLeft}>
+          <Button bsStyle="link" className="pull-left" bsSize="md" onClick={this.changeEndTime.bind(this, filter, 'subtract')}>
               <Icon name="step-backward" style={{marginRight: margin}}/>
               <DateDisplay date={moment(filter.endtime).subtract(filter.window)} />
           </Button>
         </div>
         <div className="pull-right">
-          <Button bsStyle="link" bsSize="md" onClick={acMoveGraphToRight}>
+          <Button bsStyle="link" bsSize="md" onClick={this.changeEndTime.bind(this, filter, 'add')}>
             <DateDisplay  date={filter.endtime.format()} />
-        <Icon name="step-forward" style={{marginLeft: margin}}/>
+            <Icon name="step-forward" style={{marginLeft: margin}}/>
           </Button>
         </div>
       </div>);
   }
 }
+ChartNavigation.propTypes = {
+  filter: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired
+};
 
 export class TopChart extends Component {
 
@@ -62,12 +77,7 @@ export class TopChart extends Component {
   }
 
   render() {
-    const {filter, data, error, whatIsLoading, whatIsLoaded, acMoveGraphToLeft,
-      acMoveGraphToRight, acSetFilterAndRefresh, acSearch, id, tab} = this.props;
-    const durationPickerHandler = (dur) => {
-      dur.id= id;
-      acSetFilterAndRefresh(dur, id, tab);
-    };
+    const {filter, data, error, whatIsLoading, whatIsLoaded, acSetFilterAndRefresh, acSearch, id, tab} = this.props;
 
     const showLoading = (whatIsLoading !== null || (whatIsLoaded === null && !error));
     const showError = (whatIsLoading === null && !!error);
@@ -92,7 +102,7 @@ export class TopChart extends Component {
         <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
           <Col xs={10}>
             <div className="text-center">
-            <DurationPicker value={filter} durations={DURATIONS} onChange={durationPickerHandler} />
+              <DurationPicker filter={filter} onChange={acSetFilterAndRefresh} />
             </div>
           </Col>
           <Col xs={2}>
@@ -136,7 +146,7 @@ export class TopChart extends Component {
           </Row>
           <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
             <Col>
-              <ChartNavigation {...{filter, acMoveGraphToLeft, acMoveGraphToRight}} />
+              <ChartNavigation filter={filter} onChange={acSetFilterAndRefresh} />
             </Col>
           </Row>
       </div>

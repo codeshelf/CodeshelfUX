@@ -85,19 +85,3 @@ export const acSettingClose = store.acSettingClose;
 export const acSettingOpen = store.acSettingOpen;
 export const acSetFilter = store.acSetFilter;
 export const acSetFilterAndRefresh = store.acSetFilterAndRefresh;
-
-
-function moveGraphToFactory(howToMove) {
-  return (dispatch, getState) => {
-    const localState = getCartDetail(getState())[TAB_PRODUCTIVITY];
-    const {endtime: oldEndtime, window} = localState.filter
-    const endtime = howToMove(oldEndtime,window);
-    dispatch(acSetFilter(TAB_PRODUCTIVITY, {endtime}));
-    dispatch(acSearch(TAB_PRODUCTIVITY, localState.filter.id, true));
-  }
-}
-
-export const acMoveGraphToLeft = () => moveGraphToFactory(
-  (end, window) => moment(end).subtract(window));
-export const acMoveGraphToRight = () => moveGraphToFactory(
-  (end, window) => moment(end).add(window));

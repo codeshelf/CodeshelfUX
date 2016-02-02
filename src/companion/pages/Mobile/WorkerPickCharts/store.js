@@ -89,23 +89,6 @@ export function acSetDefaultFilter() {
   }
 }
 
-
-function moveGraphToFactory(howToMove) {
-  return (dispatch, getState) => {
-    const localState = getWorkerPickChart(getState());
-    const {endtime: oldEndtime, window} = localState.filter
-    const endtime = howToMove(oldEndtime,window);
-    dispatch(acSetFilter({endtime}));
-    dispatch(acSearch(true));
-  }
-}
-
-export const acMoveGraphToLeft = () => moveGraphToFactory(
-  (end, window) => moment(end).subtract(window));
-export const acMoveGraphToRight = () => moveGraphToFactory(
-  (end, window) => moment(end).add(window));
-
-
 export function acSetFilter(filter) {
   return {
     type: SET_FILTER,
