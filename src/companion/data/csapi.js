@@ -321,11 +321,6 @@ export function getFacilityContext(selectedFacility) {
 
         findChes: function(filter) {
             var chesPath = facilityPath + "/ches";
-            // to be removed later, hardcoded for now
-            filter = {
-                cheId: "*",
-                limit: 5,
-            }
             return ajax(chesPath, {
                 data: filter
             });
