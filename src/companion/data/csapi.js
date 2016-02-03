@@ -351,8 +351,8 @@ export function getFacilityContext(selectedFacility) {
 
         getCheEventsWithTime: function({id, startAt, endAt}) {
           var chePath = facilityPath + "/ches/" + encodeURIComponent(id) + "/events";
-          startAt = moment(startAt).add(this.utcOffset, "minutes");
-          endAt = moment(endAt).add(this.utcOffset, "minutes");
+          startAt = moment(startAt);
+          endAt = moment(endAt);
           const created = startAt.toISOString() + "/" + endAt.toISOString();
           return ajax(chePath, {
             data: {created}
@@ -387,8 +387,8 @@ export function getFacilityContext(selectedFacility) {
 
         getWorkerEventsWithTime: function({id, startAt, endAt}) {
           var workerPath = facilityPath + "/workers/" + encodeURIComponent(id) + "/events";
-          startAt = moment(startAt).add(this.utcOffset, "minutes");
-          endAt = moment(endAt).add(this.utcOffset, "minutes");
+          startAt = moment(startAt);
+          endAt = moment(endAt);
           const created = startAt.toISOString() + "/" + endAt.toISOString();
           return ajax(workerPath, {
             data: {created}

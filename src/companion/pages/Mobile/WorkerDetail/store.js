@@ -21,6 +21,7 @@ const tabToSetting = {
 };
 
 function getDefaultFilter(tab) {
+    const currentTime = moment.utc();
     return {
       [TAB_DETAIL]: {
         id: null,
@@ -28,7 +29,7 @@ function getDefaultFilter(tab) {
       [TAB_PRODUCTIVITY]: {
         interval: moment.duration(5, 'minutes'),
         window: moment.duration(2, 'hours'),
-        endtime: moment(),
+        endtime: currentTime,
         id: null,
       },
     }[tab]
