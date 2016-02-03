@@ -10,7 +10,7 @@ import {TabWithItemList} from "../../Detail/TabWithItemList.react.js";
 import {TopChart} from '../../WorkerPickCharts/TopChart.react.js';
 import {SettingsRow} from "../../Detail/common/SettingsRow.react.js";
 import {Settings} from '../../Detail/common/Settings.react.js';
-import {renderField, deviceFormatter, orderLinkFormatter} from "../../Detail/common/FieldRenderer.react.js";
+import {renderField, deviceLinkFormatter, orderLinkFormatter} from "../../Detail/common/FieldRenderer.react.js";
 
 import {fieldToDescription} from "../../common/historyItemIntl";
 import {acSetFilterAndRefresh, acSearch} from '../store';
@@ -20,7 +20,7 @@ import Icon from 'react-fa';
 const fieldFormater = {
     createdAt: datetimeToSecondsFormater,
     orderId: orderLinkFormatter,
-    'deviceName+deviceGuid': deviceFormatter,
+    'deviceName+deviceGuid': deviceLinkFormatter,
 };
 
 function getIdFromItem(data) {

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {datetimeToSecondsFormater} from "../../DateDisplay.react.js";
-import {deviceFormatter, workerIdFormatter, workerNameFormatter} from "../../Detail/common/FieldRenderer";
+import {deviceLinkFormatter, workerIdFormatter, workerNameFormatter} from "../../Detail/common/FieldRenderer";
 import {TabWithItemList} from "../../Detail/TabWithItemList.react.js";
 
 import {fieldToDescription} from "../../common/historyItemIntl";
@@ -10,7 +10,7 @@ const fieldFormater = {
   resolvedAt: datetimeToSecondsFormater,
   workerId: workerIdFormatter,
   "workerId+workerName" : workerNameFormatter,
-  "deviceName+deviceGuid": deviceFormatter
+  "deviceName+deviceGuid": deviceLinkFormatter
 };
 
 function getIdFromItem(data) {

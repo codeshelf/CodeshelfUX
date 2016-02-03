@@ -41,7 +41,6 @@ export function workerIdFormatter(workerId) {
   return (
       <Link to="mobile-worker-detail-default" params={{id: encodeURIComponent(workerId)}}>
         {workerId}
-        <Button bsStyle="link"><Icon name="chevron-right"/></Button>
       </Link>
   );
 }
@@ -51,7 +50,6 @@ export function workerNameFormatter({workerId, workerName}) {
   return (
       <Link to="mobile-worker-detail-default" params={{id: encodeURIComponent(workerId)}} onClick={(e) => e.stopPropagation()}>
         {workerName}
-        <Button bsStyle="link"><Icon name="chevron-right"/></Button>
     </Link>
 );
 }
@@ -59,7 +57,14 @@ export function workerNameFormatter({workerId, workerName}) {
 export function deviceFormatter({deviceName, deviceGuid}) {
   const shortGuid = deviceGuid && parseInt(deviceGuid, 16).toString(16).toUpperCase();
   return (<span>{`${deviceName}/0x${shortGuid}`}</span>);
-  return (<span>{`${deviceName}/0x${shortGuid}`}</span>);
+}
+
+export function deviceLinkFormatter({deviceName, deviceGuid}) {
+    if (!deviceName) return deviceFormatter({deviceName, deviceGuid});
+    return (<Link to="mobile-cart-detail-default" params={{id: deviceName}}>
+        {deviceFormatter({deviceName, deviceGuid})}
+    </Link>);
+
 }
 
 export function orderLinkFormatter(orderId) {
