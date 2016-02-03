@@ -44,12 +44,12 @@ function getTitleComponent(props) {
 
   if (props && props[TAB_DETAIL] && props[TAB_DETAIL].data) {
     const {domainId, deviceGuid} = props[TAB_DETAIL].data;
-    leftValue = deviceGuid;
-    rightValue = domainId;
+    leftValue = domainId;
+    rightValue = deviceGuid;
   }
   return (<TitleComponent className="detail-title">
-            <TitleCol property={fieldToDescription["deviceGuid"]} value={leftValue} />
-            <TitleCol property={fieldToDescription.domainId} value={rightValue} />
+            <TitleCol property={fieldToDescription.domainId} value={leftValue} />
+            <TitleCol property={fieldToDescription["deviceGuid"]} value={rightValue} />
           </TitleComponent>);
 }
 
