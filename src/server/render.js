@@ -2,6 +2,7 @@ import DocumentTitle from 'react-document-title';
 import Html from './html';
 import Promise from 'bluebird';
 import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 import Router from 'react-router';
 import config from './config';
 import initialState from '../companion/data/initialstate';
@@ -67,7 +68,7 @@ function getPageHtml(Handler, appState) {
 
   const title = DocumentTitle.rewind();
 
-  return '<!DOCTYPE html>' + React.renderToStaticMarkup(
+  return '<!DOCTYPE html>' + ReactDOMServer.renderToStaticMarkup(
     <Html
       bodyHtml={appHtml + scriptHtml}
       isProduction={config.isProduction}

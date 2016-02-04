@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
-import {RouteHandler} from 'react-router';
-
 // redux imports
 import { combineReducers, createStore, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import createLogger from "redux-logger";
-import * as storage from 'redux-storage'
+import * as storage from 'redux-storage';
 import createEngine from 'redux-storage/engines/localStorage';
 import * as storageConfig from './storage';
 
@@ -77,9 +75,9 @@ if (versionInStorage >= storageConfig.VERSION) {
 class Mobile extends Component {
   render() {
     return (
-      <Provider store={store}>{ () =>
-        <RouteHandler />
-      }</Provider>
+      <Provider store={store}>
+        {this.props.children}
+      </Provider>
     );
   }
 }

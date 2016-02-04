@@ -158,7 +158,8 @@ class App extends Component {
               overlay: {
                 zIndex: 998,
               }
-            }}/>
+            }}>
+          </Sidebar>
           <div id="page-wrapper" className="page-container" style={{backgroundColor: "rgb(245, 245, 245)"}}>
               <Header facility={this.props.facility}>
                 <Button
@@ -171,7 +172,7 @@ class App extends Component {
               <div className="page-content-wrapper">
                 <div className="content">
                   <Grid fluid className="sm-padding-10">
-                    <RouteHandler />
+                    {this.props.children}
                   </Grid>
                 </div>
               </div>

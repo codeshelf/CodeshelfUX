@@ -29,19 +29,18 @@ export function authn(Component) {
         }
 
         handleRouting(props) {
-            var router = props.router;
-            var currentPath = router.getCurrentPath();
-            var params = router.getCurrentParams();
-            if (!isLoggedIn()) {
-                var nextPath = currentPath;
-                console.log("not authenticated to reach " + nextPath);
-                // escaping is not working in currnet router 13.2 so if % is in url redirect to home
-                if (nextPath.indexOf("%") !== -1) {
-                  nextPath = "/";
-                }
-                console.log("will redirect to " + nextPath);
-                router.transitionTo("login", {}, {nextPath: nextPath});
+          const {location, params, router} = props;
+          var currentPath = location.pathname+location.search;
+          if (!isLoggedIn()) {
+            var nextPath = currentPath;
+            console.log("not authenticated to reach " + nextPath);
+            // escaping is not working in currnet router 13.2 so if % is in url redirect to home
+            if (nextPath.indexOf("%") !== -1) {
+              nextPath = "/";
             }
+            console.log("will redirect to " + nextPath);
+            router.push({pathname: "/login", query: {nextPath: nextPath}});
+          }
         }
 
         render() {

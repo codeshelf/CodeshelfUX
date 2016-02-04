@@ -26,8 +26,7 @@ class FacilityWrapper extends Component {
   }
 
   selectFacilityFromRoute(props) {
-     const router = props.router;
-     const facilityName = router.getCurrentParams().facilityName;
+     const facilityName = props.params.facilityName;
      this.props.acSelectFacility(facilityName);
   }
 
@@ -40,19 +39,18 @@ class FacilityWrapper extends Component {
     if (this.props.loadingAvailableFacilities) return this.renderLoading();
     // if haven't selected facility render loading
     // after loading this component will refresh and in DidUpdate we will select correct facility
-    const {selectedFacility, availableFacilities} = this.props;
+    const {selectedFacility, availableFacilities, acSelectFacility, acToggleSidebar, isOpen} = this.props;
     if (!selectedFacility) {
       return this.renderLoading(".");
     } else {
-      return (
-       <RouteHandler key={selectedFacility.persistentId}
-                      facility={selectedFacility}
-                      availableFacilities={availableFacilities}
-                      acSelectFacility={this.props.acSelectFacility}
-                      acToggleSidebar={this.props.acToggleSidebar}
-                      isOpen={this.props.isOpen}
-                      />
-      );
+      return React.cloneElement(this.props.children, {
+        key: selectedFacility.persistentId,
+        facility: selectedFacility,
+        availableFacilities,
+        acSelectFacility,
+        acToggleSidebar,
+        isOpen
+      });
     }
   }
 }

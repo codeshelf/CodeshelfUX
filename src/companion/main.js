@@ -1,5 +1,5 @@
-import React from 'react';
-import Router from 'react-router';
+import ReactDOM from 'react-dom';
+import {Router, hashHistory} from 'react-router';
 import routes from './routes';
 
 //patch immutable to be compatible with destructuring https://github.com/vacuumlabs/babel-plugin-extensible-destructuring
@@ -14,6 +14,4 @@ require("expose?cli!./scripting/index.js");
 const app = document.getElementById('app');
 
 //Use hash urls
-Router.run(routes, (Handler) => {
-  React.render(<Handler />, app);
-});
+ReactDOM.render(<Router history={hashHistory}>{routes}</Router>, app);

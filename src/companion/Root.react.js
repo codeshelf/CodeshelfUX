@@ -1,6 +1,5 @@
 /*eslint strict:0 */
 import React from 'react';
-import {RouteHandler} from 'react-router';
 import {state} from './data/state';
 import storage from 'lib/storage';
 import { DragDropContext } from 'react-dnd';
@@ -64,7 +63,7 @@ class Root extends React.Component {
    }
 
    render() {
-       return (<RouteHandler state={state}/>);
+     return React.cloneElement(this.props.children, { state: state });
 
    }
 };

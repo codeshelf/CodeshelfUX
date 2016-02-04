@@ -24,10 +24,10 @@ class LoadFacility extends Component {
   loadAndRedirect() {
     const {availableFacilities} = this.props;
     if (!availableFacilities || availableFacilities.length === 0) {
-      this.props.acInitialLoadFacilities()
+      this.props.acInitialLoadFacilities();
     } else {
       const router = this.props.router;
-      router.transitionTo("mobile-facility", {facilityName: availableFacilities[0].domainId});
+      router.push(`/mobile/facilities/${availableFacilities[0].domainId}`);
     }
   }
 

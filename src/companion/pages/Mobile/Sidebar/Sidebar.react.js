@@ -1,4 +1,5 @@
-import React from 'react/addons';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 const CANCEL_DISTANCE_ON_SCROLL = 20;
 
@@ -159,7 +160,7 @@ class Sidebar extends React.Component {
   }
 
   saveSidebarWidth() {
-    let width = React.findDOMNode(this.refs.sidebar).offsetWidth;
+    let width = ReactDOM.findDOMNode(this.refs.sidebar).offsetWidth;
 
     if (width != this.state.sidebarWidth) {
       this.setState({sidebarWidth: width});
@@ -337,7 +338,7 @@ class Sidebar extends React.Component {
 
 Sidebar.propTypes = {
   // main content to render
-  children: React.PropTypes.node.isRequired,
+  //children: React.PropTypes.node.isRequired,
 
   // sidebar content to render
   sidebar: React.PropTypes.node.isRequired,

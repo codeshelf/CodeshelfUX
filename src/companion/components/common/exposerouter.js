@@ -6,12 +6,13 @@ export default function exposeRouter(Component) {
 
   class ExposeRouter extends React.Component {
     render() {
-      return <Component {...this.props} router={this.context.router} />;
+      const {router} = this.context;
+      return <Component {...this.props} router={router} />;
     }
   }
 
   ExposeRouter.contextTypes = {
-    router: React.PropTypes.func.isRequired
+    router: React.PropTypes.object.isRequired
   };
 
   return ExposeRouter;

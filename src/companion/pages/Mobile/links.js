@@ -1,5 +1,6 @@
-import rrb from 'react-router-bootstrap';
-import rr from 'react-router';
+import {LinkContainer} from 'react-router-bootstrap';
+import {Link as rrLink} from 'react-router';
+import {NavItem, MenuItem, Button, ListGroupItem} from 'react-bootstrap';
 import {connect} from 'react-redux';
 
 
@@ -10,6 +11,7 @@ function mapState(state) {
 }
 
 function wrapFacility(Component) {
+  console.log("fac comp",Component);
 
   class WrapFacility extends React.Component {
     render() {
@@ -24,7 +26,7 @@ function wrapFacility(Component) {
         if (!params["facilityName"]) {
           params["facilityName"] = this.props.facility.domainId;
         }
-        return <Component {...this.props} params={params} />;
+        return (<Component {...this.props} params={params} />);
       }
     }
   }
@@ -32,24 +34,18 @@ function wrapFacility(Component) {
   return connect(mapState)(WrapFacility);
 }
 
-function wrapSidebar(Component) {
-
-  class WrapSidebar extends React.Component {
-    render() {
-      return (
-        <Component {...this.props}>
-          <div onClick={this.props.onclick}>{this.props.label}</div>
-        </Component>
-      )
-    }
-
+function wrapLink(Component) {
+  return (props) => {
+    return (<LinkContainer {...props}>
+                <Component {...props}>
+                  {props.children}
+                </Component>
+            </LinkContainer>);
   }
-
-  return WrapSidebar;
 }
 
-export const NavItemLink = wrapFacility(rrb.NavItemLink);
-export const MenuItemLink = wrapFacility(rrb.MenuItemLink);
-export const ButtonLink = wrapFacility(rrb.ButtonLink);
-export const ListGroupItemLink = wrapFacility(rrb.ListGroupItemLink);
-export const Link = wrapFacility(rr.Link);
+export const NavItemLink = wrapFacility(wrapLink(NavItem));
+export const MenuItemLink = wrapFacility(wrapLink(MenuItem));
+export const ButtonLink = wrapFacility(wrapLink(Button));
+export const ListGroupItemLink = wrapFacility(wrapLink(ListGroupItem));
+export const Link = wrapFacility(rrLink);
