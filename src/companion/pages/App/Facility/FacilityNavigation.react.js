@@ -11,8 +11,7 @@ class FacilityNavigation extends React.Component {
   }
 
   render() {
-      var params = this.props.router.getCurrentParams();
-      let {facility} = this.props;
+    const {params, facility} = this.props;
       return (<Navigation {...this.props}>
                       <AuthzMenuItem permission="event:view" to="workresults" params={params} title="Picks By Hour" iconName="pie-chart" />
                       <AuthzMenuItem permission="order:view" to="orders" params={params} title="Orders" iconName="shopping-cart" />

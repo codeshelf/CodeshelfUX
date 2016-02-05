@@ -31,7 +31,7 @@ export default class Facility extends React.Component {
                                   <TopNavBar title={tenantName} facility={facility} facilities={facilities}/>
                                   <div className="page-content-wrapper">
                                       <div className="content">
-                                          <RouteHandler state={state}/>
+                                        { React.cloneElement(this.props.children, { state: state })}
                                       </div>
                                   </div>
                               </div>

@@ -9,7 +9,7 @@ class CSButtonLink extends React.Component{
     render() {
         var allParams = {};
         var propsWithoutParams = {};
-        var currentParams = this.props.router.getCurrentParams();
+        var currentParams = this.props.params;
         let {params} = this.props;
         _.merge(allParams, currentParams, params);
         _.merge(propsWithoutParams, this.props);

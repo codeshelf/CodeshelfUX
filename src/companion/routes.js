@@ -56,8 +56,8 @@ export default (
     <IndexRoute component={DetectMobile} />
     <Route component={authn(App)} path="facilities"> //ensure auth and default facility
       <Route component={Facility} path=":facilityName">
-        <IndexRoute component={WorkResults} />
-        <Route component={NotFound} path="*" />
+        <IndexRedirect to="workresults" />
+        <Route component={WorkResults} path="workresults" />
         <Route component={Orders} path="orders" />
         <Route component={WorkInstructions} path="workinstructions" />
         <Route component={BlockedWork} path="blockedwork" />
@@ -80,6 +80,7 @@ export default (
           <Route component={ExtensionPointAdd} path="new" />
           <Route component={ExtensionPointEdit} path=":extensionPointId" />
         </Route>
+        <Route component={NotFound} path="*" />
       </Route>
     </Route>
 
