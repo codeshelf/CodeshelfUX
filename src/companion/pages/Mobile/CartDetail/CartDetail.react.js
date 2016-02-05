@@ -33,8 +33,8 @@ export const convertTab = {
     productivity: TAB_PRODUCTIVITY,
   },
   toURL: {
-    [TAB_DETAIL]: "detail",
-    [TAB_PRODUCTIVITY]: "productivity",
+    [TAB_DETAIL]: "./detail",
+    [TAB_PRODUCTIVITY]: "./productivity",
   },
 }
 

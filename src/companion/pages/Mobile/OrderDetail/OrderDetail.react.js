@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 
 import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
-import {Detail, TitleComponent, TitleCol} from "../Detail/Detail.react.js";
+import {Detail, TitleComponent, TitleCol, toTabUrl} from "../Detail/Detail.react.js";
 
 import {TAB_DETAIL, TAB_ITEMS, TAB_PICKS, TAB_IMPORTS, ALL_TABS} from './store';
 import {acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
@@ -41,11 +41,11 @@ export const convertTab = {
     imports: TAB_IMPORTS,
   },
   toURL: {
-    [TAB_DETAIL]: "order",
-    [TAB_ITEMS]: "lines",
-    [TAB_PICKS]: "history",
-    [TAB_IMPORTS]: "imports",
-  },
+    [TAB_DETAIL]: "./order",
+    [TAB_ITEMS]: "./lines",
+    [TAB_PICKS]: "./history",
+    [TAB_IMPORTS]: "./imports"
+  }
 }
 
 // is called inide render of Detail component so have access to props

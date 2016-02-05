@@ -3,6 +3,7 @@ import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {TimeFromNow} from "../DateDisplay.react.js";
 import _ from "lodash";
+import URI from 'urijs';
 
 import * as csapi from 'data/csapi';
 import "./Detail.styl";
@@ -39,13 +40,11 @@ export class Detail extends Component {
         className="nav-tabs-simple"
         activeKey={activeTab}
         onSelect={(tab) => {
-          this.props.router.transitionTo(this.props.transitionTo,
-            {
-              facilityName: this.props.params.facilityName,
-              id: this.props.params.id,
-              tab: this.props.convertTab.toURL[tab],
-            }
-          )
+          const {convertTab, router, location} = this.props;
+          const tabFragment = convertTab.toURL[tab];
+          const newUri = new URI(tabFragment);
+          const tabURL = newUri.absoluteTo(location.pathname+location.search).toString();
+          router.push(tabURL);
         }}
         tabWidth={1}>
         {this.props.ALL_TABS.map(tab =>

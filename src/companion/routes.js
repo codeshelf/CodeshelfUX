@@ -96,14 +96,20 @@ export default (
           <IndexRedirect to="events" />
           <Route component={mWorkerPickCharts}  path="events"/>
           <Route component={mOrderSearch} path="orders" />
-          <Route component={mOrderDeatil} path="orders/:id/:tab" />
-          <Route component={mOrderDeatil} path="orders/:id" />
+          <Route component={mOrderDeatil} path="orders/:id">
+            <IndexRedirect to="order" />
+            <Route component={mOrderDeatil} path=":tab" />
+          </Route>
           <Route component={mWorkerSearch} path="workers" />
-          <Route component={mWorkerDetail} path="workers/:id/:tab" />
-          <Route component={mWorkerDetail} path="workers/:id" />
+          <Route component={mWorkerDetail} path="workers/:id">
+            <IndexRedirect to="detail" />
+            <Route component={mWorkerDetail} path=":tab" />
+          </Route>
           <Route component={mCartSearch} path="carts" />
-          <Route component={mCartDetail} path="carts/:id/:tab" />
-          <Route component={mCartDetail} path="carts/:id" />
+          <Route component={mCartDetail} path="carts/:id">
+            <IndexRedirect to="detail" />
+            <Route component={mCartDetail} path=":tab" />
+          </Route>
         </Route>
       </Route>
     </Route>
