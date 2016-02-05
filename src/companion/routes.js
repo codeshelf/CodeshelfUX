@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, IndexRoute, NotFoundRoute, RouteHandler, Redirect} from 'react-router';
+import {Route, IndexRoute, NotFoundRoute, RouteHandler, Redirect, IndexRedirect} from 'react-router';
 import Root from './Root.react.js';
 import App from './pages/App/App.react.js';
 import Admin from './pages/App/Admin/Admin.react.js';
@@ -93,16 +93,17 @@ export default (
       <IndexRoute component={LoadFacility} />
       <Route component={FacilityWrapper} path=":facilityName">
         <Route component={mApp}>
-          <IndexRoute component={mWorkerPickCharts}  />
-          <Route component={mOrderSearch} path="search/order" />
-          <Route component={mOrderDeatil} path="orderDetail/:id/:tab" />
-          <Route component={mOrderDeatil} path="orderDetail/:id" />
-          <Route component={mWorkerSearch} path="search/worker" />
-          <Route component={mWorkerDetail} path="workerDetail/:id/:tab" />
-          <Route component={mWorkerDetail} path="workerDetail/:id" />
-          <Route component={mCartSearch} path="search/cart" />
-          <Route component={mCartDetail} path="cartDetail/:id/:tab" />
-          <Route component={mCartDetail} path="cartDetail/:id" />
+          <IndexRedirect to="events" />
+          <Route component={mWorkerPickCharts}  path="events"/>
+          <Route component={mOrderSearch} path="orders" />
+          <Route component={mOrderDeatil} path="orders/:id/:tab" />
+          <Route component={mOrderDeatil} path="orders/:id" />
+          <Route component={mWorkerSearch} path="workers" />
+          <Route component={mWorkerDetail} path="workers/:id/:tab" />
+          <Route component={mWorkerDetail} path="workers/:id" />
+          <Route component={mCartSearch} path="carts" />
+          <Route component={mCartDetail} path="carts/:id/:tab" />
+          <Route component={mCartDetail} path="carts/:id" />
         </Route>
       </Route>
     </Route>

@@ -117,22 +117,24 @@ class App extends Component {
   }
 
   getSidebarContent() {
+    const domainId = this.props.facility.domainId;
+    const basePath = "/mobile/facilities/" + domainId;
     return (
       <PagesNavigation {...this.props}>
         <NavMenuItem active={false}>
-          {this.sidebarLink("mobile-events", "Productivity")}
+          {this.sidebarLink(`${basePath}/events`, "Productivity")}
           {menuIcon("bar-chart")}
         </NavMenuItem>
         <NavMenuItem active={false}>
-          {this.sidebarLink("mobile-search-orders", "Orders")}
+          {this.sidebarLink(`${basePath}/orders`, "Orders")}
           {menuIcon("shopping-cart")}
         </NavMenuItem>
         <NavMenuItem active={false}>
-          {this.sidebarLink("mobile-search-workers", "Workers")}
+          {this.sidebarLink(`${basePath}/workers`, "Workers")}
           {menuIcon("users")}
         </NavMenuItem>
         <NavMenuItem active={false}>
-          {this.sidebarLink("mobile-search-carts", "Carts")}
+          {this.sidebarLink(`${basePath}/carts`, "Carts")}
           {menuIcon("shopping-cart")}
         </NavMenuItem>
         <NavMenuItem>
