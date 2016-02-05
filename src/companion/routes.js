@@ -120,9 +120,9 @@ export default (
     // Routes for user credentials
 
     <Route component={Login} path="login" />
-    <Route component={SetupPassword} path="setuppassword" />
-    <Route component={ChangePassword} path="changepassword" />
-    <Route component={RecoverPassword} path="recoverpassword" />
-    <Route component={RecoverSuccess} path="recoversuccess" />
+    <Route component={SetupPassword} path="password/setup" />
+    <Route component={ChangePassword} path="password/change" />
+    <Route component={RecoverPassword} path="password/recover" />
+    <Route component={RecoverSuccess} path="password/success" />
   </Route>
 );
