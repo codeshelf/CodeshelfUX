@@ -94,7 +94,7 @@ class Login extends React.Component {
                 </Row>
           <Row>
             <Col sm={12} >
-              <Link to="recoverpassword" >Forgot Password</Link>
+              <Link to="/password/recovery" >Forgot Password</Link>
             </Col>
           </Row>
           <Row>
