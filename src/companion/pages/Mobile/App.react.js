@@ -198,8 +198,7 @@ class FacilitySelector extends React.Component {
                         const {name, persistentId, domainId, description} = facility;
 
                         return <MenuItemLink key={domainId}
-                                             to="mobile-facility"
-                                             params={{facilityName: domainId}}
+                                             to={`/mobile/facilities/${domainId}`}
                                              data-persistentid={persistentId}
                                              onclick={() => this.props.acToggleSidebar(false)}>
                                  {description}

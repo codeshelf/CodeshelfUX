@@ -39,7 +39,7 @@ export function renderField(field, itemData, fieldDescriptions, fieldFormatters)
 export function workerIdFormatter(workerId) {
   if (!workerId) return workerId;
   return (
-      <Link to="mobile-worker-detail-default" params={{id: encodeURIComponent(workerId)}}>
+      <Link to={`worker/${encodeURIComponent(workerId)}`}>
         {workerId}
       </Link>
   );
@@ -48,7 +48,7 @@ export function workerIdFormatter(workerId) {
 export function workerNameFormatter({workerId, workerName}) {
   if (!workerId) return <span>{workerName}</span>;
   return (
-      <Link to="mobile-worker-detail-default" params={{id: encodeURIComponent(workerId)}} onClick={(e) => e.stopPropagation()}>
+    <Link to={`worker/${encodeURIComponent(workerId)}`} onClick={(e) => e.stopPropagation()}>
         {workerName}
     </Link>
 );
@@ -61,7 +61,7 @@ export function deviceFormatter({deviceName, deviceGuid}) {
 
 export function deviceLinkFormatter({deviceName, deviceGuid}) {
     if (!deviceName) return deviceFormatter({deviceName, deviceGuid});
-    return (<Link to="mobile-cart-detail-default" params={{id: deviceName}}>
+    return (<Link to={`carts/${deviceName}`}>
         {deviceFormatter({deviceName, deviceGuid})}
     </Link>);
 
@@ -70,7 +70,7 @@ export function deviceLinkFormatter({deviceName, deviceGuid}) {
 export function orderLinkFormatter(orderId) {
   if (!orderId) return orderId;
   return (
-      <Link to="mobile-order-datail-default" params={{id: orderId}}>
+      <Link to={`orders/${orderId}`}>
       {orderId}
     </Link>
   );

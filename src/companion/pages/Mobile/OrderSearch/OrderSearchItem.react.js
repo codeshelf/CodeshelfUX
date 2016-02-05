@@ -8,7 +8,7 @@ export class OrderSearchItem extends Component {
     const {orderId, dueDate, status, filterText} = this.props;
     const subtitle = <span>{status} - <DateDisplay date={dueDate} /></span>;
     return (
-      <SearchItem to="mobile-order-datail-default" params={{id: orderId}}
+      <SearchItem to={`orders/${orderId}`}
           title={renderMatch(orderId, filterText)}
           subtitle={subtitle} />
     );

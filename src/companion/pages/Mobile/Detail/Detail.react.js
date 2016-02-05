@@ -17,17 +17,17 @@ export class Detail extends Component {
   previousUrl = null;
 
   componentWillMount() {
-    this.previousUrl = this.props.router.getCurrentParams();
-    const {id: itemId, tab} = this.props.router.getCurrentParams();
+    this.previousUrl = this.props.params;
+    const {id: itemId, tab} = this.props.params;
     this.itemId = itemId;
     const selectTab = this.props.convertTab.fromURL[tab] || this.props.defaultSelectTab || 0;
     this.props.acSelectTab(selectTab, itemId, true);
   }
 
   componentWillReceiveProps(nextProps) {
-    const {id: itemId, tab} = nextProps.router.getCurrentParams();
-    if (!_.isEqual(this.previousUrl, nextProps.router.getCurrentParams())) {
-      this.previousUrl = nextProps.router.getCurrentParams();
+    const {id: itemId, tab} = nextProps.params;
+    if (!_.isEqual(this.previousUrl, nextProps.params)) {
+      this.previousUrl = nextProps.params;
       this.props.acSelectTab(this.props.convertTab.fromURL[tab], itemId, true);
     }
   }
@@ -41,8 +41,8 @@ export class Detail extends Component {
         onSelect={(tab) => {
           this.props.router.transitionTo(this.props.transitionTo,
             {
-              facilityName: this.props.router.getCurrentParams().facilityName,
-              id: this.props.router.getCurrentParams().id,
+              facilityName: this.props.params.facilityName,
+              id: this.props.params.id,
               tab: this.props.convertTab.toURL[tab],
             }
           )
@@ -59,7 +59,7 @@ export class Detail extends Component {
   }
 
   render() {
-    const {id: itemId} = this.props.router.getCurrentParams();
+    const {id: itemId} = this.props.params;
     this.itemId = itemId;
     const {tab} = this.props;
     if (this.props[tab].filter === null) return null;

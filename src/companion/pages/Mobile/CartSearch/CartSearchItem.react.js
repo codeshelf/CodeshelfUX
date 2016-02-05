@@ -8,7 +8,7 @@ export class CartSearchItem extends Component {
     const {domainId, deviceGuid, filterText} = this.props;
     const subtitle = deviceGuid;
     return (
-        <SearchItem to="mobile-cart-detail-default" params={{id: domainId}}
+        <SearchItem to={`carts/${domainId}`}
          title={renderMatch(domainId, filterText)}
          subtitle={subtitle} />
     );

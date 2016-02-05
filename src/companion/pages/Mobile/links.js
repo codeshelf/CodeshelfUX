@@ -15,18 +15,20 @@ function wrapFacility(Component) {
 
   class WrapFacility extends React.Component {
     render() {
-      let params = {};
       if (this.props.params) {
-        params = {...this.props.params};
+        console.warn("old style Link detected");
       }
       if (!this.props.facility) {
         // no links will be renderd without facility
         return null;
       } else {
-        if (!params["facilityName"]) {
-          params["facilityName"] = this.props.facility.domainId;
+        const {to, ...rest} = this.props;
+        const basePath=`/mobile/facilities/${this.props.facility.domainId}`;
+        let newTo = to;
+        if (to.indexOf("/") != 0) {
+          newTo=`${basePath}/${this.props.to}`;
         }
-        return (<Component {...this.props} params={params} />);
+        return (<Component {...rest} to={newTo} />);
       }
     }
   }
