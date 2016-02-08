@@ -112,9 +112,9 @@ const AuthzCredentialsStore = authz(CredentialsStore);
 class FacilitySelector extends React.Component {
 
     renderDropdownLabel(facility) {
-        let facilityName = (facility) ? facility.get("description") : "";
         if (facility) {
-            return (<span><Icon name="building" /> {facilityName}</span>);
+          const {description, production} = facility;
+          return (<span><Icon name="building" /> {description} {!production && <Icon name="leaf" />}</span>);
         } else {
             return null;
         }
