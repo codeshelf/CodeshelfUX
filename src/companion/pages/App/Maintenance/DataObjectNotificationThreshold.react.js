@@ -6,16 +6,10 @@ import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {Modal} from 'react-bootstrap';
 import {Button, List as BSList} from 'components/common/bootstrap';
-import {Form, Input, Checkbox, ErrorDisplay} from 'components/common/Form';
+import {Form, Input, Checkbox, ErrorDisplay, changeState} from 'components/common/Form';
 import Icon from 'react-fa';
 import {Table} from 'components/common/Table';
 import Dropzone from 'react-dropzone';
-
-function changeState(name, value, callback = () => {}) {
-    let obj = new Object();
-    obj[name] = value;
-    this.setState(obj, callback);
-}
 
 export default class DataObjectNotificationThreshold extends React.Component {
     constructor(props) {

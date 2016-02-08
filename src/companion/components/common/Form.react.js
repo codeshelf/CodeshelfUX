@@ -7,6 +7,12 @@ import _ from "lodash";
 import {List} from "immutable";
 require('./Form.styl');
 
+export function changeState(name, value, callback = () =>{}) {
+  let obj = new Object();
+  obj[name] = value;
+  this.setState(obj, callback);
+}
+
 export function getRefInputValue(ref) {
     return React.findDOMNode(ref).getElementsByTagName("input")[0].value;
 }

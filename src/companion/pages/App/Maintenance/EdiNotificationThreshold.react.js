@@ -13,13 +13,6 @@ import Dropzone from 'react-dropzone';
 
 import ParameterSetConfiguration from "./ParameterSetConfiguration";
 
-
-function changeState(name, value, callback = () => {}) {
-    let obj = new Object();
-    obj[name] = value;
-    this.setState(obj, callback);
-}
-
 export default class EdiNotificationThreshold extends React.Component {
     constructor(props) {
         super(props);

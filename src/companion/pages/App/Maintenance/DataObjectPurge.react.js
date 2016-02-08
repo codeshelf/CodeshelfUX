@@ -7,18 +7,11 @@ import {getFacilityContext} from 'data/csapi';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {Button, List as BSList} from 'components/common/bootstrap';
-import {Form, Input, Checkbox, ErrorDisplay, getRefInputValue} from 'components/common/Form';
+import {Form, Input, Checkbox, ErrorDisplay, getRefInputValue, changeState} from 'components/common/Form';
 import Icon from 'react-fa';
 import {Table} from 'components/common/Table';
 import ParameterSetConfiguration from "./ParameterSetConfiguration";
 import ConfirmAction from "components/common/ConfirmAction";
-
-function changeState(name, value, callback) {
-    let obj = new Object();
-    obj[name] = value;
-    this.setState(obj, callback);
-}
-
 
 class DataObjectPurge extends React.Component{
 
