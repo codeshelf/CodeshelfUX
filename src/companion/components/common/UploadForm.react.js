@@ -15,7 +15,7 @@ export default class UploadForm extends React.Component{
         let file = input.getElementsByTagName("input")[0].files[0];
         this.setState({errorMessage: null});
         this.setState({successMessage: null});
-        return this.props.onImportSubmit(file).then(((data) => {
+        return this.props.onImportSubmit({file}).then(((data) => {
                 this.setState({errorMessage: null});
             this.setState({successMessage: "File Imported"});
             return data;
@@ -30,18 +30,18 @@ export default class UploadForm extends React.Component{
         let {eventKey, label, onImportSubmit} = this.props;
         let {successMessage, errorMessage} = this.state;
         return (
-            <SingleCellIBox title={label + " Import"}>
-                <Form onSubmit={this.handleSubmit.bind(this)}>
-                    <SuccessDisplay message={successMessage} />
-                    <ErrorDisplay message={errorMessage} />
-                    <Input ref="fileInput"
-                           type='file'
-                           label={label + " File"}
-                           help={label + " files to import"}
-                           required={true} />
-
-                        <SubmitButton label="Import" />
-                </Form>
-            </SingleCellIBox>);
+          <SingleCellIBox title={label + " Import"}>
+            <Form onSubmit={this.handleSubmit.bind(this)}>
+              <SuccessDisplay message={successMessage} />
+              <ErrorDisplay message={errorMessage} />
+              <Input ref="fileInput"
+                     type='file'
+                     label={label + " File"}
+                     help={label + " files to import"}
+                     required={true} />
+                {this.props.children}
+                <SubmitButton label="Import" />
+            </Form>
+          </SingleCellIBox>);
     }
 }

@@ -4,13 +4,37 @@ import {Tabs, Tab} from 'react-bootstrap';
 import {SingleCellLayout} from 'components/common/pagelayout';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import UploadForm from 'components/common/UploadForm';
-
+import {Checkbox, changeState} from 'components/common/Form';
 import {Authz, authz, isAuthorized} from 'components/common/auth';
 import {getFacilityContext} from 'data/csapi';
 import ImportList from './ImportList';
 import ImportSearch from './ImportSearch';
 import search from "data/search";
 import Promise from "bluebird";
+
+class OrderUploadForm extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      deleteOldOrders: false
+    };
+    this.handleChange = (e) => {
+      //e.preventDefault();
+      changeState.bind(this)("deleteOldOrders", e.target.checked);
+    };
+  }
+
+  render() {
+    const {deleteOldOrders} = this.state;
+    return (
+      <UploadForm
+          label="Orders"
+          onImportSubmit={({file}) => this.props.onImportSubmit({file, deleteOldOrders})}>
+        {!this.props.facility.production && <Checkbox id="deleteOldOrders" name="deleteOldOrders" label="Delete Old Orders" value={deleteOldOrders} onChange={this.handleChange} /> }
+      </UploadForm>);
+  }
+}
+
 export default class Imports extends React.Component{
 
     constructor() {
@@ -69,21 +93,23 @@ export default class Imports extends React.Component{
         }.bind(this));
     }
 
-    handleImportSubmit(method, file) {
-        var formData = new FormData();
-        formData.append("file", file);
-         return getFacilityContext()[method](formData).then(function() {
-            this.handleRefresh();
-        }.bind(this));
+    handleImportSubmit(method, formInput) {
+      var formData = new FormData();
+      for(var key in formInput) {
+        formData.append(key, formInput[key]);
+      }
+
+      return getFacilityContext()[method](formData).then(function() {
+        this.handleRefresh();
+      }.bind(this));
     }
 
-    renderOrder() {
+    renderOrder(facility) {
         let receipts = this.getImportReceipts();
         return (
                 <Tab eventKey="orders" title="Orders">
                     <Authz permission="order:import">
-                        <UploadForm
-                            label="Orders"
+                    <OrderUploadForm facility={facility}
                             onImportSubmit={this.handleImportSubmit.bind(this, "importOrderFile")} />
                     </Authz>
 
@@ -127,19 +153,18 @@ export default class Imports extends React.Component{
     }
 
     render() {
-
-            return (<SingleCellLayout title="Manage Imports">
-                <Authz permission="facility:edit">
-                    <Link id="configure" to="edigateways" params={{facilityName: getFacilityContext().domainId}}>Configure EDI</Link>
-                </Authz>
-                <Tabs className="nav-tabs-simple" defaultActiveKey="orders">
-                    {this.renderOrder()}
-                    {isAuthorized("location:import") && this.renderLocation()}
-                    {isAuthorized("location:import") && this.renderAisle()}
-                    {isAuthorized("inventory:import") && this.renderInventory()}
-                </Tabs>
-
-                </SingleCellLayout>
-        );
+      const facility = getFacilityContext().facility;
+      return (
+        <SingleCellLayout title="Manage Imports">
+          <Authz permission="facility:edit">
+            <Link id="configure" to="edigateways" params={{facilityName: facility.domainId}}>Configure EDI</Link>
+          </Authz>
+          <Tabs className="nav-tabs-simple" defaultActiveKey="orders">
+            {this.renderOrder(facility)}
+            {isAuthorized("location:import") && this.renderLocation()}
+            {isAuthorized("location:import") && this.renderAisle()}
+            {isAuthorized("inventory:import") && this.renderInventory()}
+          </Tabs>
+        </SingleCellLayout>);
     }
 };
