@@ -59,21 +59,24 @@ export function isAuthorized(permission) {
 }
 
 export function authz(Component) {
+  if(typeof Component !== 'string' && typeof Component !== 'function') {
+    console.error("Unable to wrap " + Component);
+  }
 
-    class AuthzWrapper extends React.Component {
-        render() {
-            let {permission, notPermission} = this.props;
-            var permit = true;
-            if (permission != null) {
-                permit = hasPermission(permission);
-            }
-            if (notPermission != null) {
-                permit = !hasPermission(notPermission);
-            }
-            return ((permit) ?
-                       <Component {...this.props} />
-                       :
-                       null);
+  class AuthzWrapper extends React.Component {
+    render() {
+      let {permission, notPermission} = this.props;
+      var permit = true;
+      if (permission != null) {
+        permit = hasPermission(permission);
+      }
+      if (notPermission != null) {
+        permit = !hasPermission(notPermission);
+      }
+      return ((permit) ?
+              <Component {...this.props} />
+              :
+              null);
         }
     };
     return AuthzWrapper;
