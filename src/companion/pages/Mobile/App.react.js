@@ -8,10 +8,14 @@ import {loggedout} from "data/auth/actions";
 import Sidebar from './Sidebar/Sidebar.react';
 import exposeRouter from 'components/common/exposerouter';
 import classnames from 'classnames';
+import {encodeContextToURL} from './common/contextEncode.js';
 
-function renderFacilityLabel(facility) {
-  if (facility) {
-    const {description, timeZoneDisplay} = facility;
+function renderFacilityLabel(selected) {
+  if (selected.selectedFacility){
+    let {description, timeZoneDisplay} = selected.selectedFacility;
+    if (selected.selectedCustomer && selected.selectedCustomer !== 'ALL') {
+      description = selected.selectedCustomer.name;
+    }
     return (<span><Icon name="building" style={{marginRight: ".25em"}}/>{description}({timeZoneDisplay})</span>);
   } else {
     return null;
@@ -32,7 +36,7 @@ class Header extends Component {
             <div className="pull-center">
               <div className="header-inner">
                 <div className="brand inline">
-                  {renderFacilityLabel(this.props.facility)}
+                  {renderFacilityLabel(this.props.selected)}
                 </div>
               </div>
             </div>
@@ -117,22 +121,23 @@ class App extends Component {
   }
 
   getSidebarContent() {
+    const basePath = "/mobile/facilities/" + encodeContextToURL(this.props.selected);
     return (
       <PagesNavigation {...this.props}>
         <NavMenuItem active={false}>
-          {this.sidebarLink("mobile-events", "Productivity")}
+          {this.sidebarLink(`${basePath}/events`, "Productivity")}
           {menuIcon("bar-chart")}
         </NavMenuItem>
         <NavMenuItem active={false}>
-          {this.sidebarLink("mobile-search-orders", "Orders")}
+          {this.sidebarLink(`${basePath}/orders`, "Orders")}
           {menuIcon("shopping-cart")}
         </NavMenuItem>
         <NavMenuItem active={false}>
-          {this.sidebarLink("mobile-search-workers", "Workers")}
+          {this.sidebarLink(`${basePath}/workers`, "Workers")}
           {menuIcon("users")}
         </NavMenuItem>
         <NavMenuItem active={false}>
-          {this.sidebarLink("mobile-search-carts", "Carts")}
+          {this.sidebarLink(`${basePath}/carts`, "Carts")}
           {menuIcon("shopping-cart")}
         </NavMenuItem>
         <NavMenuItem>
@@ -158,9 +163,10 @@ class App extends Component {
               overlay: {
                 zIndex: 998,
               }
-            }}/>
+            }}>
+          </Sidebar>
           <div id="page-wrapper" className="page-container" style={{backgroundColor: "rgb(245, 245, 245)"}}>
-              <Header facility={this.props.facility}>
+              <Header selected={this.props.selected}>
                 <Button
                     bsStyle="link"
                     className="visible-sm-inline-block visible-xs-inline-block padding-5"
@@ -171,7 +177,7 @@ class App extends Component {
               <div className="page-content-wrapper">
                 <div className="content">
                   <Grid fluid className="sm-padding-10">
-                    <RouteHandler />
+                    {this.props.children}
                   </Grid>
                 </div>
               </div>
@@ -188,19 +194,30 @@ export default exposeRouter(App);
 class FacilitySelector extends React.Component {
 
     render() {
-        let {facility, availableFacilities} = this.props;
-        return (<DropdownButton className="facility-dropdown" bsStyle="link" title={renderFacilityLabel(facility)}>
+        const {selected, availableFacilities} = this.props;
+        return (<DropdownButton className="facility-dropdown" bsStyle="link" title={renderFacilityLabel(selected)}>
                 {
                     availableFacilities.map((facility) => {
                         const {name, persistentId, domainId, description} = facility;
-
-                        return <MenuItemLink key={domainId}
-                                             to="mobile-facility"
-                                             params={{facilityName: domainId}}
-                                             data-persistentid={persistentId}
-                                             onclick={() => this.props.acToggleSidebar(false)}>
-                                 {description}
-                               </MenuItemLink>
+                        return (
+                          <div>
+                            <MenuItemLink key={domainId}
+                                           to={`/mobile/facilities/${domainId}/ALL`}
+                                           data-persistentid={persistentId}
+                                           onClick={() => this.props.acToggleSidebar(false)}>
+                               {description}
+                             </MenuItemLink>
+                             {facility.customers.map((customer) => {
+                              return (
+                                <MenuItemLink key={domainId + customer.domainId}
+                                               to={`/mobile/facilities/${domainId}/${customer.domainId}`}
+                                               data-persistentid={customer.persistentId}
+                                               onClick={() => this.props.acToggleSidebar(false)}>
+                                   {customer.name}
+                                 </MenuItemLink>
+                              )
+                             })}
+                          </div>)
 
                     })
                }

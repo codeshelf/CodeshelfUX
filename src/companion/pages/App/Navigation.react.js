@@ -79,7 +79,6 @@ class Navigation extends React.Component {
   }
 
   render() {
-      var params = this.props.router.getCurrentParams();
       return (
               <nav className="page-sidebar" dataPages="sidebar" style={{"transform": "translate3d(210px, 0px, 0px)"}} role="navigation">
               <NavbarHeader {...this.props} />

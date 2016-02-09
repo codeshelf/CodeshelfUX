@@ -117,7 +117,7 @@ class SetupPassword extends React.Component {
                         }
                         <Row>
                           <Col sm={12} >
-                            <Link to="recoverpassword" >Regenerate Recovery Email</Link>
+                            <Link to="/password/recover" >Regenerate Recovery Email</Link>
                           </Col>
                         </Row>
 

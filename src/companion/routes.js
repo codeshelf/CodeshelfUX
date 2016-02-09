@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, DefaultRoute, NotFoundRoute, RouteHandler, Redirect} from 'react-router';
+import {Route, IndexRoute, NotFoundRoute, RouteHandler, Redirect, IndexRedirect} from 'react-router';
 import Root from './Root.react.js';
 import App from './pages/App/App.react.js';
 import Admin from './pages/App/Admin/Admin.react.js';
@@ -51,77 +51,85 @@ import FacilityWrapper from './pages/Mobile/Facility/FacilityWrapper.react.js';
 import Mobile from './pages/Mobile/Mobile.react.js';
 
 export default (
-  <Route handler={Root} path="/">
+  <Route component={Root} path="/">
     {/* Redirect to mobile or desktop web component */}
-    <DefaultRoute handler={DetectMobile} />
-    <Route handler={authn(App)} name="facilities"> //ensure auth and default facility
-      <Route handler={Facility} name="facility" path=":facilityName">
-        <DefaultRoute handler={WorkResults} name="workresults" />
-        <NotFoundRoute handler={NotFound} name="not-found" />
-        <Route handler={Orders} name="orders" />
-        <Route handler={WorkInstructions} name="workinstructions" />
-        <Route handler={BlockedWork} name="blockedwork" />
-        <Route handler={Overview} name="overview" />
-        <Route handler={Import} name="import" />
-        <Route handler={EDIGateways} name="edigateways">
-          <Route handler={EDIGatewayEdit} name="edigatewayedit" path=":id"/>
+    <IndexRoute component={DetectMobile} />
+    <Route component={authn(App)} path="facilities"> //ensure auth and default facility
+      <Route component={Facility} path=":facilityName">
+        <IndexRedirect to="workresults" />
+        <Route component={WorkResults} path="workresults" />
+        <Route component={Orders} path="orders" />
+        <Route component={WorkInstructions} path="workinstructions" />
+        <Route component={BlockedWork} path="blockedwork" />
+        <Route component={Overview} path="overview" />
+        <Route component={Import} path="import" />
+        <Route component={EDIGateways} path="edigateways">
+          <Route component={EDIGatewayEdit} path=":id"/>
         </Route>
-        <Route handler={WorkerMgmt} name="workermgmt">
-          <Route handler={WorkerDisplay} name="workernew" path="new" />
-          <Route handler={WorkerDisplay} name="workerdisplay" path=":workerId" />
+        <Route component={WorkerMgmt} path="workermgmt">
+          <Route component={WorkerDisplay} path="new" />
+          <Route component={WorkerDisplay} path=":workerId" />
         </Route>
-        <Route handler={Maintenance} name="maintenance">
-          <Route handler={ExtensionPointEdit} name="parametersetedit" path="parametersset/:parameterType" />
-          <Route handler={ScheduledJobAdd} name="scheduledjobadd" path="newscheduledjob" />
-          <Route handler={ScheduledJobEdit} name="scheduledjobedit" path="scheduledjobs/:type" />
+        <Route component={Maintenance} path="maintenance">
+          <Route component={ExtensionPointEdit} path="parametersset/:parameterType" />
+          <Route component={ScheduledJobAdd} path="newscheduledjob" />
+          <Route component={ScheduledJobEdit} path="scheduledjobs/:type" />
         </Route>
-        <Route handler={TestScript} name="testscript" />
-        <Route handler={ExtensionPointsPage} name="extensionpoints">
-          <Route handler={ExtensionPointAdd} name="extensionpointadd" path="new" />
-          <Route handler={ExtensionPointEdit} name="extensionpointedit" path=":extensionPointId" />
+        <Route component={TestScript} path="testscript" />
+        <Route component={ExtensionPointsPage} path="extensionpoints">
+          <Route component={ExtensionPointAdd} path="new" />
+          <Route component={ExtensionPointEdit} path=":extensionPointId" />
         </Route>
+        <Route component={NotFound} path="*" />
       </Route>
     </Route>
 
     // Rotues for mobile version
 
-    <Redirect from="/mobile" to="mobile" />
-    <Redirect from="/mobile/" to="mobile" />
-    <Redirect from="/mobile/facilities/" to="mobile" />
+    <Redirect from="/mobile" to="/mobile/facilities" />
+    <Redirect from="/mobile/" to="mobile/facilities" />
+    <Redirect from="/mobile/facilities/" to="/mobile/facilities" />
 
-    <Route handler={authn(Mobile)} name="mobile" path="mobile/facilities">
-      <DefaultRoute handler={LoadFacility} />
-      <Route handler={FacilityWrapper} name="mobile-facility" path=":facilityName">
-        <Route handler={mApp}>
-          <Route handler={mOrderSearch} name="mobile-search-orders" path="search/order" />
-          <Route handler={mOrderDeatil} name="mobile-order-datail" path="orderDetail/:id/:tab" />
-          <Route handler={mOrderDeatil} name="mobile-order-datail-default" path="orderDetail/:id" />
-          <Route handler={mWorkerSearch} name="mobile-search-workers" path="search/worker" />
-          <Route handler={mWorkerDetail} name="mobile-worker-detail" path="workerDetail/:id/:tab" />
-          <Route handler={mWorkerDetail} name="mobile-worker-detail-default" path="workerDetail/:id" />
-          <Route handler={mCartSearch} name="mobile-search-carts" path="search/cart" />
-          <Route handler={mCartDetail} name="mobile-cart-detail" path="cartDetail/:id/:tab" />
-          <Route handler={mCartDetail} name="mobile-cart-detail-default" path="cartDetail/:id" />
-          <DefaultRoute handler={mWorkerPickCharts} name="mobile-events" path="events" />
+    <Route component={authn(Mobile)} path="mobile/facilities">
+      <IndexRoute component={LoadFacility} />
+      <Route component={FacilityWrapper} path=":facilityName/:customerName">
+        <Route component={mApp}>
+          <IndexRedirect to="events" />
+          <Route component={mWorkerPickCharts}  path="events"/>
+          <Route component={mOrderSearch} path="orders" />
+          <Route component={mOrderDeatil} path="orders/:id">
+            <IndexRedirect to="order" />
+            <Route component={mOrderDeatil} path=":tab" />
+          </Route>
+          <Route component={mWorkerSearch} path="workers" />
+          <Route component={mWorkerDetail} path="workers/:id">
+            <IndexRedirect to="detail" />
+            <Route component={mWorkerDetail} path=":tab" />
+          </Route>
+          <Route component={mCartSearch} path="carts" />
+          <Route component={mCartDetail} path="carts/:id">
+            <IndexRedirect to="detail" />
+            <Route component={mCartDetail} path=":tab" />
+          </Route>
         </Route>
       </Route>
     </Route>
 
     // Routes from admin panel
 
-    <Route handler={authn(Admin)} name="admin" path="admin">
-      <Route handler={Users} name="users">
-        <Route handler={UserAdd} name="usernew" path="new"/>
-        <Route handler={UserEdit} name="useredit" path=":userId"/>
+    <Route component={authn(Admin)} path="admin">
+      <Route component={Users} path="users">
+        <Route component={UserAdd} path="new"/>
+        <Route component={UserEdit} path=":userId"/>
       </Route>
     </Route>
 
     // Routes for user credentials
 
-    <Route handler={Login} name="login" />
-    <Route handler={SetupPassword} name="setuppassword" path="setuppassword"/>
-    <Route handler={ChangePassword} name="changepassword" />
-    <Route handler={RecoverPassword} name="recoverpassword" />
-    <Route handler={RecoverSuccess} name="recoversuccess" />
+    <Route component={Login} path="login" />
+    <Route component={SetupPassword} path="password/setup" />
+    <Route component={ChangePassword} path="password/change" />
+    <Route component={RecoverPassword} path="password/recover" />
+    <Route component={RecoverSuccess} path="password/success" />
   </Route>
 );

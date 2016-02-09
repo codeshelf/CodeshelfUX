@@ -15,7 +15,7 @@ export default class RecoverSuccess extends React.Component{
                 <h3>to reset your password</h3>
                 <div>If you don't see the email check your span or junk mail folder, as it may have been blocked by your email security settings.</div>
                 <div>
-                    <Link to="login">Back to Login</Link>
+                    <Link to="/login">Back to Login</Link>
                 </div>
                 </FormPageLayout>
     );

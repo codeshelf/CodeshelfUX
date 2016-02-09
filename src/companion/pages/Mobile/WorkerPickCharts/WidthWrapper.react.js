@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import {Component} from 'react';
 
 export class WidthWrapper extends Component {
   constructor() {
@@ -20,7 +20,7 @@ export class WidthWrapper extends Component {
 
   onResize() {
     //TODO react 0.14+ remove getDOMNode() from chain ref will contain DOM element
-    this.setState({width: this.el.getDOMNode().offsetWidth});
+    this.setState({width: this.el.offsetWidth});
   }
 
   render() {

@@ -3,6 +3,7 @@ import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {TimeFromNow} from "../DateDisplay.react.js";
 import _ from "lodash";
+import URI from 'urijs';
 
 import * as csapi from 'data/csapi';
 import "./Detail.styl";
@@ -17,17 +18,17 @@ export class Detail extends Component {
   previousUrl = null;
 
   componentWillMount() {
-    this.previousUrl = this.props.router.getCurrentParams();
-    const {id: itemId, tab} = this.props.router.getCurrentParams();
+    this.previousUrl = this.props.params;
+    const {id: itemId, tab} = this.props.params;
     this.itemId = itemId;
     const selectTab = this.props.convertTab.fromURL[tab] || this.props.defaultSelectTab || 0;
     this.props.acSelectTab(selectTab, itemId, true);
   }
 
   componentWillReceiveProps(nextProps) {
-    const {id: itemId, tab} = nextProps.router.getCurrentParams();
-    if (!_.isEqual(this.previousUrl, nextProps.router.getCurrentParams())) {
-      this.previousUrl = nextProps.router.getCurrentParams();
+    const {id: itemId, tab} = nextProps.params;
+    if (!_.isEqual(this.previousUrl, nextProps.params)) {
+      this.previousUrl = nextProps.params;
       this.props.acSelectTab(this.props.convertTab.fromURL[tab], itemId, true);
     }
   }
@@ -39,13 +40,11 @@ export class Detail extends Component {
         className="nav-tabs-simple"
         activeKey={activeTab}
         onSelect={(tab) => {
-          this.props.router.transitionTo(this.props.transitionTo,
-            {
-              facilityName: this.props.router.getCurrentParams().facilityName,
-              id: this.props.router.getCurrentParams().id,
-              tab: this.props.convertTab.toURL[tab],
-            }
-          )
+          const {convertTab, router, location} = this.props;
+          const tabFragment = convertTab.toURL[tab];
+          const newUri = new URI(tabFragment);
+          const tabURL = newUri.absoluteTo(location.pathname+location.search).toString();
+          router.push(tabURL);
         }}
         tabWidth={1}>
         {this.props.ALL_TABS.map(tab =>
@@ -59,7 +58,7 @@ export class Detail extends Component {
   }
 
   render() {
-    const {id: itemId} = this.props.router.getCurrentParams();
+    const {id: itemId} = this.props.params;
     this.itemId = itemId;
     const {tab} = this.props;
     if (this.props[tab].filter === null) return null;

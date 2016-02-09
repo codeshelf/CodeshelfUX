@@ -4,13 +4,17 @@ import {bindActionCreators} from 'redux';
 import exposeRouter from 'components/common/exposerouter';
 import {RouteHandler} from 'react-router';
 
-import {acInitialLoadFacilities, acSelectFacility} from './store';
+import {acInitialLoadFacilities, acSelectContext} from './store';
 import {acToggleSidebar} from '../Sidebar/store';
 import {getFacilityMutable} from "./get";
 import {getSidebarMutable} from "../Sidebar/get";
 
 
 class FacilityWrapper extends Component {
+
+  componentWillMount() {
+    this.selected = this.props.selected;
+  }
 
   componentDidMount() {
     const {availableFacilities} = this.props;
@@ -23,12 +27,19 @@ class FacilityWrapper extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.selectFacilityFromRoute(nextProps);
+    // refresh after context change
+    if (this.selected.selectedFacility !== null && !_.isEqual(this.selected, nextProps.selected)) {
+      this.selected = nextProps.selected;
+      window.location.reload();
+    }
+    if (this.selected.selectedFacility === null) {
+      this.selected = nextProps.selected;
+    };
   }
 
   selectFacilityFromRoute(props) {
-     const router = props.router;
-     const facilityName = router.getCurrentParams().facilityName;
-     this.props.acSelectFacility(facilityName);
+     const {facilityName, customerName} = props.params;
+     this.props.acSelectContext({domainId: facilityName, customerId: customerName});
   }
 
   renderLoading(a) {
@@ -40,19 +51,18 @@ class FacilityWrapper extends Component {
     if (this.props.loadingAvailableFacilities) return this.renderLoading();
     // if haven't selected facility render loading
     // after loading this component will refresh and in DidUpdate we will select correct facility
-    const {selectedFacility, availableFacilities} = this.props;
-    if (!selectedFacility) {
+    const {selected, availableFacilities, acSelectContext, acToggleSidebar, isOpen} = this.props;
+    if (!selected.selectedFacility) {
       return this.renderLoading(".");
     } else {
-      return (
-       <RouteHandler key={selectedFacility.persistentId}
-                      facility={selectedFacility}
-                      availableFacilities={availableFacilities}
-                      acSelectFacility={this.props.acSelectFacility}
-                      acToggleSidebar={this.props.acToggleSidebar}
-                      isOpen={this.props.isOpen}
-                      />
-      );
+      return React.cloneElement(this.props.children, {
+        key: selected.selectedFacility.persistentId,
+        selected: selected,
+        availableFacilities,
+        acSelectContext,
+        acToggleSidebar,
+        isOpen
+      });
     }
   }
 }
@@ -65,7 +75,7 @@ function getState(state) {
 }
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acInitialLoadFacilities, acSelectFacility, acToggleSidebar}, dispatch);
+  return bindActionCreators({acInitialLoadFacilities, acSelectContext, acToggleSidebar}, dispatch);
 }
 
 export default exposeRouter(connect(getState, mapDispatch)(FacilityWrapper));

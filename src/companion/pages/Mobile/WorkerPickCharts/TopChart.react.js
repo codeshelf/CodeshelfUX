@@ -50,7 +50,7 @@ class ChartNavigation extends Component {
     return (
       <div>
         <div className="pull-left">
-          <Button bsStyle="link" className="pull-left" bsSize="md" onClick={this.changeEndTime.bind(this, filter, 'subtract')}>
+          <Button bsStyle="link" className="pull-left"  onClick={this.changeEndTime.bind(this, filter, 'subtract')}>
               <Icon name="step-backward" style={{marginRight: margin}}/>
               <DateDisplay date={moment(filter.endtime).subtract(filter.window)} />
           </Button>

@@ -45,7 +45,7 @@ export default class RecoverPassword extends React.Component{
                         <FormFields ref="fields" formMetadata={formMetadata} formData={formData} handleChange={this.handleChange}/>
                 <Row>
                 <Col sm={12} >
-                <Link to="login" >Back to Login</Link>
+                  <Link to="/login" >Back to Login</Link>
                 </Col>
                 </Row>
 

@@ -1,30 +1,35 @@
-import rrb from 'react-router-bootstrap';
-import rr from 'react-router';
+import {LinkContainer} from 'react-router-bootstrap';
+import {Link as rrLink} from 'react-router';
+import {NavItem, MenuItem, Button, ListGroupItem} from 'react-bootstrap';
 import {connect} from 'react-redux';
+import {encodeContextToURL} from './common/contextEncode.js';
 
 
 function mapState(state) {
   return {
-    facility: state.facility.selectedFacility
+    selected: state.facility.selected
   }
 }
 
 function wrapFacility(Component) {
+  console.log("fac comp",Component);
 
   class WrapFacility extends React.Component {
     render() {
-      let params = {};
       if (this.props.params) {
-        params = {...this.props.params};
+        console.warn("old style Link detected");
       }
-      if (!this.props.facility) {
+      if (!this.props.selected.selectedFacility) {
         // no links will be renderd without facility
         return null;
       } else {
-        if (!params["facilityName"]) {
-          params["facilityName"] = this.props.facility.domainId;
+        const {to, ...rest} = this.props;
+        const basePath=`/mobile/facilities/${encodeContextToURL(this.props.selected)}`;
+        let newTo = to;
+        if (to.indexOf("/") != 0) {
+          newTo=`${basePath}/${this.props.to}`;
         }
-        return <Component {...this.props} params={params} />;
+        return (<Component {...rest} to={newTo} />);
       }
     }
   }
@@ -32,24 +37,18 @@ function wrapFacility(Component) {
   return connect(mapState)(WrapFacility);
 }
 
-function wrapSidebar(Component) {
-
-  class WrapSidebar extends React.Component {
-    render() {
-      return (
-        <Component {...this.props}>
-          <div onClick={this.props.onclick}>{this.props.label}</div>
-        </Component>
-      )
-    }
-
+function wrapLink(Component) {
+  return (props) => {
+    return (<LinkContainer {...props}>
+                <Component {...props}>
+                  {props.children}
+                </Component>
+            </LinkContainer>);
   }
-
-  return WrapSidebar;
 }
 
-export const NavItemLink = wrapFacility(rrb.NavItemLink);
-export const MenuItemLink = wrapFacility(rrb.MenuItemLink);
-export const ButtonLink = wrapFacility(rrb.ButtonLink);
-export const ListGroupItemLink = wrapFacility(rrb.ListGroupItemLink);
-export const Link = wrapFacility(rr.Link);
+export const NavItemLink = wrapFacility(wrapLink(NavItem));
+export const MenuItemLink = wrapFacility(wrapLink(MenuItem));
+export const ButtonLink = wrapFacility(wrapLink(Button));
+export const ListGroupItemLink = wrapFacility(wrapLink(ListGroupItem));
+export const Link = wrapFacility(rrLink);

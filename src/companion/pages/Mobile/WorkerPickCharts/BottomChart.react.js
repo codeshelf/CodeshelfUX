@@ -66,13 +66,8 @@ export class BottomChart extends Component {
                   const filterWithId = WorkerHistogramFilter(filter).set("id", workerId);
                   return (
                     <ListGroupItemLink
-                      to="mobile-worker-detail"
-                      params={
-                        {id: encodeURIComponent(workerId),
-                         tab: convertTab.toURL[TAB_PRODUCTIVITY],
-                      }}
-                      onClick={() => this.props.acSetProductivityFilter(workerId, filterWithId)}
-                      >
+                        to={`workers/${encodeURIComponent(workerId)}/productivity`}
+                        onClick={() => this.props.acSetProductivityFilter(workerId, filterWithId)} >
                       <div style={{fontSize: "75%"}}>{workerName}</div>
                       <span style={{width: "4em" ,marginRight: "0.5em"}}>{totalEvents}</span>
                       {chart.toReact()}

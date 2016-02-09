@@ -1,17 +1,22 @@
-import {getFacilities} from 'data/csapi';
+import {getFacilities, getFacilityCustomers} from 'data/csapi';
 import {Record, Map} from 'immutable';
 import {getSelectedFacility} from "./get";
 import {getFacilityContext} from 'data/csapi';
+import Promise from 'bluebird';
+import {getCustomers} from './mockCustomers';
 
 const SET_AVAILABLE_FACILITIES = 'SET_AVAILABLE_FACILITIES';
 const LOAD_AVAILABLE_FACILITIES = 'LOAD_AVAILABLE_FACILITIES';
-const SELECT_FACILITY = 'SELECT_FACILITY';
+const SELECT_CONTEXT = 'SELECT_CONTEXT';
 
 const initState = new (Record({
   loadingAvailableFacilities: false,
   availableFacilities: null,
-  selectedFacility: null,
-  facilityContext: null,
+  selected: {
+    selectedFacility: null,
+    selectedCustomer: null,
+  },
+  context: null,
 }));
 
 export function facilityReducer(state = initState, action) {
@@ -25,15 +30,24 @@ export function facilityReducer(state = initState, action) {
       //return {...state, availableFacilities, loadingAvailableFacilities: false};
       return state.merge(new Map({availableFacilities, loadingAvailableFacilities: false}));
     }
-    case SELECT_FACILITY: {
+    case SELECT_CONTEXT: {
       // if i don't have facilities i can select one
       const selectedFacility = state.availableFacilities.find((f) => {
         return f.domainId === action.domainId;
       });
-      if (state.selectedFacility === selectedFacility) return state;
-      const facilityContext = getFacilityContext(selectedFacility);
+      // we select also customer
+      let selectedCustomer = null;
+      if (action.customerId !== 'ALL') {
+        selectedCustomer = selectedFacility ? selectedFacility.customers.find((c) => {
+                return c.domainId === action.customerId;
+        }) : null;
+      } else {
+        selectedCustomer = 'ALL';
+      };
+      if (state.selected.selectedFacility === selectedFacility && state.selected.selectedCustomer === selectedCustomer) return state;
+      const context = getFacilityContext({selectedFacility, selectedCustomer});
       //return {...state, selectedFacility};
-      return state.merge(new Map({selectedFacility, facilityContext}));
+      return state.merge(new Map({selected: {selectedFacility: selectedFacility, selectedCustomer: selectedCustomer}, context}));
     }
     default: return state;
   }
@@ -47,21 +61,30 @@ export function acInitialLoadFacilities() {
         type: LOAD_AVAILABLE_FACILITIES,
       });
       getFacilities().then((data) => {
-        dispatch({
-          type: SET_AVAILABLE_FACILITIES,
-          data
-        });
+        Promise.all(data.map((facility) => getCustomers(facility.domainId)))
+          .then((customersData) => {
+              data = data.map((facility, index) => {
+                facility['customers'] = customersData[index].results;
+                return facility;
+              });
+              dispatch({
+                type: SET_AVAILABLE_FACILITIES,
+                data,
+              });
+          });
       });
     }
   }
 }
 
-export function acSelectFacility(domainId) {
+export function acSelectContext({domainId, customerId}) {
   return (dispatch, getState) =>{
     const state = getState();
     // don't select facility if same is selected
-    if (state.facility.selectedFacility &&
-           state.facility.selectedFacility.domainId === domainId) {
+    if (state.facility.selected.selectedFacility &&
+        state.facility.selected.selectedFacility.domainId === domainId &&
+        state.facility.selected.selectedCustomer &&
+        (state.facility.selected.selectedCustomer === customerId || state.facility.selected.selectedCustomer.domainId === customerId)) {
       console.log("selectFacility already selected")
       return;
     }
@@ -72,8 +95,9 @@ export function acSelectFacility(domainId) {
       return;
     }
     dispatch({
-      type: SELECT_FACILITY,
+      type: SELECT_CONTEXT,
       domainId,
+      customerId,
     });
 
   }
