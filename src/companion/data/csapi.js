@@ -192,14 +192,20 @@ export function getFacilities() {
     return ajax("/api/facilities");
 };
 
+export function getFacilityCustomers(domainId) {
+    return ajax("/api/facilities/" + domainId + "");
+};
+
 // facilityId can be injected(for mobile web) or will be taken from facility cursor if not provided(desktop web)
-export function getFacilityContext(selectedFacility) {
+export function getFacilityContext({selectedFacility, selectedCustomer}) {
     var endpoint = state.cursor(["endpoint"])();
     var facility = state.cursor(["selectedFacility"])();
     var facilityId = (selectedFacility && selectedFacility.persistentId) || facility.get("persistentId");
-    var facilityPath = "/api/facilities/" + facilityId;
-    let ordersPath = facilityPath + "/orders";
-    let workInstructionsPath = facilityPath + "/work/instructions";
+    // not sure if paths will be this way in the future
+    let basePath = "/api/facilities/" + facilityId;
+    basePath = selectedCustomer !== 'ALL' && selectedCustomer ? basePath + "/" + selectedCustomer.domainId: basePath;
+    let ordersPath = basePath + "/orders";
+    let workInstructionsPath = basePath + "/work/instructions";
     let domainId = facility && facility.domainId;
     return {
         domainId: domainId,
@@ -215,40 +221,40 @@ export function getFacilityContext(selectedFacility) {
         },
 
         getOrder(properties, orderId) {
-            let orderPath = facilityPath + "/orders/" + orderId;
+            let orderPath = basePath + "/orders/" + orderId;
             return ajax(orderPath, {data: {"properties" : properties}});
         },
 
 
         getOrderDetails(orderId) {
-            let orderDetailsPath = facilityPath + "/orders/" + orderId + "/details";
+            let orderDetailsPath = basePath + "/orders/" + orderId + "/details";
             return ajax(orderDetailsPath, {});
         },
 
         getOrderEvents(orderId) {
-            let orderDetailsPath = facilityPath + "/orders/" + orderId + "/events";
+            let orderDetailsPath = basePath + "/orders/" + orderId + "/events";
             return ajax(orderDetailsPath, {});
         },
 
         getExtensionPoints: function() {
-            let extensionPointsPath = facilityPath + "/extensionpoints";
+            let extensionPointsPath = basePath + "/extensionpoints";
             return ajax(extensionPointsPath);
         },
 
         addExtensionPoint: function(params) {
-            let extensionPointsPath = facilityPath + "/extensionpoints";
+            let extensionPointsPath = basePath + "/extensionpoints";
             return addResource(extensionPointsPath, params);
         },
 
         deleteExtensionPoint: function(extensionPoint) {
-            let extensionPointsPath = facilityPath + "/extensionpoints/" + extensionPoint.persistentId;
+            let extensionPointsPath = basePath + "/extensionpoints/" + extensionPoint.persistentId;
             return ajax(extensionPointsPath, {
                 method: "DELETE"
             });
         },
 
         updateExtensionPoint: function(extensionPoint) {
-            let extensionPointsPath = facilityPath + "/extensionpoints/" + extensionPoint.persistentId;
+            let extensionPointsPath = basePath + "/extensionpoints/" + extensionPoint.persistentId;
             return ajax(extensionPointsPath, {
                 method: "PUT",
                 contentType: "form", //superagent forum url encoded
@@ -257,17 +263,17 @@ export function getFacilityContext(selectedFacility) {
         },
 
         getHealthCheckConfiguration: function(type) {
-            let path = facilityPath + `/healthchecks/${type}/configuration`;
+            let path = basePath + `/healthchecks/${type}/configuration`;
             return ajax(path);
         },
 
         getEdiGateways: function() {
-            let edipath = facilityPath + "/edigateways";
+            let edipath = basePath + "/edigateways";
             return ajax(edipath);
 
         },
         updateEdiGateway: function(config) {
-            let edipath = facilityPath + "/edigateways/" + config.domainId;
+            let edipath = basePath + "/edigateways/" + config.domainId;
             return ajax(edipath, {
                 method: "POST",
                 data: config,
@@ -276,7 +282,7 @@ export function getFacilityContext(selectedFacility) {
         },
 
         startDropboxLink: function() {
-            let edipath = facilityPath + "/edigateways/DROPBOX/link";
+            let edipath = basePath + "/edigateways/DROPBOX/link";
             return ajax(edipath);
         },
 
@@ -306,7 +312,7 @@ export function getFacilityContext(selectedFacility) {
         },
 
         getDataSummary: function() {
-            let dataSummary = facilityPath + "/data/summary";
+            let dataSummary = basePath + "/data/summary";
             return ajax(dataSummary);
         },
 
@@ -315,24 +321,24 @@ export function getFacilityContext(selectedFacility) {
         },
 
         getChe: (domainId) => {
-          var chesPath = facilityPath + "/ches/" + encodeURIComponent(domainId);
+          var chesPath = basePath + "/ches/" + encodeURIComponent(domainId);
           return ajax(chesPath, {});
         },
 
         findChes: function(filter) {
-            var chesPath = facilityPath + "/ches";
+            var chesPath = basePath + "/ches";
             return ajax(chesPath, {
                 data: filter
             });
         },
 
         getCheEvents: function(domainId) {
-          var chesPath = facilityPath + "/ches/" + encodeURIComponent(domainId) + "/events";
+          var chesPath = basePath + "/ches/" + encodeURIComponent(domainId) + "/events";
           return ajax(chesPath, {});
         },
 
         getCheEventHistogram({id, startAt, endAt, interval}) {
-          var workerPath = facilityPath + "/ches/" + id + "/events/histogram";
+          var workerPath = basePath + "/ches/" + id + "/events/histogram";
           startAt = moment(startAt);
           endAt = moment(endAt);
           const created = startAt.toISOString() + "/" + endAt.toISOString();
@@ -343,14 +349,14 @@ export function getFacilityContext(selectedFacility) {
         },
 
         getCheEventsNext: function({id, next}) {
-          var chePath = facilityPath + "/ches/" + encodeURIComponent(id) + "/events";
+          var chePath = basePath + "/ches/" + encodeURIComponent(id) + "/events";
           return ajax(chePath, {
             data: {next}
           });
         },
 
         getCheEventsWithTime: function({id, startAt, endAt}) {
-          var chePath = facilityPath + "/ches/" + encodeURIComponent(id) + "/events";
+          var chePath = basePath + "/ches/" + encodeURIComponent(id) + "/events";
           startAt = moment(startAt);
           endAt = moment(endAt);
           const created = startAt.toISOString() + "/" + endAt.toISOString();
@@ -362,24 +368,24 @@ export function getFacilityContext(selectedFacility) {
 
 
         findWorkers: function(filter) {
-          var workersPath = facilityPath + "/workers";
+          var workersPath = basePath + "/workers";
           return ajax(workersPath, {
               data: filter
           });
         },
 
         getWorker: function(domainId) {
-          var workerPath = facilityPath + "/workers/" + encodeURIComponent(domainId);
+          var workerPath = basePath + "/workers/" + encodeURIComponent(domainId);
           return ajax(workerPath, {});
         },
 
         getWorkerEvents: function(domainId) {
-          var workerPath = facilityPath + "/workers/" + encodeURIComponent(domainId) + "/events";
+          var workerPath = basePath + "/workers/" + encodeURIComponent(domainId) + "/events";
           return ajax(workerPath, {});
         },
 
         getWorkerEventsNext: function({id, next}) {
-          var workerPath = facilityPath + "/workers/" + encodeURIComponent(id) + "/events";
+          var workerPath = basePath + "/workers/" + encodeURIComponent(id) + "/events";
           return ajax(workerPath, {
             data: {next}
           });
@@ -387,6 +393,7 @@ export function getFacilityContext(selectedFacility) {
 
         getWorkerEventsWithTime: function({id, startAt, endAt, purposes}) {
           var workerPath = facilityPath + "/workers/" + encodeURIComponent(id) + "/events";
+          var workerPath = basePath + "/workers/" + encodeURIComponent(id) + "/events";
           startAt = moment(startAt);
           endAt = moment(endAt);
           const created = startAt.toISOString() + "/" + endAt.toISOString();
@@ -396,7 +403,7 @@ export function getFacilityContext(selectedFacility) {
         },
 
         getWorkerPicksWithnWindow: function({startAt, endAt, interval, purposes}) {
-          const path = facilityPath + "/picks/histogram";
+          const path = basePath + "/picks/histogram";
           startAt = moment(startAt);
           endAt = moment(endAt);
           const created = startAt.toISOString() + "/" + endAt.toISOString();
@@ -407,7 +414,7 @@ export function getFacilityContext(selectedFacility) {
         },
 
         getWorkerPicksWithnWindowAllWorkers: function({startAt, endAt, interval, purposes}) {
-          const path = facilityPath + "/picks/workers/histogram";
+          const path = basePath + "/picks/workers/histogram";
           startAt = moment(startAt);
           endAt = moment(endAt);
           const created = startAt.toISOString() + "/" + endAt.toISOString();
@@ -418,7 +425,7 @@ export function getFacilityContext(selectedFacility) {
         },
 
         getWorkerEventHistogram({id, startAt, endAt, interval, purposes}) {
-          const workerPath = facilityPath + "/workers/" + id + "/events/histogram";
+          const workerPath = basePath + "/workers/" + id + "/events/histogram";
           startAt = moment(startAt);
           endAt = moment(endAt);
           const created = startAt.toISOString() + "/" + endAt.toISOString();
@@ -429,7 +436,7 @@ export function getFacilityContext(selectedFacility) {
         },
 
         getWorkers: function(params) {
-            var workersPath = facilityPath + "/workers";
+            var workersPath = basePath + "/workers";
             return ajax(workersPath, {
               data: params
             });
@@ -440,7 +447,7 @@ export function getFacilityContext(selectedFacility) {
                 console.warn("trying to add a worker with persistentId set");
             }
             delete worker.persistentId;  //don't send in JSON so it doesn't try to deserialize with setPersistentId and fail
-            var workersPath = facilityPath + "/workers";
+            var workersPath = basePath + "/workers";
             return ajax(workersPath, {
                 method: "POST",
                 data: JSON.stringify(worker),
@@ -464,7 +471,7 @@ export function getFacilityContext(selectedFacility) {
 
         getSummarySnapshot: function(viewSpec) {
             var {filterName, aggregate} = viewSpec;
-            var orderstatussummary = facilityPath + "/statussummary/" + aggregate;
+            var orderstatussummary = basePath + "/statussummary/" + aggregate;
             return ajax(orderstatussummary, {
                 data: {
                     filterName: filterName
@@ -501,16 +508,16 @@ export function getFacilityContext(selectedFacility) {
         },
 
         getTopItems: function() {
-            var topItems = facilityPath + "/work/topitems";
+            var topItems = basePath + "/work/topitems";
             return ajax(topItems);
         },
         getFilters: function() {
-            var filtersUrl = facilityPath + "/filters";
+            var filtersUrl = basePath + "/filters";
             return ajax(filtersUrl);
         },
 
         importFile: function(path, formData) {
-            let importPath = facilityPath + "/import/" + path;
+            let importPath = basePath + "/import/" + path;
             return ajax(importPath, {
                 method: "POST",
                 data: formData,
@@ -531,18 +538,18 @@ export function getFacilityContext(selectedFacility) {
             return this.importFile("inventory", formData);
         },
         findImportReceipts: function(filter) {
-            var receiptPath = facilityPath + "/import";
+            var receiptPath = basePath + "/import";
             return ajax(receiptPath, {
                     data: filter
             });
         },
         getMetrics() {
-            var metricUrl = facilityPath + "/metrics";
+            var metricUrl = basePath + "/metrics";
             return ajax(metricUrl);
         },
 
         computeMetrics(date) {
-            var metricUrl = facilityPath + "/metrics";
+            var metricUrl = basePath + "/metrics";
             return ajax(metricUrl, {
                 method: "POST",
                 data: {date: date},
@@ -551,7 +558,7 @@ export function getFacilityContext(selectedFacility) {
         },
 
         computeWorkInstructions(cheName, containerArray) {
-          let wiComputePath = facilityPath + "/ches/" + cheName + "/workinstructions/compute";
+          let wiComputePath = basePath + "/ches/" + cheName + "/workinstructions/compute";
           return ajax(wiComputePath, {
             method: "POST",
             data: {
@@ -564,7 +571,7 @@ export function getFacilityContext(selectedFacility) {
         },
 
         createEvent(cheName, workerId, type, createTime) {
-          let eventPath = facilityPath + "/ches/" + cheName + "/events";
+          let eventPath = basePath + "/ches/" + cheName + "/events";
           return ajax(eventPath, {
             method: "POST",
             data: {
@@ -578,20 +585,20 @@ export function getFacilityContext(selectedFacility) {
         },
 
         getEventPurposes() {
-          var pickRatePurposesUrl = facilityPath + "/pickrate/search";
+          var pickRatePurposesUrl = basePath + "/pickrate/search";
           return ajax(pickRatePurposesUrl, {
           });
         },
 
         getPickRates: (filter) => {
-            var pickRateUrl = facilityPath + "/pickrate";
+            var pickRateUrl = basePath + "/pickrate";
             return ajax(pickRateUrl, {
                 data: filter
             });
         },
 
         executeTestFunction(functionName, parameters) {
-            let testFunction = facilityPath + "/test/" + functionName;
+            let testFunction = basePath + "/test/" + functionName;
             return ajax(testFunction, {
                 method: "POST",
                 data: parameters,
@@ -601,7 +608,7 @@ export function getFacilityContext(selectedFacility) {
         },
 
         processPickScript: function(formData) {
-            var runpickscript = facilityPath + "/process_script";
+            var runpickscript = basePath + "/process_script";
             return ajax(runpickscript, {
                 method: "POST",
                 data: formData,
@@ -611,7 +618,7 @@ export function getFacilityContext(selectedFacility) {
         },
         runScriptStep: function(formData, stepId, timeout) {
             //jquery ajax allows data to be one object (which we are using for formdata)
-            var runpickscript = facilityPath + "/run_script";
+            var runpickscript = basePath + "/run_script";
             formData.append("keepFromBeingEmpty", "empty");
             return ajax(runpickscript, {
                 method: "POST",
@@ -625,37 +632,37 @@ export function getFacilityContext(selectedFacility) {
             });
         },
         addScheduledJob(params) {
-            return addResource(facilityPath + "/scheduledjobs", params);
+            return addResource(basePath + "/scheduledjobs", params);
         },
         getScheduledJobs() {
-            return ajax(facilityPath + "/scheduledjobs");
+            return ajax(basePath + "/scheduledjobs");
         },
         findSchedule(type) {
-            return ajax(facilityPath + "/scheduledjobs/" + type + "/schedule");
+            return ajax(basePath + "/scheduledjobs/" + type + "/schedule");
         },
 
         triggerSchedule(type) {
-            return ajax(facilityPath + "/scheduledjobs/" + type + "/trigger", {
+            return ajax(basePath + "/scheduledjobs/" + type + "/trigger", {
                 method: "POST",
                 contentType: "form"
             });
         },
 
         cancelJob(type) {
-            return ajax(facilityPath + "/scheduledjobs/" + type + "/cancel", {
+            return ajax(basePath + "/scheduledjobs/" + type + "/cancel", {
                 method: "POST",
                 contentType: "form"
             });
         },
 
         deleteJob(type) {
-            return ajax(facilityPath + "/scheduledjobs/" + type, {
+            return ajax(basePath + "/scheduledjobs/" + type, {
                 method: "DELETE"
             });
         },
 
         updateSchedule(type, schedule) {
-            return ajax(facilityPath + "/scheduledjobs/" + type + "/schedule", {
+            return ajax(basePath + "/scheduledjobs/" + type + "/schedule", {
                 method: "POST",
                 data: schedule,
                 contentType: "form"

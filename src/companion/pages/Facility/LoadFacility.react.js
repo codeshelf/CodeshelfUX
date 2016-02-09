@@ -27,7 +27,7 @@ class LoadFacility extends Component {
       this.props.acInitialLoadFacilities();
     } else {
       const {router, location} = this.props;
-      const newUri = new URI(`./facilities/${availableFacilities[0].domainId}`);
+      const newUri = new URI(`./facilities/${availableFacilities[0].domainId}/ALL`);
       const newURL = newUri.absoluteTo(location.pathname+location.search).toString();
       router.push(newURL);
     }
