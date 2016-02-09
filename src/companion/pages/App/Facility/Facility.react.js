@@ -4,9 +4,10 @@ import {Link, RouteHandler} from 'react-router';
 import FacilityNavigation from './FacilityNavigation.react.js';
 import TopNavBar from '../TopNavBar.react';
 import Footer from '../Footer.react.js';
+
+//temp old store
 import {getSelectedTenant} from 'data/user/store';
-import {fetchFacilities} from 'data/facilities/actions';
-import {getSelectedFacility, getFacilities} from 'data/facilities/store';
+import {state} from 'data/state';
 
 export default class Facility extends React.Component {
     componentWillMount() {
@@ -18,17 +19,17 @@ export default class Facility extends React.Component {
     }
 
     render() {
-        let {facility, tenant, state} = this.props;
+        let {facility, availableFacilities} = this.props;
+        const tenant = getSelectedTenant();
         let tenantName = tenant.get("name");
-        let facilities = getFacilities();
         return (
             <DocumentTitle title='CS Companion'>
             {
                     facility ?
                           <div>
-                              <FacilityNavigation title={tenantName} facility={facility} facilities={facilities} />
+                              <FacilityNavigation title={tenantName} facility={facility} facilities={availableFacilities} />
                               <div id="page-wrapper" className="page-container">
-                                  <TopNavBar title={tenantName} facility={facility} facilities={facilities}/>
+                                  <TopNavBar title={tenantName} facility={facility} facilities={availableFacilities}/>
                                   <div className="page-content-wrapper">
                                       <div className="content">
                                         { React.cloneElement(this.props.children, { state: state })}

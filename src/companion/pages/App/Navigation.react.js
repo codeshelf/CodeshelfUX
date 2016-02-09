@@ -1,8 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
 import {Link} from 'react-router';
-import {NavItem} from 'react-bootstrap';
-import { NavItemLink, MenuItemLink} from 'react-router-bootstrap';
 import Icon from 'react-fa';
 import PureComponent from 'components/common/PureComponent';
 import exposeRouter from 'components/common/exposerouter';
@@ -11,8 +9,6 @@ import {getSelectedFacility} from 'data/facilities/store';
 import _ from "lodash";
 
 
-const AuthzNavItemLink = authz(NavItemLink);
-const AuthzNavItem = authz(NavItem);
 require('./navigation.styl');
 
 class NavbarHeader extends PureComponent {
@@ -36,9 +32,9 @@ class MenuItem extends React.Component {
              params,
              query,
              href,
-             className} = this.props;
+             className, location} = this.props;
 
-        let active = to && this.context.router.isActive(to, params, query);
+        const active = to && this.context.router.isActive(to);
 
         var titleRenderer = (<span className="title">{title}</span>);
 
@@ -52,7 +48,7 @@ class MenuItem extends React.Component {
         return (<li className={classes}>
                   {
                       (to) ?
-                          <Link {...propsToPass}>{titleRenderer}</Link>
+                          <Link {...propsToPass}  activeClass="active">{titleRenderer}</Link>
                           :
                           <a {...propsToPass}>{titleRenderer}</a>
                   }
@@ -61,8 +57,8 @@ class MenuItem extends React.Component {
     }
 }
 MenuItem.contextTypes = {
-    router: React.PropTypes.func.isRequired
-}
+  router: React.PropTypes.object.isRequired
+};
 
 class Navigation extends React.Component {
   componentWillMount() {

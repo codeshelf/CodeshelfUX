@@ -3,6 +3,10 @@ import {Record, Map} from 'immutable';
 import {getSelectedFacility} from "./get";
 import {getFacilityContext} from 'data/csapi';
 
+//temp for storing to old store
+import {updateSelectedFacility, toFacilityRecord} from 'data/facilities/store';
+
+
 const SET_AVAILABLE_FACILITIES = 'SET_AVAILABLE_FACILITIES';
 const LOAD_AVAILABLE_FACILITIES = 'LOAD_AVAILABLE_FACILITIES';
 const SELECT_FACILITY = 'SELECT_FACILITY';
@@ -32,6 +36,7 @@ export function facilityReducer(state = initState, action) {
       });
       if (state.selectedFacility === selectedFacility) return state;
       const facilityContext = getFacilityContext(selectedFacility);
+      updateSelectedFacility(toFacilityRecord(selectedFacility));
       //return {...state, selectedFacility};
       return state.merge(new Map({selectedFacility, facilityContext}));
     }

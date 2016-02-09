@@ -49,38 +49,42 @@ import mWorkerPickCharts from './pages/Mobile/WorkerPickCharts/WorkerPickCharts.
 import LoadFacility from './pages/Mobile/Facility/LoadFacility.react.js';
 import FacilityWrapper from './pages/Mobile/Facility/FacilityWrapper.react.js';
 import Mobile from './pages/Mobile/Mobile.react.js';
-
+import ReduxWrapper from './pages/App/ReduxProvider.react.js';
 export default (
   <Route component={Root} path="/">
     {/* Redirect to mobile or desktop web component */}
     <IndexRoute component={DetectMobile} />
-    <Route component={authn(App)} path="facilities"> //ensure auth and default facility
-      <Route component={Facility} path=":facilityName">
-        <IndexRedirect to="workresults" />
-        <Route component={WorkResults} path="workresults" />
-        <Route component={Orders} path="orders" />
-        <Route component={WorkInstructions} path="workinstructions" />
-        <Route component={BlockedWork} path="blockedwork" />
-        <Route component={Overview} path="overview" />
-        <Route component={Import} path="import" />
-        <Route component={EDIGateways} path="edigateways">
-          <Route component={EDIGatewayEdit} path=":id"/>
-        </Route>
-        <Route component={WorkerMgmt} path="workermgmt">
-          <Route component={WorkerDisplay} path="new" />
-          <Route component={WorkerDisplay} path=":workerId" />
-        </Route>
-        <Route component={Maintenance} path="maintenance">
-          <Route component={ExtensionPointEdit} path="parametersset/:parameterType" />
-          <Route component={ScheduledJobAdd} path="newscheduledjob" />
-          <Route component={ScheduledJobEdit} path="scheduledjobs/:type" />
-        </Route>
-        <Route component={TestScript} path="testscript" />
-        <Route component={ExtensionPointsPage} path="extensionpoints">
-          <Route component={ExtensionPointAdd} path="new" />
-          <Route component={ExtensionPointEdit} path=":extensionPointId" />
-        </Route>
-        <Route component={NotFound} path="*" />
+    <Route component={authn(ReduxWrapper)} path="facilities"> //ensure auth and default facility
+      <IndexRoute component={LoadFacility} />
+      <Route component={FacilityWrapper} path=":facilityName">
+        <Route component={Facility}>
+          <IndexRedirect to="workresults" />
+
+          <Route component={WorkResults} path="workresults" />
+          <Route component={Orders} path="orders" />
+          <Route component={WorkInstructions} path="workinstructions" />
+          <Route component={BlockedWork} path="blockedwork" />
+          <Route component={Overview} path="overview" />
+          <Route component={Import} path="import" />
+          <Route component={EDIGateways} path="edigateways">
+            <Route component={EDIGatewayEdit} path=":id"/>
+          </Route>
+          <Route component={WorkerMgmt} path="workermgmt">
+            <Route component={WorkerDisplay} path="new" />
+            <Route component={WorkerDisplay} path=":workerId" />
+          </Route>
+          <Route component={Maintenance} path="maintenance">
+            <Route component={ExtensionPointEdit} path="parametersset/:parameterType" />
+            <Route component={ScheduledJobAdd} path="newscheduledjob" />
+            <Route component={ScheduledJobEdit} path="scheduledjobs/:type" />
+          </Route>
+          <Route component={TestScript} path="testscript" />
+          <Route component={ExtensionPointsPage} path="extensionpoints">
+            <Route component={ExtensionPointAdd} path="new" />
+            <Route component={ExtensionPointEdit} path=":extensionPointId" />
+          </Route>
+          <Route component={NotFound} path="*" />
+       </Route>
       </Route>
     </Route>
 

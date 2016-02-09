@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "react-fa";
 import {DropdownButton, Nav, NavItem, Button, MenuItem} from "react-bootstrap";
-import { NavItemLink, MenuItemLink, ButtonLink} from 'react-router-bootstrap';
+import { NavItemLink, MenuItemLink, ButtonLink} from '../Mobile/links.js';
 import {loggedout} from "data/auth/actions";
 //todo turn clearStoredCredentials into an action
 import {getEmail, isCredentialsStored, clearStoredCredentials} from "data/user/store";
@@ -112,7 +112,7 @@ const AuthzCredentialsStore = authz(CredentialsStore);
 class FacilitySelector extends React.Component {
 
     renderDropdownLabel(facility) {
-        let facilityName = (facility) ? facility.get("description") : "";
+      let facilityName = (facility) ? facility.description : "";
         if (facility) {
             return (<span><Icon name="building" /> {facilityName}</span>);
         } else {
@@ -125,11 +125,10 @@ class FacilitySelector extends React.Component {
         return (<DropdownButton className="facility-dropdown" bsStyle="link" title={this.renderDropdownLabel(facility)}>
                 {
                     facilities.map((facility) => {
-                        let {name, persistentId, domainId, description} = facility.toObject();
+                      let {persistentId, domainId, description} = facility;
 
                         return <MenuItemLink key={domainId}
-                                             to="facility"
-                                             params={{facilityName: domainId}}
+                                             to={`/facilities/${domainId}`}
                                              data-persistentid={persistentId}>
                                          {description}
                                </MenuItemLink>;
