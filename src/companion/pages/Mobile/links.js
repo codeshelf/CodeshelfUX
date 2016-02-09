@@ -2,11 +2,12 @@ import {LinkContainer} from 'react-router-bootstrap';
 import {Link as rrLink} from 'react-router';
 import {NavItem, MenuItem, Button, ListGroupItem} from 'react-bootstrap';
 import {connect} from 'react-redux';
+import {encodeContextToURL} from './common/contextEncode.js';
 
 
 function mapState(state) {
   return {
-    facility: state.facility.selectedFacility
+    selected: state.facility.selected
   }
 }
 
@@ -18,12 +19,12 @@ function wrapFacility(Component) {
       if (this.props.params) {
         console.warn("old style Link detected");
       }
-      if (!this.props.facility) {
+      if (!this.props.selected.selectedFacility) {
         // no links will be renderd without facility
         return null;
       } else {
         const {to, ...rest} = this.props;
-        const basePath=`/mobile/facilities/${this.props.facility.domainId}`;
+        const basePath=`/mobile/facilities/${encodeContextToURL(this.props.selected)}`;
         let newTo = to;
         if (to.indexOf("/") != 0) {
           newTo=`${basePath}/${this.props.to}`;

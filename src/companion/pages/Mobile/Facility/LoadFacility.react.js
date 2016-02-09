@@ -27,7 +27,7 @@ class LoadFacility extends Component {
       this.props.acInitialLoadFacilities();
     } else {
       const router = this.props.router;
-      router.push(`/mobile/facilities/${availableFacilities[0].domainId}`);
+      router.push(`/mobile/facilities/${availableFacilities[0].domainId}/ALL`);
     }
   }
 

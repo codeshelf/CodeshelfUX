@@ -92,7 +92,7 @@ export default (
 
     <Route component={authn(Mobile)} path="mobile/facilities">
       <IndexRoute component={LoadFacility} />
-      <Route component={FacilityWrapper} path=":facilityName">
+      <Route component={FacilityWrapper} path=":facilityName/:customerName">
         <Route component={mApp}>
           <IndexRedirect to="events" />
           <Route component={mWorkerPickCharts}  path="events"/>
