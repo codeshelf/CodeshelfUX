@@ -11,7 +11,6 @@ function mapState(state) {
 }
 
 function wrapFacility(Component) {
-  console.log("fac comp",Component);
 
   class WrapFacility extends React.Component {
     render() {
