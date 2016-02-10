@@ -1,5 +1,6 @@
 import {Table} from '../Table.react.js';
 import React from 'react/addons';
+import ReactDOM from 'react-dom';
 import {findAllTextNodes} from 'lib/testutils';
 import Immutable, {List, Map} from 'immutable';
 
@@ -48,7 +49,7 @@ describe('Table', () => {
           return Immutable.is(row, testData);
       }} ExpandComponent={expandComponent}/>);
 
-      console.debug(React.findDOMNode(component));
+      console.debug(ReactDOM.findDOMNode(component));
 
       var textNodes = findAllTextNodes(component);
       expect(textNodes).toContain("TestExpand");

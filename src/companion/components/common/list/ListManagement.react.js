@@ -1,4 +1,5 @@
-import  React from "react";
+import React from "react";
+import ReactDOM from 'react-dom';
 import DocumentTitle from "react-document-title";
 import {Row, Col} from 'components/common/pagelayout';
 import {Input, Button} from 'react-bootstrap';
@@ -77,7 +78,7 @@ export default class ListManagement extends React.Component {
 
     generateCsv(columnMetadata, results) {
         var csv = encodeURIComponent(this.refs.listView.getCSV());
-        let anchor = React.findDOMNode(this.refs.export);
+        let anchor = ReactDOM.findDOMNode(this.refs.export);
         anchor.setAttribute("href", "data:attachment/csv," + csv);
     }
 
@@ -126,8 +127,8 @@ class Search extends React.Component {
 
     handleChange(e) {
 
-        var query = React.findDOMNode(this.refs.query).getElementsByTagName("input")[0];
-        var column = React.findDOMNode(this.refs.column);
+        var query = ReactDOM.findDOMNode(this.refs.query).getElementsByTagName("input")[0];
+        var column = ReactDOM.findDOMNode(this.refs.column);
         (this.props.onChange)({
             search: {
                 query: query.value,

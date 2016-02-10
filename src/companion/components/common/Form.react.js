@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Icon from 'react-fa';
 import {Input as BSInput, Button} from 'react-bootstrap';
 import PureComponent from 'components/common/PureComponent';
@@ -8,7 +9,7 @@ import {List} from "immutable";
 require('./Form.styl');
 
 export function getRefInputValue(ref) {
-    return React.findDOMNode(ref).getElementsByTagName("input")[0].value;
+    return ReactDOM.findDOMNode(ref).getElementsByTagName("input")[0].value;
 }
 
 export class ErrorDisplay extends PureComponent {

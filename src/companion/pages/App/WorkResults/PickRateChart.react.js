@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from 'react-dom';
 import moment from "moment";
 import d3 from "d3";
 require("nvd3/build/nv.d3.min.css");
@@ -67,13 +68,13 @@ var PickRateChart = React.createClass({
         return (<div className="nvd3"><svg style={this.props.style}></svg></div>);
     },
     componentDidMount: function() {
-        this.updateViews(this.props, this.getDOMNode());
+        this.updateViews(this.props, ReactDOM.findDOMNode(this));
     },
     componentWillUnmount: function() {
 
     },
     componentWillUpdate: function(nextProps, nextState) {
-        this.updateViews(nextProps, this.getDOMNode());
+        this.updateViews(nextProps, ReactDOM.findDOMNode(this));
     },
 
     updateViews: function(props, el) {

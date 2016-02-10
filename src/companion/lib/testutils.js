@@ -1,8 +1,9 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 export function findAllTextNodes(rootComponent) {
     var walker = document.createTreeWalker(
-        React.findDOMNode(rootComponent),
+        ReactDOM.findDOMNode(rootComponent),
         NodeFilter.SHOW_TEXT,
         null,
         false

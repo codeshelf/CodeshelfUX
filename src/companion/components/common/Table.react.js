@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from 'react-dom';
 var _ = require('lodash');
 var Immutable = require('immutable');
 //require("tablesaw/dist/tablesaw.css");
@@ -30,7 +31,7 @@ function toShownColumns(columnMetadata, columns) {
 
 class Row extends PureComponent {
     getWidth(columnName) {
-        var tdNode = React.findDOMNode(this.refs[columnName]);
+        var tdNode = ReactDOM.findDOMNode(this.refs[columnName]);
         var scrollWidth = tdNode.scrollWidth;
         return scrollWidth + 1;
     }

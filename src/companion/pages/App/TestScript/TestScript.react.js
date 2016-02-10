@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import DocumentTitle from 'react-document-title';
 import _ from 'lodash';
 import {Map, List, fromJS} from 'immutable';
@@ -263,7 +264,7 @@ class ScriptInput extends React.Component {
     }
 
     handleClear() {
-        let fileInput = React.findDOMNode(this).querySelector("input[type=\"file\"]");
+        let fileInput = ReactDOM.findDOMNode(this).querySelector("input[type=\"file\"]");
         fileInput.value = null;
         this.setState({"files" : Map()});
     }

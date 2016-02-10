@@ -1,7 +1,8 @@
-var React = require("react");
 var orb = require("orb");
 var uiheaders = require("orb/src/js/orb.ui.header");
 require("./PivotTable.less");
+import React from 'react';
+import ReactDOM from 'react-dom';
 import selectableCell from "./SelectablePivotCell";
 import {extractDimensions} from "./celldimensions";
 
@@ -99,7 +100,7 @@ export default class PivotTable extends React.Component{
     }
 
     componentDidMount() {
-        var el = React.findDOMNode(this);
+        var el = ReactDOM.findDOMNode(this);
         let orders = this.props.results;
         let config = this.getConfig(this.props);
         config.dataSource = orders.toJS();
@@ -134,7 +135,7 @@ export default class PivotTable extends React.Component{
 
 
     componentWillUnmount() {
-        var result = React.unmountComponentAtNode(React.findDOMNode(this));
+        var result = React.unmountComponentAtNode(ReactDOM.findDOMNode(this));
         console.log("Unmounting pivot table:", result);
     }
 
