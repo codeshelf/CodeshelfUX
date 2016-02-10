@@ -1,6 +1,6 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import {Link, RouteHandler} from 'react-router';
+import {Link} from 'react-router';
 import FacilityNavigation from './FacilityNavigation.react.js';
 import TopNavBar from '../TopNavBar.react';
 import Footer from '../Footer.react.js';

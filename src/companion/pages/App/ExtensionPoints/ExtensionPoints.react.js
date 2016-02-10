@@ -1,5 +1,4 @@
 import  React from "react";
-import {RouteHandler} from "react-router";
 import exposeRouter from 'components/common/exposerouter';
 import DocumentTitle from "react-document-title";
 
@@ -170,12 +169,12 @@ class ExtensionPoints extends React.Component{
                             rowActionComponent={rowActionComponent}
                             addButtonRoute={addButtonRoute} />
                          {(lastRoute.name === addRoute || lastRoute.name == editRoute)
-                          ? <RouteHandler
-                              availableTypes={availableTypes}
-                              returnRoute="extensionpoints"
-                              onExtensionPointUpdate={this.handleExtensionPointUpdate}
-                              onAdd={this.handleExtensionPointAdd}
-                              extensionPoint={extensionPoint}/>
+                          ?   React.cloneElement(this.props.children, {
+                              availableTypes:availableTypes,
+                              returnRoute:"extensionpoints",
+                              onExtensionPointUpdate:this.handleExtensionPointUpdate,
+                              onAdd:this.handleExtensionPointAdd,
+                              extensionPoint:extensionPoint})
                            : null
                          }
                     </div>

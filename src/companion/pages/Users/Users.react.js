@@ -1,5 +1,4 @@
 import  React from "react";
-import {RouteHandler} from "react-router";
 import DocumentTitle from "react-document-title";
 import {getUsers, resendNewUserEmail} from "data/csapi";
 import {Button} from "components/common/bootstrap";
@@ -55,8 +54,7 @@ export default class Users extends React.Component{
                         sortSpecs={columnSortSpecsCursor}
                         columnMetadata={columnMetadata}
                         rowActionComponent={rowActionComponent}/>
-
-                <RouteHandler users={users}/>
+                {React.cloneElement(this.props.children, { users})}
                 </div>
                 </DocumentTitle>
                );

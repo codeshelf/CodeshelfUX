@@ -1,5 +1,4 @@
 import React from 'react';
-import {RouteHandler} from "react-router";
 import exposeRouter from 'components/common/exposerouter';
 import {Tabs, Tab} from 'react-bootstrap';
 import {SingleCellLayout, PageGrid, Row, Col} from 'components/common/pagelayout';
@@ -43,7 +42,7 @@ class Maintenance extends React.Component{
 
     findExtensionPoint(props) {
 
-        let selectedParameterType = this.props.router.getCurrentParams().parameterType;
+        let selectedParameterType = this.props.params.parameterType;
         if (selectedParameterType) {
             let configuration = this.state[selectedParameterType];
             let extensionPoint = (configuration) ? configuration.extensionPoint : null;
@@ -83,7 +82,7 @@ class Maintenance extends React.Component{
                     <Tabs className="nav-tabs-simple" defaultActiveKey="jobs">
                         <Tab eventKey="jobs" title="Jobs">
                             <SingleCellIBox>
-                                <ScheduledJobs />
+                              <ScheduledJobs {...this.props}/>
                             </SingleCellIBox>
                         </Tab>
                         <Tab eventKey="database" title="Database">
@@ -132,13 +131,15 @@ class Maintenance extends React.Component{
                             </MaintenaceTabContent>
                         </Tab>
                     </Tabs>
-                    {(extensionPoint) ? <RouteHandler extensionPoint={fromJS(extensionPoint)} onExtensionPointUpdate={this.handleConfigurationUpdate.bind(this)} returnRoute="maintenance"/> : null}
-
+                    {extensionPoint && React.cloneElement(this.props.children,
+                      {extensionPoint:fromJS(extensionPoint),
+                       onExtensionPointUpdate:this.handleConfigurationUpdate.bind(this),
+                       returnRoute:"maintenance"})}
                 </SingleCellLayout>
                );
     }
 };
 Maintenance.propTypes = {
-    router: React.PropTypes.func
+    router: React.PropTypes.object.isRequired
 };
 export default exposeRouter(Maintenance);

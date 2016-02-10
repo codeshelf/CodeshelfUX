@@ -24,7 +24,6 @@ export default class EdiGateways extends React.Component {
 };
 
 import  React from "react";
-import {RouteHandler} from "react-router";
 import DocumentTitle from "react-document-title";
 import {Button} from "components/common/bootstrap";
 import {EditButtonLink, AddButtonLink} from 'components/common/TableButtons';
@@ -80,7 +79,8 @@ class ListPage extends React.Component{
                         columns={columnsCursor}
                         sortSpecs={columnSortSpecsCursor} />
 
-                     <RouteHandler list={list}/>
+                    {React.cloneElement(this.props.children, { list})}
+
                 </div>
                 </DocumentTitle>
                );

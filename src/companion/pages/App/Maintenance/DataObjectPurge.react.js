@@ -1,5 +1,4 @@
 import React from 'react';
-import {RouteHandler} from "react-router";
 import exposeRouter from 'components/common/exposerouter';
 import _ from 'lodash';
 import {Map, List, fromJS} from 'immutable';

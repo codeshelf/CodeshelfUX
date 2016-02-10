@@ -1,6 +1,6 @@
 import DocumentTitle from 'react-document-title';
 import React from 'react';
-import {Link, RouteHandler} from 'react-router';
+import {Link} from 'react-router';
 import {fetchFacilities, selectFirstFacility, selectFacilityByName} from 'data/facilities/actions';
 import {getSelectedFacility} from 'data/facilities/store';
 import {isLoggedIn, getSelectedTenant} from 'data/user/store';

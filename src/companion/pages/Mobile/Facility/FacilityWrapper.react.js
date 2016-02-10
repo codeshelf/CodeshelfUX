@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import exposeRouter from 'components/common/exposerouter';
-import {RouteHandler} from 'react-router';
-
 import {acInitialLoadFacilities, acSelectFacility} from './store';
 import {acToggleSidebar} from '../Sidebar/store';
 import {getFacilityMutable} from "./get";

@@ -4,7 +4,6 @@ import DocumentTitle from 'react-document-title';
 import {Modal, Input} from 'react-bootstrap';
 import Icon from 'react-fa';
 import Immutable from 'immutable';
-import {RouteHandler} from 'react-router';
 import PureComponent from 'components/common/PureComponent';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {SingleCellIBox} from 'components/common/IBox';
@@ -108,7 +107,7 @@ export default class WorkerMgmt extends React.Component{
                         rowActionComponent={this.rowActionComponent}
                         results={rows}
                         keyColumn={keyColumn}/>
-                <RouteHandler formMetadata={this.columnMetadata}/>
+                {this.props.children && React.cloneElement(this.props.children, { formMetadata: this.columnMetadata})}
            </SingleCellLayout>);
     }
 

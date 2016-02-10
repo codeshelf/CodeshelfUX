@@ -1,6 +1,5 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import {RouteHandler} from 'react-router';
 import AdminNavigation from './AdminNavigation';
 import TopNavBar from '../TopNavBar.react';
 import Footer from '../Footer.react.js';
@@ -24,7 +23,7 @@ export default class Admin extends React.Component {
                     <TopNavBar title={tenantName} />
                         <div className="page-content-wrapper">
                             <div className="content">
-                                <RouteHandler state={state}/>
+                              {React.cloneElement(this.props.children, { state})}
                             </div>
                         </div>
                     </div>

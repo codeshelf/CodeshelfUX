@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {RouteHandler} from 'react-router';
 import Icon from "react-fa";
 import {Grid, Row, Col, DropdownButton, MenuItem, Button} from 'react-bootstrap';
 import { NavItemLink, MenuItemLink, ButtonLink, Link} from './links';

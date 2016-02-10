@@ -6,7 +6,6 @@ import ListManagement from "components/common/list/ListManagement";
 import {getFacilityContext} from "data/csapi";
 import exposeRouter from 'components/common/exposerouter';
 import ConfirmAction from 'components/common/ConfirmAction';
-import {RouteHandler} from "react-router";
 import {Button} from 'react-bootstrap';
 import {fromJS, Map, List} from "immutable";
 import {types, keyColumn, properties} from "data/types/ScheduledJob";
@@ -131,7 +130,7 @@ class ScheduledJobs extends React.Component{
     }
 
     findSchedule(props) {
-        let selectedScheduleType = this.props.router.getCurrentParams().type;
+        let selectedScheduleType = this.props.params.type;
         if (selectedScheduleType) {
             let {scheduledJobs} = this.state;
             this.setState({"scheduledJob": scheduledJobs.find((j) => j.get("type") === selectedScheduleType)});
@@ -173,11 +172,11 @@ class ScheduledJobs extends React.Component{
                             addButtonRoute={addButtonRoute} />
                         {(lastRoute.name === addRoute || lastRoute.name == editRoute)
                           ?
-                          <RouteHandler scheduledJob={selected}
-                              availableTypes={availableTypes}
-                              onUpdate={this.handleActionComplete.bind(this)}
-                              onAdd={this.handleActionComplete.bind(this)}
-                              returnRoute="maintenance"/>
+                          React.cloneElement(this.props.children, {scheduledJob: selected,
+                                                                  availableTypes: availableTypes,
+                                                                  onUpdate: this.handleActionComplete.bind(this),
+                                                                  onAdd: this.handleActionComplete.bind(this),
+                                                                  returnRoute: "maintenance" })
                           : null}
                     </div>
                 </DocumentTitle>
@@ -186,7 +185,7 @@ class ScheduledJobs extends React.Component{
 };
 
 ScheduledJobs.propTypes = {
-    router: React.PropTypes.func
+    router: React.PropTypes.object.isRequired
 };
 
 export default exposeRouter(ScheduledJobs);
