@@ -1,6 +1,5 @@
 import  React from "react";
-import {RouteHandler} from "react-router";
-import exposeRouter from 'components/common/exposerouter';
+import exposeRouter, {toURL} from 'components/common/exposerouter';
 import {Map, List, fromJS} from 'immutable';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {WrapInput, Input, Checkbox, ErrorDisplay} from 'components/common/Form';
@@ -19,10 +18,10 @@ class ParameterSetConfiguration extends React.Component{
 
     addToEdit() {
             return getFacilityContext().addExtensionPoint({type: this.parameterType})
-            .then((newExtensionPoint) => {
-                let params = this.props.router.getCurrentParams();
-                    params.parameterType = this.parameterType;
-                    this.props.router.transitionTo("parametersetedit", params);
+              .then((newExtensionPoint) => {
+                let {router, location, params} = this.props;
+                params.parameterType = this.parameterType;
+                router.push(toURL(location, params, "parametersetedit"));
             });
     }
 

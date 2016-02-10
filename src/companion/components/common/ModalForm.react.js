@@ -3,7 +3,7 @@ import Icon from "react-fa";
 import {Modal, Button} from 'react-bootstrap';
 import {Form, SubmitButton} from 'components/common/Form';
 
-import exposeRouter from 'components/common/exposerouter';
+import exposeRouter, {toURL} from 'components/common/exposerouter';
 
 class ModalForm extends React.Component{
 
@@ -22,8 +22,9 @@ class ModalForm extends React.Component{
         this.setState({"show": false});
         //Transition away, so make sure unmount tears down the modal
         let routeName = this.props.returnRoute;
-        let params = this.props.router.getCurrentParams();
-        this.props.router.transitionTo(routeName, params);
+        let {router, location, params} = this.props;
+        params.parameterType = this.parameterType;
+        router.push(toURL(location, params, routeName));
     }
 
     handleSave(e) {

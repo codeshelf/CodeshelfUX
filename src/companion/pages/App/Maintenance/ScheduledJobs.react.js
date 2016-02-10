@@ -160,7 +160,7 @@ class ScheduledJobs extends React.Component{
         let {rowActionComponent, columnMetadata} = this;
         let availableTypes = toAvailableTypes(list, allTypes);
         let addButtonRoute = (availableTypes.count() <= 0) ? null : addRoute;
-        let lastRoute = this.props.router.getCurrentRoutes().slice(-1)[0];
+        let lastRoute = this.props.routes.slice(-1)[0];
         return (<DocumentTitle title={title}>
                    <div>
                        <div>TimeZone: {timeZoneDisplay}</div>

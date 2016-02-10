@@ -150,7 +150,7 @@ class ExtensionPoints extends React.Component{
     render() {
         let {extensionPoints} = this.state;
         let list = extensionPoints.cursor().deref();
-        let extensionPointId = this.props.router.getCurrentParams().extensionPointId;
+        let extensionPointId = this.props.params.extensionPointId;
         let extensionPoint = null;
         if (extensionPointId) {
             extensionPoint = extensionPoints.cursor().deref().find((extensionPoint) => extensionPoint.get("persistentId") === extensionPointId);
@@ -159,7 +159,7 @@ class ExtensionPoints extends React.Component{
         let {rowActionComponent, columnMetadata} = this;
         let availableTypes = toAvailableTypes(list, allTypes);
         let addButtonRoute = (availableTypes.count() <= 0) ? null : addRoute;
-        let lastRoute = this.props.router.getCurrentRoutes().slice(-1)[0];
+        let lastRoute = this.props.routes.slice(-1)[0];
         return (<DocumentTitle title={title}>
                     <div>
                         <ListManagement
@@ -184,7 +184,7 @@ class ExtensionPoints extends React.Component{
 };
 
 ExtensionPoints.propTypes = {
-    router: React.PropTypes.func
+    router: React.PropTypes.object.isRequired
 };
 
 export default exposeRouter(ExtensionPoints);

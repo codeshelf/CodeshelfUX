@@ -42,12 +42,12 @@ class WorkerDisplay extends React.Component {
     }
 
     findSelectedWorkerForm(props) {
-        let path = props.router.getCurrentPath();
+        let path = props.location.pathname;
         var workerId = null;
         if (path.indexOf("new") >= 0) {
             workerId = "new";
         } else {
-            workerId = props.router.getCurrentParams().workerId;
+            workerId = props.params.workerId;
         }
 
         var workerForm = this.getSelectedWorkerForm();

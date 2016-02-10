@@ -15,7 +15,7 @@ export default class ExtensionPointsPage extends React.Component{
         return (<DocumentTitle title="Extension Points">
                    <SingleCellLayout>
                       <SingleCellIBox title="Extension Points">
-                          <ExtensionPoints />
+                        <ExtensionPoints {...this.props}/>
                       </SingleCellIBox>
                    </SingleCellLayout>
                 </DocumentTitle>
