@@ -1,6 +1,6 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import {Badge, TabbedArea, TabPane} from 'react-bootstrap';
+import {Badge, Tabs, Tab} from 'react-bootstrap';
 import _ from 'lodash';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
 import {IBox, IBoxBody} from 'components/common/IBox';
@@ -67,23 +67,23 @@ export default class BlockedWork extends React.Component {
         return (
                 <IBox>
                 <IBoxBody>
-                <TabbedArea className="nav-tabs-simple" defaultActiveKey={firstType}>
+                <Tabs className="nav-tabs-simple" defaultActiveKey={firstType}>
                 {
                     sortedSummary.map((summary) => {
                         let type = summary.get("eventType");
                         let description = this.toDescription(type);
                         let total = summary.get("count");
-                        return (<TabPane eventKey={type}
+                        return (<Tab eventKey={type}
                                  key={type}
-                                 tab={<span>
+                                 title={<span>
                                       {description && description.toUpperCase()}
                                       <Badge style={{marginLeft: "1em"}} className="badge-primary">{total}</Badge>
                                       </span>}>
                                    <IssuesIBox type={type} filter={filter}/>
-                                </TabPane>);
+                                </Tab>);
                                 }).toArray()
                     }
-            </TabbedArea>
+            </Tabs>
                 </IBoxBody>
                 </IBox>
 
