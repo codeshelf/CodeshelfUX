@@ -32,6 +32,7 @@ export function createStore(storeName, getLocalStore, ALL_TABS, tabToSetting,
   // construction of mutable state which we will transform into immutable
   let _initState = {
     tab: ALL_TABS[0], // TAB_DETAIL, TAB_ITEMS, TAB_PICKS
+    cartAction: new Map(), //TODO hacked so that is available for cart, refactor tabs
   };
 
   const dataLoadingState = {

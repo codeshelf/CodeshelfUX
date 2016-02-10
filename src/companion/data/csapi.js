@@ -314,6 +314,10 @@ export function getFacilityContext(selectedFacility) {
             return ajax(ordersPath, {method: "DELETE"});
         },
 
+        executeCheAction: (domainId, cartAction) =>{
+          var chesPath = `${facilityPath}/ches/${encodeURIComponent(domainId)}/actions/${cartAction}`;
+          return ajax(chesPath, {method: "POST"});
+        },
         getChe: (domainId) => {
           var chesPath = facilityPath + "/ches/" + encodeURIComponent(domainId);
           return ajax(chesPath, {});

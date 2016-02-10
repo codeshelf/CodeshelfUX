@@ -123,6 +123,7 @@ export class Detail extends Component {
         acSearch,
         acSetFilterAndRefresh,
         id: itemId,
+        acCartAction: this.props.acCartAction
       };
       const Component = this.props.tabToComponent[tab];
       contentElement = <Component {...commonProps}/>
