@@ -7,6 +7,7 @@ import createLogger from "redux-logger";
 
 import {facilityReducer} from '../Mobile/Facility/store';
 import {sidebarReducer} from '../Mobile/Sidebar/store';
+import {workerPickChartReducer} from '../Mobile/WorkerPickCharts/store';
 
 
 import {Iterable} from 'immutable';
@@ -14,6 +15,7 @@ import {Iterable} from 'immutable';
 Iterable.prototype[Symbol.for('get')] = function(value) {return this.get(value) };
 
 const rootReducer = combineReducers({
+  workerPickChart: workerPickChartReducer,
   facility: facilityReducer,
   sidebar: sidebarReducer,
 });

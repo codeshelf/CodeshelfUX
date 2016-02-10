@@ -25,8 +25,8 @@ class WorkerPickCharts extends Component {
 
     return (
       <div>
-        <TopChart {...this.props} data={this.props.data && this.props.data[0]} title={"Facility Picks"} />
-        <BottomChart {...this.props} />
+        <TopChart {...this.props} data={this.props.data && this.props.data[0]} title={"Facility Picks"} expanded={this.props.expand}/>
+        {!this.props.hideBottom ? <BottomChart {...this.props} /> : null}
       </div>
     );
   }

@@ -13,6 +13,7 @@ import _ from "lodash";
 import {getFacilityContext} from "data/csapi";
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkersByBadgeId, toWorkerName} from 'data/workers/store';
+import WorkerPickCharts from '../../Mobile/WorkerPickCharts/WorkerPickCharts.react'
 
 function toD3Data(createdInterval, apiData) {
     var hoursOfOperation = _.range(
@@ -110,10 +111,9 @@ var PickerEventsIBox = React.createClass({
                      </Col>
                    </Row>
                    <IBoxSection>
-                       <PickRateChart style={{width: '100%', height: '300px'}}
-                           startTimestamp={interval.start}
-                           endTimestamp={interval.end}
-                           pickRates={pickRates} />
+                       <WorkerPickCharts
+                            hideBottom={true}
+                            expand={true}/>
                    </IBoxSection>
                    <IBoxSection>
                        <PickRateTable style={{width: '100%', height: '300px'}}

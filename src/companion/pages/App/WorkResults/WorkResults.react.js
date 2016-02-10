@@ -1,6 +1,6 @@
+import React from 'react';
 import DocumentTitle from 'react-document-title';
 import {getFacilityContext} from 'data/csapi';
-import  React from 'react';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
 import PickerEventsIBox from './PickerEventsIBox';
 
@@ -19,3 +19,6 @@ export default class WorkResults extends React.Component{
         );
     }
 };
+
+
+//<WorkerPickCharts apiContext={apiContext} hideBottom={true} expand={true}/>

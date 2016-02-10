@@ -73,7 +73,7 @@ export class TopChart extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {expanded: false};
+    this.state = {expanded: props.expanded};
   }
 
   render() {
