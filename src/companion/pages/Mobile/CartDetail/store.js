@@ -126,7 +126,7 @@ export function acCartAction(domainId, cartAction) {
       dispatch({type:  ACTION_ERROR, cartAction, error: "Want to perform cart action but no facility context is provided"});
       return;
     }
-    facilityContext.executeCheAction(domainId, cartAction)
+    facilityContext.executeCheCommand(domainId, cartAction)
       .catch((e) => {
         dispatch({type:  ACTION_ERROR, cartAction, error: e});
       })

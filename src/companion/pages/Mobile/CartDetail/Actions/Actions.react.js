@@ -3,9 +3,9 @@ import {Button} from 'react-bootstrap';
 
 export class Actions extends Component {
   render() {
-    const {domainId, acCartAction} = this.props;
+    const {id, acCartAction} = this.props;
     return (
-        <Button onClick={(e) => {acCartAction(domainId, "thisone");}}>Do</Button>
+        <Button bsStyle="primary" onClick={(e) => {acCartAction(id, "thisone");}}>Do</Button>
     );
   }
 }

@@ -314,8 +314,8 @@ export function getFacilityContext(selectedFacility) {
             return ajax(ordersPath, {method: "DELETE"});
         },
 
-        executeCheAction: (domainId, cartAction) =>{
-          var chesPath = `${facilityPath}/ches/${encodeURIComponent(domainId)}/actions/${cartAction}`;
+        executeCheCommand: (domainId, cartAction) =>{
+          var chesPath = `${facilityPath}/ches/${encodeURIComponent(domainId)}/commands/${cartAction}`;
           return ajax(chesPath, {method: "POST"});
         },
         getChe: (domainId) => {
