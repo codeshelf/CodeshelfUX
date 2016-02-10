@@ -8,7 +8,7 @@ import {Form, WrapInput, Input, SubmitButton, getRefInputValue} from 'components
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
 
 import IssuesIBox from './IssuesIBox';
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import {fetchUnresolvedIssuesByType, subscribe, unsubscribe} from 'data/issues/actions';
 import {getIssuesSummary} from 'data/issues/store';
 import {List} from 'immutable';

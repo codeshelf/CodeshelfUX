@@ -1,7 +1,7 @@
 import  React from 'react';
 import {fromJS} from 'immutable';
 import ModalForm from "components/common/ModalForm";
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 import {ErrorDisplay, Input} from "components/common/Form";
 import ScheduledJobForm from "./ScheduleJobsForm.react.js";
 
@@ -16,7 +16,7 @@ export default class ScheduledJobEdit extends React.Component {
 
     handleSave() {
         let scheduledJob = this.refs.form.getFormData();
-    return getFacilityContext().updateSchedule(scheduledJob.get("type"), scheduledJob.toJS()).then((newSchedule) => {
+    return getAPIContext().updateSchedule(scheduledJob.get("type"), scheduledJob.toJS()).then((newSchedule) => {
             return this.props.onUpdate(newSchedule);
         })
         .catch((e) =>{

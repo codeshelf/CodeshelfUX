@@ -10,7 +10,7 @@ function mapDispatch(dispatch) {
   return bindActionCreators({acInitialLoadFacilities}, dispatch);
 }
 
-class LoadFacility extends Component {
+class LoadContext extends Component {
 
   componentDidMount() {
     this.loadAndRedirect();
@@ -27,7 +27,7 @@ class LoadFacility extends Component {
       this.props.acInitialLoadFacilities();
     } else {
       const router = this.props.router;
-      router.push(`/mobile/facilities/${availableFacilities[0].domainId}/ALL`);
+      router.push(`/mobile/facilities/${availableFacilities[0].domainId}/customers/ALL`);
     }
   }
 
@@ -40,4 +40,4 @@ class LoadFacility extends Component {
   }
 }
 
-export default exposeRouter(connect(getFacilityMutable, mapDispatch)(LoadFacility));
+export default exposeRouter(connect(getFacilityMutable, mapDispatch)(LoadContext));

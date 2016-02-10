@@ -17,7 +17,7 @@ import {EditButtonLink, AddButtonLink} from 'components/common/TableButtons';
 import {Authz} from 'components/common/auth';
 
 
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkers} from 'data/workers/store';
 import DateDisplay from "components/common/DateDisplay";
@@ -85,7 +85,7 @@ export default class WorkerMgmt extends React.Component{
     handleImportSubmit(method, file) {
         var formData = new FormData();
         formData.append("file", file);
-        return getFacilityContext()[method](formData).then(() => {
+        return getAPIContext()[method](formData).then(() => {
           fetchWorkers({limit: 5000});
         });
     }

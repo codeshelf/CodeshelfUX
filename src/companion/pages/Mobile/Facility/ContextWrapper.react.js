@@ -10,7 +10,7 @@ import {getFacilityMutable} from "./get";
 import {getSidebarMutable} from "../Sidebar/get";
 
 
-class FacilityWrapper extends Component {
+class ContextWrapper extends Component {
 
   componentWillMount() {
     this.selected = this.props.selected;
@@ -78,4 +78,4 @@ function mapDispatch(dispatch) {
   return bindActionCreators({acInitialLoadFacilities, acSelectContext, acToggleSidebar}, dispatch);
 }
 
-export default exposeRouter(connect(getState, mapDispatch)(FacilityWrapper));
+export default exposeRouter(connect(getState, mapDispatch)(ContextWrapper));

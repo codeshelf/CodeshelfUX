@@ -1,4 +1,4 @@
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 import {properties, keyColumn} from "data/types/EdiGateway";
 
 const title = "EDI Gateways";
@@ -16,7 +16,7 @@ export default class EdiGateways extends React.Component {
                  title="EDI Gateways"
                  stateProp="edigateways"
                  editRouteFactory={editRouteFactory}
-                 listSource={getFacilityContext().getEdiGateways}
+                 listSource={getAPIContext().getEdiGateways}
                  listProperties={properties}
                  keyProperty={keyColumn}
                  /> );

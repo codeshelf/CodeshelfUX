@@ -2,7 +2,7 @@ import  React from 'react';
 import {fromJS} from 'immutable';
 import ModalForm from "components/common/ModalForm";
 import ExtensionPointForm from "./ExtensionPointForm.react.js";
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 
 export default class ExtensionPointEdit extends React.Component {
 
@@ -16,7 +16,7 @@ export default class ExtensionPointEdit extends React.Component {
 
     handleSave() {
         let extensionPoint = this.refs.form.getExtensionPoint();
-        return getFacilityContext().updateExtensionPoint(extensionPoint.toJS()).then((updatedExtensionPoint) => {
+        return getAPIContext().updateExtensionPoint(extensionPoint.toJS()).then((updatedExtensionPoint) => {
             return this.props.onExtensionPointUpdate(fromJS(updatedExtensionPoint));
         })
         .catch((e) =>{

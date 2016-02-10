@@ -46,8 +46,8 @@ import mWorkerDetail from './pages/Mobile/WorkerDetail/WorkerDetail.react.js';
 import mCartSearch from './pages/Mobile/CartSearch/CartSearch.react.js';
 import mCartDetail from './pages/Mobile/CartDetail/CartDetail.react.js';
 import mWorkerPickCharts from './pages/Mobile/WorkerPickCharts/WorkerPickCharts.react.js';
-import LoadFacility from './pages/Mobile/Facility/LoadFacility.react.js';
-import FacilityWrapper from './pages/Mobile/Facility/FacilityWrapper.react.js';
+import LoadContext from './pages/Mobile/Facility/LoadContext.react.js';
+import ContextWrapper from './pages/Mobile/Facility/ContextWrapper.react.js';
 import Mobile from './pages/Mobile/Mobile.react.js';
 
 export default (
@@ -91,8 +91,8 @@ export default (
     <Redirect from="/mobile/facilities/" to="/mobile/facilities" />
 
     <Route component={authn(Mobile)} path="mobile/facilities">
-      <IndexRoute component={LoadFacility} />
-      <Route component={FacilityWrapper} path=":facilityName/:customerName">
+      <IndexRoute component={LoadContext} />
+      <Route component={ContextWrapper} path=":facilityName/customers/:customerName">
         <Route component={mApp}>
           <IndexRedirect to="events" />
           <Route component={mWorkerPickCharts}  path="events"/>

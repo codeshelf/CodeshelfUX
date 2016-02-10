@@ -7,7 +7,7 @@ import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import DataObjectPurge from "./DataObjectPurge";
 import DataObjectNotificationThreshold from "./DataObjectNotificationThreshold";
 import EdiNotificationThreshold from "./EdiNotificationThreshold";
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import ParameterSetConfiguration from "./ParameterSetConfiguration.react.js";
 import DailyMetrics from "./DailyMetrics.react.js";
 import ScheduledJobs from "./ScheduledJobs.react.js";
@@ -54,7 +54,7 @@ class Maintenance extends React.Component{
     handleConfigurationUpdate(props) {
         let parameterSetTypes = ["ParameterEdiFreeSpaceHealthCheck", "ParameterSetDataPurge", "ParameterSetDataQuantityHealthCheck"];
         return Promise.reduce(parameterSetTypes, (configs, type) => {
-            return getFacilityContext().getHealthCheckConfiguration(type).then((config) => {
+            return getAPIContext().getHealthCheckConfiguration(type).then((config) => {
                 configs[type] = config;
                 return configs;
             });

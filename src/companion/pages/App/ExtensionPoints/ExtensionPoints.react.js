@@ -3,7 +3,7 @@ import {RouteHandler} from "react-router";
 import exposeRouter from 'components/common/exposerouter';
 import DocumentTitle from "react-document-title";
 
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 import ListManagement from "components/common/list/ListManagement";
 import {Row, Col} from "components/common/pagelayout";
 import {EditButtonLink, AddButtonLink} from "components/common/TableButtons";
@@ -47,7 +47,7 @@ function createRowActionComponent(onActionComplete) {
     class ScheduledJobActions extends React.Component {
 
         delete(rowData) {
-            return getFacilityContext().deleteExtensionPoint(rowData.toJS()).then(() => {
+            return getAPIContext().deleteExtensionPoint(rowData.toJS()).then(() => {
                 onActionComplete();
             });
         }
@@ -115,7 +115,7 @@ class ExtensionPoints extends React.Component{
     }
 
     loadExtensionPoints() {
-        getFacilityContext().getExtensionPoints().then((data) => {
+        getAPIContext().getExtensionPoints().then((data) => {
             this.state.extensionPoints.cursor().update((pts) =>{
                 let newList = pts.clear().concat(fromJS(data));
                 return newList;
