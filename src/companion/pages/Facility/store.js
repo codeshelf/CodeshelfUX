@@ -1,7 +1,7 @@
 import {getFacilities, getFacilityCustomers} from 'data/csapi';
 import {Record, Map} from 'immutable';
 import {getSelectedFacility} from "./get";
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import Promise from 'bluebird';
 import {getCustomers} from './mockCustomers';
 
@@ -49,7 +49,7 @@ export function facilityReducer(state = initState, action) {
         selectedCustomer = 'ALL';
       };
       if (state.selected.selectedFacility === selectedFacility && state.selected.selectedCustomer === selectedCustomer) return state;
-      const context = getFacilityContext({selectedFacility, selectedCustomer});
+      const context = getAPIContext({selectedFacility, selectedCustomer});
       updateSelectedFacility(toFacilityRecord(selectedFacility));//old store
       //return {...state, selectedFacility};
       return state.merge(new Map({selected: {selectedFacility: selectedFacility, selectedCustomer: selectedCustomer}, context}));

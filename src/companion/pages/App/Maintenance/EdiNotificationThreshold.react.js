@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import {Map, List, fromJS} from 'immutable';
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {Modal} from 'react-bootstrap';
@@ -31,7 +31,7 @@ export default class EdiNotificationThreshold extends React.Component {
     }
 
     loadConfiguration(){
-        return getFacilityContext().getHealthCheckConfiguration("ParameterEdiFreeSpaceHealthCheck").then((data)=>{
+        return getAPIContext().getHealthCheckConfiguration("ParameterEdiFreeSpaceHealthCheck").then((data)=>{
             this.setState({"healthcheck": data});
             return data;
         });

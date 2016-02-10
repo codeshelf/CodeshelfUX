@@ -11,6 +11,18 @@ import exposeRouter from 'components/common/exposerouter';
 import classnames from 'classnames';
 import {encodeContextToURL} from './common/contextEncode.js';
 
+function renderContextLabel(selected) {
+  if (selected.selectedFacility){
+    let {description, timeZoneDisplay} = selected.selectedFacility;
+    if (selected.selectedCustomer && selected.selectedCustomer !== 'ALL') {
+      description = selected.selectedCustomer.name;
+    }
+    return (<span><Icon name="building" style={{marginRight: ".25em"}}/>{description}({timeZoneDisplay})</span>);
+  } else {
+    return null;
+  }
+}
+
 class Header extends Component {
   render() {
     return (
@@ -24,7 +36,7 @@ class Header extends Component {
             <div className="pull-center">
               <div className="header-inner">
                 <div className="brand inline">
-                  {renderFacilityLabel(this.props.selected)}
+                  {renderContextLabel(this.props.selected)}
                 </div>
               </div>
             </div>
@@ -46,6 +58,26 @@ function menuIcon(iconName) {
 
 function menuTitle(title) {
   return <span className="title">{title}</span>;
+<<<<<<< variant A
+>>>>>>> variant B
+}
+
+class PagesNavigation extends Component {
+  render() {
+    return (
+        <nav className="page-sidebar visible" data-pages="sidebar">
+          <div className="sidebar-header">
+            <ContextSelector {...this.props} />
+          </div>
+          <div className="m-t-30 sidebar-menu">
+            <ul className="menu-items">
+              {this.props.children}
+            </ul>
+          </div>
+        </nav>
+    );
+  }
+======= end
 }
 
 class App extends Component {
@@ -129,37 +161,41 @@ export default exposeRouter(App);
 <<<<<<< variant A
 >>>>>>> variant B
 
-
-class FacilitySelector extends React.Component {
+class ContextSelector extends React.Component {
 
     render() {
         const {selected, availableFacilities} = this.props;
-        return (<DropdownButton className="facility-dropdown" bsStyle="link" title={renderFacilityLabel(selected)}>
+        return (<DropdownButton className="facility-dropdown" bsStyle="link" title={renderContextLabel(selected)}>
+                <div className="sidebar-menu" style={{maxHeight: '500', overflowY: 'scroll',width: '200'}}>
                 {
                     availableFacilities.map((facility) => {
                         const {name, persistentId, domainId, description} = facility;
-                        return (
-                          <div>
-                            <MenuItemLink key={domainId}
-                                           to={`/mobile/facilities/${domainId}/ALL`}
-                                           data-persistentid={persistentId}
-                                           onClick={() => this.props.acToggleSidebar(false)}>
-                               {description}
-                             </MenuItemLink>
+                        return (<ul style={{listStyleType: 'none', paddingLeft: 15, paddingTop: 3}}>
+                              <MenuItemLink key={domainId}
+                                             to={`/mobile/facilities/${domainId}/customers/ALL`}
+                                             data-persistentid={persistentId}
+                                             onClick={() => this.props.acToggleSidebar(false)}>
+                                 {description}
+                               </MenuItemLink>
+                               <ul style={{listStyleType: 'none', paddingLeft: 25}}>
                              {facility.customers.map((customer) => {
                               return (
                                 <MenuItemLink key={domainId + customer.domainId}
-                                               to={`/mobile/facilities/${domainId}/${customer.domainId}`}
+                                               to={`/mobile/facilities/${domainId}/customers/${customer.domainId}`}
                                                data-persistentid={customer.persistentId}
-                                               onClick={() => this.props.acToggleSidebar(false)}>
+                                               onClick={() => this.props.acToggleSidebar(false)}
+                                               style={{paddingTop: 3}}
+                                              >
                                    {customer.name}
                                  </MenuItemLink>
                               )
                              })}
-                          </div>)
-
+                              </ul>
+                             </ul>
+                          )
                     })
                }
+               </div>
         </DropdownButton>);
     }
 }

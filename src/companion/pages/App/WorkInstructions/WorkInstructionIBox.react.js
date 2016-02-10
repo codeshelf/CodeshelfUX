@@ -11,7 +11,7 @@ import {keyColumn, properties} from 'data/types/WorkInstruction';
 import moment from "moment";
 import Promise from "bluebird";
 import search from "data/search";
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 import SearchStatus from "components/common/SearchStatus";
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkersByBadgeId, toWorkerName} from 'data/workers/store';
@@ -99,8 +99,8 @@ export default class WorkInstructionIBox extends React.Component{
                 promise.cancel();
             }
         }
-        promise =  search(getFacilityContext().findWorkInstructionReferences,
-                          _.partial(getFacilityContext().getWorkInstruction, properties),
+        promise =  search(getAPIContext().findWorkInstructionReferences,
+                          _.partial(getAPIContext().getWorkInstruction, properties),
                           this.handleResultsUpdated.bind(this),
                           filter);
 

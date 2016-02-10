@@ -3,7 +3,7 @@ import Icon from 'react-fa';
 import _ from "lodash";
 import DocumentTitle from "react-document-title";
 import ListManagement from "components/common/list/ListManagement";
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 import exposeRouter, {toURL} from 'components/common/exposerouter';
 import ConfirmAction from 'components/common/ConfirmAction';
 import {Button} from 'react-bootstrap';
@@ -44,20 +44,20 @@ function createRowActionComponent(onActionComplete, props) {
   class ScheduledJobActions extends React.Component {
 
         trigger(type) {
-            return getFacilityContext().triggerSchedule(type).then(() => {
+            return getAPIContext().triggerSchedule(type).then(() => {
                 onActionComplete();
             });
         }
 
         cancel(type) {
-            return getFacilityContext().cancelJob(type).then(() => {
+            return getAPIContext().cancelJob(type).then(() => {
                 onActionComplete();
             });
         }
 
         delete(rowData) {
             let type = rowData.get("type");
-            return getFacilityContext().deleteJob(type).then(() => {
+            return getAPIContext().deleteJob(type).then(() => {
                 onActionComplete();
             });
         }
@@ -94,7 +94,7 @@ function createRowActionComponent(onActionComplete, props) {
 
 class DateTimeArray extends React.Component {
     render() {
-        let utcOffset = getFacilityContext().facility.utcOffset;
+        let utcOffset = getAPIContext().facility.utcOffset;
         let {cellData, rowData} = this.props;
         let style = (rowData.get("active")) ? {} : {textDecoration: "line-through"};
         return (<span>
@@ -137,7 +137,7 @@ class ScheduledJobs extends React.Component{
     }
 
     handleActionComplete() {
-        getFacilityContext().getScheduledJobs().then((jobs) => {
+        getAPIContext().getScheduledJobs().then((jobs) => {
             this.setState({"scheduledJobs": fromJS(jobs)});
         });
     }
@@ -152,7 +152,7 @@ class ScheduledJobs extends React.Component{
     }
 
     render() {
-        let timeZoneDisplay = getFacilityContext().facility.timeZoneDisplay;
+        let timeZoneDisplay = getAPIContext().facility.timeZoneDisplay;
 
         let {scheduledJobs: list = List(), scheduledJob: selected} = this.state;
 

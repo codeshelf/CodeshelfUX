@@ -10,7 +10,7 @@ import OrderSearch from "./OrderSearch";
 import OrderReview from "./OrderReview";
 import Promise from "bluebird";
 import search from "data/search";
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 import SearchStatus from "components/common/SearchStatus";
 
 export default class OrdersIBox extends React.Component{
@@ -88,8 +88,8 @@ export default class OrdersIBox extends React.Component{
                 promise.cancel();
             }
         }
-        promise =  search(getFacilityContext().findOrderReferences,
-                          _.partial(getFacilityContext().getOrder, properties),
+        promise =  search(getAPIContext().findOrderReferences,
+                          _.partial(getAPIContext().getOrder, properties),
                           this.handleResultsUpdated.bind(this),
                           filter);
 

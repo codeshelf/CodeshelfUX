@@ -4,7 +4,7 @@ import {Map} from "immutable";
 import {Button} from "components/common/Form";
 import ModalForm from "components/common/ModalForm";
 import FormFields from "components/common/FormFields";
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 
 export default class EDIForm extends React.Component{
 
@@ -26,7 +26,7 @@ export default class EDIForm extends React.Component{
         if (params.password && params.password.replace(/\*+/, '').length == 0) { //all * replaced
             delete params.password;
         }
-        return getFacilityContext().updateEdiGateway(params);
+        return getAPIContext().updateEdiGateway(params);
     }
 
     handleChange(field, value) {

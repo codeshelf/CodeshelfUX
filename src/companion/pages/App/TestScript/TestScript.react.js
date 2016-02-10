@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import DocumentTitle from 'react-document-title';
 import _ from 'lodash';
 import {Map, List, fromJS} from 'immutable';
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import {IBox, IBoxBody} from 'components/common/IBox';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
 import {Input, ListGroup, Modal} from 'react-bootstrap';
@@ -29,11 +29,11 @@ export default class TestScript extends React.Component{
     }
 
     deleteOrders() {
-        return getFacilityContext().deleteOrders();
+        return getAPIContext().deleteOrders();
     }
 
     recreateFacility() {
-        return getFacilityContext().recreateFacility().then((facility) => {
+        return getAPIContext().recreateFacility().then((facility) => {
             window.location.reload();
             return facility;
         });
@@ -100,7 +100,7 @@ class ScriptStepExecutor extends React.Component {
     processScript(scriptInputs) {
         this.setState({"loading": true});
         let scriptFormData = this.toFormData(scriptInputs.files);
-        var apiContext = getFacilityContext();
+        var apiContext = getAPIContext();
         return this.processResponse(apiContext.processPickScript(scriptFormData));
     }
 
@@ -117,7 +117,7 @@ class ScriptStepExecutor extends React.Component {
         }
 
         let scriptFormData = this.toFormData(filteredFiles);
-        var apiContext = getFacilityContext();
+        var apiContext = getAPIContext();
         return this.processResponse(apiContext.runScriptStep(scriptFormData, stepResponse.id, scriptInputs.timeout));
     }
 

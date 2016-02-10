@@ -16,11 +16,11 @@ import {EditButtonLink, AddButtonLink} from 'components/common/TableButtons';
 import {Authz} from 'components/common/auth';
 
 
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkers} from 'data/workers/store';
 import DateDisplay from "components/common/DateDisplay";
-// new imports redux 
+// new imports redux
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 

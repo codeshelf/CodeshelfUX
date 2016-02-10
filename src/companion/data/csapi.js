@@ -197,13 +197,13 @@ export function getFacilityCustomers(domainId) {
 };
 
 // facilityId can be injected(for mobile web) or will be taken from facility cursor if not provided(desktop web)
-export function getFacilityContext({selectedFacility, selectedCustomer}) {
+export function getAPIContext({selectedFacility, selectedCustomer}) {
     var endpoint = state.cursor(["endpoint"])();
     var facility = state.cursor(["selectedFacility"])();
     var facilityId = (selectedFacility && selectedFacility.persistentId) || facility.get("persistentId");
     // not sure if paths will be this way in the future
     let basePath = "/api/facilities/" + facilityId;
-    basePath = selectedCustomer !== 'ALL' && selectedCustomer ? basePath + "/" + selectedCustomer.domainId: basePath;
+    basePath = selectedCustomer !== 'ALL' && selectedCustomer ? basePath + "/customers/" + selectedCustomer.domainId: basePath;
     let ordersPath = basePath + "/orders";
     let workInstructionsPath = basePath + "/work/instructions";
     let domainId = facility && facility.domainId;

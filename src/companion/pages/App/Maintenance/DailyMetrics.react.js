@@ -5,7 +5,7 @@ import {Form, SubmitButton, Input, getRefInputValue} from "components/common/For
 import DateDisplay from "components/common/DateDisplay";
 import {properties, keyColumn} from "data/types/DailyMetric";
 import {fromJS, List} from "immutable";
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 export default class DailyMetrics extends React.Component{
 
     constructor(props) {
@@ -20,14 +20,14 @@ export default class DailyMetrics extends React.Component{
     }
 
     componentDidMount() {
-        getFacilityContext().getMetrics().then((metrics) => {
+        getAPIContext().getMetrics().then((metrics) => {
             this.setState({results: metrics});
         });
     }
 
     handleSubmit() {
         let date =  getRefInputValue(this.refs.date);
-        return getFacilityContext().computeMetrics(date).then(() => {
+        return getAPIContext().computeMetrics(date).then(() => {
             this.componentDidMount();
         });
     }
@@ -35,7 +35,7 @@ export default class DailyMetrics extends React.Component{
 
 
       render() {
-        let timeZoneDisplay = getFacilityContext().facility.timeZoneDisplay;
+        let timeZoneDisplay = getAPIContext().facility.timeZoneDisplay;
 
         const {results, columnMetadata} = this.state;
         let columnsCursor  = this.props.appState.cursor(["preferences", "dailymetric", "table", "columns"]);
@@ -64,7 +64,7 @@ export default class DailyMetrics extends React.Component{
 
 class FacilityDateOnlyDisplay extends React.Component {
   render() {
-    let utcOffset = getFacilityContext().facility.utcOffset;
+    let utcOffset = getAPIContext().facility.utcOffset;
     let {cellData, rowData} = this.props;
 
     return (

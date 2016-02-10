@@ -3,7 +3,7 @@ import DocumentTitle from 'react-document-title';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
 import {IBox, IBoxBody, IBoxTitleBar, IBoxTitleText} from "components/common/IBox";
 import _ from 'lodash';
-import  {getFacilityContext} from 'data/csapi';
+import  {getAPIContext} from 'data/csapi';
 import StatusSummaryIBox from "./StatusSummaryIBox";
 import TopItems from "./TopItems";
 
@@ -24,7 +24,7 @@ var OverviewPage = React.createClass({
     },
 
     updateViews: function(props) {
-        var apiContext = getFacilityContext();
+        var apiContext = getAPIContext();
         var promise = apiContext.getFilters();
         promise.then(function(filterOptions){
             if (!this.isMounted()) {
