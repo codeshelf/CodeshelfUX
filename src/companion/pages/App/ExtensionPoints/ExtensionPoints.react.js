@@ -15,8 +15,6 @@ import ConfirmAction from 'components/common/ConfirmAction';
 
 
 const title = "Extension Points";
-
-const editRoute = "extensionpointedit";
 const allTypes = fromJS(types);
 const typeLabelMap = allTypes.reduce((map, option) => {
         return map.set(option.get("value"), option.get("label"));

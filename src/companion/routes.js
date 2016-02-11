@@ -75,7 +75,7 @@ export default (
           </Route>
           <Route component={Maintenance} path="maintenance">
             <Route component={ExtensionPointEdit} path="parametersset/:parameterType" />
-            <Route component={ScheduledJobAdd} path="newscheduledjob" />
+            <Route component={ScheduledJobAdd} path="scheduledjobs/new" />
             <Route component={ScheduledJobEdit} path="scheduledjobs/:type" />
           </Route>
           <Route component={TestScript} path="testscript" />

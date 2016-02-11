@@ -1,5 +1,5 @@
 import React from 'react';
-import exposeRouter from 'components/common/exposerouter';
+import exposeRouter, {toURL} from 'components/common/exposerouter';
 import {Tabs, Tab} from 'react-bootstrap';
 import {SingleCellLayout, PageGrid, Row, Col} from 'components/common/pagelayout';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
@@ -77,6 +77,7 @@ class Maintenance extends React.Component{
         let {
              ParameterSetDataPurge,
              ParameterSetDataQuantityHealthCheck} = this.state;
+        const returnRoute = toURL(this.props, "maintenance");
         return (
                 <SingleCellLayout title="Maintenance">
                     <Tabs className="nav-tabs-simple" defaultActiveKey="jobs">
@@ -134,7 +135,7 @@ class Maintenance extends React.Component{
                     {extensionPoint && React.cloneElement(this.props.children,
                       {extensionPoint:fromJS(extensionPoint),
                        onExtensionPointUpdate:this.handleConfigurationUpdate.bind(this),
-                       returnRoute:"maintenance"})}
+                       returnRoute })}
                 </SingleCellLayout>
                );
     }

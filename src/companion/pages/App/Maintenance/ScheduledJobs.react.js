@@ -4,7 +4,7 @@ import _ from "lodash";
 import DocumentTitle from "react-document-title";
 import ListManagement from "components/common/list/ListManagement";
 import {getFacilityContext} from "data/csapi";
-import exposeRouter from 'components/common/exposerouter';
+import exposeRouter, {toURL} from 'components/common/exposerouter';
 import ConfirmAction from 'components/common/ConfirmAction';
 import {Button} from 'react-bootstrap';
 import {fromJS, Map, List} from "immutable";
@@ -12,8 +12,6 @@ import {types, keyColumn, properties} from "data/types/ScheduledJob";
 import DateDisplay from "components/common/DateDisplay";
 
 const title = "Scheduled Jobs";
-const addRoute = "scheduledjobadd";
-const editRoute = "scheduledjobedit";
 const allTypes = fromJS(types);
 const typeLabelMap = allTypes.reduce((map, option) => {
     return map.set(option.get("value"), option.get("label"));
@@ -33,16 +31,18 @@ class Type extends React.Component {
 }
 
 
-function editRouteFactory(row) {
+
+
+function createRowActionComponent(onActionComplete, props) {
+  debugger;
+  function editRouteFactory(row) {
     return {
-        to: editRoute,
-        params: {type: row.get("type")}
+      to:  toURL(props, 'maintenance/scheduledjobs/' + row.get("type"))
     };
-}
+  }
 
 
-function createRowActionComponent(onActionComplete) {
-    class ScheduledJobActions extends React.Component {
+  class ScheduledJobActions extends React.Component {
 
         trigger(type) {
             return getFacilityContext().triggerSchedule(type).then(() => {
@@ -123,14 +123,14 @@ class ScheduledJobs extends React.Component{
         super(props);
         this.state = {
         };
-        this.rowActionComponent = createRowActionComponent(this.handleActionComplete.bind(this));
+        this.rowActionComponent = createRowActionComponent(this.handleActionComplete.bind(this), props);
         this.columnMetadata = ListManagement.toColumnMetadataFromProperties(properties);
         this.columnMetadata = ListManagement.setCustomComponent("futureScheduled", DateTimeArray, this.columnMetadata);
         this.columnMetadata = ListManagement.setCustomComponent("type", TypeLabel, this.columnMetadata);
     }
 
     findSchedule(props) {
-        let selectedScheduleType = this.props.params.type;
+        let selectedScheduleType = props.params.type;
         if (selectedScheduleType) {
             let {scheduledJobs} = this.state;
             this.setState({"scheduledJob": scheduledJobs.find((j) => j.get("type") === selectedScheduleType)});
@@ -159,8 +159,7 @@ class ScheduledJobs extends React.Component{
 
         let {rowActionComponent, columnMetadata} = this;
         let availableTypes = toAvailableTypes(list, allTypes);
-        let addButtonRoute = (availableTypes.count() <= 0) ? null : addRoute;
-        let lastRoute = this.props.routes.slice(-1)[0];
+        let addButtonRoute = (availableTypes.count() <= 0) ? null : toURL(this.props, 'maintenance/scheduledjobs/new');
         return (<DocumentTitle title={title}>
                    <div>
                        <div>TimeZone: {timeZoneDisplay}</div>
@@ -170,14 +169,13 @@ class ScheduledJobs extends React.Component{
                             columnMetadata={columnMetadata}
                             rowActionComponent={rowActionComponent}
                             addButtonRoute={addButtonRoute} />
-                        {(lastRoute.name === addRoute || lastRoute.name == editRoute)
-                          ?
+                        {this.props.children &&
                           React.cloneElement(this.props.children, {scheduledJob: selected,
                                                                   availableTypes: availableTypes,
                                                                   onUpdate: this.handleActionComplete.bind(this),
                                                                   onAdd: this.handleActionComplete.bind(this),
-                                                                  returnRoute: "maintenance" })
-                          : null}
+                                                                  returnRoute: toURL(this.props, '../../maintenance') })
+                        }
                     </div>
                 </DocumentTitle>
                );
