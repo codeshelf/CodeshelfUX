@@ -19,8 +19,8 @@ class ParameterSetConfiguration extends React.Component{
     addToEdit() {
             return getFacilityContext().addExtensionPoint({type: this.parameterType})
               .then((newExtensionPoint) => {
-                let {router, location, params} = this.props;
-                router.push(toURL(location, `parameterset/${this.parameterType}`));
+                let {router} = this.props;
+                router.push(toURL(this.props, `parameterset/${this.parameterType}`));
             });
     }
 
@@ -63,7 +63,7 @@ class ParameterSetConfiguration extends React.Component{
                                 <div>
                                     <Checkbox name={parameterType + "useDefaults"} id={parameterType + "useDefaults"} label="Use Defaults" value={useDefaults} onChange={this.handleChange.bind(this, extensionPoint, useDefaults)} />
 
-                                    <EditButtonLink name="edit" to="parametersetedit" params={{parameterType: parameterType}} disabled={useDefaults} />
+                                    <EditButtonLink name="edit" to={toURL(this.props, "maintenance/parameterset/" + parameterType)} disabled={useDefaults} />
                                 </div>
                                :
                                 <WrapInput label="Change Configuration">

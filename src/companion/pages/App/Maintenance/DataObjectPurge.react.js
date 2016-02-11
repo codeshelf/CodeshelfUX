@@ -81,7 +81,7 @@ class DataObjectPurge extends React.Component{
         let {parameterSet = {}} = configuration;
         let {purgeAfterDays} = parameterSet;
         return (<SingleCellIBox title="Database Object Purge">
-                    <ParameterSetConfiguration parameterType={parameterType} configuration={configuration} onUpdate={onConfigurationUpdate}/>
+                   <ParameterSetConfiguration {...this.props} parameterType={parameterType} configuration={configuration} onUpdate={onConfigurationUpdate}/>
                        <Row>
                            <Col md={8}><pre>{dataSummary}</pre></Col>
                            <Col md={4}>

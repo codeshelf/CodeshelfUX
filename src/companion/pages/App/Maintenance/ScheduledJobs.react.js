@@ -34,7 +34,6 @@ class Type extends React.Component {
 
 
 function createRowActionComponent(onActionComplete, props) {
-  debugger;
   function editRouteFactory(row) {
     return {
       to:  toURL(props, 'maintenance/scheduledjobs/' + row.get("type"))

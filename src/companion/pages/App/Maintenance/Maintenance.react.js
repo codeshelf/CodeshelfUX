@@ -92,6 +92,7 @@ class Maintenance extends React.Component{
                                     <Col sm={12}>
                                         <SingleCellIBox title="Data Quantity Health Check">
                                             <ParameterSetConfiguration
+                                            {...this.props}
                                              parameterType="ParameterSetDataQuantityHealthCheck"
                                              configuration={ParameterSetDataQuantityHealthCheck}
                                              onUpdate={this.handleConfigurationUpdate.bind(this)}
@@ -102,6 +103,7 @@ class Maintenance extends React.Component{
                                 <Row>
                                     <Col sm={12}>
                                         <DataObjectPurge
+                                            {...this.props}
                                             parameterType="ParameterSetDataPurge"
                                             configuration={ParameterSetDataPurge}
                                             onConfigurationUpdate={this.handleConfigurationUpdate.bind(this)}
@@ -117,6 +119,7 @@ class Maintenance extends React.Component{
                                     <Col sm={12}>
                                         <SingleCellIBox title="Edi Free Space Health Check">
                                             <ParameterSetConfiguration
+                                                {...this.props}
                                                 parameterType="ParameterEdiFreeSpaceHealthCheck"
                                                 configuration={this.state.ParameterEdiFreeSpaceHealthCheck}
                                                 onUpdate={this.handleConfigurationUpdate.bind(this)}
@@ -128,7 +131,7 @@ class Maintenance extends React.Component{
                         </Tab>
                         <Tab eventKey="daily" title="Daily">
                             <MaintenaceTabContent title="Daily Metrics" >
-                                <DailyMetrics appState={appState}/>
+                              <DailyMetrics {...this.props} appState={appState}/>
                             </MaintenaceTabContent>
                         </Tab>
                     </Tabs>
