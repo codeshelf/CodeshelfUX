@@ -1,5 +1,5 @@
 import  React from "react";
-import exposeRouter from 'components/common/exposerouter';
+import exposeRouter, {toURL} from 'components/common/exposerouter';
 import DocumentTitle from "react-document-title";
 
 import {getFacilityContext} from "data/csapi";
@@ -15,7 +15,7 @@ import ConfirmAction from 'components/common/ConfirmAction';
 
 
 const title = "Extension Points";
-const addRoute = "extensionpointadd";
+
 const editRoute = "extensionpointedit";
 const allTypes = fromJS(types);
 const typeLabelMap = allTypes.reduce((map, option) => {
@@ -35,15 +35,15 @@ class Type extends React.Component {
 
 }
 
-function editRouteFactory(row) {
-    return {
-        to: editRoute,
-        params: {extensionPointId: row.get("persistentId")}
-    };
-}
 
-function createRowActionComponent(onActionComplete) {
-    class ScheduledJobActions extends React.Component {
+function createRowActionComponent(onActionComplete, props) {
+  function editRouteFactory(row) {
+    return {
+      to: toURL(props, 'extensionpoints/' + row.get("persistentId"))
+    };
+  }
+
+  class ScheduledJobActions extends React.Component {
 
         delete(rowData) {
             return getFacilityContext().deleteExtensionPoint(rowData.toJS()).then(() => {
@@ -106,7 +106,7 @@ class ExtensionPoints extends React.Component{
         this.handleExtensionPointUpdate = this.handleExtensionPointUpdate.bind(this);
         this.handleExtensionPointAdd = this.handleExtensionPointAdd.bind(this);
         this.handleExtensionPointDelete = this.handleExtensionPointDelete.bind(this);
-        this.rowActionComponent = createRowActionComponent(this.loadExtensionPoints);
+      this.rowActionComponent = createRowActionComponent(this.loadExtensionPoints, this.props);
     }
 
     componentWillMount() {
@@ -148,6 +148,7 @@ class ExtensionPoints extends React.Component{
     }
 
     render() {
+        const addRoute = toURL(this.props, "extensionpoints/new");
         let {extensionPoints} = this.state;
         let list = extensionPoints.cursor().deref();
         let extensionPointId = this.props.params.extensionPointId;
@@ -168,15 +169,12 @@ class ExtensionPoints extends React.Component{
                             columnMetadata={columnMetadata}
                             rowActionComponent={rowActionComponent}
                             addButtonRoute={addButtonRoute} />
-                         {(lastRoute.name === addRoute || lastRoute.name == editRoute)
-                          ?   React.cloneElement(this.props.children, {
+                         {this.props.children && React.cloneElement(this.props.children, {
                               availableTypes:availableTypes,
-                              returnRoute:"extensionpoints",
+                           returnRoute: toURL(this.props, "../extensionpoints"),
                               onExtensionPointUpdate:this.handleExtensionPointUpdate,
                               onAdd:this.handleExtensionPointAdd,
-                              extensionPoint:extensionPoint})
-                           : null
-                         }
+                           extensionPoint:extensionPoint})}
                     </div>
                 </DocumentTitle>
         );
