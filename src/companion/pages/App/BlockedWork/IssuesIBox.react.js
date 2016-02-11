@@ -38,9 +38,6 @@ export default class IssuesIBox extends React.Component {
                               <Col sm={6} lg={3}>
                                   <Select id="groupBy" label='Group By' value={groupBy} options={[{value: "item", label: "Item"}, {value:"worker", label: "Worker"}]} onChange={this.handleGroupBy.bind(this)}/>
                               </Col>
-                              <Col sm={6} lg={3} >
-                                  <Checkbox id={"resolved_" + type} label="Show Resolved Only" value={resolved} onChange={this.handleResolved.bind(this)} />
-                              </Col>
                             </Row>
                           </form>
                           {
