@@ -20,8 +20,7 @@ class ParameterSetConfiguration extends React.Component{
             return getFacilityContext().addExtensionPoint({type: this.parameterType})
               .then((newExtensionPoint) => {
                 let {router, location, params} = this.props;
-                params.parameterType = this.parameterType;
-                router.push(toURL(location, params, "parametersetedit"));
+                router.push(toURL(location, `parameterset/${this.parameterType}`));
             });
     }
 

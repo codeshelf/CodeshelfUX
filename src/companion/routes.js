@@ -69,7 +69,7 @@ export default (
           <Route component={EDIGateways} path="edigateways">
             <Route component={EDIGatewayEdit} path=":id"/>
           </Route>
-          <Route component={WorkerMgmt} path="workermgmt">
+          <Route component={WorkerMgmt} path="workers">
             <Route component={WorkerDisplay} path="new" />
             <Route component={WorkerDisplay} path=":workerId" />
           </Route>

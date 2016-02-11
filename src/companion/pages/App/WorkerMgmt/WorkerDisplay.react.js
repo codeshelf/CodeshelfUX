@@ -4,7 +4,7 @@ import {Modal, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import classnames from 'classnames';
-import exposeRouter from 'components/common/exposerouter';
+import exposeRouter, {toURL} from 'components/common/exposerouter';
 import ModalForm from "components/common/ModalForm";
 import FormFields from "components/common/FormFields";
 
@@ -99,7 +99,7 @@ class WorkerDisplay extends React.Component {
 
     render() {
         var formData = this.getSelectedWorkerForm();
-            return (<ModalForm title="Edit Worker" formData={formData} returnRoute="workermgmt"
+      return (<ModalForm title="Edit Worker" formData={formData} returnRoute={toURL(this.props, "../workers")}
                            onSave={this.handleSave}>
                     <FormFields formData={formData} formMetadata={this.formMetadata} handleChange={this.handleChange} />
                 </ModalForm>
@@ -136,7 +136,7 @@ class WorkerDisplay extends React.Component {
 
 WorkerDisplay.propTypes = {
     formMetadata: ImmutablePropTypes.iterable,
-    router: React.PropTypes.func
+    router: React.PropTypes.object.isRequired
 };
 
 export default exposeRouter(WorkerDisplay);

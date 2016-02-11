@@ -8,7 +8,7 @@ import PureComponent from 'components/common/PureComponent';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {SingleCellIBox} from 'components/common/IBox';
 import UploadForm from 'components/common/UploadForm';
-
+import {toURL} from 'components/common/exposerouter';
 
 import ListView from "components/common/list/ListView";
 import ListManagement from "components/common/list/ListManagement";
@@ -67,8 +67,7 @@ export default class WorkerMgmt extends React.Component{
             },
         ]);
             this.rowActionComponent = ListManagement.toEditButton((row) => {
-            return {    to: "workerdisplay",
-                        params: {workerId: row.get(keyColumn)}};
+              return {    to: toURL(this.props, "workers/" + row.get(keyColumn))};
         });
         let {state} = props;
         this.columnsCursor  = state.cursor(["preferences", "workers", "table", "columns"]);
@@ -100,7 +99,7 @@ export default class WorkerMgmt extends React.Component{
                 </Authz>
                 <ListManagement
                         allowExport={true}
-                        addButtonRoute="workernew"
+                        addButtonRoute={toURL(this.props, 'workers/new')}
                         columns={this.columnsCursor}
                         columnMetadata={this.columnMetadata}
                         sortSpecs={this.columnSortSpecsCursor}

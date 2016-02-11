@@ -21,10 +21,7 @@ class ModalForm extends React.Component{
     handleClose() {
         this.setState({"show": false});
         //Transition away, so make sure unmount tears down the modal
-        let routeName = this.props.returnRoute;
-        let {router, location, params} = this.props;
-        params.parameterType = this.parameterType;
-        router.push(toURL(location, params, routeName));
+        this.props.router.push(this.props.returnRoute);
     }
 
     handleSave(e) {
@@ -39,7 +36,7 @@ class ModalForm extends React.Component{
 
     componentWillUnmount() {
         //always teardown modal before transitioning away
-        this.refs.modal.onHide();
+      this.handleClose();
     }
 
     render() {
