@@ -114,7 +114,7 @@ export class TopChart extends Component {
         <Row style={{paddingLeft: "1em", paddingRight: "1em" }}>
           <Col>
            <WidthWrapper>{(width) => {
-             const minHeight = Math.round(width/2.5);
+             const minHeight = Math.round(width/(1.618*2)); //designer-like
              if (showLoading || showError) {
                return (<div style={{minHeight: minHeight + 6}}>
                          {showLoading && <span><Icon name="spinner" spin/> Loading chart...</span>}
