@@ -3,8 +3,7 @@ import React from 'react';
 import {state} from './data/state';
 import storage from 'lib/storage';
 import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd/modules/backends/HTML5';
-
+import HTML5Backend from 'react-dnd-html5-backend';
 import 'bootstrap/less/bootstrap.less';
 import 'pages/less/pages.less';
 require('assets/css/app.styl');
