@@ -22,7 +22,7 @@ export function getSubscriptions(key) : KeyedIterable {
 };
 
 export function replenItem(issue) {
-  return dispatch(replenItem, getFacilityContext().replenishItem(issue)).then((result) => {
+  return dispatch(replenItem, getFacilityContext().replenishItem(issue.toJS())).then((result) => {
     return result;
 });
 

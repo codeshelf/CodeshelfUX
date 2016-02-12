@@ -432,7 +432,7 @@ export function getFacilityContext(selectedFacility) {
           });
         },
 
-        getWorkers: function(params) {
+      getWorkers: function(params) {
             var workersPath = facilityPath + "/workers";
             return ajax(workersPath, {
               data: params
@@ -476,12 +476,12 @@ export function getFacilityContext(selectedFacility) {
             });
         },
 
-        replenishItem: (issue) => {
-          let persistentId = issue.get("persistentId");
-          let resolvePath = `/api/events/${persistentId}/replenish`;
+        replenishItem: (item) => {
+          let resolvePath = facilityPath + '/replenish';
           return ajax(resolvePath, {
             method: "POST",
-            contentType: "form" //superagent forum url encoded
+            contentType: "form", //superagent forum url encoded
+            data: item
           });
         },
 

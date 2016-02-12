@@ -7,7 +7,7 @@ import {UnresolvedEvents} from './EventsGrid';
 import {keyIn} from 'lib/predicates';
 import {getTypeIssues, getItemIssues} from 'data/issues/store';
 import {fetchTypeIssues, fetchItemIssues, subscribe, unsubscribe} from 'data/issues/actions';
-
+import {IssueActions} from './IssueActions';
 
 function itemKeys(item, type, resolved) {
     let itemId = item.get("itemId");
@@ -20,6 +20,7 @@ export default class IssuesByItem extends React.Component{
     constructor(props) {
         super(props);
         this.issueColumnMetadata = [
+
             {
                 columnName: "itemId",
                 displayName: "Item"
@@ -45,6 +46,7 @@ export default class IssuesByItem extends React.Component{
         ];
 
         this.issueColumns = _.map(this.issueColumnMetadata, (c) => c.columnName);
+        this.rowActionComponent = IssueActions;
 
         this.state = {
             "selectedGroup": null
@@ -123,7 +125,9 @@ let {type, resolved, filter} = this.props;
     render() {
         let {type, resolved, groupBy} = this.props;
         let typeIssues = getTypeIssues([type, resolved.toString(), groupBy]);
-        let results  = typeIssues.get("results");
+        let results  = typeIssues.get("results").map((item) => {
+          return item.set('type', type);
+        });
         let {selectedGroup} = this.state;
         let handleOnRowExpand = this.handleSelectedGroup.bind(this, true);
         let handleOnRowCollapse = this.handleSelectedGroup.bind(this, false);
@@ -132,6 +136,7 @@ let {type, resolved, filter} = this.props;
                 <Table results={results}
                        columns={this.issueColumns}
                        columnMetadata={this.issueColumnMetadata}
+                       rowActionComponent={this.rowActionComponent}
                        onRowExpand={handleOnRowExpand}
                        onRowCollapse={handleOnRowCollapse}
                        expand={expandFunc}>
