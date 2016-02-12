@@ -100,6 +100,11 @@ var PickerEventsIBox = React.createClass({
     render: function() {
         var {interval, pickRates} = this.state;
         return (<IBox>
+                   <IBoxSection>
+                       <WorkerPickCharts
+                            hideBottom={true}
+                            expand={false}/>
+                   </IBoxSection>
                    <IBoxTitleBar>
                      <IBoxTitleText>
                          Pick Summary
@@ -110,11 +115,6 @@ var PickerEventsIBox = React.createClass({
                          <EventSearch onSubmit={this.handleSubmit} />
                      </Col>
                    </Row>
-                   <IBoxSection>
-                       <WorkerPickCharts
-                            hideBottom={true}
-                            expand={false}/>
-                   </IBoxSection>
                    <IBoxSection>
                        <PickRateTable style={{width: '100%', height: '300px'}}
                            startTimestamp={interval.start}
