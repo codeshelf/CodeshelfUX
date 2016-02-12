@@ -26,6 +26,7 @@ class FacilityNavigation extends React.Component {
         <AuthzMenuItem permission="facility:edit" to={`${basepath}/extensionpoints`} params={params} title="Extensions" iconName="code" />
         <AuthzMenuItem permission="facility:edit" to={`${basepath}/maintenance`} params={params} title="Maintenance" iconName="heartbeat" />
         <AuthzMenuItem permission="ux:view" href={this.getUXUrl(facility)} params={params} title="Configuration" iconName="cogs" />
+        <AuthzMenuItem permission="ux:view" to={`${basepath}/cartsearch`} params={params} title="Cart search" iconName="search" />
         <AuthzMenuItem permission="che:simulate" to={`${basepath}/testscript`} params={params} title="Test Scripts" iconName="bug" />
       </Navigation>);
   }

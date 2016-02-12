@@ -79,6 +79,11 @@ export default (
             <Route component={ScheduledJobEdit} path="scheduledjobs/:type" />
           </Route>
           <Route component={TestScript} path="testscript" />
+          <Route component={mCartSearch} path="cartsearch" />
+          <Route component={mCartDetail} path="carts/:id">
+            <IndexRedirect to="detail" />
+            <Route component={mCartDetail} path=":tab" />
+          </Route>
           <Route component={ExtensionPointsPage} path="extensionpoints">
             <Route component={ExtensionPointAdd} path="new" />
             <Route component={ExtensionPointEdit} path=":extensionPointId" />

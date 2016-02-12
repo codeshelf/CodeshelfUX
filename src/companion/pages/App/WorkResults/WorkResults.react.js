@@ -19,6 +19,3 @@ export default class WorkResults extends React.Component{
         );
     }
 };
-
-
-//<WorkerPickCharts apiContext={apiContext} hideBottom={true} expand={true}/>
