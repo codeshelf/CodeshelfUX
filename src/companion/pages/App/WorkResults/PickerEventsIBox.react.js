@@ -113,7 +113,7 @@ var PickerEventsIBox = React.createClass({
                    <IBoxSection>
                        <WorkerPickCharts
                             hideBottom={true}
-                            expand={true}/>
+                            expand={false}/>
                    </IBoxSection>
                    <IBoxSection>
                        <PickRateTable style={{width: '100%', height: '300px'}}
