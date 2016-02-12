@@ -15,6 +15,7 @@ import WorkerDisplay from './pages/App/WorkerMgmt/WorkerDisplay.react.js';
 import Import from './pages/App/Import/Import.react.js';
 import EDIGateways from './pages/App/Import/EDIGateways.react.js';
 import EDIGatewayEdit from './pages/App/Import/EDIGatewayEdit.react.js';
+import CartSearch from './pages/App/CartSearch/CartSearch.react.js';
 import {authn} from './components/common/auth.js';
 import Login from './pages/Login/Login.react.js';
 import Users from './pages/Users/Users.react.js';
@@ -79,7 +80,7 @@ export default (
             <Route component={ScheduledJobEdit} path="scheduledjobs/:type" />
           </Route>
           <Route component={TestScript} path="testscript" />
-          <Route component={mCartSearch} path="cartsearch" />
+          <Route component={CartSearch} path="cartsearch" />
           <Route component={mCartDetail} path="carts/:id">
             <IndexRedirect to="detail" />
             <Route component={mCartDetail} path=":tab" />
