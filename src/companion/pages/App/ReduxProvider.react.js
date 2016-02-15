@@ -10,6 +10,8 @@ import {sidebarReducer} from '../Mobile/Sidebar/store';
 import {workerPickChartReducer} from '../Mobile/WorkerPickCharts/store';
 import {cartSearchReducer} from '../Mobile/CartSearch/store'
 import {cartDetailReducer} from '../Mobile/CartDetail/store';
+import {workerSearchReducer} from '../Mobile/WorkerSearch/store';
+import {workerDetailReducer} from '../Mobile/WorkerDetail/store';
 
 import {Iterable} from 'immutable';
 
@@ -18,9 +20,11 @@ Iterable.prototype[Symbol.for('get')] = function(value) {return this.get(value) 
 const rootReducer = combineReducers({
   cartSearch: cartSearchReducer,
   cartDetail: cartDetailReducer,
-  workerPickChart: workerPickChartReducer,
   facility: facilityReducer,
   sidebar: sidebarReducer,
+  workerSearch: workerSearchReducer,
+  workerDetail: workerDetailReducer,
+  workerPickChart: workerPickChartReducer,
 });
 
 
