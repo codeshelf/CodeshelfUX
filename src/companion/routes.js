@@ -17,6 +17,7 @@ import EDIGateways from './pages/App/Import/EDIGateways.react.js';
 import EDIGatewayEdit from './pages/App/Import/EDIGatewayEdit.react.js';
 import CartSearch from './pages/App/CartSearch/CartSearch.react.js';
 import WorkerSearch from './pages/App/WorkerSearch/WorkerSearch.react.js';
+import OrderSearch from './pages/App/OrderSearch/OrderSearch.react.js';
 import {authn} from './components/common/auth.js';
 import Login from './pages/Login/Login.react.js';
 import Users from './pages/Users/Users.react.js';
@@ -42,7 +43,7 @@ import DetectMobile from "./components/common/DetectMobile.react.js";
 import mApp from './pages/Mobile/App.react.js';
 import mHomeSearch from  './pages/Mobile/HomeSearch/HomeSearch.react.js';
 import mOrderSearch from './pages/Mobile/OrderSearch/OrderSearch.react.js';
-import mOrderDeatil from './pages/Mobile/OrderDetail/OrderDetail.react.js';
+import mOrderDetail from './pages/Mobile/OrderDetail/OrderDetail.react.js';
 import mWorkerSearch from './pages/Mobile/WorkerSearch/WorkerSearch.react.js';
 import mWorkerDetail from './pages/Mobile/WorkerDetail/WorkerDetail.react.js';
 import mCartSearch from './pages/Mobile/CartSearch/CartSearch.react.js';
@@ -81,6 +82,11 @@ export default (
             <Route component={ScheduledJobEdit} path="scheduledjobs/:type" />
           </Route>
           <Route component={TestScript} path="testscript" />
+          <Route component={OrderSearch} path="ordersearch" />
+          <Route component={mOrderDetail} path="orders/:id">
+            <IndexRedirect to="detail" />
+            <Route component={mOrderDetail} path=":tab" />
+          </Route>
           <Route component={WorkerSearch} path="workersearch" />
           <Route component={mWorkerDetail} path="workers/:id">
             <IndexRedirect to="detail" />
@@ -113,9 +119,9 @@ export default (
           <IndexRedirect to="events" />
           <Route component={mWorkerPickCharts}  path="events"/>
           <Route component={mOrderSearch} path="orders" />
-          <Route component={mOrderDeatil} path="orders/:id">
+          <Route component={mOrderDetail} path="orders/:id">
             <IndexRedirect to="order" />
-            <Route component={mOrderDeatil} path=":tab" />
+            <Route component={mOrderDetail} path=":tab" />
           </Route>
           <Route component={mWorkerSearch} path="workers" />
           <Route component={mWorkerDetail} path="workers/:id">
