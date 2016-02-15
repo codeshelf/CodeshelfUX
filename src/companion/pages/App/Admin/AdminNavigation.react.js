@@ -1,5 +1,5 @@
 import React from 'react';
-import Navigation from "../Navigation";
+import {Nav as Navigation} from "../Navigation";
 import exposeRouter from 'components/common/exposerouter';
 
 const AuthzMenuItem = Navigation.AuthzMenuItem;

@@ -3,7 +3,6 @@ import {Row, Col} from 'components/common/pagelayout';
 import {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} from "components/common/IBox";
 import {MultiSelect} from 'components/common/Form';
 
-import PickRateChart from './PickRateChart';
 import PickRateTable from "./PickRateTable";
 import EventSearch from "./EventSearch";
 import moment from 'moment';
