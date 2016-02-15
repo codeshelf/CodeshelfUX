@@ -73,7 +73,7 @@ module.exports = function(isDevelopment, isTest) {
           { test: /\.svg([\?]?.*)$/,  loader: "url-loader?limit=10000&mimetype=image/svg+xml" },
           { test: /\.(gif|jpg|png)$/, loader: 'url-loader?limit=100000' },
           {
-              exclude: [/node_modules/, /bower_components/, /web_modules/],
+              exclude: [/node_modules/, /web_modules/],
               loaders: isDevelopment ? [
                   'react-hot', 'babel-loader'
                   ] : [
@@ -139,8 +139,7 @@ module.exports = function(isDevelopment, isTest) {
             "react-dom/server": "react" // TODO remove when switched to react 14
 
         },
-        root: [ path.resolve(process.cwd(), './src/companion'),
-                path.resolve(process.cwd(), './bower_components')],
+        root: [ path.resolve(process.cwd(), './src/companion')],
         extensions: ['', '.js', '.json', '.react.js']
     }
   };

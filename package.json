@@ -2,7 +2,6 @@
   "name": "CodeshelfUX",
   "contributors": [],
   "scripts": {
-    "postinstall": "./node_modules/.bin/bower install",
     "build-production": "./node_modules/.bin/gulp build --production",
     "dev": "./node_modules/.bin/gulp",
     "test": "./node_modules/karma/bin/karma --log-level info start"
@@ -75,7 +74,6 @@
     "babel-preset-es2015": "^6.1.18",
     "babel-preset-react": "^6.1.18",
     "babel-register": "^6.2.0",
-    "bower": "^1.3.12",
     "css-loader": "^0.9.1",
     "eslint-plugin-react": "^2.0.1",
     "exports-loader": "^0.6.2",
