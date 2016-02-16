@@ -57,7 +57,7 @@ export function fetchUnresolvedIssuesByType(filter) {
         filterBy: filter,
         groupBy: "type"
     };
-    dispatch(fetchUnresolvedIssuesByType, getFacilityContext().getIssues(criteria));
+    return dispatch(fetchUnresolvedIssuesByType, getFacilityContext().getIssues(criteria));
 };
 
 export function fetchTypeIssues(storageKeys, criteria) {

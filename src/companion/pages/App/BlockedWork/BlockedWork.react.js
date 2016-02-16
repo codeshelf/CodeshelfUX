@@ -4,30 +4,31 @@ import {Badge, TabbedArea, TabPane} from 'react-bootstrap';
 import _ from 'lodash';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
 import {IBox, IBoxBody} from 'components/common/IBox';
-import {Form, WrapInput, Input, SubmitButton, getRefInputValue} from 'components/common/Form';
+import {Form, WrapInput, Input, Select, SubmitButton, getRefInputValue} from 'components/common/Form';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
-
-import IssuesIBox from './IssuesIBox';
 import {getFacilityContext} from 'data/csapi';
-import {fetchUnresolvedIssuesByType, subscribe, unsubscribe} from 'data/issues/actions';
+import {fetchUnresolvedIssuesByType, fetchTypeIssues} from 'data/issues/actions';
 import {getIssuesSummary} from 'data/issues/store';
 import {List} from 'immutable';
+import IssuesByItem from './IssuesByItem';
+import IssuesByWorker from './IssuesByWorker';
 
 export default class BlockedWork extends React.Component {
 
     constructor(props){
       super(props);
-      this.state = {};
-      this.subscribeWithFilter = this.subscribeWithFilter.bind(this);
+      this.state = {
+        "groupBy": "item",
+      };
+      this.updateFilter = this.updateFilter.bind(this);
     }
 
     componentDidMount() {
-      this.subscribeWithFilter();
+      this.updateFilter();
     }
 
     componentWillUnmount() {
 
-        unsubscribe("blockedwork");
     }
 
 
@@ -36,13 +37,17 @@ export default class BlockedWork extends React.Component {
             "SKIP_ITEM_SCAN": "Skipped",
             "SUBSTITUTION": "Substitution",
             "SHORT": "Shorted",
-            "BUTTON": "Button",
-            "COMPLETE": "Complete",
             "LOW": "Low"
         }[type];
     }
 
-    subscribeWithFilter() {
+    handleGroupBy(e) {
+      let groupBy = e.target.value;
+      this.setState({groupBy: groupBy});
+    }
+
+    updateFilter() {
+
       let interval = this.refs.createdFilter.getInterval();
       var filter = {
         resolved: false
@@ -50,9 +55,34 @@ export default class BlockedWork extends React.Component {
       if (interval) {
         filter['created'] = interval.toQueryParameterValue();
       }
-      this.setState({filter: filter});
-      subscribe("blockedwork", fetchUnresolvedIssuesByType.bind(null, filter));
+      this.setState({filter: filter}, () =>{
+        const {groupBy} = this.state;
+        fetchUnresolvedIssuesByType(filter).then(()=> {
+          let issuesSummary = getIssuesSummary();
+          let issuesSummaryResults = issuesSummary.get("results") || List();
+          let sortedSummary = issuesSummaryResults
+          .filter(summary => {
+            const type = summary.get("eventType");
+            let description = this.toDescription(type);
+            const hasDescription =  !(typeof description === 'undefined' || description == null);
+            return hasDescription;
+          })
+          .sortBy((summary) => summary.get("eventType"))
+          .forEach((summary) =>{
+            const type = summary.get("eventType");
+
+            fetchTypeIssues(
+              [type, "false", groupBy],
+              {groupBy: groupBy,
+               filterBy: {
+                   ...filter,
+                 type: type
+               }});
+          });
+        });
+      });
     }
+
 
     renderTabbedArea(issuesSummary) {
         let sortedSummary = issuesSummary.filter(summary => {
@@ -63,11 +93,11 @@ export default class BlockedWork extends React.Component {
           }).sortBy((summary) => summary.get("eventType"));
 
         let firstType = sortedSummary.first().get("eventType");
-        const {filter} = this.state;
+        const {filter, groupBy} = this.state;
         return (
                 <IBox>
                 <IBoxBody>
-                <TabbedArea className="nav-tabs-simple" defaultActiveKey={firstType}>
+                <TabbedArea className="nav-tabs-simple" defaultActiveKey={firstType} >
                 {
                     sortedSummary.map((summary) => {
                         let type = summary.get("eventType");
@@ -79,7 +109,16 @@ export default class BlockedWork extends React.Component {
                                       {description && description.toUpperCase()}
                                       <Badge style={{marginLeft: "1em"}} className="badge-primary">{total}</Badge>
                                       </span>}>
-                                   <IssuesIBox type={type} filter={filter}/>
+                                <IBox>
+                                  <IBoxBody>
+                                  {
+                                  (groupBy === "item") ?
+                                    <IssuesByItem  groupBy="item" type={type} filter={filter} />
+                                    :
+                                    <IssuesByWorker groupBy="worker" type={type} filter={filter} />
+                                  }
+                                  </IBoxBody>
+                                </IBox>
                                 </TabPane>);
                                 }).toArray()
                     }
@@ -91,21 +130,31 @@ export default class BlockedWork extends React.Component {
     }
 
     render() {
-        let title = "Issues";
-        let issuesSummary = getIssuesSummary();
-        let issuesSummaryResults = issuesSummary.get("results") || List();
-        let filteredIssueSummaryResults = issuesSummaryResults
-                .filter((summary) => summary.get("eventType") !== "COMPLETE");
-        return (
+      let title = "Issues";
+      let issuesSummary = getIssuesSummary();
+      let issuesSummaryResults = issuesSummary.get("results") || List();
+      const {groupBy} = this.state;
+      return (
                 <DocumentTitle title={title}>
-        <PageGrid>
-            <Row>
-                <Col sm={12}>
-                  <WrapInput label="Created Date">
-                    <DayOfWeekFilter ref="createdFilter" onChange={this.subscribeWithFilter} />
-                  </WrapInput>
-                  {(filteredIssueSummaryResults.count() > 0) ?
-                    this.renderTabbedArea(filteredIssueSummaryResults) :
+                  <PageGrid>
+                    <Row>
+                      <Col sm={12} lg={3}>
+                        <WrapInput label="Created Date">
+                          <DayOfWeekFilter ref="createdFilter" onChange={this.updateFilter} />
+                        </WrapInput>
+                      </Col>
+                      <Col sm={12} lg={3}>
+                        <form role="form">
+                          <WrapInput label="Group By">
+                            <Select id="groupBy" label='' value={groupBy} options={[{value: "item", label: "Item"}, {value:"worker", label: "Worker"}]} onChange={this.handleGroupBy.bind(this)}/>
+                          </WrapInput>
+                        </form>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col sm={12}>
+                  {(issuesSummaryResults.count() > 0) ?
+                    this.renderTabbedArea(issuesSummaryResults) :
                     <IBox className="bg-primary">
                         <IBoxBody>
                             <h3 className="text-white text-center">No {title}</h3>

@@ -9,10 +9,10 @@ import {getTypeIssues, getItemIssues} from 'data/issues/store';
 import {fetchTypeIssues, fetchItemIssues, subscribe, unsubscribe} from 'data/issues/actions';
 import {IssueActions} from './IssueActions';
 
-function itemKeys(item, type, resolved) {
+function itemKeys(item, type) {
     let itemId = item.get("itemId");
     let location = item.get("location");
-    return [type, resolved.toString(), itemId, location];
+    return [type, "false", itemId, location];
 }
 
 export default class IssuesByItem extends React.Component{
@@ -54,31 +54,28 @@ export default class IssuesByItem extends React.Component{
     }
 
     getIssuesByItem(item) {
-let {type, resolved, filter} = this.props;
-        return getItemIssues(itemKeys(item, type, resolved)).get("results");
+      let {type, filter} = this.props;
+      return getItemIssues(itemKeys(item, type)).get("results");
     }
 
     handleSelectedGroup(expanded, item, rowNumber, e) {
         if (expanded) {
-            this.setState({"selectedGroup" : item});
-
-            let {type, resolved, filter} = this.props;
+          this.setState({"selectedGroup" : item}, () => {
+            let {type, filter} = this.props;
             let itemId = item.get("itemId");
             let location = item.get("location");
-            var partialFunc = fetchItemIssues.bind(null,
-                                  itemKeys(item, type, resolved),
-                                  {filterBy: {
-                                      ...filter,
-                                      type: type,
-                                      itemId: itemId,
-                                      resolved: resolved,
-                                      location: location
-                                  }});
-            unsubscribe("expanded");
-            subscribe("expanded", partialFunc);
+
+            fetchItemIssues(
+              itemKeys(item, type),
+              {filterBy: {
+                  ...filter,
+                  type: type,
+                  itemId: itemId,
+                  location: location
+              }});
+          });
         }
         else {
-            unsubscribe("expanded");
             this.setState({"selectedGroup" : null});
         }
     }
@@ -95,36 +92,9 @@ let {type, resolved, filter} = this.props;
         return null;
     }
 
-        subscribeToIssues() {
-            let {type, resolved, groupBy, filter} = this.props;
-            let partialFunc = fetchTypeIssues.bind(null,
-                                                   [type, resolved.toString(), groupBy],
-                                                   {groupBy: groupBy,
-                                                    filterBy: {
-                                                        ...filter,
-                                                        type: type,
-                                                        resolved: resolved
-                                                    }});
-
-            subscribe(type, partialFunc);
-            //issues().pick("item", "worker", "type").filter(filter).groupBy(groupField).count().sortBy(sortField).take(100);
-        }
-
-        unsubscribeToIssues() {
-            unsubscribe(this.props.type);
-        }
-
-        componentWillMount() {
-            this.subscribeToIssues();
-        }
-
-        componentWillUnmount() {
-            this.unsubscribeToIssues();
-        }
-
     render() {
-        let {type, resolved, groupBy} = this.props;
-        let typeIssues = getTypeIssues([type, resolved.toString(), groupBy]);
+        let {type, groupBy} = this.props;
+        let typeIssues = getTypeIssues([type, "false", groupBy]);
         let results  = typeIssues.get("results").map((item) => {
           return item.set('type', type);
         });
@@ -147,5 +117,4 @@ let {type, resolved, filter} = this.props;
 
 IssuesByItem.propTypes = {
     type: React.PropTypes.string.isRequired,
-    resolved: React.PropTypes.bool.isRequired
 };
