@@ -6,7 +6,7 @@ import {Table} from 'components/common/Table';
 import {UnresolvedEvents} from './EventsGrid';
 import {keyIn} from 'lib/predicates';
 import {getTypeIssues, getItemIssues} from 'data/issues/store';
-import {fetchTypeIssues, fetchItemIssues, subscribe, unsubscribe} from 'data/issues/actions';
+import {fetchTypeIssues, fetchItemIssues} from 'data/issues/actions';
 import {IssueActions} from './IssueActions';
 
 function itemKeys(item, type) {

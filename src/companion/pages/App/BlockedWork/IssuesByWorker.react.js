@@ -6,15 +6,15 @@ import {Table} from 'components/common/Table';
 import {UnresolvedEvents} from './EventsGrid';
 import {keyIn} from 'lib/predicates';
 import {getTypeIssues, getItemIssues} from 'data/issues/store';
-import {fetchTypeIssues, fetchItemIssues, subscribe, unsubscribe} from 'data/issues/actions';
+import {fetchTypeIssues, fetchItemIssues} from 'data/issues/actions';
 
 
 function itemKeys(item, type, resolved) {
     let id = item.get("id");
-    return [type, resolved.toString(), id];
+    return [type, "false", id];
 }
 
-export default class IssuesByItem extends React.Component{
+export default class IssuesByWorker extends React.Component{
 
     constructor(props) {
         super(props);
@@ -43,23 +43,20 @@ export default class IssuesByItem extends React.Component{
 
     handleSelectedGroup(expanded, item, rowNumber, e) {
         if (expanded) {
-            this.setState({"selectedGroup" : item});
-
+          this.setState({"selectedGroup" : item}, ()=> {
             let {type, resolved, filter} = this.props;
             let id = item.get("id");
-            var partialFunc = fetchItemIssues.bind(null,
-                                  itemKeys(item, type, resolved),
-                                  {filterBy: {
-                                      ...filter,
-                                      type: type,
-                                      workerId: id,
-                                      resolved: resolved
-                                  }});
-            unsubscribe("expanded");
-            subscribe("expanded", partialFunc);
+            fetchItemIssues(
+              itemKeys(item, type, resolved),
+              {filterBy: {
+                  ...filter,
+                  type: type,
+                  workerId: id,
+                  resolved: resolved
+              }});
+          });
         }
         else {
-            unsubscribe("expanded");
             this.setState({"selectedGroup" : null});
         }
     }
@@ -76,36 +73,9 @@ export default class IssuesByItem extends React.Component{
         return null;
     }
 
-        subscribeToIssues() {
-            let {type, resolved, filter, groupBy} = this.props;
-            let partialFunc = fetchTypeIssues.bind(null,
-                                                   [type, resolved.toString(), groupBy],
-                                                   {groupBy: groupBy,
-                                                    filterBy: {
-                                                        ...filter,
-                                                        type: type,
-                                                        resolved: resolved
-                                                    }});
-
-            subscribe(type, partialFunc);
-            //issues().pick("item", "worker", "type").filter(filter).groupBy(groupField).count().sortBy(sortField).take(100);
-        }
-
-        unsubscribeToIssues() {
-            unsubscribe(this.props.type);
-        }
-
-        componentWillMount() {
-            this.subscribeToIssues();
-        }
-
-        componentWillUnmount() {
-            this.unsubscribeToIssues();
-        }
-
     render() {
         let {type, resolved, groupBy} = this.props;
-        let typeIssues = getTypeIssues([type, resolved.toString(), groupBy]);
+        let typeIssues = getTypeIssues([type, "false", groupBy]);
         let results  = typeIssues.get("results");
         let {selectedGroup} = this.state;
         let handleOnRowExpand = this.handleSelectedGroup.bind(this, true);
@@ -123,7 +93,6 @@ export default class IssuesByItem extends React.Component{
     }
 };
 
-IssuesByItem.propTypes = {
+IssuesByWorker.propTypes = {
     type: React.PropTypes.string.isRequired,
-    resolved: React.PropTypes.bool.isRequired
 };
