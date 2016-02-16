@@ -43,7 +43,9 @@ export default class BlockedWork extends React.Component {
 
     handleGroupBy(e) {
       let groupBy = e.target.value;
-      this.setState({groupBy: groupBy});
+      this.setState({groupBy: groupBy}, () => {
+        this.updateFilter();
+      });
     }
 
     updateFilter() {
