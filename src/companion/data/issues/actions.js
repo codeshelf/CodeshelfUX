@@ -22,7 +22,7 @@ export function getSubscriptions(key) : KeyedIterable {
 };
 
 export function replenItem(issue) {
-  return dispatch(replenItem, getFacilityContext().replenishItem(issue)).then((result) => {
+  return dispatch(replenItem, getFacilityContext().replenishItem(issue.toJS())).then((result) => {
     return result;
 });
 
@@ -57,7 +57,7 @@ export function fetchUnresolvedIssuesByType(filter) {
         filterBy: filter,
         groupBy: "type"
     };
-    dispatch(fetchUnresolvedIssuesByType, getFacilityContext().getIssues(criteria));
+    return dispatch(fetchUnresolvedIssuesByType, getFacilityContext().getIssues(criteria));
 };
 
 export function fetchTypeIssues(storageKeys, criteria) {

@@ -6,8 +6,6 @@ import PureComponent from 'components/common/PureComponent';
 import DateDisplay from 'components/common/DateDisplay';
 import {Table} from 'components/common/Table';
 import _ from 'lodash';
-import {resolveIssue, replenItem} from 'data/issues/actions';
-import {Barcode} from "components/common/Barcode";
 
 
 class EventsGrid extends React.Component {
@@ -73,7 +71,6 @@ EventsGrid.propTypes = {
 export class UnresolvedEvents extends EventsGrid {
     constructor() {
         super();
-        this.rowActionComponent = IssueActions;
     }
 }
 
@@ -153,11 +150,8 @@ class IssueActions extends React.Component {
     return (
 
         <div>
-        {(type === "LOW" || type === "SHORT" || type === "SUBSTITUTION") &&
-         <IssueButton className="replen" rowData={rowData} onClick={replenItem} iconName="retweet" title="Replenish"/> }
-        <IssueButton rowData={rowData} onClick={resolveIssue} iconName="check" title="Resolve" style={{marginLeft: ".5em"}}/>
-
-
+          {(type === "LOW" || type === "SHORT" || type === "SUBSTITUTION") &&
+            <IssueButton className="replen" rowData={rowData} onClick={replenItem} iconName="retweet" title="Replenish"/> }
         </div>);
    }
 }
