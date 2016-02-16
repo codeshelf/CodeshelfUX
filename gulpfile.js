@@ -81,30 +81,3 @@ gulp.task('tdd', function (done) {
 gulp.task('server', ['env', 'build'], bg('node', 'src/server'));
 
 gulp.task('default', ['server']);
-
-gulp.task('closure', function() {
-    return gulp.src([
-        'bower_components/closure-library/closure/**/*.js',
-        'src/lib/closure/src/**/*.js'
-    ])
-        .pipe(closureCompiler({
-            compilerPath: 'bower_components/compiler-latest/compiler.jar',
-            fileName: 'index.js',
-            continueWithWarnings: true,
-            compilerFlags: {
-                language_in: 'ECMASCRIPT6',
-                language_out: 'ES5',
-                closure_entry_point: 'index',
-                compilation_level: 'ADVANCED_OPTIMIZATIONS',
-                define: [
-                    'goog.DEBUG=false',
-                    'goog.dom.animationFrame.polyfill.ENABLED=false'
-                ],
-                externs: ['src/lib/closure/externs.js'],
-                only_closure_dependencies: true,
-                output_wrapper: '(function(){%output%})();',
-                warning_level: 'VERBOSE'
-            }
-        }))
-        .pipe(gulp.dest('src/lib/closure'));
-});

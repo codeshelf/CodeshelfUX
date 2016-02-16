@@ -22,7 +22,11 @@ function wrapFacility(Component) {
         return null;
       } else {
         const {to, ...rest} = this.props;
-        const basePath=`/mobile/facilities/${this.props.facility.domainId}`;
+        let basePath=`/facilities/${this.props.facility.domainId}`;
+        // little hacky for now, to be fixed when moving common thing one level higher
+        if (location.hash.indexOf('#/mobile') === 0) {
+          basePath = '/mobile' + basePath
+        }
         let newTo = to;
         if (to.indexOf("/") != 0) {
           newTo=`${basePath}/${this.props.to}`;

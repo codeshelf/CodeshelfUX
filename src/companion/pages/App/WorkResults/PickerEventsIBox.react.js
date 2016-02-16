@@ -3,7 +3,6 @@ import {Row, Col} from 'components/common/pagelayout';
 import {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} from "components/common/IBox";
 import {MultiSelect} from 'components/common/Form';
 
-import PickRateChart from './PickRateChart';
 import PickRateTable from "./PickRateTable";
 import EventSearch from "./EventSearch";
 import moment from 'moment';
@@ -13,6 +12,7 @@ import _ from "lodash";
 import {getFacilityContext} from "data/csapi";
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkersByBadgeId, toWorkerName} from 'data/workers/store';
+import WorkerPickCharts from '../../Mobile/WorkerPickCharts/WorkerPickCharts.react'
 
 function toD3Data(createdInterval, apiData) {
     var hoursOfOperation = _.range(
@@ -99,27 +99,10 @@ var PickerEventsIBox = React.createClass({
     render: function() {
         var {interval, pickRates} = this.state;
         return (<IBox>
-                   <IBoxTitleBar>
-                     <IBoxTitleText>
-                         Pick Summary
-                     </IBoxTitleText>
-                   </IBoxTitleBar>
-                   <Row>
-                     <Col md={6}>
-                         <EventSearch onSubmit={this.handleSubmit} />
-                     </Col>
-                   </Row>
                    <IBoxSection>
-                       <PickRateChart style={{width: '100%', height: '300px'}}
-                           startTimestamp={interval.start}
-                           endTimestamp={interval.end}
-                           pickRates={pickRates} />
-                   </IBoxSection>
-                   <IBoxSection>
-                       <PickRateTable style={{width: '100%', height: '300px'}}
-                           startTimestamp={interval.start}
-                           endTimestamp={interval.end}
-                           pickRates={pickRates} />
+                       <WorkerPickCharts
+                            desktop={true}
+                            expand={false}/>
                    </IBoxSection>
                 </IBox>
         );

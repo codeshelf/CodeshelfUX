@@ -11,6 +11,34 @@ import _ from "lodash";
 
 require('./navigation.styl');
 
+export class Submenu extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      expanded: false,
+    }
+  }
+
+  toggleExpand() {
+    this.setState({expanded: !this.state.expanded})
+  }
+
+  render() {
+    return (
+      <li>
+        <a><span onClick={() => this.toggleExpand()} className="title">{this.props.title}</span></a>
+        <span className="icon-thumbnail"><Icon name={this.props.iconName}></Icon></span>
+        <div style={{paddingLeft: 15}} className="sidebar-menu">
+            <ul className="menu-items">
+                {this.state.expanded ? this.props.children : null}
+            </ul>
+        </div>
+      </li>
+    )
+  }
+}
+
 class NavbarHeader extends PureComponent {
     render() {
         let {title = ""}  = this.props;
@@ -35,7 +63,6 @@ class MenuItem extends React.Component {
              className, location} = this.props;
 
         const active = to && this.context.router.isActive(to);
-
         var titleRenderer = (<span className="title">{title}</span>);
 
         var classes = classnames(className, {
@@ -91,4 +118,4 @@ class Navigation extends React.Component {
 
 var NavigationWithRouter = exposeRouter(Navigation);
 NavigationWithRouter.AuthzMenuItem = authz(MenuItem);
-export default NavigationWithRouter;
+export const Nav = NavigationWithRouter;

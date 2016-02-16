@@ -1,8 +1,9 @@
 import React from 'react';
-import Navigation from "../Navigation";
+import {Nav as Navigation, Submenu} from "../Navigation";
 import exposeRouter from 'components/common/exposerouter';
 
 const AuthzMenuItem = Navigation.AuthzMenuItem;
+
 class FacilityNavigation extends React.Component {
 
   getUXUrl(facility) {
@@ -17,10 +18,15 @@ class FacilityNavigation extends React.Component {
     return (
       <Navigation {...this.props}>
         <AuthzMenuItem permission="event:view" to={`${basepath}/workresults`} params={params} title="Picks By Hour" iconName="pie-chart" />
-        <AuthzMenuItem permission="order:view" to={`${basepath}/orders`} params={params} title="Orders" iconName="shopping-cart" />
-        <AuthzMenuItem permission="workinstruction:view" to={`${basepath}/workinstructions`} params={params} title="Work Instructions" iconName="barcode" />
+        <AuthzMenuItem permission="ux:view" to={`${basepath}/ordersearch`} params={params} title="Order" iconName="search" />
+        <AuthzMenuItem permission="ux:view" to={`${basepath}/cartsearch`} params={params} title="Cart" iconName="search" />
+        <AuthzMenuItem permission="ux:view" to={`${basepath}/workersearch`} params={params} title="Worker" iconName="search" />
         <AuthzMenuItem permission="event:view"  to={`${basepath}/blockedwork`} params={params} title="Issues" iconName="exclamation-circle"/ >
-        <AuthzMenuItem permission="worker:edit" to={`${basepath}/workers`} params={params} title="Workers" iconName="users" />
+        <Submenu title="Planning" iconName="tasks">
+          <AuthzMenuItem permission="order:view" to={`${basepath}/orders`} params={params} title="Orders" iconName="shopping-cart" />
+          <AuthzMenuItem permission="workinstruction:view" to={`${basepath}/workinstructions`} params={params} title="Work Instructions" iconName="barcode" />
+          <AuthzMenuItem permission="worker:edit" to={`${basepath}/workers`} params={params} title="Workers" iconName="users" />
+        </Submenu>
         {/* TODO: support *:import permissions */}
         <AuthzMenuItem permission="order:view" to={`${basepath}/import`} params={params} title="Imports/Exports" iconName="exchange" />
         <AuthzMenuItem permission="facility:edit" to={`${basepath}/extensionpoints`} params={params} title="Extensions" iconName="code" />

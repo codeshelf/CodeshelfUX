@@ -7,15 +7,28 @@ import createLogger from "redux-logger";
 
 import {facilityReducer} from '../Mobile/Facility/store';
 import {sidebarReducer} from '../Mobile/Sidebar/store';
-
+import {workerPickChartReducer} from '../Mobile/WorkerPickCharts/store';
+import {cartSearchReducer} from '../Mobile/CartSearch/store'
+import {cartDetailReducer} from '../Mobile/CartDetail/store';
+import {orderSearchReducer} from '../Mobile/OrderSearch/store';
+import {orderDetailReducer} from '../Mobile/OrderDetail/store';
+import {workerSearchReducer} from '../Mobile/WorkerSearch/store';
+import {workerDetailReducer} from '../Mobile/WorkerDetail/store';
 
 import {Iterable} from 'immutable';
 
 Iterable.prototype[Symbol.for('get')] = function(value) {return this.get(value) };
 
 const rootReducer = combineReducers({
+  cartSearch: cartSearchReducer,
+  cartDetail: cartDetailReducer,
   facility: facilityReducer,
+  orderSearch: orderSearchReducer,
+  orderDetail: orderDetailReducer,
   sidebar: sidebarReducer,
+  workerSearch: workerSearchReducer,
+  workerDetail: workerDetailReducer,
+  workerPickChart: workerPickChartReducer,
 });
 
 
