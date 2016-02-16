@@ -18,6 +18,9 @@ class FacilityNavigation extends React.Component {
     return (
       <Navigation {...this.props}>
         <AuthzMenuItem permission="event:view" to={`${basepath}/workresults`} params={params} title="Picks By Hour" iconName="pie-chart" />
+        <AuthzMenuItem permission="ux:view" to={`${basepath}/ordersearch`} params={params} title="Order" iconName="search" />
+        <AuthzMenuItem permission="ux:view" to={`${basepath}/cartsearch`} params={params} title="Cart" iconName="search" />
+        <AuthzMenuItem permission="ux:view" to={`${basepath}/workersearch`} params={params} title="Worker" iconName="search" />
         <AuthzMenuItem permission="event:view"  to={`${basepath}/blockedwork`} params={params} title="Issues" iconName="exclamation-circle"/ >
         <Submenu title="Planning" iconName="tasks">
           <AuthzMenuItem permission="order:view" to={`${basepath}/orders`} params={params} title="Orders" iconName="shopping-cart" />
@@ -29,9 +32,6 @@ class FacilityNavigation extends React.Component {
         <AuthzMenuItem permission="facility:edit" to={`${basepath}/extensionpoints`} params={params} title="Extensions" iconName="code" />
         <AuthzMenuItem permission="facility:edit" to={`${basepath}/maintenance`} params={params} title="Maintenance" iconName="heartbeat" />
         <AuthzMenuItem permission="ux:view" href={this.getUXUrl(facility)} params={params} title="Configuration" iconName="cogs" />
-        <AuthzMenuItem permission="ux:view" to={`${basepath}/cartsearch`} params={params} title="Cart search" iconName="search" />
-        <AuthzMenuItem permission="ux:view" to={`${basepath}/workersearch`} params={params} title="Worker search" iconName="search" />
-        <AuthzMenuItem permission="ux:view" to={`${basepath}/ordersearch`} params={params} title="Order search" iconName="search" />
         <AuthzMenuItem permission="che:simulate" to={`${basepath}/testscript`} params={params} title="Test Scripts" iconName="bug" />
       </Navigation>);
   }
