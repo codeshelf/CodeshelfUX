@@ -15,6 +15,11 @@ const initState = new (Record({
   error: null,
   whatIsLoading: null,
   loadedTime: null,
+  purposes: {
+    data: null,
+    error: null,
+    loading: null,
+  },
 }));
 
 function getDefaultFilter() {
@@ -32,6 +37,8 @@ const STATUS_ERROR = "error";
 
 const SET_FILTER = "WPCH - set filter ";
 const TOGGLE_EXPAND = "toggle expand";
+
+const LOADING_PURPOSES = "loding purposes";
 
 export function workerPickChartReducer(state = initState, action) {
   switch (action.type) {
@@ -67,6 +74,40 @@ export function workerPickChartReducer(state = initState, action) {
               whatIsLoading: null,
               whatIsLoaded: null,
               loadedTime,
+          }));
+        }
+      }
+    }
+    case LOADING_PURPOSES: {
+      switch (action.status) {
+        case STATUS_STARTED: {
+          return state.merge(new Map({
+              purposes: {
+                data: null,
+                error: null,
+                loading: true,
+              },
+          }));
+        }
+        case STATUS_OK: {
+          const {data, filter} = action;
+          return state.merge(new Map({
+              purposes: {
+                data: data,
+                error: null,
+                loading: false,
+              }
+          }));
+        }
+        case STATUS_ERROR: {
+          const {error} = action;
+          const loadedTime = moment();
+          return state.merge(new Map({
+            purposes: {
+              data: null,
+              error: error,
+              loading: false,
+            },
           }));
         }
       }
@@ -123,6 +164,40 @@ export function filterToParams({endtime, window, interval}) {
     startAt: moment(endtime).subtract(window),
     endAt: endtime,
     interval: interval,
+  }
+}
+
+function getPurposes(status, data) {
+  return {
+    type: LOADING_PURPOSES,
+    status,
+    ...data,
+  }
+}
+
+export function acGetPurposes() {
+  return (dispatch, getState) => {
+    const localState = getWorkerPickChart(getState());
+    const {purposes: {data}} = localState;
+    if (data) {
+      console.info(`Skip loading purposes beacuse they are already loaded`);
+      return;
+    }
+    dispatch(getPurposes(STATUS_STARTED));
+
+    const facilityContext = getFacilityContextFromState(getState());
+    if (!facilityContext) {
+      dispatch(getPurposes(STATUS_ERROR));
+      return;
+    }
+
+    facilityContext.getEventPurposes()
+    .catch((error) => {
+        dispatch(getPurposes(STATUS_ERROR));
+    })
+    .then((data) => {
+        dispatch(getPurposes(STATUS_OK, {data}));
+    });
   }
 }
 

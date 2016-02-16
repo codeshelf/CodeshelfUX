@@ -1,0 +1,986 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'install' ]
+2 info using npm@2.14.4
+3 info using node@v4.1.1
+4 verbose readDependencies loading dependencies from /Users/skoki/Documents/work/CodeshelfUX/package.json
+5 warn package.json CodeshelfUX@2.0.0 No repository field.
+6 warn package.json CodeshelfUX@2.0.0 No license field.
+7 verbose install where, deps [ '/Users/skoki/Documents/work/CodeshelfUX',
+7 verbose install   [ 'bardcode',
+7 verbose install     'bluebird',
+7 verbose install     'bootstrap',
+7 verbose install     'chance',
+7 verbose install     'chart.js',
+7 verbose install     'classnames',
+7 verbose install     'compression',
+7 verbose install     'd3',
+7 verbose install     'del',
+7 verbose install     'eventemitter3',
+7 verbose install     'express',
+7 verbose install     'fastclick',
+7 verbose install     'flux',
+7 verbose install     'immstruct',
+7 verbose install     'immutable',
+7 verbose install     'intl',
+7 verbose install     'intl-messageformat',
+7 verbose install     'jquery',
+7 verbose install     'jquery-ui',
+7 verbose install     'jspath',
+7 verbose install     'lodash',
+7 verbose install     'moment',
+7 verbose install     'node-uuid',
+7 verbose install     'normalize.css',
+7 verbose install     'orb',
+7 verbose install     'piping',
+7 verbose install     'react',
+7 verbose install     'react-bootstrap',
+7 verbose install     'react-dnd',
+7 verbose install     'react-document-title',
+7 verbose install     'react-dom',
+7 verbose install     'react-dropzone',
+7 verbose install     'react-fa',
+7 verbose install     'react-faux-dom',
+7 verbose install     'react-immutable-proptypes',
+7 verbose install     'react-intl',
+7 verbose install     'react-pure-render',
+7 verbose install     'react-redux',
+7 verbose install     'react-router',
+7 verbose install     'react-router-bootstrap',
+7 verbose install     'react-sidebar',
+7 verbose install     'redux',
+7 verbose install     'redux-logger',
+7 verbose install     'redux-storage',
+7 verbose install     'redux-thunk',
+7 verbose install     'rx',
+7 verbose install     'serve-favicon',
+7 verbose install     'superagent-bluebird-promise',
+7 verbose install     'urijs',
+7 verbose install     'validator',
+7 verbose install     'yargs',
+7 verbose install     'autoprefixer-loader',
+7 verbose install     'babel-core',
+7 verbose install     'babel-eslint',
+7 verbose install     'babel-loader',
+7 verbose install     'babel-plugin-extensible-destructuring',
+7 verbose install     'babel-plugin-transform-class-properties',
+7 verbose install     'babel-plugin-transform-decorators',
+7 verbose install     'babel-plugin-transform-object-rest-spread',
+7 verbose install     'babel-preset-es2015',
+7 verbose install     'babel-preset-react',
+7 verbose install     'babel-register',
+7 verbose install     'css-loader',
+7 verbose install     'eslint-plugin-react',
+7 verbose install     'exports-loader',
+7 verbose install     'expose-loader',
+7 verbose install     'extract-text-webpack-plugin',
+7 verbose install     'file-loader',
+7 verbose install     'gulp',
+7 verbose install     'gulp-bg',
+7 verbose install     'gulp-closure-compiler',
+7 verbose install     'gulp-eslint',
+7 verbose install     'gulp-util',
+7 verbose install     'harmonize',
+7 verbose install     'imports-loader',
+7 verbose install     'jasmine',
+7 verbose install     'jasmine-core',
+7 verbose install     'karma',
+7 verbose install     'karma-chai',
+7 verbose install     'karma-chrome-launcher',
+7 verbose install     'karma-coverage',
+7 verbose install     'karma-mocha',
+7 verbose install     'karma-notify-reporter',
+7 verbose install     'karma-sourcemap-loader',
+7 verbose install     'karma-teamcity-reporter',
+7 verbose install     'karma-webpack',
+7 verbose install     'less-loader',
+7 verbose install     'node-notifier',
+7 verbose install     'react-hot-loader',
+7 verbose install     'run-sequence',
+7 verbose install     'sass-loader',
+7 verbose install     'skin-deep',
+7 verbose install     'style-loader',
+7 verbose install     'stylus-loader',
+7 verbose install     'url-loader',
+7 verbose install     'webpack',
+7 verbose install     'webpack-dev-server' ] ]
+8 verbose install where, peers [ '/Users/skoki/Documents/work/CodeshelfUX', [] ]
+9 verbose installManyTop reading for lifecycle /Users/skoki/Documents/work/CodeshelfUX/package.json
+10 info preinstall CodeshelfUX@2.0.0
+11 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/autoprefixer-loader/package.json
+12 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-core/package.json
+13 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-eslint/package.json
+14 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-loader/package.json
+15 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-plugin-extensible-destructuring/package.json
+16 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-plugin-transform-class-properties/package.json
+17 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-plugin-transform-decorators/package.json
+18 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-plugin-transform-object-rest-spread/package.json
+19 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-preset-es2015/package.json
+20 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-preset-react/package.json
+21 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-register/package.json
+22 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode/package.json
+23 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/bluebird/package.json
+24 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/bootstrap/package.json
+25 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/bower/package.json
+26 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/chai/package.json
+27 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/chance/package.json
+28 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/chart.js/package.json
+29 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/classnames/package.json
+30 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/compression/package.json
+31 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/css-loader/package.json
+32 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/d3/package.json
+33 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/del/package.json
+34 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/eslint/package.json
+35 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/eslint-plugin-react/package.json
+36 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/eventemitter3/package.json
+37 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/exports-loader/package.json
+38 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/expose-loader/package.json
+39 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/express/package.json
+40 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/extract-text-webpack-plugin/package.json
+41 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/fastclick/package.json
+42 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/file-loader/package.json
+43 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/flux/package.json
+44 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/gulp/package.json
+45 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/gulp-bg/package.json
+46 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/gulp-closure-compiler/package.json
+47 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/gulp-eslint/package.json
+48 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/gulp-util/package.json
+49 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/harmonize/package.json
+50 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/immstruct/package.json
+51 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/immutable/package.json
+52 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/imports-loader/package.json
+53 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/intl/package.json
+54 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/intl-messageformat/package.json
+55 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/jasmine/package.json
+56 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/jasmine-core/package.json
+57 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/jquery/package.json
+58 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/jquery-ui/package.json
+59 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/jspath/package.json
+60 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma/package.json
+61 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-chai/package.json
+62 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-chrome-launcher/package.json
+63 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-coverage/package.json
+64 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-mocha/package.json
+65 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-notify-reporter/package.json
+66 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-sourcemap-loader/package.json
+67 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-teamcity-reporter/package.json
+68 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-webpack/package.json
+69 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/less/package.json
+70 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/less-loader/package.json
+71 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/lodash/package.json
+72 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/mocha/package.json
+73 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/moment/package.json
+74 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/node-libs-browser/package.json
+75 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/node-notifier/package.json
+76 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/node-sass/package.json
+77 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/node-uuid/package.json
+78 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/normalize.css/package.json
+79 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/orb/package.json
+80 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/piping/package.json
+81 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react/package.json
+82 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-bootstrap/package.json
+83 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-burger-menu/package.json
+84 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-dnd/package.json
+85 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-document-title/package.json
+86 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-dom/package.json
+87 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-dropzone/package.json
+88 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-fa/package.json
+89 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-faux-dom/package.json
+90 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-hot-loader/package.json
+91 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-immutable-proptypes/package.json
+92 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-intl/package.json
+93 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-pure-render/package.json
+94 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-redux/package.json
+95 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-router/package.json
+96 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-router-bootstrap/package.json
+97 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-sidebar/package.json
+98 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/redux/package.json
+99 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/redux-logger/package.json
+100 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/redux-storage/package.json
+101 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/redux-thunk/package.json
+102 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/run-sequence/package.json
+103 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/rx/package.json
+104 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/sass-loader/package.json
+105 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/serve-favicon/package.json
+106 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/skin-deep/package.json
+107 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/style-loader/package.json
+108 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/stylus-loader/package.json
+109 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/superagent/package.json
+110 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/superagent-bluebird-promise/package.json
+111 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/urijs/package.json
+112 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/url-loader/package.json
+113 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/validator/package.json
+114 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/webpack/package.json
+115 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/webpack-dev-server/package.json
+116 verbose installManyTop reading scoped package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/yargs/package.json
+117 info package.json chart.js@1.0.2 No license field.
+118 info package.json css-loader@0.9.1 No license field.
+119 info package.json exports-loader@0.6.2 No license field.
+120 info package.json expose-loader@0.7.1 No license field.
+121 info package.json fastclick@1.0.6 No license field.
+122 info package.json gulp-bg@0.0.5 No license field.
+123 info package.json gulp-eslint@0.8.0 No license field.
+124 info package.json extract-text-webpack-plugin@0.5.0 No license field.
+125 info package.json jquery-ui@1.10.5 No license field.
+126 info package.json less-loader@2.2.2 No license field.
+127 info package.json node-uuid@1.4.7 No license field.
+128 info package.json style-loader@0.9.0 No license field.
+129 info package.json jspath@0.3.2 No license field.
+130 info package.json webpack-dev-server@1.8.2 No license field.
+131 verbose readDependencies loading dependencies from /Users/skoki/Documents/work/CodeshelfUX/package.json
+132 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/autoprefixer-loader/package.json
+133 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-core/package.json
+134 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-eslint/package.json
+135 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-loader/package.json
+136 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-plugin-extensible-destructuring/package.json
+137 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-plugin-transform-class-properties/package.json
+138 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-plugin-transform-decorators/package.json
+139 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-plugin-transform-object-rest-spread/package.json
+140 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-preset-es2015/package.json
+141 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-preset-react/package.json
+142 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/babel-register/package.json
+143 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode/package.json
+144 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/bluebird/package.json
+145 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/bootstrap/package.json
+146 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/bower/package.json
+147 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/chai/package.json
+148 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/chance/package.json
+149 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/chart.js/package.json
+150 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/classnames/package.json
+151 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/compression/package.json
+152 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/css-loader/package.json
+153 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/d3/package.json
+154 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/del/package.json
+155 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/eslint/package.json
+156 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/eslint-plugin-react/package.json
+157 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/eventemitter3/package.json
+158 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/exports-loader/package.json
+159 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/expose-loader/package.json
+160 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/express/package.json
+161 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/extract-text-webpack-plugin/package.json
+162 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/fastclick/package.json
+163 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/file-loader/package.json
+164 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/flux/package.json
+165 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/gulp/package.json
+166 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/gulp-bg/package.json
+167 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/gulp-closure-compiler/package.json
+168 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/gulp-eslint/package.json
+169 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/gulp-util/package.json
+170 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/harmonize/package.json
+171 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/immstruct/package.json
+172 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/immutable/package.json
+173 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/imports-loader/package.json
+174 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/intl/package.json
+175 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/intl-messageformat/package.json
+176 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/jasmine/package.json
+177 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/jasmine-core/package.json
+178 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/jquery/package.json
+179 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/jquery-ui/package.json
+180 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/jspath/package.json
+181 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma/package.json
+182 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-chai/package.json
+183 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-chrome-launcher/package.json
+184 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-coverage/package.json
+185 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-mocha/package.json
+186 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-notify-reporter/package.json
+187 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-sourcemap-loader/package.json
+188 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-teamcity-reporter/package.json
+189 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/karma-webpack/package.json
+190 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/less/package.json
+191 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/less-loader/package.json
+192 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/lodash/package.json
+193 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/mocha/package.json
+194 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/moment/package.json
+195 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/node-libs-browser/package.json
+196 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/node-notifier/package.json
+197 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/node-sass/package.json
+198 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/node-uuid/package.json
+199 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/normalize.css/package.json
+200 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/orb/package.json
+201 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/piping/package.json
+202 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react/package.json
+203 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-bootstrap/package.json
+204 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-burger-menu/package.json
+205 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-dnd/package.json
+206 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-document-title/package.json
+207 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-dom/package.json
+208 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-dropzone/package.json
+209 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-fa/package.json
+210 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-faux-dom/package.json
+211 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-hot-loader/package.json
+212 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-immutable-proptypes/package.json
+213 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-intl/package.json
+214 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-pure-render/package.json
+215 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-redux/package.json
+216 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-router/package.json
+217 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-router-bootstrap/package.json
+218 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-sidebar/package.json
+219 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/redux/package.json
+220 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/redux-logger/package.json
+221 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/redux-storage/package.json
+222 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/redux-thunk/package.json
+223 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/run-sequence/package.json
+224 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/rx/package.json
+225 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/sass-loader/package.json
+226 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/serve-favicon/package.json
+227 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/skin-deep/package.json
+228 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/style-loader/package.json
+229 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/stylus-loader/package.json
+230 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/superagent/package.json
+231 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/superagent-bluebird-promise/package.json
+232 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/urijs/package.json
+233 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/url-loader/package.json
+234 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/validator/package.json
+235 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/webpack/package.json
+236 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/webpack-dev-server/package.json
+237 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/yargs/package.json
+238 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/bower/package.json
+239 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/chance/package.json
+240 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/eslint/package.json
+241 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/gulp/package.json
+242 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/jasmine/package.json
+243 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/karma/package.json
+244 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/lessc/package.json
+245 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/mocha/package.json
+246 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/node-sass/package.json
+247 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/notify/package.json
+248 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/uuid/package.json
+249 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/webpack/package.json
+250 verbose targetResolver reading package data from /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/webpack-dev-server/package.json
+251 verbose already installed skipping flux@^2.0.1 /Users/skoki/Documents/work/CodeshelfUX
+252 verbose already installed skipping immstruct@^1.4.1 /Users/skoki/Documents/work/CodeshelfUX
+253 verbose already installed skipping immutable@^3.7.6 /Users/skoki/Documents/work/CodeshelfUX
+254 verbose already installed skipping intl@^0.1.4 /Users/skoki/Documents/work/CodeshelfUX
+255 verbose already installed skipping intl-messageformat@^1.1.0 /Users/skoki/Documents/work/CodeshelfUX
+256 verbose already installed skipping jquery@^2.1.3 /Users/skoki/Documents/work/CodeshelfUX
+257 verbose already installed skipping jquery-ui@^1.10.5 /Users/skoki/Documents/work/CodeshelfUX
+258 verbose already installed skipping jspath@^0.3.2 /Users/skoki/Documents/work/CodeshelfUX
+259 verbose already installed skipping lodash@3.10.1 /Users/skoki/Documents/work/CodeshelfUX
+260 verbose already installed skipping moment@^2.9.0 /Users/skoki/Documents/work/CodeshelfUX
+261 verbose already installed skipping node-uuid@^1.4.7 /Users/skoki/Documents/work/CodeshelfUX
+262 verbose already installed skipping normalize.css@^3.0.2 /Users/skoki/Documents/work/CodeshelfUX
+263 verbose already installed skipping orb@^1.0.9 /Users/skoki/Documents/work/CodeshelfUX
+264 verbose already installed skipping piping@0.1.6 /Users/skoki/Documents/work/CodeshelfUX
+265 verbose already installed skipping react@0.14.4 /Users/skoki/Documents/work/CodeshelfUX
+266 verbose already installed skipping react-bootstrap@0.28.2 /Users/skoki/Documents/work/CodeshelfUX
+267 verbose already installed skipping react-dnd@^1.1.4 /Users/skoki/Documents/work/CodeshelfUX
+268 verbose already installed skipping react-document-title@^1.0.0 /Users/skoki/Documents/work/CodeshelfUX
+269 verbose already installed skipping react-dom@0.14.4 /Users/skoki/Documents/work/CodeshelfUX
+270 verbose already installed skipping react-dropzone@^1.1.1 /Users/skoki/Documents/work/CodeshelfUX
+271 verbose already installed skipping react-fa@^4.0.0 /Users/skoki/Documents/work/CodeshelfUX
+272 verbose already installed skipping react-faux-dom@^2.1.1 /Users/skoki/Documents/work/CodeshelfUX
+273 verbose already installed skipping react-immutable-proptypes@^1.5.0 /Users/skoki/Documents/work/CodeshelfUX
+274 verbose already installed skipping react-intl@^1.2.2 /Users/skoki/Documents/work/CodeshelfUX
+275 verbose already installed skipping react-pure-render@^1.0.2 /Users/skoki/Documents/work/CodeshelfUX
+276 verbose already installed skipping react-redux@^3.0.0 /Users/skoki/Documents/work/CodeshelfUX
+277 verbose already installed skipping react-router@2.0.0-rc5 /Users/skoki/Documents/work/CodeshelfUX
+278 verbose already installed skipping react-router-bootstrap@0.20.1 /Users/skoki/Documents/work/CodeshelfUX
+279 verbose already installed skipping react-sidebar@^1.1.0 /Users/skoki/Documents/work/CodeshelfUX
+280 verbose already installed skipping redux@^3.0.4 /Users/skoki/Documents/work/CodeshelfUX
+281 verbose already installed skipping redux-logger@^2.0.4 /Users/skoki/Documents/work/CodeshelfUX
+282 verbose already installed skipping redux-storage@^1.3.4 /Users/skoki/Documents/work/CodeshelfUX
+283 verbose already installed skipping redux-thunk@^1.0.0 /Users/skoki/Documents/work/CodeshelfUX
+284 verbose already installed skipping rx@^2.4.9 /Users/skoki/Documents/work/CodeshelfUX
+285 verbose already installed skipping serve-favicon@^2.2.0 /Users/skoki/Documents/work/CodeshelfUX
+286 verbose already installed skipping superagent-bluebird-promise@2.1.1 /Users/skoki/Documents/work/CodeshelfUX
+287 verbose already installed skipping urijs@^1.17.0 /Users/skoki/Documents/work/CodeshelfUX
+288 verbose already installed skipping validator@^3.34.0 /Users/skoki/Documents/work/CodeshelfUX
+289 verbose already installed skipping yargs@^3.3.1 /Users/skoki/Documents/work/CodeshelfUX
+290 verbose already installed skipping autoprefixer-loader@^1.2.0 /Users/skoki/Documents/work/CodeshelfUX
+291 verbose already installed skipping babel-core@^6.2.1 /Users/skoki/Documents/work/CodeshelfUX
+292 verbose already installed skipping babel-eslint@3.1.30 /Users/skoki/Documents/work/CodeshelfUX
+293 verbose already installed skipping babel-loader@^6.2.0 /Users/skoki/Documents/work/CodeshelfUX
+294 verbose already installed skipping babel-plugin-extensible-destructuring@^2.0.0 /Users/skoki/Documents/work/CodeshelfUX
+295 verbose already installed skipping babel-plugin-transform-class-properties@6.3.0 /Users/skoki/Documents/work/CodeshelfUX
+296 verbose already installed skipping babel-plugin-transform-decorators@^6.1.18 /Users/skoki/Documents/work/CodeshelfUX
+297 verbose already installed skipping babel-plugin-transform-object-rest-spread@^6.1.18 /Users/skoki/Documents/work/CodeshelfUX
+298 verbose already installed skipping babel-preset-es2015@^6.1.18 /Users/skoki/Documents/work/CodeshelfUX
+299 verbose already installed skipping babel-preset-react@^6.1.18 /Users/skoki/Documents/work/CodeshelfUX
+300 verbose already installed skipping babel-register@^6.2.0 /Users/skoki/Documents/work/CodeshelfUX
+301 verbose already installed skipping css-loader@^0.9.1 /Users/skoki/Documents/work/CodeshelfUX
+302 verbose already installed skipping eslint-plugin-react@^2.0.1 /Users/skoki/Documents/work/CodeshelfUX
+303 verbose already installed skipping exports-loader@^0.6.2 /Users/skoki/Documents/work/CodeshelfUX
+304 verbose already installed skipping expose-loader@^0.7.0 /Users/skoki/Documents/work/CodeshelfUX
+305 verbose already installed skipping extract-text-webpack-plugin@^0.5.0 /Users/skoki/Documents/work/CodeshelfUX
+306 verbose already installed skipping file-loader@^0.8.1 /Users/skoki/Documents/work/CodeshelfUX
+307 verbose already installed skipping gulp@^3.8.10 /Users/skoki/Documents/work/CodeshelfUX
+308 verbose already installed skipping gulp-bg@0.0.5 /Users/skoki/Documents/work/CodeshelfUX
+309 verbose already installed skipping gulp-closure-compiler@^0.2.17 /Users/skoki/Documents/work/CodeshelfUX
+310 verbose already installed skipping gulp-eslint@^0.8.0 /Users/skoki/Documents/work/CodeshelfUX
+311 verbose already installed skipping gulp-util@^3.0.2 /Users/skoki/Documents/work/CodeshelfUX
+312 verbose already installed skipping harmonize@^1.4.1 /Users/skoki/Documents/work/CodeshelfUX
+313 verbose already installed skipping imports-loader@^0.6.3 /Users/skoki/Documents/work/CodeshelfUX
+314 verbose already installed skipping jasmine@^2.2.1 /Users/skoki/Documents/work/CodeshelfUX
+315 verbose already installed skipping jasmine-core@^2.2.0 /Users/skoki/Documents/work/CodeshelfUX
+316 verbose already installed skipping karma@^0.13.3 /Users/skoki/Documents/work/CodeshelfUX
+317 verbose already installed skipping karma-chai@^0.1.0 /Users/skoki/Documents/work/CodeshelfUX
+318 verbose already installed skipping karma-chrome-launcher@^0.2.0 /Users/skoki/Documents/work/CodeshelfUX
+319 verbose already installed skipping karma-coverage@^0.5.0 /Users/skoki/Documents/work/CodeshelfUX
+320 verbose already installed skipping karma-mocha@^0.2.0 /Users/skoki/Documents/work/CodeshelfUX
+321 verbose already installed skipping karma-notify-reporter@^0.1.1 /Users/skoki/Documents/work/CodeshelfUX
+322 verbose already installed skipping karma-sourcemap-loader@^0.3.5 /Users/skoki/Documents/work/CodeshelfUX
+323 verbose already installed skipping karma-teamcity-reporter@~0.1.2 /Users/skoki/Documents/work/CodeshelfUX
+324 verbose already installed skipping karma-webpack@^1.7.0 /Users/skoki/Documents/work/CodeshelfUX
+325 verbose already installed skipping less-loader@^2.0.0 /Users/skoki/Documents/work/CodeshelfUX
+326 verbose already installed skipping node-notifier@^4.1.0 /Users/skoki/Documents/work/CodeshelfUX
+327 verbose already installed skipping react-hot-loader@^1.2.7 /Users/skoki/Documents/work/CodeshelfUX
+328 verbose already installed skipping run-sequence@^1.0.2 /Users/skoki/Documents/work/CodeshelfUX
+329 verbose already installed skipping sass-loader@^1.0.0 /Users/skoki/Documents/work/CodeshelfUX
+330 verbose already installed skipping skin-deep@~0.6.0 /Users/skoki/Documents/work/CodeshelfUX
+331 verbose already installed skipping style-loader@^0.9.0 /Users/skoki/Documents/work/CodeshelfUX
+332 verbose already installed skipping stylus-loader@^1.0.0 /Users/skoki/Documents/work/CodeshelfUX
+333 verbose already installed skipping url-loader@^0.5.5 /Users/skoki/Documents/work/CodeshelfUX
+334 verbose already installed skipping webpack@1.9.13 /Users/skoki/Documents/work/CodeshelfUX
+335 verbose already installed skipping webpack-dev-server@1.8.2 /Users/skoki/Documents/work/CodeshelfUX
+336 silly cache add args [ 'bardcode@git+https://github.com/froatsnook/bardcode.git',
+336 silly cache add   null ]
+337 verbose cache add spec bardcode@git+https://github.com/froatsnook/bardcode.git
+338 verbose already installed skipping bluebird@^2.10.2 /Users/skoki/Documents/work/CodeshelfUX
+339 verbose already installed skipping bootstrap@^3.3.6 /Users/skoki/Documents/work/CodeshelfUX
+340 verbose already installed skipping chance@^0.7.3 /Users/skoki/Documents/work/CodeshelfUX
+341 verbose already installed skipping chart.js@^1.0.2 /Users/skoki/Documents/work/CodeshelfUX
+342 verbose already installed skipping classnames@^1.2.1 /Users/skoki/Documents/work/CodeshelfUX
+343 verbose already installed skipping compression@^1.4.0 /Users/skoki/Documents/work/CodeshelfUX
+344 verbose already installed skipping d3@^3.5.10 /Users/skoki/Documents/work/CodeshelfUX
+345 verbose already installed skipping del@^1.1.1 /Users/skoki/Documents/work/CodeshelfUX
+346 verbose already installed skipping eventemitter3@^0.1.6 /Users/skoki/Documents/work/CodeshelfUX
+347 verbose already installed skipping express@^4.11.2 /Users/skoki/Documents/work/CodeshelfUX
+348 verbose already installed skipping fastclick@^1.0.6 /Users/skoki/Documents/work/CodeshelfUX
+349 silly cache add parsed spec Result {
+349 silly cache add   raw: 'bardcode@git+https://github.com/froatsnook/bardcode.git',
+349 silly cache add   scope: null,
+349 silly cache add   name: 'bardcode',
+349 silly cache add   rawSpec: 'git+https://github.com/froatsnook/bardcode.git',
+349 silly cache add   spec: 'git+https://github.com/froatsnook/bardcode.git',
+349 silly cache add   type: 'hosted',
+349 silly cache add   hosted:
+349 silly cache add    { type: 'github',
+349 silly cache add      ssh: 'git@github.com:froatsnook/bardcode.git',
+349 silly cache add      sshUrl: 'git+ssh://git@github.com/froatsnook/bardcode.git',
+349 silly cache add      httpsUrl: 'git+https://github.com/froatsnook/bardcode.git',
+349 silly cache add      gitUrl: 'git://github.com/froatsnook/bardcode.git',
+349 silly cache add      shortcut: 'github:froatsnook/bardcode',
+349 silly cache add      directUrl: 'https://raw.githubusercontent.com/froatsnook/bardcode/master/package.json' } }
+350 verbose addRemoteGit caching git+https://github.com/froatsnook/bardcode.git
+351 verbose addRemoteGit git+https://github.com/froatsnook/bardcode.git is a repository hosted by github
+352 silly tryClone cloning git+https://github.com/froatsnook/bardcode.git via git+https://github.com/froatsnook/bardcode.git
+353 verbose tryClone https-github-com-froatsnook-bardcode-git-6355773a not in flight; caching
+354 info git [ 'config', '--get', 'remote.origin.url' ]
+355 silly validateExistingRemote git+https://github.com/froatsnook/bardcode.git remote.origin.url: https://github.com/froatsnook/bardcode.git
+356 verbose validateExistingRemote git+https://github.com/froatsnook/bardcode.git is updating existing cached remote /Users/skoki/.npm/_git-remotes/https-github-com-froatsnook-bardcode-git-6355773a
+357 info git [ 'fetch', '-a', 'origin' ]
+358 verbose updateRemote git fetch -a origin (https://github.com/froatsnook/bardcode.git)
+359 verbose setPermissions git+https://github.com/froatsnook/bardcode.git set permissions on /Users/skoki/.npm/_git-remotes/https-github-com-froatsnook-bardcode-git-6355773a
+360 verbose resolveHead git+https://github.com/froatsnook/bardcode.git original treeish: master
+361 info git [ 'rev-list', '-n1', 'master' ]
+362 silly resolveHead git+https://github.com/froatsnook/bardcode.git resolved treeish: e210865370678caf5d549add9ceada81056bd13f
+363 verbose resolveHead git+https://github.com/froatsnook/bardcode.git resolved Git URL: git+https://github.com/froatsnook/bardcode.git#e210865370678caf5d549add9ceada81056bd13f
+364 silly resolveHead Git working directory: /var/folders/fl/nr85xh0n6pqff1x_b1q87t_00000gn/T/npm-21528-ff4dc0d5/git-cache-b965217f635e/e210865370678caf5d549add9ceada81056bd13f
+365 info git [ 'clone',
+365 info git   '/Users/skoki/.npm/_git-remotes/https-github-com-froatsnook-bardcode-git-6355773a',
+365 info git   '/var/folders/fl/nr85xh0n6pqff1x_b1q87t_00000gn/T/npm-21528-ff4dc0d5/git-cache-b965217f635e/e210865370678caf5d549add9ceada81056bd13f' ]
+366 verbose cloneResolved git+https://github.com/froatsnook/bardcode.git clone Cloning into '/var/folders/fl/nr85xh0n6pqff1x_b1q87t_00000gn/T/npm-21528-ff4dc0d5/git-cache-b965217f635e/e210865370678caf5d549add9ceada81056bd13f'...
+366 verbose cloneResolved done.
+367 info git [ 'checkout', 'e210865370678caf5d549add9ceada81056bd13f' ]
+368 verbose checkoutTreeish git+https://github.com/froatsnook/bardcode.git checkout Note: checking out 'e210865370678caf5d549add9ceada81056bd13f'.
+368 verbose checkoutTreeish
+368 verbose checkoutTreeish You are in 'detached HEAD' state. You can look around, make experimental
+368 verbose checkoutTreeish changes and commit them, and you can discard any commits you make in this
+368 verbose checkoutTreeish state without impacting any branches by performing another checkout.
+368 verbose checkoutTreeish
+368 verbose checkoutTreeish If you want to create a new branch to retain commits you create, you may
+368 verbose checkoutTreeish do so (now or later) by using -b with the checkout command again. Example:
+368 verbose checkoutTreeish
+368 verbose checkoutTreeish   git checkout -b <new-branch-name>
+368 verbose checkoutTreeish
+368 verbose checkoutTreeish HEAD is now at e210865... Fix some lint errors.
+369 verbose addLocalDirectory /Users/skoki/.npm/bardcode/1.0.0/package.tgz not in flight; packing
+370 verbose tar pack [ '/Users/skoki/.npm/bardcode/1.0.0/package.tgz',
+370 verbose tar pack   '/var/folders/fl/nr85xh0n6pqff1x_b1q87t_00000gn/T/npm-21528-ff4dc0d5/git-cache-b965217f635e/e210865370678caf5d549add9ceada81056bd13f' ]
+371 verbose tarball /Users/skoki/.npm/bardcode/1.0.0/package.tgz
+372 verbose folder /var/folders/fl/nr85xh0n6pqff1x_b1q87t_00000gn/T/npm-21528-ff4dc0d5/git-cache-b965217f635e/e210865370678caf5d549add9ceada81056bd13f
+373 verbose addLocalTarball adding from inside cache /Users/skoki/.npm/bardcode/1.0.0/package.tgz
+374 verbose addRemoteGit data._from: git+https://github.com/froatsnook/bardcode.git
+375 verbose addRemoteGit data._resolved: git+https://github.com/froatsnook/bardcode.git#e210865370678caf5d549add9ceada81056bd13f
+376 silly cache afterAdd bardcode@1.0.0
+377 verbose afterAdd /Users/skoki/.npm/bardcode/1.0.0/package/package.json not in flight; writing
+378 verbose afterAdd /Users/skoki/.npm/bardcode/1.0.0/package/package.json written
+379 silly install resolved [ { name: 'bardcode',
+379 silly install resolved     version: '1.0.0',
+379 silly install resolved     description: 'Draw 1-D barcodes to Canvases',
+379 silly install resolved     main: 'dist/index.js',
+379 silly install resolved     directories: { test: 'test' },
+379 silly install resolved     scripts: { test: 'echo "Use meteor test-packages ./" && exit 1' },
+379 silly install resolved     repository:
+379 silly install resolved      { type: 'git',
+379 silly install resolved        url: 'git+https://github.com/froatsnook/bardcode.git' },
+379 silly install resolved     keywords:
+379 silly install resolved      [ 'barcode',
+379 silly install resolved        'codabar',
+379 silly install resolved        'code128',
+379 silly install resolved        'code 128',
+379 silly install resolved        'code39',
+379 silly install resolved        'code 39',
+379 silly install resolved        'ean',
+379 silly install resolved        'fim',
+379 silly install resolved        'itf',
+379 silly install resolved        '2of5',
+379 silly install resolved        'upc' ],
+379 silly install resolved     author: { name: 'froatsnook', email: 'froatsnook@gmail.com' },
+379 silly install resolved     license: 'MIT',
+379 silly install resolved     bugs: { url: 'https://github.com/froatsnook/bardcode/issues' },
+379 silly install resolved     homepage: 'https://github.com/froatsnook/bardcode',
+379 silly install resolved     devDependencies: { eslint: '^0.17.1', 'uglify-js': '^2.4.16' },
+379 silly install resolved     gitHead: 'e210865370678caf5d549add9ceada81056bd13f',
+379 silly install resolved     readme: 'Render 1-D barcodes to canvas or svg.  Supports Code 128, 3 of 9, 2 of 5, EAN, and more.\n\n## Why?\nThis barcode library specializes in its use of the canvas API.  You provide a canvas (be it in a browser or with [node-canvas](https://github.com/Automattic/node-canvas)), and then specify where the barcode should be drawn, how large it should be, and at what angle.\n\nOther barcode libraries that I found created pngs or svgs directly and were not very flexible in the output size (i.e. no `maxWidth` option).  Rendering directly to a canvas allows for a flexible API if that\'s your target anyway.\n\n## Demos/Playground\nFirst of all, check out the [demos](https://froatsnook.github.io/bardcode/).\n\n## How?\n```js\n// In the browser\nvar canvas = document.getElementById("barcode-canvas");\nvar g = canvas.getContext("2d");\ndrawBarcode(g, "Test barcode", options);\n```\n\n```js\n// On the server\nvar bardcode = require("bardcode");\nvar Canvas = require("canvas");\nvar canvas = new Canvas(595, 842, "pdf");\nvar g = canvas.getContext("2d");\nbardcode.drawBarcode(g, "Test barcode", options);\n```\n\n```js\n// Meteor server\nvar Canvas = Meteor.npmRequire("canvas");\nvar canvas = new Canvas(595, 842, "pdf");\nvar g = canvas.getContext("2d");\ndrawBarcode(g, "Test barcode", options);\n```\n\n## Symbology\nThe following barcode formats are supported:\n\n* Codabar\n* Code 128\n* Code 39\n* EAN-8\n* EAN-13\n* FIM\n* ITF (interleaved 2 of 5)\n* UPC-A\n\n## API\n```js\n// browser+meteor\ndrawBarcode(g, barcodeText, options);\n\n// node\nvar bardcode = require("bardcode");\nbardcode.drawBarcode(g, barcodeText, options);\n```\n\n* `g` is a Canvas\' 2-D graphics context or the output format.  The only supported non-canvas output format is `"svg"`.\n* `barcodeText` is a string.  Allowed characters depend on the chosen symbology.\n* `options` is an optional object with the following properties:\n    * `options.type` Barcode type.  Defaults to Code 128.  Other valid options are "Codabar", "Code 39", "EAN-8", "EAN-13", "FIM", "ITF" (interleaved 2 of 5), and "UPC-A".\n    * `options.hasChecksum` If true, the barcode already has a checksum (which will be validated); if false, calculate and add a checksum. Defaults to false. **Currently works only for EAN-type barcodes (EAN-8, EAN-13, UPC-A).** \n    * `options.x` Where to draw barcode.  Defaults to 0.\n    * `options.y` Where to draw the barcode.  Defaults to 0.\n    * `options.horizontalAlign` How to align the barcode.  Defaults to "left".  Other options are "center" and "right".\n    * `options.verticalAlign` How to align the barcode.  Defaults to "top".  Other options are "middle" and "bottom".\n    * `options.height` Barcode height.  Defaults to 90.72.\n    * `options.moduleWidth` Width of thinnest bar.  Defaults to 2.892.\n    * `options.quietZoneSize` Number of moduleWidths in quiet zone on either side.  Defaults to 10.\n    * `options.angle` Rotate barcode this many degrees clockwise.  Defaults to 0.\n    * `options.maxWidth` Maximum barcode width (including quiet zones).  If specified, then the moduleWidth will be adjusted if necessary to make the entire barcode fit in the given width.\n    * `options.width` If given, then ignore moduleWidth and maxWidth and set the moduleWidth so that the barcode will have the given width (including quiet zones).\n\nNote: `width` and `maxWidth` refer to the unrotated barcode width.\n\n## SVG\nIf the first parameter to `bardcode.drawBarcode`, `g`, is `"svg"`, then an SVG string is returned.\n\nFor the moment, the only supported options when using SVG are:\n* `options.type`\n* `options.height`\n* `options.moduleWidth`\n* `options.quietZoneSize`\n* `options.maxWidth`\n* `options.width`\n\n## Errors\nErrors are thrown on invalid input, for example when including letters in EAN barcodes.\n\n## Installation\n`node-canvas` installation causes issues for a lot of users.  So it\'s an optional dependency (i.e. you should Bring Your Own Canvas).  It\'s also not a node dependency because it\'s not the only output format.\n\nFor the browser:\n* Include `dist/bardcode.js` or `dist/bardcode.min.js`\n\nFor node:\n* `npm install canvas` (requires cairo)\n* `npm install bardcode`\n\nFor meteor:\n* (optional) `meteor add meteorhacks:npm` and add `"canvas": "1.1.6"` to `packages.json`\n* `meteor add froatsnook:bardcode`\n\n## Testing\nTests require meteor and zbar.\n\n* Download zbar: http://zbar.sourceforge.net/\n* `./configure --disable-video --without-qt --without-gtk --without-python`\n* `make`\n* Copy `zbarimg/zbarimg` and `zbar/.libs/libzbar.so*` to a new directory called `zbar` in `bardcode`\'s project directory\n* `meteor test-packages ./` in `bardcode`\'s project directory\n* Open `localhost:3000` in a browser\n\n## Contributors\nThank you:\n\n* [wolfgang42](https://github.com/wolfgang42)\n\n## License\nMIT\n\n',
+379 silly install resolved     readmeFilename: 'README.md',
+379 silly install resolved     _id: 'bardcode@1.0.0',
+379 silly install resolved     _shasum: 'c0a2b2ff467a0a8ed1a60a64469105f14b3ca1c1',
+379 silly install resolved     _from: 'git+https://github.com/froatsnook/bardcode.git',
+379 silly install resolved     _resolved: 'git+https://github.com/froatsnook/bardcode.git#e210865370678caf5d549add9ceada81056bd13f' } ]
+380 info install bardcode@1.0.0 into /Users/skoki/Documents/work/CodeshelfUX
+381 info installOne bardcode@1.0.0
+382 verbose installOne of bardcode to /Users/skoki/Documents/work/CodeshelfUX not in flight; installing
+383 verbose lock using /Users/skoki/.npm/_locks/bardcode-73fa661e9df2212b.lock for /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode
+384 silly install write writing bardcode 1.0.0 to /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode
+385 verbose unbuild node_modules/bardcode
+386 info preuninstall bardcode@1.0.0
+387 info uninstall bardcode@1.0.0
+388 verbose unbuild rmStuff bardcode@1.0.0 from /Users/skoki/Documents/work/CodeshelfUX/node_modules
+389 info postuninstall bardcode@1.0.0
+390 silly gentlyRm /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode is being purged from base /Users/skoki/Documents/work/CodeshelfUX
+391 verbose gentlyRm don't care about contents; nuking /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode
+392 silly vacuum-fs purging /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode
+393 silly vacuum-fs quitting because other entries in /Users/skoki/Documents/work/CodeshelfUX/node_modules
+394 verbose tar unpack /Users/skoki/.npm/bardcode/1.0.0/package.tgz
+395 verbose tar unpacking to /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode
+396 silly gentlyRm /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode is being purged
+397 verbose gentlyRm don't care about contents; nuking /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode
+398 silly gunzTarPerm modes [ '755', '644' ]
+399 silly gunzTarPerm extractEntry package.json
+400 silly gunzTarPerm extractEntry .npmignore
+401 silly gunzTarPerm extractEntry README.md
+402 silly gunzTarPerm extractEntry package.js
+403 silly gunzTarPerm extractEntry demos/demos.js
+404 silly gunzTarPerm extractEntry demos/react.js
+405 silly gunzTarPerm extractEntry demos/react.min.js
+406 silly gunzTarPerm extractEntry demos/index.html
+407 silly gunzTarPerm extractEntry demos/style.css
+408 silly gunzTarPerm extractEntry Rakefile
+409 silly gunzTarPerm extractEntry CHANGELOG.md
+410 silly gunzTarPerm extractEntry dist/bardcode.js
+411 silly gunzTarPerm extractEntry dist/bardcode.min.js
+412 silly gunzTarPerm extractEntry dist/index.js
+413 silly gunzTarPerm extractEntry lib/01-bardcode.js
+414 silly gunzTarPerm extractEntry lib/Code128.js
+415 silly gunzTarPerm extractEntry lib/Code39.js
+416 silly gunzTarPerm extractEntry lib/EAN.js
+417 silly gunzTarPerm extractEntry lib/Codabar.js
+418 silly gunzTarPerm extractEntry lib/ITF.js
+419 silly gunzTarPerm extractEntry lib/canvas.js
+420 silly gunzTarPerm extractEntry lib/drawBarcode.js
+421 silly gunzTarPerm extractEntry lib/svg.js
+422 silly gunzTarPerm extractEntry lib/validations.js
+423 silly gunzTarPerm extractEntry lib/FIM.js
+424 silly gunzTarPerm extractEntry LICENSE.txt
+425 silly gunzTarPerm extractEntry .eslintrc
+426 silly gunzTarPerm extractEntry test/tests.js
+427 verbose write writing to /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode/package.json
+428 info preinstall bardcode@1.0.0
+429 verbose readDependencies loading dependencies from /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode/package.json
+430 verbose readDependencies loading dependencies from /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode/package.json
+431 silly install resolved []
+432 verbose about to build /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode
+433 info build /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode
+434 info linkStuff bardcode@1.0.0
+435 silly linkStuff bardcode@1.0.0 has /Users/skoki/Documents/work/CodeshelfUX/node_modules as its parent node_modules
+436 verbose linkBins bardcode@1.0.0
+437 verbose linkMans bardcode@1.0.0
+438 verbose rebuildBundles bardcode@1.0.0
+439 info install bardcode@1.0.0
+440 info postinstall bardcode@1.0.0
+441 verbose unlock done using /Users/skoki/.npm/_locks/bardcode-73fa661e9df2212b.lock for /Users/skoki/Documents/work/CodeshelfUX/node_modules/bardcode
+442 info build /Users/skoki/Documents/work/CodeshelfUX
+443 info linkStuff CodeshelfUX@2.0.0
+444 silly linkStuff CodeshelfUX@2.0.0 has /Users/skoki/Documents/work as its parent node_modules
+445 verbose linkBins CodeshelfUX@2.0.0
+446 verbose linkMans CodeshelfUX@2.0.0
+447 verbose rebuildBundles CodeshelfUX@2.0.0
+448 verbose rebuildBundles [ '.DS_Store',
+448 verbose rebuildBundles   '.bin',
+448 verbose rebuildBundles   'autoprefixer-loader',
+448 verbose rebuildBundles   'babel-core',
+448 verbose rebuildBundles   'babel-eslint',
+448 verbose rebuildBundles   'babel-loader',
+448 verbose rebuildBundles   'babel-plugin-extensible-destructuring',
+448 verbose rebuildBundles   'babel-plugin-transform-class-properties',
+448 verbose rebuildBundles   'babel-plugin-transform-decorators',
+448 verbose rebuildBundles   'babel-plugin-transform-object-rest-spread',
+448 verbose rebuildBundles   'babel-preset-es2015',
+448 verbose rebuildBundles   'babel-preset-react',
+448 verbose rebuildBundles   'babel-register',
+448 verbose rebuildBundles   'bardcode',
+448 verbose rebuildBundles   'bluebird',
+448 verbose rebuildBundles   'bootstrap',
+448 verbose rebuildBundles   'bower',
+448 verbose rebuildBundles   'chai',
+448 verbose rebuildBundles   'chance',
+448 verbose rebuildBundles   'chart.js',
+448 verbose rebuildBundles   'classnames',
+448 verbose rebuildBundles   'compression',
+448 verbose rebuildBundles   'css-loader',
+448 verbose rebuildBundles   'd3',
+448 verbose rebuildBundles   'del',
+448 verbose rebuildBundles   'eslint',
+448 verbose rebuildBundles   'eslint-plugin-react',
+448 verbose rebuildBundles   'eventemitter3',
+448 verbose rebuildBundles   'exports-loader',
+448 verbose rebuildBundles   'expose-loader',
+448 verbose rebuildBundles   'express',
+448 verbose rebuildBundles   'extract-text-webpack-plugin',
+448 verbose rebuildBundles   'fastclick',
+448 verbose rebuildBundles   'file-loader',
+448 verbose rebuildBundles   'flux',
+448 verbose rebuildBundles   'gulp',
+448 verbose rebuildBundles   'gulp-bg',
+448 verbose rebuildBundles   'gulp-closure-compiler',
+448 verbose rebuildBundles   'gulp-eslint',
+448 verbose rebuildBundles   'gulp-util',
+448 verbose rebuildBundles   'harmonize',
+448 verbose rebuildBundles   'immstruct',
+448 verbose rebuildBundles   'immutable',
+448 verbose rebuildBundles   'imports-loader',
+448 verbose rebuildBundles   'intl',
+448 verbose rebuildBundles   'intl-messageformat',
+448 verbose rebuildBundles   'jasmine',
+448 verbose rebuildBundles   'jasmine-core',
+448 verbose rebuildBundles   'jquery',
+448 verbose rebuildBundles   'jquery-ui',
+448 verbose rebuildBundles   'jspath',
+448 verbose rebuildBundles   'karma',
+448 verbose rebuildBundles   'karma-chai',
+448 verbose rebuildBundles   'karma-chrome-launcher',
+448 verbose rebuildBundles   'karma-coverage',
+448 verbose rebuildBundles   'karma-mocha',
+448 verbose rebuildBundles   'karma-notify-reporter',
+448 verbose rebuildBundles   'karma-sourcemap-loader',
+448 verbose rebuildBundles   'karma-teamcity-reporter',
+448 verbose rebuildBundles   'karma-webpack',
+448 verbose rebuildBundles   'less',
+448 verbose rebuildBundles   'less-loader',
+448 verbose rebuildBundles   'lodash',
+448 verbose rebuildBundles   'mocha',
+448 verbose rebuildBundles   'moment',
+448 verbose rebuildBundles   'node-libs-browser',
+448 verbose rebuildBundles   'node-notifier',
+448 verbose rebuildBundles   'node-sass',
+448 verbose rebuildBundles   'node-uuid',
+448 verbose rebuildBundles   'normalize.css',
+448 verbose rebuildBundles   'orb',
+448 verbose rebuildBundles   'piping',
+448 verbose rebuildBundles   'react',
+448 verbose rebuildBundles   'react-bootstrap',
+448 verbose rebuildBundles   'react-burger-menu',
+448 verbose rebuildBundles   'react-dnd',
+448 verbose rebuildBundles   'react-document-title',
+448 verbose rebuildBundles   'react-dom',
+448 verbose rebuildBundles   'react-dropzone',
+448 verbose rebuildBundles   'react-fa',
+448 verbose rebuildBundles   'react-faux-dom',
+448 verbose rebuildBundles   'react-hot-loader',
+448 verbose rebuildBundles   'react-immutable-proptypes',
+448 verbose rebuildBundles   'react-intl',
+448 verbose rebuildBundles   'react-pure-render',
+448 verbose rebuildBundles   'react-redux',
+448 verbose rebuildBundles   'react-router',
+448 verbose rebuildBundles   'react-router-bootstrap',
+448 verbose rebuildBundles   'react-sidebar',
+448 verbose rebuildBundles   'redux',
+448 verbose rebuildBundles   'redux-logger',
+448 verbose rebuildBundles   'redux-storage',
+448 verbose rebuildBundles   'redux-thunk',
+448 verbose rebuildBundles   'run-sequence',
+448 verbose rebuildBundles   'rx',
+448 verbose rebuildBundles   'sass-loader',
+448 verbose rebuildBundles   'serve-favicon',
+448 verbose rebuildBundles   'skin-deep',
+448 verbose rebuildBundles   'style-loader',
+448 verbose rebuildBundles   'stylus-loader',
+448 verbose rebuildBundles   'superagent',
+448 verbose rebuildBundles   'superagent-bluebird-promise',
+448 verbose rebuildBundles   'urijs',
+448 verbose rebuildBundles   'url-loader',
+448 verbose rebuildBundles   'validator',
+448 verbose rebuildBundles   'webpack',
+448 verbose rebuildBundles   'webpack-dev-server',
+448 verbose rebuildBundles   'yargs' ]
+449 verbose rebuild bundle /Users/skoki/Documents/work/CodeshelfUX/node_modules/bower
+450 info build /Users/skoki/Documents/work/CodeshelfUX/node_modules/bower
+451 info preinstall bower@1.7.7
+452 info linkStuff bower@1.7.7
+453 silly linkStuff bower@1.7.7 has /Users/skoki/Documents/work/CodeshelfUX/node_modules as its parent node_modules
+454 verbose linkBins bower@1.7.7
+455 verbose link bins [ { bower: 'bin/bower' },
+455 verbose link bins   '/Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin',
+455 verbose link bins   false ]
+456 verbose linkMans bower@1.7.7
+457 verbose rebuildBundles bower@1.7.7
+458 silly gentlyRm /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/bower is being purged
+459 verbose gentlyRm don't care about contents; nuking /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/bower
+460 silly vacuum-fs purging /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/bower
+461 silly vacuum-fs quitting because other entries in /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin
+462 info install bower@1.7.7
+463 info postinstall bower@1.7.7
+464 verbose rebuild bundle /Users/skoki/Documents/work/CodeshelfUX/node_modules/chai
+465 info build /Users/skoki/Documents/work/CodeshelfUX/node_modules/chai
+466 info preinstall chai@3.4.1
+467 info linkStuff chai@3.4.1
+468 silly linkStuff chai@3.4.1 has /Users/skoki/Documents/work/CodeshelfUX/node_modules as its parent node_modules
+469 verbose linkBins chai@3.4.1
+470 verbose linkMans chai@3.4.1
+471 verbose rebuildBundles chai@3.4.1
+472 verbose rebuildBundles [ 'assertion-error', 'deep-eql', 'type-detect' ]
+473 info install chai@3.4.1
+474 info postinstall chai@3.4.1
+475 verbose rebuild bundle /Users/skoki/Documents/work/CodeshelfUX/node_modules/eslint
+476 info build /Users/skoki/Documents/work/CodeshelfUX/node_modules/eslint
+477 info preinstall eslint@1.10.3
+478 info linkStuff eslint@1.10.3
+479 silly linkStuff eslint@1.10.3 has /Users/skoki/Documents/work/CodeshelfUX/node_modules as its parent node_modules
+480 verbose linkBins eslint@1.10.3
+481 verbose link bins [ { eslint: './bin/eslint.js' },
+481 verbose link bins   '/Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin',
+481 verbose link bins   false ]
+482 verbose linkMans eslint@1.10.3
+483 verbose rebuildBundles eslint@1.10.3
+484 verbose rebuildBundles [ '.bin',
+484 verbose rebuildBundles   'chalk',
+484 verbose rebuildBundles   'concat-stream',
+484 verbose rebuildBundles   'debug',
+484 verbose rebuildBundles   'doctrine',
+484 verbose rebuildBundles   'escape-string-regexp',
+484 verbose rebuildBundles   'escope',
+484 verbose rebuildBundles   'espree',
+484 verbose rebuildBundles   'estraverse',
+484 verbose rebuildBundles   'estraverse-fb',
+484 verbose rebuildBundles   'esutils',
+484 verbose rebuildBundles   'file-entry-cache',
+484 verbose rebuildBundles   'glob',
+484 verbose rebuildBundles   'globals',
+484 verbose rebuildBundles   'handlebars',
+484 verbose rebuildBundles   'inquirer',
+484 verbose rebuildBundles   'is-my-json-valid',
+484 verbose rebuildBundles   'is-resolvable',
+484 verbose rebuildBundles   'js-yaml',
+484 verbose rebuildBundles   'json-stable-stringify',
+484 verbose rebuildBundles   'lodash.clonedeep',
+484 verbose rebuildBundles   'lodash.merge',
+484 verbose rebuildBundles   'lodash.omit',
+484 verbose rebuildBundles   'minimatch',
+484 verbose rebuildBundles   'mkdirp',
+484 verbose rebuildBundles   'object-assign',
+484 verbose rebuildBundles   'optionator',
+484 verbose rebuildBundles   'path-is-absolute',
+484 verbose rebuildBundles   'path-is-inside',
+484 verbose rebuildBundles   'shelljs',
+484 verbose rebuildBundles   'strip-json-comments',
+484 verbose rebuildBundles   'text-table',
+484 verbose rebuildBundles   'user-home',
+484 verbose rebuildBundles   'xml-escape' ]
+485 silly gentlyRm /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/eslint is being purged
+486 verbose gentlyRm don't care about contents; nuking /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/eslint
+487 silly vacuum-fs purging /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/eslint
+488 silly vacuum-fs quitting because other entries in /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin
+489 info install eslint@1.10.3
+490 info postinstall eslint@1.10.3
+491 verbose rebuild bundle /Users/skoki/Documents/work/CodeshelfUX/node_modules/less
+492 info build /Users/skoki/Documents/work/CodeshelfUX/node_modules/less
+493 info preinstall less@2.5.3
+494 info linkStuff less@2.5.3
+495 silly linkStuff less@2.5.3 has /Users/skoki/Documents/work/CodeshelfUX/node_modules as its parent node_modules
+496 verbose linkBins less@2.5.3
+497 verbose link bins [ { lessc: './bin/lessc' },
+497 verbose link bins   '/Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin',
+497 verbose link bins   false ]
+498 verbose linkMans less@2.5.3
+499 verbose rebuildBundles less@2.5.3
+500 verbose rebuildBundles [ '.bin',
+500 verbose rebuildBundles   'errno',
+500 verbose rebuildBundles   'graceful-fs',
+500 verbose rebuildBundles   'image-size',
+500 verbose rebuildBundles   'mime',
+500 verbose rebuildBundles   'mkdirp',
+500 verbose rebuildBundles   'promise',
+500 verbose rebuildBundles   'request',
+500 verbose rebuildBundles   'source-map' ]
+501 silly gentlyRm /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/lessc is being purged
+502 verbose gentlyRm don't care about contents; nuking /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/lessc
+503 silly vacuum-fs purging /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/lessc
+504 silly vacuum-fs quitting because other entries in /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin
+505 info install less@2.5.3
+506 info postinstall less@2.5.3
+507 verbose rebuild bundle /Users/skoki/Documents/work/CodeshelfUX/node_modules/mocha
+508 info build /Users/skoki/Documents/work/CodeshelfUX/node_modules/mocha
+509 info preinstall mocha@2.3.4
+510 info linkStuff mocha@2.3.4
+511 silly linkStuff mocha@2.3.4 has /Users/skoki/Documents/work/CodeshelfUX/node_modules as its parent node_modules
+512 verbose linkBins mocha@2.3.4
+513 verbose link bins [ { mocha: './bin/mocha', _mocha: './bin/_mocha' },
+513 verbose link bins   '/Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin',
+513 verbose link bins   false ]
+514 verbose linkMans mocha@2.3.4
+515 verbose rebuildBundles mocha@2.3.4
+516 verbose rebuildBundles [ '.bin',
+516 verbose rebuildBundles   'commander',
+516 verbose rebuildBundles   'debug',
+516 verbose rebuildBundles   'diff',
+516 verbose rebuildBundles   'escape-string-regexp',
+516 verbose rebuildBundles   'glob',
+516 verbose rebuildBundles   'growl',
+516 verbose rebuildBundles   'jade',
+516 verbose rebuildBundles   'mkdirp',
+516 verbose rebuildBundles   'supports-color' ]
+517 silly gentlyRm /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/mocha is being purged
+518 verbose gentlyRm don't care about contents; nuking /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/mocha
+519 silly gentlyRm /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/_mocha is being purged
+520 verbose gentlyRm don't care about contents; nuking /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/_mocha
+521 silly vacuum-fs purging /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/mocha
+522 silly vacuum-fs purging /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/_mocha
+523 silly vacuum-fs quitting because other entries in /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin
+524 silly vacuum-fs quitting because other entries in /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin
+525 info install mocha@2.3.4
+526 info postinstall mocha@2.3.4
+527 verbose rebuild bundle /Users/skoki/Documents/work/CodeshelfUX/node_modules/node-libs-browser
+528 info build /Users/skoki/Documents/work/CodeshelfUX/node_modules/node-libs-browser
+529 info preinstall node-libs-browser@0.5.3
+530 info linkStuff node-libs-browser@0.5.3
+531 silly linkStuff node-libs-browser@0.5.3 has /Users/skoki/Documents/work/CodeshelfUX/node_modules as its parent node_modules
+532 verbose linkBins node-libs-browser@0.5.3
+533 verbose linkMans node-libs-browser@0.5.3
+534 verbose rebuildBundles node-libs-browser@0.5.3
+535 verbose rebuildBundles [ 'assert',
+535 verbose rebuildBundles   'browserify-zlib',
+535 verbose rebuildBundles   'buffer',
+535 verbose rebuildBundles   'console-browserify',
+535 verbose rebuildBundles   'constants-browserify',
+535 verbose rebuildBundles   'crypto-browserify',
+535 verbose rebuildBundles   'domain-browser',
+535 verbose rebuildBundles   'events',
+535 verbose rebuildBundles   'http-browserify',
+535 verbose rebuildBundles   'https-browserify',
+535 verbose rebuildBundles   'os-browserify',
+535 verbose rebuildBundles   'path-browserify',
+535 verbose rebuildBundles   'process',
+535 verbose rebuildBundles   'punycode',
+535 verbose rebuildBundles   'querystring-es3',
+535 verbose rebuildBundles   'readable-stream',
+535 verbose rebuildBundles   'stream-browserify',
+535 verbose rebuildBundles   'string_decoder',
+535 verbose rebuildBundles   'timers-browserify',
+535 verbose rebuildBundles   'tty-browserify',
+535 verbose rebuildBundles   'url',
+535 verbose rebuildBundles   'util',
+535 verbose rebuildBundles   'vm-browserify' ]
+536 info install node-libs-browser@0.5.3
+537 info postinstall node-libs-browser@0.5.3
+538 verbose rebuild bundle /Users/skoki/Documents/work/CodeshelfUX/node_modules/node-sass
+539 info build /Users/skoki/Documents/work/CodeshelfUX/node_modules/node-sass
+540 info preinstall node-sass@3.4.2
+541 info linkStuff node-sass@3.4.2
+542 silly linkStuff node-sass@3.4.2 has /Users/skoki/Documents/work/CodeshelfUX/node_modules as its parent node_modules
+543 verbose linkBins node-sass@3.4.2
+544 verbose link bins [ { 'node-sass': 'bin/node-sass' },
+544 verbose link bins   '/Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin',
+544 verbose link bins   false ]
+545 verbose linkMans node-sass@3.4.2
+546 verbose rebuildBundles node-sass@3.4.2
+547 verbose rebuildBundles [ '.bin',
+547 verbose rebuildBundles   'async-foreach',
+547 verbose rebuildBundles   'chalk',
+547 verbose rebuildBundles   'cross-spawn',
+547 verbose rebuildBundles   'gaze',
+547 verbose rebuildBundles   'get-stdin',
+547 verbose rebuildBundles   'glob',
+547 verbose rebuildBundles   'meow',
+547 verbose rebuildBundles   'mkdirp',
+547 verbose rebuildBundles   'nan',
+547 verbose rebuildBundles   'node-gyp',
+547 verbose rebuildBundles   'npmconf',
+547 verbose rebuildBundles   'request',
+547 verbose rebuildBundles   'sass-graph' ]
+548 silly gentlyRm /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/node-sass is being purged
+549 verbose gentlyRm don't care about contents; nuking /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/node-sass
+550 silly vacuum-fs purging /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin/node-sass
+551 silly vacuum-fs quitting because other entries in /Users/skoki/Documents/work/CodeshelfUX/node_modules/.bin
+552 info install node-sass@3.4.2
+553 verbose unsafe-perm in lifecycle true
+554 info postinstall node-sass@3.4.2
+555 verbose unsafe-perm in lifecycle true
+556 verbose rebuild bundle /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-burger-menu
+557 info build /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-burger-menu
+558 info preinstall react-burger-menu@1.1.6
+559 info linkStuff react-burger-menu@1.1.6
+560 silly linkStuff react-burger-menu@1.1.6 has /Users/skoki/Documents/work/CodeshelfUX/node_modules as its parent node_modules
+561 verbose linkBins react-burger-menu@1.1.6
+562 verbose linkMans react-burger-menu@1.1.6
+563 verbose rebuildBundles react-burger-menu@1.1.6
+564 verbose rebuildBundles [ 'browserify-optional', 'classnames', 'react-kit', 'snapsvg' ]
+565 info install react-burger-menu@1.1.6
+566 info postinstall react-burger-menu@1.1.6
+567 verbose rebuild bundle /Users/skoki/Documents/work/CodeshelfUX/node_modules/superagent
+568 info build /Users/skoki/Documents/work/CodeshelfUX/node_modules/superagent
+569 info preinstall superagent@1.6.1
+570 info linkStuff superagent@1.6.1
+571 silly linkStuff superagent@1.6.1 has /Users/skoki/Documents/work/CodeshelfUX/node_modules as its parent node_modules
+572 verbose linkBins superagent@1.6.1
+573 verbose linkMans superagent@1.6.1
+574 verbose rebuildBundles superagent@1.6.1
+575 verbose rebuildBundles [ '.bin',
+575 verbose rebuildBundles   'component-emitter',
+575 verbose rebuildBundles   'cookiejar',
+575 verbose rebuildBundles   'debug',
+575 verbose rebuildBundles   'extend',
+575 verbose rebuildBundles   'form-data',
+575 verbose rebuildBundles   'formidable',
+575 verbose rebuildBundles   'methods',
+575 verbose rebuildBundles   'mime',
+575 verbose rebuildBundles   'qs',
+575 verbose rebuildBundles   'readable-stream',
+575 verbose rebuildBundles   'reduce-component' ]
+576 info install superagent@1.6.1
+577 info postinstall superagent@1.6.1
+578 info install CodeshelfUX@2.0.0
+579 info postinstall CodeshelfUX@2.0.0
+580 info prepublish CodeshelfUX@2.0.0
+581 verbose validateInstall loading /Users/skoki/Documents/work/CodeshelfUX/package.json for validation
+582 warn unmet dependency /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-intl requires react@'>=0.11.2 <0.14.0' but will load
+582 warn unmet dependency /Users/skoki/Documents/work/CodeshelfUX/node_modules/react,
+582 warn unmet dependency which is version 0.14.4
+583 warn unmet dependency /Users/skoki/Documents/work/CodeshelfUX/node_modules/react-burger-menu requires react@'^0.13.3' but will load
+583 warn unmet dependency /Users/skoki/Documents/work/CodeshelfUX/node_modules/react,
+583 warn unmet dependency which is version 0.14.4
+584 verbose stack Error: The package react@0.14.4 does not satisfy its siblings' peerDependencies requirements!
+584 verbose stack     at /usr/local/lib/node_modules/npm/lib/install.js:125:32
+584 verbose stack     at /usr/local/lib/node_modules/npm/lib/install.js:268:7
+584 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/read-installed/read-installed.js:142:5
+584 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/read-installed/read-installed.js:263:14
+584 verbose stack     at cb (/usr/local/lib/node_modules/npm/node_modules/slide/lib/async-map.js:47:24)
+584 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/read-installed/read-installed.js:263:14
+584 verbose stack     at cb (/usr/local/lib/node_modules/npm/node_modules/slide/lib/async-map.js:47:24)
+584 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/read-installed/read-installed.js:263:14
+584 verbose stack     at cb (/usr/local/lib/node_modules/npm/node_modules/slide/lib/async-map.js:47:24)
+584 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/read-installed/read-installed.js:263:14
+585 verbose cwd /Users/skoki/Documents/work/CodeshelfUX
+586 error Darwin 15.3.0
+587 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "install"
+588 error node v4.1.1
+589 error npm  v2.14.4
+590 error code EPEERINVALID
+591 error peerinvalid The package react@0.14.4 does not satisfy its siblings' peerDependencies requirements!
+591 error peerinvalid Peer react-bootstrap@0.28.2 wants react@>=0.14.0
+591 error peerinvalid Peer react-dnd@1.1.8 wants react@>=0.13.0 <0.15.0 || ^0.14.0-rc1
+591 error peerinvalid Peer react-dom@0.14.4 wants react@^0.14.4
+591 error peerinvalid Peer react-fa@4.0.0 wants react@^0.14.0-rc1 || >= 0.13.0, < 0.15.0
+591 error peerinvalid Peer react-faux-dom@2.1.1 wants react@*
+591 error peerinvalid Peer react-router-bootstrap@0.20.1 wants react@>=0.14.0
+591 error peerinvalid Peer react-burger-menu@1.1.6 wants react@^0.13.3
+592 verbose exit [ 1, true ]
