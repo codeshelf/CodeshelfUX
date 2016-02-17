@@ -26,14 +26,15 @@ export class Submenu extends React.Component {
 
   render() {
     return (
-      <li>
-        <a><span onClick={() => this.toggleExpand()} className="title">{this.props.title}</span></a>
+      <li className={this.state.expanded ? "open": null}>
+        <a>
+          <span onClick={() => this.toggleExpand()} className="title">{this.props.title}</span>
+          <span className={this.state.expanded ? "arrow open active": "arrow"}></span>
+        </a>
         <span className="icon-thumbnail"><Icon name={this.props.iconName}></Icon></span>
-        <div style={{paddingLeft: 15}} className="sidebar-menu">
-            <ul className="menu-items">
-                {this.state.expanded ? this.props.children : null}
-            </ul>
-        </div>
+        <ul className="sub-menu" style={{ display: this.state.expanded ? "block": "none"}}>
+            {this.props.children}
+        </ul>
       </li>
     )
   }
