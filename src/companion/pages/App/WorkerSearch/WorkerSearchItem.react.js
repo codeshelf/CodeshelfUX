@@ -8,7 +8,7 @@ export class WorkerSearchItem extends Component {
     const {domainId, updated, firstName, lastName, filterText} = this.props;
     const subtitle = <span>{firstName} {lastName} - <DateDisplay date={updated} /></span>;
     return (
-        <SearchItem to={`workers/${encodeURIComponent(domainId)}`}
+        <SearchItem to={`worker/${encodeURIComponent(domainId)}`}
          title={renderMatch(domainId, filterText)}
          subtitle={subtitle} />
     );

@@ -88,7 +88,7 @@ export default (
             <Route component={mOrderDetail} path=":tab" />
           </Route>
           <Route component={WorkerSearch} path="workersearch" />
-          <Route component={mWorkerDetail} path="workers/:id">
+          <Route component={mWorkerDetail} path="worker/:id">
             <IndexRedirect to="detail" />
             <Route component={mWorkerDetail} path=":tab" />
           </Route>
