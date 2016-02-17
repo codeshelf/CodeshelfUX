@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {DateDisplay} from "../../Mobile/DateDisplay.react.js";
 import {SearchItem, renderMatch} from "../../Mobile/Search/SearchItem.react.js";
 import {Link} from '../../Mobile/links';
+import Icon from 'react-fa';
 
 export class CartSearchItem extends Component {
 
@@ -11,8 +12,9 @@ export class CartSearchItem extends Component {
     return (
       <Link to={`carts/${domainId}`}>
         <tr>
-            <td>{domainId}</td>
+            <td>{renderMatch(domainId, filterText)}</td>
             <td>{deviceGuid}</td>
+            <td><Icon name="chevron-right"/></td>
         </tr>
       </Link>
     );

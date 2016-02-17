@@ -35,12 +35,7 @@ export function createSearchComponent(ItemComponent, searchFieldText, getIdForIt
           <Col sm={12}>
             Number of results: { result.total }
             <Table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>GUID</th>
-                </tr>
-              </thead>
+              {/* TODO Add head maybe? */}
               <tbody>
             {result.results.map((oneResult) => {
               return <ItemComponent key={getIdForItem(oneResult)} {...oneResult} filterText={filterText} />

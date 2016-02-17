@@ -1,6 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {DateDisplay} from "../../Mobile/DateDisplay.react.js";
 import {SearchItem, renderMatch} from "../../Mobile/Search/SearchItem.react.js";
+import {Link} from '../../Mobile/links';
+import Icon from 'react-fa';
 
 export class WorkerSearchItem extends Component {
 
@@ -8,9 +10,13 @@ export class WorkerSearchItem extends Component {
     const {domainId, updated, firstName, lastName, filterText} = this.props;
     const subtitle = <span>{firstName} {lastName} - <DateDisplay date={updated} /></span>;
     return (
-        <SearchItem to={`worker/${encodeURIComponent(domainId)}`}
-         title={renderMatch(domainId, filterText)}
-         subtitle={subtitle} />
+      <Link to={`worker/${encodeURIComponent(domainId)}`}>
+        <tr>
+            <td>{renderMatch(domainId, filterText)}</td>
+            <td>{subtitle}</td>
+            <td><Icon name="chevron-right"/></td>
+        </tr>
+      </Link>
     );
   }
 }
