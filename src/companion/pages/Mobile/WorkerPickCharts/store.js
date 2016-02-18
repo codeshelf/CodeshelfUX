@@ -27,6 +27,7 @@ function getDefaultFilter() {
     interval: moment.duration(5, 'minutes'),
     window: moment.duration(2, 'hours'),
     endtime: moment(),
+    purposes: [],
   }));
 }
 
@@ -159,11 +160,12 @@ function search(status, data) {
   };
 }
 
-export function filterToParams({endtime, window, interval}) {
+export function filterToParams({endtime, window, interval, purposes}) {
   return {
     startAt: moment(endtime).subtract(window),
     endAt: endtime,
     interval: interval,
+    purposes: purposes,
   }
 }
 

@@ -45,7 +45,7 @@ function tabToApi(facilityContext, tab, filter) {
       const startAt = moment(endAt).subtract(filter.window.asMinutes(), "m");
       return Promise.all([
         facilityContext.getWorkerEventHistogram({id: filter.id, ...filterToParams(filter)}),
-        facilityContext.getWorkerEventsWithTime({id: filter.id, startAt, endAt})
+        facilityContext.getWorkerEventsWithTime({id: filter.id, startAt, endAt, purposes: filter.purposes})
       ]).then((res) => { return {histogram: res[0], events: res[1]}})
     },
   }[tab];

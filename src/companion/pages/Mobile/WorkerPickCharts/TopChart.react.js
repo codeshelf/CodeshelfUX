@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {Panel, Tabs, Tab, Row, Col, Button, ListGroup,
   ListGroupItem, Badge, DropdownButton, MenuItem} from 'react-bootstrap';
+import Multiselect from 'react-bootstrap-multiselect';
 import Icon from 'react-fa';
 import {WidthWrapper} from "./WidthWrapper.react.js";
 import {HistogramChart} from './HistogramChart.react.js';
@@ -31,6 +32,36 @@ export class DurationPicker extends Component {
           <MenuItem key={index} eventKey={d}>{d['interval'].humanize() + " / " + d['window'].humanize()}</MenuItem>
         ))}
       </DropdownButton>
+    );
+  }
+}
+
+export class PurposePicker extends Component {
+
+  preprocessData(purposes, selected) {
+    return purposes.map((purpose) => { return {value: purpose, selected: selected.indexOf(purpose) !== -1}});
+  }
+
+  render()  {
+    /* To be deleted */
+    const mockedData = ['Purpose 1', 'Purpose 2', 'Purpose 3'];
+    const {filter, onSelect, purposes} = this.props;
+    const data = purposes.error || purposes.loading ? [] : this.preprocessData(mockedData, filter.purposes);
+    return (
+      <Multiselect
+        multiple
+        data={data}
+        onChange={(selected, add) => {
+          const value = selected[0].value;
+          let purposes = this.props.filter.purposes.slice(0);
+          if (add && purposes.indexOf(value) === -1) {
+            purposes.push(value);
+          } else {
+            purposes = purposes.filter((element, i) => element !== value);
+          }
+          const newFilter =  this.props.filter.set('purposes', purposes);
+          onSelect(newFilter);
+        }} />
     );
   }
 }
@@ -77,8 +108,7 @@ export class TopChart extends Component {
   }
 
   render() {
-    const {filter, data, error, whatIsLoading, whatIsLoaded, acSetFilterAndRefresh, acSearch, id, tab} = this.props;
-
+    const {purposes, filter, data, error, whatIsLoading, whatIsLoaded, acSetFilterAndRefresh, acSearch, id, tab} = this.props;
     const showLoading = (whatIsLoading !== null || (whatIsLoaded === null && !error));
     const showError = (whatIsLoading === null && !!error);
     let errorText = "Can't load request";
@@ -103,6 +133,11 @@ export class TopChart extends Component {
           <Col xs={10}>
             <div className="text-center">
               <DurationPicker filter={filter} onChange={acSetFilterAndRefresh} />
+            </div>
+          </Col>
+          <Col xs={10}>
+            <div className="text-center">
+              <PurposePicker purposes={purposes} filter={filter} onSelect={acSetFilterAndRefresh} />
             </div>
           </Col>
           <Col xs={2}>

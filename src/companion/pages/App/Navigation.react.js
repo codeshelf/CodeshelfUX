@@ -84,6 +84,7 @@ class MenuItem extends React.Component {
                </li>);
     }
 }
+
 MenuItem.contextTypes = {
   router: React.PropTypes.object.isRequired
 };
