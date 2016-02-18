@@ -3,7 +3,7 @@ import moment from "moment";
 import d3 from "d3";
 import ReactFauxDOM from 'react-faux-dom';
 import {connect} from 'react-redux';
-import {getSelectedFacility} from '../Facility/get';
+import {getSelectedFacility} from '../../Facility/get';
 
 require('./histogramChart.styl');
 

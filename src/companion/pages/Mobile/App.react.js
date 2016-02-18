@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Icon from "react-fa";
 import {Grid, Row, Col, DropdownButton, MenuItem, Button} from 'react-bootstrap';
-import { NavItemLink, MenuItemLink, ButtonLink, Link} from './links';
+import { NavItemLink, MenuItemLink, ButtonLink, Link} from '../links';
 import {clearStoredCredentials} from "data/user/store";
 import {loggedout} from "data/auth/actions";
 import Sidebar from './Sidebar/Sidebar.react';

@@ -1,4 +1,4 @@
-import {asMutable} from "pages/Mobile/asMutable";
+import {asMutable} from "pages/asMutable";
 
 export function getSidebar({sidebar}) {
   return sidebar;

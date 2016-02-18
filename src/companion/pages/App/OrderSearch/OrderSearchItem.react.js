@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
-import {DateDisplay} from "../../Mobile/DateDisplay.react.js";
-import {SearchItem, renderMatch} from "../../Mobile/Search/SearchItem.react.js";
-import {Link} from '../../Mobile/links';
+import {DateDisplay} from "../../DateDisplay.react.js";
+import {SearchItem, renderMatch} from "../../Search/SearchItem.react.js";
+import {Link} from '../../links';
 import Icon from 'react-fa';
 
 export class OrderSearchItem extends Component {

@@ -1,5 +1,5 @@
 import  React from "react";
-import {ButtonLink} from '../../pages/Mobile/links.js';
+import {ButtonLink} from '../../pages/links.js';
 import Icon from 'react-fa';
 
 export class EditButtonLink extends React.Component{

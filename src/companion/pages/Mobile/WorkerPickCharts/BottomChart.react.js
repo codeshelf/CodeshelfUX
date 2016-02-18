@@ -4,10 +4,10 @@ import Icon from 'react-fa';
 import {WidthWrapper} from "./WidthWrapper.react.js";
 import d3 from "d3";
 import ReactFauxDOM from 'react-faux-dom';
-import {TAB_PRODUCTIVITY} from '../WorkerDetail/store';
-import {convertTab} from '../WorkerDetail/WorkerDetail.react.js';
+import {TAB_PRODUCTIVITY} from '../../Detail/WorkerDetail/store';
+import {convertTab} from '../../Detail/WorkerDetail/WorkerDetail.react.js';
 import {Map, Record} from "immutable";
-import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../links';
+import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../../links';
 
 export class BottomChart extends Component {
 

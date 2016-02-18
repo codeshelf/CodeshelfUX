@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "react-fa";
 import {DropdownButton, Nav, NavItem, Button, MenuItem} from "react-bootstrap";
-import { NavItemLink, MenuItemLink, ButtonLink} from '../Mobile/links.js';
+import { NavItemLink, MenuItemLink, ButtonLink} from '../links.js';
 import {loggedout} from "data/auth/actions";
 //todo turn clearStoredCredentials into an action
 import {getEmail, isCredentialsStored, clearStoredCredentials} from "data/user/store";

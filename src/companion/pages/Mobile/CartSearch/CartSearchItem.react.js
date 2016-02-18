@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
-import {DateDisplay} from "../DateDisplay.react.js";
-import {SearchItem, renderMatch} from "../Search/SearchItem.react.js";
+import {DateDisplay} from "../../DateDisplay.react.js";
+import {SearchItem, renderMatch} from "../../Search/SearchItem.react.js";
 
 export class CartSearchItem extends Component {
 

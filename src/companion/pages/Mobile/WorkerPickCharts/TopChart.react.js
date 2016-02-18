@@ -8,7 +8,7 @@ import moment from 'moment';
 
 import * as csapi from 'data/csapi';
 
-import {DateDisplay} from "../DateDisplay.react.js";
+import {DateDisplay} from "../../DateDisplay.react.js";
 
 export class DurationPicker extends Component {
 

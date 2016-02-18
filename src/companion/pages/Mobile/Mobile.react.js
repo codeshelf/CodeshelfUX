@@ -9,13 +9,13 @@ import createEngine from 'redux-storage/engines/localStorage';
 import * as storageConfig from './storage';
 
 // reducer imports
-import {facilityReducer} from './Facility/store';
-import {cartSearchReducer} from './CartSearch/store';
-import {cartDetailReducer} from './CartDetail/store';
-import {orderSearchReducer} from './OrderSearch/store';
-import {orderDetailReducer} from './OrderDetail/store';
-import {workerSearchReducer} from './WorkerSearch/store';
-import {workerDetailReducer} from './WorkerDetail/store';
+import {facilityReducer} from '../Facility/store';
+import {cartSearchReducer} from '../Search/CartSearch/store';
+import {cartDetailReducer} from '../Detail/CartDetail/store';
+import {orderSearchReducer} from '../Search/OrderSearch/store';
+import {orderDetailReducer} from '../Detail/OrderDetail/store';
+import {workerSearchReducer} from '../Search/WorkerSearch/store';
+import {workerDetailReducer} from '../Detail/WorkerDetail/store';
 import {workerPickChartReducer} from './WorkerPickCharts/store';
 import {sidebarReducer} from './Sidebar/store';
 

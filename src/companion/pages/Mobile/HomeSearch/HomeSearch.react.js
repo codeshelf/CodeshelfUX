@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Tabs, Tab, Row, Col, Button, ListGroup, ListGroupItem} from 'react-bootstrap';
-import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../links';
+import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../../links';
 import Icon from "react-fa";
 
 class HomeSearch extends Component {

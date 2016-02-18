@@ -1,6 +1,6 @@
-import * as orderDetail from './OrderDetail/store';
-import * as workerDetail from './WorkerDetail/store';
-import * as detailFactory from './Detail/storeFactory';
+import * as orderDetail from '../Detail/OrderDetail/store';
+import * as workerDetail from '../Detail/WorkerDetail/store';
+import * as detailFactory from '../Detail/storeFactory';
 
 
 export const PERSIST_STATE_PART = [...orderDetail.PERSIST_STATE_PART, ...workerDetail.PERSIST_STATE_PART];

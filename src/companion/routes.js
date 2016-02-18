@@ -43,14 +43,14 @@ import DetectMobile from "./components/common/DetectMobile.react.js";
 import mApp from './pages/Mobile/App.react.js';
 import mHomeSearch from  './pages/Mobile/HomeSearch/HomeSearch.react.js';
 import mOrderSearch from './pages/Mobile/OrderSearch/OrderSearch.react.js';
-import mOrderDetail from './pages/Mobile/OrderDetail/OrderDetail.react.js';
+import OrderDetail from './pages/Detail/OrderDetail/OrderDetail.react.js';
 import mWorkerSearch from './pages/Mobile/WorkerSearch/WorkerSearch.react.js';
-import mWorkerDetail from './pages/Mobile/WorkerDetail/WorkerDetail.react.js';
+import WorkerDetail from './pages/Detail/WorkerDetail/WorkerDetail.react.js';
 import mCartSearch from './pages/Mobile/CartSearch/CartSearch.react.js';
-import mCartDetail from './pages/Mobile/CartDetail/CartDetail.react.js';
+import CartDetail from './pages/Detail/CartDetail/CartDetail.react.js';
 import mWorkerPickCharts from './pages/Mobile/WorkerPickCharts/WorkerPickCharts.react.js';
-import LoadFacility from './pages/Mobile/Facility/LoadFacility.react.js';
-import FacilityWrapper from './pages/Mobile/Facility/FacilityWrapper.react.js';
+import LoadFacility from './pages/Facility/LoadFacility.react.js';
+import FacilityWrapper from './pages/Facility/FacilityWrapper.react.js';
 import Mobile from './pages/Mobile/Mobile.react.js';
 import ReduxWrapper from './pages/App/ReduxProvider.react.js';
 export default (
@@ -83,19 +83,19 @@ export default (
           </Route>
           <Route component={TestScript} path="testscript" />
           <Route component={OrderSearch} path="ordersearch" />
-          <Route component={mOrderDetail} path="orders/:id">
+          <Route component={OrderDetail} path="orders/:id">
             <IndexRedirect to="detail" />
-            <Route component={mOrderDetail} path=":tab" />
+            <Route component={OrderDetail} path=":tab" />
           </Route>
           <Route component={WorkerSearch} path="workersearch" />
-          <Route component={mWorkerDetail} path="worker/:id">
+          <Route component={WorkerDetail} path="worker/:id">
             <IndexRedirect to="detail" />
-            <Route component={mWorkerDetail} path=":tab" />
+            <Route component={WorkerDetail} path=":tab" />
           </Route>
           <Route component={CartSearch} path="cartsearch" />
-          <Route component={mCartDetail} path="carts/:id">
+          <Route component={CartDetail} path="carts/:id">
             <IndexRedirect to="detail" />
-            <Route component={mCartDetail} path=":tab" />
+            <Route component={CartDetail} path=":tab" />
           </Route>
           <Route component={ExtensionPointsPage} path="extensionpoints">
             <Route component={ExtensionPointAdd} path="new" />
@@ -119,19 +119,19 @@ export default (
           <IndexRedirect to="events" />
           <Route component={mWorkerPickCharts}  path="events"/>
           <Route component={mOrderSearch} path="orders" />
-          <Route component={mOrderDetail} path="orders/:id">
+          <Route component={OrderDetail} path="orders/:id">
             <IndexRedirect to="order" />
-            <Route component={mOrderDetail} path=":tab" />
+            <Route component={OrderDetail} path=":tab" />
           </Route>
           <Route component={mWorkerSearch} path="workers" />
-          <Route component={mWorkerDetail} path="workers/:id">
+          <Route component={WorkerDetail} path="workers/:id">
             <IndexRedirect to="detail" />
-            <Route component={mWorkerDetail} path=":tab" />
+            <Route component={WorkerDetail} path=":tab" />
           </Route>
           <Route component={mCartSearch} path="carts" />
-          <Route component={mCartDetail} path="carts/:id">
+          <Route component={CartDetail} path="carts/:id">
             <IndexRedirect to="detail" />
-            <Route component={mCartDetail} path=":tab" />
+            <Route component={CartDetail} path=":tab" />
           </Route>
         </Route>
       </Route>

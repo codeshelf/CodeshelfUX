@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import {getWorkerPickChartMutable} from "./get";
 import {acSetDefaultFilter, acSetFilter, acSearch, acRefresh, acSetFilterAndRefresh, acGetPurposes} from "./store";
-import {acSetProductivityFilter} from "../WorkerDetail/store";
+import {acSetProductivityFilter} from "../../Detail/WorkerDetail/store";
 
 import {TopChart} from "./TopChart";
 import {BottomChart} from "./BottomChart";
