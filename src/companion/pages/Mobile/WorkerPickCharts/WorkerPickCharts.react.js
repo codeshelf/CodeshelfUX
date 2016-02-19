@@ -14,7 +14,6 @@ class WorkerPickCharts extends Component {
   componentWillMount() {
     const {filter} = this.props;
     if (filter === null) {
-      this.props.acGetPurposes();
       this.props.acSetDefaultFilter();
     }
   }

@@ -11,6 +11,7 @@ import {TopChart} from '../../../Mobile/WorkerPickCharts/TopChart.react.js';
 import {SettingsRow} from "../../common/SettingsRow.react.js";
 import {Settings} from '../../common/Settings.react.js';
 import {renderField, deviceFormatter, orderLinkFormatter, workerIdFormatter, workerNameFormatter} from "../../common/FieldRenderer.react.js";
+import {acGetPurposes} from "../../../Mobile/WorkerPickCharts/store";
 
 import {fieldToDescription} from "../../../Mobile/common/historyItemIntl";
 import moment from "moment";
@@ -42,7 +43,7 @@ export class ProductivityDump extends Component {
 
   render() {
     //consume acReloadTab so that the list does not show Refresh button
-    const {data: {events, histogram}, additionalDataLoading,
+    const {data: {events, histogram}, workerPickChart, additionalDataLoading,
            filter, id, acReloadTab, acSearchAdditional, ...other} = this.props;
 
     if (filter === null) return null;
@@ -51,6 +52,7 @@ export class ProductivityDump extends Component {
       <div>
         <TopChart {...this.props}
           data={histogram}
+          purposes={workerPickChart.purposes}
         />
         <TabWithItemList data={events.results} {...{getIdFromItem, fieldToDescription, fieldFormater}} {...other}>
           {noEntriesText}
@@ -73,11 +75,11 @@ export class ProductivityDump extends Component {
 }
 
 function mapStateToProps(state) {
-  return {};
+  return {workerPickChart: state.workerPickChart};
 }
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators({acGetPurposes}, dispatch);
 }
 
 export const History = connect(mapStateToProps, mapDispatch)(ProductivityDump);

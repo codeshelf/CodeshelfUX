@@ -6,7 +6,6 @@ import Icon from 'react-fa';
 import {WidthWrapper} from "./WidthWrapper.react.js";
 import {HistogramChart} from './HistogramChart.react.js';
 import moment from 'moment';
-
 import * as csapi from 'data/csapi';
 
 import {DateDisplay} from "../../DateDisplay.react.js";
@@ -105,6 +104,10 @@ export class TopChart extends Component {
   constructor(props) {
     super(props);
     this.state = {expanded: props.expanded};
+  }
+
+  componentWillMount() {
+    this.props.acGetPurposes();
   }
 
   render() {

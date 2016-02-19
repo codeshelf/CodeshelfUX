@@ -14,6 +14,7 @@ import {renderField, deviceLinkFormatter, orderLinkFormatter} from "../../common
 
 import {fieldToDescription} from "../../../Mobile/common/historyItemIntl";
 import {acSetFilterAndRefresh, acSearch} from '../store';
+import {acGetPurposes} from "../../../Mobile/WorkerPickCharts/store";
 import moment from "moment";
 import Icon from 'react-fa';
 
@@ -64,17 +65,15 @@ export class ProductivityDump extends Component {
 
   render() {
     //consume acReloadTab so that the list does not show Refresh button
-    const {data: {events, histogram}, additionalDataLoading,
+    const {data: {events, histogram}, workerPickChart, additionalDataLoading,
            filter, id, acReloadTab, acSearchAdditional, ...other} = this.props;
-
     if (filter === null) return null;
     const {next} = events;
     return (
       <div>
         <TopChart {...this.props}
-
           data={histogram}
-
+          purposes={workerPickChart.purposes}
         />
         <TabWithItemList data={events.results} {...{getIdFromItem, fieldToDescription, fieldFormater}} {...other}>
           {noEntriesText}
@@ -97,11 +96,11 @@ export class ProductivityDump extends Component {
 }
 
 function mapStateToProps(state) {
-  return {};
+  return {workerPickChart: state.workerPickChart};
 }
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators({acGetPurposes}, dispatch);
 }
 
 export const Productivity = connect(mapStateToProps, mapDispatch)(ProductivityDump);

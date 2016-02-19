@@ -30,6 +30,7 @@ function getDefaultFilter(tab) {
         window: moment.duration(2, 'hours'),
         endtime: moment(),
         id: null,
+        purposes: [],
       },
     }[tab]
   }

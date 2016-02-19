@@ -77,20 +77,19 @@ export class BottomChart extends Component {
                   // temporarly disable links
                   return (
                       <div>
-                      { desktop ?
-                        <div>
-                         <div style={{fontSize: "75%"}}>{workerName}</div>
-                         <span style={{width: "4em" ,marginRight: "0.5em"}}>{totalEvents}</span>
-                         {chart.toReact()}
-                        </div> :
                         <ListGroupItemLink
-                            to={`workers/${encodeURIComponent(workerId)}/productivity`}
+                            style={{display: "flex", alignItems: "center"}}
+                            to={`${desktop ? "worker": "workers"}/${encodeURIComponent(workerId)}/productivity`}
                             onClick={() => this.props.acSetProductivityFilter(workerId, filterWithId)} >
-                          <div style={{fontSize: "75%"}}>{workerName}</div>
-                          <span style={{width: "4em" ,marginRight: "0.5em"}}>{totalEvents}</span>
-                          {chart.toReact()}
+                          <div style={{fontSize: "75%"}}>
+                            <div>{workerName}</div>
+                            <div style={{width: "4em", marginRight: "0.5em"}}>{totalEvents}</div>
+                          </div>
+                          <div>
+                            {chart.toReact()}
+                          </div>
                           <Icon name="chevron-right" className="pull-right" style={{marginTop: "-.25em"}}/>
-                        </ListGroupItemLink> }
+                        </ListGroupItemLink>
                       </div>
                   );
                 })
