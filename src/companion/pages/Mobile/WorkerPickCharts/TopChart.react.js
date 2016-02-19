@@ -169,7 +169,7 @@ export class TopChart extends Component {
                         barWidth: 60,
                         margins: {
                           top: 20,
-                          right: 20,
+                          right: 40,
                           bottom: 20,
                           left: 50,
                         },
