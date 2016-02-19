@@ -19,7 +19,7 @@ export default class Facility extends React.Component {
     }
 
     render() {
-        let {facility, availableFacilities} = this.props;
+        let {facility, availableFacilities, acToggleSidebar} = this.props;
         const tenant = getSelectedTenant();
         let tenantName = tenant.get("name");
         return (
@@ -27,7 +27,7 @@ export default class Facility extends React.Component {
             {
                     facility ?
                           <div>
-                              <FacilityNavigation title={tenantName} facility={facility} facilities={availableFacilities} />
+                              <FacilityNavigation title={tenantName} facility={facility} facilities={availableFacilities} acToggleSidebar={acToggleSidebar}/>
                               <div id="page-wrapper" className="page-container">
                                   <TopNavBar title={tenantName} facility={facility} facilities={availableFacilities}/>
                                   <div className="page-content-wrapper">

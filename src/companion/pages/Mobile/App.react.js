@@ -1,21 +1,14 @@
 import React, {Component} from 'react';
 import Icon from "react-fa";
+import {authz} from 'components/common/auth';
 import {Grid, Row, Col, DropdownButton, MenuItem, Button} from 'react-bootstrap';
 import { NavItemLink, MenuItemLink, ButtonLink, Link} from '../links';
 import {clearStoredCredentials} from "data/user/store";
+import {FacilitySelector, renderFacilityLabel} from '../Facility/FacilitySelector';
 import {loggedout} from "data/auth/actions";
 import Sidebar from './Sidebar/Sidebar.react';
 import exposeRouter from 'components/common/exposerouter';
 import classnames from 'classnames';
-
-function renderFacilityLabel(facility) {
-  if (facility) {
-    const {description, timeZoneDisplay} = facility;
-    return (<span><Icon name="building" style={{marginRight: ".25em"}}/>{description}({timeZoneDisplay})</span>);
-  } else {
-    return null;
-  }
-}
 
 
 class Header extends Component {
@@ -62,6 +55,8 @@ class NavMenuItem extends Component {
     );
   }
 }
+
+const AuthzNavMenuItem = authz(NavMenuItem);
 
 function menuIcon(iconName) {
   return <span className="icon-thumbnail"><Icon name={iconName}></Icon></span>;
@@ -120,26 +115,26 @@ class App extends Component {
     const basePath = "/mobile/facilities/" + domainId;
     return (
       <PagesNavigation {...this.props}>
-        <NavMenuItem active={false}>
+        <AuthzNavMenuItem active={false}>
           {this.sidebarLink(`${basePath}/events`, "Productivity")}
           {menuIcon("bar-chart")}
-        </NavMenuItem>
-        <NavMenuItem active={false}>
+        </AuthzNavMenuItem>
+        <AuthzNavMenuItem active={false}>
           {this.sidebarLink(`${basePath}/orders`, "Orders")}
           {menuIcon("shopping-cart")}
-        </NavMenuItem>
-        <NavMenuItem active={false}>
+        </AuthzNavMenuItem>
+        <AuthzNavMenuItem active={false}>
           {this.sidebarLink(`${basePath}/workers`, "Workers")}
           {menuIcon("users")}
-        </NavMenuItem>
-        <NavMenuItem active={false}>
+        </AuthzNavMenuItem>
+        <AuthzNavMenuItem active={false}>
           {this.sidebarLink(`${basePath}/carts`, "Carts")}
           {menuIcon("shopping-cart")}
-        </NavMenuItem>
-        <NavMenuItem>
+        </AuthzNavMenuItem>
+        <AuthzNavMenuItem>
           {this.sidebarFunction(this.handleLogoutClick.bind(this), "Logout")}
           {menuIcon("sign-out")}
-        </NavMenuItem>
+        </AuthzNavMenuItem>
       </PagesNavigation>
     )
   }
@@ -185,26 +180,3 @@ class App extends Component {
 
 export default exposeRouter(App);
 
-
-
-class FacilitySelector extends React.Component {
-
-    render() {
-        let {facility, availableFacilities} = this.props;
-        return (<DropdownButton className="facility-dropdown" bsStyle="link" title={renderFacilityLabel(facility)}>
-                {
-                    availableFacilities.map((facility) => {
-                        const {name, persistentId, domainId, description} = facility;
-
-                        return <MenuItemLink key={domainId}
-                                             to={`/mobile/facilities/${domainId}`}
-                                             data-persistentid={persistentId}
-                                             onclick={() => this.props.acToggleSidebar(false)}>
-                                 {description}
-                               </MenuItemLink>
-
-                    })
-               }
-        </DropdownButton>);
-    }
-}

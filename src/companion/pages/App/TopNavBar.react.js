@@ -40,8 +40,6 @@ export default class TopNavBar extends React.Component {
                                         <Icon name="home" size="lg"/>
                                     </ButtonLink>
                             }
-                            {(facilities) &&
-                                <FacilitySelector facility={facility} facilities={facilities} />}
                                 <UserProfileMenu user={user}/>
                             </div>
                 </div>
@@ -108,32 +106,3 @@ class CredentialsStore extends React.Component {
     }
 }
 const AuthzCredentialsStore = authz(CredentialsStore);
-
-class FacilitySelector extends React.Component {
-
-    renderDropdownLabel(facility) {
-      let facilityName = (facility) ? facility.description : "";
-        if (facility) {
-            return (<span><Icon name="building" /> {facilityName}</span>);
-        } else {
-            return null;
-        }
-    }
-
-    render() {
-        let {facility, facilities} = this.props;
-        return (<DropdownButton className="facility-dropdown" bsStyle="link" title={this.renderDropdownLabel(facility)}>
-                {
-                    facilities.map((facility) => {
-                      let {persistentId, domainId, description} = facility;
-
-                        return <MenuItemLink key={domainId}
-                                             to={`/facilities/${domainId}`}
-                                             data-persistentid={persistentId}>
-                                         {description}
-                               </MenuItemLink>;
-                    })
-               }
-        </DropdownButton>);
-    }
-}

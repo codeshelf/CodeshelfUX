@@ -6,6 +6,7 @@ import PureComponent from 'components/common/PureComponent';
 import exposeRouter from 'components/common/exposerouter';
 import {authz} from 'components/common/auth';
 import {getSelectedFacility} from 'data/facilities/store';
+import {FacilitySelector, renderFacilityLabel} from '../Facility/FacilitySelector';
 import _ from "lodash";
 
 
@@ -46,7 +47,6 @@ class NavbarHeader extends PureComponent {
         return (<div className="sidebar-header">
                   <h3 style={{color: "#ffffff", display: "inline"}}>{title}</h3>
                   <div className="sidebar-header-controls">
-
                   </div>
                 </div>);
     }
@@ -107,10 +107,11 @@ class Navigation extends React.Component {
       return (
               <nav className="page-sidebar" dataPages="sidebar" style={{"transform": "translate3d(210px, 0px, 0px)"}} role="navigation">
               <NavbarHeader {...this.props} />
+              <FacilitySelector desktop={true} availableFacilities={this.props.facilities} {...this.props}/>
               <div className="sidebar-menu">
                   <ul className="menu-items">
                       {this.props.children}
-              </ul>
+                  </ul>
             </div>
         </nav>
     );

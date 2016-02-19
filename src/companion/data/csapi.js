@@ -104,11 +104,6 @@ function addResource(path, params) {
     });
 }
 
-function purposesToQueryString(purposes) {
-    console.info(purposes, purposes.map((purpose) => "purpose=" + encodeURIComponent(purpose)).join("&"))
-    return purposes.map((purpose) => "purpose=" + encodeURIComponent(purpose)).join("&");
-}
-
 export function recoverPassword(email) {
     let queryData = {u: email};
     var options = {
