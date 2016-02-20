@@ -13,10 +13,13 @@ const rootReducer = combineReducers({
 
 const store = createApplicationStore(rootReducer);
 
-export default function (props) {
-  return (
-    <Provider store={store}>
-      {props.children && React.cloneElement(props.children, props)}
-    </Provider>
-  );
+export function reduxAdmin(Component) {
+  return  function (props) {
+    return (
+      <Provider store={store}>
+        <Component {...props} />
+      </Provider>
+    );
+  }
+
 }

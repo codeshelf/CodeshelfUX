@@ -54,7 +54,7 @@ import FacilityWrapper from './pages/Mobile/Facility/FacilityWrapper.react.js';
 
 import ReduxMobile from './pages/Mobile/Mobile.react.js';
 import ReduxFacility from './pages/App/ReduxFacility.react.js';
-import ReduxAdmin from './pages/App/Admin/ReduxAdmin.react.js';
+import {reduxAdmin} from './pages/App/Admin/ReduxAdmin.react.js';
 
 export default (
   <Route component={Root} path="/">
@@ -141,12 +141,10 @@ export default (
     </Route>
 
     // Routes from admin panel
-    <Route component={ReduxAdmin}>
-      <Route component={authn(Admin)} path="admin">
-        <Route component={Users} path="users">
-          <Route component={UserAdd} path="new"/>
-          <Route component={UserEdit} path=":userId"/>
-        </Route>
+    <Route component={authn(reduxAdmin(Admin))} path="admin">
+      <Route component={Users} path="users">
+        <Route component={UserAdd} path="new"/>
+        <Route component={UserEdit} path=":userId"/>
       </Route>
     </Route>
     // Routes for user credentials
