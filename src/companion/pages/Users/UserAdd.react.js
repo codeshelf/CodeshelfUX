@@ -9,7 +9,7 @@ function addFormMetadata() {
 }
 
 const title = "New User";
-const returnRoute = "users";
+const returnRoute = "/admin/users";
 
 function handleSave(formMap: Map) {
     return createUser(formMap.toJS());

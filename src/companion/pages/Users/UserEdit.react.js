@@ -19,7 +19,7 @@ function editFormMetadata() {
             }
           }).value();
 }
-const returnRoute = "users";
+const returnRoute = "/admin/users";
 
 function handleSave(formMap: Map) {
     let user = formMap.toJS();
@@ -34,10 +34,10 @@ function toSelectedUser(ComponentForm) {
         render() {
             let {userId} = this.props.params;
             let {users} = this.props;
-            let user = users.find((u) => {
-                    return u.get("id") == parseInt(userId);
-                });
-            return <ComponentForm title={"Edit " + user.get("username")} initialFormData={user} />;
+            let user = new Map(users.find((u) => {
+              return u.id == parseInt(userId);
+            }));
+            return <ComponentForm title={"Edit " + user.username} initialFormData={user} />;
         }
     }
     return SelectedUser;
