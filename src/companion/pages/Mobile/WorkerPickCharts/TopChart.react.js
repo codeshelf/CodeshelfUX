@@ -10,6 +10,8 @@ import * as csapi from 'data/csapi';
 
 import {DateDisplay} from "../../DateDisplay.react.js";
 
+import "./TopChart.less";
+
 export class DurationPicker extends Component {
 
   durations = [
