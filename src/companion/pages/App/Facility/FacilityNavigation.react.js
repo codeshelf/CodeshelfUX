@@ -6,6 +6,14 @@ const AuthzMenuItem = Navigation.AuthzMenuItem;
 
 class FacilityNavigation extends React.Component {
 
+  componentWillMount() {
+    document.body.classList.add("fixed-header", "dashboard", "sidebar-visible", "menu-pin");
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove("fixed-header", "dashboard", "sidebar-visible", "menu-pin");
+  }
+
   getUXUrl(facility) {
     let uxURL = "/ux/?facilityId=" + facility.domainId;
     return uxURL;

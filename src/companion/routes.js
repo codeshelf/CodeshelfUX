@@ -51,13 +51,15 @@ import CartDetail from './pages/Detail/CartDetail/CartDetail.react.js';
 import mWorkerPickCharts from './pages/Mobile/WorkerPickCharts/WorkerPickCharts.react.js';
 import LoadFacility from './pages/Facility/LoadFacility.react.js';
 import FacilityWrapper from './pages/Facility/FacilityWrapper.react.js';
-import Mobile from './pages/Mobile/Mobile.react.js';
-import ReduxWrapper from './pages/App/ReduxProvider.react.js';
+import ReduxMobile from './pages/Mobile/Mobile.react.js';
+import ReduxFacility from './pages/App/ReduxFacility.react.js';
+import {reduxAdmin} from './pages/App/Admin/ReduxAdmin.react.js';
+
 export default (
   <Route component={Root} path="/">
     {/* Redirect to mobile or desktop web component */}
     <IndexRoute component={DetectMobile} />
-    <Route component={authn(ReduxWrapper)} path="facilities"> //ensure auth and default facility
+    <Route component={authn(ReduxFacility)} path="facilities"> //ensure auth and default facility
       <IndexRoute component={LoadFacility} />
       <Route component={FacilityWrapper} path=":facilityName">
         <Route component={Facility}>
@@ -112,7 +114,7 @@ export default (
     <Redirect from="/mobile/" to="mobile/facilities" />
     <Redirect from="/mobile/facilities/" to="/mobile/facilities" />
 
-    <Route component={authn(Mobile)} path="mobile/facilities">
+    <Route component={authn(ReduxMobile)} path="mobile/facilities">
       <IndexRoute component={LoadFacility} />
       <Route component={FacilityWrapper} path=":facilityName">
         <Route component={mApp}>
@@ -138,14 +140,12 @@ export default (
     </Route>
 
     // Routes from admin panel
-
-    <Route component={authn(Admin)} path="admin">
+    <Route component={authn(reduxAdmin(Admin))} path="admin">
       <Route component={Users} path="users">
         <Route component={UserAdd} path="new"/>
         <Route component={UserEdit} path=":userId"/>
       </Route>
     </Route>
-
     // Routes for user credentials
 
     <Route component={Login} path="login" />

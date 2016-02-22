@@ -10,13 +10,6 @@ import {getSelectedTenant} from 'data/user/store';
 import {state} from 'data/state';
 
 export default class Facility extends React.Component {
-    componentWillMount() {
-      document.body.classList.add("fixed-header", "dashboard", "sidebar-visible", "menu-pin");
-    }
-
-    componentWillUnmount() {
-      document.body.classList.remove("fixed-header", "dashboard", "sidebar-visible", "menu-pin");
-    }
 
     render() {
         let {facility, availableFacilities, acToggleSidebar} = this.props;
