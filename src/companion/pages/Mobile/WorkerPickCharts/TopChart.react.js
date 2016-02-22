@@ -5,6 +5,7 @@ import Multiselect from 'react-bootstrap-multiselect';
 import Icon from 'react-fa';
 import {WidthWrapper} from "./WidthWrapper.react.js";
 import {HistogramChart} from './HistogramChart.react.js';
+import {IBox} from '../../IBox.react.js';
 import moment from 'moment';
 import * as csapi from 'data/csapi';
 
@@ -124,71 +125,68 @@ export class TopChart extends Component {
     const lineHeight = (title) ? "53px" : null;
     return (
       <div>
-        <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
-          <Col xs={6}>
-            {title}
-          </Col>
-          <Col xs={6} style={{lineHeight: lineHeight, verticalAlign:"middle", textAlign: "right"}}>
-              <Button  bsStyle="primary"  bsSize="xs" onClick={()=> acSearch(tab, true)}>
-                <Icon name="refresh" />
-              </Button>
-        </Col>
-        </Row>
-        <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
-          <Col xs={10}>
-            <div className="text-center">
-              <DurationPicker filter={filter} onChange={acSetFilterAndRefresh} />
-            </div>
-          </Col>
-          <Col xs={10}>
-            <div className="text-center">
-              <PurposePicker purposes={purposes} filter={filter} onSelect={acSetFilterAndRefresh} />
-            </div>
-          </Col>
-          <Col xs={2}>
-            <Button bsStyle="link" className="pull-right" bsSize="sm" onClick={() => this.setState({expanded: !this.state.expanded})}>
-              <Icon name={this.state.expanded ? "compress": "expand"} />
-            </Button>
-          </Col>
-        </Row>
-        <Row style={{paddingLeft: "1em", paddingRight: "1em" }}>
-          <Col>
-           <WidthWrapper>{(width) => {
-             const minHeight = Math.round(width/(1.618*2)); //designer-like
-             if (showLoading || showError) {
-               return (<div style={{minHeight: minHeight + 6}}>
-                         {showLoading && <span><Icon name="spinner" spin/> Loading chart...</span>}
-                         {showError && <span>Error: {errorText}</span>}
-                       </div>);
-             }
-             else {
-               return (
-                   <HistogramChart
-                      expanded={this.state.expanded}
-                      limit={12}
-                      interval={filter.interval}
-                      pickRates={data}
-                      chartStyle={{
-                        height: minHeight,
-                        width: width,
-                        barWidth: 60,
-                        margins: {
-                          top: 20,
-                          right: 40,
-                          bottom: 20,
-                          left: 50,
-                        },
-                      }} />
-                   );
-             }
-             }}</WidthWrapper>
+        <IBox data={filter} reloadFunction={acSetFilterAndRefresh} loading={showLoading}>
+          <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
+            <Col xs={6}>
+              {title}
             </Col>
           </Row>
           <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
-            <Col>
-              <ChartNavigation filter={filter} onChange={acSetFilterAndRefresh} />
+            <Col xs={10}>
+              <div className="text-center">
+                <DurationPicker filter={filter} onChange={acSetFilterAndRefresh} />
+              </div>
+            </Col>
+            <Col xs={10}>
+              <div className="text-center">
+                <PurposePicker purposes={purposes} filter={filter} onSelect={acSetFilterAndRefresh} />
+              </div>
+            </Col>
+            <Col xs={2}>
+              <Button bsStyle="link" className="pull-right" bsSize="sm" onClick={() => this.setState({expanded: !this.state.expanded})}>
+                <Icon name={this.state.expanded ? "compress": "expand"} />
+              </Button>
             </Col>
           </Row>
+          <Row style={{paddingLeft: "1em", paddingRight: "1em" }}>
+            <Col>
+             <WidthWrapper>{(width) => {
+               const minHeight = Math.round(width/(1.618*2)); //designer-like
+               if (showLoading || showError) {
+                 return (<div style={{minHeight: minHeight + 6}}>
+                           {showLoading && <span><Icon name="spinner" spin/> Loading chart...</span>}
+                           {showError && <span>Error: {errorText}</span>}
+                         </div>);
+               }
+               else {
+                 return (
+                     <HistogramChart
+                        expanded={this.state.expanded}
+                        limit={12}
+                        interval={filter.interval}
+                        pickRates={data}
+                        chartStyle={{
+                          height: minHeight,
+                          width: width,
+                          barWidth: 60,
+                          margins: {
+                            top: 20,
+                            right: 40,
+                            bottom: 20,
+                            left: 50,
+                          },
+                        }} />
+                     );
+               }
+               }}</WidthWrapper>
+              </Col>
+            </Row>
+            <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
+              <Col>
+                <ChartNavigation filter={filter} onChange={acSetFilterAndRefresh} />
+              </Col>
+            </Row>
+          </IBox>
       </div>
     );
   }
