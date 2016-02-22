@@ -105,9 +105,11 @@ class Navigation extends React.Component {
 
   render() {
       return (
-              <nav className="page-sidebar" dataPages="sidebar" style={{"transform": "translate3d(210px, 0px, 0px)"}} role="navigation">
-              <FacilitySelector desktop={true} availableFacilities={this.props.facilities} {...this.props}/>
-              <div className="sidebar-menu">
+          <nav className="page-sidebar" dataPages="sidebar" style={{"transform": "translate3d(210px, 0px, 0px)"}} role="navigation">
+              <div className="sidebar-header">
+                <FacilitySelector desktop={true} availableFacilities={this.props.facilities} {...this.props}/>
+              </div>
+              <div className="m-t-30 sidebar-menu">
                   <ul className="menu-items">
                       {this.props.children}
                   </ul>
