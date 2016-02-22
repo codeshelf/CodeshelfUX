@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Icon from 'react-fa';
-//const { FaIcon, FaStack } = require('react-fa-icon');
-
+import {Button} from "react-bootstrap";
 export class IBox extends Component {
 
   componentDidMount() {
@@ -26,7 +25,7 @@ export class IBox extends Component {
           animation: "fadein 0.3s",
           zIndex: "9998",
           position: "absolute",
-          backgroundColor: "rgba(0,0,0, 0.5)",
+          backgroundColor: "rgba(255,255,255, 0.80)",
           top: 0,
           bottom: 0,
           left: 0,
@@ -38,9 +37,12 @@ export class IBox extends Component {
           <div>Loading...</div>
         </div> }
         <div style={{float: "right", zIndex: "9999", position: "relative"}}>
-        { loading
-          ? <Icon name="circle-o-notch" spin />
-          : <a onClick={() => reloadFunction(data)}><Icon name="circle-o-notch"/></a>}
+          <Button
+              bsStyle="link"
+              onClick={() => reloadFunction(data)}
+              disabled={loading}>
+            <Icon name="refresh" spin={loading} />
+          </Button>
         </div>
         { this.props.children }
       </div>
