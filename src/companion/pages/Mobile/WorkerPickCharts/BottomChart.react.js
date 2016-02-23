@@ -81,12 +81,14 @@ export class BottomChart extends Component {
                             style={{display: "flex", alignItems: "center"}}
                             to={`${desktop ? "worker": "workers"}/${encodeURIComponent(workerId)}/productivity`}
                             onClick={() => this.props.acSetProductivityFilter(workerId, filterWithId)} >
-                          <div style={{fontSize: "75%"}}>
-                            <div>{workerName}</div>
-                            <div style={{width: "4em", marginRight: "0.5em"}}>{totalEvents}</div>
-                          </div>
-                          <div>
-                            {chart.toReact()}
+                          <div style={{display: "flex", flexWrap: "wrap"}}>
+                            <div style={{textAlign: "left", width: "100%", flexShrink: "0"}}>
+                              <div>{workerName}</div>
+                            </div>
+                            <div style={{display: "flex", alignItems: "center"}}>
+                              <div style={{}}>{totalEvents}</div>
+                              {chart.toReact()}
+                            </div>
                           </div>
                           <Icon name="chevron-right" className="pull-right" style={{marginTop: "-.25em"}}/>
                         </ListGroupItemLink>
