@@ -22,7 +22,7 @@ class AdminNavigation extends React.Component {
       var params = this.props.params;
       let {facility} = this.props;
       return (<Navigation {...this.props}>
-                  <AuthzMenuItem className="m-t-30" to="users" params={params} title="Users" iconName="users" />
+                  <AuthzMenuItem to="users" params={params} title="Users" iconName="users" />
               </Navigation>);
   }
 
