@@ -5,7 +5,7 @@ import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import {Link} from '../../links';
 
 import {datetimeToSecondsFormater} from "../../DateDisplay.react.js";
-import {TabWithItemList} from "../../Detail/TabWithItemList.react.js";
+import {TabWithItemList, MoreDisplay} from "../../Detail/TabWithItemList.react.js";
 
 import {TopChart} from '../../WorkerPickCharts/TopChart.react.js';
 import {SettingsRow} from "../../Detail/common/SettingsRow.react.js";
@@ -42,8 +42,8 @@ export class ProductivityDump extends Component {
 
   render() {
     //consume acReloadTab so that the list does not show Refresh button
-    const {data: {events, histogram}, additionalDataLoading,
-           filter, id, acReloadTab, acSearchAdditional, ...other} = this.props;
+    const {data: {events, histogram},
+           filter, acReloadTab, ...other} = this.props;
 
     if (filter === null) return null;
     const {next} = events;
@@ -57,14 +57,7 @@ export class ProductivityDump extends Component {
         </TabWithItemList>
         <Row>
           <Col>
-            {additionalDataLoading &&
-              <Icon name="spinner" spin />
-            }
-            {(events.results.length > 0 && next && !additionalDataLoading) &&
-              <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchAdditional({id, next})}>
-                <Icon name="long-arrow-right" />
-              </Button>
-            }
+            <MoreDisplay {...this.props} />
           </Col>
         </Row>
       </div>

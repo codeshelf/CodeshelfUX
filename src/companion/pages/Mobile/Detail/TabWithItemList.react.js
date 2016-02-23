@@ -84,3 +84,17 @@ export class TabWithItemList extends Component {
     );
   }
 }
+
+
+export function MoreDisplay(props) {
+  const {additionalDataLoading, events, next, acSearchAdditional, id} = props;
+  const {results, total} = events;
+  if (additionalDataLoading) {
+    return (<Icon name="spinner" spin />);
+  } else if (results.length > 0 && next) {
+    return (
+      <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchAdditional({id, next})}>
+        <Icon name="long-arrow-right" />
+      </Button>);
+  }
+}
