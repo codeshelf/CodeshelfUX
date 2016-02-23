@@ -17,22 +17,23 @@ export function renderFacilityLabel(facility) {
 export class FacilitySelector extends React.Component {
 
     render() {
-        let {facility, availableFacilities, desktop} = this.props;
-        console.info(facility, availableFacilities)
-        return (<DropdownButton className="facility-dropdown" bsStyle="link" title={renderFacilityLabel(facility)}>
-                { availableFacilities &&
-                    availableFacilities.map((facility) => {
-                        const {name, persistentId, domainId, description} = facility;
-
-                        return <MenuItemLink key={domainId}
-                                             to={desktop ? `/facilities/${domainId}` : `/mobile/facilities/${domainId}`}
-                                             data-persistentid={persistentId}
-                                             onclick={() => this.props.acToggleSidebar(false)}>
-                                 {description}
-                               </MenuItemLink>
-
-                    })
-               }
-        </DropdownButton>);
+      let {facility, availableFacilities, desktop} = this.props;
+      if (availableFacilities) {
+        return (
+            <DropdownButton className="facility-dropdown" bsStyle="link" title={renderFacilityLabel(facility)}>
+            {availableFacilities.map((facility) => {
+              const {name, persistentId, domainId, description} = facility;
+              return <MenuItemLink
+              key={domainId}
+              to={desktop ? `/facilities/${domainId}` : `/mobile/facilities/${domainId}`}
+              data-persistentid={persistentId}
+              onclick={() => this.props.acToggleSidebar(false)}>
+                {description}
+              </MenuItemLink>})
+            }
+          </DropdownButton>);
+      } else {
+        return null;
+      }
     }
 }
