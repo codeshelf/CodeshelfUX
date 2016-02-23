@@ -91,7 +91,7 @@ class App extends Component {
                 iconName="bar-chart" />
               <AuthzMenuItem permission="event:view" to={`${basePath}/orders`} title="Orders"
                 onClick={() => this.props.acToggleSidebar(false)}
-                iconName="shopping-cart" />
+                iconName="shopping-basket" />
               <AuthzMenuItem permission="event:view" to={`${basePath}/workers`} title="Workers"
                 onClick={() => this.props.acToggleSidebar(false)}
                 iconName="users" />
