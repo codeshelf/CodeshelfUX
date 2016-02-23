@@ -87,28 +87,22 @@ export default class BlockedWork extends React.Component {
 
 
     renderTabbedArea(issuesSummary) {
-        let sortedSummary = issuesSummary.filter(summary => {
-            let type = summary.get("eventType");
-            let description = this.toDescription(type);
-            const hasDescription =  !(typeof description === 'undefined' || description == null);
-            return hasDescription;
-          }).sortBy((summary) => summary.get("eventType"));
-
-        let firstType = sortedSummary.first().get("eventType");
+        const first = issuesSummary.first();
+        let firstType = first && first.get("eventType");
         const {filter, groupBy} = this.state;
         return (
                 <IBox>
                 <IBoxBody>
                 <TabbedArea className="nav-tabs-simple" defaultActiveKey={firstType} >
                 {
-                    sortedSummary.map((summary) => {
+                    issuesSummary.map((summary) => {
                         let type = summary.get("eventType");
                         let description = this.toDescription(type);
                         let total = summary.get("count");
                         return (<TabPane eventKey={type}
                                  key={type}
                                  tab={<span>
-                                      {description && description.toUpperCase()}
+                                      <span className="name">{description && description.toUpperCase()}</span>
                                       <Badge style={{marginLeft: "1em"}} className="badge-primary">{total}</Badge>
                                       </span>}>
                                 <IBox>
@@ -135,6 +129,12 @@ export default class BlockedWork extends React.Component {
       let title = "Issues";
       let issuesSummary = getIssuesSummary();
       let issuesSummaryResults = issuesSummary.get("results") || List();
+      let sortedSummary = issuesSummaryResults.filter(summary => {
+        let type = summary.get("eventType");
+        let description = this.toDescription(type);
+        const hasDescription =  !(typeof description === 'undefined' || description == null);
+        return hasDescription;
+      }).sortBy((summary) => summary.get("eventType"));
       const {groupBy} = this.state;
       return (
                 <DocumentTitle title={title}>
@@ -155,8 +155,8 @@ export default class BlockedWork extends React.Component {
                     </Row>
                     <Row>
                       <Col sm={12}>
-                  {(issuesSummaryResults.count() > 0) ?
-                    this.renderTabbedArea(issuesSummaryResults) :
+                  {(sortedSummary.count() > 0) ?
+                    this.renderTabbedArea(sortedSummary) :
                     <IBox className="bg-primary">
                         <IBoxBody>
                             <h3 className="text-white text-center">No {title}</h3>
