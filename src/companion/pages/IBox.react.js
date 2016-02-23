@@ -36,7 +36,7 @@ export class IBox extends Component {
           color: "white"}}>
           <div>Loading...</div>
         </div> }
-        <div style={{float: "right", zIndex: "9999", position: "relative"}}>
+        <div style={{float: "right", position: "relative"}}>
           <Button
               bsStyle="link"
               onClick={() => reloadFunction(data)}
