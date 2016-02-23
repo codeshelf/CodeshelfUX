@@ -1,5 +1,5 @@
 import React from 'react';
-import {Nav as Navigation} from "../Navigation";
+import {Navigation} from "../../Sidebar/Navigation";
 import exposeRouter from 'components/common/exposerouter';
 
 const AuthzMenuItem = Navigation.AuthzMenuItem;
@@ -21,7 +21,7 @@ class AdminNavigation extends React.Component {
   render() {
       var params = this.props.params;
       let {facility} = this.props;
-      return (<Navigation {...this.props}>
+      return (<Navigation {...this.props} docked={true} desktop={true} availableFacilities={this.props.facilities}>
                   <AuthzMenuItem to="users" params={params} title="Users" iconName="users" />
               </Navigation>);
   }

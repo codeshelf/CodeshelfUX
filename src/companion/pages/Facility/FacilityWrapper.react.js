@@ -3,9 +3,9 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import exposeRouter from 'components/common/exposerouter';
 import {acInitialLoadFacilities, acSelectFacility} from './store';
-import {acToggleSidebar} from '../Mobile/Sidebar/store';
+import {acToggleSidebar} from '../Sidebar/store';
 import {getFacilityMutable} from "./get";
-import {getSidebarMutable} from "../Mobile/Sidebar/get";
+import {getSidebarMutable} from "../Sidebar/get";
 
 
 class FacilityWrapper extends Component {

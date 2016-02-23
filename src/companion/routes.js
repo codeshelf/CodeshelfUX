@@ -1,7 +1,6 @@
 import React from 'react';
 import {Route, IndexRoute, NotFoundRoute, RouteHandler, Redirect, IndexRedirect} from 'react-router';
 import Root from './Root.react.js';
-import App from './pages/App/App.react.js';
 import Admin from './pages/App/Admin/Admin.react.js';
 import Facility from './pages/App/Facility/Facility.react.js';
 import NotFound from 'pages/NotFound';

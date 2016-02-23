@@ -14,7 +14,7 @@ import {orderDetailReducer} from '../Detail/OrderDetail/store';
 import {workerSearchReducer} from '../Search/WorkerSearch/store';
 import {workerDetailReducer} from '../Detail/WorkerDetail/store';
 import {workerPickChartReducer} from './WorkerPickCharts/store';
-import {sidebarReducer} from './Sidebar/store';
+import {sidebarReducer} from '../Sidebar/store';
 
 const rootReducer = combineReducers({
 //  user: userReducer,

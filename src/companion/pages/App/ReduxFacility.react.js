@@ -5,7 +5,6 @@ import { combineReducers, createStore, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
 
 import {facilityReducer} from '../Facility/store';
-import {sidebarReducer} from '../Mobile/Sidebar/store';
 import {workerPickChartReducer} from '../Mobile/WorkerPickCharts/store';
 import {cartSearchReducer} from '../Search/CartSearch/store';
 import {cartDetailReducer} from '../Detail/CartDetail/store';
@@ -13,6 +12,7 @@ import {orderSearchReducer} from '../Search/OrderSearch/store';
 import {orderDetailReducer} from '../Detail/OrderDetail/store';
 import {workerSearchReducer} from '../Search/WorkerSearch/store';
 import {workerDetailReducer} from '../Detail/WorkerDetail/store';
+import {sidebarReducer} from '../Sidebar/store';
 
 const rootReducer = combineReducers({
   cartSearch: cartSearchReducer,
@@ -20,10 +20,10 @@ const rootReducer = combineReducers({
   facility: facilityReducer,
   orderSearch: orderSearchReducer,
   orderDetail: orderDetailReducer,
-  sidebar: sidebarReducer,
   workerSearch: workerSearchReducer,
   workerDetail: workerDetailReducer,
   workerPickChart: workerPickChartReducer,
+  sidebar: sidebarReducer,
 });
 
 const store = createApplicationStore(rootReducer);
