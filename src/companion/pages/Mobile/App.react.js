@@ -161,7 +161,7 @@ class App extends Component {
             }}/>
           <div id="page-wrapper" className="page-container" style={{backgroundColor: "rgb(245, 245, 245)"}}>
               <Header facility={this.props.facility}>
-                <Button
+                <Button id="menucontrol"
                     bsStyle="link"
                     className="visible-sm-inline-block visible-xs-inline-block padding-5"
                     onClick={() => this.props.acToggleSidebar(true)}>

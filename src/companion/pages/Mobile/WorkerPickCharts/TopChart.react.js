@@ -22,7 +22,7 @@ export class DurationPicker extends Component {
   render() {
     const {filter, onChange} = this.props;
     return (
-      <DropdownButton bsStyle="default" bsSize="small" title={`events per ${filter['interval'].humanize()} / ${filter['window'].humanize()}`}
+      <DropdownButton id="durationpicker" bsStyle="default" bsSize="small" title={`events per ${filter['interval'].humanize()} / ${filter['window'].humanize()}`}
         onSelect={(ev, dur) => {
           const newFilter = filter.merge(dur);
           onChange(newFilter);

@@ -34,7 +34,7 @@ export function createSearchComponent(ItemComponent, searchFieldText, getIdForIt
         <Row>
           <Col sm={12}>
             Number of results: { result.total }
-            <ListGroup>
+            <ListGroup className="searchresults">
             {result.results.map((oneResult) => {
               return <ItemComponent key={getIdForItem(oneResult)} {...oneResult} filterText={filterText} />
             })}
