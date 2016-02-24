@@ -82,12 +82,10 @@ export default class WorkerMgmt extends React.Component{
         fetchWorkers({limit: 5000});
     }
 
-    handleImportSubmit(method, file) {
-        var formData = new FormData();
-        formData.append("file", file);
-        return getFacilityContext()[method](formData).then(() => {
-          fetchWorkers({limit: 5000});
-        });
+    handleImportSubmit(method, formInput) {
+      return getFacilityContext()[method](formInput).then(function() {
+        fetchWorkers({limit: 5000});
+      }.bind(this));
     }
 
     render() {

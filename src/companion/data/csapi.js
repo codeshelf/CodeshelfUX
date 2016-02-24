@@ -513,14 +513,19 @@ export function getFacilityContext(selectedFacility) {
             return ajax(filtersUrl);
         },
 
-        importFile: function(path, formData) {
-            let importPath = facilityPath + "/import/" + path;
-            return ajax(importPath, {
-                method: "POST",
-                data: formData,
-                processData: false,
-                contentType: false
-            });
+        importFile: function(path, formInput) {
+          var formData = new FormData();
+          for(var key in formInput) {
+            formData.append(key, formInput[key]);
+          }
+
+          let importPath = facilityPath + "/import/" + path;
+          return ajax(importPath, {
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false
+          });
         },
         importOrderFile: function(formData) {
             return this.importFile("orders", formData);

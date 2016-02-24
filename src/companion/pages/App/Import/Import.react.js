@@ -19,7 +19,6 @@ class OrderUploadForm extends React.Component {
       deleteOldOrders: false
     };
     this.handleChange = (e) => {
-      //e.preventDefault();
       changeState.bind(this)("deleteOldOrders", e.target.checked);
     };
   }
@@ -94,12 +93,7 @@ export default class Imports extends React.Component{
     }
 
     handleImportSubmit(method, formInput) {
-      var formData = new FormData();
-      for(var key in formInput) {
-        formData.append(key, formInput[key]);
-      }
-
-      return getFacilityContext()[method](formData).then(function() {
+      return getFacilityContext()[method](formInput).then(function() {
         this.handleRefresh();
       }.bind(this));
     }
