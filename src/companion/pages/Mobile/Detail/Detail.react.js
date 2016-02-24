@@ -48,12 +48,13 @@ export class Detail extends Component {
           )
         }}
         tabWidth={1}>
-        {this.props.ALL_TABS.map(tab =>
-          <Tab key={tab} eventKey={tab} title={this.props.tabToHeaderText[tab]}>
+        {this.props.ALL_TABS.map(tab => {
+          const title= <span className="name">{this.props.tabToHeaderText[tab]}</span>;
+          return <Tab key={tab} eventKey={tab} title={title}>
             {loadedTime && "loaded "}
             <TimeFromNow time={loadedTime}/>
           </Tab>
-        )}
+        })}
       </Tabs>
     );
   }

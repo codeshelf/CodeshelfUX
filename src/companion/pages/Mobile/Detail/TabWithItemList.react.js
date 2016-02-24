@@ -85,10 +85,27 @@ export class TabWithItemList extends Component {
   }
 }
 
+export class MoreDisplay extends Component {
+  render() {
+    const {additionalDataLoading, data = {}, acSearchAdditional, id} = this.props;
+    const {results = 0, total = 0, next = null} = data;
+    if (additionalDataLoading) {
+      return (<Icon name="spinner" spin />);
+    } else if (results.length > 0 && next) {
+      return (
+          <Button bsStyle="primary" bsSize="xs" onClick={() => acSearchAdditional({id, next})}>
+          <Icon name="long-arrow-right" />
+          </Button>);
+    } else {
+      return null;
+    }
 
+  }
+}
+/*
 export function MoreDisplay(props) {
-  const {additionalDataLoading, events, next, acSearchAdditional, id} = props;
-  const {results, total} = events;
+  const {additionalDataLoading, events ={}, next, acSearchAdditional, id} = props;
+  const {results = 0, total = 0} = events;
   if (additionalDataLoading) {
     return (<Icon name="spinner" spin />);
   } else if (results.length > 0 && next) {
@@ -97,4 +114,4 @@ export function MoreDisplay(props) {
         <Icon name="long-arrow-right" />
       </Button>);
   }
-}
+}*/

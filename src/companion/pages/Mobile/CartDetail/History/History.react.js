@@ -57,7 +57,7 @@ export class ProductivityDump extends Component {
         </TabWithItemList>
         <Row>
           <Col>
-            <MoreDisplay {...this.props} />
+            <MoreDisplay {...this.props} data={events}/>
           </Col>
         </Row>
       </div>
