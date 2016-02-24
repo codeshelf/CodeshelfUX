@@ -9,6 +9,7 @@ import PureComponent from 'components/common/PureComponent';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {SingleCellIBox} from 'components/common/IBox';
 import UploadForm from 'components/common/UploadForm';
+import {Checkbox, changeState} from 'components/common/Form';
 
 
 import ListView from "components/common/list/ListView";
@@ -22,6 +23,29 @@ import {fetchWorkers} from 'data/workers/actions';
 import {getWorkers} from 'data/workers/store';
 import DateDisplay from "components/common/DateDisplay";
 const keyColumn = "persistentId";
+
+
+class WorkerUploadForm extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      append: true
+    };
+    this.handleChange = (e) => {
+      changeState.bind(this)("append", e.target.checked);
+    };
+  }
+
+  render() {
+    const {append} = this.state;
+    return (
+        <UploadForm
+            label="Workers"
+            onImportSubmit={({file}) => this.props.onImportSubmit({file, append})}>
+          <Checkbox id="append" name="append" label="Append Workers" value={append} onChange={this.handleChange} />
+      </UploadForm>);
+  }
+}
 
 export default class WorkerMgmt extends React.Component{
 
@@ -94,7 +118,7 @@ export default class WorkerMgmt extends React.Component{
         return (
             <SingleCellLayout title={title}>
                 <Authz permission="worker:import">
-                    <UploadForm label="Workers"
+                    <WorkerUploadForm label="Workers"
                             onImportSubmit={this.handleImportSubmit.bind(this, "importWorkers")} />
                 </Authz>
                 <ListManagement
