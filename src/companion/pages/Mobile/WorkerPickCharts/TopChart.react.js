@@ -88,7 +88,7 @@ export class TopChart extends Component {
     const title = this.props.title && <h4>{this.props.title}</h4>;
     const lineHeight = (title) ? "53px" : null;
     return (
-      <div>
+      <div className="chart">
         <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
           <Col xs={6}>
             {title}
