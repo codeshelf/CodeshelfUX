@@ -11,7 +11,7 @@ export const TAB_DETAIL = "cart tab detail";
 export const TAB_PRODUCTIVITY = "cart tab productivity";
 export const TAB_ACTIONS = "cart tab actions";
 
-export const ALL_TABS = [TAB_DETAIL, TAB_PRODUCTIVITY, TAB_ACTIONS];
+export const ALL_TABS = [TAB_DETAIL, TAB_PRODUCTIVITY /*, TAB_ACTIONS*/]; //TODO hide actions temporarily
 
 export const PERSIST_STATE_PART = [
   ["cartDetail", TAB_DETAIL, "settings", "properties"],
