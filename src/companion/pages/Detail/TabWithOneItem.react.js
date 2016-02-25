@@ -30,7 +30,7 @@ export class TabWithOneItem extends Component {
     return (
       //TODO same structure as TabWithItemList
       <div>
-        <SettingsRow onClickReload={acReloadTab} onClickSettings={acSettingOpen} />
+        <SettingsRow onClickSettings={acSettingOpen} />
         <Settings title="Set field visibility"
                   visible={settingOpen}
                   onClose={acSettingClose}
