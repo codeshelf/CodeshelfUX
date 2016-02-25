@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import _ from 'lodash';
 import DocumentTitle from 'react-document-title';
 import {Modal, Input} from 'react-bootstrap';
@@ -20,9 +20,16 @@ import {getFacilityContext} from 'data/csapi';
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkers} from 'data/workers/store';
 import DateDisplay from "components/common/DateDisplay";
+// new imports redux 
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+
+import {getWorkerMgmtMutable} from "./get";
+import {acGetWorkers, acHandleImport} from "./store";
+
 const keyColumn = "persistentId";
 
-export default class WorkerMgmt extends React.Component{
+class WorkerMgmt extends Component{
 
     constructor(props) {
         super(props);
@@ -66,49 +73,52 @@ export default class WorkerMgmt extends React.Component{
                 displayName: "Active"
             },
         ]);
-            this.rowActionComponent = ListManagement.toEditButton((row) => {
-              return {    to: toURL(this.props, "workers/" + row.get(keyColumn))};
+        this.rowActionComponent = ListManagement.toEditButton((row) => {
+          return { to: toURL(this.props, "workers/" + row.get(keyColumn))};
         });
-        let {state} = props;
-        this.columnsCursor  = state.cursor(["preferences", "workers", "table", "columns"]);
-        this.columnSortSpecsCursor = state.cursor(["preferences", "workers", "table", "sortSpecs"]);
-
     }
 
 
     componentWillMount() {
-        fetchWorkers({limit: 5000});
+        this.props.acGetWorkers({limit: 20});
     }
 
     handleImportSubmit(method, file) {
         var formData = new FormData();
         formData.append("file", file);
-        return getFacilityContext()[method](formData).then(() => {
-          fetchWorkers({limit: 5000});
-        });
+        return this.props.acHandleImport(method, formData);
     }
 
     render() {
-        var rows = getWorkers();
-        let title = "Manage Workers";
+        const {table, workers} = this.props;
+        const title = "Manage Workers";
         return (
             <SingleCellLayout title={title}>
-                <Authz permission="worker:import">
-                    <UploadForm label="Workers"
-                            onImportSubmit={this.handleImportSubmit.bind(this, "importWorkers")} />
-                </Authz>
-                <ListManagement
-                        allowExport={true}
-                        addButtonRoute={toURL(this.props, 'workers/new')}
-                        columns={this.columnsCursor}
-                        columnMetadata={this.columnMetadata}
-                        sortSpecs={this.columnSortSpecsCursor}
-                        rowActionComponent={this.rowActionComponent}
-                        results={rows}
-                        keyColumn={keyColumn}/>
-                {this.props.children && React.cloneElement(this.props.children, { formMetadata: this.columnMetadata})}
+              <Authz permission="worker:import">
+                  <UploadForm label="Workers"
+                    onImportSubmit={(file) => this.handleImportSubmit("importWorkers", file)} />
+              </Authz>
+              { workers.get('loading')
+                ? <div>Loading...</div>
+                : <ListManagement
+                    allowExport={true}
+                    addButtonRoute={toURL(this.props, 'workers/new')}
+                    columns={table.columns}
+                    columnMetadata={this.columnMetadata}
+                    sortSpecs={table.sortSpecs}
+                    rowActionComponent={this.rowActionComponent}
+                    results={workers.get('data')}
+                    keyColumn={keyColumn}/>
+              }
+              {this.props.children && React.cloneElement(this.props.children, { formMetadata: this.columnMetadata})}
            </SingleCellLayout>);
     }
 
 
 };
+
+function mapDispatch(dispatch) {
+  return bindActionCreators({acGetWorkers, acHandleImport}, dispatch);
+}
+
+export default connect(getWorkerMgmtMutable, mapDispatch)(WorkerMgmt);

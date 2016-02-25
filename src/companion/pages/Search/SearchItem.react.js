@@ -30,7 +30,7 @@ export class SearchItem extends Component {
     return (
       <ListGroupItemLink {...rest} >
         <Row className="searchResult">
-          <Col xs={9} >
+          <Col xs={9}>
             <dl>
               <dt>{title}</dt>
               <dd>{subtitle}</dd>
