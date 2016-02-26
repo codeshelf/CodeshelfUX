@@ -41,12 +41,12 @@ export class DurationPicker extends Component {
 export class PurposePicker extends Component {
 
   preprocessData(purposes, selected) {
-    return purposes.map((purpose) => { return {value: purpose, selected: selected.indexOf(purpose) !== -1}});
+    return purposes.map((purpose) => { return { ...purpose, selected: selected.indexOf(purpose.value) !== -1}});
   }
 
   render()  {
     /* To be deleted */
-    const mockedData = ['Purpose 1', 'Purpose 2', 'Purpose 3'];
+    const mockedData =  [{label: 'Purpose 1', value: 'p1'}, {label: 'Purpose 2', value: 'p2'}, {label: 'Purpose 3', value: 'p3'}];
     const {filter, onSelect, purposes} = this.props;
     const data = purposes.error || purposes.loading ? [] : this.preprocessData(mockedData, filter.purposes);
     return (
