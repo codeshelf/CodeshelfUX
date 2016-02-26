@@ -16,6 +16,7 @@ import {getCartDetailMutable} from "./get";
 import {Cart} from "./Cart/Cart.react.js";
 import {fieldToDescription} from "./Cart/intl";
 import {History} from "./History/History.react.js";
+import {IBox} from '../../IBox.react.js';
 
 const tabToComponent = {
   [TAB_DETAIL]: Cart,
@@ -55,18 +56,20 @@ function getTitleComponent(props) {
 
 export class CartDetail extends Component {
   render() {
-    const {tab} = this.props;
+    const {tab, acSelectTab, params:{id}} = this.props;
     const {error, whatIsLoading, whatIsLoaded} = this.props[tab];
     const transitionTo = 'mobile-cart-detail';
     return (
-        <Detail {...this.props} {...{
-          ALL_TABS,
-          tabToComponent,
-          tabToHeaderText,
-          getTitleComponent,
-          convertTab,
-          transitionTo,
-        }} />
+        <IBox reloadFunction={() => acSelectTab(tab, id, true)}>
+          <Detail {...this.props} {...{
+            ALL_TABS,
+            tabToComponent,
+            tabToHeaderText,
+            getTitleComponent,
+            convertTab,
+            transitionTo,
+          }} />
+        </IBox>
     );
   }
 }

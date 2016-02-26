@@ -4,8 +4,10 @@ import Icon from 'react-fa';
 import {Link} from '../links';
 import {SearchInput} from "./SearchInput.react.js";
 import * as csapi from 'data/csapi';
+import {IBox} from '../IBox.react.js';
 
 export function createSearchComponent(ItemComponent, searchFieldText, getIdForItem) {
+
 
   class SearchList extends Component {
     render() {
@@ -58,15 +60,19 @@ export function createSearchComponent(ItemComponent, searchFieldText, getIdForIt
     }
 */
     render() {
+
       const {whatIsLoading, error, result, filter} = this.props;
       const {acChangeFilter, acSearch} = this.props;
 
       const isLoading = (whatIsLoading !== null);
+
       return (
         <div>
           {/*<SearchType />*/}
-          <SearchInput  placeholder={searchFieldText} {...{filter, acChangeFilter, acSearch}} />
-          <SearchList {...{isLoading, result, filter, error, acChangeFilter}} />
+          <IBox loading={isLoading} reloadFunction={acChangeFilter} data={filter.text}>
+            <SearchInput  placeholder={searchFieldText} {...{filter, acChangeFilter, acSearch}} />
+            <SearchList {...{isLoading, result, filter, error, acChangeFilter}} />
+          </IBox>
         </div>
       );
     }
