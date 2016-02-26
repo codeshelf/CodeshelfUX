@@ -385,46 +385,46 @@ export function getFacilityContext(selectedFacility) {
           });
         },
 
-        getWorkerEventsWithTime: function({id, startAt, endAt}) {
+        getWorkerEventsWithTime: function({id, startAt, endAt, purposes}) {
           var workerPath = facilityPath + "/workers/" + encodeURIComponent(id) + "/events";
           startAt = moment(startAt);
           endAt = moment(endAt);
           const created = startAt.toISOString() + "/" + endAt.toISOString();
           return ajax(workerPath, {
-            data: {created}
+            data: {created, purpose: purposes}
           });
         },
 
-        getWorkerPicksWithnWindow: function({startAt, endAt, interval}) {
-          var path = facilityPath + "/picks/histogram";
+        getWorkerPicksWithnWindow: function({startAt, endAt, interval, purposes}) {
+          const path = facilityPath + "/picks/histogram";
           startAt = moment(startAt);
           endAt = moment(endAt);
           const created = startAt.toISOString() + "/" + endAt.toISOString();
           const createdBin = interval.toISOString();
           return ajax(path, {
-            data: {created, createdBin}
+            data: {created, createdBin, purpose: purposes}
           });
         },
 
-        getWorkerPicksWithnWindowAllWorkers: function({startAt, endAt, interval}) {
-          var path = facilityPath + "/picks/workers/histogram";
+        getWorkerPicksWithnWindowAllWorkers: function({startAt, endAt, interval, purposes}) {
+          const path = facilityPath + "/picks/workers/histogram";
           startAt = moment(startAt);
           endAt = moment(endAt);
           const created = startAt.toISOString() + "/" + endAt.toISOString();
           const createdBin = interval.toISOString();
           return ajax(path, {
-            data: {created, createdBin}
+            data: {created, createdBin, purpose: purposes}
           });
         },
 
-        getWorkerEventHistogram({id, startAt, endAt, interval}) {
-          var workerPath = facilityPath + "/workers/" + id + "/events/histogram";
+        getWorkerEventHistogram({id, startAt, endAt, interval, purposes}) {
+          const workerPath = facilityPath + "/workers/" + id + "/events/histogram";
           startAt = moment(startAt);
           endAt = moment(endAt);
           const created = startAt.toISOString() + "/" + endAt.toISOString();
           const createdBin = interval.toISOString();
           return ajax(workerPath, {
-            data: {created, createdBin}
+            data: {created, createdBin, purpose: purposes}
           });
         },
 
@@ -562,6 +562,7 @@ export function getFacilityContext(selectedFacility) {
           });
 
         },
+
         createEvent(cheName, workerId, type, createTime) {
           let eventPath = facilityPath + "/ches/" + cheName + "/events";
           return ajax(eventPath, {
@@ -575,13 +576,13 @@ export function getFacilityContext(selectedFacility) {
             accept: "text/plain"
           });
         },
+
         getEventPurposes() {
           var pickRatePurposesUrl = facilityPath + "/pickrate/search";
           return ajax(pickRatePurposesUrl, {
-
           });
-
         },
+
         getPickRates: (filter) => {
             var pickRateUrl = facilityPath + "/pickrate";
             return ajax(pickRateUrl, {

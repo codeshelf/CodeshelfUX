@@ -4,10 +4,10 @@ import Icon from 'react-fa';
 import {WidthWrapper} from "./WidthWrapper.react.js";
 import d3 from "d3";
 import ReactFauxDOM from 'react-faux-dom';
-import {TAB_PRODUCTIVITY} from '../WorkerDetail/store';
-import {convertTab} from '../WorkerDetail/WorkerDetail.react.js';
+import {TAB_PRODUCTIVITY} from '../../Detail/WorkerDetail/store';
+import {convertTab} from '../../Detail/WorkerDetail/WorkerDetail.react.js';
 import {Map, Record} from "immutable";
-import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../links';
+import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../../links';
 
 export class BottomChart extends Component {
 
@@ -77,20 +77,21 @@ export class BottomChart extends Component {
                   // temporarly disable links
                   return (
                       <div>
-                      { desktop ?
-                        <div>
-                         <div style={{fontSize: "75%"}}>{workerName}</div>
-                         <span style={{width: "4em" ,marginRight: "0.5em"}}>{totalEvents}</span>
-                         {chart.toReact()}
-                        </div> :
                         <ListGroupItemLink
-                            to={`workers/${encodeURIComponent(workerId)}/productivity`}
+                            style={{display: "flex", alignItems: "center"}}
+                            to={`${desktop ? "worker": "workers"}/${encodeURIComponent(workerId)}/productivity`}
                             onClick={() => this.props.acSetProductivityFilter(workerId, filterWithId)} >
-                          <div style={{fontSize: "75%"}}>{workerName}</div>
-                          <span style={{width: "4em" ,marginRight: "0.5em"}}>{totalEvents}</span>
-                          {chart.toReact()}
+                          <div style={{display: "flex", flexWrap: "wrap"}}>
+                            <div style={{textAlign: "left", width: "100%", flexShrink: "0"}}>
+                              <div>{workerName}</div>
+                            </div>
+                            <div style={{display: "flex", alignItems: "center"}}>
+                              <div style={{}}>{totalEvents}</div>
+                              {chart.toReact()}
+                            </div>
+                          </div>
                           <Icon name="chevron-right" className="pull-right" style={{marginTop: "-.25em"}}/>
-                        </ListGroupItemLink> }
+                        </ListGroupItemLink>
                       </div>
                   );
                 })

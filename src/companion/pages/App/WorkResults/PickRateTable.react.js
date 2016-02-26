@@ -26,7 +26,6 @@ export default class PickRateTable extends React.Component{
         .sortBy("total")
         .reverse()
         .value();
-
     }
 
     render() {

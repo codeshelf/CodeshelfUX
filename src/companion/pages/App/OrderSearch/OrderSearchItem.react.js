@@ -1,6 +1,8 @@
 import React, {Component, PropTypes} from 'react';
-import {DateDisplay} from "../../Mobile/DateDisplay.react.js";
-import {SearchItem, renderMatch} from "../../Mobile/Search/SearchItem.react.js";
+import {DateDisplay} from "../../DateDisplay.react.js";
+import {SearchItem, renderMatch} from "../../Search/SearchItem.react.js";
+import {Link} from '../../links';
+import Icon from 'react-fa';
 
 export class OrderSearchItem extends Component {
 
@@ -8,9 +10,13 @@ export class OrderSearchItem extends Component {
     const {orderId, dueDate, status, filterText} = this.props;
     const subtitle = <span>{status} - <DateDisplay date={dueDate} /></span>;
     return (
-      <SearchItem to={`orders/${orderId}`}
-          title={renderMatch(orderId, filterText)}
-          subtitle={subtitle} />
-    );
+      <Link to={`orders/${orderId}`}>
+        <tr>
+            <td>{renderMatch(orderId, filterText)}</td>
+            <td>{subtitle}</td>
+            <td><Icon name="chevron-right"/></td>
+        </tr>
+      </Link>
+    )
   }
 }

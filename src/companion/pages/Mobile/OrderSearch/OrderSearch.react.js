@@ -2,11 +2,11 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import {OrderSearchItem} from "./OrderSearchItem.react.js";
-import {createSearchComponent} from "../Search/SearchFactory.react.js";
+import {createSearchComponent} from "../../Search/SearchFactory.react.js";
 
-import {getOrderSearchMutable} from './get';
-import {acChangeFilter, acSearch} from './store';
-import {DateDisplay} from "../DateDisplay.react.js";
+import {getOrderSearchMutable} from '../../Search/OrderSearch/get';
+import {acChangeFilter, acSearch} from '../../Search/OrderSearch/store';
+import {DateDisplay} from "../../DateDisplay.react.js";
 
 /* NOT USED RIGHT NOW
 export class SearchType extends Component {

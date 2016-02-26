@@ -24,15 +24,12 @@ export default class ListManagement extends React.Component {
     }
 
     static toEditButton(editButtonPropsFn: Function) {
-        class Edit extends React.Component {
-            render() {
-                var {rowData, ...rest}  = this.props;
-                return (<EditButtonLink {...editButtonPropsFn(rowData)} {...rest}>
-                        </EditButtonLink>);
-            }
+      return (props) => {
+        var {rowData, ...rest}  = props;
+        return (<EditButtonLink {...editButtonPropsFn(rowData)} {...rest}>
+                </EditButtonLink>);
 
-        }
-        return Edit;
+      };
     }
 
 

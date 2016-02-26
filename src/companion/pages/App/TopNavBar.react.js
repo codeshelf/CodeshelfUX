@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "react-fa";
 import {DropdownButton, Nav, NavItem, Button, MenuItem} from "react-bootstrap";
-import { NavItemLink, MenuItemLink, ButtonLink} from '../Mobile/links.js';
+import { NavItemLink, MenuItemLink, ButtonLink} from '../../links.js';
 import {loggedout} from "data/auth/actions";
 //todo turn clearStoredCredentials into an action
 import {getEmail, isCredentialsStored, clearStoredCredentials} from "data/user/store";
@@ -33,17 +33,16 @@ export default class TopNavBar extends React.Component {
                         </div>
                     </div>
                     <div className="pull-right">
-                            {
-                                (facilities) ?
-                                    <AuthzButtonLink permission="user:edit" bsStyle="link" to="users" >Admin</AuthzButtonLink> :
-                                    <ButtonLink bsStyle="link" to="facilities" id="home" name="home">
-                                        <Icon name="home" size="lg"/>
-                                    </ButtonLink>
-                            }
-                            {(facilities) &&
-                                <FacilitySelector facility={facility} facilities={facilities} />}
-                                <UserProfileMenu user={user}/>
-                            </div>
+                        {
+                            (facilities) ?
+                                <AuthzButtonLink id="admin" permission="user:edit" bsStyle="link" to="/admin/users" >Admin</AuthzButtonLink> :
+                                <ButtonLink bsStyle="link" to="/facilities" id="home" name="home">
+                                    <Icon name="home" size="lg"/>
+                                </ButtonLink>
+                        }
+                            <span>{title}</span>
+                            <UserProfileMenu user={user}/>
+                    </div>
                 </div>
         );
     }
@@ -108,32 +107,3 @@ class CredentialsStore extends React.Component {
     }
 }
 const AuthzCredentialsStore = authz(CredentialsStore);
-
-class FacilitySelector extends React.Component {
-
-    renderDropdownLabel(facility) {
-      let facilityName = (facility) ? facility.description : "";
-        if (facility) {
-            return (<span><Icon name="building" /> {facilityName}</span>);
-        } else {
-            return null;
-        }
-    }
-
-    render() {
-        let {facility, facilities} = this.props;
-        return (<DropdownButton className="facility-dropdown" bsStyle="link" title={this.renderDropdownLabel(facility)}>
-                {
-                    facilities.map((facility) => {
-                      let {persistentId, domainId, description} = facility;
-
-                        return <MenuItemLink key={domainId}
-                                             to={`/facilities/${domainId}`}
-                                             data-persistentid={persistentId}>
-                                         {description}
-                               </MenuItemLink>;
-                    })
-               }
-        </DropdownButton>);
-    }
-}

@@ -38,6 +38,7 @@
     "piping": "0.1.6",
     "react": "0.14.4",
     "react-bootstrap": "0.28.2",
+    "react-bootstrap-multiselect": "^1.0.1",
     "react-dnd": "2.0.2",
     "react-dnd-html5-backend": "2.0.2",
     "react-document-title": "^1.0.0",

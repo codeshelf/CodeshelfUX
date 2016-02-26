@@ -2,11 +2,11 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import {OrderSearchItem} from "./OrderSearchItem.react.js";
-import {createSearchComponent} from "../CartSearch/Search.react.js";
+import {createSearchComponent} from "../Search/Search.react.js";
 
-import {getOrderSearchMutable} from '../../Mobile/OrderSearch/get';
-import {acChangeFilter, acSearch} from '../../Mobile/OrderSearch/store';
-import {DateDisplay} from "../../Mobile/DateDisplay.react.js";
+import {getOrderSearchMutable} from '../../Search/OrderSearch/get';
+import {acChangeFilter, acSearch} from '../../Search/OrderSearch/store';
+import {DateDisplay} from "../../DateDisplay.react.js";
 
 
 function getIdForItem(item) { return  item.orderId }

@@ -10,16 +10,9 @@ import {getSelectedTenant} from 'data/user/store';
 import {state} from 'data/state';
 
 export default class Facility extends React.Component {
-    componentWillMount() {
-      document.body.classList.add("fixed-header", "dashboard", "sidebar-visible", "menu-pin");
-    }
-
-    componentWillUnmount() {
-      document.body.classList.remove("fixed-header", "dashboard", "sidebar-visible", "menu-pin");
-    }
 
     render() {
-        let {facility, availableFacilities} = this.props;
+        let {facility, availableFacilities, acToggleSidebar} = this.props;
         const tenant = getSelectedTenant();
         let tenantName = tenant.get("name");
         return (
@@ -27,11 +20,11 @@ export default class Facility extends React.Component {
             {
                     facility ?
                           <div>
-                              <FacilityNavigation title={tenantName} facility={facility} facilities={availableFacilities} />
+                              <FacilityNavigation title={tenantName} facility={facility} facilities={availableFacilities} acToggleSidebar={acToggleSidebar}/>
                               <div id="page-wrapper" className="page-container">
                                   <TopNavBar title={tenantName} facility={facility} facilities={availableFacilities}/>
                                   <div className="page-content-wrapper">
-                                      <div className="content">
+                                      <div className="content" style={{paddingLeft: "250px"}}>
                                         { React.cloneElement(this.props.children, { state: state })}
                                       </div>
                                   </div>

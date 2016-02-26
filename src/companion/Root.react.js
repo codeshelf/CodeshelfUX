@@ -11,10 +11,22 @@ require('assets/css/app.styl');
 require('imports?this=>window!assets/plugins/modernizr.custom.js');
 require("imports?classie=assets/plugins/classie/classie.js!pages/js/pages.js");
 
+import {Iterable} from 'immutable';
+
+Iterable.prototype[Symbol.for('get')] = function(value) {return this.get(value); };
 
 class Root extends React.Component {
 
     componentDidMount() {
+
+      window.onerror = (errorMsg, url, lineNumber, columnNumber, error) => {
+        if (error instanceof URIError) {
+          console.error("Error occured: " + errorMsg, error);//or any message
+          window.location = "/";
+        }
+        return false;
+      };
+
         document.addEventListener('keypress', this.onDocumentKeypress);
 
         // Return to codebase if we see problems on older devices

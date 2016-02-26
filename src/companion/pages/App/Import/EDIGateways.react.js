@@ -79,7 +79,7 @@ class ListPage extends React.Component{
                         columns={columnsCursor}
                         sortSpecs={columnSortSpecsCursor} />
 
-                    {React.cloneElement(this.props.children, { list})}
+                    {this.props.children && React.cloneElement(this.props.children, { list})}
 
                 </div>
                 </DocumentTitle>

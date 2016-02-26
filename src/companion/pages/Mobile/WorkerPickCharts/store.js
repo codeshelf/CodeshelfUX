@@ -3,7 +3,7 @@ import _ from "lodash";
 import {Map, Record} from 'immutable';
 import {getWorkerPickChart} from "./get";
 
-import {getFacilityContextFromState} from "../Facility/get";
+import {getFacilityContextFromState} from "../../Facility/get";
 
 import {getWorkerPickCharts, getWorkerPickByWorker} from "./mockGetWorkerPickCharts";
 
@@ -27,6 +27,7 @@ function getDefaultFilter() {
     interval: moment.duration(5, 'minutes'),
     window: moment.duration(2, 'hours'),
     endtime: moment(),
+    purposes: [],
   }));
 }
 
@@ -93,7 +94,7 @@ export function workerPickChartReducer(state = initState, action) {
           const {data, filter} = action;
           return state.merge(new Map({
               purposes: {
-                data: data,
+                data: data.purposes,
                 error: null,
                 loading: false,
               }
@@ -159,11 +160,12 @@ function search(status, data) {
   };
 }
 
-export function filterToParams({endtime, window, interval}) {
+export function filterToParams({endtime, window, interval, purposes}) {
   return {
     startAt: moment(endtime).subtract(window),
     endAt: endtime,
     interval: interval,
+    purposes: purposes,
   }
 }
 
