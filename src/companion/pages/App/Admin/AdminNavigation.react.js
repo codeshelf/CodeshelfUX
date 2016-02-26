@@ -20,8 +20,8 @@ class AdminNavigation extends React.Component {
   render() {
       var params = this.props.params;
       let {facility} = this.props;
-      return (<Navigation {...this.props} docked={true} desktop={true} availableFacilities={this.props.facilities}>
-                <AuthzMenuItem to="/admin/users" params={params} title="Users" iconName="users" />
+      return (<Navigation {...this.props} hideFacilitySelector={true} docked={true} desktop={true} availableFacilities={this.props.facilities}>
+                <AuthzMenuItem normalLinks={true} to="/admin/users" params={params} title="Users" iconName="users" />
               </Navigation>);
   }
 

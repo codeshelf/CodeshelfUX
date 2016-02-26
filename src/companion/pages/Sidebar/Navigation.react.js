@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Icon from "react-fa";
 import {Grid, Row, Col, DropdownButton, Button} from 'react-bootstrap';
 import { NavItemLink, MenuItemLink, ButtonLink, Link} from '../links';
+import {Link as OrdinaryLink} from '../../links';
 import {FacilitySelector, renderFacilityLabel} from '../Facility/FacilitySelector';
 import Sidebar from './Sidebar';
 import classnames from 'classnames';
@@ -14,7 +15,9 @@ require('./navigation.styl');
 class MenuItem extends Component {
 
     render() {
-        let {title,
+        let {
+             normalLinks,
+             title,
              iconName,
              to,
              params,
@@ -35,8 +38,9 @@ class MenuItem extends Component {
         return (<li className={classes}>
                   {
                       (to) ?
-                          <Link {...propsToPass} activeClass="active">{titleRenderer}</Link>
-                          :
+                          normalLinks ?
+                          <OrdinaryLink {...propsToPass} activeClass="active">{titleRenderer}</OrdinaryLink> :
+                          <Link {...propsToPass} activeClass="active">{titleRenderer}</Link> :
                           <a {...propsToPass}>{titleRenderer}</a>
                   }
                   <span className="icon-thumbnail"><Icon name={iconName}></Icon></span>
@@ -85,7 +89,7 @@ class NavigationDump extends Component {
       return (
         <nav className="page-sidebar visible" data-pages="sidebar">
           <div className="sidebar-header">
-            <FacilitySelector availableFacilities={this.props.availableFacilities} facility={this.props.facility} desktop={this.props.desktop}/>
+            {this.props.hideFacilitySelector || <FacilitySelector availableFacilities={this.props.availableFacilities} facility={this.props.facility} desktop={this.props.desktop}/>}
           </div>
           <div className="m-t-30 sidebar-menu">
             <ul className="menu-items">
