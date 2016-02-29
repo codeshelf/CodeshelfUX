@@ -1,4 +1,4 @@
-qimport React, {Component} from 'react';
+import React, {Component} from 'react';
 import Icon from "react-fa";
 import {DropdownButton} from 'react-bootstrap';
 import {NavItemLink, MenuItemLink, ButtonLink, Link} from '../links';
