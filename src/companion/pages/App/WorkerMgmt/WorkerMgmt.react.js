@@ -78,7 +78,6 @@ class WorkerMgmt extends Component{
         });
     }
 
-
     componentWillMount() {
         this.props.acGetWorkers({limit: 20});
     }
