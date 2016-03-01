@@ -1,17 +1,21 @@
-import {toUserModalForm, getFormMetadata} from "./UserForm.js";
-import {createUser} from "data/csapi";
+import {acAddUser, acUpdateAddUserForm} from "./store.js";
+import {UserForm} from "./UserForm.js";
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import exposeRouter, {toURL} from 'components/common/exposerouter';
 import {Map} from "immutable";
-import _ from "lodash";
 
-const fields = ["username", "roles"];
-function addFormMetadata() {
-  return _.filter(getFormMetadata(), (m) => fields.indexOf(m.name) >= 0);
+
+function mapDispatch(dispatch) {
+    return bindActionCreators({
+ 				acAddUser,
+ 				acUpdateAddUserForm
+ 		    }, dispatch);
 }
 
-const title = "New User";
-const returnRoute = "/admin/users";
-
-function handleSave(formMap: Map) {
-    return createUser(formMap.toJS());
+const mapStateToProps = (state) => {
+	return {
+		formData: state.users.addUserForm
+	};
 }
-export default toUserModalForm(title, addFormMetadata, returnRoute, handleSave);
+export default exposeRouter(connect(mapStateToProps, mapDispatch)(UserForm));
