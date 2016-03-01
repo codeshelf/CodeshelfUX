@@ -3,74 +3,80 @@ import DocumentTitle from "react-document-title";
 import ModalForm from "components/common/ModalForm";
 import FormFields from "components/common/FormFields";
 import {Map} from "immutable";
-import _ from "lodash";
 import {getEmail} from "data/user/store";
+import _ from "lodash";
 
+export class UserForm extends React.Component{
 
-export function getFormMetadata() {
+    constructor(props) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+    }
 
-  const commonRoles = [{value: "Admin", label: "Admin"},
-               {value: "Upload", label: "Upload"},
-               {value: "View", label: "View"},
-               {value: "Supervise", label: "Supervise"},
-               {value: "Dashboard", label: "Dashboard"},
-  ];
-  const csRoles = [{value: "CsDeveloper", label: "CsDeveloper"},
-                   {value: "CsSupport", label: "CsSupport"}];
-  let roles = commonRoles;
-  if (getEmail() && getEmail().indexOf("@codeshelf.com") > 0) {
-    roles = commonRoles.concat(csRoles);
-  }
+    handleChange(field, value) {
+        this.props.acUpdateAddUserForm(field.name, value);
+    }
 
-  return [
-    {name: "id",
-     label: "ID",
-     hidden: true},
-    {name: "username",
-     label: "Email",
-     required: true},
-    {name: "active",
-     label: "Active",
-     type: Boolean,
-     required: true},
-    {name: "roles",
-     label: "Roles",
-     options:roles,
-     type: Array,
-     required: false}
-  ];
-}
+    handleSave() {
+        const addUserForm = this.props.formData;
+        let promise = this.props.acAddUser(addUserForm);
+        return promise;
+    }
 
-export function toUserModalForm(defaultTitle, formMetadataFn, returnRoute, handleSave) {
+    getFormMetadata() {
+      const commonRoles = [{value: "Admin", label: "Admin"},
+                   {value: "Upload", label: "Upload"},
+                   {value: "View", label: "View"},
+                   {value: "Supervise", label: "Supervise"},
+                   {value: "Dashboard", label: "Dashboard"},
+      ];
+      const csRoles = [{value: "CsDeveloper", label: "CsDeveloper"},
+                       {value: "CsSupport", label: "CsSupport"}];
+      let roles = commonRoles;
 
-    class UserForm extends React.Component{
+      if (getEmail() && getEmail().indexOf("@codeshelf.com") > 0) {
+        roles = commonRoles.concat(csRoles);
+      }
 
-        constructor(props) {
-            super(props);
-            this.handleChange = this.handleChange.bind(this);
-            this.state = {formData: this.props.initialFormData || Map()};
-        }
+      return [
+        {name: "id",
+         label: "ID",
+         hidden: true},
+        {name: "username",
+         label: "Email",
+         required: true},
+        {name: "active",
+         label: "Active",
+         type: Boolean,
+         required: true},
+        {name: "roles",
+         label: "Roles",
+         options:roles,
+         type: Array,
+         required: false}
+      ];
+    }
 
-        handleChange(field, value) {
-            let newFormData = this.state.formData.set(field.name, value);
-            this.setState({formData: newFormData});
-        }
+    addFormMetadata() {
+      const fields = ["username", "roles"];
+      return _.filter(this.getFormMetadata(), (m) => fields.indexOf(m.name) >= 0);
+    }
 
-        render() {
-            let {formData} = this.state;
-            let {title = defaultTitle} = this.props;
-            return (<DocumentTitle title={title}>
-                    <ModalForm title={title} returnRoute={returnRoute}
-                     onSave={_.partial(handleSave, formData)}
-                     formData={formData}>
+    render() {
+        const {formData} = this.props;
+        const title = "New User";
+        const returnRoute = "/admin/users";
 
-                    <FormFields formMetadata={formMetadataFn()}
-                     formData={formData}
-                     handleChange={this.handleChange}/>
-                    </ModalForm>
-                    </DocumentTitle>
-                   );
-        }
-    };
-    return UserForm;
-}
+        return (<DocumentTitle title={title}>
+                <ModalForm title={title} returnRoute={returnRoute}
+                 onSave={() => this.handleSave()}
+                 formData={formData}>
+
+                <FormFields formMetadata={this.addFormMetadata()}
+                 handleChange={this.handleChange}
+                 formData={formData}/>
+                </ModalForm>
+                </DocumentTitle>
+               );
+    }
+};
