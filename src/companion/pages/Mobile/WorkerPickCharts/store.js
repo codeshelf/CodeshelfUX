@@ -94,7 +94,7 @@ export function workerPickChartReducer(state = initState, action) {
           const {data, filter} = action;
           return state.merge(new Map({
               purposes: {
-                data: data.purposes,
+                data: data.purpose,
                 error: null,
                 loading: false,
               }

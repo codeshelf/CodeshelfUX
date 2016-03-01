@@ -45,10 +45,8 @@ export class PurposePicker extends Component {
   }
 
   render()  {
-    /* To be deleted */
-    const mockedData =  [{label: 'Purpose 1', value: 'p1'}, {label: 'Purpose 2', value: 'p2'}, {label: 'Purpose 3', value: 'p3'}];
     const {filter, onSelect, purposes} = this.props;
-    const data = purposes.error || purposes.loading ? [] : this.preprocessData(mockedData, filter.purposes);
+    const data = purposes.error || purposes.loading || !purposes.data ? [] : this.preprocessData(purposes.data, filter.purposes);
     return (
       <Multiselect
         multiple
