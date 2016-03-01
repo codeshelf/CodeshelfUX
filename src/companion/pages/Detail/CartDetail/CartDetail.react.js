@@ -7,7 +7,7 @@ import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {Detail, TitleComponent, TitleCol} from "../Detail.react.js";
 
-import {TAB_DETAIL, TAB_PRODUCTIVITY, ALL_TABS} from './store';
+import {TAB_DETAIL, TAB_PRODUCTIVITY, TAB_PLANNED, ALL_TABS} from './store';
 import {acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
         acSettingOpen, acSettingClose, acSearchAdditional, acSetFilter, acSearch,
         acSetFilterAndRefresh} from './store';
@@ -16,25 +16,31 @@ import {getCartDetailMutable} from "./get";
 import {Cart} from "./Cart/Cart.react.js";
 import {fieldToDescription} from "./Cart/intl";
 import {History} from "./History/History.react.js";
+import {Planned} from "./Planned/Planned.react.js";
+
 
 const tabToComponent = {
   [TAB_DETAIL]: Cart,
   [TAB_PRODUCTIVITY]: History,
+  [TAB_PLANNED]: Planned,
 }
 
 const tabToHeaderText = {
   [TAB_DETAIL]: "Detail",
   [TAB_PRODUCTIVITY]: "Productivity",
+  [TAB_PLANNED]: "Planned",
 }
 
 export const convertTab = {
   fromURL: {
     detail: TAB_DETAIL,
     productivity: TAB_PRODUCTIVITY,
+    planned: TAB_PLANNED,
   },
   toURL: {
     [TAB_DETAIL]: "./detail",
     [TAB_PRODUCTIVITY]: "./productivity",
+    [TAB_PLANNED]: "./planned",
   },
 }
 

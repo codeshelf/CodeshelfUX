@@ -13,6 +13,7 @@ import {orderDetailReducer} from '../Detail/OrderDetail/store';
 import {workerSearchReducer} from '../Search/WorkerSearch/store';
 import {workerDetailReducer} from '../Detail/WorkerDetail/store';
 import {workerMgmtReducer} from './WorkerMgmt/store';
+import {printingTemplatesReducer} from './PrintingTemplates/store';
 import {sidebarReducer} from '../Sidebar/store';
 
 const rootReducer = combineReducers({
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   facility: facilityReducer,
   orderSearch: orderSearchReducer,
   orderDetail: orderDetailReducer,
+  printingTemplates: printingTemplatesReducer,
   workerSearch: workerSearchReducer,
   workerDetail: workerDetailReducer,
   workerPickChart: workerPickChartReducer,

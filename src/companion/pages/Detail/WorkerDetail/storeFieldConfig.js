@@ -30,3 +30,33 @@ export const historyFieldsSetting = {
     "createdAt": true,
   },
 };
+
+export const locationFieldsSetting = {
+  order: ["type", "status", "containerId", "itemId", "description", "-", "planMinQuantity", "locationId", "created", "started"],
+  visibility: {
+    "type": true,
+    "status": true,
+    "containerId": true,
+    "itemId": true,
+    "description": true,
+    "pickInstruction": true,
+    "planQuantity": true,
+    "planMinQuantity": true,
+    "planMaxQuantity": true,
+    "actualQuantity": true,
+    "locationId": true,
+    "pickerId": true,
+    "posAlongPath": true,
+    "created": true,
+    "assigned": true,
+    "started": true,
+    "completed": true,
+    "needsScan": true,
+    "gtin": true,
+    "purpose": true,
+    "pathName": true,
+    "substituteAllowed": true,
+    "substitution": true,
+    "alreadyShorted": true,
+  },
+};

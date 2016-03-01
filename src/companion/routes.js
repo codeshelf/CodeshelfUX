@@ -11,6 +11,8 @@ import BlockedWork from './pages/App/BlockedWork/BlockedWork.react.js';
 import WorkResults from './pages/App/WorkResults/WorkResults.react.js';
 import WorkerMgmt from './pages/App/WorkerMgmt/WorkerMgmt.react.js';
 import WorkerDisplay from './pages/App/WorkerMgmt/WorkerDisplay.react.js';
+import PrintingTemplates from './pages/App/PrintingTemplates/PrintingTemplates.react.js';
+import TemplateDisplay from './pages/App/PrintingTemplates/TemplateDisplay.react.js';
 import Import from './pages/App/Import/Import.react.js';
 import EDIGateways from './pages/App/Import/EDIGateways.react.js';
 import EDIGatewayEdit from './pages/App/Import/EDIGatewayEdit.react.js';
@@ -77,6 +79,10 @@ export default (
           <Route component={WorkerMgmt} path="workers">
             <Route component={WorkerDisplay} path="new" />
             <Route component={WorkerDisplay} path=":workerId" />
+          </Route>
+          <Route component={PrintingTemplates} path="templates">
+            <Route component={TemplateDisplay} path="new" />
+            <Route component={TemplateDisplay} path=":templateId" />
           </Route>
           <Route component={Maintenance} path="maintenance">
             <Route component={ExtensionPointEdit} path="parametersset/:parameterType" />

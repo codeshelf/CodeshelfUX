@@ -4,20 +4,24 @@ import * as fieldSetting from './storeFieldConfig';
 import {createStore} from "../storeFactory";
 import moment from "moment";
 import {filterToParams} from "../../Mobile/WorkerPickCharts/store";
+import {getLocation} from "./mockGetWorker";
 
 export const TAB_DETAIL = "worker tab detail";
 export const TAB_PRODUCTIVITY = "worker tab productivity";
+export const TAB_LOCATION = "worker tab location";
 
-export const ALL_TABS = [TAB_DETAIL, TAB_PRODUCTIVITY];
+export const ALL_TABS = [TAB_DETAIL, TAB_PRODUCTIVITY, TAB_LOCATION];
 
 export const PERSIST_STATE_PART = [
   ["workerDetail", TAB_DETAIL, "settings", "properties"],
   ["workerDetail", TAB_PRODUCTIVITY, "settings", "properties"],
+  ["workerDetail", TAB_LOCATION, "settings", "properties"],
  ];
 
 const tabToSetting = {
   [TAB_DETAIL]: fieldSetting.headerFieldsSetting,
   [TAB_PRODUCTIVITY]: fieldSetting.historyFieldsSetting,
+  [TAB_LOCATION]: fieldSetting.locationFieldsSetting,
 };
 
 function getDefaultFilter(tab) {
@@ -33,6 +37,9 @@ function getDefaultFilter(tab) {
         id: null,
         purposes: [],
       },
+      [TAB_LOCATION]: {
+        id: null,
+      }
     }[tab]
   }
 
@@ -49,6 +56,7 @@ function tabToApi(facilityContext, tab, filter) {
         facilityContext.getWorkerEventsWithTime({id: filter.id, startAt, endAt, purposes: filter.purposes})
       ]).then((res) => { return {histogram: res[0], events: res[1]}})
     },
+    [TAB_LOCATION]: getLocation,
   }[tab];
   return call(filter);
 }

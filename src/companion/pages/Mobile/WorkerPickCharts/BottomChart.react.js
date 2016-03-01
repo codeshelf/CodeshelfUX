@@ -80,7 +80,8 @@ export class BottomChart extends Component {
                         <ListGroupItemLink
                             style={{display: "flex", alignItems: "center"}}
                             to={`${desktop ? "worker": "workers"}/${encodeURIComponent(workerId)}/productivity`}
-                            onClick={() => this.props.acSetProductivityFilter(workerId, filterWithId)} >
+                            onClick={() => this.props.acSetProductivityFilter(workerId, filterWithId)}
+                            shouldHaveFacility={true}>
                           <div style={{display: "flex", flexWrap: "wrap"}}>
                             <div style={{textAlign: "left", width: "100%", flexShrink: "0"}}>
                               <div>{workerName}</div>

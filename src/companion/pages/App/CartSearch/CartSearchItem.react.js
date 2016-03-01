@@ -10,7 +10,7 @@ export class CartSearchItem extends Component {
     const {domainId, deviceGuid, filterText} = this.props;
     const subtitle = deviceGuid;
     return (
-      <Link to={`carts/${domainId}`}>
+      <Link to={`carts/${domainId}`} shouldHaveFacility={true}>
         <tr>
             <td>{renderMatch(domainId, filterText)}</td>
             <td>{deviceGuid}</td>

@@ -16,20 +16,21 @@ import {EditButtonLink, AddButtonLink} from 'components/common/TableButtons';
 import {Authz} from 'components/common/auth';
 
 
-import {getAPIContext} from 'data/csapi';
+import {getFacilityContext} from 'data/csapi';
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkers} from 'data/workers/store';
 import DateDisplay from "components/common/DateDisplay";
-// new imports redux
+
+// new imports redux 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import {getWorkerMgmtMutable} from "./get";
-import {acGetWorkers, acHandleImport} from "./store";
+import {getPrintingTemplatesMutable} from "./get";
+import {acGetTemplates} from "./store";
 
 const keyColumn = "persistentId";
 
-class WorkerMgmt extends Component{
+class PrintingTemplates extends Component{
 
     constructor(props) {
         super(props);
@@ -74,39 +75,29 @@ class WorkerMgmt extends Component{
             },
         ]);
         this.rowActionComponent = ListManagement.toEditButton((row) => {
-          return { to: toURL(this.props, "workers/" + row.get(keyColumn))};
+          return { to: toURL(this.props, "templates/" + row.get(keyColumn))};
         });
     }
 
     componentWillMount() {
-        this.props.acGetWorkers({limit: 20});
-    }
-
-    handleImportSubmit(method, file) {
-        var formData = new FormData();
-        formData.append("file", file);
-        return this.props.acHandleImport(method, formData);
+        this.props.acGetTemplates({limit: 20});
     }
 
     render() {
-        const {table, workers} = this.props;
-        const title = "Manage Workers";
+        const {table, templates} = this.props;
+        const title = "Manage Templates";
         return (
             <SingleCellLayout title={title}>
-              <Authz permission="worker:import">
-                  <UploadForm label="Workers"
-                    onImportSubmit={(file) => this.handleImportSubmit("importWorkers", file)} />
-              </Authz>
-              { workers.get('loading')
+              { templates.get('loading')
                 ? <div>Loading...</div>
                 : <ListManagement
                     allowExport={true}
-                    addButtonRoute={toURL(this.props, 'workers/new')}
+                    addButtonRoute={toURL(this.props, 'templates/new')}
                     columns={table.columns}
                     columnMetadata={this.columnMetadata}
                     sortSpecs={table.sortSpecs}
                     rowActionComponent={this.rowActionComponent}
-                    results={workers.get('data')}
+                    results={templates.get('data')}
                     keyColumn={keyColumn}/>
               }
               {this.props.children && React.cloneElement(this.props.children, { formMetadata: this.columnMetadata})}
@@ -117,7 +108,7 @@ class WorkerMgmt extends Component{
 };
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acGetWorkers, acHandleImport}, dispatch);
+  return bindActionCreators({acGetTemplates}, dispatch);
 }
 
-export default connect(getWorkerMgmtMutable, mapDispatch)(WorkerMgmt);
+export default connect(getPrintingTemplatesMutable, mapDispatch)(PrintingTemplates);

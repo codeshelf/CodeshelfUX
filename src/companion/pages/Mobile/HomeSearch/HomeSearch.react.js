@@ -7,7 +7,7 @@ class HomeSearch extends Component {
 
   renderItem(to, iconName, title) {
     return (
-        <ListGroupItemLink to={to} id={to} name={to}>
+        <ListGroupItemLink to={to} id={to} name={to} shouldHaveFacility={true}>
           <div className="thumbnail-wrapper d48 circular bg-primary text-white inline">
             <Icon name={iconName} size="lg"/>
           </div>

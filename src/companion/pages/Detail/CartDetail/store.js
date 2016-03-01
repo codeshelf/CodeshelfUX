@@ -4,20 +4,24 @@ import * as fieldSetting from './storeFieldConfig';
 import {createStore} from "../storeFactory";
 import moment from "moment";
 import {filterToParams} from "../../Mobile/WorkerPickCharts/store";
+import {getPlannedWork} from "./getMockedData.js";
 
 export const TAB_DETAIL = "cart tab detail";
 export const TAB_PRODUCTIVITY = "cart tab productivity";
+export const TAB_PLANNED = "cart tab planned"
 
-export const ALL_TABS = [TAB_DETAIL, TAB_PRODUCTIVITY];
+export const ALL_TABS = [TAB_DETAIL, TAB_PRODUCTIVITY, TAB_PLANNED];
 
 export const PERSIST_STATE_PART = [
   ["cartDetail", TAB_DETAIL, "settings", "properties"],
   ["cartDetail", TAB_PRODUCTIVITY, "settings", "properties"],
+  ["cartDetail", TAB_PLANNED, "settings", "properties"],
  ];
 
 const tabToSetting = {
   [TAB_DETAIL]: fieldSetting.detailFieldsSetting,
   [TAB_PRODUCTIVITY]: fieldSetting.historyFieldsSetting,
+  [TAB_PLANNED]: fieldSetting.plannedFieldsSetting,
 };
 
 function getDefaultFilter(tab) {
@@ -32,6 +36,9 @@ function getDefaultFilter(tab) {
         id: null,
         purposes: [],
       },
+      [TAB_PLANNED]: {
+        id: null,
+      }
     }[tab]
   }
 
@@ -48,6 +55,11 @@ function tabToApi(facilityContext, tab, filter) {
         facilityContext.getCheEventsWithTime({id: filter.id, startAt, endAt})
       ]).then((res) => { return {histogram: res[0], events: res[1]}})
     },
+    [TAB_PLANNED]: getPlannedWork,
+    // [TAB_PLANNED]: (filter) => {
+    //     return facilityContext.getWorkInstruction()
+    //       .then((res) => res)
+    // },
   }[tab];
   return call(filter);
 }

@@ -9,6 +9,7 @@ import PureComponent from 'components/common/PureComponent';
 import {EditButtonLink, AddButtonLink} from 'components/common/TableButtons';
 import ListView from "./ListView";
 import Immutable from 'immutable';
+import _ from 'lodash';
 
 export default class ListManagement extends React.Component {
 
@@ -21,6 +22,10 @@ export default class ListManagement extends React.Component {
             }
         };
         this.handleSearchChange = this.handleSearchChange.bind(this);
+    }
+
+    shouldComponentUpdate(nextProps){
+        return !_.isEqual(nextProps, this.props);
     }
 
     static toEditButton(editButtonPropsFn: Function) {
