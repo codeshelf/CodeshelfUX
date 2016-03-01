@@ -10,7 +10,7 @@ export class WorkerSearchItem extends Component {
     const {domainId, updated, firstName, lastName, filterText} = this.props;
     const subtitle = <span>{firstName} {lastName} - <DateDisplay date={updated} /></span>;
     return (
-      <Link to={`worker/${encodeURIComponent(domainId)}`}>
+      <Link to={`worker/${encodeURIComponent(domainId)}`} shouldHaveFacility={true}>
         <tr>
             <td>{renderMatch(domainId, filterText)}</td>
             <td>{subtitle}</td>

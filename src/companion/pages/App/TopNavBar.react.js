@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "react-fa";
 import {DropdownButton, Nav, NavItem, Button, MenuItem} from "react-bootstrap";
-import { NavItemLink, MenuItemLink, ButtonLink} from '../../links.js';
+import {NavItemLink, MenuItemLink, ButtonLink} from '../links.js';
 import {loggedout} from "data/auth/actions";
 //todo turn clearStoredCredentials into an action
 import {getEmail, isCredentialsStored, clearStoredCredentials} from "data/user/store";
@@ -35,8 +35,8 @@ export default class TopNavBar extends React.Component {
                     <div className="pull-right">
                         {
                             (facilities) ?
-                                <AuthzButtonLink id="admin" permission="user:edit" bsStyle="link" to="/admin/users" >Admin</AuthzButtonLink> :
-                                <ButtonLink bsStyle="link" to="/facilities" id="home" name="home">
+                                <AuthzButtonLink id="admin" permission="user:edit" bsStyle="link" to="/admin/users" shouldHaveFacility={false}>Admin</AuthzButtonLink> :
+                                <ButtonLink bsStyle="link" to="/facilities" id="home" name="home" shouldHaveFacility={false}>
                                     <Icon name="home" size="lg"/>
                                 </ButtonLink>
                         }
@@ -70,8 +70,8 @@ class UserProfileMenu extends React.Component {
         return (
             <DropdownButton bsStyle="link" className="userprofile" title={this.renderTitle()} pullRight={true}>
                 <AuthzCredentialsStore permission="companion:savecredentials" notPermission="companion:nosavecredentials"/>
-                <MenuItemLink title="changepassword" to="/password/change" id="changepassword"><Icon name="edit" />Change Password</MenuItemLink>
-                <MenuItem title="logout" onSelect={this.handleLogoutClick.bind(this)} id="logout"><Icon name="sign-out" />Log out</MenuItem>
+                <MenuItemLink title="changepassword" to="/password/change" id="changepassword" shouldHaveFacility={false}><Icon name="edit" />Change Password</MenuItemLink>
+                <MenuItem title="logout" onSelect={this.handleLogoutClick.bind(this)} id="logout" shouldHaveFacility={false}><Icon name="sign-out" />Log out</MenuItem>
             </DropdownButton>
         );
     }

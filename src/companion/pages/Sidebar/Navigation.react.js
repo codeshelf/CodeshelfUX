@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import Icon from "react-fa";
 import {Grid, Row, Col, DropdownButton, Button} from 'react-bootstrap';
 import { NavItemLink, MenuItemLink, ButtonLink, Link} from '../links';
-import {Link as OrdinaryLink} from '../../links';
 import {FacilitySelector, renderFacilityLabel} from '../Facility/FacilitySelector';
 import Sidebar from './Sidebar';
 import classnames from 'classnames';
@@ -38,9 +37,7 @@ class MenuItem extends Component {
         return (<li className={classes}>
                   {
                       (to) ?
-                          normalLinks ?
-                          <OrdinaryLink {...propsToPass} activeClass="active">{titleRenderer}</OrdinaryLink> :
-                          <Link {...propsToPass} activeClass="active">{titleRenderer}</Link> :
+                          <Link {...propsToPass} activeClass="active" shouldHaveFacility={!normalLinks}>{titleRenderer}</Link> :
                           <a {...propsToPass}>{titleRenderer}</a>
                   }
                   <span className="icon-thumbnail"><Icon name={iconName}></Icon></span>

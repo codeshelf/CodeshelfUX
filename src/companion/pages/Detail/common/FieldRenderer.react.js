@@ -39,7 +39,7 @@ export function renderField(field, itemData, fieldDescriptions, fieldFormatters)
 export function workerIdFormatter(workerId) {
   if (!workerId) return workerId;
   return (
-      <Link to={`worker/${encodeURIComponent(workerId)}`}>
+      <Link to={`worker/${encodeURIComponent(workerId)}`} shouldHaveFacility={true}>
         {workerId}
       </Link>
   );
@@ -48,7 +48,7 @@ export function workerIdFormatter(workerId) {
 export function workerNameFormatter({workerId, workerName}) {
   if (!workerId) return <span>{workerName}</span>;
   return (
-    <Link to={`worker/${encodeURIComponent(workerId)}`} onClick={(e) => e.stopPropagation()}>
+    <Link to={`worker/${encodeURIComponent(workerId)}`} onClick={(e) => e.stopPropagation()} shouldHaveFacility={true}>
         {workerName}
     </Link>
 );
@@ -61,7 +61,7 @@ export function deviceFormatter({deviceName, deviceGuid}) {
 
 export function deviceLinkFormatter({deviceName, deviceGuid}) {
     if (!deviceName) return deviceFormatter({deviceName, deviceGuid});
-    return (<Link to={`carts/${deviceName}`}>
+    return (<Link to={`carts/${deviceName}`} shouldHaveFacility={true}>
         {deviceFormatter({deviceName, deviceGuid})}
     </Link>);
 
@@ -70,7 +70,7 @@ export function deviceLinkFormatter({deviceName, deviceGuid}) {
 export function orderLinkFormatter(orderId) {
   if (!orderId) return orderId;
   return (
-      <Link to={`orders/${orderId}`}>
+      <Link to={`orders/${orderId}`} shouldHaveFacility={true}>
       {orderId}
     </Link>
   );

@@ -55,7 +55,8 @@ class App extends Component {
          to={route}
          id={route}
          name={route}
-         onClick={() => this.props.acToggleSidebar(false)}>
+         onClick={() => this.props.acToggleSidebar(false)}
+         shouldHaveFacility={true}>
       {menuTitle(title)}
     </Link>
     );

@@ -10,7 +10,7 @@ export class OrderSearchItem extends Component {
     const {orderId, dueDate, status, filterText} = this.props;
     const subtitle = <span>{status} - <DateDisplay date={dueDate} /></span>;
     return (
-      <Link to={`orders/${orderId}`}>
+      <Link to={`orders/${orderId}`} shouldHaveFacility={true}>
         <tr>
             <td>{renderMatch(orderId, filterText)}</td>
             <td>{subtitle}</td>

@@ -28,7 +28,7 @@ export class SearchItem extends Component {
   render() {
     const {title, subtitle, ...rest} = this.props;
     return (
-      <ListGroupItemLink {...rest} >
+      <ListGroupItemLink {...rest} shouldHaveFacility={true}>
         <Row className="searchResult">
           <Col xs={9}>
             <dl>

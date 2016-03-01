@@ -130,7 +130,7 @@ export default class Imports extends React.Component{
 
             return (<SingleCellLayout title="Manage Imports">
                 <Authz permission="facility:edit">
-                    <Link id="configure" to="edigateways" params={{facilityName: getFacilityContext().domainId}}>Configure EDI</Link>
+                    <Link shouldHaveFacility={true} id="configure" to="edigateways" params={{facilityName: getFacilityContext().domainId}}>Configure EDI</Link>
                 </Authz>
                 <Tabs className="nav-tabs-simple" defaultActiveKey="orders">
                     {this.renderOrder()}

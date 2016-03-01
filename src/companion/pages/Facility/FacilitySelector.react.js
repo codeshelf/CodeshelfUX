@@ -27,7 +27,8 @@ export class FacilitySelector extends React.Component {
               key={domainId}
               to={desktop ? `/facilities/${domainId}` : `/mobile/facilities/${domainId}`}
               data-persistentid={persistentId}
-              onclick={() => this.props.acToggleSidebar(false)}>
+              onclick={() => this.props.acToggleSidebar(false)}
+              shouldHaveFacility={true}>
                 {description}
               </MenuItemLink>})
             }

@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {Nav, NavItem, Grid, Row, Col, Button, Input, ListGroup, Table} from 'react-bootstrap';
 import Icon from 'react-fa';
-import {Link} from '../../links';
 import {SearchInput} from "../../Search/SearchInput.react.js";
 import * as csapi from 'data/csapi';
 
