@@ -8,7 +8,7 @@ import {getPlannedWork} from "./getMockedData.js";
 
 export const TAB_DETAIL = "cart tab detail";
 export const TAB_PRODUCTIVITY = "cart tab productivity";
-export const TAB_PLANNED = "cart tab planned"
+export const TAB_PLANNED = "cart tab planned";
 
 export const ALL_TABS = [TAB_DETAIL, TAB_PRODUCTIVITY, TAB_PLANNED];
 
@@ -53,13 +53,12 @@ function tabToApi(facilityContext, tab, filter) {
       return Promise.all([
         facilityContext.getCheEventHistogram({id: filter.id, ...filterToParams(filter)}),
         facilityContext.getCheEventsWithTime({id: filter.id, startAt, endAt})
-      ]).then((res) => { return {histogram: res[0], events: res[1]}})
+      ]).then((res) => { return {histogram: res[0], events: res[1]};});
     },
-    [TAB_PLANNED]: getPlannedWork,
-    // [TAB_PLANNED]: (filter) => {
-    //     return facilityContext.getWorkInstruction()
-    //       .then((res) => res)
-    // },
+    [TAB_PLANNED]: (filter) => {
+         return facilityContext.getCheWorkInstructions(filter.id)
+           .then((res) => res);
+    },
   }[tab];
   return call(filter);
 }

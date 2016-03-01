@@ -572,6 +572,11 @@ export function getAPIContext(selected) {
 
         },
 
+        getCheWorkInstructions(cheName) {
+          let wiPath = basePath + "/ches/" + cheName + "/workinstructions";
+          return ajax(wiPath, {});
+        },
+
         createEvent(cheName, workerId, type, createTime) {
           let eventPath = basePath + "/ches/" + cheName + "/events";
           return ajax(eventPath, {
