@@ -7,7 +7,7 @@ import {Tabs, Tab, Row, Col, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {Detail, TitleComponent, TitleCol} from "../Detail.react.js";
 
-import {TAB_DETAIL, TAB_PRODUCTIVITY, ALL_TABS} from './store';
+import {TAB_DETAIL, TAB_PRODUCTIVITY, TAB_LOCATION, ALL_TABS} from './store';
 import {acSelectTab, acExpand, acSetFieldVisibility, acSetFieldOrder,
     acSettingOpen, acSettingClose, acSearchAdditional, acSetFilter, acSearch,
     acSetFilterAndRefresh} from './store';
@@ -16,26 +16,30 @@ import {getWorkerDetailMutable} from "./get";
 import {Header} from "./Header/Header.react.js";
 import {fieldToDescription} from "./Header/intl";
 import {Productivity} from "./Productivity/Productivity.react.js";
-
+import {Location} from "./Location/Location.react.js";
 
 const tabToComponent = {
   [TAB_DETAIL]: Header,
   [TAB_PRODUCTIVITY]: Productivity,
+  [TAB_LOCATION]: Location,
 }
 
 const tabToHeaderText = {
   [TAB_DETAIL]: "Worker",
   [TAB_PRODUCTIVITY]: "Productivity",
+  [TAB_LOCATION]: "Location",
 }
 
 export const convertTab = {
   fromURL: {
     detail: TAB_DETAIL,
     productivity: TAB_PRODUCTIVITY,
+    location: TAB_LOCATION,
   },
   toURL: {
     [TAB_DETAIL]: "./detail",
     [TAB_PRODUCTIVITY]: "./productivity",
+    [TAB_LOCATION]: "./location",
   },
 }
 
