@@ -6,7 +6,7 @@ import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import UploadForm from 'components/common/UploadForm';
 
 import {Authz, authz, isAuthorized} from 'components/common/auth';
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import ImportList from './ImportList';
 import ImportSearch from './ImportSearch';
 import search from "data/search";
@@ -47,7 +47,7 @@ export default class Imports extends React.Component{
                 promise.cancel();
             }
         }
-        promise =  getFacilityContext().findImportReceipts(filter).then((receipts) => {
+        promise =  getAPIContext().findImportReceipts(filter).then((receipts) => {
             this.handleResultsUpdated(receipts, receipts.length);
         });
         promise.then(()=> this.forceUpdate());
@@ -72,7 +72,7 @@ export default class Imports extends React.Component{
     handleImportSubmit(method, file) {
         var formData = new FormData();
         formData.append("file", file);
-         return getFacilityContext()[method](formData).then(function() {
+         return getAPIContext()[method](formData).then(function() {
             this.handleRefresh();
         }.bind(this));
     }
@@ -130,7 +130,7 @@ export default class Imports extends React.Component{
 
             return (<SingleCellLayout title="Manage Imports">
                 <Authz permission="facility:edit">
-                    <Link id="configure" to="edigateways" params={{facilityName: getFacilityContext().domainId}}>Configure EDI</Link>
+                    <Link id="configure" to="edigateways" params={{facilityName: getAPIContext().domainId}}>Configure EDI</Link>
                 </Authz>
                 <Tabs className="nav-tabs-simple" defaultActiveKey="orders">
                     {this.renderOrder()}

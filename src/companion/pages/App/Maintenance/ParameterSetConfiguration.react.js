@@ -5,7 +5,7 @@ import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {WrapInput, Input, Checkbox, ErrorDisplay} from 'components/common/Form';
 import {Button, List as BSList} from 'components/common/bootstrap';
 import Icon from 'react-fa';
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import {EditButtonLink} from "components/common/TableButtons";
 
 class ParameterSetConfiguration extends React.Component{
@@ -17,7 +17,7 @@ class ParameterSetConfiguration extends React.Component{
     }
 
     addToEdit() {
-            return getFacilityContext().addExtensionPoint({type: this.parameterType})
+        return getAPIContext().addExtensionPoint({type: this.parameterType})
               .then((newExtensionPoint) => {
                 let {router} = this.props;
                 router.push(toURL(this.props, `parameterset/${this.parameterType}`));
@@ -25,7 +25,7 @@ class ParameterSetConfiguration extends React.Component{
     }
 
     handleExtensionPointUpdate(extensionPoint) {
-        return getFacilityContext().updateExtensionPoint(extensionPoint.toJS()).then((updatedExtensionPoint) => {
+        return getAPIContext().updateExtensionPoint(extensionPoint.toJS()).then((updatedExtensionPoint) => {
             return this.props.onUpdate();
         });
     }

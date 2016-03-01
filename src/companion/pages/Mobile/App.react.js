@@ -4,11 +4,12 @@ import {authz} from 'components/common/auth';
 import {Grid, Row, Col, DropdownButton, MenuItem, Button} from 'react-bootstrap';
 import { NavItemLink, MenuItemLink, ButtonLink, Link} from '../links';
 import {clearStoredCredentials} from "data/user/store";
-import {FacilitySelector, renderFacilityLabel} from '../Facility/FacilitySelector';
+import {ContextSelector, renderContextLabel} from '../Facility/ContextSelector';
 import {loggedout} from "data/auth/actions";
 import {Navigation, AuthzNavMenuItem, AuthzMenuItem} from '../Sidebar/Navigation';
 import exposeRouter from 'components/common/exposerouter';
 import classnames from 'classnames';
+import {encodeContextToURL} from './common/contextEncode.js';
 
 class Header extends Component {
   render() {
@@ -23,7 +24,7 @@ class Header extends Component {
             <div className="pull-center">
               <div className="header-inner">
                 <div className="brand inline">
-                  {renderFacilityLabel(this.props.facility)}
+                  {renderContextLabel(this.props.selected)}
                 </div>
               </div>
             </div>
@@ -75,12 +76,11 @@ class App extends Component {
   }
 
   render() {
-    const domainId = this.props.facility.domainId;
-    const basePath = "/mobile/facilities/" + domainId;
+    const basePath = "/mobile/facilities/" + encodeContextToURL(this.props.selected);
     return (
         <div id="outer-wrapper">
           <Navigation
-            facility={this.props.facility}
+            selected={this.props.selected}
             availableFacilities={this.props.availableFacilities}
             isOpen={this.props.isOpen}
             docked={false}
@@ -103,7 +103,7 @@ class App extends Component {
                 iconName="sign-out" />
           </Navigation>
           <div id="page-wrapper" className="page-container" style={{backgroundColor: "rgb(245, 245, 245)"}}>
-              <Header facility={this.props.facility}>
+              <Header selected={this.props.selected}>
                 <Button
                     bsStyle="link"
                     className="visible-sm-inline-block visible-xs-inline-block padding-5"
@@ -125,4 +125,3 @@ class App extends Component {
 }
 
 export default exposeRouter(App);
-

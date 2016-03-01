@@ -3,7 +3,7 @@ import {DropdownButton} from "react-bootstrap";
 import Icon from "react-fa";
 import _ from "lodash";
 import {Map, List, fromJS, Record, Seq} from "immutable";
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 import {StatusSummary} from "data/types";
 import {Table} from "components/common/Table";
 import ListManagement from "components/common/list/ListManagement";
@@ -94,7 +94,7 @@ export default class OrderReview extends React.Component{
     }
 
     fetchOrderDetails(orderId) {
-        getFacilityContext().getOrderDetails(orderId).then((orderDetails) => {
+        getAPIContext().getOrderDetails(orderId).then((orderDetails) => {
             let oldOrderDetails = this.state.orderDetails;
             let newOrderDetails = oldOrderDetails.set(orderId, fromJS(orderDetails));
             this.setState({"orderDetails": newOrderDetails});

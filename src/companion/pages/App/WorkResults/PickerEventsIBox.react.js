@@ -9,7 +9,7 @@ import moment from 'moment';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
 
 import _ from "lodash";
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkersByBadgeId, toWorkerName} from 'data/workers/store';
 import WorkerPickCharts from '../../Mobile/WorkerPickCharts/WorkerPickCharts.react'
@@ -73,7 +73,7 @@ var PickerEventsIBox = React.createClass({
           createdInterval: createdInterval.toQueryParameterValue()
       }).toJS();
       this.setState({interval: createdInterval});
-      return getFacilityContext().getPickRates(params).then((data) => {
+      return getAPIContext().getPickRates(params).then((data) => {
         let workersByBadgeId = getWorkersByBadgeId();
         let d3Data = toD3Data(createdInterval, data);
         let withWorkerNames = d3Data.map((keyData) => {

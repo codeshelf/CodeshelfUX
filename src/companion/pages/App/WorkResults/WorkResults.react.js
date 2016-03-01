@@ -1,12 +1,13 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import {PageGrid, Row, Col} from 'components/common/pagelayout';
 import PickerEventsIBox from './PickerEventsIBox';
 
 export default class WorkResults extends React.Component{
     render() {
-        var apiContext = getFacilityContext();
+        const {selected} = this.props;
+        var apiContext = getAPIContext(selected);
         return (<DocumentTitle title="Picks By Hour">
                 <PageGrid>
                     <Row>

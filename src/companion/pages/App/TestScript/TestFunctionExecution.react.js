@@ -2,7 +2,7 @@ import  React from "react";
 import {SingleCellIBox} from "components/common/IBox.react.js";
 import {Form, Input, getRefInputValue, SubmitButton} from "components/common/Form";
 import {Row, Col} from "components/common/pagelayout";
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 
 export default class TestFunctionExecution extends React.Component{
 
@@ -25,7 +25,7 @@ export default class TestFunctionExecution extends React.Component{
                 return params;
             }, {});
         }
-        return getFacilityContext().executeTestFunction(functionName, parameters).then((result) => {
+        return getAPIContext().executeTestFunction(functionName, parameters).then((result) => {
             this.setState({"testFunctionResult" : result});
         });
     }

@@ -3,7 +3,7 @@ import Icon from "react-fa";
 import {Grid, Row, Col, DropdownButton, Button} from 'react-bootstrap';
 import { NavItemLink, MenuItemLink, ButtonLink, Link} from '../links';
 import {Link as OrdinaryLink} from '../../links';
-import {FacilitySelector, renderFacilityLabel} from '../Facility/FacilitySelector';
+import {ContextSelector, renderContextLabel} from '../Facility/ContextSelector';
 import Sidebar from './Sidebar';
 import classnames from 'classnames';
 import exposeRouter from 'components/common/exposerouter';
@@ -89,14 +89,14 @@ class NavigationDump extends Component {
       return (
         <nav className="page-sidebar visible" data-pages="sidebar">
           <div className="sidebar-header">
-            {this.props.hideFacilitySelector || <FacilitySelector availableFacilities={this.props.availableFacilities} facility={this.props.facility} desktop={this.props.desktop}/>}
+            {this.props.hideFacilitySelector || <ContextSelector availableFacilities={this.props.availableFacilities} selected={this.props.selected} closeSidebar={() => this.props.acToggleSidebar(false)}desktop={this.props.desktop}/>}
           </div>
           <div className="m-t-30 sidebar-menu">
             <ul className="menu-items">
               {this.props.children}
             </ul>
           </div>
-        </nav> 
+        </nav>
       )
 
     }

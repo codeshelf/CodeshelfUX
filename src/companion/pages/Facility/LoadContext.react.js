@@ -5,13 +5,12 @@ import exposeRouter from 'components/common/exposerouter';
 
 import {acInitialLoadFacilities} from './store';
 import {getFacilityMutable} from "./get";
-import URI from 'urijs';
 
 function mapDispatch(dispatch) {
   return bindActionCreators({acInitialLoadFacilities}, dispatch);
 }
 
-class LoadFacility extends Component {
+class LoadContext extends Component {
 
   componentDidMount() {
     this.loadAndRedirect();
@@ -21,15 +20,14 @@ class LoadFacility extends Component {
     this.loadAndRedirect();
   }
 
+
   loadAndRedirect() {
     const {availableFacilities} = this.props;
     if (!availableFacilities || availableFacilities.length === 0) {
       this.props.acInitialLoadFacilities();
     } else {
-      const {router, location} = this.props;
-      const newUri = new URI(`./facilities/${availableFacilities[0].domainId}`);
-      const newURL = newUri.absoluteTo(location.pathname+location.search).toString();
-      router.push(newURL);
+      const router = this.props.router;
+      router.push(`/mobile/facilities/${availableFacilities[0].domainId}/customers/ALL`);
     }
   }
 
@@ -42,4 +40,4 @@ class LoadFacility extends Component {
   }
 }
 
-export default exposeRouter(connect(getFacilityMutable, mapDispatch)(LoadFacility));
+export default exposeRouter(connect(getFacilityMutable, mapDispatch)(LoadContext));

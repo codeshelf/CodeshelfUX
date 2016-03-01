@@ -13,3 +13,4 @@ bin
 .DS_Store
 /bower_components/
 jsconfig.json
+npm_debug.log

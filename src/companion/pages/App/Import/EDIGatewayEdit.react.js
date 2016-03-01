@@ -2,7 +2,7 @@ import  React from "react";
 import {Button} from "components/common/bootstrap";
 import EDIForm from "./EDIForm";
 import {Map} from "immutable";
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 
 const baseFormMetadata = [
     {name: "active",
@@ -98,7 +98,7 @@ export default toSelectedListItem();
 class DropboxLinkButton extends React.Component {
 
     handleClick() {
-        return getFacilityContext().startDropboxLink().then((urlObj) => {
+        return getAPIContext().startDropboxLink().then((urlObj) => {
                 window.open(urlObj.url, '_blank');
             window.focus();
         });
