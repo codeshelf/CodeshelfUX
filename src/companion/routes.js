@@ -49,8 +49,8 @@ import mCartSearch from './pages/Mobile/CartSearch/CartSearch.react.js';
 import CartDetail from './pages/Detail/CartDetail/CartDetail.react.js';
 import mWorkerPickCharts from './pages/Mobile/WorkerPickCharts/WorkerPickCharts.react.js';
 
-import LoadContext from './pages/Mobile/Facility/LoadContext.react.js';
-import ContextWrapper from './pages/Mobile/Facility/ContextWrapper.react.js';
+import LoadContext from './pages/Facility/LoadContext.react.js';
+import ContextWrapper from './pages/Facility/ContextWrapper.react.js';
 import ReduxMobile from './pages/Mobile/Mobile.react.js';
 import ReduxFacility from './pages/App/ReduxFacility.react.js';
 import {reduxAdmin} from './pages/App/Admin/ReduxAdmin.react.js';
@@ -60,8 +60,8 @@ export default (
     {/* Redirect to mobile or desktop web component */}
     <IndexRoute component={DetectMobile} />
     <Route component={authn(ReduxFacility)} path="facilities"> //ensure auth and default facility
-      <IndexRoute component={LoadFacility} />
-      <Route component={FacilityWrapper} path=":facilityName">
+      <IndexRoute component={LoadContext} />
+      <Route component={ContextWrapper} path=":facilityName/customers/:customerName">
         <Route component={Facility}>
           <IndexRedirect to="workresults" />
 
@@ -116,7 +116,7 @@ export default (
 
     <Route component={authn(ReduxMobile)} path="mobile/facilities">
       <IndexRoute component={LoadContext} />
-      <Route component={ContextWrapper} path=":facilityName/:customerName">
+      <Route component={ContextWrapper} path=":facilityName/customers/:customerName">
         <Route component={mApp}>
           <IndexRedirect to="events" />
           <Route component={mWorkerPickCharts}  path="events"/>

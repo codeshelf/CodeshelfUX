@@ -4,24 +4,12 @@ import {authz} from 'components/common/auth';
 import {Grid, Row, Col, DropdownButton, MenuItem, Button} from 'react-bootstrap';
 import { NavItemLink, MenuItemLink, ButtonLink, Link} from '../links';
 import {clearStoredCredentials} from "data/user/store";
-import {FacilitySelector, renderFacilityLabel} from '../Facility/FacilitySelector';
+import {ContextSelector, renderContextLabel} from '../Facility/ContextSelector';
 import {loggedout} from "data/auth/actions";
 import {Navigation, AuthzNavMenuItem, AuthzMenuItem} from '../Sidebar/Navigation';
 import exposeRouter from 'components/common/exposerouter';
 import classnames from 'classnames';
 import {encodeContextToURL} from './common/contextEncode.js';
-
-function renderContextLabel(selected) {
-  if (selected.selectedFacility){
-    let {description, timeZoneDisplay} = selected.selectedFacility;
-    if (selected.selectedCustomer && selected.selectedCustomer !== 'ALL') {
-      description = selected.selectedCustomer.name;
-    }
-    return (<span><Icon name="building" style={{marginRight: ".25em"}}/>{description}({timeZoneDisplay})</span>);
-  } else {
-    return null;
-  }
-}
 
 class Header extends Component {
   render() {
@@ -58,26 +46,6 @@ function menuIcon(iconName) {
 
 function menuTitle(title) {
   return <span className="title">{title}</span>;
-<<<<<<< variant A
->>>>>>> variant B
-}
-
-class PagesNavigation extends Component {
-  render() {
-    return (
-        <nav className="page-sidebar visible" data-pages="sidebar">
-          <div className="sidebar-header">
-            <ContextSelector {...this.props} />
-          </div>
-          <div className="m-t-30 sidebar-menu">
-            <ul className="menu-items">
-              {this.props.children}
-            </ul>
-          </div>
-        </nav>
-    );
-  }
-======= end
 }
 
 class App extends Component {
@@ -112,7 +80,7 @@ class App extends Component {
     return (
         <div id="outer-wrapper">
           <Navigation
-            facility={this.props.facility}
+            selected={this.props.selected}
             availableFacilities={this.props.availableFacilities}
             isOpen={this.props.isOpen}
             docked={false}
@@ -157,46 +125,3 @@ class App extends Component {
 }
 
 export default exposeRouter(App);
-
-<<<<<<< variant A
->>>>>>> variant B
-
-class ContextSelector extends React.Component {
-
-    render() {
-        const {selected, availableFacilities} = this.props;
-        return (<DropdownButton className="facility-dropdown" bsStyle="link" title={renderContextLabel(selected)}>
-                <div className="sidebar-menu" style={{maxHeight: '500', overflowY: 'scroll',width: '200'}}>
-                {
-                    availableFacilities.map((facility) => {
-                        const {name, persistentId, domainId, description} = facility;
-                        return (<ul style={{listStyleType: 'none', paddingLeft: 15, paddingTop: 3}}>
-                              <MenuItemLink key={domainId}
-                                             to={`/mobile/facilities/${domainId}/customers/ALL`}
-                                             data-persistentid={persistentId}
-                                             onClick={() => this.props.acToggleSidebar(false)}>
-                                 {description}
-                               </MenuItemLink>
-                               <ul style={{listStyleType: 'none', paddingLeft: 25}}>
-                             {facility.customers.map((customer) => {
-                              return (
-                                <MenuItemLink key={domainId + customer.domainId}
-                                               to={`/mobile/facilities/${domainId}/customers/${customer.domainId}`}
-                                               data-persistentid={customer.persistentId}
-                                               onClick={() => this.props.acToggleSidebar(false)}
-                                               style={{paddingTop: 3}}
-                                              >
-                                   {customer.name}
-                                 </MenuItemLink>
-                              )
-                             })}
-                              </ul>
-                             </ul>
-                          )
-                    })
-               }
-               </div>
-        </DropdownButton>);
-    }
-}
-======= end

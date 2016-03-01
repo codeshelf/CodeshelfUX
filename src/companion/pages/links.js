@@ -2,7 +2,7 @@ import {LinkContainer} from 'react-router-bootstrap';
 import {Link as rrLink} from 'react-router';
 import {NavItem, MenuItem, Button, ListGroupItem} from 'react-bootstrap';
 import {connect} from 'react-redux';
-import {encodeContextToURL} from './common/contextEncode.js';
+import {encodeContextToURL} from '../pages/Mobile/common/contextEncode.js';
 
 
 function mapState(state) {
