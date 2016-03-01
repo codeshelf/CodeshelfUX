@@ -7,7 +7,7 @@ import {encodeContextToURL} from '../pages/Mobile/common/contextEncode.js';
 
 function mapState(state) {
   return {
-    selected: state.facility.selected
+    selected: state.facility && state.facility.selected
   }
 }
 
@@ -18,11 +18,12 @@ function includeContext(Component) {
       if (this.props.params) {
         console.warn("old style Link detected");
       }
-      if (!this.props.selected.selectedFacility && this.props.shouldHaveFacility) {
+      const {selected, shouldHaveFacility} = this.props;
+      if (!selected && this.props.shouldHaveFacility) {
         // no links will be renderd without facility
         return null;
       }
-      else if (!this.props.facility && !this.props.shouldHaveFacility) {
+      else if (!selected && !this.props.shouldHaveFacility) {
         let {to, ...rest} = this.props;
         const basePath= location.hash.indexOf('#/mobile') === 0 ? '/mobile' : '';
         if (to.indexOf("/") != 0) {
@@ -32,10 +33,10 @@ function includeContext(Component) {
       }
       else {
         const {to, ...rest} = this.props;
-        let basePath=`/facilities/${encodeContextToURL(this.props.selected)}`;
+        let basePath=`/facilities/${encodeContextToURL(selected)}`;
         // little hacky for now, to be fixed when moving common thing one level higher
         if (location.hash.indexOf('#/mobile') === 0) {
-          basePath = '/mobile' + basePath
+          basePath = '/mobile' + basePath;
         }
         let newTo = to;
         if (to.indexOf("/") != 0) {

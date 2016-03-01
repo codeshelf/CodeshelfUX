@@ -33,6 +33,14 @@ export default class TopNavBar extends React.Component {
                         </div>
                     </div>
                     <div className="pull-right">
+                      {
+                        (selected) ?
+                          <AuthzButtonLink id="admin" permission="user:edit" bsStyle="link" to="/admin/users" shouldHaveFacility={false} >Admin</AuthzButtonLink>
+                          :
+                          <ButtonLink bsStyle="link" to="/facilities" id="home" name="home">
+                            <Icon name="home" size="lg"/>
+                          </ButtonLink>
+                      }
                       <span>{title}</span>
                       <UserProfileMenu user={user}/>
                     </div>
