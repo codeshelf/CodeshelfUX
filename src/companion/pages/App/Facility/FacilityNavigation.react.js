@@ -1,6 +1,7 @@
 import React from 'react';
 import {Navigation, Submenu, AuthzMenuItem} from "../../Sidebar/Navigation";
 import exposeRouter from 'components/common/exposerouter';
+import {encodeContextToURL} from '../../Mobile/common/contextEncode.js';
 
 class FacilityNavigation extends React.Component {
 
@@ -18,9 +19,9 @@ class FacilityNavigation extends React.Component {
   }
 
   render() {
-    const {params, facility} = this.props;
-    const {domainId} = facility;
-    const basepath = `/facilities/${domainId}`;
+    const {params, selected} = this.props;
+    const {selectedFacility} = selected;
+    const basepath = "/facilities/" + encodeContextToURL(this.props.selected);
     return (
       <Navigation {...this.props} docked={true} desktop={true} availableFacilities={this.props.facilities}>
         <AuthzMenuItem permission="event:view" to={`${basepath}/workresults`} params={params} title="Productivity" iconName="bar-chart" />
@@ -38,7 +39,7 @@ class FacilityNavigation extends React.Component {
           <AuthzMenuItem permission="worker:edit" to={`${basepath}/workers`} params={params} title="Workers" iconName="users" />
           <AuthzMenuItem permission="facility:edit" to={`${basepath}/extensionpoints`} params={params} title="Extensions" iconName="code" />
           <AuthzMenuItem permission="facility:edit" to={`${basepath}/maintenance`} params={params} title="Maintenance" iconName="heartbeat" />
-          <AuthzMenuItem permission="ux:view" href={this.getUXUrl(facility)} params={params} title="Advanced" iconName="magic" />
+          <AuthzMenuItem permission="ux:view" href={this.getUXUrl(selectedFacility)} params={params} title="Advanced" iconName="magic" />
         </Submenu>
         <AuthzMenuItem permission="che:simulate" to={`${basepath}/testscript`} params={params} title="Test Scripts" iconName="bug" />
       </Navigation>);

@@ -12,20 +12,20 @@ import {state} from 'data/state';
 export default class Facility extends React.Component {
 
     render() {
-        let {facility, availableFacilities, acToggleSidebar} = this.props;
+        let {selected, availableFacilities, acToggleSidebar} = this.props;
         const tenant = getSelectedTenant();
         let tenantName = tenant.get("name");
         return (
             <DocumentTitle title='CS Companion'>
             {
-                    facility ?
+                    selected ?
                           <div>
-                              <FacilityNavigation title={tenantName} facility={facility} facilities={availableFacilities} acToggleSidebar={acToggleSidebar}/>
+                              <FacilityNavigation title={tenantName} selected={selected} facilities={availableFacilities} acToggleSidebar={acToggleSidebar}/>
                               <div id="page-wrapper" className="page-container">
-                                  <TopNavBar title={tenantName} facility={facility} facilities={availableFacilities}/>
+                                  <TopNavBar title={tenantName} selected={selected} availableFacilities={availableFacilities}/>
                                   <div className="page-content-wrapper">
                                       <div className="content" style={{paddingLeft: "250px"}}>
-                                        { React.cloneElement(this.props.children, { state: state })}
+                                        { React.cloneElement(this.props.children, { state: state, ...this.props})}
                                       </div>
                                   </div>
                               </div>

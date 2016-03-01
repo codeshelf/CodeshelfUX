@@ -6,7 +6,8 @@ import PickerEventsIBox from './PickerEventsIBox';
 
 export default class WorkResults extends React.Component{
     render() {
-        var apiContext = getAPIContext();
+        const {selected} = this.props;
+        var apiContext = getAPIContext(selected);
         return (<DocumentTitle title="Picks By Hour">
                 <PageGrid>
                     <Row>

@@ -1,22 +1,22 @@
 import setToString from 'lib/settostring';
 import {dispatch} from 'dispatcher';
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import _ from 'lodash';
 import {selectedWorkerCursor, workersCursor} from 'data/state';
 
 
 export function fetchWorkers() {
   //set default for this UI at 2000 until paging is handled
-  return dispatch(fetchWorkers, getFacilityContext().getWorkers({limit: 2000}));
+  return dispatch(fetchWorkers, getAPIContext().getWorkers({limit: 2000}));
 };
 
 export function addWorker(selectedWorkerForm) {
-    return dispatch(addWorker, getFacilityContext().addWorker(selectedWorkerForm.toJS()));
+    return dispatch(addWorker, getAPIContext().addWorker(selectedWorkerForm.toJS()));
 };
 
 
 export function updateWorker(selectedWorkerForm) {
-    return dispatch(updateWorker, getFacilityContext().updateWorker(selectedWorkerForm));
+    return dispatch(updateWorker, getAPIContext().updateWorker(selectedWorkerForm));
 };
 
 

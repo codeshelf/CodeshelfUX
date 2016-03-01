@@ -22,7 +22,7 @@ export default class TopNavBar extends React.Component {
     }
 
     render() {
-        let {title, facility, facilities, user} = this.props;
+        let {title, selected, user} = this.props;
         return (
                 <div className="header">
                     <div className="pull-left sm-table">
@@ -33,15 +33,8 @@ export default class TopNavBar extends React.Component {
                         </div>
                     </div>
                     <div className="pull-right">
-                        {
-                            (facilities) ?
-                                <AuthzButtonLink id="admin" permission="user:edit" bsStyle="link" to="/admin/users" >Admin</AuthzButtonLink> :
-                                <ButtonLink bsStyle="link" to="/facilities" id="home" name="home">
-                                    <Icon name="home" size="lg"/>
-                                </ButtonLink>
-                        }
-                            <span>{title}</span>
-                            <UserProfileMenu user={user}/>
+                      <span>{title}</span>
+                      <UserProfileMenu user={user}/>
                     </div>
                 </div>
         );

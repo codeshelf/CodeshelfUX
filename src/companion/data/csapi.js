@@ -197,22 +197,24 @@ export function getFacilityCustomers(domainId) {
 };
 
 // facilityId can be injected(for mobile web) or will be taken from facility cursor if not provided(desktop web)
-export function getAPIContext({selectedFacility, selectedCustomer}) {
+export function getAPIContext(selected) {
+    const {selectedFacility = null, selectedCustomer = 'ALL'} = selected || {};
     var endpoint = state.cursor(["endpoint"])();
-    var facility = state.cursor(["selectedFacility"])();
-    var facilityId = (selectedFacility && selectedFacility.persistentId) || facility.get("persistentId");
+    var facility = selectedFacility || state.cursor(["selectedFacility"])();
+
+    const {persistentId: facilityId, domainId, utcOffset} = facility;
     // not sure if paths will be this way in the future
-    let basePath = "/api/facilities/" + facilityId;
+    let basePath = "/api/facilities/" + domainId;
+
     basePath = selectedCustomer !== 'ALL' && selectedCustomer ? basePath + "/customers/" + selectedCustomer.domainId: basePath;
     let ordersPath = basePath + "/orders";
     let workInstructionsPath = basePath + "/work/instructions";
-    let domainId = facility && facility.domainId;
     return {
         domainId: domainId,
         facilityId: facilityId,
         endpoint: endpoint,
         facility: facility,
-        utcOffset: (selectedFacility && selectedFacility.utcOffset) || facility.get("utcOffset"),
+        utcOffset: utcOffset,
 
         recreateFacility() {
             return ajax("/api/facilities/recreate/" + facility.domainId, {
