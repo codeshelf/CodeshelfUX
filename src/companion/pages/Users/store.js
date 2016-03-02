@@ -4,6 +4,7 @@ import {createUser, updateUser} from "data/csapi";
 
 const ADD_USER = 'ADD_USER';
 const EDIT_USER = 'EDIT_USER';
+const GET_USERS = 'GET_USERS';
 const LOADING_STARTED = 'LOADING_STARTED';
 const LOADING_OK = 'LOADING_OK';
 const LOADING_ERROR = 'LOADING_ERROR';
@@ -14,8 +15,11 @@ const COMPLETED = "Success";
 const ERRORED = "Error";
 
 const initState = new (Record({
-  actions: new (Record({acLoadUsers: {}})),
-  users: List(),
+  users: new Map({
+    data: new List(),
+    error: null,
+    loading: null
+  }),
   addUser: new Map({
     loading: null,
     error: null
@@ -31,12 +35,12 @@ const initState = new (Record({
   })
 }));
 
-const Stage = new Record({
+/*const Stage = new Record({
   stage: "never run",
   running: null,
   error: null,
   result: null
-});
+});*/
 
 export function usersReducer(state = initState, action) {
   var newState = actionReducer(state, action);
@@ -47,7 +51,7 @@ export function usersReducer(state = initState, action) {
   }
 }
 
-function apiActionType(stage) {
+/*function apiActionType(stage) {
   return "users " + stage;
 }
 
@@ -93,10 +97,35 @@ function toState(stage, value) {
   }
 
   return state;
-}
+}*/
 
 function actionReducer(state, action) {
   switch(action.type) {
+    case GET_USERS: {
+      switch (action.status) {
+        case LOADING_STARTED: {
+          return state.mergeIn(['users'], new Map({
+            data: new List(),
+            loading: true,
+            error: null,
+          }));
+        }
+        case LOADING_OK: {
+          return state.mergeIn(['users'], new Map({
+            data: List(action.data),
+            loading: null,
+            error: null,
+          }));
+        }
+        case LOADING_ERROR: {
+          return state.mergeIn(['users'], new Map({
+            data: [],
+            loading: null,
+            error: List.of(action.data),
+          }));
+        }
+      }
+    }
     case ADD_USER:
       switch (action.status) {
         case LOADING_STARTED: {
@@ -131,18 +160,8 @@ function actionReducer(state, action) {
              error: null,
            }));
          }
-         // need to be reworked
          case LOADING_OK: {
-           const data = state.users;
-           let i = 0;
-            data.forEach(d => {
-              if (d.id == action.userId) {
-                data.updateIn([i, 'id'], new Map({
-                  ...action.data
-                }))
-              }
-            i++;
-            });
+            //TODO
            return state.merge({ 
               editUser: {
                 loading: null,
@@ -160,16 +179,16 @@ function actionReducer(state, action) {
       }
     case UPDATE_USER_FORM:
       return state.setIn(['userForm', action.fieldName], action.value);
-    case apiActionType(STARTED):
+    /*case apiActionType(STARTED):
     case apiActionType(ERRORED):
       return state.mergeIn(["actions", "acLoadUsers"], action.data);
     case apiActionType(COMPLETED):
-      return state.set("users", action.data.result);
+      return state.set("users", action.data.result);*/
   }
   return null;
 }
 
-export function acLoadUsers() {
+/*export function acLoadUsers() {
   return (dispatch, getState) => {
     const state = getState();
     const {running} = state.users.actions.acLoadUsers;
@@ -182,7 +201,7 @@ export function acLoadUsers() {
       });
     }
   };
-};
+};*/
 
 function setStatus(type, status, data) {
   return {
@@ -236,6 +255,21 @@ export function acEditUser(userForm, userId) {
     }); 
   }
 }
+
+export function acLoadUsers() {
+  return (dispatch, getState) => {
+    dispatch(setStatus(GET_USERS, LOADING_STARTED));
+
+    return getUsers().then((data) => {
+      console.log(`data from getUsers`, data);
+      dispatch(setStatus(GET_USERS, LOADING_OK, data));
+    }).catch((e) => {
+      console.log(`error from getting users`, e);
+      dispatch(setStatus(GET_USERS, LOADING_ERROR, e));
+    });
+  }
+}
+
 
 export function acUpdateUserForm(fieldName, value) {
   return {
