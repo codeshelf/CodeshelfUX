@@ -1,6 +1,4 @@
 target
-bin
-/bin
 *.pyc
 /node_modules
 *.js~
