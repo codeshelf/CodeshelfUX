@@ -14,6 +14,8 @@ var yargs = require('yargs');
 var closureCompiler = require('gulp-closure-compiler');
 var path = require('path');
 var karma = require('karma');
+var babel = require('gulp-babel');
+var sourcemaps = require('gulp-sourcemaps');
 var nightwatch = require('gulp-nightwatch');
 
 var args = yargs
@@ -82,7 +84,38 @@ gulp.task('server', ['env', 'build'], bg('node', 'src/server'));
 
 gulp.task('default', ['server']);
 
-gulp.task('nightwatch', function() {
+
+// var testDirs = ['test/selenium', 'test/pages'];
+// var allTestJS = testDirs.map(function(path) {
+//   return path + "**/*.js";
+// });
+
+// gulp.task("watch-tests", function() {
+//   gulp.watch(allTestJS, ["build-tests", "build-pages"]);
+// });
+
+
+gulp.task('build-tests', function() {
+  return gulp.src('test/selenium/**/*.js')
+    .pipe(sourcemaps.init())
+    .pipe(babel({
+      plugins: ["add-module-exports"]
+    }))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('target/test/selenium'));
+});
+
+gulp.task('build-pages', function() {
+  return gulp.src('test/pages/**/*.js')
+    .pipe(sourcemaps.init())
+    .pipe(babel({
+      plugins: ["add-module-exports"]
+    }))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('target/test/pages'));
+});
+
+gulp.task('nightwatch', ['build-tests', 'build-pages'], function() {
   return gulp.src('')
     .pipe(nightwatch({
       configFile: 'nightwatch.json'
