@@ -14,6 +14,7 @@ var yargs = require('yargs');
 var closureCompiler = require('gulp-closure-compiler');
 var path = require('path');
 var karma = require('karma');
+var nightwatch = require('gulp-nightwatch');
 
 var args = yargs
   .alias('p', 'production')
@@ -77,7 +78,13 @@ gulp.task('tdd', function (done) {
     runSequence('server', 'karma', done);
 });
 
-
 gulp.task('server', ['env', 'build'], bg('node', 'src/server'));
 
 gulp.task('default', ['server']);
+
+gulp.task('nightwatch', function() {
+  return gulp.src('')
+    .pipe(nightwatch({
+      configFile: 'nightwatch.json'
+    }));
+});
