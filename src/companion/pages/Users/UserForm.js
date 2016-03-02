@@ -6,8 +6,28 @@ import {Map} from "immutable";
 import {getEmail} from "data/user/store";
 import _ from "lodash";
 
+const editFormMetadata = () => {
+  const fields = ["id", "username", "active", "roles"];
+  return _.chain(getFormMetadata())
+          .filter((m) => fields.indexOf(m.name) >= 0)
+          .map((m) => {
+            if (m.name == "username") {
+              let editM = _.clone(m);
+              editM.readOnly = "true";
+              editM.required = false;
+              return editM;
+            } else {
+              return m;
+            }
+          }).value();
+}
 
-export function getFormMetadata() {
+const addFormMetadata = () => {
+    const fields = ["username", "roles"];
+    return _.filter(getFormMetadata(), (m) => fields.indexOf(m.name) >= 0);
+}
+
+const getFormMetadata = () => {
     const commonRoles = [{value: "Admin", label: "Admin"},
                  {value: "Upload", label: "Upload"},
                  {value: "View", label: "View"},
@@ -47,18 +67,24 @@ export class UserForm extends React.Component{
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
+        this.returnRoute = "/admin/users";
     }
 
-    handleSave() {
-      if (this.userId) {
-        const userForm = this.props.formData;
+    handleSave(userId) {
+      const userForm = this.props.formData;
+      if (userId) {
+        return this.props.acEditUser(userForm, userId)
+      } else {
+        return this.props.acAddUser(userForm);
+      }
+      /*if (this.userId) {
+        
         let promise = this.props.acEditUser(userForm, this.userId);
         return promise;
       } else {
-        const userForm = this.props.formData;
         let promise = this.props.acAddUser(userForm);
         return promise;
-      }
+      }*/
       
       // this was previoulsy in User.Edit, not sure what it does
       /*let subFields = _.difference(fields, ["id", "username"]);
@@ -71,25 +97,19 @@ export class UserForm extends React.Component{
     }
 
     render() {
-        const returnRoute = "/admin/users";
-        const {formMetadata} = this.props;
+        const {users, params:{userId}} = this.props;
         let {formData} = this.props;
 
-        var user = undefined;
-        if (Object.keys(this.props.params).length) {
-          let {userId} = this.props.params;
-          let {users} = this.props;
-          user = new Map(users.find((u) => {
-            return u.id == parseInt(userId);
-          }));
-          this.userId = userId;
-          formData = user;
-        }
-        const title = (user !== undefined ? `Edit ${user.get('username')}` : "New user");
-
+        const user = users.find((u) => {
+            return u.id === parseInt(userId);
+        });
+        formData = userId ? user : formData;
+        const title = user ?  `Edit ${user.username}` : "New user";
+        const formMetadata = user ? editFormMetadata : addFormMetadata;
+        
         return (<DocumentTitle title={title}>
-                <ModalForm title={title} returnRoute={returnRoute}
-                 onSave={() => this.handleSave()}
+                <ModalForm title={title} returnRoute={this.returnRoute}
+                 onSave={() => this.handleSave(userId)}
                  formData={formData}>
 
                 <FormFields formMetadata={formMetadata()}
