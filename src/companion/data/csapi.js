@@ -381,6 +381,11 @@ export function getAPIContext(selected) {
           return ajax(workerPath, {});
         },
 
+        getWorkerWorkInstructions: function(domainId) {
+          var workerPath = basePath + "/workers/" + encodeURIComponent(domainId) + "/workinstructions";
+          return ajax(workerPath, {});
+        },
+
         getWorkerEvents: function(domainId) {
           var workerPath = basePath + "/workers/" + encodeURIComponent(domainId) + "/events";
           return ajax(workerPath, {});
@@ -394,7 +399,6 @@ export function getAPIContext(selected) {
         },
 
         getWorkerEventsWithTime: function({id, startAt, endAt, purposes}) {
-          var workerPath = facilityPath + "/workers/" + encodeURIComponent(id) + "/events";
           var workerPath = basePath + "/workers/" + encodeURIComponent(id) + "/events";
           startAt = moment(startAt);
           endAt = moment(endAt);
@@ -504,7 +508,7 @@ export function getAPIContext(selected) {
                 groupBy: criteria.groupBy
             };
             _.merge(data, criteria.filterBy);
-            return ajax(facilityPath + "/events", {
+            return ajax(basePath + "/events", {
                 data: data
             });
         },

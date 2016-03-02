@@ -54,10 +54,12 @@ function tabToApi(facilityContext, tab, filter) {
       return Promise.all([
         facilityContext.getWorkerEventHistogram({id: filter.id, ...filterToParams(filter)}),
         facilityContext.getWorkerEventsWithTime({id: filter.id, startAt, endAt, purposes: filter.purposes})
-      ]).then((res) => { return {histogram: res[0], events: res[1]}})
+      ]).then((res) => { return {histogram: res[0], events: res[1]};});
     },
-    [TAB_LOCATION]: getLocation,
-  }[tab];
+    [TAB_LOCATION]: (filter) => {
+      return facilityContext.getWorkerWorkInstructions(filter.id)
+        .then((res) => res);
+    }}[tab];
   return call(filter);
 }
 
