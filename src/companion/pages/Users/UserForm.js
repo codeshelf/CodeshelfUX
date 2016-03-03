@@ -77,44 +77,41 @@ export class UserForm extends React.Component{
       } else {
         return this.props.acAddUser(userForm);
       }
-      /*if (this.userId) {
-        
-        let promise = this.props.acEditUser(userForm, this.userId);
-        return promise;
-      } else {
-        let promise = this.props.acAddUser(userForm);
-        return promise;
-      }*/
-      
-      // this was previoulsy in User.Edit, not sure what it does
-      /*let subFields = _.difference(fields, ["id", "username"]);
-      let params = _.pick(userForm, subFields);
-      params.roles = (params.roles.join) ? params.roles.join(",") : '';*/
     }
 
     handleChange(field, value) {
         this.props.updateForm(field.name, value);
     }
 
+    componentWillMount() {
+      const {users, params:{userId}} = this.props;
+      let {formData} = this.props;
+      const user = users.find((u) => {
+          return u.id === parseInt(userId);
+      });
+
+      this.formData = userId ? user : formData;
+      this.title = user ?  `Edit ${user.username}` : "New user";
+      this.userId = userId;
+      this.user = user;
+
+      if (userId) {
+        this.props.updateForm('active', true);
+        this.props.updateForm('username', user.username);
+        this.props.updateForm('roles', user.roles);
+      }
+      this.formMetadata = this.user ? editFormMetadata : addFormMetadata;
+    }
+
     render() {
-        const {users, params:{userId}} = this.props;
-        let {formData} = this.props;
+        return (<DocumentTitle title={this.title}>
+                <ModalForm title={this.title} returnRoute={this.returnRoute}
+                 onSave={() => this.handleSave(this.userId)}
+                 formData={this.formData}>
 
-        const user = users.find((u) => {
-            return u.id === parseInt(userId);
-        });
-        formData = userId ? user : formData;
-        const title = user ?  `Edit ${user.username}` : "New user";
-        const formMetadata = user ? editFormMetadata : addFormMetadata;
-        
-        return (<DocumentTitle title={title}>
-                <ModalForm title={title} returnRoute={this.returnRoute}
-                 onSave={() => this.handleSave(userId)}
-                 formData={formData}>
-
-                <FormFields formMetadata={formMetadata()}
+                <FormFields formMetadata={this.formMetadata()}
                  handleChange={this.handleChange}
-                 formData={formData}/>
+                 formData={this.formData}/>
                 </ModalForm>
                 </DocumentTitle>
                );

@@ -16,7 +16,7 @@ const ERRORED = "Error";
 
 const initState = new (Record({
   users: new Map({
-    data: new List(),
+    data: [],
     error: null,
     loading: null
   }),
@@ -26,21 +26,15 @@ const initState = new (Record({
   }),
   editUser: new Map({
     loading: null,
-    error: null
+    error: null,
+    data: null
   }),
   userForm: new Map({
     username: null,
-    roles: List(),
+    roles: [],
     active: null
   })
 }));
-
-/*const Stage = new Record({
-  stage: "never run",
-  running: null,
-  error: null,
-  result: null
-});*/
 
 export function usersReducer(state = initState, action) {
   var newState = actionReducer(state, action);
@@ -51,9 +45,6 @@ export function usersReducer(state = initState, action) {
   }
 }
 
-/*function apiActionType(stage) {
-  return "users " + stage;
-}
 
 function recordAsync(fn, callback) {
   //setup chain
@@ -71,48 +62,20 @@ function recordAsync(fn, callback) {
   return promise;
 }
 
-function toState(stage, value) {
-  var state = {};
-  if (stage === STARTED) {
-    state = new Stage({
-      stage,
-      running: value,
-      error: null,
-      result: null
-    });
-  } else if (stage === ERRORED) {
-    state = new Stage({
-      stage,
-      running: null,
-      error: value,
-      result: null
-    });
-  } else {
-    state = new Stage({
-      stage,
-      running: null,
-      error: null,
-      result: value
-    });
-  }
-
-  return state;
-}*/
-
 function actionReducer(state, action) {
   switch(action.type) {
     case GET_USERS: {
       switch (action.status) {
         case LOADING_STARTED: {
           return state.mergeIn(['users'], new Map({
-            data: new List(),
+            data: [],
             loading: true,
             error: null,
           }));
         }
         case LOADING_OK: {
           return state.mergeIn(['users'], new Map({
-            data: List(action.data),
+            data: action.data,
             loading: null,
             error: null,
           }));
@@ -121,7 +84,7 @@ function actionReducer(state, action) {
           return state.mergeIn(['users'], new Map({
             data: [],
             loading: null,
-            error: List.of(action.data),
+            error: action.data,
           }));
         }
       }
@@ -161,13 +124,21 @@ function actionReducer(state, action) {
            }));
          }
          case LOADING_OK: {
-            //TODO
+           const data = state.users.get('data');
+           const newData = data.map((user) => {
+            if (user.id == action.userId) {
+              const u = Map(user).merge(Map(action.data));
+              return u.toJS();
+            }
+            return user;
+          })
            return state.merge({ 
               editUser: {
+                data: action.data,
                 loading: null,
                 error: null
               },
-              users: {...state.users}
+              users: {...state.users, data: newData}
            });
          }
          case LOADING_ERROR: {
@@ -179,29 +150,9 @@ function actionReducer(state, action) {
       }
     case UPDATE_USER_FORM:
       return state.setIn(['userForm', action.fieldName], action.value);
-    /*case apiActionType(STARTED):
-    case apiActionType(ERRORED):
-      return state.mergeIn(["actions", "acLoadUsers"], action.data);
-    case apiActionType(COMPLETED):
-      return state.set("users", action.data.result);*/
   }
   return null;
 }
-
-/*export function acLoadUsers() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const {running} = state.users.actions.acLoadUsers;
-    if(!running) {
-      recordAsync(getUsers, (stage, value) => {
-        dispatch({
-          type: apiActionType(stage),
-          data: toState(stage, value)
-        });
-      });
-    }
-  };
-};*/
 
 function setStatus(type, status, data) {
   return {
@@ -236,6 +187,7 @@ export function acEditUser(userForm, userId) {
       data: userForm.toJS(),
       userId: userId
     });
+  console.info("AAA" + userForm.toJS());
   return updateUser(userId, userForm.toJS()).then((data) => {
       console.log(`data from updateUser`, data);
       dispatch({
@@ -261,7 +213,7 @@ export function acLoadUsers() {
     dispatch(setStatus(GET_USERS, LOADING_STARTED));
 
     return getUsers().then((data) => {
-      console.log(`data from getUsers`, data);
+      console.log(`data from getUsers ${JSON.stringify(data)}`);
       dispatch(setStatus(GET_USERS, LOADING_OK, data));
     }).catch((e) => {
       console.log(`error from getting users`, e);
