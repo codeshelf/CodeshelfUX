@@ -98,7 +98,7 @@ function actionReducer(state, action) {
            }));
          }
          case LOADING_OK: {
-           const data = state.users;
+           const data = state.users.get('data');
            data.push(action.data);
            return state.merge({ 
               addUser: {
