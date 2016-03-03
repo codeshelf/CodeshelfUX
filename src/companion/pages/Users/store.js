@@ -127,8 +127,9 @@ function actionReducer(state, action) {
            const data = state.users.get('data');
            const newData = data.map((user) => {
             if (user.id == action.userId) {
-              const u = Map(user).merge(Map(action.data));
-              return u.toJS();
+              let u = Map(user).merge(Map(action.data));
+              u = u.toJS();
+              return u;
             }
             return user;
           })
@@ -143,6 +144,7 @@ function actionReducer(state, action) {
          }
          case LOADING_ERROR: {
            return state.mergeIn(['editUser'], new Map({
+             data: null,
              loading: null,
              error: `${action.data} : ${action.id}`,
            }));
