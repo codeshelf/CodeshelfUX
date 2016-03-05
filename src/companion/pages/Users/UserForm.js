@@ -2,8 +2,9 @@ import React from "react";
 import DocumentTitle from "react-document-title";
 import ModalForm from "components/common/ModalForm";
 import FormFields from "components/common/FormFields";
-import {Map, List} from "immutable";
+import {Map, List, fromJS} from "immutable";
 import {getEmail} from "data/user/store";
+import {UserRecord} from "data/types/User";
 import _ from "lodash";
 
 const editFormMetadata = () => {
@@ -68,13 +69,14 @@ export class UserForm extends React.Component{
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.returnRoute = "/admin/users";
-        this.first = true;
+        this.formMetadata = null;
+        this.title = null;
     }
 
-    handleSave(userId) {
+    handleSave() {
       const userForm = this.props.formData;
-      if (userId) {
-        return this.props.acEditUser(userForm, userId)
+      if (userForm.get('id')) {
+        return this.props.acEditUser(userForm)
       } else {
         return this.props.acAddUser(userForm);
       }
@@ -84,38 +86,58 @@ export class UserForm extends React.Component{
         this.props.updateForm(field.name, value);
     }
 
+    componentWillReceiveProps(newProps) {
+      this.findSelectedUserData(newProps);
+    }
+
     componentWillMount() {
+      this.findSelectedUserData(this.props);
+    }
+
+    findSelectedUserData(props) {
+      const path = props.location.pathname;
+      let userId = null;
+      if (path.indexOf("new") >= 0) {
+          userId = "new";
+      } else {
+          userId = props.params.userId;
+      }
+
+      let userForm = this.props.formData;
+      if (!userForm) {
+        if (userId === "new") {
+          userForm = UserRecord();
+          this.formMetadata = addFormMetadata;
+          this.title = "New user";
+          props.acStoreSelectedUserForm(userForm);
+        } else {
+          userForm = props.users.find((u) => {
+            return u.id == userId;
+          });
+          this.formMetadata = editFormMetadata;
+          this.title = `Edit ${userForm.username}`; 
+          props.acStoreSelectedUserForm(fromJS(userForm));
+        }
+      }
+    }
+
+    componentWillUnmount() {
+      this.props.acStoreSelectedUserForm(null);
     }
 
     render() {
-      const {users, params:{userId}} = this.props;
-      let {formData} = this.props;
+      const formData = this.props.formData;
 
-      const user = users.find((u) => {
-          return u.id == userId;
-      });
+      return (<DocumentTitle title={this.title}>
+              <ModalForm title={this.title} returnRoute={this.returnRoute}
+               onSave={() => this.handleSave()}
+               formData={formData}>
 
-      formData = userId ? user : formData;
-      const title = user ?  `Edit ${user.username}` : "New user";
-
-      if (this.first && userId) {
-        this.props.updateForm('active', true);
-        this.props.updateForm('username', user.username);
-        this.props.updateForm('roles', user.roles);
-        this.first = false;
-      }
-      const formMetadata = user ? editFormMetadata : addFormMetadata;
-
-        return (<DocumentTitle title={title}>
-                <ModalForm title={title} returnRoute={this.returnRoute}
-                 onSave={() => this.handleSave(userId)}
-                 formData={formData}>
-
-                <FormFields formMetadata={formMetadata()}
-                 handleChange={this.handleChange}
-                 formData={formData}/>
-                </ModalForm>
-                </DocumentTitle>
-               );
+              <FormFields formMetadata={this.formMetadata()}
+               handleChange={this.handleChange}
+               formData={formData}/>
+              </ModalForm>
+              </DocumentTitle>
+             );
     }
 };

@@ -1,4 +1,5 @@
-import {acAddUser, acUpdateUserForm} from "./store.js";
+import {acAddUser, acUpdateUserForm, 
+		acStoreSelectedUserForm} from "./store.js";
 import {UserForm} from "./UserForm.js";
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -9,7 +10,8 @@ import _ from "lodash";
 function mapDispatch(dispatch) {
     return bindActionCreators({
  				acAddUser,
- 				updateForm: acUpdateUserForm
+ 				updateForm: acUpdateUserForm,
+ 				acStoreSelectedUserForm
  		    }, dispatch);
 }
 

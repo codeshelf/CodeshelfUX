@@ -2,14 +2,17 @@ import {UserForm} from "./UserForm.js";
 import {Map} from "immutable";
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {acEditUser, acUpdateUserForm} from "./store.js";
+import {acEditUser, acUpdateUserForm, 
+        acStoreSelectedUserForm} from "./store.js";
 import exposeRouter, {toURL} from 'components/common/exposerouter';
 import _ from "lodash";
+
 
 function mapDispatch(dispatch) {
     return bindActionCreators({
         acEditUser,
-        updateForm: acUpdateUserForm
+        updateForm: acUpdateUserForm,
+        acStoreSelectedUserForm
         }, dispatch);
 }
 
