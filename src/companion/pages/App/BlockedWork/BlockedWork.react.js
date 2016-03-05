@@ -2,7 +2,7 @@ import React from 'react';
 import DocumentTitle from 'react-document-title';
 import {Badge, Tabs, Tab} from 'react-bootstrap';
 import _ from 'lodash';
-import {PageGrid, Row, Col} from 'components/common/pagelayout';
+import {SingleCellLayout} from 'components/common/pagelayout';
 import {IBox, IBoxBody} from 'components/common/IBox';
 import {Form, WrapInput, Input, SubmitButton, getRefInputValue} from 'components/common/Form';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
@@ -97,25 +97,21 @@ export default class BlockedWork extends React.Component {
         let filteredIssueSummaryResults = issuesSummaryResults
                 .filter((summary) => summary.get("eventType") !== "COMPLETE");
         return (
-                <DocumentTitle title={title}>
-        <PageGrid>
-            <Row>
-                <Col sm={12}>
-                  <WrapInput label="Created Date">
-                    <DayOfWeekFilter ref="createdFilter" onChange={this.subscribeWithFilter} />
-                  </WrapInput>
-                  {(filteredIssueSummaryResults.count() > 0) ?
-                    this.renderTabbedArea(filteredIssueSummaryResults) :
-                    <IBox className="bg-primary">
-                        <IBoxBody>
-                            <h3 className="text-white text-center">No {title}</h3>
-                        </IBoxBody>
-                    </IBox>
-                }
-                </Col>
-                </Row>
-       </PageGrid>
-       </DocumentTitle>
-       );
+          <DocumentTitle title={title}>
+            <SingleCellLayout>
+              <WrapInput label="Created Date">
+                <DayOfWeekFilter ref="createdFilter" onChange={this.subscribeWithFilter} />
+              </WrapInput>
+              {(filteredIssueSummaryResults.count() > 0) ?
+                this.renderTabbedArea(filteredIssueSummaryResults)
+                :
+                <IBox className="bg-primary">
+                  <IBoxBody>
+                    <h3 className="text-white text-center">No {title}</h3>
+                  </IBoxBody>
+                </IBox>
+              }
+            </SingleCellLayout>
+          </DocumentTitle>);
    }
 }

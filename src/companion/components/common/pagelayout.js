@@ -1,5 +1,22 @@
 import React from "react";
 import DocumentTitle from "react-document-title";
+import {Grid, Row, Col, DropdownButton, MenuItem, Button} from 'react-bootstrap';
+
+export {
+  Grid,
+  Row,
+  Col
+}
+
+export function Row1(props) {
+  return (
+      <Row>
+        <Col sm={12}>
+          {props.children}
+        </Col>
+      </Row>
+  );
+}
 
 export class FormPageLayout extends React.Component {
     constructor(props) {
@@ -23,22 +40,18 @@ export class SingleCellLayout extends React.Component{
     }
 
     render() {
-        let {title} = this.props;
-        return (<DocumentTitle title={title}>
-                    <PageGrid>
-                        <Row>
-                            <Col sm={12}>
-                                {this.props.children}
-                            </Col>
-                        </Row>
-                    </PageGrid>
-                </DocumentTitle>);
+      let {title} = this.props;
+      return (<DocumentTitle title={title}>
+                <Row1>
+                  {this.props.children}
+                </Row1>
+              </DocumentTitle>);
     }
 };
 
 export class PageGrid extends React.Component {
     render() {
-        return (<div className="container-fluid padding-25 sm-padding-10">{this.props.children}</div>);
+        return (<Grid fluid className="padding-10 sm-padding-0">{this.props.children}</Grid>);
     }
 };
 
@@ -61,7 +74,3 @@ class FormGrid extends React.Component {
             );
     }
 }
-
-
-export const Row = require('react-bootstrap').Row;
-export const Col = require('react-bootstrap').Col;

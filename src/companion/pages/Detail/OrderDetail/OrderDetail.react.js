@@ -17,6 +17,7 @@ import {fieldToDescription} from "./Header/intl";
 import {Items} from "./Items/Items.react.js";
 import {Picks} from "./Picks/Picks.react.js";
 import {Imports} from "./Imports/Imports.react.js";
+import {SingleCellLayout} from "components/common/pagelayout";
 import {IBox} from '../../IBox.react.js';
 import _ from "lodash";
 
@@ -69,16 +70,18 @@ export class OrderDetail extends Component {
     const {acSelectTab, tab, params:{id}} = this.props;
 
     return (
-      <IBox reloadFunction={() => acSelectTab(tab, id, true)}>
-        <Detail {...this.props} {...{
-          ALL_TABS,
-          tabToComponent,
-          tabToHeaderText,
-          getTitleComponent,
-          convertTab,
-          transitionTo,
-        }} />
-      </IBox>
+      <SingleCellLayout title={"Order: " + id}>
+        <IBox reloadFunction={() => acSelectTab(tab, id, true)}>
+          <Detail {...this.props} {...{
+              ALL_TABS,
+              tabToComponent,
+              tabToHeaderText,
+              getTitleComponent,
+              convertTab,
+              transitionTo,
+          }} />
+        </IBox>
+      </SingleCellLayout>
     );
   }
 }

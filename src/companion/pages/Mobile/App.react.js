@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Icon from "react-fa";
 import {authz} from 'components/common/auth';
+import {PageGrid} from 'components/common/pagelayout';
 import {Grid, Row, Col, DropdownButton, MenuItem, Button} from 'react-bootstrap';
 import { NavItemLink, MenuItemLink, ButtonLink, Link} from '../links';
 import {clearStoredCredentials} from "data/user/store";
@@ -113,9 +114,9 @@ class App extends Component {
               </Header>
               <div className="page-content-wrapper">
                 <div className="content">
-                  <Grid fluid className="sm-padding-10">
+                  <PageGrid>
                     {this.props.children}
-                  </Grid>
+                  </PageGrid>
                 </div>
               </div>
           </div>
