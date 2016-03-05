@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 
 import {acLoadUsers} from "./store.js";
 import {UsersList} from "./UsersList.react.js";
+import {List} from "immutable";
 
 //TODO remove when in redux store
 import {getEmail} from "data/user/store";
