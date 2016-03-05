@@ -1,7 +1,8 @@
 import React from "react";
 import DocumentTitle from "react-document-title";
-        import {SingleCellLayout, Row, Col} from "components/common/pagelayout";
-import {SingleCellIBox} from 'components/common/IBox';
+import {SingleCellLayout, Row1} from "components/common/pagelayout";
+import {IBox} from "pages/IBox";
+
 import {fromJS, Map, Set} from "immutable";
 import WorkInstructionSearch from "./WorkInstructionSearch";
 import ListManagement from "components/common/list/ListManagement";
@@ -151,15 +152,13 @@ export default class WorkInstructionIBox extends React.Component{
         let columns = this.columnsCursor;
         let sortSpecs = this.columnSortSpecsCursor;
         return (
-            <SingleCellIBox title={this.title}
-                    style={{display: "inline-block"}}
-                    isRefreshing={refreshingAction.isPending()}
-                        onRefresh={this.handleRefresh}>
-                <Row>
-                    <Col md={6}>
-                            <WorkInstructionSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
-                    </Col>
-                </Row>
+            <IBox
+                title={this.title}
+                style={{display: "inline-block"}}
+                loading={refreshingAction.isPending()} reloadFunction={this.handleRefresh}>
+              <Row1 md={6}>
+                <WorkInstructionSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
+              </Row1>
                 <SearchStatus {...{results, errorMessage}} />
                 <PivotTable results={resultValues} options={pivotOptions} onDrillDown={this.handleDrillDown}/>
                 <ListManagement results={selected}
@@ -168,6 +167,6 @@ export default class WorkInstructionIBox extends React.Component{
                  keyColumn={keyColumn}
                  sortSpecs={sortSpecs}
                  allowExport={true}/>
-            </SingleCellIBox>);
+            </IBox>);
     }
 };

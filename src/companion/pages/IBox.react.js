@@ -17,25 +17,28 @@ export class IBox extends Component {
 
   render() {
     // put the data into reload function and call it on click
-    const {reloadFunction, data, loading} = this.props;
+    const {reloadFunction, data, loading, title} = this.props;
     return (
       <div className="panel">
         <div className="panel-heading">
           <div className="panel-title">
+            {title}
+          </div>
+          {reloadFunction &&
 
-          </div>
-          <div className="panel-controls">
-            <ul>
-              <li>
-                <Button
-                  bsStyle="link"
-                  onClick={() => reloadFunction(data)}
-                  disabled={loading}>
-                  <Icon name="refresh" spin={loading} />
-                </Button>
-              </li>
-            </ul>
-          </div>
+           <div className="panel-controls">
+             <ul>
+               <li>
+                 <Button
+                     bsStyle="link"
+                     onClick={() => reloadFunction(data)}
+                     disabled={loading}>
+                   <Icon name="refresh" spin={loading} />
+                 </Button>
+               </li>
+             </ul>
+           </div>
+          }
         </div>
         <div className="panel-body">
           { this.props.children }

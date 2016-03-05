@@ -1,5 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {Nav, NavItem, Grid, Row, Col, Button, Input, ListGroup, Table} from 'react-bootstrap';
+import {SingleCellLayout} from 'components/common/pagelayout';
+import {IBox} from 'pages/IBox';
 import Icon from 'react-fa';
 import {Link} from '../../links';
 import {SearchInput} from "../../Search/SearchInput.react.js";
@@ -66,11 +68,12 @@ export function createSearchComponent(ItemComponent, searchFieldText, getIdForIt
 
       const isLoading = (whatIsLoading !== null);
       return (
-        <div>
-          {/*<SearchType />*/}
-          <SearchInput  placeholder={searchFieldText} {...{filter, acChangeFilter, acSearch}} />
-          <SearchList {...{isLoading, result, filter, error, acChangeFilter}} />
-        </div>
+        <SingleCellLayout>
+          <IBox>
+            <SearchInput  placeholder={searchFieldText} {...{filter, acChangeFilter, acSearch}} />
+            <SearchList {...{isLoading, result, filter, error, acChangeFilter}} />
+          </IBox>
+        </SingleCellLayout>
       );
     }
   }

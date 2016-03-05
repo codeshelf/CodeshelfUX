@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router';
 import {Tabs, Tab} from 'react-bootstrap';
 import {SingleCellLayout} from 'components/common/pagelayout';
+import {IBox} from 'pages/IBox';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import UploadForm from 'components/common/UploadForm';
 
@@ -127,19 +128,19 @@ export default class Imports extends React.Component{
     }
 
     render() {
-
-            return (<SingleCellLayout title="Manage Imports">
-                <Authz permission="facility:edit">
-                    <Link id="configure" to="edigateways" params={{facilityName: getFacilityContext().domainId}}>Configure EDI</Link>
-                </Authz>
-                <Tabs className="nav-tabs-simple" defaultActiveKey="orders">
-                    {this.renderOrder()}
-                    {isAuthorized("location:import") && this.renderLocation()}
-                    {isAuthorized("location:import") && this.renderAisle()}
-                    {isAuthorized("inventory:import") && this.renderInventory()}
-                </Tabs>
-
-                </SingleCellLayout>
-        );
+      return (
+        <SingleCellLayout title="Manage Imports">
+          <IBox>
+            <Authz permission="facility:edit">
+              <Link id="configure" to="edigateways" params={{facilityName: getFacilityContext().domainId}}>Configure EDI</Link>
+            </Authz>
+            <Tabs className="nav-tabs-simple" defaultActiveKey="orders">
+              {this.renderOrder()}
+              {isAuthorized("location:import") && this.renderLocation()}
+              {isAuthorized("location:import") && this.renderAisle()}
+              {isAuthorized("inventory:import") && this.renderInventory()}
+            </Tabs>
+          </IBox>
+        </SingleCellLayout>);
     }
 };

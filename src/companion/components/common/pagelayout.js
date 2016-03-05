@@ -9,10 +9,11 @@ export {
 }
 
 export function Row1(props) {
+  const {children, ...rest} = props
   return (
       <Row>
-        <Col sm={12}>
-          {props.children}
+        <Col {...rest}>
+          {children}
         </Col>
       </Row>
   );
@@ -51,7 +52,7 @@ export class SingleCellLayout extends React.Component{
 
 export class PageGrid extends React.Component {
     render() {
-        return (<Grid fluid className="padding-10 sm-padding-0">{this.props.children}</Grid>);
+        return (<Grid fluid className="padding-25 sm-padding-0">{this.props.children}</Grid>);
     }
 };
 

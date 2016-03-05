@@ -2,6 +2,7 @@ import React from 'react';
 import exposeRouter, {toURL} from 'components/common/exposerouter';
 import {Tabs, Tab} from 'react-bootstrap';
 import {SingleCellLayout, Grid, Row1} from 'components/common/pagelayout';
+import {IBox} from 'pages/IBox';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import DataObjectPurge from "./DataObjectPurge";
 import DataObjectNotificationThreshold from "./DataObjectNotificationThreshold";
@@ -78,6 +79,7 @@ class Maintenance extends React.Component{
         const returnRoute = toURL(this.props, "maintenance");
         return (
                 <SingleCellLayout title="Maintenance">
+                  <IBox>
                     <Tabs className="nav-tabs-simple" defaultActiveKey="jobs">
                         <Tab eventKey="jobs" title="Jobs">
                             <SingleCellIBox>
@@ -131,6 +133,7 @@ class Maintenance extends React.Component{
                       {extensionPoint:fromJS(extensionPoint),
                        onExtensionPointUpdate:this.handleConfigurationUpdate.bind(this),
                        returnRoute })}
+                  </IBox>
                 </SingleCellLayout>
                );
     }
