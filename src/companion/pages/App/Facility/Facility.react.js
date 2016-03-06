@@ -25,7 +25,7 @@ export default class Facility extends React.Component {
                                   <TopNavBar title={tenantName} selected={selected} availableFacilities={availableFacilities}/>
                                   <div className="page-content-wrapper">
                                       <div className="content" style={{paddingLeft: "250px"}}>
-                                        { React.cloneElement(this.props.children, { state: state, ...this.props})}
+                                        { React.cloneElement(this.props.children, { state: state})}
                                       </div>
                                   </div>
                               </div>
