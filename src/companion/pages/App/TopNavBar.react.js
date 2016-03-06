@@ -28,7 +28,6 @@ export default class TopNavBar extends React.Component {
                     <div className="pull-left sm-table">
                         <div className="header-inner hidden-sm hidden-xs">
                             <div className="brand inline">
-                                <h1>{title}</h1>
                             </div>
                         </div>
                     </div>
