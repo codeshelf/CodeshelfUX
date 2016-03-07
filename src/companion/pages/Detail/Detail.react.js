@@ -69,7 +69,6 @@ export class Detail extends Component {
     let contentElement = null;
 
     if (showError) {
-      const acReloadTab = () => this.props.acSelectTab(tab, this.itemId, true);
       let text = "Can't load request";
       if (error instanceof csapi.ConnectionError || error.message) {
         text = error.message;
@@ -78,9 +77,6 @@ export class Detail extends Component {
         <Row>
           <Col xs={8}>
             Error: {text}
-          </Col>
-          <Col xs={4}>
-            <Button bsStyle="primary" bsSize="xs" onClick={acReloadTab}><Icon name="refresh" /></Button>
           </Col>
         </Row>
       );
@@ -95,7 +91,6 @@ export class Detail extends Component {
       const acSetFieldVisibility = (f, v) => this.props.acSetFieldVisibility(tab, f, v);
       const acSetFieldOrder = (f, v) => this.props.acSetFieldOrder(tab, f, v);
       const acExpand = (i) => this.props.acExpand(tab, i);
-      const acReloadTab = () => this.props.acSelectTab(tab, this.itemId, true);
       const acSearchAdditional = (filter) => this.props.acSearchAdditional(tab, filter);
       const acSearch = (forceLoad) => this.props.acSearch(tab, forceLoad);
       const acSetFilterAndRefresh = (filter) => this.props.acSetFilterAndRefresh(tab, itemId, filter);
@@ -116,7 +111,6 @@ export class Detail extends Component {
         acSetFieldOrder,
         acSettingOpen,
         acSettingClose,
-        acReloadTab,
         acSearchAdditional,
         acSetFilter,
         acSearch,

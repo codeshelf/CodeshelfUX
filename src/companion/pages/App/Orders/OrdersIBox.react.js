@@ -3,7 +3,8 @@ import _ from "lodash";
 import DocumentTitle from "react-document-title";
 import {fromJS, Set} from "immutable";
 import moment from "moment";
-        import {SingleCellLayout, Row, Col} from "components/common/pagelayout";
+import {SingleCellLayout, Row1} from "components/common/pagelayout";
+import {IBox} from "pages/IBox";
 import {SingleCellIBox} from 'components/common/IBox';
 import PivotTable from "components/common/pivot/PivotTable";
 import OrderSearch from "./OrderSearch";
@@ -130,19 +131,16 @@ export default class OrdersIBox extends React.Component{
         let columns = this.columnsCursor;
         let sortSpecs = this.columnSortSpecsCursor;
         return (
-            <SingleCellIBox
+            <IBox
               title={this.title}
               style={{display: "inline-block"}}
-              isRefreshing={refreshingAction.isPending()} onRefresh={this.handleRefresh}>
-                <Row>
-                    <Col md={6}>
-
-                            <OrderSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
-                    </Col>
-                </Row>
+              loading={refreshingAction.isPending()} reloadFunction={this.handleRefresh}>
+                <Row1 md={6}>
+                  <OrderSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
+                </Row1>
                 <SearchStatus {...{results, errorMessage}} />
                 <PivotTable results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
                 <OrderReview orders={selectedOrders} columns={columns} sortSpecs={sortSpecs}/>
-            </SingleCellIBox>);
+            </IBox>);
     }
 };

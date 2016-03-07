@@ -1,6 +1,7 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
 import {Link} from 'react-router';
+import {PageGrid} from 'components/common/pagelayout';
 import FacilityNavigation from './FacilityNavigation.react.js';
 import TopNavBar from '../TopNavBar.react';
 import Footer from '../Footer.react.js';
@@ -24,8 +25,10 @@ export default class Facility extends React.Component {
                               <div id="page-wrapper" className="page-container">
                                   <TopNavBar title={tenantName} selected={selected} availableFacilities={availableFacilities}/>
                                   <div className="page-content-wrapper">
-                                      <div className="content" style={{paddingLeft: "250px"}}>
-                                        { React.cloneElement(this.props.children, { state: state})}
+                                      <div className="content">
+                                        <PageGrid>
+                                          { React.cloneElement(this.props.children, { state: state })}
+                                        </PageGrid>
                                       </div>
                                   </div>
                               </div>

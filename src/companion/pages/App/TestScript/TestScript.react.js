@@ -5,7 +5,7 @@ import _ from 'lodash';
 import {Map, List, fromJS} from 'immutable';
 import {getAPIContext} from 'data/csapi';
 import {IBox, IBoxBody} from 'components/common/IBox';
-import {PageGrid, Row, Col} from 'components/common/pagelayout';
+import {Row1, Row, Col} from 'components/common/pagelayout';
 import {Input, ListGroup, Modal} from 'react-bootstrap';
 import {Button, List as BSList} from 'components/common/bootstrap';
 import {ErrorDisplay} from 'components/common/Form';
@@ -40,17 +40,16 @@ export default class TestScript extends React.Component{
     }
 
     render() {
-            let {scriptInputs} = this.state;
-            return (<DocumentTitle title="Test Script">
-                        <PageGrid>
-                            <Row>
-                                <Col sm={12}>
-                                        <TestFunctionExecution />
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col sm={12} md={6}>
-                <IBox>
+      let {scriptInputs} = this.state;
+      return (
+        <DocumentTitle title="Test Script">
+          <div>
+            <Row1>
+              <TestFunctionExecution />
+            </Row1>
+          <Row>
+            <Col sm={12} md={6}>
+              <IBox>
                     <IBoxBody>
                         <div className="pull-right" style={{marginBottom: "1em"}}>
                             <div>
@@ -78,11 +77,11 @@ export default class TestScript extends React.Component{
                         <ScriptInput onChange={this.handleScriptInputChanges.bind(this)} />
                         <ScriptStepExecutor scriptInputs={scriptInputs} />
                 </IBoxBody>
-                </IBox>
-                </Col>
-                </Row>
-                </PageGrid>
-                </DocumentTitle>
+              </IBox>
+              </Col>
+            </Row>
+          </div>
+        </DocumentTitle>
                );
     }
 };

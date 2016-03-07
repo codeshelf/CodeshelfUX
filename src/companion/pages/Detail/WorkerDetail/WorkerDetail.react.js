@@ -17,6 +17,7 @@ import {Header} from "./Header/Header.react.js";
 import {fieldToDescription} from "./Header/intl";
 import {Productivity} from "./Productivity/Productivity.react.js";
 import {Location} from "./Location/Location.react.js";
+import {IBox} from '../../IBox.react.js';
 
 const tabToComponent = {
   [TAB_DETAIL]: Header,
@@ -60,18 +61,20 @@ function getTitleComponent(props, itemId) {
 
 export class WorkerDetail extends Component {
   render() {
-    const {tab} = this.props;
+    const {tab, acSelectTab, params:{id}} = this.props;
     const {error, whatIsLoading, whatIsLoaded} = this.props[tab];
     const transitionTo = 'mobile-worker-detail';
     return (
-        <Detail {...this.props} {...{
-          ALL_TABS,
-          tabToComponent,
-          tabToHeaderText,
-          getTitleComponent,
-          convertTab,
-          transitionTo,
-        }} />
+        <IBox reloadFunction={() => acSelectTab(tab, id, true)}>
+          <Detail {...this.props} {...{
+            ALL_TABS,
+            tabToComponent,
+            tabToHeaderText,
+            getTitleComponent,
+            convertTab,
+            transitionTo,
+          }} />
+        </IBox>
     );
   }
 }

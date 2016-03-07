@@ -7,9 +7,8 @@ import "./SettingsRow.styl";
 export class SettingsRow extends Component {
 
   render() {
-    const {onClickReload , onClickSettings} = this.props;
+    const {onClickSettings} = this.props;
     let numberOfButtons = 1;
-    if (onClickReload) numberOfButtons++;
     if (Array.isArray(this.props.children)) {
       numberOfButtons += this.props.children.length;
     }
@@ -20,8 +19,6 @@ export class SettingsRow extends Component {
             <span className="pull-right">
             {this.props.children}
             <Button bsStyle="primary" bsSize="xs" onClick={onClickSettings}><Icon name="gears" /></Button>
-            {onClickReload &&
-               <Button bsStyle="primary" bsSize="xs" onClick={onClickReload}><Icon name="refresh" /></Button>}
             </span>
           </Col>
         </Row>

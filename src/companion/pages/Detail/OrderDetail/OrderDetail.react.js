@@ -17,6 +17,8 @@ import {fieldToDescription} from "./Header/intl";
 import {Items} from "./Items/Items.react.js";
 import {Picks} from "./Picks/Picks.react.js";
 import {Imports} from "./Imports/Imports.react.js";
+import {SingleCellLayout} from "components/common/pagelayout";
+import {IBox} from '../../IBox.react.js';
 import _ from "lodash";
 
 const tabToComponent = {
@@ -65,15 +67,21 @@ function getTitleComponent(props, itemId) {
 export class OrderDetail extends Component {
   render() {
     const transitionTo = 'mobile-order-datail';
+    const {acSelectTab, tab, params:{id}} = this.props;
+
     return (
-      <Detail {...this.props} {...{
-        ALL_TABS,
-        tabToComponent,
-        tabToHeaderText,
-        getTitleComponent,
-        convertTab,
-        transitionTo,
-      }} />
+      <SingleCellLayout title={"Order: " + id}>
+        <IBox reloadFunction={() => acSelectTab(tab, id, true)}>
+          <Detail {...this.props} {...{
+              ALL_TABS,
+              tabToComponent,
+              tabToHeaderText,
+              getTitleComponent,
+              convertTab,
+              transitionTo,
+          }} />
+        </IBox>
+      </SingleCellLayout>
     );
   }
 }

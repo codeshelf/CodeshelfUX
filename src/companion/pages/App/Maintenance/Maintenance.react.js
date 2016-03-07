@@ -1,7 +1,8 @@
 import React from 'react';
 import exposeRouter, {toURL} from 'components/common/exposerouter';
 import {Tabs, Tab} from 'react-bootstrap';
-import {SingleCellLayout, PageGrid, Row, Col} from 'components/common/pagelayout';
+import {SingleCellLayout, Grid, Row1} from 'components/common/pagelayout';
+import {IBox} from 'pages/IBox';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import DataObjectPurge from "./DataObjectPurge";
 import DataObjectNotificationThreshold from "./DataObjectNotificationThreshold";
@@ -18,15 +19,13 @@ class MaintenaceTabContent extends React.Component {
     render() {
         const {title} = this.props;
         return (
-            <PageGrid>
-                <Row>
-                    <Col sm={12}>
-                        <SingleCellIBox title={title}>
-                            {this.props.children}
-                        </SingleCellIBox>
-                    </Col>
-                </Row>
-            </PageGrid>
+          <Grid fluid>
+            <Row1>
+              <SingleCellIBox title={title}>
+                {this.props.children}
+              </SingleCellIBox>
+            </Row1>
+          </Grid>
         );
     }
 }
@@ -80,11 +79,11 @@ class Maintenance extends React.Component{
         const returnRoute = toURL(this.props, "../../maintenance");
         return (
                 <SingleCellLayout title="Maintenance">
-                    <Tabs className="nav-tabs-simple" defaultActiveKey="database">
+                  <IBox>
+                    <Tabs className="nav-tabs-simple" defaultActiveKey="jobs">
                         <Tab eventKey="database" title="Database">
-                            <PageGrid>
-                                <Row>
-                                    <Col sm={12}>
+                            <Grid fluid>
+                                <Row1>
                                         <SingleCellIBox title="Data Quantity Health Check">
                                             <ParameterSetConfiguration
                                             {...this.props}
@@ -93,25 +92,21 @@ class Maintenance extends React.Component{
                                              onUpdate={this.handleConfigurationUpdate.bind(this)}
                                              />
                                         </SingleCellIBox>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col sm={12}>
-                                        <DataObjectPurge
+                                </Row1>
+                                <Row1>
+                                  <DataObjectPurge
                                             {...this.props}
                                             parameterType="ParameterSetDataPurge"
                                             configuration={ParameterSetDataPurge}
                                             onConfigurationUpdate={this.handleConfigurationUpdate.bind(this)}
 
                                          />
-                                    </Col>
-                                </Row>
-                            </PageGrid>
+                                </Row1>
+                            </Grid>
                         </Tab>
                         <Tab eventKey="edi" title="EDI">
-                            <PageGrid>
-                                <Row>
-                                    <Col sm={12}>
+                            <Grid fluid>
+                                <Row1>
                                         <SingleCellIBox title="Edi Free Space Health Check">
                                             <ParameterSetConfiguration
                                                 {...this.props}
@@ -120,9 +115,8 @@ class Maintenance extends React.Component{
                                                 onUpdate={this.handleConfigurationUpdate.bind(this)}
                                              />
                                             </SingleCellIBox>
-                                    </Col>
-                                </Row>
-                            </PageGrid>
+                                </Row1>
+                            </Grid>
                         </Tab>
                         <Tab eventKey="daily" title="Daily">
                             <MaintenaceTabContent title="Daily Metrics" >
@@ -134,6 +128,7 @@ class Maintenance extends React.Component{
                       {extensionPoint:fromJS(extensionPoint),
                        onExtensionPointUpdate:this.handleConfigurationUpdate.bind(this),
                        returnRoute })}
+                  </IBox>
                 </SingleCellLayout>
                );
     }

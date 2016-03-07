@@ -112,7 +112,9 @@ export class TopChart extends Component {
   }
 
   render() {
-    const {purposes, filter, data, error, whatIsLoading, whatIsLoaded, acSetFilterAndRefresh, acSearch, id, tab} = this.props;
+    const {purposes, filter, data, error, whatIsLoading, whatIsLoaded, 
+           acSetFilterAndRefresh, acSearch, id, tab} = this.props;
+
     const showLoading = (whatIsLoading !== null || (whatIsLoaded === null && !error));
     const showError = (whatIsLoading === null && !!error);
     let errorText = "Can't load request";
@@ -123,7 +125,6 @@ export class TopChart extends Component {
     const lineHeight = (title) ? "53px" : null;
     return (
       <div>
-        <IBox data={filter} reloadFunction={acSetFilterAndRefresh} loading={showLoading}>
           <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
             <Col xs={6}>
               {title}
@@ -184,7 +185,6 @@ export class TopChart extends Component {
                 <ChartNavigation filter={filter} onChange={acSetFilterAndRefresh} />
               </Col>
             </Row>
-          </IBox>
       </div>
     );
   }
