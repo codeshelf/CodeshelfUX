@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-
+import {IBox} from '../../IBox.react.js';
 import {getWorkerPickChartMutable} from "./get";
-import {acSetDefaultFilter, acSetFilter, acSearch, acRefresh, acSetFilterAndRefresh, acGetPurposes} from "./store";
+import {acSetDefaultFilter, acSetFilter, acSearch, acRefresh, acGetPurposes, acSetFilterAndRefresh} from "./store";
 import {acSetProductivityFilter} from "../../Detail/WorkerDetail/store";
 
 import {TopChart} from "./TopChart";
@@ -22,19 +22,24 @@ class WorkerPickCharts extends Component {
     // no filter means we are redering first time and dispached action
     // to set default filter so no render
     if (this.props.filter === null) return null;
-
+    const {filter, acSetFilterAndRefresh, whatIsLoaded, whatIsLoading, error} = this.props;
+    const showLoading = (whatIsLoading !== null || (whatIsLoaded === null && !error));
     return (
-      <div>
-        <TopChart {...this.props} data={this.props.data && this.props.data[0]} title={"Facility Picks"} expanded={this.props.expand}/>
+        <IBox data={filter}
+              reloadFunction={acSetFilterAndRefresh}
+              loading={showLoading} >
+          <TopChart {...this.props} data={this.props.data && this.props.data[0]}
+                                    title={"Facility Picks"}
+                                    expanded={this.props.expand}/>
         <BottomChart {...this.props} />
-      </div>
+      </IBox>
     );
   }
 }
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acSetDefaultFilter, acSetFilter, acSearch,
-   acRefresh, acSetFilterAndRefresh, acSetProductivityFilter, acGetPurposes}, dispatch);
+  return bindActionCreators({acSetDefaultFilter, acSetFilter, acSearch, acRefresh,
+                             acSetProductivityFilter, acGetPurposes, acSetFilterAndRefresh}, dispatch);
 }
 
 export default connect(getWorkerPickChartMutable, mapDispatch)(WorkerPickCharts);
