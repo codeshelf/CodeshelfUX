@@ -1,6 +1,5 @@
-import {getUsers} from 'data/csapi';
-import {Record, Map, List} from 'immutable';
-import {createUser, updateUser} from "data/csapi";
+import {Record, Map} from 'immutable';
+import {getUsers, createUser, updateUser} from "data/csapi";
 
 const ADD_USER = 'ADD_USER';
 const EDIT_USER = 'EDIT_USER';
@@ -10,10 +9,6 @@ const LOADING_OK = 'LOADING_OK';
 const LOADING_ERROR = 'LOADING_ERROR';
 const UPDATE_USER_FORM = 'UPDATE_USER_FORM';
 const STORE_USER_FORM = 'STORE_USER_FORM';
-
-const STARTED = "Loading";
-const COMPLETED = "Success";
-const ERRORED = "Error";
 
 const initState = new (Record({
   users: new Map({
@@ -40,23 +35,6 @@ export function usersReducer(state = initState, action) {
   } else {
     return newState;
   }
-}
-
-
-function recordAsync(fn, callback) {
-  //setup chain
-  var promise =
-        fn()
-        .then((result) => {
-          callback(COMPLETED, result);
-          return result;
-        })
-        .catch((err) => {
-          callback(ERRORED, err);
-          throw err;
-        });
-  callback(STARTED, promise);
-  return promise;
 }
 
 function actionReducer(state, action) {
@@ -123,19 +101,20 @@ function actionReducer(state, action) {
         case LOADING_OK: {
           const data = state.users.get('data');
           const newData = data.map((user) => {
-            if (user.id == action.data.id) {
+            if (user.id === action.data.id) {
               return action.data;
             }
             return user;
           })
-          return state.merge({ 
-            editUser: {
+          const newState = state.merge(new (Record({ 
+            editUser: new Map({
               data: action.data,
               loading: null,
               error: null
-            },
-            users: {...state.users, data: newData}
-          });
+            }),
+            users: state.users.set('data', newData)
+          })));
+          return newState;
         }
         case LOADING_ERROR: {
           return state.mergeIn(['editUser'], new Map({
@@ -165,7 +144,6 @@ export function acAddUser(userForm) {
   return (dispatch, getState) => {
     dispatch({
       type: ADD_USER,
-      data: userForm.toJS(),
       status: LOADING_STARTED
     });
     return createUser(userForm.toJS()).then((data) => {
@@ -182,8 +160,7 @@ export function acEditUser(userForm) {
   return (dispatch, getState) => {
     dispatch({
       type: EDIT_USER, 
-      status: LOADING_STARTED,
-      data: userForm.toJS()
+      status: LOADING_STARTED
     });
     const unpackedData = {
       username: userForm.get('username'),
@@ -194,18 +171,10 @@ export function acEditUser(userForm) {
     const id = userForm.get('id');
     return updateUser(id, unpackedData).then((data) => {
       console.log(`data from updateUser`, data);
-      dispatch({
-        type: EDIT_USER, 
-        status: LOADING_OK,
-        data: userForm.toJS()
-      });
+      dispatch(setStatus(EDIT_USER, LOADING_OK, userForm.toJS()));
     }).catch((e) => {
        console.log(`error from updating user`, e);
-       dispatch({
-        type: EDIT_USER, 
-        status: LOADING_ERROR,
-        data: userForm.toJS()
-        });
+       dispatch(setStatus(EDIT_USER, LOADING_ERROR, userForm.toJS()));
     }); 
   }
 }
