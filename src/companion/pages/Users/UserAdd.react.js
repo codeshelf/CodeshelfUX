@@ -1,6 +1,6 @@
 import {acAddUser, acUpdateUserForm, 
 		acStoreSelectedUserForm} from "./store.js";
-import {UserForm} from "./UserForm.js";
+import {UserForm} from "./UserForm.react.js";
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import exposeRouter, {toURL} from 'components/common/exposerouter';
