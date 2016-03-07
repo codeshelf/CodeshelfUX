@@ -1,4 +1,4 @@
-import {UserForm} from "./UserForm.js";
+import {UserForm} from "./UserForm.react.js";
 import {Map} from "immutable";
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
