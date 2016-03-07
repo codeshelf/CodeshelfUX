@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import {getWorkerPickChartMutable} from "./get";
-import {acSetDefaultFilter, acSetFilter, acSearch, acRefresh, acSetFilterAndRefresh, acGetPurposes} from "./store";
+import {acSetDefaultFilter, acSetFilter, acSearch, acRefresh, acGetPurposes} from "./store";
 import {acSetProductivityFilter} from "../../Detail/WorkerDetail/store";
 
 import {TopChart} from "./TopChart";
@@ -25,7 +25,9 @@ class WorkerPickCharts extends Component {
 
     return (
       <div>
-        <TopChart {...this.props} data={this.props.data && this.props.data[0]} title={"Facility Picks"} expanded={this.props.expand}/>
+        <TopChart {...this.props} data={this.props.data && this.props.data[0]} 
+                                  title={"Facility Picks"} 
+                                  expanded={this.props.expand}/>
         <BottomChart {...this.props} />
       </div>
     );
@@ -33,8 +35,8 @@ class WorkerPickCharts extends Component {
 }
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acSetDefaultFilter, acSetFilter, acSearch,
-   acRefresh, acSetFilterAndRefresh, acSetProductivityFilter, acGetPurposes}, dispatch);
+  return bindActionCreators({acSetDefaultFilter, acSetFilter, acSearch, acRefresh, 
+                             acSetProductivityFilter, acGetPurposes}, dispatch);
 }
 
 export default connect(getWorkerPickChartMutable, mapDispatch)(WorkerPickCharts);

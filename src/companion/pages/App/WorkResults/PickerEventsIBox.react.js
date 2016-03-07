@@ -101,6 +101,7 @@ var PickerEventsIBox = React.createClass({
         return (<IBox>
                    <IBoxSection>
                        <WorkerPickCharts
+                            {...this.props}
                             desktop={true}
                             expand={false}/>
                    </IBoxSection>
