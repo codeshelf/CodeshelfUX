@@ -42,7 +42,7 @@ class WorkerUploadForm extends React.Component {
         <UploadForm
             label="Workers"
             onImportSubmit={({file}) => this.props.onImportSubmit({file, append})}>
-          <Checkbox id="append" name="append" label="Append Workers" value={append} onChange={this.handleChange} />
+      <Checkbox id="append" name="append" label="Uncheck this box to replace all current workers with workers in this file" value={append} onChange={this.handleChange} />
       </UploadForm>);
   }
 }
