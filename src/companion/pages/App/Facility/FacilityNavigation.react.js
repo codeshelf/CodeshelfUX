@@ -39,6 +39,8 @@ class FacilityNavigation extends React.Component {
           <AuthzMenuItem permission="worker:edit" to={`${basepath}/workers`} params={params} title="Workers" iconName="users" />
           <AuthzMenuItem permission="facility:edit" to={`${basepath}/templates`} params={params} title="Printing Templates" iconName="tasks" />
           <AuthzMenuItem permission="facility:edit" to={`${basepath}/extensionpoints`} params={params} title="Extensions" iconName="code" />
+          <AuthzMenuItem permission="facility:edit" to={`${basepath}/scheduledjobs`} params={params} title="Schedule" iconName="clock-o" />
+
           <AuthzMenuItem permission="facility:edit" to={`${basepath}/maintenance`} params={params} title="Maintenance" iconName="heartbeat" />
           <AuthzMenuItem permission="ux:view" href={this.getUXUrl(selectedFacility)} params={params} title="Advanced" iconName="magic" />
         </Submenu>

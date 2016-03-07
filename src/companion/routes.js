@@ -34,6 +34,7 @@ import TestScript from './pages/App/TestScript/TestScript.react.js';
 import ExtensionPointsPage from "./pages/App/ExtensionPoints/ExtensionPointsPage.react.js";
 import ExtensionPointEdit from "./pages/App/ExtensionPoints/ExtensionPointEdit.react.js";
 import ExtensionPointAdd from "./pages/App/ExtensionPoints/ExtensionPointAdd.react.js";
+import ScheduledJobs from "./pages/App/Maintenance/ScheduledJobs.react.js";
 import ScheduledJobEdit from "./pages/App/Maintenance/ScheduledJobsEdit.react.js";
 import ScheduledJobAdd from "./pages/App/Maintenance/ScheduledJobAdd.react.js";
 
@@ -85,9 +86,11 @@ export default (
             <Route component={TemplateDisplay} path=":templateId" />
           </Route>
           <Route component={Maintenance} path="maintenance">
-            <Route component={ExtensionPointEdit} path="parametersset/:parameterType" />
-            <Route component={ScheduledJobAdd} path="scheduledjobs/new" />
-            <Route component={ScheduledJobEdit} path="scheduledjobs/:type" />
+            <Route component={ExtensionPointEdit} path="parameterset/:parameterType" />
+          </Route>
+          <Route component={ScheduledJobs} path="scheduledjobs">
+           <Route component={ScheduledJobAdd} path="new" />
+           <Route component={ScheduledJobEdit} path=":type" />
           </Route>
           <Route component={TestScript} path="testscript" />
           <Route component={OrderSearch} path="ordersearch" />

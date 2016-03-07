@@ -36,7 +36,7 @@ class Type extends React.Component {
 function createRowActionComponent(onActionComplete, props) {
   function editRouteFactory(row) {
     return {
-      to:  toURL(props, 'maintenance/scheduledjobs/' + row.get("type"))
+      to:  toURL(props, 'scheduledjobs/' + row.get("type"))
     };
   }
 
@@ -132,7 +132,10 @@ class ScheduledJobs extends React.Component{
         let selectedScheduleType = props.params.type;
         if (selectedScheduleType) {
             let {scheduledJobs} = this.state;
-            this.setState({"scheduledJob": scheduledJobs.find((j) => j.get("type") === selectedScheduleType)});
+            const scheduledJob =  scheduledJobs.find((j) => {
+              return j.get("type") === selectedScheduleType;
+            });
+            this.setState({scheduledJob});
         }
     }
 
@@ -158,7 +161,8 @@ class ScheduledJobs extends React.Component{
 
         let {rowActionComponent, columnMetadata} = this;
         let availableTypes = toAvailableTypes(list, allTypes);
-        let addButtonRoute = (availableTypes.count() <= 0) ? null : toURL(this.props, 'maintenance/scheduledjobs/new');
+        let addButtonRoute = (availableTypes.count() <= 0) ? null : toURL(this.props, 'scheduledjobs/new');
+        let returnRoute = toURL(this.props, '../scheduledjobs');
         return (<DocumentTitle title={title}>
                    <div>
                        <div>TimeZone: {timeZoneDisplay}</div>
@@ -173,7 +177,7 @@ class ScheduledJobs extends React.Component{
                                                                   availableTypes: availableTypes,
                                                                   onUpdate: this.handleActionComplete.bind(this),
                                                                   onAdd: this.handleActionComplete.bind(this),
-                                                                  returnRoute: toURL(this.props, '../../maintenance') })
+                                                                  returnRoute })
                         }
                     </div>
                 </DocumentTitle>

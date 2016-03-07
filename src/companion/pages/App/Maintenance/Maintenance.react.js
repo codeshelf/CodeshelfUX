@@ -77,15 +77,10 @@ class Maintenance extends React.Component{
         let {
              ParameterSetDataPurge,
              ParameterSetDataQuantityHealthCheck} = this.state;
-        const returnRoute = toURL(this.props, "maintenance");
+        const returnRoute = toURL(this.props, "../../maintenance");
         return (
                 <SingleCellLayout title="Maintenance">
-                    <Tabs className="nav-tabs-simple" defaultActiveKey="jobs">
-                        <Tab eventKey="jobs" title="Jobs">
-                            <SingleCellIBox>
-                              <ScheduledJobs {...this.props}/>
-                            </SingleCellIBox>
-                        </Tab>
+                    <Tabs className="nav-tabs-simple" defaultActiveKey="database">
                         <Tab eventKey="database" title="Database">
                             <PageGrid>
                                 <Row>
@@ -135,7 +130,7 @@ class Maintenance extends React.Component{
                             </MaintenaceTabContent>
                         </Tab>
                     </Tabs>
-                    {extensionPoint && React.cloneElement(this.props.children,
+                    {this.props.children && React.cloneElement(this.props.children,
                       {extensionPoint:fromJS(extensionPoint),
                        onExtensionPointUpdate:this.handleConfigurationUpdate.bind(this),
                        returnRoute })}
