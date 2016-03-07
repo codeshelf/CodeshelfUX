@@ -20,7 +20,7 @@
   },
   "jsx": {
     "attrsOnSameLineAsTag": false,
-    "maxAttrsOnTag": 2g,
+    "maxAttrsOnTag": 2,
     "firstAttributeOnSameLine": true,
     "alignWithFirstAttribute": true,
     "spaceInJSXExpressionContainers": ""
