@@ -107,16 +107,17 @@ export class UserForm extends React.Component{
       if (!userForm) {
         if (userId === "new") {
           userForm = UserRecord();
+          userForm = userForm.set('roles', []);
           this.formMetadata = addFormMetadata;
           this.title = "New user";
           props.acStoreSelectedUserForm(userForm);
         } else {
           userForm = props.users.find((u) => {
-            return u.id == userId;
+            return u.id === parseInt(userId);
           });
           this.formMetadata = editFormMetadata;
           this.title = `Edit ${userForm.username}`; 
-          props.acStoreSelectedUserForm(fromJS(userForm));
+          props.acStoreSelectedUserForm(Map(userForm));
         }
       }
     }
