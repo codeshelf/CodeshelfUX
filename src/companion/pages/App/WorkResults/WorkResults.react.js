@@ -2,11 +2,10 @@ import React from 'react';
 import DocumentTitle from 'react-document-title';
 import {getAPIContext} from 'data/csapi';
 import {SingleCellLayout} from 'components/common/pagelayout';
-import PickerEventsIBox from './PickerEventsIBox';
-import {IBox} from '../../IBox.react.js';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {acSetFilterAndRefresh} from "../../Mobile/WorkerPickCharts/store";
+import WorkerPickCharts from '../../Mobile/WorkerPickCharts/WorkerPickCharts.react';
 
 class WorkResults extends React.Component{
     render() {
@@ -20,16 +19,13 @@ class WorkResults extends React.Component{
 
         const {selected} = this.props;
         var apiContext = getAPIContext(selected);
-        return (<DocumentTitle title="Picks By Hour">
-                  <SingleCellLayout>
-                    <IBox data={filter}
-                      <PickerEventsIBox apiContext={apiContext} />
-                                        reloadFunction={acSetFilterAndRefresh}
-                                        loading={showLoading}>
-                    </IBox>
-                  </SingleCellLayout>
-                </DocumentTitle>
-        );
+        return (
+          <SingleCellLayout title="Picks By Hour">
+            <WorkerPickCharts {...this.props}
+                                desktop={true}
+                                expand={false} />
+          </SingleCellLayout>);
+
     }
 };
 

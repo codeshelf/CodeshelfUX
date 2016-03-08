@@ -48,20 +48,20 @@ export class PurposePicker extends Component {
     const {filter, onSelect, purposes} = this.props;
     const data = purposes.error || purposes.loading || !purposes.data ? [] : this.preprocessData(purposes.data, filter.purposes);
     return (
-      <Multiselect
-        multiple
-        data={data}
-        onChange={(selected, add) => {
-          const value = selected[0].value;
-          let purposes = this.props.filter.purposes.slice(0);
-          if (add && purposes.indexOf(value) === -1) {
-            purposes.push(value);
-          } else {
-            purposes = purposes.filter((element, i) => element !== value);
-          }
-          const newFilter =  this.props.filter.set('purposes', purposes);
-          onSelect(newFilter);
-        }} />
+      data.length > 0 &&
+      <Multiselect multiple
+                   data={data}
+                   onChange={(selected, add) => {
+                     const value = selected[0].value;
+                     let purposes = this.props.filter.purposes.slice(0);
+                     if (add && purposes.indexOf(value) === -1) {
+                       purposes.push(value);
+                     } else {
+                       purposes = purposes.filter((element, i) => element !== value);
+                     }
+                     const newFilter =  this.props.filter.set('purposes', purposes);
+                     onSelect(newFilter);
+                   }} />
     );
   }
 }
@@ -112,7 +112,7 @@ export class TopChart extends Component {
   }
 
   render() {
-    const {purposes, filter, data, error, whatIsLoading, whatIsLoaded, 
+    const {purposes, filter, data, error, whatIsLoading, whatIsLoaded,
            acSetFilterAndRefresh, acSearch, id, tab} = this.props;
 
     const showLoading = (whatIsLoading !== null || (whatIsLoaded === null && !error));
