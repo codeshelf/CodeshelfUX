@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import DocumentTitle from 'react-document-title';
-import {Modal, Button} from 'react-bootstrap';
+import {Modal, Button, Input, Row, Col} from 'react-bootstrap';
 import Icon from 'react-fa';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import classnames from 'classnames';
@@ -17,7 +17,8 @@ import {connect} from 'react-redux';
 import Text from "data/types/Text";
 
 import {getPrintingTemplatesMutable} from "./get";
-import {acAddTemplate, acUpdateTemplate, acStoreTemplateForm, acUpdateSelectedTemplate, NEWID} from "./store";
+import {acAddTemplate, acUpdateTemplate, acStoreTemplateForm, acUpdateSelectedTemplate,
+    acChangeOrderId, acGetPdfPreview, NEWID} from "./store";
 
 const tmplate = new (Record({
     persistentId : "new",
@@ -33,7 +34,8 @@ class TemplateDisplay extends Component {
         this.formMetadata = [
             {name: "name", label: "Name", required: true},
             {name: "active", label: "Active", type: Boolean},
-            {name: "template", label: "Template", type: Text, required: true}];
+            {name: "template", label: "Template", type: Text, required: true}]
+        this.handleChange = (e) => this.props.acChangeOrderId(e.target.value)
     }
 
     componentWillMount() {
@@ -84,9 +86,26 @@ class TemplateDisplay extends Component {
 
     render() {
       const formData = this.props.selectedTemplateForm;
+      const orderId = this.props.orderId;
       return (<ModalForm title="Edit Template" formData={formData} returnRoute={toURL(this.props, "../templates")}
                 onSave={() => this.handleSave()}>
-                <FormFields formData={formData} formMetadata={this.formMetadata} handleChange={(formField, value) => this.handleChange(formField, value)} />
+                <Col xs={10}>
+                    <FormFields formData={formData} formMetadata={this.formMetadata} handleChange={(formField, value) => this.handleChange(formField, value)} />
+                      <Input
+                        type="text"
+                        value={orderId}
+                        hasFeedback
+                        ref="input"
+                        groupClassName="group-class"
+                        labelClassName="label-class"
+                        onChange={this.handleChange}
+                        buttonAfter={
+                            <Button bsStyle="primary" onClick={() => this.props.acGetPdfPreview(orderId)}><Icon name="search"/></Button>
+                        } />
+                </Col>
+                <Col xs={10}>
+                    <h1>Hi world</h1>
+                </Col>
               </ModalForm>
             );
     }
@@ -105,7 +124,7 @@ TemplateDisplay.propTypes = {
 };
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acAddTemplate, acUpdateTemplate, acStoreTemplateForm, acUpdateSelectedTemplate}, dispatch);
+  return bindActionCreators({acAddTemplate, acUpdateTemplate, acStoreTemplateForm, acUpdateSelectedTemplate, acChangeOrderId, acGetPdfPreview}, dispatch);
 }
 
 export default exposeRouter(connect(getPrintingTemplatesMutable, mapDispatch)(TemplateDisplay));

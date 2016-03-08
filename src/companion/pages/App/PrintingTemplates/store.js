@@ -11,6 +11,8 @@ const LOADING_OK = 'LOADING_OK';
 const LOADING_ERROR = 'LOADING_ERROR';
 const STORE_TEMPLATE_FORM = 'STORE_TEMPLATE_FORM';
 const UPDATE_TEMPLATE_FORM = 'UPDATE_TEMPLATE_FORM';
+const SAVE_ORDERID = 'SAVE_ORDERID';
+const GET_PREVIEW = 'GET_PREVIEW';
 
 const initState = new (Record({
   templates: new Map({
@@ -28,6 +30,7 @@ const initState = new (Record({
     error: null,
   }),
   selectedTemplateForm: null,
+  orderId: '',
 }));
 
 export function printingTemplatesReducer(state = initState, action) {
@@ -125,6 +128,12 @@ export function printingTemplatesReducer(state = initState, action) {
     case UPDATE_TEMPLATE_FORM: {
       return state.setIn(['selectedTemplateForm', action.fieldName], action.value);
     }
+    case SAVE_ORDERID: {
+      return state.set('orderId', action.value);
+    }
+    case GET_PREVIEW: {
+      return state.set('preview', '');
+    }
     default: return state;
   }
 }
@@ -208,6 +217,34 @@ export function acAddTemplate(selectedTemplateForm) {
     }).catch((e) => {
       console.log(`error from updating template`, e);
       dispatch(setStatus(ADD_TEMPLATE, LOADING_ERROR, e));
+    });
+  }
+}
+
+export function acChangeOrderId(value) {
+  return {
+    type: SAVE_ORDERID,
+    value,
+  }
+}
+
+
+export function acGetPdfPreview(orderId) {
+    return (dispatch, getState) => {
+    //dispatch(setStatus(ADD_TEMPLATE, LOADING_STARTED));
+
+    const facilityContext = getFacilityContextFromState(getState());
+    if (!facilityContext) {
+      //dispatch(getError(`Want to update template but no facility context is provided`));
+      return;
+    }
+
+    facilityContext.getTemplatePreview(orderId).then((data) => {
+      console.log(`data from updateTemplate`, data);
+      dispatch({type: GET_PREVIEW,data});
+    }).catch((e) => {
+      console.log(`error from updating template`, e);
+      //dispatch(setStatus(ADD_TEMPLATE, LOADING_ERROR, e));
     });
   }
 }

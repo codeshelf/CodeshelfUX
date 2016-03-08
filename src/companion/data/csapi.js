@@ -678,8 +678,18 @@ export function getAPIContext(selected) {
                 data: schedule,
                 contentType: "form"
             });
+        },
 
-        }
+        getTemplatePreview(orderId) {
+            return ajax(basePath + "/orders/" + domainId + "/print/preview", {
+                method: "POST",
+                contentType: "application/x-groovy",
+                data: {
+                    orderId: '12057',
+                    script: '',
+                },
+            })
+        },
 
     };
 };
