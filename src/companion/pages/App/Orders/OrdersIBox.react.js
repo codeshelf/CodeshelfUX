@@ -23,13 +23,13 @@ export default class OrdersIBox extends React.Component{
         var resultsPath = ["pivot", "orders"];
 
         this.state = {
-            refreshingAction: Promise.resolve([])
+          refreshingAction: Promise.resolve([]),
+          selected: Set()
         };
         let {state}=  this.props;
         this.columnsCursor  = state.cursor(rootPath.concat(["table", "columns"]));
         this.columnSortSpecsCursor = state.cursor(rootPath.concat(["table", "sortSpecs"]));
         this.pivotOptionsCursor = state.cursor(rootPath.concat(["pivot"]));
-        this.selectedCursor = state.cursor(selectedPath);
         this.resultsCursor = state.cursor(resultsPath);
 
         this.handleRefresh = this.handleRefresh.bind(this);
@@ -117,16 +117,13 @@ export default class OrdersIBox extends React.Component{
     }
 
     handleDrillDown(selected) {
-        this.selectedCursor((previousSelected) =>{
-            return previousSelected.clear().concat(fromJS(selected));
-        });
+      this.setState({selected: fromJS(selected)});
     }
 
     render() {
-        let {refreshingAction, errorMessage} = this.state;
+        let {refreshingAction, errorMessage, selected} = this.state;
         let results = this.resultsCursor();
         let orders = results.get("values");
-        let selectedOrders = this.selectedCursor();
         let pivotOptions = this.pivotOptionsCursor;
         let columns = this.columnsCursor;
         let sortSpecs = this.columnSortSpecsCursor;
@@ -140,7 +137,7 @@ export default class OrdersIBox extends React.Component{
                 </Row1>
                 <SearchStatus {...{results, errorMessage}} />
                 <PivotTable results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
-                <OrderReview orders={selectedOrders} columns={columns} sortSpecs={sortSpecs}/>
+                <OrderReview orders={selected} columns={columns} sortSpecs={sortSpecs}/>
             </IBox>);
     }
 };

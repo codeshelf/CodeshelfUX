@@ -30,7 +30,7 @@ class FacilityNavigation extends React.Component {
         <AuthzMenuItem permission="ux:view" to={`${basepath}/workersearch`} params={params} title="Workers" iconName="users" />
         <AuthzMenuItem permission="event:view"  to={`${basepath}/blockedwork`} params={params} title="Issues" iconName="exclamation-circle"/>
         <Submenu title="Planning" iconName="tasks">
-          <AuthzMenuItem permission="order:view" to={`${basepath}/orders`} params={params} title="Planning" iconName="shopping-basket" />
+          <AuthzMenuItem permission="order:view" to={`${basepath}/orders`} params={params} title="Orders" iconName="shopping-basket" />
           <AuthzMenuItem permission="workinstruction:view" to={`${basepath}/workinstructions`} params={params} title="Work Instructions" iconName="barcode" />
           <AuthzMenuItem permission="facility:edit" to={`${basepath}/templates`} params={params} title="Printing Templates" iconName="print" />
         </Submenu>

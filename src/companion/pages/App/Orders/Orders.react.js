@@ -1,20 +1,18 @@
-import  React from "react";
-import DocumentTitle from "react-document-title";
-import {SingleCellLayout} from 'components/common/pagelayout';
-import {SingleCellIBox} from "components/common/IBox";
+import React from "react";
+import { SingleCellLayout } from 'components/common/pagelayout';
 import OrdersIBox from "./OrdersIBox";
 
-export default class Orders extends React.Component{
+export default class Orders extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
+  constructor( props ) {
+    super(props);
+  }
 
-    render() {
-        return (
-                  <SingleCellLayout title="Orders">
-                      <OrdersIBox state={this.props.state} />
-                  </SingleCellLayout>
-               );
-    }
+  render() {
+    return (
+      <SingleCellLayout title="Orders">
+        <OrdersIBox state={this.props.state} />
+      </SingleCellLayout>
+      );
+  }
 };

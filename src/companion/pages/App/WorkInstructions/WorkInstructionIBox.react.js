@@ -26,7 +26,8 @@ export default class WorkInstructionIBox extends React.Component{
         var resultsPath = ["pivot", "workInstructions"];
 
         this.state = {
-            refreshingAction: Promise.resolve([])
+          refreshingAction: Promise.resolve([]),
+          selected: Set()
         };
 
 
@@ -34,7 +35,6 @@ export default class WorkInstructionIBox extends React.Component{
         this.columnsCursor  = state.cursor(rootPath.concat(["table", "columns"]));
         this.columnSortSpecsCursor = state.cursor(rootPath.concat(["table", "sortSpecs"]));
         this.pivotOptionsCursor = state.cursor(rootPath.concat(["pivot"]));
-        this.selectedCursor = state.cursor(selectedPath);
         this.resultsCursor = state.cursor(resultsPath);
 
         this.handleRefresh = this.handleRefresh.bind(this);
@@ -138,16 +138,13 @@ export default class WorkInstructionIBox extends React.Component{
     }
 
     handleDrillDown(selected) {
-        this.selectedCursor((previousSelected) =>{
-            return previousSelected.clear().concat(fromJS(selected));
-        });
+      this.setState({selected: fromJS(selected)});
     }
 
     render() {
-        let {refreshingAction, errorMessage} = this.state;
+        let {refreshingAction, errorMessage, selected} = this.state;
         let results = this.resultsCursor();
         let resultValues = results.get("values");
-        let selected = this.selectedCursor();
         let pivotOptions = this.pivotOptionsCursor;
         let columns = this.columnsCursor;
         let sortSpecs = this.columnSortSpecsCursor;
