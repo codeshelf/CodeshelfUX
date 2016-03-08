@@ -18,7 +18,7 @@ function mapDispatch(dispatch) {
 
 const mapStateToProps = (state) => {
   return {
-    formData: state.users.userForm
+    formData: state.users.itemForm
   };
 }
 export default exposeRouter(connect(mapStateToProps, mapDispatch)(UserForm));
