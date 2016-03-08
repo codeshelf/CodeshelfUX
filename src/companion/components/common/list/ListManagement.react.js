@@ -120,11 +120,11 @@ class ListManagement extends React.Component {
                         }
                    </Col>
                 </Row>
-                <ListView 
+                <ListView
                     ref="listView"
                     {...other}
                     columns={tables.getIn([storeName, 'columns'])}
-                    handleColumnMove={(moved, value) => this.props.acMoveColumns(moved, value, storeName)}
+                    onColumnMove={(moved, value) => this.props.acMoveColumns(moved, value, storeName)}
                     onColumnSortChange={(moved, value) => this.props.acSortColumn(moved, value, storeName)}
                     sortSpecs={tables.getIn([storeName, 'sortSpecs'])}
                     results={filteredResults}
