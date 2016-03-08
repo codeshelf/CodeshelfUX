@@ -73,14 +73,14 @@ export function workerMgmtReducer(state = initState, action) {
             }
             return worker;
           })
-          return state.merge({
+          return state.merge(new (Record({
             updateWorker: {
               data: action.data,
               loading: null,
               error: null,
             },
-            workers: {...state.workers, data: newData}
-          });
+            workers: new Map({...state.workers, data: newData})
+          })));
         }
         case LOADING_ERROR: {
           return state.mergeIn(['updateWorker'], new Map({

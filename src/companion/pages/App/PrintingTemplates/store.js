@@ -1,5 +1,6 @@
 import {Map, Record, fromJS, List} from 'immutable';
 import {getFacilityContextFromState} from "../../Facility/get";
+import {getTemplates} from './mockTemplates.js';
 
 export const NEWID = "new";
 const GET_TEMPLATES = 'GET_TEMPLATES';
@@ -68,20 +69,19 @@ export function printingTemplatesReducer(state = initState, action) {
         case LOADING_OK: {
           const data = state.workers.get('data');
           const newData = data.map((template) => {
-            console.info(template.persistentId, action.data.persistentId)
             if (template.persistentId == action.data.persistentId) {
               return action.data;
             }
             return template;
           })
-          return state.merge({
+          return state.merge(new (Record({
             updateTemplate: {
               data: action.data,
               loading: null,
               error: null,
             },
-            templates: {...state.templates, data: newData}
-          });
+            templates: new Map({...state.templates, data: newData})
+          })));
         }
         case LOADING_ERROR: {
           return state.mergeIn(['updateTemplate'], new Map({
@@ -103,13 +103,13 @@ export function printingTemplatesReducer(state = initState, action) {
         case LOADING_OK: {
           const data = state.templates.get('data');
           data.push(action.data);
-          return state.merge({ 
+          return state.merge(new (Record({ 
           addTemplate: {
             loading: null,
             error: null,
           },
-          templates: {...state.templates, data}
-          });
+          templates: new Map({...state.templates, data})
+          })));
         }
         case LOADING_ERROR: {
           return state.mergeIn(['addTemplate'], new Map({
@@ -153,14 +153,14 @@ export function acGetTemplates({limit}) {
       dispatch(getError(`Want to get templates but no facility context is provided`));
       return;
     }
-
-    //facilityContext.getTemplates().then((data) => {
-      //console.log(`data from getTemplates`, data);
-      dispatch(setStatus(GET_TEMPLATES, LOADING_OK, []));
-    // }).catch((e) => {
-    //   console.log(`error from getting templates`, e);
-    //   dispatch(setStatus(GET_TEMPLATES, LOADING_ERROR, e));
-    // });
+    /*facilityContext.getTemplates()*/
+    getTemplates().then((data) => {
+      console.log(`data from getTemplates`, data);
+      dispatch(setStatus(GET_TEMPLATES, LOADING_OK, data));
+     }).catch((e) => {
+       console.log(`error from getting templates`, e);
+       dispatch(setStatus(GET_TEMPLATES, LOADING_ERROR, e));
+     });
   }
 }
 

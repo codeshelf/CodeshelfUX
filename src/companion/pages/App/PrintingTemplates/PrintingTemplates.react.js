@@ -28,37 +28,8 @@ class PrintingTemplates extends Component{
 
         this.columnMetadata = ListView.toColumnMetadata([
             {
-                columnName: keyColumn,
-                displayName: "UUID"
-            },
-                {
-                columnName: "lastName",
-                displayName: "Last"
-            },
-            {
-                columnName: "firstName",
-                displayName: "First"
-            },
-            {
-                columnName: "middleInitial",
-                displayName: "M"
-            },
-            {
-                columnName: "domainId",
-                displayName: "Badge"
-            },
-            {
-                columnName: "hrId",
-                displayName: "HR ID"
-            },
-            {
-                columnName: "groupName",
-                displayName: "Group"
-            },
-            {
-                columnName: "updated",
-                displayName: "Updated",
-                customComponent: DateDisplay
+                columnName: "name",
+                displayName: "Name"
             },
             {
                 columnName: "active",
