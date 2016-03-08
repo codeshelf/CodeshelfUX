@@ -15,6 +15,7 @@ import {workerDetailReducer} from '../Detail/WorkerDetail/store';
 import {workerMgmtReducer} from './WorkerMgmt/store';
 import {printingTemplatesReducer} from './PrintingTemplates/store';
 import {sidebarReducer} from '../Sidebar/store';
+import {listReducer} from '../../components/common/list/store'
 
 const rootReducer = combineReducers({
   cartSearch: cartSearchReducer,
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   workerPickChart: workerPickChartReducer,
   workerMgmt: workerMgmtReducer,
   sidebar: sidebarReducer,
+  list: listReducer,
 });
 
 const store = createApplicationStore(rootReducer);

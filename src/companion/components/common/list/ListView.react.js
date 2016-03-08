@@ -113,7 +113,6 @@ export default class ListView extends React.Component{
     }
 
     handleColumnMove(moved, afterName) {
-
         this.props.columns((columns) => {
             let formerPosition = columns.indexOf(moved);
             let newPosition = columns.indexOf(afterName);
@@ -143,7 +142,7 @@ export default class ListView extends React.Component{
              onRowExpand,
              onRowCollapse} = this.props;
 
-        var {results,
+        let {results,
              sortSpecs = () => {}} = this.props;
 
 
@@ -157,19 +156,15 @@ export default class ListView extends React.Component{
             columnArray = columns;
         }
 
-        var sortBy = null;
-        if (typeof sortSpecs === 'function') {
-            sortBy = Seq(toFullSortSpecs(columnArray, sortSpecs()));
-            results = this.props.results.sort((a, b) => {
-                //find first non zero result as you run each sort function in order
-                let comp =  sortBy.map(({sortFunction, property}) => {
-                    return sortFunction(a.get(property), b.get(property));
-                })
-                .find((result) => result !=0) || 0;
-                return comp;
-            });
-        }
 
+        const sortBy = Seq(toFullSortSpecs(columnArray, fromJS(sortSpecs)));
+        results = this.props.results.sort((a, b) => {
+            let comp =  sortBy.map(({sortFunction, property}) => {
+                return sortFunction(a.get(property), b.get(property));
+            })
+            .find((result) => result !=0) || 0;
+            return comp;
+        });
         return (<div className="listview">
                 <Row >
                     <Col sm={6} >
@@ -193,8 +188,8 @@ export default class ListView extends React.Component{
                     keyColumn={keyColumn}
                     rowActionComponent={rowActionComponent}
                     sortedBy={sortBy}
-                    onColumnMove={this.handleColumnMove.bind(this)}
-                    onColumnSortChange={this.handleColumnSortChange.bind(this)}
+                    onColumnMove={this.props.handleColumnMove}
+                    onColumnSortChange={this.props.onColumnSortChange.bind(this)}
                     {...{expand, onRowExpand, onRowCollapse}}
                  />
                 </div>);

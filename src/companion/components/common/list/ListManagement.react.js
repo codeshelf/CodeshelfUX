@@ -11,7 +11,13 @@ import ListView from "./ListView";
 import Immutable from 'immutable';
 import _ from 'lodash';
 
-export default class ListManagement extends React.Component {
+import exposeRouter, {toURL} from 'components/common/exposerouter';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {acMoveColumns, acSortColumn} from './store';
+import {getListMutable} from "./get";
+
+class ListManagement extends React.Component {
 
     constructor(props) {
         super(props);
@@ -89,6 +95,8 @@ export default class ListManagement extends React.Component {
              , addButtonRoute
              , results
              , allowExport = false
+             , storeName
+             , tables
              , ...other} = this.props;
 
         var filteredResults = this.search(
@@ -112,13 +120,27 @@ export default class ListManagement extends React.Component {
                         }
                    </Col>
                 </Row>
-                <ListView ref="listView" {...other} results={filteredResults} columnMetadata={columnMetadata}/>
+                <ListView 
+                    ref="listView"
+                    {...other}
+                    columns={tables.getIn([storeName, 'columns'])}
+                    handleColumnMove={(moved, value) => this.props.acMoveColumns(moved, value, storeName)}
+                    onColumnSortChange={(moved, value) => this.props.acSortColumn(moved, value, storeName)}
+                    sortSpecs={tables.getIn([storeName, 'sortSpecs'])}
+                    results={filteredResults}
+                    columnMetadata={columnMetadata}/>
             </SingleCellIBox>);
     }
 };
+
 ListManagement.toColumnMetadataFromProperties = ListView.toColumnMetadataFromProperties;
 ListManagement.setCustomComponent = ListView.setCustomComponent;
 
+function mapDispatch(dispatch) {
+  return bindActionCreators({acMoveColumns, acSortColumn}, dispatch);
+}
+
+export default connect(getListMutable, mapDispatch)(ListManagement);
 
 class Search extends React.Component {
 

@@ -17,7 +17,7 @@ import {connect} from 'react-redux';
 import Text from "data/types/Text";
 
 import {getPrintingTemplatesMutable} from "./get";
-import {acAddTemplate, acUpdateTemplate, acStoreTemplateForm, acUpdateSelectedTemplate} from "./store";
+import {acAddTemplate, acUpdateTemplate, acStoreTemplateForm, acUpdateSelectedTemplate, NEWID} from "./store";
 
 const tmplate = new (Record({
     persistentId : "new",

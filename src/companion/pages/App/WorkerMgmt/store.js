@@ -27,10 +27,6 @@ const initState = new (Record({
     error: null,
   }),
   selectedWorkerForm: null,
-  table: {
-    columns: ["lastName", "firstName", "domainId", "updated"],
-    sortSpecs: {"lastName": {order: "asc"}}
-  },
 }));
 
 export function workerMgmtReducer(state = initState, action) {
@@ -72,7 +68,6 @@ export function workerMgmtReducer(state = initState, action) {
         case LOADING_OK: {
           const data = state.workers.get('data');
           const newData = data.map((worker) => {
-            console.info(worker.persistentId, action.data.persistentId)
             if (worker.persistentId == action.data.persistentId) {
               return action.data;
             }
@@ -107,13 +102,13 @@ export function workerMgmtReducer(state = initState, action) {
         case LOADING_OK: {
           const data = state.workers.get('data');
           data.push(action.data);
-          return state.merge({ 
+          return state.merge(new (Record({
           addWorker: {
             loading: null,
             error: null,
           },
-          workers: {...state.workers, data}
-          });
+          workers: new Map({...state.workers, data})
+          })));
         }
         case LOADING_ERROR: {
           return state.mergeIn(['addWorker'], new Map({

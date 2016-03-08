@@ -25,7 +25,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import {getWorkerMgmtMutable} from "./get";
-import {acGetWorkers, acHandleImport} from "./store";
+import {acGetWorkers, acHandleImport, acMoveColumns, acSortColumn} from "./store";
 
 const keyColumn = "persistentId";
 
@@ -89,7 +89,7 @@ class WorkerMgmt extends Component{
     }
 
     render() {
-        const {table, workers} = this.props;
+        const {workers} = this.props;
         const title = "Manage Workers";
         return (
             <SingleCellLayout title={title}>
@@ -102,9 +102,8 @@ class WorkerMgmt extends Component{
                 : <ListManagement
                     allowExport={true}
                     addButtonRoute={toURL(this.props, 'workers/new')}
-                    columns={table.columns}
+                    storeName={'workersManagement'}
                     columnMetadata={this.columnMetadata}
-                    sortSpecs={table.sortSpecs}
                     rowActionComponent={this.rowActionComponent}
                     results={workers.get('data')}
                     keyColumn={keyColumn}/>
@@ -117,7 +116,7 @@ class WorkerMgmt extends Component{
 };
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acGetWorkers, acHandleImport}, dispatch);
+  return bindActionCreators({acGetWorkers, acHandleImport, acMoveColumns, acSortColumn}, dispatch);
 }
 
 export default connect(getWorkerMgmtMutable, mapDispatch)(WorkerMgmt);

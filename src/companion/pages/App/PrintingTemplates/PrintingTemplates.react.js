@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
-import DocumentTitle from 'react-document-title';
 import {Modal, Input} from 'react-bootstrap';
 import Icon from 'react-fa';
 import Immutable from 'immutable';
-import PureComponent from 'components/common/PureComponent';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {SingleCellIBox} from 'components/common/IBox';
 import UploadForm from 'components/common/UploadForm';
@@ -13,15 +11,8 @@ import {toURL} from 'components/common/exposerouter';
 import ListView from "components/common/list/ListView";
 import ListManagement from "components/common/list/ListManagement";
 import {EditButtonLink, AddButtonLink} from 'components/common/TableButtons';
-import {Authz} from 'components/common/auth';
-
-
-import {getFacilityContext} from 'data/csapi';
-import {fetchWorkers} from 'data/workers/actions';
-import {getWorkers} from 'data/workers/store';
 import DateDisplay from "components/common/DateDisplay";
 
-// new imports redux 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
@@ -84,7 +75,7 @@ class PrintingTemplates extends Component{
     }
 
     render() {
-        const {table, templates} = this.props;
+        const {templates} = this.props;
         const title = "Manage Templates";
         return (
             <SingleCellLayout title={title}>
@@ -93,9 +84,8 @@ class PrintingTemplates extends Component{
                 : <ListManagement
                     allowExport={true}
                     addButtonRoute={toURL(this.props, 'templates/new')}
-                    columns={table.columns}
+                    storeName={'printingTemplates'}
                     columnMetadata={this.columnMetadata}
-                    sortSpecs={table.sortSpecs}
                     rowActionComponent={this.rowActionComponent}
                     results={templates.get('data')}
                     keyColumn={keyColumn}/>

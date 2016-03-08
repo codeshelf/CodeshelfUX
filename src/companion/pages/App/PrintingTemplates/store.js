@@ -27,10 +27,6 @@ const initState = new (Record({
     error: null,
   }),
   selectedTemplateForm: null,
-  table: {
-    columns: ["name", "active"],
-    sortSpecs: {"name": {order: "asc"}}
-  },
 }));
 
 export function printingTemplatesReducer(state = initState, action) {
