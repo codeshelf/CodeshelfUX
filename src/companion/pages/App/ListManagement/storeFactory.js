@@ -6,15 +6,31 @@ const defaultMutate = (data) => {
 	return data.toJS();
 }
 
+const defaultUpdateItemCond = (item, action) => {
+  if (item.id === action.data.id) {
+    return action.data;
+  }
+  return item;
+}
+
+/*
+  getItems: function responsible for retreiving items
+  addItem: function responsible for adding single item
+  updateItem: function responsible for updating single item 
+  useFacility: boolean which reflects if api functions use facilityContext
+  mutateGet/Add/Update/Data: functions which mutate data to suitable form for api calls
+  updateItemCond: function representing condition for map in updateItem section
+*/
 export function createStore({storeName,
-							getItems,
-							addItem,
-							updateItem,
-							useFacility = false,
-							mutateGetData = defaultMutate,
-							mutateAddData = defaultMutate,
-							mutateUpdateData = defaultMutate
-						    }) {
+							              getItems,
+							              addItem,
+              							updateItem,
+              							useFacility = false,
+              							mutateGetData = defaultMutate,
+              							mutateAddData = defaultMutate,
+              							mutateUpdateData = defaultMutate,
+                            updateItemCond = defaultUpdateItemCond
+						                }) {
 
 	const LOADING_STARTED = "LOADING_STARTED";
 	const LOADING_OK = "LOADING_OK";
@@ -124,13 +140,10 @@ export function createStore({storeName,
 			        }
 			        case LOADING_OK: {
 			        	const data = state.items.get('data');
-			          	const newData = data.map((item) => {
-			            	if (item.id === action.data.id) {
-			              		return action.data;
-			            	}
-			            	return item;
-			          	})
-			          	const newState = state.merge(new (Record({ 
+			          const newData = data.map((item) => {
+			            return updateItemCond(item, action);
+			          });
+			          const newState = state.merge(new (Record({ 
 			            	updateItem: new Map({
 			              		data: action.data,
 			              		loading: null,
@@ -289,44 +302,44 @@ export function createStore({storeName,
 
 	const acUpdateWithoutFacility = (itemForm) => {
 		return (dispatch, getState) => {
-		    dispatch(setStatus(UPDATE_ITEM, LOADING_STARTED));
+	    dispatch(setStatus(UPDATE_ITEM, LOADING_STARTED));
 
-		    let mutData = mutateUpdateData(itemForm)
-		    if (!Array.isArray(mutData)) {
-		    	mutData = [mutData];
-		    }
+	    let mutData = mutateUpdateData(itemForm)
+	    if (!Array.isArray(mutData)) {
+	    	mutData = [mutData];
+	    }
 
-		    return updateItem(...mutData).then((data) => {
-		      console.log(`data from updateItem`, data);
-		      dispatch(setStatus(UPDATE_ITEM, LOADING_OK, data));
-		    }).catch((e) => {
-		       console.log(`error from updateItem`, e);
-		       dispatch(setStatus(UPDATE_ITEM, LOADING_ERROR, e));
-		    }); 
-		  }
+	    return updateItem(...mutData).then((data) => {
+	      console.log(`data from updateItem`, data);
+	      dispatch(setStatus(UPDATE_ITEM, LOADING_OK, data));
+	    }).catch((e) => {
+	       console.log(`error from updateItem`, e);
+	       dispatch(setStatus(UPDATE_ITEM, LOADING_ERROR, e));
+	    }); 
+	  }
 	}
 
 	const acUpdateForm = (fieldName, value) => {
-  		return {
-    		type: UPDATE_FORM,
-    		fieldName,
-    		value
-  		}
+		return {
+  		type: UPDATE_FORM,
+  		fieldName,
+  		value
+		}
 	}
 
 	const acStoreForm = (form) => {
-  		return {
-    		type: STORE_FORM,
-    		data: form
-  		}
+		return {
+  		type: STORE_FORM,
+  		data: form
+		}
 	}
 
 	const setStatus = (type, status, data) => {
-  		return {
-    		type,
-    		status,
-    		data
-  		};
+		return {
+  		type,
+  		status,
+  		data
+		};
 	}
 
 	return {
