@@ -29,15 +29,15 @@ class FacilityNavigation extends React.Component {
         <AuthzMenuItem permission="ux:view" to={`${basepath}/cartsearch`} params={params} title="Carts" iconName="shopping-cart" />
         <AuthzMenuItem permission="ux:view" to={`${basepath}/workersearch`} params={params} title="Workers" iconName="users" />
         <AuthzMenuItem permission="event:view"  to={`${basepath}/blockedwork`} params={params} title="Issues" iconName="exclamation-circle"/>
-        <AuthzMenuItem permission="order:view" to={`${basepath}/orders`} params={params} title="Planning" iconName="tasks" />
-        <Submenu title="History" iconName="history">
+        <Submenu title="Planning" iconName="tasks">
+          <AuthzMenuItem permission="order:view" to={`${basepath}/orders`} params={params} title="Planning" iconName="shopping-basket" />
           <AuthzMenuItem permission="workinstruction:view" to={`${basepath}/workinstructions`} params={params} title="Work Instructions" iconName="barcode" />
+          <AuthzMenuItem permission="facility:edit" to={`${basepath}/templates`} params={params} title="Printing Templates" iconName="print" />
         </Submenu>
         <Submenu title="Administration" iconName="cogs">
           {/* TODO: support *:import permissions */}
           <AuthzMenuItem permission="order:view" to={`${basepath}/import`} params={params} title="Imports/Exports" iconName="exchange" />
           <AuthzMenuItem permission="worker:edit" to={`${basepath}/workers`} params={params} title="Workers" iconName="users" />
-          <AuthzMenuItem permission="facility:edit" to={`${basepath}/templates`} params={params} title="Printing Templates" iconName="tasks" />
           <AuthzMenuItem permission="facility:edit" to={`${basepath}/extensionpoints`} params={params} title="Extensions" iconName="code" />
           <AuthzMenuItem permission="facility:edit" to={`${basepath}/scheduledjobs`} params={params} title="Schedule" iconName="clock-o" />
 
