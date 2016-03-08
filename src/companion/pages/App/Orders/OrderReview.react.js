@@ -156,8 +156,8 @@ export default class OrderReview extends React.Component{
                 <ListManagement results={orders}
                  columns={columns}
                  columnMetadata={columnMetadata}
+                 storeName="planning"
                  keyColumn="orderId"
-                 sortSpecs={sortSpecs}
                  expand={this.shouldExpand}
                  onRowExpand={this.handleRowExpand}
                  onRowCollapse={this.handleRowCollapse}

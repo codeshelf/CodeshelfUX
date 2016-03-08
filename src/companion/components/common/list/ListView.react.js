@@ -145,7 +145,6 @@ export default class ListView extends React.Component{
         let {results,
              sortSpecs = () => {}} = this.props;
 
-
         if (!columns) {
             columns = columnMetadata.map((m) => { return m.columnName;});
         }

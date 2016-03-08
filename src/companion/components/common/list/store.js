@@ -12,7 +12,14 @@ const initState = new (Record({
     printingTemplates: new Map({
       columns: ["name", "active"],
       sortSpecs: new Map({"name": {order: "asc"}})
-    })}),
+    }),
+    planning: new Map({
+      columns: ["orderId", "customerId", "shipperId", "destinationId", "containerId", "dueDate", "status"],
+      sortSpecs: new Map({
+          "orderId": {order: "asc"}
+      }),
+    }),
+  }),
 }));
 
 export function listReducer(state = initState, action) {
