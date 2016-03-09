@@ -13,12 +13,17 @@ const defaultUpdateItemCond = (item, action) => {
   return item;
 }
 
+const getDefaultListDataFormat = (data) => {
+  return data;
+}
+
 /*
   getItems: function responsible for retreiving items
   addItem: function responsible for adding single item
   updateItem: function responsible for updating single item 
   useFacility: boolean which reflects if api functions use facilityContext
   mutateGet/Add/Update/Data: functions which mutate data to suitable form for api calls
+  getDataFormat: function which return spec data part for getItems section
   updateItemCond: function representing condition for map in updateItem section
 */
 export function createStore({storeName,
@@ -26,6 +31,7 @@ export function createStore({storeName,
                             addItem,
                             updateItem,
                             useFacility = false,
+                            getDataFormat = getDefaultListDataFormat,
                             mutateGetData = defaultMutate,
                             mutateAddData = defaultMutate,
                             mutateUpdateData = defaultMutate,
@@ -88,7 +94,7 @@ export function createStore({storeName,
               }
               case LOADING_OK: {
                   return state.mergeIn(['items'], new Map({
-                    data: action.data,
+                    data: getDataFormat(action.data),
                     loading: null,
                     error: null,
                   }));
@@ -179,7 +185,7 @@ export function createStore({storeName,
   }
 
 
-  const acLoadItems = () => {
+  const acLoadItems = (params) => {
     if (useFacility) {
       return acLoadWithFacility();
     } else {
@@ -187,7 +193,7 @@ export function createStore({storeName,
     }
   }
 
-  const acLoadWithFacility = () => {
+  const acLoadWithFacility = (params) => {
     return (dispatch, getState) => {
         dispatch(setStatus(GET_ITEMS, LOADING_STARTED));
 
@@ -197,7 +203,7 @@ export function createStore({storeName,
             return;
         }
 
-        facilityContext.getItems().then((data) => {
+        facilityContext[getItems]({limit: 20}).then((data) => {
             console.log(`data from getItems`, data);
             dispatch(setStatus(GET_ITEMS, LOADING_OK, data));
         }).catch((e) => {
@@ -207,7 +213,7 @@ export function createStore({storeName,
     }
   }
 
-  const acLoadWithoutFacility = () => {
+  const acLoadWithoutFacility = (params) => {
     return (dispatch, getState) => {
         dispatch(setStatus(GET_ITEMS, LOADING_STARTED));
 
@@ -244,7 +250,7 @@ export function createStore({storeName,
           mutData = [mutData];
         }
 
-        return facilityContext.addItem(...mutData).then((data) => {
+        return facilityContext[addItem](...mutData).then((data) => {
           console.log(`data from add item`, data);
           dispatch(setStatus(ADD_ITEM, LOADING_OK, data));
         }).catch((e) => {
@@ -295,7 +301,7 @@ export function createStore({storeName,
           mutData = [mutData];
         }
 
-        return facilityContext.updateItem(...mutData).then((data) => {
+        return facilityContext[updateItem](...mutData).then((data) => {
             console.log(`data from updateItem`, data);
             dispatch(setStatus(UPDATE_ITEM, LOADING_OK, data));
         }).catch((e) => {

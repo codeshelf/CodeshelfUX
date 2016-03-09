@@ -89,15 +89,18 @@ class WorkerMgmt extends Component{
     }
 
     render() {
-        const {table, workers} = this.props;
+        const {table, items} = this.props;
         const title = "Manage Workers";
+
+        console.info("workers", items);
+
         return (
             <SingleCellLayout title={title}>
               <Authz permission="worker:import">
                   <UploadForm label="Workers"
                     onImportSubmit={(file) => this.handleImportSubmit("importWorkers", file)} />
               </Authz>
-              { workers.get('loading')
+              { items.get('loading')
                 ? <div>Loading...</div>
                 : <ListManagement
                     allowExport={true}
@@ -106,7 +109,7 @@ class WorkerMgmt extends Component{
                     columnMetadata={this.columnMetadata}
                     sortSpecs={table.sortSpecs}
                     rowActionComponent={this.rowActionComponent}
-                    results={workers.get('data')}
+                    results={items.get('data')}
                     keyColumn={keyColumn}/>
               }
               {this.props.children && React.cloneElement(this.props.children, { formMetadata: this.columnMetadata})}
