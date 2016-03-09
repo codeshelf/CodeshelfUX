@@ -42,6 +42,7 @@ export function createStore({storeName,
 
   const UPDATE_FORM = "UPDATE_FORM";
   const STORE_FORM = "STORE_FORM";
+  const UNSET_ERROR = "UNSET_ERROR";
 
   const initState = new (Record({
     items: new Map({
@@ -157,7 +158,7 @@ export function createStore({storeName,
                 return state.mergeIn(['updateItem'], new Map({
                   data: null,
                   loading: null,
-                  error: action.data,
+                  error: action.data
                 }));
               }
             }
@@ -167,6 +168,10 @@ export function createStore({storeName,
         }
         case UPDATE_FORM: {
             return state.setIn(['itemForm', action.fieldName], action.value);
+        }
+        case UNSET_ERROR: {
+            return state.setIn(['updateItem', 'error'], null)
+                        .setIn(['addItem', 'error'], null);
         }
         default: 
           return state;
@@ -197,7 +202,7 @@ export function createStore({storeName,
             dispatch(setStatus(GET_ITEMS, LOADING_OK, data));
         }).catch((e) => {
             console.log(`error from getItems`, e);
-            dispatch(setStatus(GET_ITEMS, LOADING_ERROR, e));
+            dispatch(setStatus(GET_ITEMS, LOADING_ERROR, e.message));
         });
     }
   }
@@ -211,7 +216,7 @@ export function createStore({storeName,
           dispatch(setStatus(GET_ITEMS, LOADING_OK, data));
         }).catch((e) => {
           console.log(`error from getItems`, e);
-          dispatch(setStatus(GET_ITEMS, LOADING_ERROR, e));
+          dispatch(setStatus(GET_ITEMS, LOADING_ERROR, e.message));
         });
       }
   }
@@ -244,7 +249,7 @@ export function createStore({storeName,
           dispatch(setStatus(ADD_ITEM, LOADING_OK, data));
         }).catch((e) => {
           console.log(`error from add item`, e);
-          dispatch(setStatus(ADD_ITEM, LOADING_ERROR, e));
+          dispatch(setStatus(ADD_ITEM, LOADING_ERROR, e.message));
         });
      }
   }
@@ -262,8 +267,8 @@ export function createStore({storeName,
            console.log(`data from add item`, data);
            dispatch(setStatus(ADD_ITEM, LOADING_OK, data));
         }).catch((e) => {
-           console.log(`data from add item`, data);
-           dispatch(setStatus(ADD_ITEM, LOADING_ERROR, e));
+           console.log(`error from add item`, e);
+           dispatch(setStatus(ADD_ITEM, LOADING_ERROR, e.message));
         });
     }
   }
@@ -295,7 +300,7 @@ export function createStore({storeName,
             dispatch(setStatus(UPDATE_ITEM, LOADING_OK, data));
         }).catch((e) => {
             console.log(`error from updateItem`, e);
-            dispatch(setStatus(UPDATE_ITEM, LOADING_ERROR, e));
+            dispatch(setStatus(UPDATE_ITEM, LOADING_ERROR, e.message));
         });
     }
   }
@@ -314,7 +319,7 @@ export function createStore({storeName,
         dispatch(setStatus(UPDATE_ITEM, LOADING_OK, data));
       }).catch((e) => {
          console.log(`error from updateItem`, e);
-         dispatch(setStatus(UPDATE_ITEM, LOADING_ERROR, e));
+         dispatch(setStatus(UPDATE_ITEM, LOADING_ERROR, e.message));
       }); 
     }
   }
@@ -324,14 +329,20 @@ export function createStore({storeName,
       type: UPDATE_FORM,
       fieldName,
       value
-    }
+    };
   }
 
   const acStoreForm = (form) => {
     return {
       type: STORE_FORM,
       data: form
-    }
+    };
+  }
+
+  const acUnsetError = () => {
+    return {
+      type: UNSET_ERROR
+    };
   }
 
   const setStatus = (type, status, data) => {
@@ -348,6 +359,7 @@ export function createStore({storeName,
     acLoadItems,
     acAddItem,
     acUpdateItem,
+    acUnsetError,
     listReducer
   };
 
