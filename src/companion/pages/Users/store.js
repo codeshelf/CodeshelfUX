@@ -30,4 +30,5 @@ export const acStoreSelectedUserForm = store.acStoreForm;
 export const acLoadUsers = store.acLoadItems;
 export const acAddUser = store.acAddItem;
 export const acEditUser = store.acUpdateItem;
+export const acUnsetError = store.acUnsetError;
 export const usersReducer = store.listReducer;

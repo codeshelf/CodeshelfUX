@@ -26,8 +26,11 @@ class ModalForm extends React.Component{
 
     handleSave(e) {
         e.preventDefault();
+
         return this.props.onSave().then(() => {
-            this.handleClose();
+            if (!this.props.actionError) {
+                this.handleClose();
+            }
         })
         .catch((e) => {
             this.forceUpdate();
@@ -35,17 +38,43 @@ class ModalForm extends React.Component{
     }
 
     componentWillUnmount() {
-        //always teardown modal before transitioning away
+      //always teardown modal before transitioning away
+      this.props.acUnsetError();
       this.handleClose();
     }
 
     render() {
-        var {title, formData} = this.props;
+        const {title, formData, actionError} = this.props;
         let {show} = this.state;
-        var modalTitle = formData ? title : "Not Found"
-;        return (
+        const modalTitle = formData ? title : "Not Found";
+
+        if (actionError) {
+            const errorStyle = {
+                color: '#8D1414'
+            };
+
+            return (
+                <Modal ref="modal" 
+                       show={show} 
+                       title={modalTitle} 
+                       onHide={this.handleClose}>
+                    <Modal.Header>
+                        <h5>{modalTitle}</h5>
+                        <h4 style={errorStyle}>Unexpected error has occurred!</h4>
+                        <h5 style={errorStyle}>{actionError}</h5>
+                    </Modal.Header>
+                    <Modal.Footer>
+                        <Button  id="cancel" onClick={this.handleClose}>Cancel</Button>
+                    </Modal.Footer>
+                </Modal>
+            );
+        }
+        return (
                 <Modal ref="modal" show={show} title={modalTitle} onHide={this.handleClose}>
-                    <Modal.Header><h5>{modalTitle}</h5></Modal.Header>
+                    <Modal.Header>
+                        <h5>{modalTitle}</h5>
+                        <h5>{actionError}</h5>
+                    </Modal.Header>
                     { formData ? this.renderForm(formData, this.handleSave, this.handleClose ) : this.renderNotFound()}
                 </Modal>
             );
