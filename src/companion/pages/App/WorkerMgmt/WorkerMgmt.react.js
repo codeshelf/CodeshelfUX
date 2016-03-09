@@ -83,7 +83,7 @@ class WorkerMgmt extends Component{
     }
 
     handleImportSubmit(method, file) {
-        var formData = new FormData();
+        let formData = new FormData();
         formData.append("file", file);
         return this.props.acHandleImport(method, formData);
     }

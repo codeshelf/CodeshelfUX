@@ -7,13 +7,18 @@ const getDataFormat = (data) => {
   return data.results;
 }
 
+const columns =  ["lastName", "firstName", "domainId", "updated"];
+const sortSpecs =  {"lastName": {order: "asc"}};
+
 const store = createStore({
                           storeName: "workers", 
                           getItems: "getWorkers",
                           addItem: "addWorker",
                           updateItem: "updateWorker",
                           useFacility: true,
-                          getDataFormat
+                          getDataFormat,
+                          columns,
+                          sortSpecs
                           });
 
 export const acUpdateSelectedWorker = store.acUpdateForm;
@@ -25,9 +30,9 @@ export const acUnsetError = store.acUnsetError;
 export const workerMgmtReducer = store.listReducer;
 export const NEWID = "new";
 
-export function acHandleImport({method, formData}){
+export function acHandleImport(method, formData){
   return (dispatch, getState) => {
-    dispatch(setStatus(GET_WORKERS, LOADING_STARTED));
+    dispatch(store.setStatus(store.GET_ITEMS, store.LOADING_STARTED));
 
     const facilityContext = getFacilityContextFromState(getState());
     if (!facilityContext) {
@@ -35,12 +40,12 @@ export function acHandleImport({method, formData}){
       return;
     }
 
-    facilityContext[method](formData).then(() => {
+    return facilityContext[method](formData).then(() => {
       console.log(`import file finish OK`);
       acGetWorkers({limit: 5000});
     }).catch((e) => {
       console.log(`error from file import`, e);
-      dispatch(setStatus(GET_WORKERS, LOADING_ERROR, e));
+      dispatch(store.setStatus(store.GET_ITEMS, store.LOADING_ERROR, e));
     });
   }
 }

@@ -1,9 +1,12 @@
-import {Map, Record, fromJS, List} from 'immutable';
+import {Map, Record, fromJS, List, Iterable} from 'immutable';
 
 import {getFacilityContextFromState} from "../../Facility/get";
 
 const defaultMutate = (data) => {
-  return data.toJS();
+  if (data && Iterable.isIterable(data)) {
+    return data.toJS();
+  }
+  return data;
 }
 
 const defaultUpdateItemCond = (item, action) => {
@@ -35,7 +38,9 @@ export function createStore({storeName,
                             mutateGetData = defaultMutate,
                             mutateAddData = defaultMutate,
                             mutateUpdateData = defaultMutate,
-                            updateItemCond = defaultUpdateItemCond
+                            updateItemCond = defaultUpdateItemCond,
+                            columns,
+                            sortSpecs
                             }) {
 
   const LOADING_STARTED = "LOADING_STARTED";
@@ -67,8 +72,8 @@ export function createStore({storeName,
     }),
     itemForm: null,
     table: {
-      columns: [],
-      sortSpecs: []
+      columns: columns ? columns : [],
+      sortSpecs: sortSpecs ? sortSpecs : []
     }
   }));
 
@@ -187,9 +192,9 @@ export function createStore({storeName,
 
   const acLoadItems = (params) => {
     if (useFacility) {
-      return acLoadWithFacility();
+      return acLoadWithFacility(params);
     } else {
-      return acLoadWithoutFacility();
+      return acLoadWithoutFacility(params);
     }
   }
 
@@ -199,11 +204,16 @@ export function createStore({storeName,
 
         const facilityContext = getFacilityContextFromState(getState());
         if (!facilityContext) {
-            dispatch(getError(`Want to get workers but no facility context is provided`));
+            dispatch(getError(`Want to get items but no facility context is provided`));
             return;
         }
 
-        facilityContext[getItems]({limit: 20}).then((data) => {
+        let mutData = mutateAddData(params)
+        if (!Array.isArray(mutData)) {
+          mutData = [mutData];
+        }
+
+        facilityContext[getItems](...mutData).then((data) => {
             console.log(`data from getItems`, data);
             dispatch(setStatus(GET_ITEMS, LOADING_OK, data));
         }).catch((e) => {
@@ -217,7 +227,12 @@ export function createStore({storeName,
     return (dispatch, getState) => {
         dispatch(setStatus(GET_ITEMS, LOADING_STARTED));
 
-        return getItems().then((data) => {
+        let mutData = mutateAddData(params)
+        if (!Array.isArray(mutData)) {
+          mutData = [mutData];
+        }
+
+        return getItems(...mutData).then((data) => {
           console.log(`data from getItems`, data);
           dispatch(setStatus(GET_ITEMS, LOADING_OK, data));
         }).catch((e) => {
@@ -360,12 +375,22 @@ export function createStore({storeName,
   }
 
   return {
+    LOADING_STARTED,
+    LOADING_OK,
+    LOADING_ERROR,
+    GET_ITEMS,
+    ADD_ITEM,
+    UPDATE_ITEM,
+    UPDATE_FORM,
+    STORE_FORM,
+    UNSET_ERROR,
     acUpdateForm,
     acStoreForm,
     acLoadItems,
     acAddItem,
     acUpdateItem,
     acUnsetError,
+    setStatus,
     listReducer
   };
 

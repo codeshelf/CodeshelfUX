@@ -52,13 +52,13 @@ class WorkerDisplay extends Component {
             workerId = props.params.workerId;
         }
 
-        let workerForm = this.props.selectedWorkerForm;
+        let workerForm = this.props.itemForm;
         if (!workerForm || workerForm.get('persistentId') !== workerId) {
             if (workerId === "new") {
                 workerForm = Worker();
                 this.props.acStoreSelectedWorkerForm(workerForm);
             } else {
-                workerForm = this.props.workers.get('data').find((worker) => worker.persistentId === workerId);
+                workerForm = this.props.items.get('data').find((worker) => worker.persistentId === workerId);
                 this.props.acStoreSelectedWorkerForm(fromJS(workerForm));
             }
         }
@@ -79,7 +79,7 @@ class WorkerDisplay extends Component {
     }
 
     handleSave() {
-        const selectedWorkerForm = this.props.selectedWorkerForm;
+        const selectedWorkerForm = this.props.itemForm;
         const id = selectedWorkerForm.persistentId;
         let promise;
         if (id === NEWID) {
@@ -93,7 +93,7 @@ class WorkerDisplay extends Component {
 
 
     render() {
-      const formData = this.props.selectedWorkerForm;
+      const formData = this.props.itemForm;
       return (<ModalForm title="Edit Worker" formData={formData} returnRoute={toURL(this.props, "../workers")}
                 onSave={() => this.handleSave()}>
                 <FormFields formData={formData} formMetadata={this.formMetadata} handleChange={(formField, value) => this.handleChange(formField, value)} />
@@ -110,7 +110,7 @@ class WorkerDisplay extends Component {
     renderBarcodeGeneratorComponent (name) {
         function setBadgeId() {
             const barCode = this.generateBarcode();
-            const selectedWorkerForm = this.props.selectedWorkerForm;
+            const selectedWorkerForm = this.props.itemForm;
             this.props.acStoreSelectedWorkerForm(selectedWorkerForm.set(name, barCode));
             this.refs[objField].getInputDOMNode().focus();
         };
