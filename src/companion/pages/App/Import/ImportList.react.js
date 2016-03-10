@@ -3,7 +3,7 @@ import ListView from "components/common/list/ListView";
 import DateDisplay from "components/common/DateDisplay";
 import DurationDisplay from "components/common/DurationDisplay";
 import Immutable from "immutable";
-
+import ListManagement from "components/common/list/ListManagement";
 export default class ImportList extends React.Component {
 
   constructor( props ) {
@@ -77,12 +77,12 @@ export default class ImportList extends React.Component {
       }
     });
     return (
-      <ListView results={enhanced}
+      <ListManagement results={enhanced}
                 keyColumn="persistentId"
+                storeName="import"
                 columnMetadata={this.columnMetadata}
-                columns={this.columnsCursor}
-                sortSpecs={this.columnSortSpecsCursor}>
-      </ListView>);
+                />
+    );
   }
 }
 ;

@@ -127,7 +127,7 @@ export default class ListView extends React.Component{
              onRowCollapse} = this.props;
 
         let {results,
-             sortSpecs = () => {}} = this.props;
+             sortSpecs = new Map()} = this.props;
 
         if (!columns) {
             columns = columnMetadata.map((m) => { return m.columnName;});
@@ -172,7 +172,7 @@ export default class ListView extends React.Component{
                     rowActionComponent={rowActionComponent}
                     sortedBy={sortBy}
                     onColumnMove={this.props.onColumnMove}
-                    onColumnSortChange={this.props.onColumnSortChange.bind(this)}
+                    onColumnSortChange={this.props.onColumnSortChange}
                     {...{expand, onRowExpand, onRowCollapse}}
                  />
                 </div>);

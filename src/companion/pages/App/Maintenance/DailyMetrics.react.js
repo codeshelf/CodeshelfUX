@@ -50,13 +50,11 @@ export default class DailyMetrics extends React.Component{
                     <SubmitButton label="Recompute" />
                 </Form>
                 <ListManagement
-
                     allowExport={true}
                     results={results}
                     keyColumn="date"
-                    columns={columnsCursor}
-                    columnMetadata={columnMetadata}
-                    sortSpecs={columnSortSpecsCursor}/>
+                    storeName={"dailymetric"}
+                    columnMetadata={columnMetadata}/>
            </div>
         );
     }

@@ -103,6 +103,15 @@ class ListManagement extends React.Component {
                 this.state.search,
                 columnMetadata,
                 results);
+        let columnsManagement = {}
+        if (tables.get(storeName)) {
+            columnsManagement = {
+                columns: tables.getIn([storeName, 'columns']),
+                onColumnMove: (moved, value) => this.props.acMoveColumns(moved, value, storeName),
+                onColumnSortChange: (moved, value) => this.props.acSortColumn(moved, value, storeName),
+                sortSpecs: tables.getIn([storeName, 'sortSpecs'])
+            }
+        }
         return (
             <SingleCellIBox>
                 <Row>
@@ -123,12 +132,9 @@ class ListManagement extends React.Component {
                 <ListView
                     ref="listView"
                     {...other}
-                    columns={tables.getIn([storeName, 'columns'])}
-                    onColumnMove={(moved, value) => this.props.acMoveColumns(moved, value, storeName)}
-                    onColumnSortChange={(moved, value) => this.props.acSortColumn(moved, value, storeName)}
-                    sortSpecs={tables.getIn([storeName, 'sortSpecs'])}
                     results={filteredResults}
-                    columnMetadata={columnMetadata}/>
+                    {...columnsManagement}
+                    columnMetadata={columnMetadata} />
             </SingleCellIBox>);
     }
 };

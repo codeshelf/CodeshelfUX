@@ -19,6 +19,16 @@ const initState = new (Record({
           "orderId": {order: "asc"}
       }),
     }),
+    dailymetric: new Map({
+      columns: ["localDateUI", "ordersPicked"],
+      sortSpecs: new Map({
+        "localDateUI": {order:"desc"}
+      }),
+    }),
+    import: new Map({
+      columns: ["received", "filename", "started", "processingTime", "ordersProcessed", "linesProcessed", "linesFailed", "status", "username"],
+      sortSpecs: new Map({"started": {order:"desc"}}),
+    })
   }),
 }));
 
