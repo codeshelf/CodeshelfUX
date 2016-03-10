@@ -50,17 +50,12 @@ class ModalForm extends React.Component{
         let {show} = this.state;
         const modalTitle = formData ? title : "Not Found";
 
-        if (actionError) {
-            const errorStyle = {
-                color: '#8D1414'
-            };
-
-            let errorMessage = '';
-            if (actionError === 400) {
-                errorMessage = "Invalid input please correct the form.";
-            } else {
-                errorMessage = "An error occurred on the server contact support and try again.";
-            }
+        const errorStyle = {
+            color: '#8D1414'
+        };
+        let errorMessage = "";
+        if (actionError && actionError === 500) {
+            errorMessage = "An error occurred on the server contact support and try again.";
 
             return (
                 <Modal ref="modal" 
@@ -77,11 +72,14 @@ class ModalForm extends React.Component{
                 </Modal>
             );
         }
+        if (actionError && actionError === 400) {
+            errorMessage = "Invalid input please correct the form.";
+        }
         return (
                 <Modal ref="modal" show={show} title={modalTitle} onHide={this.handleClose}>
                     <Modal.Header>
                         <h5>{modalTitle}</h5>
-                        <h5>{actionError}</h5>
+                        <h5 style={errorStyle}>{errorMessage}</h5>
                     </Modal.Header>
                     { formData ? this.renderForm(formData, this.handleSave, this.handleClose ) : this.renderNotFound()}
                 </Modal>
