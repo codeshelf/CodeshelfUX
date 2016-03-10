@@ -75,6 +75,12 @@ class ChartNavigation extends Component {
     this.props.onChange(filter.set('endtime', newEndTime));
   }
 
+  moveOneBucket(filter, momentMethod, e) {
+    const {endtime, interval} = filter;
+    const newEndTime = moment(endtime)[momentMethod](interval);
+    this.props.onChange(filter.set('endtime', newEndTime));
+  }
+
   render() {
     const {filter} = this.props;
     const margin = ".5em";
@@ -86,9 +92,19 @@ class ChartNavigation extends Component {
               <DateDisplay date={moment(filter.endtime).subtract(filter.window)} />
           </Button>
         </div>
+        <div className="pull-left">
+          <Button bsStyle="link" className="pull-left"  onClick={this.moveOneBucket.bind(this, filter, 'subtract')}>
+              <Icon name="step-backward" style={{marginRight: margin}}/>
+          </Button>
+        </div>
         <div className="pull-right">
           <Button bsStyle="link" bsSize="md" onClick={this.changeEndTime.bind(this, filter, 'add')}>
             <DateDisplay  date={filter.endtime.format()} />
+            <Icon name="step-forward" style={{marginLeft: margin}}/>
+          </Button>
+        </div>
+        <div className="pull-right">
+          <Button bsStyle="link" bsSize="md" onClick={this.moveOneBucket.bind(this, filter, 'add')}>
             <Icon name="step-forward" style={{marginLeft: margin}}/>
           </Button>
         </div>
