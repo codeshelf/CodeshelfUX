@@ -7,6 +7,13 @@ const getDataFormat = (data) => {
   return data.results;
 }
 
+const updateItemCond = (item, action) => {
+  if (item.persistentId == action.data.persistentId) {
+    return action.data;
+  }
+  return item;
+}
+
 const columns =  ["lastName", "firstName", "domainId", "updated"];
 const sortSpecs =  {"lastName": {order: "asc"}};
 
@@ -18,7 +25,8 @@ const store = createStore({
                           useFacility: true,
                           getDataFormat,
                           columns,
-                          sortSpecs
+                          sortSpecs,
+                          updateItemCond
                           });
 
 export const acUpdateSelectedWorker = store.acUpdateForm;
@@ -39,6 +47,8 @@ export function acHandleImport(method, formData){
       dispatch(getError(`Want to import file but no facility context is provided`));
       return;
     }
+
+    console.info("meethod", method);
 
     return facilityContext[method](formData).then(() => {
       console.log(`import file finish OK`);

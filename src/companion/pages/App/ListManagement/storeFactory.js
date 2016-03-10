@@ -218,7 +218,7 @@ export function createStore({storeName,
             dispatch(setStatus(GET_ITEMS, LOADING_OK, data));
         }).catch((e) => {
             console.log(`error from getItems`, e);
-            dispatch(setStatus(GET_ITEMS, LOADING_ERROR, e.message));
+            dispatch(setStatus(GET_ITEMS, LOADING_ERROR, e.status));
         });
     }
   }
@@ -237,7 +237,7 @@ export function createStore({storeName,
           dispatch(setStatus(GET_ITEMS, LOADING_OK, data));
         }).catch((e) => {
           console.log(`error from getItems`, e);
-          dispatch(setStatus(GET_ITEMS, LOADING_ERROR, e.message));
+          dispatch(setStatus(GET_ITEMS, LOADING_ERROR, e.status));
         });
       }
   }
@@ -270,7 +270,7 @@ export function createStore({storeName,
           dispatch(setStatus(ADD_ITEM, LOADING_OK, data));
         }).catch((e) => {
           console.log(`error from add item`, e);
-          dispatch(setStatus(ADD_ITEM, LOADING_ERROR, e.message));
+          dispatch(setStatus(ADD_ITEM, LOADING_ERROR, e.status));
         });
      }
   }
@@ -289,7 +289,7 @@ export function createStore({storeName,
            dispatch(setStatus(ADD_ITEM, LOADING_OK, data));
         }).catch((e) => {
            console.log(`error from add item`, e);
-           dispatch(setStatus(ADD_ITEM, LOADING_ERROR, e.message));
+           dispatch(setStatus(ADD_ITEM, LOADING_ERROR, e.status));
         });
     }
   }
@@ -321,7 +321,7 @@ export function createStore({storeName,
             dispatch(setStatus(UPDATE_ITEM, LOADING_OK, data));
         }).catch((e) => {
             console.log(`error from updateItem`, e);
-            dispatch(setStatus(UPDATE_ITEM, LOADING_ERROR, e.message));
+            dispatch(setStatus(UPDATE_ITEM, LOADING_ERROR, e.status));
         });
     }
   }
@@ -340,7 +340,7 @@ export function createStore({storeName,
         dispatch(setStatus(UPDATE_ITEM, LOADING_OK, data));
       }).catch((e) => {
          console.log(`error from updateItem`, e);
-         dispatch(setStatus(UPDATE_ITEM, LOADING_ERROR, e.message));
+         dispatch(setStatus(UPDATE_ITEM, LOADING_ERROR, e.status));
       }); 
     }
   }

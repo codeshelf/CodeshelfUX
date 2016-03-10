@@ -112,7 +112,7 @@ class WorkerDisplay extends Component {
             const barCode = this.generateBarcode();
             const selectedWorkerForm = this.props.itemForm;
             this.props.acStoreSelectedWorkerForm(selectedWorkerForm.set(name, barCode));
-            this.refs[objField].getInputDOMNode().focus();
+            //this.refs[objField].getInputDOMNode().focus();
         };
 
         return <Button id="generateBadgeId" bsStyle="link" onClick={setBadgeId.bind(this)}><Icon name="barcode" size="2x" /></Button>;

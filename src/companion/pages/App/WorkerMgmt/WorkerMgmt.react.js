@@ -92,8 +92,6 @@ class WorkerMgmt extends Component{
         const {table, items} = this.props;
         const title = "Manage Workers";
 
-        console.info("workers", items);
-
         return (
             <SingleCellLayout title={title}>
               <Authz permission="worker:import">
