@@ -8,51 +8,10 @@ import {TAB_PRODUCTIVITY} from '../../Detail/WorkerDetail/store';
 import {convertTab} from '../../Detail/WorkerDetail/WorkerDetail.react.js';
 import {Map, Record} from "immutable";
 import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../../links';
-import {WorkerPicksTable} from './WorkerPicksTable'
 
-export class BottomChart extends Component {
-
-  printChart(node, bins, style) {
-    const showBottomLables = this.props.desktop;
-    const rangeTo = showBottomLables ? 10 : 0;
-    const {height, width, margin} = style;
-    const barWidth = width/bins.length;
-    const xRange = d3.scale.linear()
-        .domain([0, bins.length])
-        .range([margin, width - margin])
-    const yRange = d3.scale.linear().range([height - 2 * margin, rangeTo]).domain([ 0,
-      d3.max(bins, (d) => d)
-    ])
-    const svg = d3.select(node)
-      .attr("width", width)
-      .attr("height", height + 10);
-
-    let bar = svg.selectAll(".bottom-bar")
-        .data(bins)
-      .enter().append("g")
-        .attr("class", "bottom-bar")
-        .attr("transform", (d, i) => "translate(" + i * barWidth + "," + (yRange(d) + rangeTo) + ")")
-
-    bar.append("rect")
-          .attr("width", (width - 2 * margin)/bins.length)
-          .attr("height", (d) => ((height -  2 * margin) - yRange(d)))
-          .attr("fill", "grey");
-
-    if (showBottomLables) {
-      bar.append("text")
-            .attr("dy", "0.75em")
-            .attr("y", -15)
-            .attr("x", barWidth/2)
-            .attr("text-anchor", "middle")
-            .text((d) => d !== 0 ? d : null);
-    }
-
-    return node;
-  }
-
+export class WorkerPicksTable extends Component {
 
   render() {
-
     const {whatIsLoading, whatIsLoaded, filter, desktop, view} = this.props;
     if (whatIsLoading !== null || whatIsLoaded === null) {
       return null;
