@@ -130,23 +130,6 @@ export default class OrderReview extends React.Component{
         return result;
     }
 
-    handleColumnMove(moved, afterName) {
-
-        this.props.columns((columns) => {
-            let formerPosition = columns.indexOf(moved);
-            let newPosition = columns.indexOf(afterName);
-            let after = columns.splice(formerPosition, 1)
-                    .splice(newPosition, 0, moved);
-            return after;
-        });
-    }
-
-    handleColumnSortChange(columnName, direction) {
-            this.props.sortSpecs((oldSortSpec)=>{
-                return oldSortSpec.set(columnName, Map({order: direction}));
-            });
-    }
-
     render() {
 
         let {columns, sortSpecs, orders} = this.props;

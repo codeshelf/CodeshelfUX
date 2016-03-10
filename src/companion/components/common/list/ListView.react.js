@@ -112,22 +112,6 @@ export default class ListView extends React.Component{
         return result;
     }
 
-    handleColumnMove(moved, afterName) {
-        this.props.columns((columns) => {
-            let formerPosition = columns.indexOf(moved);
-            let newPosition = columns.indexOf(afterName);
-            let after = columns.splice(formerPosition, 1)
-                    .splice(newPosition, 0, moved);
-            return after;
-        });
-    }
-
-    handleColumnSortChange(columnName, direction) {
-            this.props.sortSpecs((oldSortSpec)=>{
-                return oldSortSpec.set(columnName, Map({order: direction}));
-            });
-    }
-
     getCSV() {
         return this.refs.table.getCSV();
     }
@@ -187,7 +171,7 @@ export default class ListView extends React.Component{
                     keyColumn={keyColumn}
                     rowActionComponent={rowActionComponent}
                     sortedBy={sortBy}
-                    onColumnMove={this.props.handleColumnMove}
+                    onColumnMove={this.props.onColumnMove}
                     onColumnSortChange={this.props.onColumnSortChange.bind(this)}
                     {...{expand, onRowExpand, onRowCollapse}}
                  />
