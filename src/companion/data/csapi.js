@@ -173,6 +173,7 @@ export function createUser(data) {
 }
 
 export function updateUser(id, data) {
+    delete data.username; //username is readonly
     return ajax("/api/users/"+id, {method: 'POST',
                                contentType: "form", //superagent forum url encoded
                                data: data});
