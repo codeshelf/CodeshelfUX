@@ -31,6 +31,8 @@ const initState = new (Record({
   }),
   selectedTemplateForm: null,
   orderId: '',
+  script: null,
+  preview: null,
 }));
 
 export function printingTemplatesReducer(state = initState, action) {
@@ -132,7 +134,7 @@ export function printingTemplatesReducer(state = initState, action) {
       return state.set('orderId', action.value);
     }
     case GET_PREVIEW: {
-      return state.set('preview', '');
+      return state.set('preview', action.data);
     }
     default: return state;
   }
@@ -229,7 +231,7 @@ export function acChangeOrderId(value) {
 }
 
 
-export function acGetPdfPreview(orderId) {
+export function acGetPdfPreview(orderId, script) {
     return (dispatch, getState) => {
     //dispatch(setStatus(ADD_TEMPLATE, LOADING_STARTED));
 
@@ -239,9 +241,13 @@ export function acGetPdfPreview(orderId) {
       return;
     }
 
-    facilityContext.getTemplatePreview(orderId).then((data) => {
+    facilityContext.getTemplatePreview(orderId, script).then((data) => {
       console.log(`data from updateTemplate`, data);
-      dispatch({type: GET_PREVIEW,data});
+      console.info(data.location);
+      dispatch({
+        type: GET_PREVIEW,
+        data: data.location,
+      });
     }).catch((e) => {
       console.log(`error from updating template`, e);
       //dispatch(setStatus(ADD_TEMPLATE, LOADING_ERROR, e));

@@ -18,7 +18,9 @@ import Text from "data/types/Text";
 
 import {getPrintingTemplatesMutable} from "./get";
 import {acAddTemplate, acUpdateTemplate, acStoreTemplateForm, acUpdateSelectedTemplate,
-    acChangeOrderId, acGetPdfPreview, NEWID} from "./store";
+    acChangeOrderId, acGetPdfPreview, NEWID, getPdf} from "./store";
+
+var PDF = require('react-pdf');
 
 const tmplate = new (Record({
     persistentId : "new",
@@ -35,6 +37,10 @@ class TemplateDisplay extends Component {
             {name: "name", label: "Name", required: true},
             {name: "active", label: "Active", type: Boolean},
             {name: "template", label: "Template", type: Text, required: true}]
+        this.state = {
+            currentPage: 0,
+            pages: 2,
+        }
         this.handleChange = (e) => this.props.acChangeOrderId(e.target.value)
     }
 
@@ -86,7 +92,8 @@ class TemplateDisplay extends Component {
 
     render() {
       const formData = this.props.selectedTemplateForm;
-      const orderId = this.props.orderId;
+      const {orderId, preview} = this.props;
+      console.info(preview);
       return (<ModalForm title="Edit Template" formData={formData} returnRoute={toURL(this.props, "../templates")}
                 onSave={() => this.handleSave()}>
                 <Col xs={10}>
@@ -100,14 +107,18 @@ class TemplateDisplay extends Component {
                         labelClassName="label-class"
                         onChange={this.handleChange}
                         buttonAfter={
-                            <Button bsStyle="primary" onClick={() => this.props.acGetPdfPreview(orderId)}><Icon name="search"/></Button>
+                            <Button bsStyle="primary" onClick={() => this.props.acGetPdfPreview(orderId, '')}><Icon name="search"/></Button>
                         } />
                 </Col>
                 <Col xs={10}>
-                    <h1>Hi world</h1>
+                    { preview && <PDF page={this.state.currentPage} file={'https://test.codeshelf.com' + preview.substr(16)} onDocumentComplete={(pages) => this._onDocumentComplete(pages)}/>}
                 </Col>
               </ModalForm>
             );
+    }
+
+    _onDocumentComplete(pages) {
+      this.setState({pages: pages});
     }
 
     renderNotFound() {
@@ -124,7 +135,7 @@ TemplateDisplay.propTypes = {
 };
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acAddTemplate, acUpdateTemplate, acStoreTemplateForm, acUpdateSelectedTemplate, acChangeOrderId, acGetPdfPreview}, dispatch);
+  return bindActionCreators({acAddTemplate, acUpdateTemplate, acStoreTemplateForm, acUpdateSelectedTemplate, acChangeOrderId, acGetPdfPreview, getPdf}, dispatch);
 }
 
 export default exposeRouter(connect(getPrintingTemplatesMutable, mapDispatch)(TemplateDisplay));

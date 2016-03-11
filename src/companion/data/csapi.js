@@ -680,16 +680,13 @@ export function getAPIContext(selected) {
             });
         },
 
-        getTemplatePreview(orderId) {
+        getTemplatePreview(orderId, script) {
+            // todo domainId = orderId, and fix script in body after CRUD is done
             return ajax(basePath + "/orders/" + domainId + "/print/preview", {
                 method: "POST",
                 contentType: "application/x-groovy",
-                data: {
-                    orderId: '12057',
-                    script: '',
-                },
+                data: 'import static net.sf.dynamicreports.report.builder.DynamicReports.*;reportBuilder.title(cmp.text("Order"))',
             })
         },
-
     };
 };
