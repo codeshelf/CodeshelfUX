@@ -1,5 +1,6 @@
 import {Map, Record, fromJS, List} from 'immutable';
 import {getFacilityContextFromState} from "../../Facility/get";
+import {getTemplates} from './mockTemplates.js';
 
 export const NEWID = "new";
 const GET_TEMPLATES = 'GET_TEMPLATES';
@@ -10,6 +11,8 @@ const LOADING_OK = 'LOADING_OK';
 const LOADING_ERROR = 'LOADING_ERROR';
 const STORE_TEMPLATE_FORM = 'STORE_TEMPLATE_FORM';
 const UPDATE_TEMPLATE_FORM = 'UPDATE_TEMPLATE_FORM';
+const SAVE_ORDERID = 'SAVE_ORDERID';
+const GET_PREVIEW = 'GET_PREVIEW';
 
 const initState = new (Record({
   templates: new Map({
@@ -27,10 +30,9 @@ const initState = new (Record({
     error: null,
   }),
   selectedTemplateForm: null,
-  table: {
-    columns: ["name", "active"],
-    sortSpecs: {"name": {order: "asc"}}
-  },
+  orderId: '',
+  script: null,
+  preview: null,
 }));
 
 export function printingTemplatesReducer(state = initState, action) {
@@ -72,20 +74,19 @@ export function printingTemplatesReducer(state = initState, action) {
         case LOADING_OK: {
           const data = state.workers.get('data');
           const newData = data.map((template) => {
-            console.info(template.persistentId, action.data.persistentId)
             if (template.persistentId == action.data.persistentId) {
               return action.data;
             }
             return template;
           })
-          return state.merge({
+          return state.merge(new (Record({
             updateTemplate: {
               data: action.data,
               loading: null,
               error: null,
             },
-            templates: {...state.templates, data: newData}
-          });
+            templates: new Map({...state.templates, data: newData})
+          })));
         }
         case LOADING_ERROR: {
           return state.mergeIn(['updateTemplate'], new Map({
@@ -107,13 +108,13 @@ export function printingTemplatesReducer(state = initState, action) {
         case LOADING_OK: {
           const data = state.templates.get('data');
           data.push(action.data);
-          return state.merge({ 
+          return state.merge(new (Record({ 
           addTemplate: {
             loading: null,
             error: null,
           },
-          templates: {...state.templates, data}
-          });
+          templates: new Map({...state.templates, data})
+          })));
         }
         case LOADING_ERROR: {
           return state.mergeIn(['addTemplate'], new Map({
@@ -128,6 +129,12 @@ export function printingTemplatesReducer(state = initState, action) {
     }
     case UPDATE_TEMPLATE_FORM: {
       return state.setIn(['selectedTemplateForm', action.fieldName], action.value);
+    }
+    case SAVE_ORDERID: {
+      return state.set('orderId', action.value);
+    }
+    case GET_PREVIEW: {
+      return state.set('preview', action.data);
     }
     default: return state;
   }
@@ -157,14 +164,14 @@ export function acGetTemplates({limit}) {
       dispatch(getError(`Want to get templates but no facility context is provided`));
       return;
     }
-
-    //facilityContext.getTemplates().then((data) => {
-      //console.log(`data from getTemplates`, data);
-      dispatch(setStatus(GET_TEMPLATES, LOADING_OK, []));
-    // }).catch((e) => {
-    //   console.log(`error from getting templates`, e);
-    //   dispatch(setStatus(GET_TEMPLATES, LOADING_ERROR, e));
-    // });
+    /*facilityContext.getTemplates()*/
+    getTemplates().then((data) => {
+      console.log(`data from getTemplates`, data);
+      dispatch(setStatus(GET_TEMPLATES, LOADING_OK, data));
+     }).catch((e) => {
+       console.log(`error from getting templates`, e);
+       dispatch(setStatus(GET_TEMPLATES, LOADING_ERROR, e));
+     });
   }
 }
 
@@ -212,6 +219,38 @@ export function acAddTemplate(selectedTemplateForm) {
     }).catch((e) => {
       console.log(`error from updating template`, e);
       dispatch(setStatus(ADD_TEMPLATE, LOADING_ERROR, e));
+    });
+  }
+}
+
+export function acChangeOrderId(value) {
+  return {
+    type: SAVE_ORDERID,
+    value,
+  }
+}
+
+
+export function acGetPdfPreview(orderId, script) {
+    return (dispatch, getState) => {
+    //dispatch(setStatus(ADD_TEMPLATE, LOADING_STARTED));
+
+    const facilityContext = getFacilityContextFromState(getState());
+    if (!facilityContext) {
+      //dispatch(getError(`Want to update template but no facility context is provided`));
+      return;
+    }
+
+    facilityContext.getTemplatePreview(orderId, script).then((data) => {
+      console.log(`data from updateTemplate`, data);
+      console.info(data.location);
+      dispatch({
+        type: GET_PREVIEW,
+        data: data.location,
+      });
+    }).catch((e) => {
+      console.log(`error from updating template`, e);
+      //dispatch(setStatus(ADD_TEMPLATE, LOADING_ERROR, e));
     });
   }
 }

@@ -37,7 +37,7 @@ module.exports = function(isDevelopment, isTest) {
   var config = {
     cache: isDevelopment,
     debug: isDevelopment,
-    devtool: isDevelopment ? 'eval-source-map' : '',
+    devtool: isDevelopment ? 'eval' : '',
     entry: {
       app: isDevelopment ? [
         'webpack-dev-server/client?http://localhost:8888',
@@ -112,7 +112,12 @@ module.exports = function(isDevelopment, isTest) {
           NotifyPlugin,
           new webpack.HotModuleReplacementPlugin(),
           // Tell reloader to not reload if there is an error.
-          new webpack.NoErrorsPlugin()
+          new webpack.NoErrorsPlugin(),
+          new webpack.optimize.UglifyJsPlugin({
+            compress: {
+              warnings: false
+            }
+          })
         );
       else
         plugins.push(
@@ -135,8 +140,6 @@ module.exports = function(isDevelopment, isTest) {
         alias: {
             "react": path.resolve(process.cwd(), './node_modules/react'),
             "react/addons": path.resolve(process.cwd(), './node_modules/react'),
-            "react-addons-test-utils": "react/addons", //TODO remove when switched to react 14
-            "react-dom/server": "react" // TODO remove when switched to react 14
 
         },
         root: [ path.resolve(process.cwd(), './src/companion')],

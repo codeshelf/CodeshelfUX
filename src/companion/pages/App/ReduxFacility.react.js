@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {createApplicationStore} from '../../storeFactory.js';
 import { combineReducers, createStore, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
+import * as storageConfig from '../Mobile/storage';
 
 import {facilityReducer} from '../Facility/store';
 import {workerPickChartReducer} from '../Mobile/WorkerPickCharts/store';
@@ -15,6 +16,7 @@ import {workerDetailReducer} from '../Detail/WorkerDetail/store';
 import {workerMgmtReducer} from './WorkerMgmt/store';
 import {printingTemplatesReducer} from './PrintingTemplates/store';
 import {sidebarReducer} from '../Sidebar/store';
+import {listReducer} from '../../components/common/list/store'
 
 const rootReducer = combineReducers({
   cartSearch: cartSearchReducer,
@@ -28,9 +30,15 @@ const rootReducer = combineReducers({
   workerPickChart: workerPickChartReducer,
   workerMgmt: workerMgmtReducer,
   sidebar: sidebarReducer,
+  list: listReducer,
 });
 
-const store = createApplicationStore(rootReducer);
+const store = createApplicationStore(rootReducer, {
+  key: storageConfig.STORAGE_KEY,
+  pathsToSync: storageConfig.PERSIST_STATE_PART,
+  actionWhitelist: storageConfig.ACTIONS,
+  version: storageConfig.VERSION
+});
 
 export default function (props) {
   return (

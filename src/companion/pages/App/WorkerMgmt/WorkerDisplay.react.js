@@ -51,7 +51,7 @@ class WorkerDisplay extends Component {
         } else {
             workerId = props.params.workerId;
         }
-
+        console.info(workerId);
         let workerForm = this.props.selectedWorkerForm;
         if (!workerForm || workerForm.get('persistentId') !== workerId) {
             if (workerId === "new") {
@@ -59,6 +59,7 @@ class WorkerDisplay extends Component {
                 this.props.acStoreSelectedWorkerForm(workerForm);
             } else {
                 workerForm = this.props.workers.get('data').find((worker) => worker.persistentId === workerId);
+                console.info(workerForm);
                 this.props.acStoreSelectedWorkerForm(fromJS(workerForm));
             }
         }
@@ -112,7 +113,6 @@ class WorkerDisplay extends Component {
             const barCode = this.generateBarcode();
             const selectedWorkerForm = this.props.selectedWorkerForm;
             this.props.acStoreSelectedWorkerForm(selectedWorkerForm.set(name, barCode));
-            this.refs[objField].getInputDOMNode().focus();
         };
 
         return <Button id="generateBadgeId" bsStyle="link" onClick={setBadgeId.bind(this)}><Icon name="barcode" size="2x" /></Button>;

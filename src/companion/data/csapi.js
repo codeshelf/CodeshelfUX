@@ -678,8 +678,15 @@ export function getAPIContext(selected) {
                 data: schedule,
                 contentType: "form"
             });
+        },
 
-        }
-
+        getTemplatePreview(orderId, script) {
+            // todo domainId = orderId, and fix script in body after CRUD is done
+            return ajax(basePath + "/orders/" + domainId + "/print/preview", {
+                method: "POST",
+                contentType: "application/x-groovy",
+                data: 'import static net.sf.dynamicreports.report.builder.DynamicReports.*;reportBuilder.title(cmp.text("Order"))',
+            })
+        },
     };
 };

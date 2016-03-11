@@ -84,7 +84,6 @@ export default class ListView extends React.Component{
                 customComponent: customComponent
             });
         });
-
     }
 
     static setCustomComponent(propertyName, CustomComponent, columnMetadata) {
@@ -112,23 +111,6 @@ export default class ListView extends React.Component{
         return result;
     }
 
-    handleColumnMove(moved, afterName) {
-
-        this.props.columns((columns) => {
-            let formerPosition = columns.indexOf(moved);
-            let newPosition = columns.indexOf(afterName);
-            let after = columns.splice(formerPosition, 1)
-                    .splice(newPosition, 0, moved);
-            return after;
-        });
-    }
-
-    handleColumnSortChange(columnName, direction) {
-            this.props.sortSpecs((oldSortSpec)=>{
-                return oldSortSpec.set(columnName, Map({order: direction}));
-            });
-    }
-
     getCSV() {
         return this.refs.table.getCSV();
     }
@@ -143,9 +125,8 @@ export default class ListView extends React.Component{
              onRowExpand,
              onRowCollapse} = this.props;
 
-        var {results,
-             sortSpecs = () => {}} = this.props;
-
+        let {results,
+             sortSpecs = new Map()} = this.props;
 
         if (!columns) {
             columns = columnMetadata.map((m) => { return m.columnName;});
@@ -157,33 +138,27 @@ export default class ListView extends React.Component{
             columnArray = columns;
         }
 
-        var sortBy = null;
-        if (typeof sortSpecs === 'function') {
-            sortBy = Seq(toFullSortSpecs(columnArray, sortSpecs()));
-            results = this.props.results.sort((a, b) => {
-                //find first non zero result as you run each sort function in order
-                let comp =  sortBy.map(({sortFunction, property}) => {
-                    return sortFunction(a.get(property), b.get(property));
-                })
-                .find((result) => result !=0) || 0;
-                return comp;
-            });
-        }
 
+        const sortBy = Seq(toFullSortSpecs(columnArray, fromJS(sortSpecs)));
+        results = this.props.results.sort((a, b) => {
+            let comp =  sortBy.map(({sortFunction, property}) => {
+                return sortFunction(a.get(property), b.get(property));
+            })
+            .find((result) => result !=0) || 0;
+            return comp;
+        });
         return (<div className="listview">
                 <Row >
                     <Col sm={6} >
-                        <div className="pullLeft text-left">
+                        <div className="pull-left text-left">
                             Total: {results.count()}
                         </div>
                     </Col>
                     <Col sm={6} >
-                        <div className="pullRight">
-                            {(typeof columns === "function") &&
-                                <TableSettings onColumnsChange={columns}
-                                    columns={columnArray}
-                                    columnMetadata={columnMetadata} />
-                            }
+                        <div className="pull-right">
+                            <TableSettings onColumnsChange={(columns) => this.props.onChange(columns, this.props.storeName)}
+                                columns={columnArray}
+                                columnMetadata={columnMetadata} />
                         </div>
                     </Col>
                  </Row>
@@ -193,8 +168,8 @@ export default class ListView extends React.Component{
                     keyColumn={keyColumn}
                     rowActionComponent={rowActionComponent}
                     sortedBy={sortBy}
-                    onColumnMove={this.handleColumnMove.bind(this)}
-                    onColumnSortChange={this.handleColumnSortChange.bind(this)}
+                    onColumnMove={this.props.onColumnMove}
+                    onColumnSortChange={this.props.onColumnSortChange}
                     {...{expand, onRowExpand, onRowCollapse}}
                  />
                 </div>);
