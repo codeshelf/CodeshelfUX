@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {createApplicationStore} from '../../storeFactory.js';
 import { combineReducers, createStore, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
+import * as storageConfig from '../Mobile/storage';
 
 import {facilityReducer} from '../Facility/store';
 import {workerPickChartReducer} from '../Mobile/WorkerPickCharts/store';
@@ -32,7 +33,12 @@ const rootReducer = combineReducers({
   list: listReducer,
 });
 
-const store = createApplicationStore(rootReducer);
+const store = createApplicationStore(rootReducer, {
+  key: storageConfig.STORAGE_KEY,
+  pathsToSync: storageConfig.PERSIST_STATE_PART,
+  actionWhitelist: storageConfig.ACTIONS,
+  version: storageConfig.VERSION
+});
 
 export default function (props) {
   return (

@@ -14,7 +14,7 @@ import _ from 'lodash';
 import exposeRouter, {toURL} from 'components/common/exposerouter';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {acMoveColumns, acSortColumn} from './store';
+import {acMoveColumns, acSortColumn, acChangeColumns} from './store';
 import {getListMutable} from "./get";
 
 class ListManagement extends React.Component {
@@ -132,8 +132,10 @@ class ListManagement extends React.Component {
                 <ListView
                     ref="listView"
                     {...other}
+                    storeName={storeName}
                     results={filteredResults}
                     {...columnsManagement}
+                    onChange={this.props.acChangeColumns}
                     columnMetadata={columnMetadata} />
             </SingleCellIBox>);
     }
@@ -143,7 +145,7 @@ ListManagement.toColumnMetadataFromProperties = ListView.toColumnMetadataFromPro
 ListManagement.setCustomComponent = ListView.setCustomComponent;
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acMoveColumns, acSortColumn}, dispatch);
+  return bindActionCreators({acMoveColumns, acSortColumn, acChangeColumns}, dispatch);
 }
 
 export default connect(getListMutable, mapDispatch)(ListManagement);

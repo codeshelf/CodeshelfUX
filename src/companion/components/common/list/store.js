@@ -1,7 +1,13 @@
 import {Map, Record, fromJS, List} from 'immutable';
+import {getList} from './get';
 
-const MOVE_COLUMNS = 'MOVE_COLUMNS';
-const SORT_COLUMN = 'SORT_COLUMN';
+export const MOVE_COLUMNS = 'MOVE_COLUMNS';
+export const SORT_COLUMN = 'SORT_COLUMN';
+export const CHANGE_COLUMN = 'CHANGE_COLUMN';
+
+export const PERSIST_STATE_PART = [
+  ["list", "tables"],
+];
 
 const initState = new (Record({
   tables: new Map({
@@ -45,6 +51,20 @@ export function listReducer(state = initState, action) {
     case SORT_COLUMN: {
         return state.mergeIn(['tables', action.key, 'sortSpecs'], {[action.columnName]: {order: action.direction}});
     }
+    case CHANGE_COLUMN: {
+       return state.setIn(['tables', action.storeName, 'columns'], action.data);
+    }
+    case 'REDUX_STORAGE_LOAD': {
+      try {
+        const {payload} = action;
+        const savedStorage = getList(payload);
+        let newState = state;
+        newState = newState.mergeIn(['tables'], savedStorage.tables);
+        return newState;
+      } catch(e) {
+        return state;
+      }
+    }
     default: return state;
   }
 }
@@ -64,5 +84,13 @@ export function acSortColumn(columnName, direction, key) {
     columnName,
     direction,
     key,
+  }
+}
+
+export function acChangeColumns(columns, storeName) {
+  return {
+    type: CHANGE_COLUMN,
+    data: columns.toJS(),
+    storeName,
   }
 }

@@ -84,7 +84,6 @@ export default class ListView extends React.Component{
                 customComponent: customComponent
             });
         });
-
     }
 
     static setCustomComponent(propertyName, CustomComponent, columnMetadata) {
@@ -151,17 +150,15 @@ export default class ListView extends React.Component{
         return (<div className="listview">
                 <Row >
                     <Col sm={6} >
-                        <div className="pullLeft text-left">
+                        <div className="pull-left text-left">
                             Total: {results.count()}
                         </div>
                     </Col>
                     <Col sm={6} >
-                        <div className="pullRight">
-                            {(typeof columns === "function") &&
-                                <TableSettings onColumnsChange={columns}
-                                    columns={columnArray}
-                                    columnMetadata={columnMetadata} />
-                            }
+                        <div className="pull-right">
+                            <TableSettings onColumnsChange={(columns) => this.props.onChange(columns, this.props.storeName)}
+                                columns={columnArray}
+                                columnMetadata={columnMetadata} />
                         </div>
                     </Col>
                  </Row>
