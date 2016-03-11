@@ -127,12 +127,15 @@ export class UserForm extends React.Component{
     }
 
     render() {
-      const formData = this.props.formData;
+      const {formData, error, acUnsetError} = this.props;
 
       return (<DocumentTitle title={this.title}>
-              <ModalForm title={this.title} returnRoute={this.returnRoute}
-               onSave={() => this.handleSave()}
-               formData={formData}>
+              <ModalForm title={this.title} 
+                         returnRoute={this.returnRoute}
+                         onSave={() => this.handleSave()}
+                         formData={formData}
+                         acUnsetError={acUnsetError}
+                         actionError={error}>
 
               <FormFields formMetadata={this.formMetadata()}
                handleChange={this.handleChange}
