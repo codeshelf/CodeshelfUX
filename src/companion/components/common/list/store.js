@@ -1,5 +1,5 @@
 import {Map, Record, fromJS, List} from 'immutable';
-import {getList} from './get';
+import {getListMutable} from './get';
 
 export const MOVE_COLUMNS = 'MOVE_COLUMNS';
 export const SORT_COLUMN = 'SORT_COLUMN';
@@ -44,7 +44,7 @@ export function listReducer(state = initState, action) {
       const columns = state.tables.getIn([action.key, 'columns']).slice(0);
       const formerPosition = columns.indexOf(action.moved);
       const newPosition = columns.indexOf(action.afterName);
-      columns.splice(formerPosition, 1)
+      columns.splice(formerPosition, 1);
       columns.splice(newPosition, 0, action.moved);
       return state.setIn(['tables', action.key, 'columns'], columns);
     }
@@ -57,9 +57,10 @@ export function listReducer(state = initState, action) {
     case 'REDUX_STORAGE_LOAD': {
       try {
         const {payload} = action;
-        const savedStorage = getList(payload);
+        const savedStorage = getListMutable(payload);
         let newState = state;
-        newState = newState.mergeIn(['tables'], savedStorage.tables);
+
+        newState = newState.mergeIn(['tables'], savedStorage['tables']);
         return newState;
       } catch(e) {
         return state;
