@@ -289,6 +289,23 @@ domainobjects = {
 			}
 		}
 	},
+	
+	'CodeshelfNetwork': {
+		'className':  'CodeshelfNetwork',
+		'properties': {
+			'domainId': {
+				'id':    'domainId',
+				'title': 'ID',
+				'width': 25
+			},
+			'persistentId': {
+				'id': 'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			}
+		}
+	},
+
 
 	'ContainerUse': {
 		'className':  'ContainerUse',
@@ -1009,6 +1026,43 @@ domainobjects = {
 				'formatter': metersFormatter
 			}
 
+		}
+	},
+	
+
+	'SiteController': {
+		'className':  'SiteController',
+		'properties': {
+			'domainId': {
+				'id':    'domainId',
+				'title': 'ID',
+				'width': 25
+			},
+			'persistentId': {
+				'id':    'persistentId',
+				'title': 'Persistent ID',
+				'width': 40
+			},
+			'location': {
+				'id':    'location',
+				'title': 'Location',
+				'width': 8
+			},
+			'role': {
+				'id': 'role',
+				'title': 'Role',
+				'width': 8
+			},
+			'networkDomainId': {
+				'id':    'networkDomainId',
+				'title': 'Network',
+				'width': 8
+			},
+			'channelUi': {
+				'id':    'channelUi',
+				'title': 'Channel',
+				'width': 8
+			}
 		}
 	},
 

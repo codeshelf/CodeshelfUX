@@ -27,6 +27,7 @@ goog.require('codeshelf.hierarchylistview');
 goog.require('codeshelf.listdemoview');
 goog.require('codeshelf.ordersview');
 goog.require('codeshelf.orderdetailsview');
+goog.require('codeshelf.sitecontrollerlistview');
 goog.require('codeshelf.templates');
 goog.require('codeshelf.window');
 goog.require('codeshelf.workareaeditorview');
@@ -165,6 +166,18 @@ codeshelf.windowLauncher = (function() {
 														 codeshelf.sessionGlobals.getFacility());
 				var cheListWindow = codeshelf.window(cheListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
 				cheListWindow.open();
+			}
+			catch (err) {
+                console.log(err);
+			}
+		},
+		
+		loadSiteControllerListView: function() {
+			try {
+				var siteControllerListView = codeshelf.sitecontrollerlistview(codeshelf.sessionGlobals.getWebsession(),
+														 					  codeshelf.sessionGlobals.getFacility());
+				var siteControllerListWindow = codeshelf.window(siteControllerListView, codeshelf.sessionGlobals.getDomNodeForNextWindow(), codeshelf.sessionGlobals.getWindowDragLimit());
+				siteControllerListWindow.open();
 			}
 			catch (err) {
                 console.log(err);
@@ -600,6 +613,11 @@ function launchCheListView() {
 }
 goog.exportSymbol('launchCheListView', launchCheListView);
 
+function launchSiteControllerListView() {
+	codeshelf.windowLauncher.loadSiteControllerListView();
+}
+goog.exportSymbol('launchSiteControllerListView', launchSiteControllerListView);
+
 function launchTierListView() {
 	codeshelf.windowLauncher.loadTierListView();
 }
@@ -667,6 +685,7 @@ function launchTestRunner() {
 	launchLedControllersListView();
 	launchLocationAliasesListView();
 	launchCheListView();
+	launchSiteControllerListView();
 	launchBayListView();
 	launchTierListView();
 	launchContainerUseListView();

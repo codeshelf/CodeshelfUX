@@ -1,0 +1,28 @@
+<form name="site-controller-form">
+	<div class="modal-header">
+		<h3>Change Site Controller</h3>
+	</div>
+	<div class="modal-body">
+	  	<div class="alert alert-danger" ng-repeat="(field, fieldErrors) in response.errors.fieldErrors">
+			<div ng-repeat="fieldError in fieldErrors">{{fieldError.message}}</div>
+		</div>
+      	
+		<div id='instructions'>
+			<!-- forcing separate lines on these instructions-->
+			<p>Enter Site Controller information.</p>
+		</div>
+
+		<p>Site Controller ID: <input type="text" name="domainid" ng-model="siteController.domainId"></p>
+		<p>Location: <input type="text" name="location" ng-model="siteController.location"></p>
+		<p>Network: 
+			<select ng-model="siteController.networkDomainId" ng-options="o.domainId as o.domainId for o in networks"></select>
+		</p>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" ng-click="controller.cancel()">Cancel</button>
+        <span ng-switch="mode">
+		  <button ng-switch-when="edit" class="btn btn-primary" ng-click="controller.edit()">Save</button>		  
+		  <button ng-switch-when="add" class="btn btn-primary" ng-click="controller.add()">Add</button>
+        </ngSwitch>
+	</div>
+</form>
