@@ -11,7 +11,7 @@ import FormFields from "components/common/FormFields";
 import Immutable, {fromJS, Record} from 'immutable';
 import uuid from 'node-uuid';
 
-// new imports redux 
+// new imports redux
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import Text from "data/types/Text";
@@ -38,7 +38,7 @@ class TemplateDisplay extends Component {
             {name: "active", label: "Active", type: Boolean},
             {name: "template", label: "Template", type: Text, required: true}]
         this.state = {
-            currentPage: 0,
+            currentPage: 1,
             pages: 2,
         }
         this.handleChange = (e) => this.props.acChangeOrderId(e.target.value)
@@ -94,6 +94,11 @@ class TemplateDisplay extends Component {
       const formData = this.props.selectedTemplateForm;
       const {orderId, preview} = this.props;
       console.info(preview);
+      const previewUrl = preview; //'https://test.codeshelf.com' + preview.substr(16);
+      const pdfInitParams = {
+        url: previewUrl,
+        withCredentials: true
+      };
       return (<ModalForm title="Edit Template" formData={formData} returnRoute={toURL(this.props, "../templates")}
                 onSave={() => this.handleSave()}>
                 <Col xs={10}>
@@ -111,7 +116,7 @@ class TemplateDisplay extends Component {
                         } />
                 </Col>
                 <Col xs={10}>
-                    { preview && <PDF page={this.state.currentPage} file={'https://test.codeshelf.com' + preview.substr(16)} onDocumentComplete={(pages) => this._onDocumentComplete(pages)}/>}
+                    { preview && <PDF page={this.state.currentPage} file={pdfInitParams} onDocumentComplete={(pages) => this._onDocumentComplete(pages)}/>}
                 </Col>
               </ModalForm>
             );
