@@ -20,6 +20,7 @@ const initState = new (Record({
     error: null,
     loading: null,
   },
+  view: 'graph', //table or graph
 }));
 
 function getDefaultFilter() {
@@ -38,6 +39,7 @@ const STATUS_ERROR = "error";
 
 const SET_FILTER = "WPCH - set filter ";
 const TOGGLE_EXPAND = "toggle expand";
+const TOGGLE_VIEW = "toggle view";
 
 const LOADING_PURPOSES = "loding purposes";
 
@@ -119,6 +121,9 @@ export function workerPickChartReducer(state = initState, action) {
         state = state.set("filter", getDefaultFilter());
       }
       return state.mergeIn(["filter"], new Map(filter));
+    }
+    case TOGGLE_VIEW: {
+      return state.set('view', state.view === 'graph' ? 'table': 'graph');
     }
     default: return state;
   }
@@ -244,5 +249,11 @@ export function acSearch(forceLoad) {
         dispatch(search(STATUS_OK, {data, filter}));
       }
     });
+  }
+}
+
+export function acToggleView() {
+  return {
+    type: TOGGLE_VIEW,
   }
 }
