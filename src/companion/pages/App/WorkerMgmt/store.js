@@ -48,8 +48,6 @@ export function acHandleImport(method, formData){
       return;
     }
 
-    console.info("meethod", method);
-
     return facilityContext[method](formData).then(() => {
       console.log(`import file finish OK`);
       acGetWorkers({limit: 5000});

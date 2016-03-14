@@ -20,7 +20,8 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import {getWorkerMgmtMutable} from "./get";
-import {acAddWorker, acUpdateWorker, acStoreSelectedWorkerForm, acUpdateSelectedWorker} from "./store";
+import {acAddWorker, acUpdateWorker, acStoreSelectedWorkerForm, 
+        acUpdateSelectedWorker, acUnsetError} from "./store";
 
 class WorkerDisplay extends Component {
 
@@ -94,9 +95,19 @@ class WorkerDisplay extends Component {
 
     render() {
       const formData = this.props.itemForm;
-      return (<ModalForm title="Edit Worker" formData={formData} returnRoute={toURL(this.props, "../workers")}
-                onSave={() => this.handleSave()}>
-                <FormFields formData={formData} formMetadata={this.formMetadata} handleChange={(formField, value) => this.handleChange(formField, value)} />
+      const error = this.props.addItem.get('error') ? 
+                    this.props.addItem.get('error') :
+                    this.props.updateItem.get('error');
+
+      return (<ModalForm title="Edit Worker" 
+                         formData={formData} 
+                         returnRoute={toURL(this.props, "../workers")}
+                         onSave={() => this.handleSave()}
+                         actionError={error}
+                         acUnsetError={this.props.acUnsetError}>
+                <FormFields formData={formData} 
+                            formMetadata={this.formMetadata} 
+                            handleChange={(formField, value) => this.handleChange(formField, value)} />
               </ModalForm>
             );
     }
@@ -132,7 +143,8 @@ WorkerDisplay.propTypes = {
 };
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acAddWorker, acUpdateWorker, acStoreSelectedWorkerForm, acUpdateSelectedWorker}, dispatch);
+  return bindActionCreators({acAddWorker, acUpdateWorker, acStoreSelectedWorkerForm, 
+                            acUpdateSelectedWorker, acUnsetError}, dispatch);
 }
 
 export default exposeRouter(connect(getWorkerMgmtMutable, mapDispatch)(WorkerDisplay));

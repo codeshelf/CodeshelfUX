@@ -54,6 +54,7 @@ class ModalForm extends React.Component{
             color: '#8D1414'
         };
         let errorMessage = "";
+
         if (actionError && actionError === 500) {
             errorMessage = "An error occurred on the server contact support and try again.";
 
