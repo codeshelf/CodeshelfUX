@@ -23,11 +23,22 @@ const initState = new (Record({
   view: 'graph', //table or graph
 }));
 
+
+function getCurrentTimeRounded(endtime, interval) {
+  if (interval.minutes()) {
+    const remainder = endtime.minute() % 5;
+    endtime.subtract('minutes', remainder);
+  } else if (interval.hours()) {
+    endtime.subtract('minutes', endtime.minute());
+  }
+  return endtime;
+}
+
 function getDefaultFilter() {
   return new (Record({
     interval: moment.duration(5, 'minutes'),
     window: moment.duration(2, 'hours'),
-    endtime: moment(),
+    endtime: getCurrentTimeRounded(moment(), moment.duration(5, 'minutes')),
     purposes: [],
   }));
 }
