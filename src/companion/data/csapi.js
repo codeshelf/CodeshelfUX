@@ -457,18 +457,16 @@ export function getAPIContext(selected) {
             var workersPath = basePath + "/workers";
             return ajax(workersPath, {
                 method: "POST",
-                data: JSON.stringify(worker),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json"
+                data: worker,
+                contentType: "form"
             });
         },
         updateWorker: function(worker) {
-            var workersPath = "/api/workers/" + worker.persistentId;
+            var workersPath = basePath + "/workers" + worker.domainId;
             return ajax(workersPath, {
-                method: "PUT",
-                data: JSON.stringify(worker),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json"
+              method: "POST",
+              data: worker,
+              contentType: "form"
             });
         },
 
