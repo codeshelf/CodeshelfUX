@@ -28,6 +28,14 @@ export function login(fields) {
 
 export function loginCookies() {
     return getUser()
+        .catch((e) => {
+          // babel does not support instance of when extending error object
+          if (e.name === 'ConnectionError') {
+            const err = new ConnectionError ('Server is unavailable, please contact support and try again later', 'password');
+            loginError(err);
+            throw error;
+          }
+        })
         .then((user) => {
             logged(user, null);
             return user;
