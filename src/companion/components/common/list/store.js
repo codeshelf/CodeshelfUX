@@ -34,7 +34,11 @@ const initState = new (Record({
     import: new Map({
       columns: ["received", "filename", "started", "processingTime", "ordersProcessed", "linesProcessed", "linesFailed", "status", "username"],
       sortSpecs: new Map({"started": {order:"desc"}}),
-    })
+    }),
+    workInstructions: new Map({
+        columns: ["itemMasterId", "status"],
+        sortSpecs: new Map({}),
+    }),
   }),
 }));
 

@@ -163,10 +163,9 @@ export default class WorkInstructionIBox extends React.Component{
                 <SearchStatus {...{results, errorMessage}} />
                 <PivotTable results={resultValues} options={pivotOptions} onDrillDown={this.handleDrillDown}/>
                 <ListManagement results={selected}
-                 columns={columns}
+                 storeName={"workInstructions"}
                  columnMetadata={this.columnMetadata}
                  keyColumn={keyColumn}
-                 sortSpecs={sortSpecs}
                  allowExport={true}/>
             </SingleCellIBox>);
     }
