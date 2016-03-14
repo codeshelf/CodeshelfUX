@@ -5,6 +5,7 @@ import {Link} from '../links';
 import {SearchInput} from "./SearchInput.react.js";
 import * as csapi from 'data/csapi';
 import {IBox} from '../IBox.react.js';
+import Infinite from 'react-infinite';
 
 export function createSearchComponent(ItemComponent, searchFieldText, getIdForItem) {
 
@@ -12,6 +13,7 @@ export function createSearchComponent(ItemComponent, searchFieldText, getIdForIt
   class SearchList extends Component {
     render() {
       const {isLoading, error, result, filter: {text: filterText}} = this.props;
+      const headerLength = 210; // for now bulgaria constant
       if (isLoading) {
         return <div> Loading...</div>;
       } else if (error) {
@@ -32,18 +34,25 @@ export function createSearchComponent(ItemComponent, searchFieldText, getIdForIt
       } else if (result === null) {
         return <div>No results</div>;
       }
+      
       return (
-        <Row>
-          <Col sm={12}>
-            Number of results: { result.total }
-            <ListGroup>
-            {result.results.map((oneResult) => {
-              return <ItemComponent key={getIdForItem(oneResult)} {...oneResult} filterText={filterText} />
-            })}
-            </ListGroup>
-            {/*"Orders:" + JSON.stringify(result)*/}
-          </Col>
-        </Row>
+        <div>
+          <Row>
+            <Col sm={12}>
+              Number of results: { result.total }
+              <Infinite containerHeight={screen.height - headerLength} 
+                        elementHeight={40}
+                        infiniteLoadBeginEdgeOffset={undefined}
+                        displayBottomUpwards={false}
+                        useWindowAsScrollContainer={false}>
+                {result.results.map((oneResult) => {
+                  return <ItemComponent key={getIdForItem(oneResult)} {...oneResult} 
+                                        filterText={filterText} />
+                })}
+              </Infinite>
+            </Col>
+          </Row>
+        </div>
       );
     }
   }
