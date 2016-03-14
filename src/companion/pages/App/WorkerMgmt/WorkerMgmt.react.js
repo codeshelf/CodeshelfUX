@@ -83,21 +83,22 @@ class WorkerMgmt extends Component{
     }
 
     handleImportSubmit(method, file) {
-        var formData = new FormData();
+        let formData = new FormData();
         formData.append("file", file);
         return this.props.acHandleImport(method, formData);
     }
 
     render() {
-        const {workers} = this.props;
+        const {table, items} = this.props;
         const title = "Manage Workers";
+
         return (
             <SingleCellLayout title={title}>
               <Authz permission="worker:import">
                   <UploadForm label="Workers"
                     onImportSubmit={(file) => this.handleImportSubmit("importWorkers", file)} />
               </Authz>
-              { workers.get('loading')
+              { items.get('loading')
                 ? <div>Loading...</div>
                 : <ListManagement
                     allowExport={true}
@@ -105,7 +106,7 @@ class WorkerMgmt extends Component{
                     storeName={'workersManagement'}
                     columnMetadata={this.columnMetadata}
                     rowActionComponent={this.rowActionComponent}
-                    results={workers.get('data')}
+                    results={items.get('data')}
                     keyColumn={keyColumn}/>
               }
               {this.props.children && React.cloneElement(this.props.children, { formMetadata: this.columnMetadata})}

@@ -1,9 +1,12 @@
-import {Map, Record, fromJS, List} from 'immutable';
+import {Map, Record, fromJS, List, Iterable} from 'immutable';
 
 import {getFacilityContextFromState} from "../../Facility/get";
 
 const defaultMutate = (data) => {
-  return data.toJS();
+  if (data && Iterable.isIterable(data)) {
+    return data.toJS();
+  }
+  return data;
 }
 
 const defaultUpdateItemCond = (item, action) => {
@@ -13,12 +16,17 @@ const defaultUpdateItemCond = (item, action) => {
   return item;
 }
 
+const getDefaultListDataFormat = (data) => {
+  return data;
+}
+
 /*
   getItems: function responsible for retreiving items
   addItem: function responsible for adding single item
   updateItem: function responsible for updating single item 
   useFacility: boolean which reflects if api functions use facilityContext
   mutateGet/Add/Update/Data: functions which mutate data to suitable form for api calls
+  getDataFormat: function which return spec data part for getItems section
   updateItemCond: function representing condition for map in updateItem section
 */
 export function createStore({storeName,
@@ -26,10 +34,13 @@ export function createStore({storeName,
                             addItem,
                             updateItem,
                             useFacility = false,
+                            getDataFormat = getDefaultListDataFormat,
                             mutateGetData = defaultMutate,
                             mutateAddData = defaultMutate,
                             mutateUpdateData = defaultMutate,
-                            updateItemCond = defaultUpdateItemCond
+                            updateItemCond = defaultUpdateItemCond,
+                            columns,
+                            sortSpecs
                             }) {
 
   const LOADING_STARTED = "LOADING_STARTED";
@@ -61,8 +72,8 @@ export function createStore({storeName,
     }),
     itemForm: null,
     table: {
-      columns: [],
-      sortSpecs: []
+      columns: columns ? columns : [],
+      sortSpecs: sortSpecs ? sortSpecs : []
     }
   }));
 
@@ -88,7 +99,7 @@ export function createStore({storeName,
               }
               case LOADING_OK: {
                   return state.mergeIn(['items'], new Map({
-                    data: action.data,
+                    data: getDataFormat(action.data),
                     loading: null,
                     error: null,
                   }));
@@ -179,44 +190,54 @@ export function createStore({storeName,
   }
 
 
-  const acLoadItems = () => {
+  const acLoadItems = (params) => {
     if (useFacility) {
-      return acLoadWithFacility();
+      return acLoadWithFacility(params);
     } else {
-      return acLoadWithoutFacility();
+      return acLoadWithoutFacility(params);
     }
   }
 
-  const acLoadWithFacility = () => {
+  const acLoadWithFacility = (params) => {
     return (dispatch, getState) => {
         dispatch(setStatus(GET_ITEMS, LOADING_STARTED));
 
         const facilityContext = getFacilityContextFromState(getState());
         if (!facilityContext) {
-            dispatch(getError(`Want to get workers but no facility context is provided`));
+            dispatch(getError(`Want to get items but no facility context is provided`));
             return;
         }
 
-        facilityContext.getItems().then((data) => {
+        let mutData = mutateAddData(params)
+        if (!Array.isArray(mutData)) {
+          mutData = [mutData];
+        }
+
+        facilityContext[getItems](...mutData).then((data) => {
             console.log(`data from getItems`, data);
             dispatch(setStatus(GET_ITEMS, LOADING_OK, data));
         }).catch((e) => {
             console.log(`error from getItems`, e);
-            dispatch(setStatus(GET_ITEMS, LOADING_ERROR, e.message));
+            dispatch(setStatus(GET_ITEMS, LOADING_ERROR, e.status));
         });
     }
   }
 
-  const acLoadWithoutFacility = () => {
+  const acLoadWithoutFacility = (params) => {
     return (dispatch, getState) => {
         dispatch(setStatus(GET_ITEMS, LOADING_STARTED));
 
-        return getItems().then((data) => {
+        let mutData = mutateAddData(params)
+        if (!Array.isArray(mutData)) {
+          mutData = [mutData];
+        }
+
+        return getItems(...mutData).then((data) => {
           console.log(`data from getItems`, data);
           dispatch(setStatus(GET_ITEMS, LOADING_OK, data));
         }).catch((e) => {
           console.log(`error from getItems`, e);
-          dispatch(setStatus(GET_ITEMS, LOADING_ERROR, e.message));
+          dispatch(setStatus(GET_ITEMS, LOADING_ERROR, e.status));
         });
       }
   }
@@ -244,12 +265,12 @@ export function createStore({storeName,
           mutData = [mutData];
         }
 
-        return facilityContext.addItem(...mutData).then((data) => {
+        return facilityContext[addItem](...mutData).then((data) => {
           console.log(`data from add item`, data);
           dispatch(setStatus(ADD_ITEM, LOADING_OK, data));
         }).catch((e) => {
           console.log(`error from add item`, e);
-          dispatch(setStatus(ADD_ITEM, LOADING_ERROR, e.message));
+          dispatch(setStatus(ADD_ITEM, LOADING_ERROR, e.status));
         });
      }
   }
@@ -268,7 +289,7 @@ export function createStore({storeName,
            dispatch(setStatus(ADD_ITEM, LOADING_OK, data));
         }).catch((e) => {
            console.log(`error from add item`, e);
-           dispatch(setStatus(ADD_ITEM, LOADING_ERROR, e.message));
+           dispatch(setStatus(ADD_ITEM, LOADING_ERROR, e.status));
         });
     }
   }
@@ -295,12 +316,12 @@ export function createStore({storeName,
           mutData = [mutData];
         }
 
-        return facilityContext.updateItem(...mutData).then((data) => {
+        return facilityContext[updateItem](...mutData).then((data) => {
             console.log(`data from updateItem`, data);
             dispatch(setStatus(UPDATE_ITEM, LOADING_OK, data));
         }).catch((e) => {
             console.log(`error from updateItem`, e);
-            dispatch(setStatus(UPDATE_ITEM, LOADING_ERROR, e.message));
+            dispatch(setStatus(UPDATE_ITEM, LOADING_ERROR, e.status));
         });
     }
   }
@@ -319,7 +340,7 @@ export function createStore({storeName,
         dispatch(setStatus(UPDATE_ITEM, LOADING_OK, data));
       }).catch((e) => {
          console.log(`error from updateItem`, e);
-         dispatch(setStatus(UPDATE_ITEM, LOADING_ERROR, e.message));
+         dispatch(setStatus(UPDATE_ITEM, LOADING_ERROR, e.status));
       }); 
     }
   }
@@ -354,12 +375,22 @@ export function createStore({storeName,
   }
 
   return {
+    LOADING_STARTED,
+    LOADING_OK,
+    LOADING_ERROR,
+    GET_ITEMS,
+    ADD_ITEM,
+    UPDATE_ITEM,
+    UPDATE_FORM,
+    STORE_FORM,
+    UNSET_ERROR,
     acUpdateForm,
     acStoreForm,
     acLoadItems,
     acAddItem,
     acUpdateItem,
     acUnsetError,
+    setStatus,
     listReducer
   };
 
