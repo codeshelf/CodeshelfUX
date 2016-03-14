@@ -67,6 +67,8 @@ gulp.task('eslint', function() {
         },
         'parser': 'babel-eslint',
         'env': {
+            'jasmine': true,
+            'mocha': true,
             'browser': true,
             'node': true,
             'es6': true
@@ -106,8 +108,8 @@ gulp.task('karma', function(done) {
 
 gulp.task('test', function(done) {
   // Run test tasks serially, because it doesn't make sense to build when tests
-  // are not passing, and it doesn't make sense to run tests, if lint 
-  // has failed. Gulp deps aren't helpful, because we want to run tasks 
+  // are not passing, and it doesn't make sense to run tests, if lint
+  // has failed. Gulp deps aren't helpful, because we want to run tasks
   // without deps as well.
   runSequence('eslint', 'jest', 'build-webpack-production', done);
 });
@@ -158,4 +160,3 @@ gulp.task('nightwatch', ['build-tests', 'build-pages'], function() {
       configFile: 'nightwatch.json'
     }));
 });
-
