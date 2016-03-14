@@ -116,7 +116,7 @@ export class UserForm extends React.Component{
             return u.id === parseInt(userId);
           });
           this.formMetadata = editFormMetadata;
-          this.title = `Edit ${userForm.username}`; 
+          this.title = `Edit ${userForm.username}`;
           props.acStoreSelectedUserForm(Map(userForm));
         }
       }
@@ -130,7 +130,7 @@ export class UserForm extends React.Component{
       const {formData, error, acUnsetError} = this.props;
 
       return (<DocumentTitle title={this.title}>
-              <ModalForm title={this.title} 
+              <ModalForm title={this.title}
                          returnRoute={this.returnRoute}
                          onSave={() => this.handleSave()}
                          formData={formData}

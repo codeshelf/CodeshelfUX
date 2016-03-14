@@ -49,6 +49,7 @@ class ModalForm extends React.Component{
         const {title, formData, actionError} = this.props;
         let {show} = this.state;
         const modalTitle = formData ? title : "Not Found";
+        const widthClass = this.props.widerModal ? "widerDialog" : "";
 
         if (actionError) {
             const errorStyle = {
@@ -56,9 +57,9 @@ class ModalForm extends React.Component{
             };
 
             return (
-                <Modal ref="modal" 
-                       show={show} 
-                       title={modalTitle} 
+                <Modal ref="modal"
+                       show={show}
+                       title={modalTitle}
                        onHide={this.handleClose}>
                     <Modal.Header>
                         <h5>{modalTitle}</h5>
@@ -72,14 +73,13 @@ class ModalForm extends React.Component{
             );
         }
         return (
-                <Modal ref="modal" show={show} title={modalTitle} onHide={this.handleClose}>
-                    <Modal.Header>
-                        <h5>{modalTitle}</h5>
-                        <h5>{actionError}</h5>
-                    </Modal.Header>
+          <Modal dialogClassName={widthClass} ref="modal" show={show} title={modalTitle} onHide={this.handleClose}>
+            <Modal.Header>
+              <h5>{modalTitle}</h5>
+              <h5>{actionError}</h5>
+            </Modal.Header>
                     { formData ? this.renderForm(formData, this.handleSave, this.handleClose ) : this.renderNotFound()}
-                </Modal>
-            );
+          </Modal>);
     }
 
     renderNotFound() {

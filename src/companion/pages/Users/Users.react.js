@@ -33,7 +33,11 @@ function mapStateToProps(state) {
   console.info("state", state, state.users);
 
   return {
+<<<<<<< HEAD
     users: state.users.items.get('data'),
+=======
+    users: state.users.users.get('data'),
+>>>>>>> columns-drag
     currentUser: state.currentUser || {username: getEmail()}
   }
 }

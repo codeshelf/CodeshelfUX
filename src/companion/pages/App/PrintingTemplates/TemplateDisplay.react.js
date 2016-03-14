@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import DocumentTitle from 'react-document-title';
-import {Modal, Button} from 'react-bootstrap';
+import {Modal, Button, Input, Row, Col} from 'react-bootstrap';
 import Icon from 'react-fa';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import classnames from 'classnames';
@@ -17,7 +17,10 @@ import {connect} from 'react-redux';
 import Text from "data/types/Text";
 
 import {getPrintingTemplatesMutable} from "./get";
-import {acAddTemplate, acUpdateTemplate, acStoreTemplateForm, acUpdateSelectedTemplate} from "./store";
+import {acAddTemplate, acUpdateTemplate, acStoreTemplateForm, acUpdateSelectedTemplate,
+    acChangeOrderId, acGetPdfPreview, NEWID, getPdf} from "./store";
+
+var PDF = require('react-pdf');
 
 const tmplate = new (Record({
     persistentId : "new",
@@ -33,7 +36,12 @@ class TemplateDisplay extends Component {
         this.formMetadata = [
             {name: "name", label: "Name", required: true},
             {name: "active", label: "Active", type: Boolean},
-            {name: "template", label: "Template", type: Text, required: true}];
+            {name: "template", label: "Template", type: Text, required: true}]
+        this.state = {
+            currentPage: 0,
+            pages: 2,
+        }
+        this.handleChange = (e) => this.props.acChangeOrderId(e.target.value)
     }
 
     componentWillMount() {
@@ -84,11 +92,34 @@ class TemplateDisplay extends Component {
 
     render() {
       const formData = this.props.selectedTemplateForm;
-      return (<ModalForm title="Edit Template" formData={formData} returnRoute={toURL(this.props, "../templates")}
+      const {orderId, preview} = this.props;
+      return (<ModalForm widerModal={true} title="Edit Template" formData={formData} returnRoute={toURL(this.props, "../templates")}
                 onSave={() => this.handleSave()}>
-                <FormFields formData={formData} formMetadata={this.formMetadata} handleChange={(formField, value) => this.handleChange(formField, value)} />
+                <Row>
+                    <Col xs={6}>
+                        <FormFields formData={formData} formMetadata={this.formMetadata} handleChange={(formField, value) => this.handleChange(formField, value)} />
+                          <Input
+                            type="text"
+                            value={orderId}
+                            hasFeedback
+                            ref="input"
+                            groupClassName="group-class"
+                            labelClassName="label-class"
+                            onChange={this.handleChange}
+                            buttonAfter={
+                                <Button bsStyle="primary" onClick={() => this.props.acGetPdfPreview(orderId, '')}><Icon name="search"/></Button>
+                            } />
+                    </Col>
+                    <Col xs={6}>
+                        { preview && <PDF scale={0.75} file={'https://test.codeshelf.com' + preview.substr(16)} onDocumentComplete={(pages) => this._onDocumentComplete(pages)}/>}
+                    </Col>
+                </Row>
               </ModalForm>
             );
+    }
+
+    _onDocumentComplete(pages) {
+      this.setState({pages: pages});
     }
 
     renderNotFound() {
@@ -105,7 +136,7 @@ TemplateDisplay.propTypes = {
 };
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acAddTemplate, acUpdateTemplate, acStoreTemplateForm, acUpdateSelectedTemplate}, dispatch);
+  return bindActionCreators({acAddTemplate, acUpdateTemplate, acStoreTemplateForm, acUpdateSelectedTemplate, acChangeOrderId, acGetPdfPreview, getPdf}, dispatch);
 }
 
 export default exposeRouter(connect(getPrintingTemplatesMutable, mapDispatch)(TemplateDisplay));

@@ -18,7 +18,7 @@ const getUpdateData = (data) => {
 }
 
 const store = createStore({
-                          storeName: "users", 
+                          storeName: "users",
                           getItems: getUsers,
                           addItem: createUser,
                           updateItem: updateUser,
