@@ -104,7 +104,7 @@ codeshelf.sitecontrollerlistview = function(websession, facility) {
 			var prompt = "Make Site Controller " + siteController['domainId'] + " primary on network " + siteController['networkDomainId'] + "? Site Controllers on that network will restart.";
 			codeshelf.simpleDlogService.showModalDialog("Confirm", prompt, {})
             	.then(function() {
-            		websession_.callMethod(siteController, 'SiteController', 'makePrimaryForNetwork', []);
+            		websession_.callServiceMethod("UiUpdateBehavior", 'makeSiteControllerPrimaryForNetwork', [siteController['persistentId']]);
                	});
        	}
     };
