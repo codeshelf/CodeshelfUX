@@ -1,11 +1,12 @@
-
 import Promise from "bluebird";
 
+
+const simpleTemplate = 'import static net.sf.dynamicreports.report.builder.DynamicReports.*; reportBuilder.title(cmp.text("Order"))';
 export let data = { results: [
   {persistentId: '123',
    name: 'First',
    active: true,
-   template: 'Hi this is first',},
+   template: simpleTemplate},
    {persistentId: '456',
     name: 'Second',
     active: true,
