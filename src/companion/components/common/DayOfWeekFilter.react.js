@@ -2,6 +2,7 @@ import React from 'react';
 import {ButtonGroup, Button} from 'react-bootstrap';
 import {IBox, IBoxTitleBar, IBoxTitleText, IBoxSection} from "components/common/IBox";
 import moment from 'moment';
+import _ from 'lodash';
 
 class ButtonFilter extends  React.Component {
 

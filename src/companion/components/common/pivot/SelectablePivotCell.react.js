@@ -2,8 +2,9 @@
 /*jshint eqnull: true*/
 
 'use strict';
-import React from "react";
-var classNames = require('classnames');
+import React from 'react';
+import _ from 'lodash';
+import classNames from 'classnames';
 import {extractDimensions, matchDimensions} from "./celldimensions";
 
 export default function selectableCell(Component, selectedFunc) {

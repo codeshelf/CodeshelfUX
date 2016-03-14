@@ -3,7 +3,6 @@ import sd from "skin-deep";
 import {SingleCellIBox} from "components/common/IBox";
 
 describe("SingleCellIBox", () => {
-    debugger;
     it("Shows refresh when is refreshing", () => {
         const isRefreshing = true;
         const onRefresh = () => {};
