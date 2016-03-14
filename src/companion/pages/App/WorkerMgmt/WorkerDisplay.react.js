@@ -20,7 +20,8 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import {getWorkerMgmtMutable} from "./get";
-import {acAddWorker, acUpdateWorker, acStoreSelectedWorkerForm, acUpdateSelectedWorker} from "./store";
+import {acAddWorker, acUpdateWorker, acStoreSelectedWorkerForm, 
+        acUpdateSelectedWorker, acUnsetError} from "./store";
 
 class WorkerDisplay extends Component {
 
@@ -52,13 +53,13 @@ class WorkerDisplay extends Component {
             workerId = props.params.workerId;
         }
 
-        let workerForm = this.props.selectedWorkerForm;
+        let workerForm = this.props.itemForm;
         if (!workerForm || workerForm.get('persistentId') !== workerId) {
             if (workerId === "new") {
                 workerForm = Worker();
                 this.props.acStoreSelectedWorkerForm(workerForm);
             } else {
-                workerForm = this.props.workers.get('data').find((worker) => worker.persistentId === workerId);
+                workerForm = this.props.items.get('data').find((worker) => worker.persistentId === workerId);
                 this.props.acStoreSelectedWorkerForm(fromJS(workerForm));
             }
         }
@@ -79,7 +80,7 @@ class WorkerDisplay extends Component {
     }
 
     handleSave() {
-        const selectedWorkerForm = this.props.selectedWorkerForm;
+        const selectedWorkerForm = this.props.itemForm;
         const id = selectedWorkerForm.persistentId;
         let promise;
         if (id === NEWID) {
@@ -93,10 +94,20 @@ class WorkerDisplay extends Component {
 
 
     render() {
-      const formData = this.props.selectedWorkerForm;
-      return (<ModalForm title="Edit Worker" formData={formData} returnRoute={toURL(this.props, "../workers")}
-                onSave={() => this.handleSave()}>
-                <FormFields formData={formData} formMetadata={this.formMetadata} handleChange={(formField, value) => this.handleChange(formField, value)} />
+      const formData = this.props.itemForm;
+      const error = this.props.addItem.get('error') ? 
+                    this.props.addItem.get('error') :
+                    this.props.updateItem.get('error');
+
+      return (<ModalForm title="Edit Worker" 
+                         formData={formData} 
+                         returnRoute={toURL(this.props, "../workers")}
+                         onSave={() => this.handleSave()}
+                         actionError={error}
+                         acUnsetError={this.props.acUnsetError}>
+                <FormFields formData={formData} 
+                            formMetadata={this.formMetadata} 
+                            handleChange={(formField, value) => this.handleChange(formField, value)} />
               </ModalForm>
             );
     }
@@ -110,9 +121,9 @@ class WorkerDisplay extends Component {
     renderBarcodeGeneratorComponent (name) {
         function setBadgeId() {
             const barCode = this.generateBarcode();
-            const selectedWorkerForm = this.props.selectedWorkerForm;
+            const selectedWorkerForm = this.props.itemForm;
             this.props.acStoreSelectedWorkerForm(selectedWorkerForm.set(name, barCode));
-            this.refs[objField].getInputDOMNode().focus();
+            //this.refs[objField].getInputDOMNode().focus();
         };
 
         return <Button id="generateBadgeId" bsStyle="link" onClick={setBadgeId.bind(this)}><Icon name="barcode" size="2x" /></Button>;
@@ -132,7 +143,8 @@ WorkerDisplay.propTypes = {
 };
 
 function mapDispatch(dispatch) {
-  return bindActionCreators({acAddWorker, acUpdateWorker, acStoreSelectedWorkerForm, acUpdateSelectedWorker}, dispatch);
+  return bindActionCreators({acAddWorker, acUpdateWorker, acStoreSelectedWorkerForm, 
+                            acUpdateSelectedWorker, acUnsetError}, dispatch);
 }
 
 export default exposeRouter(connect(getWorkerMgmtMutable, mapDispatch)(WorkerDisplay));
