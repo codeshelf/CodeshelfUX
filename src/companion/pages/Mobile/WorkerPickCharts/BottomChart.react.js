@@ -90,7 +90,7 @@ export class BottomChart extends Component {
           {(width) => (
             <div>
               {desktop &&
-                <Button bsStyle="link" bsSize="md" onClick={() => this.props.acToggleView()}>
+                <Button bsStyle="link" onClick={() => this.props.acToggleView()}>
                   Change view
                 </Button>}
               {view === 'graph'
