@@ -55,9 +55,45 @@ gulp.task('eslint', function() {
       'src/companion/**/*.js',
       'webpack/*.js'
     ])
-    .pipe(eslint())
-    .pipe(eslint.format());
-    //.pipe(eslint.failOnError());
+    .pipe(eslint({
+        'parserOptions': {
+            'ecmaVersion': 6,
+            'sourceType': 'module',
+            'ecmaFeatures': {
+                'jsx': true,
+                'impliedStrict': true,
+                'experimentalObjectRestSpread': true
+            }
+        },
+        'parser': 'babel-eslint',
+        'env': {
+            'browser': true,
+            'node': true,
+            'es6': true
+        },
+        'rules': {
+            'no-empty': 1,
+            'no-debugger': 2,
+            'no-alert': 1,
+            'no-delete-var': 1,
+            'no-undef': 2,
+            'no-unused-vars': 1,
+            'no-this-before-super': 2,
+            'constructor-super': 2,
+            'no-dupe-keys': 1,
+            'no-duplicate-case': 1,
+            'no-sparse-arrays': 1,
+            'no-unreachable': 1,
+            'use-isnan': 1,
+            'valid-typeof': 1,
+            'indent': [1, 2],
+            'max-len': [1, 80, 4],
+            'eol-last': 1,
+            'no-trailing-spaces': 1
+        }
+    }))
+    .pipe(eslint.format())
+    .pipe(eslint.failOnError());
 });
 
 gulp.task('karma-ci', function(done) {
@@ -70,8 +106,9 @@ gulp.task('karma', function(done) {
 
 gulp.task('test', function(done) {
   // Run test tasks serially, because it doesn't make sense to build when tests
-  // are not passing, and it doesn't make sense to run tests, if lint has failed.
-  // Gulp deps aren't helpful, because we want to run tasks without deps as well.
+  // are not passing, and it doesn't make sense to run tests, if lint 
+  // has failed. Gulp deps aren't helpful, because we want to run tasks 
+  // without deps as well.
   runSequence('eslint', 'jest', 'build-webpack-production', done);
 });
 
@@ -121,3 +158,4 @@ gulp.task('nightwatch', ['build-tests', 'build-pages'], function() {
       configFile: 'nightwatch.json'
     }));
 });
+

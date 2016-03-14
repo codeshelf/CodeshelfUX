@@ -68,7 +68,7 @@
   "devDependencies": {
     "autoprefixer-loader": "^1.2.0",
     "babel-core": "^6.2.1",
-    "babel-eslint": "3.1.30",
+    "babel-eslint": "^5.0.0",
     "babel-loader": "^6.2.0",
     "babel-plugin-add-module-exports": "^0.1.2",
     "babel-plugin-extensible-destructuring": "^2.0.0",
@@ -90,7 +90,7 @@
     "gulp-babel": "^6.1.2",
     "gulp-bg": "0.0.5",
     "gulp-closure-compiler": "^0.2.17",
-    "gulp-eslint": "^0.8.0",
+    "gulp-eslint": "^2.0.0",
     "gulp-nightwatch": "^0.2.9",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-util": "^3.0.2",
