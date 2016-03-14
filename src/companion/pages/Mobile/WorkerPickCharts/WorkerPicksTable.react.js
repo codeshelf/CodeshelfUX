@@ -3,87 +3,21 @@ import {Panel, Tabs, Tab, Row, Col, Button, ListGroup, ListGroupItem, Badge} fro
 import Icon from 'react-fa';
 import {WidthWrapper} from "./WidthWrapper.react.js";
 import d3 from "d3";
-import moment from 'moment';
 import ReactFauxDOM from 'react-faux-dom';
 import {TAB_PRODUCTIVITY} from '../../Detail/WorkerDetail/store';
 import {convertTab} from '../../Detail/WorkerDetail/WorkerDetail.react.js';
 import {Map, Record} from "immutable";
 import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../../links';
-import ListView from "components/common/list/ListView";
-import ListManagement from "components/common/list/ListManagement";
 
-export class BottomChart extends Component {
-
-  printChart(node, bins, style) {
-    const showBottomLables = this.props.desktop;
-    const rangeTo = showBottomLables ? 10 : 0;
-    const {height, width, margin} = style;
-    const barWidth = width/bins.length;
-    const xRange = d3.scale.linear()
-        .domain([0, bins.length])
-        .range([margin, width - margin])
-    const yRange = d3.scale.linear().range([height - 2 * margin, rangeTo]).domain([ 0,
-      d3.max(bins, (d) => d)
-    ])
-    const svg = d3.select(node)
-      .attr("width", width)
-      .attr("height", height + 10);
-
-    let bar = svg.selectAll(".bottom-bar")
-        .data(bins)
-      .enter().append("g")
-        .attr("class", "bottom-bar")
-        .attr("transform", (d, i) => "translate(" + i * barWidth + "," + (yRange(d) + rangeTo) + ")")
-
-    bar.append("rect")
-          .attr("width", (width - 2 * margin)/bins.length)
-          .attr("height", (d) => ((height -  2 * margin) - yRange(d)))
-          .attr("fill", "grey");
-
-    if (showBottomLables) {
-      bar.append("text")
-            .attr("dy", "0.75em")
-            .attr("y", -15)
-            .attr("x", barWidth/2)
-            .attr("text-anchor", "middle")
-            .text((d) => d !== 0 ? d : null);
-    }
-
-    return node;
-  }
-
+export class WorkerPicksTable extends Component {
 
   render() {
-
     const {whatIsLoading, whatIsLoaded, filter, desktop, view} = this.props;
     if (whatIsLoading !== null || whatIsLoaded === null) {
       return null;
     } else {
       //return <div>{this.props.data && JSON.stringify(this.props.data[1])}</div>;
       const WorkerHistogramFilter = Record(Map(filter).set("id", null).toJS());
-
-      const columns = ['id'].concat(this.props.data[0].bins.map((bin, index) => index.toString()));
-      const results = this.props.data[1].map((obj) => {
-        const events = obj.events.bins;
-        const result = {
-          id: obj.worker.domainId,
-        };
-        events.map((event, index) => {
-          result[index] = event.value;
-        })
-        return result;
-      });
-      const columnsMetaData = ListView.toColumnMetadata([{
-            columnName: "id",
-            displayName: "ID"
-        }].concat(this.props.data[0].bins.map((bin, index) => {
-          const startTime = moment.utc(bin.start).format('dd HH:mm');
-          const endTime = moment.utc(bin.start).add('minutes', filter.interval.asMinutes()).format('dd HH:mm');
-          return {
-            columnName: index.toString(),
-            displayName: startTime + " - " + endTime,
-          }
-        })));
       return (
         <Panel header="Worker Picks">
           <WidthWrapper>
@@ -132,11 +66,7 @@ export class BottomChart extends Component {
                     })
                   }
                 </ListGroup>)
-               : <ListManagement
-                      allowExport={true}
-                      columns={columns}
-                      columnMetadata={columnsMetaData}
-                      results={results}/>}
+               : <WorkerPicksTable></WorkerPicksTable>}
               </div>)}
           </WidthWrapper>
         </Panel>

@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {IBox} from '../../IBox.react.js';
 import {getWorkerPickChartMutable} from "./get";
-import {acSetDefaultFilter, acSetFilter, acSearch, acRefresh, acGetPurposes, acSetFilterAndRefresh} from "./store";
+import {acSetDefaultFilter, acSetFilter, acSearch, acRefresh, acGetPurposes, acSetFilterAndRefresh, acToggleView} from "./store";
 import {acSetProductivityFilter} from "../../Detail/WorkerDetail/store";
 
 import {TopChart} from "./TopChart";
@@ -39,7 +39,7 @@ class WorkerPickCharts extends Component {
 
 function mapDispatch(dispatch) {
   return bindActionCreators({acSetDefaultFilter, acSetFilter, acSearch, acRefresh,
-                             acSetProductivityFilter, acGetPurposes, acSetFilterAndRefresh}, dispatch);
+                             acSetProductivityFilter, acGetPurposes, acSetFilterAndRefresh, acToggleView}, dispatch);
 }
 
 export default connect(getWorkerPickChartMutable, mapDispatch)(WorkerPickCharts);
