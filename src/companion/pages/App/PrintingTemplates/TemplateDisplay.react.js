@@ -93,26 +93,27 @@ class TemplateDisplay extends Component {
     render() {
       const formData = this.props.selectedTemplateForm;
       const {orderId, preview} = this.props;
-      console.info(preview);
-      return (<ModalForm title="Edit Template" formData={formData} returnRoute={toURL(this.props, "../templates")}
+      return (<ModalForm widerModal={true} title="Edit Template" formData={formData} returnRoute={toURL(this.props, "../templates")}
                 onSave={() => this.handleSave()}>
-                <Col xs={10}>
-                    <FormFields formData={formData} formMetadata={this.formMetadata} handleChange={(formField, value) => this.handleChange(formField, value)} />
-                      <Input
-                        type="text"
-                        value={orderId}
-                        hasFeedback
-                        ref="input"
-                        groupClassName="group-class"
-                        labelClassName="label-class"
-                        onChange={this.handleChange}
-                        buttonAfter={
-                            <Button bsStyle="primary" onClick={() => this.props.acGetPdfPreview(orderId, '')}><Icon name="search"/></Button>
-                        } />
-                </Col>
-                <Col xs={10}>
-                    { preview && <PDF page={this.state.currentPage} file={'https://test.codeshelf.com' + preview.substr(16)} onDocumentComplete={(pages) => this._onDocumentComplete(pages)}/>}
-                </Col>
+                <Row>
+                    <Col xs={6}>
+                        <FormFields formData={formData} formMetadata={this.formMetadata} handleChange={(formField, value) => this.handleChange(formField, value)} />
+                          <Input
+                            type="text"
+                            value={orderId}
+                            hasFeedback
+                            ref="input"
+                            groupClassName="group-class"
+                            labelClassName="label-class"
+                            onChange={this.handleChange}
+                            buttonAfter={
+                                <Button bsStyle="primary" onClick={() => this.props.acGetPdfPreview(orderId, '')}><Icon name="search"/></Button>
+                            } />
+                    </Col>
+                    <Col xs={6}>
+                        { preview && <PDF scale={0.75} file={'https://test.codeshelf.com' + preview.substr(16)} onDocumentComplete={(pages) => this._onDocumentComplete(pages)}/>}
+                    </Col>
+                </Row>
               </ModalForm>
             );
     }
