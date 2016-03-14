@@ -10,6 +10,6 @@ export default {
 
     page.expect.element('@username').to.be.present.before(1000);
     page.login(username, password);
-    browser.end();
-  }
+    browser.getCookies(function(coo){browser.globals.cookie = coo;});
+  },
 };
