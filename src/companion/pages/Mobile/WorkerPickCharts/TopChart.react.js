@@ -61,7 +61,7 @@ export class PurposePicker extends Component {
                      if (add && purposes.indexOf(value) === -1) {
                        purposes.push(value);
                      } else {
-                       purposes = purposes.filter((element, i) => element !== value);
+                       purposes = purposes.filter((element) => element !== value);
                      }
                      const newFilter =  this.props.filter.set('purposes', purposes);
                      onSelect(newFilter);
@@ -73,13 +73,13 @@ export class PurposePicker extends Component {
 
 class ChartNavigation extends Component {
 
-  changeEndTime(filter, momentMethod, e) {
+  changeEndTime(filter, momentMethod) {
     const {endtime, window} = filter;
     const newEndTime = moment(endtime)[momentMethod](window);
     this.props.onChange(filter.set('endtime', newEndTime));
   }
 
-  moveOneBucket(filter, momentMethod, e) {
+  moveOneBucket(filter, momentMethod) {
     const {endtime, interval} = filter;
     const newEndTime = moment(endtime)[momentMethod](interval);
     this.props.onChange(filter.set('endtime', newEndTime));

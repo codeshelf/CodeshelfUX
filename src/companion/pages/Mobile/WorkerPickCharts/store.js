@@ -136,7 +136,7 @@ export function workerPickChartReducer(state = initState, action) {
 }
 
 export function acSetDefaultFilter() {
-  return (dispatch, getState) => {
+  return (dispatch, getState) => { // eslint-disable-line no-unused-vars
     dispatch(acSetFilter(getDefaultFilter()));
     dispatch(acSearch(true));
   }
@@ -205,7 +205,7 @@ export function acGetPurposes() {
     }
 
     facilityContext.getEventPurposes()
-    .catch((error) => {
+    .catch((error) => { // eslint-disable-line no-unused-vars
         dispatch(getPurposes(STATUS_ERROR));
     })
     .then((data) => {
