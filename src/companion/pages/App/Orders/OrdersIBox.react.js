@@ -6,13 +6,109 @@ import moment from "moment";
 import {SingleCellLayout, Row1} from "components/common/pagelayout";
 import {IBox} from "pages/IBox";
 import {SingleCellIBox} from 'components/common/IBox';
-import PivotTable from "components/common/pivot/PivotTable";
+import Pivot from "components/common/pivot/Pivot";
+import CrossTab from "components/common/pivot/CrossTab";
 import OrderSearch from "./OrderSearch";
 import OrderReview from "./OrderReview";
 import Promise from "bluebird";
 import search from "data/search";
 import {getAPIContext} from "data/csapi";
 import SearchStatus from "components/common/SearchStatus";
+
+const groupValues = {
+  "status" : [
+    { name: "COMPLETE", selected: true },
+    { name: "RELEASED", selected: true },
+    { name: "SHORT", selected: true },
+    { name: "INPROGRESS", selected: true }
+
+  ],
+  "customerId" : [
+    { name: "L7", selected: true },
+    { name: "B6", selected: true }
+  ]
+};
+
+let columnGroups = ['status'];
+
+let rowGroups = ['customerId'];
+
+function changeGroup(name) {
+  const notGroup = (g) => g.name !== name;
+  const column = columnGroups.includes(name);
+  if (column) {
+    columnGroups = columnGroups.filter(notGroup);
+    rowGroups.push(name);
+  } else {
+    rowGroups = rowGroups.filter(notGroup);
+    columnGroups.push(name);
+  }
+}
+
+function removeGroup(name) {
+  const notGroup = (g) => g.name !== name;
+  const column = columnGroups.includes(name);
+  if (column) {
+    columnGroups = columnGroups.filter(notGroup);
+  } else {
+    rowGroups = rowGroups.filter(notGroup);
+  }
+}
+
+const availableGroups = [
+  {
+                        name: 'status',
+                        label: 'Status',
+                        sort: {order: "asc"}
+                        },
+                    {name: "pivotDetailCount",
+                     label: "Lines"},
+                    {name: "pivotRemainingDetailCount",
+                     label: "Lines Remaining"},
+
+                     {name: "caseQuantity",
+                    label: "Cases",
+                     dataSettings: {aggregateFunc: 'sum'}
+                    },
+                    {name: "eachQuantity",
+                    label: "Eaches",
+                    dataSettings: {aggregateFunc: 'sum'}
+                    },
+                    {name: "otherQuantity",
+                     label: "Other UOM",
+                     dataSettings: {aggregateFunc: 'sum'}
+                     },
+                    {
+                        name: 'customerId',
+                        label: 'Customer',
+                        sort: { order: "asc"}
+                    },
+                    {
+                        name: 'destinationId',
+                        label: 'Destination',
+                        sort: { order: "asc"}
+                    },
+                    {
+                        name: "shipperId",
+                        label: "Shipper",
+                        sort: { order: "asc"}
+                    },
+                    {
+                        name: "dueDay",
+                        label: "Date Due",
+                        sort: { order: "asc"}
+                    },
+                    {
+                        name: "dueTime",
+                        label: "Time Due",
+                        sort: { order: "asc"}
+                    },
+                    {
+                      name: "orderType",
+                      label: "Type",
+                      sort: { order: "asc"}
+                    }
+                ];
 
 export default class OrdersIBox extends React.Component{
 
@@ -127,6 +223,10 @@ export default class OrdersIBox extends React.Component{
         let pivotOptions = this.pivotOptionsCursor;
         let columns = this.columnsCursor;
         let sortSpecs = this.columnSortSpecsCursor;
+        const groupControls = {
+          remove: removeGroup,
+          change: changeGroup
+        };
         return (
             <IBox
               title={this.title}
@@ -136,7 +236,11 @@ export default class OrdersIBox extends React.Component{
                   <OrderSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
                 </Row1>
                 <SearchStatus {...{results, errorMessage}} />
-                <PivotTable results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
+                <Pivot {...{availableGroups, groupValues, rowGroups, columnGroups}}
+                       {...{groupControls}}
+                       results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}>
+                   <CrossTab />
+                </Pivot>
                 <OrderReview orders={selected} columns={columns} sortSpecs={sortSpecs}/>
             </IBox>);
     }
