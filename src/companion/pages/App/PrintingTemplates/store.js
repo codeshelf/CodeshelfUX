@@ -243,7 +243,6 @@ export function acGetPdfPreview(orderId, script) {
 
     facilityContext.getTemplatePreview(orderId, script).then((data) => {
       console.log(`data from updateTemplate`, data);
-      console.info(data.location);
       dispatch({
         type: GET_PREVIEW,
         data: data.location,
