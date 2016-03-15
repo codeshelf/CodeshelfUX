@@ -463,7 +463,7 @@ export function getAPIContext(selected) {
             });
         },
         updateWorker: function(worker) {
-            var workersPath = basePath + "/workers" + worker.domainId;
+            const workersPath = basePath + "/workers/" + worker.domainId;
             return ajax(workersPath, {
               method: "POST",
               data: worker,

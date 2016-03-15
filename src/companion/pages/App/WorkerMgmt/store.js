@@ -8,7 +8,7 @@ const getDataFormat = (data) => {
 }
 
 const updateItemCond = (item, action) => {
-  if (item.persistentId == action.data.persistentId) {
+  if (item.persistentId === action.data.persistentId) {
     return action.data;
   }
   return item;
@@ -44,7 +44,8 @@ export function acHandleImport(method, formData){
 
     const facilityContext = getFacilityContextFromState(getState());
     if (!facilityContext) {
-      dispatch(getError(`Want to import file but no facility context is provided`));
+      console.error(`Want to import file but no facility context is provided`);
+      //dispatch(getError(`Want to import file but no facility context is provided`));
       return;
     }
 

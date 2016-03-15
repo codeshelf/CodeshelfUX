@@ -1,14 +1,12 @@
-import React, {Component} from 'react';
-import {Panel, Tabs, Tab, Row, Col, Button, ListGroup, ListGroupItem, Badge} from 'react-bootstrap';
+import {Component} from 'react';
+import {Panel, Button, ListGroup} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {WidthWrapper} from "./WidthWrapper.react.js";
 import d3 from "d3";
 import moment from 'moment';
 import ReactFauxDOM from 'react-faux-dom';
-import {TAB_PRODUCTIVITY} from '../../Detail/WorkerDetail/store';
-import {convertTab} from '../../Detail/WorkerDetail/WorkerDetail.react.js';
 import {Map, Record} from "immutable";
-import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../../links';
+import {ListGroupItemLink} from '../../links';
 import ListView from "components/common/list/ListView";
 import ListManagement from "components/common/list/ListManagement";
 
@@ -19,12 +17,14 @@ export class BottomChart extends Component {
     const rangeTo = showBottomLables ? 10 : 0;
     const {height, width, margin} = style;
     const barWidth = width/bins.length;
-    const xRange = d3.scale.linear()
+
+    // may be used later
+    /*const xRange = d3.scale.linear()
         .domain([0, bins.length])
-        .range([margin, width - margin])
-    const yRange = d3.scale.linear().range([height - 2 * margin, rangeTo]).domain([ 0,
-      d3.max(bins, (d) => d)
-    ])
+        .range([margin, width - margin])*/
+    const yRange = d3.scale.linear()
+                           .range([height - 2 * margin, rangeTo])
+                           .domain([0,d3.max(bins, (d) => d)])
     const svg = d3.select(node)
       .attr("width", width)
       .attr("height", height + 10);
@@ -33,7 +33,8 @@ export class BottomChart extends Component {
         .data(bins)
       .enter().append("g")
         .attr("class", "bottom-bar")
-        .attr("transform", (d, i) => "translate(" + i * barWidth + "," + (yRange(d) + rangeTo) + ")")
+        .attr("transform", (d, i) =>
+              "translate(" + i * barWidth + "," + (yRange(d) + rangeTo) + ")")
 
     bar.append("rect")
           .attr("width", (width - 2 * margin)/bins.length)
@@ -60,9 +61,14 @@ export class BottomChart extends Component {
       return null;
     } else {
       //return <div>{this.props.data && JSON.stringify(this.props.data[1])}</div>;
-      const WorkerHistogramFilter = Record(Map(filter).set("id", null).toJS());
+      const WorkerHistogramFilter = Record(Map(filter).set("id", null)
+                                                      .toJS()
+                                           );
 
-      const columns = ['id'].concat(this.props.data[0].bins.map((bin, index) => index.toString()));
+      const columns = ['id'].concat(this.props.data[0]
+                                              .bins
+                                              .map((bin, index) =>
+                                                    index.toString()));
       const results = this.props.data[1].map((obj) => {
         const events = obj.events.bins;
         const result = {
@@ -78,7 +84,9 @@ export class BottomChart extends Component {
             displayName: "ID"
         }].concat(this.props.data[0].bins.map((bin, index) => {
           const startTime = moment.utc(bin.start).format('dd HH:mm');
-          const endTime = moment.utc(bin.start).add('minutes', filter.interval.asMinutes()).format('dd HH:mm');
+          const endTime = moment.utc(bin.start)
+                                .add('minutes', filter.interval.asMinutes())
+                                .format('dd HH:mm');
           return {
             columnName: index.toString(),
             displayName: startTime + " - " + endTime,
@@ -106,28 +114,38 @@ export class BottomChart extends Component {
                         height:20,
                         margin:0
                       };
-                      const chart = this.printChart(ReactFauxDOM.createElement('svg'), eventBins, style);
+                      const chart = this.printChart(ReactFauxDOM.createElement('svg'),
+                                                    eventBins, style);
                       const filterWithId = WorkerHistogramFilter(filter).set("id", workerId);
                       // temporarly disable links
+                      const to = desktop ? 'worker' : 'workers';
+
                       return (
-                          <div>
-                            <ListGroupItemLink
-                                style={{display: "flex", alignItems: "center"}}
-                                to={`${desktop ? "worker": "workers"}/${encodeURIComponent(workerId)}/productivity`}
-                                onClick={() => this.props.acSetProductivityFilter(workerId, filterWithId)}
-                                shouldHaveFacility={true}>
-                              <div style={{display: "flex", flexWrap: "wrap"}}>
-                                <div style={{textAlign: "left", width: "100%", flexShrink: "0"}}>
-                                  <div>{workerName}</div>
-                                </div>
-                                <div style={{display: "flex", alignItems: "center"}}>
-                                  <div style={{}}>{totalEvents}</div>
-                                  {chart.toReact()}
-                                </div>
+                        <div>
+                          <ListGroupItemLink
+                              style={{display: "flex", alignItems: "center"}}
+                              to={`${to}/${encodeURIComponent(workerId)}/productivity`}
+                              onClick={() => this.props.acSetProductivityFilter(
+                                          workerId, filterWithId
+                                      )}
+                              shouldHaveFacility={true}>
+                            <div style={{display: "flex",
+                                         flexWrap: "wrap"}}>
+                              <div style={{textAlign: "left",
+                                           width: "100%",
+                                           flexShrink: "0"}}>
+                                <div>{workerName}</div>
                               </div>
-                              <Icon name="chevron-right" className="pull-right" style={{marginTop: "-.25em"}}/>
-                            </ListGroupItemLink>
-                          </div>
+                              <div style={{display: "flex", alignItems: "center"}}>
+                                <div style={{}}>{totalEvents}</div>
+                                {chart.toReact()}
+                              </div>
+                            </div>
+                            <Icon name="chevron-right"
+                                  className="pull-right"
+                                  style={{marginTop: "-.25em"}}/>
+                          </ListGroupItemLink>
+                        </div>
                       );
                     })
                   }

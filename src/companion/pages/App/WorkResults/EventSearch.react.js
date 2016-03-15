@@ -3,6 +3,8 @@ import {Row, Col} from 'components/common/pagelayout';
 import {Form, Input, WrapInput, MultiSelect, SubmitButton, getRefInputValue} from 'components/common/Form';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
 import {getAPIContext} from "data/csapi";
+import React from 'react';
+
 
 export default class EventSearch extends React.Component {
 

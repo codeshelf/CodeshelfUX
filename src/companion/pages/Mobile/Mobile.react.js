@@ -1,8 +1,7 @@
-import React, {Component} from 'react';
 // redux imports
 import {createApplicationStore} from '../../storeFactory.js';
-import { combineReducers, createStore, applyMiddleware, compose } from "redux";
-import { Provider } from "react-redux";
+import {combineReducers} from "redux";
+import {Provider} from "react-redux";
 import * as storageConfig from './storage';
 
 // reducer imports

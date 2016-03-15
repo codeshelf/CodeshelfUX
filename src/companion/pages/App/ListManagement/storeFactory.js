@@ -124,13 +124,13 @@ export function createStore({storeName,
               case LOADING_OK: {
                   const data = state.items.get('data');
                   data.push(action.data);
-                  
-                  return state.merge({ 
+
+                  return state.merge({
                     addItem: {
                       loading: null,
                       error: null
                     },
-                    items: {...state.items, data}
+                    items: state.items.set('data', data)
                   });
               }
               case LOADING_ERROR: {
@@ -204,7 +204,8 @@ export function createStore({storeName,
 
         const facilityContext = getFacilityContextFromState(getState());
         if (!facilityContext) {
-            dispatch(getError(`Want to get items but no facility context is provided`));
+            console.info("Error");
+            //dispatch(getError(`Want to get items but no facility context is provided`));
             return;
         }
 
@@ -256,7 +257,8 @@ export function createStore({storeName,
 
         const facilityContext = getFacilityContextFromState(getState());
         if (!facilityContext) {
-          dispatch(getError(`Want to update worker but no facility context is provided`));
+          dispatch(setStatus(ADD_ITEM, LOADING_ERROR,
+                  `Want to update worker but no facility context is provided`));
           return;
         }
 
@@ -308,7 +310,8 @@ export function createStore({storeName,
 
         const facilityContext = getFacilityContextFromState(getState());
         if (!facilityContext) {
-            dispatch(getError(`Want to update worker but no facility context is provided`));
+            dispatch(setStatus(UPDATE_ITEM, LOADING_ERROR,
+                     `Want to update worker but no facility context is provided`));
             return;
         }
         let mutData = mutateUpdateData(itemForm)

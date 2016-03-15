@@ -1,5 +1,7 @@
 import {Form, Select, Input, WrapInput, SubmitButton, getRefInputValue} from 'components/common/Form';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
+import React from 'react';
+
 
 function globSubstring(substring) {
   if (substring && substring.indexOf('*') < 0) {

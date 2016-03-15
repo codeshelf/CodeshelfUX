@@ -1,4 +1,5 @@
 import React from "react";
+import _ from 'lodash';
 import DocumentTitle from "react-document-title";
 import {SingleCellLayout, Row1} from "components/common/pagelayout";
 import {IBox} from "pages/IBox";

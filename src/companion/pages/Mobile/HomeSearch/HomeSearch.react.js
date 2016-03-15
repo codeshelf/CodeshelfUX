@@ -1,14 +1,16 @@
-import React, {Component} from 'react';
-import {Tabs, Tab, Row, Col, Button, ListGroup, ListGroupItem} from 'react-bootstrap';
-import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../../links';
+import {Component} from 'react';
+import {Row, Col, ListGroup} from 'react-bootstrap';
+import {ListGroupItemLink} from '../../links';
 import Icon from "react-fa";
 
 class HomeSearch extends Component {
 
   renderItem(to, iconName, title) {
     return (
-        <ListGroupItemLink to={to} id={to} name={to} shouldHaveFacility={true}>
-          <div className="thumbnail-wrapper d48 circular bg-primary text-white inline">
+        <ListGroupItemLink to={to} id={to} name={to}
+                           shouldHaveFacility={true}>
+          <div className="thumbnail-wrapper d48 circular bg-primary \
+                          text-white inline">
             <Icon name={iconName} size="lg"/>
           </div>
           <div className="p-l-10 inline">

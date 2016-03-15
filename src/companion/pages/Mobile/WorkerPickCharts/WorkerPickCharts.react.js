@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
+import {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {IBox} from '../../IBox.react.js';
 import {getWorkerPickChartMutable} from "./get";
-import {acSetDefaultFilter, acSetFilter, acSearch, acRefresh, acGetPurposes, acSetFilterAndRefresh, acToggleView} from "./store";
+import {acSetDefaultFilter, acSetFilter, acSearch, acRefresh, acGetPurposes,
+        acSetFilterAndRefresh, acToggleView} from "./store";
 import {acSetProductivityFilter} from "../../Detail/WorkerDetail/store";
 
 import {TopChart} from "./TopChart";
@@ -21,7 +22,9 @@ class WorkerPickCharts extends Component {
   render() {
     // no filter means we are redering first time and dispached action
     // to set default filter so no render
-    if (this.props.filter === null) return null;
+    if (this.props.filter === null) {
+      return null;
+    }
     const {filter, acSetFilterAndRefresh, whatIsLoaded, whatIsLoading, error} = this.props;
     const showLoading = (whatIsLoading !== null || (whatIsLoaded === null && !error));
     return (
@@ -39,7 +42,8 @@ class WorkerPickCharts extends Component {
 
 function mapDispatch(dispatch) {
   return bindActionCreators({acSetDefaultFilter, acSetFilter, acSearch, acRefresh,
-                             acSetProductivityFilter, acGetPurposes, acSetFilterAndRefresh, acToggleView}, dispatch);
+                             acSetProductivityFilter, acGetPurposes, acSetFilterAndRefresh,
+                             acToggleView}, dispatch);
 }
 
 export default connect(getWorkerPickChartMutable, mapDispatch)(WorkerPickCharts);
