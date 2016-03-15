@@ -72,7 +72,7 @@ export function printingTemplatesReducer(state = initState, action) {
           }));
         }
         case LOADING_OK: {
-          const data = state.workers.get('data');
+          const data = state.templates.get('data');
           const newData = data.map((template) => {
             if (template.persistentId == action.data.persistentId) {
               return action.data;
@@ -166,7 +166,7 @@ export function acGetTemplates({limit}) {
       return;
     }
     /*facilityContext.getTemplates()*/
-    getTemplates().then((data) => {
+    facilityContext.getTemplates().then((data) => {
       console.log(`data from getTemplates`, data);
       dispatch(setStatus(GET_TEMPLATES, LOADING_OK, data));
      }).catch((e) => {
