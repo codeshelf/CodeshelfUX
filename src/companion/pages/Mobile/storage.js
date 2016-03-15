@@ -18,7 +18,8 @@ export const ACTIONS = [
   list.MOVE_COLUMNS,
 ];
 
-// If you change shape of anything in PERSIST_STATE_PART then increase this number
+// If you change shape of anything in PERSIST_STATE_PART
+// then increase this number
 export const VERSION = 11;
 
 export const STORAGE_KEY = 'codeshelfus-mobile-web';

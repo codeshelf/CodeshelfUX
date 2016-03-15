@@ -94,8 +94,9 @@ gulp.task('eslint', function() {
             'use-isnan': 1,
             'valid-typeof': 1,
             //'indent': [1, 2],
+            //'quotes': [1, 'single', 'avoid-escape'],
             'curly': 1,
-            'max-len': [1, 80, 4],
+            'max-len': [1, 100, 4],
             'eol-last': 1,
             'no-trailing-spaces': 1
         }

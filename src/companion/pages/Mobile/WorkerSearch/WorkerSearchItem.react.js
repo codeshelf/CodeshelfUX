@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react';
+import {Component} from 'react';
 import {DateDisplay} from "../../DateDisplay.react.js";
 import {SearchItem, renderMatch} from "../../Search/SearchItem.react.js";
 

@@ -1,11 +1,9 @@
-import React, {Component, PropTypes} from 'react';
-import {Panel, Tabs, Tab, Row, Col, Button, ListGroup,
-  ListGroupItem, Badge, DropdownButton, MenuItem} from 'react-bootstrap';
+import {Component, PropTypes} from 'react';
+import {Row, Col, Button, DropdownButton, MenuItem} from 'react-bootstrap';
 import Multiselect from 'react-bootstrap-multiselect';
 import Icon from 'react-fa';
 import {WidthWrapper} from "./WidthWrapper.react.js";
 import {HistogramChart} from './HistogramChart.react.js';
-import {IBox} from '../../IBox.react.js';
 import moment from 'moment';
 import * as csapi from 'data/csapi';
 
@@ -24,14 +22,17 @@ export class DurationPicker extends Component {
 
   render() {
     const {filter, onChange} = this.props;
+    const title = `events per ${filter['interval'].humanize()} / ${filter['window'].humanize()}`;
     return (
-      <DropdownButton bsStyle="default" bsSize="small" title={`events per ${filter['interval'].humanize()} / ${filter['window'].humanize()}`}
+      <DropdownButton bsStyle="default" bsSize="small" title={title}
         onSelect={(ev, dur) => {
           const newFilter = filter.merge(dur);
           onChange(newFilter);
         }}>
         {this.durations.map((d, index) => (
-          <MenuItem key={index} eventKey={d}>{d['interval'].humanize() + " / " + d['window'].humanize()}</MenuItem>
+          <MenuItem key={index}
+                    eventKey={d}>
+              {d['interval'].humanize() + " / " + d['window'].humanize()}</MenuItem>
         ))}
       </DropdownButton>
     );
@@ -41,12 +42,15 @@ export class DurationPicker extends Component {
 export class PurposePicker extends Component {
 
   preprocessData(purposes, selected) {
-    return purposes.map((purpose) => { return { ...purpose, selected: selected.indexOf(purpose.value) !== -1}});
+    return purposes.map((purpose) => {
+      return { ...purpose, selected: selected.indexOf(purpose.value) !== -1}
+    });
   }
 
   render()  {
     const {filter, onSelect, purposes} = this.props;
-    const data = purposes.error || purposes.loading || !purposes.data ? [] : this.preprocessData(purposes.data, filter.purposes);
+    const data = purposes.error || purposes.loading ||
+                 !purposes.data ? [] : this.preprocessData(purposes.data, filter.purposes);
     return (
       data.length > 0 &&
       <Multiselect multiple
@@ -87,24 +91,28 @@ class ChartNavigation extends Component {
     return (
       <div>
         <div className="pull-left">
-          <Button bsStyle="link" className="pull-left"  onClick={this.changeEndTime.bind(this, filter, 'subtract')}>
+          <Button bsStyle="link" className="pull-left"
+                  onClick={this.changeEndTime.bind(this, filter, 'subtract')}>
               <Icon name="step-backward" style={{marginRight: margin}}/>
               <DateDisplay date={moment(filter.endtime).subtract(filter.window)} />
           </Button>
         </div>
         <div className="pull-left">
-          <Button bsStyle="link" className="pull-left"  onClick={this.moveOneBucket.bind(this, filter, 'subtract')}>
+          <Button bsStyle="link" className="pull-left"
+                  onClick={this.moveOneBucket.bind(this, filter, 'subtract')}>
               <Icon name="step-backward" style={{marginRight: margin}}/>
           </Button>
         </div>
         <div className="pull-right">
-          <Button bsStyle="link" bsSize="md" onClick={this.changeEndTime.bind(this, filter, 'add')}>
+          <Button bsStyle="link" bsSize="md"
+                  onClick={this.changeEndTime.bind(this, filter, 'add')}>
             <DateDisplay  date={filter.endtime.format()} />
             <Icon name="step-forward" style={{marginLeft: margin}}/>
           </Button>
         </div>
         <div className="pull-right">
-          <Button bsStyle="link" bsSize="md" onClick={this.moveOneBucket.bind(this, filter, 'add')}>
+          <Button bsStyle="link" bsSize="md"
+                  onClick={this.moveOneBucket.bind(this, filter, 'add')}>
             <Icon name="step-forward" style={{marginLeft: margin}}/>
           </Button>
         </div>
@@ -129,7 +137,7 @@ export class TopChart extends Component {
 
   render() {
     const {purposes, filter, data, error, whatIsLoading, whatIsLoaded,
-           acSetFilterAndRefresh, acSearch, id, tab} = this.props;
+           acSetFilterAndRefresh} = this.props;
 
     const showLoading = (whatIsLoading !== null || (whatIsLoaded === null && !error));
     const showError = (whatIsLoading === null && !!error);
@@ -138,7 +146,7 @@ export class TopChart extends Component {
       errorText = error.message;
     }
     const title = this.props.title && <h4>{this.props.title}</h4>;
-    const lineHeight = (title) ? "53px" : null;
+    //const lineHeight = (title) ? "53px" : null;
     return (
       <div>
           <Row style={{paddingLeft: "1em", paddingRight: "1em"}}>
@@ -154,11 +162,13 @@ export class TopChart extends Component {
             </Col>
             <Col xs={10}>
               <div className="text-center">
-                <PurposePicker purposes={purposes} filter={filter} onSelect={acSetFilterAndRefresh} />
+                <PurposePicker purposes={purposes} filter={filter}
+                               onSelect={acSetFilterAndRefresh} />
               </div>
             </Col>
             <Col xs={2}>
-              <Button bsStyle="link" className="pull-right" bsSize="sm" onClick={() => this.setState({expanded: !this.state.expanded})}>
+              <Button bsStyle="link" className="pull-right" bsSize="sm"
+                      onClick={() => this.setState({expanded: !this.state.expanded})}>
                 <Icon name={this.state.expanded ? "compress": "expand"} />
               </Button>
             </Col>
@@ -169,7 +179,9 @@ export class TopChart extends Component {
                const minHeight = Math.round(width/(1.618*2)); //designer-like
                if (showLoading || showError) {
                  return (<div style={{minHeight: minHeight + 6}}>
-                           {showLoading && <span><Icon name="spinner" spin/> Loading chart...</span>}
+                           {showLoading && <span><Icon name="spinner" spin/>
+                              Loading chart...
+                           </span>}
                            {showError && <span>Error: {errorText}</span>}
                          </div>);
                }

@@ -1,11 +1,8 @@
 import moment from "moment";
-import _ from "lodash";
 import {Map, Record} from 'immutable';
 import {getWorkerPickChart} from "./get";
 
 import {getFacilityContextFromState} from "../../Facility/get";
-
-import {getWorkerPickCharts, getWorkerPickByWorker} from "./mockGetWorkerPickCharts";
 
 const initState = new (Record({
   whatIsLoaded: null, // store what we are loading. Currently idOfItem
@@ -49,7 +46,6 @@ const STATUS_OK = "ok";
 const STATUS_ERROR = "error";
 
 const SET_FILTER = "WPCH - set filter ";
-const TOGGLE_EXPAND = "toggle expand";
 const TOGGLE_VIEW = "toggle view";
 
 const LOADING_PURPOSES = "loding purposes";
@@ -104,7 +100,7 @@ export function workerPickChartReducer(state = initState, action) {
           }));
         }
         case STATUS_OK: {
-          const {data, filter} = action;
+          const {data} = action;
           return state.merge(new Map({
               purposes: {
                 data: data.purpose,
@@ -115,7 +111,6 @@ export function workerPickChartReducer(state = initState, action) {
         }
         case STATUS_ERROR: {
           const {error} = action;
-          const loadedTime = moment();
           return state.merge(new Map({
             purposes: {
               data: null,
@@ -231,7 +226,8 @@ export function acSearch(forceLoad) {
 
     const facilityContext = getFacilityContextFromState(getState());
     if (!facilityContext) {
-      dispatch(search(STATUS_ERROR, {error: "Want to search for worker pick chart but no facility context is provided"}));
+      dispatch(search(STATUS_ERROR, {error: "Want to search for worker pick chart\
+                                             but no facility context is provided"}));
       return;
     }
 
@@ -240,7 +236,8 @@ export function acSearch(forceLoad) {
       //getWorkerPickCharts(filter),
       facilityContext.getWorkerPicksWithnWindow(filterToParams(filter)),
       //getWorkerPickByWorker(filter)
-      facilityContext.getWorkerPicksWithnWindowAllWorkers(filterToParams(filter)).then((result) => {
+      facilityContext.getWorkerPicksWithnWindowAllWorkers(filterToParams(filter))
+                     .then((result) => {
         result.sort((a,b) => {
            return (a.events.total -  b.events.total) * -1; //descending
         });

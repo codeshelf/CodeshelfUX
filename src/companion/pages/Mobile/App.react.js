@@ -1,15 +1,13 @@
-import React, {Component} from 'react';
+import {Component} from 'react';
 import Icon from "react-fa";
-import {authz} from 'components/common/auth';
 import {PageGrid} from 'components/common/pagelayout';
-import {Grid, Row, Col, DropdownButton, MenuItem, Button} from 'react-bootstrap';
-import { NavItemLink, MenuItemLink, ButtonLink, Link} from '../links';
+import {Button} from 'react-bootstrap';
+import {Link} from '../links';
 import {clearStoredCredentials} from "data/user/store";
-import {ContextSelector, renderContextLabel} from '../Facility/ContextSelector';
+import {renderContextLabel} from '../Facility/ContextSelector';
 import {loggedout} from "data/auth/actions";
-import {Navigation, AuthzNavMenuItem, AuthzMenuItem} from '../Sidebar/Navigation';
+import {Navigation, AuthzMenuItem} from '../Sidebar/Navigation';
 import exposeRouter from 'components/common/exposerouter';
-import classnames from 'classnames';
 import {encodeContextToURL} from './common/contextEncode.js';
 
 class Header extends Component {
@@ -17,7 +15,8 @@ class Header extends Component {
     return (
         <div className="header ">
           <div className="">
-            <div className="pull-left full-height visible-sm visible-xs" style={{zIndex: 10, position: "relative"}}>
+            <div className="pull-left full-height visible-sm visible-xs"
+                 style={{zIndex: 10, position: "relative"}}>
               <div className="header-inner">
                 {this.props.children}
               </div>
@@ -39,10 +38,6 @@ class Header extends Component {
         </div>
     );
   }
-}
-
-function menuIcon(iconName) {
-  return <span className="icon-thumbnail"><Icon name={iconName}></Icon></span>;
 }
 
 function menuTitle(title) {
@@ -78,7 +73,8 @@ class App extends Component {
   }
 
   render() {
-    const basePath = "/mobile/facilities/" + encodeContextToURL(this.props.selected);
+    const basePath = "/mobile/facilities/" +
+                     encodeContextToURL(this.props.selected);
     return (
         <div id="outer-wrapper">
           <Navigation
@@ -88,27 +84,39 @@ class App extends Component {
             docked={false}
             acToggleSidebar={this.props.acToggleSidebar}
             >
-              <AuthzMenuItem permission="event:view" to={`${basePath}/events`} title="Productivity"
-                onClick={() => this.props.acToggleSidebar(false)}
-                iconName="bar-chart" />
-              <AuthzMenuItem permission="event:view" to={`${basePath}/orders`} title="Orders"
-                onClick={() => this.props.acToggleSidebar(false)}
-                iconName="shopping-basket" />
-              <AuthzMenuItem permission="event:view" to={`${basePath}/workers`} title="Workers"
-                onClick={() => this.props.acToggleSidebar(false)}
-                iconName="users" />
-              <AuthzMenuItem permission="event:view" to={`${basePath}/carts`} title="Carts"
-                onClick={() => this.props.acToggleSidebar(false)}
-                iconName="shopping-cart" />
-              <AuthzMenuItem permission="event:view" title="Logout"
-                onClick={(e) => this.handleLogoutClick(e)}
-                iconName="sign-out" />
+              <AuthzMenuItem permission="event:view"
+                             to={`${basePath}/events`}
+                             title="Productivity"
+                             onClick={() => this.props.acToggleSidebar(false)}
+                             iconName="bar-chart" />
+              <AuthzMenuItem permission="event:view"
+                             to={`${basePath}/orders`}
+                             title="Orders"
+                             onClick={() => this.props.acToggleSidebar(false)}
+                             iconName="shopping-basket" />
+              <AuthzMenuItem permission="event:view"
+                             to={`${basePath}/workers`}
+                             title="Workers"
+                             onClick={() => this.props.acToggleSidebar(false)}
+                             iconName="users" />
+              <AuthzMenuItem permission="event:view"
+                             to={`${basePath}/carts`}
+                             title="Carts"
+                             onClick={() => this.props.acToggleSidebar(false)}
+                             iconName="shopping-cart" />
+              <AuthzMenuItem permission="event:view"
+                             title="Logout"
+                             onClick={(e) => this.handleLogoutClick(e)}
+                             iconName="sign-out" />
           </Navigation>
-          <div id="page-wrapper" className="page-container" style={{backgroundColor: "rgb(245, 245, 245)"}}>
+          <div id="page-wrapper"
+               className="page-container"
+               style={{backgroundColor: "rgb(245, 245, 245)"}}>
               <Header selected={this.props.selected}>
                 <Button
                     bsStyle="link"
-                    className="visible-sm-inline-block visible-xs-inline-block padding-5"
+                    className="visible-sm-inline-block \
+                               visible-xs-inline-block padding-5"
                     onClick={() => this.props.acToggleSidebar(true)}>
                       <Icon name="bars" size="lg"/>
                 </Button>

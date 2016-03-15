@@ -1,13 +1,10 @@
-import React, {Component} from 'react';
-import {Panel, Tabs, Tab, Row, Col, Button, ListGroup, ListGroupItem, Badge} from 'react-bootstrap';
+import {Component} from 'react';
+import {Panel, Button, ListGroup} from 'react-bootstrap';
 import Icon from 'react-fa';
 import {WidthWrapper} from "./WidthWrapper.react.js";
-import d3 from "d3";
 import ReactFauxDOM from 'react-faux-dom';
-import {TAB_PRODUCTIVITY} from '../../Detail/WorkerDetail/store';
-import {convertTab} from '../../Detail/WorkerDetail/WorkerDetail.react.js';
 import {Map, Record} from "immutable";
-import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../../links';
+import {ListGroupItemLink} from '../../links';
 
 export class WorkerPicksTable extends Component {
 
@@ -40,15 +37,18 @@ export class WorkerPicksTable extends Component {
                         height:20,
                         margin:0
                       };
-                      const chart = this.printChart(ReactFauxDOM.createElement('svg'), eventBins, style);
+                      const chart = this.printChart(ReactFauxDOM.createElement('svg'),
+                                                    eventBins, style);
                       const filterWithId = WorkerHistogramFilter(filter).set("id", workerId);
+                      const to = desktop ? 'worker': 'workers';
                       // temporarly disable links
                       return (
                           <div>
                             <ListGroupItemLink
                                 style={{display: "flex", alignItems: "center"}}
-                                to={`${desktop ? "worker": "workers"}/${encodeURIComponent(workerId)}/productivity`}
-                                onClick={() => this.props.acSetProductivityFilter(workerId, filterWithId)}
+                                to={`${to}/${encodeURIComponent(workerId)}/productivity`}
+                                onClick={() => this.props.acSetProductivityFilter(workerId,
+                                                                                  filterWithId)}
                                 shouldHaveFacility={true}>
                               <div style={{display: "flex", flexWrap: "wrap"}}>
                                 <div style={{textAlign: "left", width: "100%", flexShrink: "0"}}>
@@ -59,7 +59,8 @@ export class WorkerPicksTable extends Component {
                                   {chart.toReact()}
                                 </div>
                               </div>
-                              <Icon name="chevron-right" className="pull-right" style={{marginTop: "-.25em"}}/>
+                              <Icon name="chevron-right" className="pull-right"
+                                    style={{marginTop: "-.25em"}}/>
                             </ListGroupItemLink>
                           </div>
                       );
