@@ -56,7 +56,7 @@ class ModalForm extends React.Component{
         };
         let errorMessage = "";
 
-        if (actionError && actionError === 500) {
+        if (actionError && actionError !== 400) {
             errorMessage = "An error occurred on the server contact support and try again.";
 
             return (
@@ -74,7 +74,7 @@ class ModalForm extends React.Component{
                 </Modal>
             );
         }
-        if (actionError && actionError === 400) {
+        if (actionError) {
             errorMessage = "Invalid input please correct the form.";
         }
         return (

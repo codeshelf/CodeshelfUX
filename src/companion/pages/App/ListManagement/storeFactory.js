@@ -124,13 +124,13 @@ export function createStore({storeName,
               case LOADING_OK: {
                   const data = state.items.get('data');
                   data.push(action.data);
-                  
-                  return state.merge({ 
+
+                  return state.merge({
                     addItem: {
                       loading: null,
                       error: null
                     },
-                    items: {...state.items, data}
+                    items: state.items.set('data', data)
                   });
               }
               case LOADING_ERROR: {
