@@ -121,6 +121,9 @@ class BottomChartDummy extends Component {
                       const chart = this.printChart(ReactFauxDOM.createElement('svg'),
                                                     eventBins, style);
                       const filterWithId = WorkerHistogramFilter(filter).set("id", workerId);
+                      // temporarly disable links
+                      const to = desktop ? 'worker' : 'workers';
+
                       return (
                         <div>
                           <ListGroupItemLink
