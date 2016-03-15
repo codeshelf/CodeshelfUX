@@ -4,6 +4,7 @@ import ListManagement from "components/common/list/ListManagement";
 import ListView from "components/common/list/ListView";
 import moment from "moment";
 import {List} from "immutable";
+import _ from 'lodash';
 
 export default class PickRateTable extends React.Component{
 

@@ -51,9 +51,9 @@ gulp.task('build', ['build-webpack']);
 
 gulp.task('eslint', function() {
   return gulp.src([
-      'gulpfile.js',
-      'src/companion/**/*.js',
-      'webpack/*.js'
+      //'gulpfile.js',
+      'src/companion/pages/Mobile/**/*.js',
+      //'webpack/*.js'
     ])
     .pipe(eslint({
         'parserOptions': {
@@ -73,6 +73,9 @@ gulp.task('eslint', function() {
             'node': true,
             'es6': true
         },
+        'plugins': [
+            'react'   
+        ],
         'rules': {
             'no-empty': 1,
             'no-debugger': 2,
@@ -82,13 +85,16 @@ gulp.task('eslint', function() {
             'no-unused-vars': 1,
             'no-this-before-super': 2,
             'constructor-super': 2,
+            'react/jsx-no-undef': 2,
+            'react/jsx-uses-vars': 2,
             'no-dupe-keys': 1,
             'no-duplicate-case': 1,
             'no-sparse-arrays': 1,
             'no-unreachable': 1,
             'use-isnan': 1,
             'valid-typeof': 1,
-            'indent': [1, 2],
+            //'indent': [1, 2],
+            'curly': 1,
             'max-len': [1, 80, 4],
             'eol-last': 1,
             'no-trailing-spaces': 1

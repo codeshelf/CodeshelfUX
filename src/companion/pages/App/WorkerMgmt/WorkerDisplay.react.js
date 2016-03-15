@@ -7,6 +7,7 @@ import classnames from 'classnames';
 import exposeRouter, {toURL} from 'components/common/exposerouter';
 import ModalForm from "components/common/ModalForm";
 import FormFields from "components/common/FormFields";
+import _ from 'lodash';
 
 import {selectedWorkerCursor, workersCursor} from 'data/state';
 

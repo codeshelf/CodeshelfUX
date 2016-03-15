@@ -161,7 +161,8 @@ export function acGetTemplates({limit}) {
 
     const facilityContext = getFacilityContextFromState(getState());
     if (!facilityContext) {
-      dispatch(getError(`Want to get templates but no facility context is provided`));
+      console.error(`Want to get templates but no facility context is provided`);
+      //dispatch(getError(`Want to get templates but no facility context is provided`));
       return;
     }
     /*facilityContext.getTemplates()*/
@@ -189,7 +190,8 @@ export function acUpdateTemplate(selectedTemplateForm) {
 
     const facilityContext = getFacilityContextFromState(getState());
     if (!facilityContext) {
-      dispatch(getError(`Want to update worker but no facility context is provided`));
+      console.error(`Want to update worker but no facility context is provided`);
+      //dispatch(getError(`Want to update worker but no facility context is provided`));
       return;
     }
 
@@ -209,7 +211,8 @@ export function acAddTemplate(selectedTemplateForm) {
 
     const facilityContext = getFacilityContextFromState(getState());
     if (!facilityContext) {
-      dispatch(getError(`Want to update template but no facility context is provided`));
+      console.error(`Want to update template but no facility context is provided`);
+      //dispatch(getError(`Want to update template but no facility context is provided`));
       return;
     }
 
@@ -237,6 +240,7 @@ export function acGetPdfPreview(orderId, script) {
 
     const facilityContext = getFacilityContextFromState(getState());
     if (!facilityContext) {
+      console.error(`Want to update template but no facility context is provided`);
       //dispatch(getError(`Want to update template but no facility context is provided`));
       return;
     }
