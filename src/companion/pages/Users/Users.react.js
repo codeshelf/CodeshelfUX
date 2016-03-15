@@ -30,8 +30,6 @@ class Users extends React.Component{
 };
 
 function mapStateToProps(state) {
-  console.info("state", state, state.users);
-
   return {
     users: state.users.items.get('data'),
     currentUser: state.currentUser || {username: getEmail()}

@@ -8,7 +8,7 @@ const getDataFormat = (data) => {
 }
 
 const updateItemCond = (item, action) => {
-  if (item.persistentId == action.data.persistentId) {
+  if (item.persistentId === action.data.persistentId) {
     return action.data;
   }
   return item;

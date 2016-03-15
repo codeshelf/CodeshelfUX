@@ -4,11 +4,13 @@ import {createApplicationStore} from '../../../storeFactory.js';
 import { combineReducers, createStore, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
 //import {sidebarReducer} from '../../Mobile/Sidebar/store';
+import {listReducer} from '../../../components/common/list/store';
 
 import {usersReducer} from '../../Users/store.js';
 
 const rootReducer = combineReducers({
-  users: usersReducer
+  users: usersReducer,
+  list: listReducer
 });
 
 const store = createApplicationStore(rootReducer);
