@@ -41,7 +41,7 @@ class TemplateDisplay extends Component {
             currentPage: 1,
             pages: 2,
         }
-        this.handleChange = (e) => this.props.acChangeOrderId(e.target.value)
+        this.handleOrderChange = (e) => this.props.acChangeOrderId(e.target.value)
     }
 
     componentWillMount() {
@@ -73,6 +73,7 @@ class TemplateDisplay extends Component {
     }
 
     handleChange(formField, value) {
+      console.info(formField, value, 'form and value');
       this.props.acUpdateSelectedTemplate(formField.name, value);
     }
 
@@ -103,7 +104,10 @@ class TemplateDisplay extends Component {
                 onSave={() => this.handleSave()}>
                 <Row>
                     <Col xs={6}>
-                        <FormFields formData={formData} formMetadata={this.formMetadata} handleChange={(formField, value) => this.handleChange(formField, value)} />
+                        <FormFields
+                            formData={formData}
+                            formMetadata={this.formMetadata}
+                            handleChange={(formField, value) => this.handleChange(formField, value)} />
                           <Input
                             type="text"
                             value={orderId}
@@ -111,7 +115,7 @@ class TemplateDisplay extends Component {
                             ref="input"
                             groupClassName="group-class"
                             labelClassName="label-class"
-                            onChange={this.handleChange}
+                            onChange={this.handleOrderChange}
                             buttonAfter={
                                 <Button bsStyle="primary" onClick={() => this.props.acGetPdfPreview(orderId, '')}><Icon name="search"/></Button>
                             } />

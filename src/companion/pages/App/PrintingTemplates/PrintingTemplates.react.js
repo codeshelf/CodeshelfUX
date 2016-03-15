@@ -35,6 +35,10 @@ class PrintingTemplates extends Component{
                 columnName: "active",
                 displayName: "Active"
             },
+            {
+                columnName: "template",
+                displayName: "Template"
+            },
         ]);
         this.rowActionComponent = ListManagement.toEditButton((row) => {
           return { to: toURL(this.props, "templates/" + row.get(keyColumn))};

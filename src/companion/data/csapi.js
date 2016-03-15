@@ -680,6 +680,37 @@ export function getAPIContext(selected) {
             });
         },
 
+        getTemplates(params) {
+            const templatesPath = basePath + "/templates";
+            return ajax(templatesPath, {
+              data: params
+            });
+        },
+
+        addTemplate(template) {
+            if (template.persistentId != null) {
+                console.warn("trying to add a worker with persistentId set");
+            }
+            delete template.persistentId;
+            const templatesPath = basePath + '/templates';
+            template['domainId'] = domainId;
+            return ajax(templatesPath, {
+                method: "POST",
+                data: template,
+                contentType: "form"
+            });
+        },
+
+        updateTemplate(template) {
+            console.info(template);
+            const templatesPath = basePath + "/templates/" + template.domainId;
+            return ajax(templatesPath, {
+              method: "POST",
+              data: template,
+              contentType: "form"
+            });
+        },
+
         getTemplatePreview(orderId, script) {
             // todo domainId = orderId, and fix script in body after CRUD is done
             return ajax(basePath + "/orders/" + domainId + "/print/preview", {
