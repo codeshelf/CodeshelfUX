@@ -35,7 +35,7 @@ class TemplateDisplay extends Component {
     constructor() {
         super();
         this.formMetadata = [
-            {name: "name", label: "Name", required: true},
+            {name: "domainId", label: "Name", required: true},
             {name: "active", label: "Active", type: Boolean},
             {name: "template", label: "Template", type: Text, required: true}]
         this.state = {
