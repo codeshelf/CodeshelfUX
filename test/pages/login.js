@@ -10,8 +10,8 @@ export default {
         this
           .clearValue('@username')
           .clearValue('@password')
-          .setValue('@username', 'andrejskoki@gmail.com')
-          .setValue('@password', 'test')
+          .setValue('@username', username)
+          .setValue('@password', password)
           .submitForm('@password')
           .waitForElementNotPresent('@password');
       },
