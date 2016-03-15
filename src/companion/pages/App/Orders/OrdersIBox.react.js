@@ -33,6 +33,11 @@ let columnGroups = ['status'];
 
 let rowGroups = ['customerId'];
 
+function addGroup(name) {
+  //for simplicity just add to row group and allow them to just switch it to col group
+  rowGroups.push(name);
+}
+
 function changeGroup(name) {
   const notGroup = (g) => g.name !== name;
   const column = columnGroups.includes(name);
@@ -236,7 +241,8 @@ export default class OrdersIBox extends React.Component{
                   <OrderSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
                 </Row1>
                 <SearchStatus {...{results, errorMessage}} />
-                <Pivot {...{availableGroups, groupValues, rowGroups, columnGroups}}
+                <Pivot {...{availableGroups, addGroup}}
+                       {...{groupValues, rowGroups, columnGroups}}
                        {...{groupControls}}
                        results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}>
                    <CrossTab />
