@@ -45,26 +45,25 @@ const initState = new (Record({
 export function listReducer(state = initState, action) {
   switch (action.type) {
     case MOVE_COLUMNS: {
-      const columns = state.tables.getIn([action.key, 'columns']).slice(0);
+      const columns = state.tables.getIn([action.key, 'columns']).toJS().slice(0);
       const formerPosition = columns.indexOf(action.moved);
       const newPosition = columns.indexOf(action.afterName);
       columns.splice(formerPosition, 1);
       columns.splice(newPosition, 0, action.moved);
-      return state.setIn(['tables', action.key, 'columns'], columns);
+      return state.setIn(['tables', action.key, 'columns'], fromJS(columns));
     }
     case SORT_COLUMN: {
-        return state.mergeIn(['tables', action.key, 'sortSpecs'], {[action.columnName]: {order: action.direction}});
+        return state.mergeIn(['tables', action.key, 'sortSpecs'], fromJS({[action.columnName]: {order: action.direction}}));
     }
     case CHANGE_COLUMN: {
-       return state.setIn(['tables', action.storeName, 'columns'], action.data);
+       return state.setIn(['tables', action.storeName, 'columns'], fromJS(action.data));
     }
     case 'REDUX_STORAGE_LOAD': {
       try {
         const {payload} = action;
-        const savedStorage = getListMutable(payload);
+        const savedStorage = payload['list'];
         let newState = state;
-
-        newState = newState.mergeIn(['tables'], savedStorage['tables']);
+        newState = newState.mergeIn(['tables'], fromJS(savedStorage['tables']));
         return newState;
       } catch(e) {
         return state;
