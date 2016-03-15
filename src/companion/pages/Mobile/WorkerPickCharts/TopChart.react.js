@@ -25,7 +25,7 @@ export class DurationPicker extends Component {
   render() {
     const {filter, onChange} = this.props;
     return (
-      <DropdownButton bsStyle="default" bsSize="small" title={`events per ${filter['interval'].humanize()} / ${filter['window'].humanize()}`}
+      <DropdownButton id="duration-picker" bsStyle="default" bsSize="small" title={`events per ${filter['interval'].humanize()} / ${filter['window'].humanize()}`}
         onSelect={(ev, dur) => {
           const newFilter = filter.merge(dur);
           onChange(newFilter);
@@ -98,13 +98,13 @@ class ChartNavigation extends Component {
           </Button>
         </div>
         <div className="pull-right">
-          <Button bsStyle="link" bsSize="md" onClick={this.changeEndTime.bind(this, filter, 'add')}>
+          <Button bsStyle="link" onClick={this.changeEndTime.bind(this, filter, 'add')}>
             <DateDisplay  date={filter.endtime.format()} />
             <Icon name="step-forward" style={{marginLeft: margin}}/>
           </Button>
         </div>
         <div className="pull-right">
-          <Button bsStyle="link" bsSize="md" onClick={this.moveOneBucket.bind(this, filter, 'add')}>
+          <Button bsStyle="link" onClick={this.moveOneBucket.bind(this, filter, 'add')}>
             <Icon name="step-forward" style={{marginLeft: margin}}/>
           </Button>
         </div>

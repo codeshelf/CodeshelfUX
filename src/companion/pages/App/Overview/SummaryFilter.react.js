@@ -10,7 +10,7 @@ var SummaryFilter = React.createClass({
             return (<div className="panel-controls">
                       <ul>
                           <li>
-                              <DropdownButton data-toggle={true} navItem={true} pullRight={true} noCaret={true} title={<Icon name="filter"  />}>
+                              <DropdownButton id="summary-filter" data-toggle={true} navItem={true} pullRight={true} noCaret={true} title={<Icon name="filter"  />}>
                                     {
                                         filterNames.map(function(filterName) {
                                             return (

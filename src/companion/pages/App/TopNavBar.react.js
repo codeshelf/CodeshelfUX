@@ -79,7 +79,8 @@ class UserProfileMenu extends React.Component {
       <DropdownButton bsStyle="link"
                       className="userprofile"
                       title={this.renderTitle()}
-                      pullRight={true}>
+                      pullRight={true}
+                      id="topNavBar">
         <AuthzCredentialsStore permission="companion:savecredentials" notPermission="companion:nosavecredentials" />
         <MenuItemLink title="changepassword"
                       to="/password/change"

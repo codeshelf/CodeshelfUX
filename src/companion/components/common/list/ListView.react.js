@@ -185,7 +185,7 @@ class TableSettings extends PureComponent {
         });
 
         return (
-                <DropdownButton className="settings pull-right" title={<Icon name="gear" />}>
+                <DropdownButton id="table-settings" className="settings pull-right" title={<Icon name="gear" />}>
                     <MultiSelectUnwrapped options={options} values={columns} onChange={onColumnsChange}/>
                 </DropdownButton>
         );
