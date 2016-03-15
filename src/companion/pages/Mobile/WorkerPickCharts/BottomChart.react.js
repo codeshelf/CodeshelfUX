@@ -11,8 +11,10 @@ import {Map, Record} from "immutable";
 import { NavItemLink, MenuItemLink, ButtonLink, ListGroupItemLink} from '../../links';
 import ListView from "components/common/list/ListView";
 import ListManagement from "components/common/list/ListManagement";
+import {getSelectedFacility} from '../../Facility/get';
+import {connect} from 'react-redux';
 
-export class BottomChart extends Component {
+class BottomChartDummy extends Component {
 
   printChart(node, bins, style) {
     const showBottomLables = this.props.desktop;
@@ -54,8 +56,7 @@ export class BottomChart extends Component {
 
 
   render() {
-
-    const {whatIsLoading, whatIsLoaded, filter, desktop, view} = this.props;
+    const {whatIsLoading, whatIsLoaded, filter, desktop, view, utcOffset} = this.props;
     if (whatIsLoading !== null || whatIsLoaded === null) {
       return null;
     } else {
@@ -77,8 +78,8 @@ export class BottomChart extends Component {
             columnName: "id",
             displayName: "ID"
         }].concat(this.props.data[0].bins.map((bin, index) => {
-          const startTime = moment.utc(bin.start).format('dd HH:mm');
-          const endTime = moment.utc(bin.start).add('minutes', filter.interval.asMinutes()).format('dd HH:mm');
+          const startTime = moment.utc(bin.start).add(utcOffset, 'm').format('dd HH:mm');
+          const endTime = moment.utc(bin.start).add(utcOffset, 'm').add('minutes', filter.interval.asMinutes()).format('dd HH:mm');
           return {
             columnName: index.toString(),
             displayName: startTime + " - " + endTime,
@@ -88,7 +89,7 @@ export class BottomChart extends Component {
         <Panel header="Worker Picks">
           <WidthWrapper>
           {(width) => (
-            <div>
+            <div style={{overflow: 'scroll'}}>
               {desktop &&
                 <Button bsStyle="link" bsSize="md" onClick={() => this.props.acToggleView()}>
                   Change view
@@ -108,7 +109,6 @@ export class BottomChart extends Component {
                       };
                       const chart = this.printChart(ReactFauxDOM.createElement('svg'), eventBins, style);
                       const filterWithId = WorkerHistogramFilter(filter).set("id", workerId);
-                      // temporarly disable links
                       return (
                           <div>
                             <ListGroupItemLink
@@ -144,3 +144,6 @@ export class BottomChart extends Component {
     }
   }
 }
+
+export const BottomChart = connect(getSelectedFacility)(BottomChartDummy);
+
