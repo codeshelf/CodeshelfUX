@@ -7,6 +7,7 @@ import classnames from 'classnames';
 import exposeRouter, {toURL} from 'components/common/exposerouter';
 import ModalForm from "components/common/ModalForm";
 import FormFields from "components/common/FormFields";
+import _ from 'lodash';
 
 import Immutable, {fromJS, Record} from 'immutable';
 import uuid from 'node-uuid';
@@ -51,6 +52,10 @@ class TemplateDisplay extends Component {
         this.findSelectedTemplateForm(newProps);
     }
 
+    shouldComponentUpdate(newProps) {
+        return !_.isEqual(this.props, newProps);
+    }
+
     findSelectedTemplateForm(props) {
         let path = props.location.pathname;
         let templateId = null;
@@ -93,8 +98,8 @@ class TemplateDisplay extends Component {
     render() {
       const formData = this.props.selectedTemplateForm;
       const {orderId, preview} = this.props;
-      console.info(preview);
-      const previewUrl = preview; //'https://test.codeshelf.com' + preview.substr(16);
+      const previewUrl = preview ? 'https://test.codeshelf.com' + preview.substr(16): null;
+      console.info(previewUrl);
       const pdfInitParams = {
         url: previewUrl,
         withCredentials: true
@@ -117,7 +122,7 @@ class TemplateDisplay extends Component {
                             } />
                     </Col>
                     <Col xs={6}>
-                      { preview && <PDF scale={0.75} file={pdfInitParams} onDocumentComplete={(pages) => this._onDocumentComplete(pages)}/>}
+                      { preview && <PDF scale={0.75} file={pdfInitParams}/>}
                     </Col>
                 </Row>
               </ModalForm>
