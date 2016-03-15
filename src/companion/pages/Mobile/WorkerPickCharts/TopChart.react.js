@@ -105,7 +105,6 @@ class ChartNavigation extends Component {
         </div>
         <div className="pull-right">
           <Button bsStyle="link"
-                  bsSize="md"
                   onClick={this.changeEndTime.bind(this, filter, 'add')}>
             <DateDisplay  date={filter.endtime.format()} />
             <Icon name="step-forward" style={{marginLeft: margin}}/>
@@ -113,8 +112,7 @@ class ChartNavigation extends Component {
         </div>
         <div className="pull-right">
           <Button bsStyle="link"
-                bsSize="md"
-                onClick={this.moveOneBucket.bind(this, filter, 'add')}>
+                  onClick={this.moveOneBucket.bind(this, filter, 'add')}>
             <Icon name="step-forward" style={{marginLeft: margin}}/>
           </Button>
         </div>
