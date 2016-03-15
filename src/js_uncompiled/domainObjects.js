@@ -1038,6 +1038,11 @@ domainobjects = {
 				'title': 'ID',
 				'width': 25
 			},
+			'userExists': {
+				'id':    'userExists',
+				'title': 'User Exists',
+				'width': 25
+			},
 			'persistentId': {
 				'id':    'persistentId',
 				'title': 'Persistent ID',

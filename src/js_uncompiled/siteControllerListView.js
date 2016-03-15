@@ -45,15 +45,17 @@ codeshelf.sitecontrollerlistview = function(websession, facility) {
         // following psuedo-inheritance
         'shouldAddThisColumn': function(inProperty){
             // only fields in domainObjects for aisle will be asked for. We want to exclude persistent Id
-            if (inProperty['id'] ===  'domainId')
+            if (inProperty['id'] === 'domainId')
                 return true;
-            else if (inProperty['id'] ===  'location')
+            else if (inProperty['id'] === 'userExists')
                 return true;
-            else if (inProperty['id'] ===  'role')
+            else if (inProperty['id'] === 'location')
                 return true;
-            else if (inProperty['id'] ===  'networkDomainId')
+            else if (inProperty['id'] === 'role')
                 return true;
-            else if (inProperty['id'] ===  'channelUi')
+            else if (inProperty['id'] === 'networkDomainId')
+                return true;
+            else if (inProperty['id'] === 'channelUi')
                 return true;
             else
                 return false;
