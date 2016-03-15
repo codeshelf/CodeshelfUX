@@ -106,10 +106,22 @@ codeshelf.sitecontrollerlistview = function(websession, facility) {
             	.then(function() {
             		websession_.callServiceMethod("UiUpdateBehavior", 'makeSiteControllerPrimaryForNetwork', [siteController['persistentId']]);
                	});
+       	},
+       	
+		restartSiteController: function(siteController) {
+			codeshelf.simpleDlogService.showModalDialog("Confirm", "Restart Site Controller?", {})
+            	.then(function() {
+					websession_.callServiceMethod("UiUpdateBehavior", 'restartSiteController', [siteController['persistentId']]);
+               	});
        	}
     };
 
     var contextDefs = [
+        {
+           "label": "Restart Site Controller",
+           "permission": "facility:edit",
+           "action": self.restartSiteController
+        },
         {
             "label": "Make Site Controller Primary For Network",
             "permission": "facility:edit",
