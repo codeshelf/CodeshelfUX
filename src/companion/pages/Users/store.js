@@ -6,7 +6,7 @@ import {createStore} from '../App/ListManagement/storeFactory';
 
 const getUpdateData = (data) => {
     let newData = [];
-
+    
     newData.push(data.get('id'));
     newData.push({
         username: data.get('username'),
