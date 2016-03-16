@@ -78,10 +78,9 @@ export class BottomChart extends Component {
             displayName: "ID"
         }].concat(this.props.data[0].bins.map((bin, index) => {
           const startTime = moment.utc(bin.start).format('dd HH:mm');
-          const endTime = moment.utc(bin.start).add('minutes', filter.interval.asMinutes()).format('dd HH:mm');
           return {
             columnName: index.toString(),
-            displayName: startTime + " - " + endTime,
+            displayName: startTime,
           }
         })));
       return (
