@@ -5,6 +5,9 @@
 		<h3>Set Facility Name</h3>
 	</div>
 	<div class="modal-body">
+	 	<div class="alert alert-danger" ng-repeat="(field, fieldErrors) in response.errors.fieldErrors">
+			<div ng-repeat="fieldError in fieldErrors">{{fieldError.message}}</div>
+		</div>
 		<div id='instructions'>
 			<!-- forcing separate lines on these instructions-->
 			<p>Domain ID is the internal code name of the facility. This determines the file directory within your dropbox.</p>

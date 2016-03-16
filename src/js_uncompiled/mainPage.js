@@ -727,12 +727,18 @@ codeshelfApp.FacilityNgController = function($scope, $modalInstance, websession,
  * @export
  */
 codeshelfApp.FacilityNgController.prototype.ok = function(){
+	var self = this;
 	var facility = this.scope_['facility'];
 	facility["className"] = "Facility";
 	this.websession_.update(facility, ["domainId", "description", "primaryChannel", "primarySiteControllerId"]).then(function(newFacility) {
+		self.modalInstance_.close();
 		codeshelf.sessionGlobals.setFacility(newFacility);
-	});
-	this.modalInstance_.close();
+    }, function(error) {
+    	self.scope_.$apply(function() {
+			self.scope_['response'] = error;
+		});
+    });
+
 };
 
 /**
