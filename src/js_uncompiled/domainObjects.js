@@ -1053,8 +1053,8 @@ domainobjects = {
 				'title': 'Location',
 				'width': 8
 			},
-			'role': {
-				'id': 'role',
+			'roleUi': {
+				'id': 'roleUi',
 				'title': 'Role',
 				'width': 8
 			},

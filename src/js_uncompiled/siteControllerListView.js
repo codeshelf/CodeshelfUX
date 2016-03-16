@@ -51,7 +51,7 @@ codeshelf.sitecontrollerlistview = function(websession, facility) {
                 return true;
             else if (inProperty['id'] === 'location')
                 return true;
-            else if (inProperty['id'] === 'role')
+            else if (inProperty['id'] === 'roleUi')
                 return true;
             else if (inProperty['id'] === 'networkDomainId')
                 return true;
