@@ -99,7 +99,7 @@ export function createStore({storeName,
               }
               case LOADING_OK: {
                   return state.mergeIn(['items'], new Map({
-                    data: getDataFormat(action.data),
+                    data: action.data.results,
                     loading: null,
                     error: null,
                   }));

@@ -4,6 +4,7 @@ import DateDisplay from "components/common/DateDisplay";
 import DurationDisplay from "components/common/DurationDisplay";
 import Immutable from "immutable";
 import ListManagement from "components/common/list/ListManagement";
+
 export default class ImportList extends React.Component {
 
   constructor( props ) {
@@ -51,20 +52,6 @@ export default class ImportList extends React.Component {
     ]);
 
     let {state} = props;
-    this.columnsCursor = state.cursor([
-      "preferences",
-      "imports",
-      "orders",
-      "table",
-      "columns"
-    ]);
-    this.columnSortSpecsCursor = state.cursor([
-      "preferences",
-      "imports",
-      "orders",
-      "table",
-      "sortSpecs"
-    ]);
   }
 
   render() {

@@ -5,19 +5,23 @@ import {Button} from "components/common/Form";
 import ModalForm from "components/common/ModalForm";
 import FormFields from "components/common/FormFields";
 import {getAPIContext} from "data/csapi";
+import exposeRouter, {toURL} from 'components/common/exposerouter';
 
-export default class EDIForm extends React.Component{
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+
+import {getEdiGatewayMutable} from './get';
+import {acUpdateEdiGatewayForm, acLoadEdiGateway, acAddEdiGateway,
+  acEditEdiGateway, acStoreSelectedEdiGatewayForm} from './store';
+
+class EDIForm extends React.Component{
 
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
-        let {initialFormData} = props;
-        var formData = initialFormData || Map();
-        if (initialFormData && initialFormData.get("passwordEnc")) {
-            formData = initialFormData.set("password", "********");
-        }
-
-        this.state = {formData: formData};
+        // if (initialFormData && initialFormData.get("passwordEnc")) {
+        //     formData = initialFormData.set("password", "********");
+        // }
     }
 
     handleSubmit(formData) {
@@ -26,33 +30,35 @@ export default class EDIForm extends React.Component{
         if (params.password && params.password.replace(/\*+/, '').length == 0) { //all * replaced
             delete params.password;
         }
-        return getAPIContext().updateEdiGateway(params);
+        return this.props.acEditEdiGateway(params);
     }
 
     handleChange(field, value) {
-        let newFormData = this.state.formData.set(field.name, value);
-        this.setState({formData: newFormData});
+        this.props.acUpdateEdiGatewayForm(field, value);
     }
-
-
 
     render() {
-        let {title, formMetadata} = this.props;
-        let {formData} = this.state;
-        return (<DocumentTitle title={title}>
-                <ModalForm title={title}
-                        returnRoute="edigateways"
-                        onSave={this.handleSubmit.bind(this, formData)}
-                        formData={formData}>
-
-                    <FormFields
-                        formMetadata={formMetadata}
-                        formData={formData}
-                        handleChange={this.handleChange}/>
-
-                    {this.props.children}
-                </ModalForm>
-                </DocumentTitle>
-               );
+        let {title, formMetadata, formData} = this.props;
+        return (
+          <DocumentTitle title={title}>
+            <ModalForm title={title}
+              returnRoute={toURL(this.props, "../edigateways")}
+              onSave={this.handleSubmit.bind(this, formData)}
+              formData={formData}>
+            <FormFields
+              formMetadata={formMetadata}
+              formData={formData}
+              handleChange={this.handleChange}/>
+            {this.props.children}
+            </ModalForm>
+          </DocumentTitle>
+        );
     }
 };
+
+function mapDispatch(dispatch) {
+  return bindActionCreators({acUpdateEdiGatewayForm, acLoadEdiGateway,
+    acAddEdiGateway, acEditEdiGateway, acStoreSelectedEdiGatewayForm}, dispatch);
+}
+
+export default connect(getEdiGatewayMutable, mapDispatch)(EDIForm);
