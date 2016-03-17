@@ -23,10 +23,12 @@ const initState = new (Record({
 
 function getCurrentTimeRounded(endtime, interval) {
   if (interval.minutes()) {
-    const remainder = endtime.minute() % 5;
+    const remainder = endtime.minute() % interval.asMinutes();
     endtime.subtract('minutes', remainder);
   } else if (interval.hours()) {
     endtime.subtract('minutes', endtime.minute());
+    //const remainder = endtime.hour() % interval.hours();
+    //endtime.subtract('hours', remainder);
   }
   return endtime;
 }
@@ -122,7 +124,8 @@ export function workerPickChartReducer(state = initState, action) {
       }
     }
     case SET_FILTER: {
-      const {filter} = action;
+      let {filter} = action;
+      filter = filter.set('endtime', getCurrentTimeRounded(filter.endtime, filter.interval));
       if (!state.filter) {
         state = state.set("filter", getDefaultFilter());
       }
