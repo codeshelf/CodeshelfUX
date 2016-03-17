@@ -2,6 +2,12 @@ import {Record, Map} from 'immutable';
 
 import {createStore} from '../ListManagement/storeFactory';
 
+const updateItemCond = (item, action) => {
+  if (item.persistentId == action.data.persistentId) {
+    return action.data;
+  }
+  return item;
+}
 
 const getUpdateData = (data) => {
     let newData = [];
@@ -17,12 +23,11 @@ const getUpdateData = (data) => {
 }
 
 const store = createStore({
-                          storeName: "users",
+                          storeName: "ediGateways",
                           getItems: 'getEdiGateways',
-                          addItem: 'getEdiGateways',
                           updateItem: 'updateEdiGateway',
-                          mutateUpdateData: 'getEdiGateways',
                           useFacility: true,
+                          updateItemCond,
                           });
 
 export const acUpdateEdiGatewayForm = store.acUpdateForm;

@@ -40,7 +40,7 @@ const initState = new (Record({
         sortSpecs: new Map({}),
     }),
     ediGateways: new Map({
-      columns: ["provider", "active"],
+      columns: ["domainId", "provider", "active"],
       sortSpecs: new Map({}),
     }),
   }),

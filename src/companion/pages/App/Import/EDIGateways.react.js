@@ -58,10 +58,9 @@ class EdiGateways extends Component {
 
 };
 
-
 function mapDispatch(dispatch) {
   return bindActionCreators({acUpdateEdiGatewayForm, acLoadEdiGateway,
     acAddEdiGateway, acEditEdiGateway, acStoreSelectedEdiGatewayForm}, dispatch);
 }
 
-export default exposeRouter(connect(getEdiGatewayMutable, mapDispatch)(EdiGateways));
+export default connect(getEdiGatewayMutable, mapDispatch)(EdiGateways);

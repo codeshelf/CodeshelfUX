@@ -1,4 +1,4 @@
-import  React from "react";
+import React from "react";
 import DocumentTitle from "react-document-title";
 import {Map} from "immutable";
 import {Button} from "components/common/Form";
@@ -19,13 +19,10 @@ class EDIForm extends React.Component{
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
-        // if (initialFormData && initialFormData.get("passwordEnc")) {
-        //     formData = initialFormData.set("password", "********");
-        // }
     }
 
     handleSubmit(formData) {
-        var params = formData.toJS();
+        const params = formData.toJS();
         //don't save password if it hasn't been edited
         if (params.password && params.password.replace(/\*+/, '').length == 0) { //all * replaced
             delete params.password;
@@ -34,11 +31,11 @@ class EDIForm extends React.Component{
     }
 
     handleChange(field, value) {
-        this.props.acUpdateEdiGatewayForm(field, value);
+        this.props.acUpdateEdiGatewayForm(field.name, value);
     }
 
     render() {
-        let {title, formMetadata, formData} = this.props;
+        const {title, formMetadata, formData} = this.props;
         return (
           <DocumentTitle title={title}>
             <ModalForm title={title}
