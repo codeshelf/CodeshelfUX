@@ -138,23 +138,23 @@ class ScriptStepExecutor extends React.Component {
         });
     }
 
-    renderButton(action, loading) {
+    renderButton(action, loading, label = "Run") {
         return  (<Button bsStyle="primary" type="submit" onClick={action}>
                 {
                     (loading) ?
                         <span><Icon name="spinner" spin/> Running...</span>
                         :
-                        <span>Run</span>
+                        <span>{label}</span>
                 }
                 </Button>);
 
     }
 
-    renderFirstStep(scriptInputs) {
+    renderFirstStep(scriptInputs, label) {
         return (
                 <div className="text-right">
                     {
-                        this.renderButton(this.processScript.bind(this, scriptInputs), false)
+                        this.renderButton(this.processScript.bind(this, scriptInputs), false, label)
                     }
                 </div>
                 );
@@ -176,7 +176,7 @@ class ScriptStepExecutor extends React.Component {
                                     <BSList label="Required Files" values={requiredFiles} />
                                     <div className="text-right">
                                     {
-                                        this.renderButton(this.processStep.bind(this, scriptInputs, stepResponse), loading)
+                                        this.renderButton(this.processStep.bind(this, scriptInputs, stepResponse), loading, "Run Step")
                                     }
                                     </div>
                                  </div>
@@ -205,13 +205,13 @@ class ScriptStepExecutor extends React.Component {
         let {scriptInputs} = this.props;
         let {stepResponse} = this.state;
         let valid = this.validScriptInputs(scriptInputs);
-        if (valid && !stepResponse) {
-            return this.renderFirstStep(scriptInputs);
-        } else if (valid && stepResponse) {
-            return this.renderNextStep(scriptInputs, stepResponse);
-        } else {
-            return null;
-        }
+        let firstStepLabel = (!stepResponse) ? "Run" : "Restart";
+        return (
+          <div>
+            {valid && this.renderFirstStep(scriptInputs, firstStepLabel)}
+            {valid && stepResponse && this.renderNextStep(scriptInputs, stepResponse)}
+          </div>
+        );
     }
 }
 
