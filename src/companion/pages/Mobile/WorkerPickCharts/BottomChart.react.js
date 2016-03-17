@@ -87,13 +87,9 @@ class BottomChartDummy extends Component {
           const startTime = moment.utc(bin.start)
                                   .add(utcOffset, 'm')
                                   .format('dd HH:mm');
-          const endTime = moment.utc(bin.start)
-                                .add(utcOffset, 'm')
-                                .add('minutes', filter.interval.asMinutes())
-                                .format('dd HH:mm');
           return {
             columnName: index.toString(),
-            displayName: startTime + " - " + endTime,
+            displayName: startTime,
           }
         })));
       return (
