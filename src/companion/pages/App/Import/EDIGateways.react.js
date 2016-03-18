@@ -39,12 +39,24 @@ class EdiGateways extends Component {
     this.props.acLoadEdiGateway({limit: 20});
   }
 
+  flatten(data) {
+    if (!data) return data;
+    for (let obj in data) {
+      if (!data[obj]['providerCredentials']) continue;
+      const blob = JSON.parse(data[obj]['providerCredentials']);
+      for (let key in blob) {
+        data[obj][key] = blob[key];
+      }
+    }
+    return data;
+  }
+
   render() {
     return (
       <DocumentTitle title={"EDI Gateways"}>
         <div>
           <ListManagement
-            results={this.props.items.get('data')}
+            results={this.flatten(this.props.items.get('data'))}
             keyColumn={keyColumn}
             storeName={"ediGateways"}
             columnMetadata={this.columnMetadata}
