@@ -6,6 +6,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {acSetFilterAndRefresh} from "../../Mobile/WorkerPickCharts/store";
 import WorkerPickCharts from '../../Mobile/WorkerPickCharts/WorkerPickCharts.react';
+import PivotTable from '../PivotTable/PivotTable';
 
 class WorkResults extends React.Component{
     render() {
@@ -21,6 +22,7 @@ class WorkResults extends React.Component{
         var apiContext = getAPIContext(selected);
         return (
           <SingleCellLayout title="Picks By Hour">
+            <PivotTable />
             <WorkerPickCharts {...this.props}
                                 desktop={true}
                                 expand={false} />
