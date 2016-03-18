@@ -11,6 +11,7 @@ export class ConnectionError extends Error {
     constructor(message) {
         super(message);
         this.message = message;
+        this.name = 'ConnectionError';
     }
 }
 
@@ -173,6 +174,7 @@ export function createUser(data) {
 }
 
 export function updateUser(id, data) {
+    delete data.username; //username is readonly
     return ajax("/api/users/"+id, {method: 'POST',
                                contentType: "form", //superagent forum url encoded
                                data: data});
@@ -195,9 +197,18 @@ export function getFacilities() {
 // facilityId can be injected(for mobile web) or will be taken from facility cursor if not provided(desktop web)
 export function getFacilityContext(selectedFacility) {
     var endpoint = state.cursor(["endpoint"])();
+// future    var facility = selectedFacility || state.cursor(["selectedFacility"])();
+// future   const {persistentId: facilityId, domainId, utcOffset} = facility;
+    // not sure if paths will be this way in the future
+// future   let basePath = "/api/facilities/" + domainId;
+
+//future    basePath = selectedCustomer !== 'ALL' && selectedCustomer ? basePath + "/customers/" + selectedCustomer.domainId: basePath;
+
     var facility = state.cursor(["selectedFacility"])();
     var facilityId = (selectedFacility && selectedFacility.persistentId) || facility.get("persistentId");
     var facilityPath = "/api/facilities/" + facilityId;
+//remove when merging react-14-upgrade
+    let basePath = facilityPath;
     let ordersPath = facilityPath + "/orders";
     let workInstructionsPath = facilityPath + "/work/instructions";
     let domainId = facility && facility.domainId;
@@ -373,17 +384,22 @@ export function getFacilityContext(selectedFacility) {
         },
 
         getWorker: function(domainId) {
-          var workerPath = facilityPath + "/workers/" + encodeURIComponent(domainId);
+          var workerPath = basePath + "/workers/" + encodeURIComponent(domainId);
+          return ajax(workerPath, {});
+        },
+
+        getWorkerWorkInstructions: function(domainId) {
+          var workerPath = basePath + "/workers/" + encodeURIComponent(domainId) + "/workinstructions";
           return ajax(workerPath, {});
         },
 
         getWorkerEvents: function(domainId) {
-          var workerPath = facilityPath + "/workers/" + encodeURIComponent(domainId) + "/events";
+          var workerPath = basePath + "/workers/" + encodeURIComponent(domainId) + "/events";
           return ajax(workerPath, {});
         },
 
         getWorkerEventsNext: function({id, next}) {
-          var workerPath = facilityPath + "/workers/" + encodeURIComponent(id) + "/events";
+          var workerPath = basePath + "/workers/" + encodeURIComponent(id) + "/events";
           return ajax(workerPath, {
             data: {next}
           });
@@ -440,25 +456,25 @@ export function getFacilityContext(selectedFacility) {
         },
         //TODO: this should work like extension point and scheduledjob
         addWorker: function(worker) {
-            if (worker.persistentId != null) {
+            let data = (worker.toJS) ? worker.toJS() : worker;
+            if (data.persistentId != null) {
                 console.warn("trying to add a worker with persistentId set");
             }
-            delete worker.persistentId;  //don't send in JSON so it doesn't try to deserialize with setPersistentId and fail
-            var workersPath = facilityPath + "/workers";
+            delete data.persistentId;  //don't send in JSON so it doesn't try to deserialize with setPersistentId and fail
+            var workersPath = basePath + "/workers";
             return ajax(workersPath, {
                 method: "POST",
-                data: JSON.stringify(worker),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json"
+                data: data,
+                contentType: "form"
             });
         },
         updateWorker: function(worker) {
-            var workersPath = "/api/workers/" + worker.persistentId;
+            let data = (worker.toJS) ? worker.toJS() : worker;
+            const workersPath = basePath + "/workers/" + worker.persistentId;
             return ajax(workersPath, {
-                method: "PUT",
-                data: JSON.stringify(worker),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json"
+              method: "POST",
+              data: data,
+              contentType: "form"
             });
         },
 

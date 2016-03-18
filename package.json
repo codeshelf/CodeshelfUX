@@ -33,6 +33,7 @@
     "jspath": "^0.3.2",
     "lodash": "^3.10.1",
     "moment": "^2.9.0",
+    "node-libs-browser": "^0.4.1",
     "node-uuid": "^1.4.7",
     "normalize.css": "^3.0.2",
     "orb": "^1.0.9",

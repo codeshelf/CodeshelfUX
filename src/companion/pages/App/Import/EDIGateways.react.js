@@ -49,7 +49,7 @@ class ListPage extends React.Component{
 
     updateList() {
         return this.props.listSource().then((list) => {
-            let immutableList = fromJS(list);
+            let immutableList = fromJS(list.results);
             this.setState(newState(immutableList));
             return immutableList;
         });
