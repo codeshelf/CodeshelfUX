@@ -281,14 +281,10 @@ export function createStore({storeName,
     return (dispatch, getState) => {
         dispatch(setStatus(ADD_ITEM, LOADING_STARTED));
 
-        console.info("muta", itemForm);
-
         let mutData = mutateAddData(itemForm)
         if (!Array.isArray(mutData)) {
           mutData = [mutData];
         }
-
-        console.info("mut", mutData);
 
         return addItem(...mutData).then((data) => {
            console.log(`data from add item`, data);
