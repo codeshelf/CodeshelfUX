@@ -30,9 +30,6 @@ class EdiGateways extends Component {
       {columnName: "active",
        displayName: "Active"}
     ])
-    this.rowActionComponent = ListManagement.toEditButton((row) => {
-      return { to: toURL(this.props, 'edigateways/' + row.get(keyColumn))};
-    });
   }
 
   componentWillMount() {
@@ -52,6 +49,9 @@ class EdiGateways extends Component {
   }
 
   render() {
+    const rowActionComponent = ListManagement.toEditButton((row) => {
+      return { to: toURL(this.props, 'edigateways/' + row.get(keyColumn))};
+    });
     return (
       <DocumentTitle title={"EDI Gateways"}>
         <div>
@@ -60,7 +60,7 @@ class EdiGateways extends Component {
             keyColumn={keyColumn}
             storeName={"ediGateways"}
             columnMetadata={this.columnMetadata}
-            rowActionComponent={this.rowActionComponent}
+            rowActionComponent={rowActionComponent}
           />
           {this.props.children && React.cloneElement(this.props.children, {formMetaData: this.columnMetadata})}
         </div>
