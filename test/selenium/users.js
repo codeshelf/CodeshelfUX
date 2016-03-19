@@ -29,14 +29,14 @@ export default {
     page.expect.element('@modal').to.be.present.after(2000);
     page.clickCancelButton();
   },
-  /*'Add item': (browser) => {
+  'Add item': (browser) => {
     const page = browser.page.users();
     page.clickAddButton();
     page.fillCompleteData();
     browser.pause(1000);
     page.submitForm('form');
     page.expect.element('@modal').to.not.be.present.after(2000);
-  },*/
+  },
   'Open and close Edit section': (browser) => {
     const page = browser.page.users();
     browser.execute(function() {
