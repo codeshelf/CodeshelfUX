@@ -80,7 +80,7 @@ class Maintenance extends React.Component{
         return (
                 <SingleCellLayout title="Maintenance">
                   <IBox>
-                    <Tabs className="nav-tabs-simple" defaultActiveKey="jobs">
+                    <Tabs className="nav-tabs-simple" defaultActiveKey="database">
                         <Tab eventKey="database" title="Database">
                             <Grid fluid>
                                 <Row1>

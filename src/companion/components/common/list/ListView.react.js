@@ -195,9 +195,9 @@ class TableSettings extends PureComponent {
 ListView.TableSettings = TableSettings;
 ListView.ColumnRecord = ColumnRecord;
 ListView.propTypes = {
-    columns: React.PropTypes.func, //cursor
+    columns: React.PropTypes.object,
     columnMetadata: ImmutablePropTypes.iterable.isRequired,
-    sortSpecs: React.PropTypes.func, //cursor
+    sortSpecs: React.PropTypes.object,
     keyColumn: React.PropTypes.string.isRequired,
     results: ImmutablePropTypes.iterable
 };

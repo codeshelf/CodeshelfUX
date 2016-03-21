@@ -16,11 +16,15 @@ import {workerDetailReducer} from '../Detail/WorkerDetail/store';
 import {workerMgmtReducer} from './WorkerMgmt/store';
 import {printingTemplatesReducer} from './PrintingTemplates/store';
 import {sidebarReducer} from '../Sidebar/store';
-import {listReducer} from '../../components/common/list/store'
+import {listReducer} from '../../components/common/list/store';
+import {ediGatewayReducer} from './Import/store';
+import {dailyMetricsReducer} from './Maintenance/store';
 
 const rootReducer = combineReducers({
   cartSearch: cartSearchReducer,
   cartDetail: cartDetailReducer,
+  dailyMetrics: dailyMetricsReducer,
+  ediGateway: ediGatewayReducer,
   facility: facilityReducer,
   orderSearch: orderSearchReducer,
   orderDetail: orderDetailReducer,

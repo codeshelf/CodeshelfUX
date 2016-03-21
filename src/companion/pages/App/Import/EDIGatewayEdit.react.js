@@ -1,8 +1,17 @@
-import  React from "react";
+import React from "react";
 import {Button} from "components/common/bootstrap";
 import EDIForm from "./EDIForm";
 import {Map} from "immutable";
 import {getAPIContext} from "data/csapi";
+import exposeRouter, {toURL} from 'components/common/exposerouter';
+
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+
+import {getEdiGatewayMutable} from './get';
+import {acUpdateEdiGatewayForm, acLoadEdiGateway, acAddEdiGateway,
+  acEditEdiGateway, acStoreSelectedEdiGatewayForm} from './store';
+
 
 const baseFormMetadata = [
     {name: "active",
@@ -70,30 +79,48 @@ const domainIdMap = new Map({"IRONMQ": ironMQFormMetadata,
                              "SFTPORDERS": sftpOrderFormMetadata,
                              "SFTPWIS": sftpWIFormMetadata});
 
-function toSelectedListItem() {
-    class SelectedItem extends React.Component {
-        render() {
-            let {id} = this.props.params;
-            let {list} = this.props;
-            let listItem = list.find((u) => {
-                return u.get("domainId") == id;
-            });
-            let config = listItem.get("providerCredentials", "{}");
-            let active  = listItem.get("active", false);
-            let configJSON = new Map(JSON.parse(config))
-                .set("domainId", id) //add domainId  and active for form
-                .set("active", active);
+class SelectedItem extends React.Component {
 
-            let formMetadata = domainIdMap.get(id, sftpOrderFormMetadata);
-            return (<EDIForm title={"Edit " + listItem.get("domainId")} initialFormData={configJSON} formMetadata={formMetadata}>
-                       {(id === "DROPBOX") && <DropboxLinkButton>Link</DropboxLinkButton>}
-                    </EDIForm>);
+    constructor(props) {
+        super(props);
+        this.formMetadata = domainIdMap.get(this.props.params.id, sftpOrderFormMetadata);
+        this.id = this.props.params.id;
+    }
+
+    componentWillMount() {
+        this.findSelectedEdiForm(this.props);
+    }
+
+    componentWillReceiveProps(newProps) {
+        this.findSelectedEdiForm(newProps);
+    }
+
+    findSelectedEdiForm(props) {
+        if(!this.props.itemForm) {
+            const {id} = this.props.params;
+            const list = this.props.items.get('data');
+            const listItem = list.find((u) => {
+                return u["domainId"] == id;
+            });
+            this.props.acStoreSelectedEdiGatewayForm(Map(listItem));
         }
     }
-    return SelectedItem;
+
+    render() {
+        const listItem = this.props.itemForm;
+        if (!listItem) {
+            return null;
+        }
+        return (<EDIForm {...this.props} title={"Edit " + listItem["domainId"]} formData={new Map(listItem)} formMetadata={this.formMetadata}>
+                   {(this.id === "DROPBOX") && <DropboxLinkButton>Link</DropboxLinkButton>}
+                </EDIForm>);
+    }
 }
 
-export default toSelectedListItem();
+function mapDispatch(dispatch) {
+  return bindActionCreators({acUpdateEdiGatewayForm, acLoadEdiGateway,
+    acAddEdiGateway, acEditEdiGateway, acStoreSelectedEdiGatewayForm}, dispatch);
+}
 
 class DropboxLinkButton extends React.Component {
 
@@ -108,3 +135,5 @@ class DropboxLinkButton extends React.Component {
         return (<Button type="button" onClick={this.handleClick.bind(this)}>Link</Button>);
     }
 }
+
+export default exposeRouter(connect(getEdiGatewayMutable, mapDispatch)(SelectedItem));
