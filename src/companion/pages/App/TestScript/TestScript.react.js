@@ -1,10 +1,11 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import DocumentTitle from 'react-document-title';
 import _ from 'lodash';
 import {Map, List, fromJS} from 'immutable';
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import {IBox, IBoxBody} from 'components/common/IBox';
-import {PageGrid, Row, Col} from 'components/common/pagelayout';
+import {Row1, Row, Col} from 'components/common/pagelayout';
 import {Input, ListGroup, Modal} from 'react-bootstrap';
 import {Button, List as BSList} from 'components/common/bootstrap';
 import {ErrorDisplay} from 'components/common/Form';
@@ -28,28 +29,27 @@ export default class TestScript extends React.Component{
     }
 
     deleteOrders() {
-        return getFacilityContext().deleteOrders();
+        return getAPIContext().deleteOrders();
     }
 
     recreateFacility() {
-        return getFacilityContext().recreateFacility().then((facility) => {
+        return getAPIContext().recreateFacility().then((facility) => {
             window.location.reload();
             return facility;
         });
     }
 
     render() {
-            let {scriptInputs} = this.state;
-            return (<DocumentTitle title="Test Script">
-                        <PageGrid>
-                            <Row>
-                                <Col sm={12}>
-                                        <TestFunctionExecution />
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col sm={12} md={6}>
-                <IBox>
+      let {scriptInputs} = this.state;
+      return (
+        <DocumentTitle title="Test Script">
+          <div>
+            <Row1>
+              <TestFunctionExecution />
+            </Row1>
+          <Row>
+            <Col sm={12} md={6}>
+              <IBox>
                     <IBoxBody>
                         <div className="pull-right" style={{marginBottom: "1em"}}>
                             <div>
@@ -77,11 +77,11 @@ export default class TestScript extends React.Component{
                         <ScriptInput onChange={this.handleScriptInputChanges.bind(this)} />
                         <ScriptStepExecutor scriptInputs={scriptInputs} />
                 </IBoxBody>
-                </IBox>
-                </Col>
-                </Row>
-                </PageGrid>
-                </DocumentTitle>
+              </IBox>
+              </Col>
+            </Row>
+          </div>
+        </DocumentTitle>
                );
     }
 };
@@ -99,7 +99,7 @@ class ScriptStepExecutor extends React.Component {
     processScript(scriptInputs) {
         this.setState({"loading": true});
         let scriptFormData = this.toFormData(scriptInputs.files);
-        var apiContext = getFacilityContext();
+        var apiContext = getAPIContext();
         return this.processResponse(apiContext.processPickScript(scriptFormData));
     }
 
@@ -116,7 +116,7 @@ class ScriptStepExecutor extends React.Component {
         }
 
         let scriptFormData = this.toFormData(filteredFiles);
-        var apiContext = getFacilityContext();
+        var apiContext = getAPIContext();
         return this.processResponse(apiContext.runScriptStep(scriptFormData, stepResponse.id, scriptInputs.timeout));
     }
 
@@ -138,23 +138,23 @@ class ScriptStepExecutor extends React.Component {
         });
     }
 
-    renderButton(action, loading) {
+    renderButton(action, loading, label = "Run") {
         return  (<Button bsStyle="primary" type="submit" onClick={action}>
                 {
                     (loading) ?
                         <span><Icon name="spinner" spin/> Running...</span>
                         :
-                        <span>Run</span>
+                        <span>{label}</span>
                 }
                 </Button>);
 
     }
 
-    renderFirstStep(scriptInputs) {
+    renderFirstStep(scriptInputs, label) {
         return (
                 <div className="text-right">
                     {
-                        this.renderButton(this.processScript.bind(this, scriptInputs), false)
+                        this.renderButton(this.processScript.bind(this, scriptInputs), false, label)
                     }
                 </div>
                 );
@@ -176,7 +176,7 @@ class ScriptStepExecutor extends React.Component {
                                     <BSList label="Required Files" values={requiredFiles} />
                                     <div className="text-right">
                                     {
-                                        this.renderButton(this.processStep.bind(this, scriptInputs, stepResponse), loading)
+                                        this.renderButton(this.processStep.bind(this, scriptInputs, stepResponse), loading, "Run Step")
                                     }
                                     </div>
                                  </div>
@@ -205,13 +205,13 @@ class ScriptStepExecutor extends React.Component {
         let {scriptInputs} = this.props;
         let {stepResponse} = this.state;
         let valid = this.validScriptInputs(scriptInputs);
-        if (valid && !stepResponse) {
-            return this.renderFirstStep(scriptInputs);
-        } else if (valid && stepResponse) {
-            return this.renderNextStep(scriptInputs, stepResponse);
-        } else {
-            return null;
-        }
+        let firstStepLabel = (!stepResponse) ? "Run" : "Restart";
+        return (
+          <div>
+            {valid && this.renderFirstStep(scriptInputs, firstStepLabel)}
+            {valid && stepResponse && this.renderNextStep(scriptInputs, stepResponse)}
+          </div>
+        );
     }
 }
 
@@ -263,7 +263,7 @@ class ScriptInput extends React.Component {
     }
 
     handleClear() {
-        let fileInput = React.findDOMNode(this).querySelector("input[type=\"file\"]");
+        let fileInput = ReactDOM.findDOMNode(this).querySelector("input[type=\"file\"]");
         fileInput.value = null;
         this.setState({"files" : Map()});
     }

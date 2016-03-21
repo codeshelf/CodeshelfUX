@@ -1,4 +1,5 @@
-import  React from "react";
+import React from "react";
+import ReactDOM from 'react-dom';
 import ModalForm from "components/common/ModalForm";
 import {Select, ErrorDisplay} from "components/common/Form";
 import {fromJS, List} from "immutable";
@@ -13,7 +14,7 @@ export default class AddModalForm extends React.Component{
     }
 
     handleSave() {
-        let node = React.findDOMNode(this.refs.type);
+        let node = ReactDOM.findDOMNode(this.refs.type);
         let select = node.getElementsByTagName("select")[0];
         let value = select.options[select.selectedIndex].value;
         return this.props.addAction({type: value}).then((newOne) => {

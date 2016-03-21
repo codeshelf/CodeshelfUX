@@ -1,7 +1,9 @@
 import React from "react";
+import _ from 'lodash';
 import DocumentTitle from "react-document-title";
-        import {SingleCellLayout, Row, Col} from "components/common/pagelayout";
-import {SingleCellIBox} from 'components/common/IBox';
+import {SingleCellLayout, Row1} from "components/common/pagelayout";
+import {IBox} from "pages/IBox";
+
 import {fromJS, Map, Set} from "immutable";
 import WorkInstructionSearch from "./WorkInstructionSearch";
 import ListManagement from "components/common/list/ListManagement";
@@ -11,7 +13,7 @@ import {keyColumn, properties} from 'data/types/WorkInstruction';
 import moment from "moment";
 import Promise from "bluebird";
 import search from "data/search";
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 import SearchStatus from "components/common/SearchStatus";
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkersByBadgeId, toWorkerName} from 'data/workers/store';
@@ -25,7 +27,8 @@ export default class WorkInstructionIBox extends React.Component{
         var resultsPath = ["pivot", "workInstructions"];
 
         this.state = {
-            refreshingAction: Promise.resolve([])
+          refreshingAction: Promise.resolve([]),
+          selected: Set()
         };
 
 
@@ -33,7 +36,6 @@ export default class WorkInstructionIBox extends React.Component{
         this.columnsCursor  = state.cursor(rootPath.concat(["table", "columns"]));
         this.columnSortSpecsCursor = state.cursor(rootPath.concat(["table", "sortSpecs"]));
         this.pivotOptionsCursor = state.cursor(rootPath.concat(["pivot"]));
-        this.selectedCursor = state.cursor(selectedPath);
         this.resultsCursor = state.cursor(resultsPath);
 
         this.handleRefresh = this.handleRefresh.bind(this);
@@ -99,8 +101,8 @@ export default class WorkInstructionIBox extends React.Component{
                 promise.cancel();
             }
         }
-        promise =  search(getFacilityContext().findWorkInstructionReferences,
-                          _.partial(getFacilityContext().getWorkInstruction, properties),
+        promise =  search(getAPIContext().findWorkInstructionReferences,
+                          _.partial(getAPIContext().getWorkInstruction, properties),
                           this.handleResultsUpdated.bind(this),
                           filter);
 
@@ -137,37 +139,31 @@ export default class WorkInstructionIBox extends React.Component{
     }
 
     handleDrillDown(selected) {
-        this.selectedCursor((previousSelected) =>{
-            return previousSelected.clear().concat(fromJS(selected));
-        });
+      this.setState({selected: fromJS(selected)});
     }
 
     render() {
-        let {refreshingAction, errorMessage} = this.state;
+        let {refreshingAction, errorMessage, selected} = this.state;
         let results = this.resultsCursor();
         let resultValues = results.get("values");
-        let selected = this.selectedCursor();
         let pivotOptions = this.pivotOptionsCursor;
         let columns = this.columnsCursor;
         let sortSpecs = this.columnSortSpecsCursor;
         return (
-            <SingleCellIBox title={this.title}
-                    style={{display: "inline-block"}}
-                    isRefreshing={refreshingAction.isPending()}
-                        onRefresh={this.handleRefresh}>
-                <Row>
-                    <Col md={6}>
-                            <WorkInstructionSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
-                    </Col>
-                </Row>
+            <IBox
+                title={this.title}
+                style={{display: "inline-block"}}
+                loading={refreshingAction.isPending()} reloadFunction={this.handleRefresh}>
+              <Row1 md={6}>
+                <WorkInstructionSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
+              </Row1>
                 <SearchStatus {...{results, errorMessage}} />
                 <PivotTable results={resultValues} options={pivotOptions} onDrillDown={this.handleDrillDown}/>
                 <ListManagement results={selected}
-                 columns={columns}
+                 storeName={"workInstructions"}
                  columnMetadata={this.columnMetadata}
                  keyColumn={keyColumn}
-                 sortSpecs={sortSpecs}
                  allowExport={true}/>
-            </SingleCellIBox>);
+            </IBox>);
     }
 };

@@ -1,3 +1,27 @@
+/*
+IBox
+ - Independently Refreshable Section of a screen.
+ - An IBox has a title and a refresh button
+ - Most pages only have one IBox
+
+Refresh
+ - Refreshes the content within the box (filtered etc)
+ - If the content has tabs, only refreshes active tab
+
+Margins
+ The current IBox CSS uses 20px bottom margin. The IBox does not have any other margins.  All other "margins" are driven by the padding of the grid system.
+
+Structure
+ * TitleBar
+ ** Title
+ ** Controls
+ * Body
+ ** Section
+
+Common Single Section IBox (Called SingleCellIBox)
+
+*/
+
 import React from "react";
 import pluralize from "lib/pluralize";
 import classNames from "classnames";

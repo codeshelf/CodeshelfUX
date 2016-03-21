@@ -1,4 +1,5 @@
-import  React from 'react';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import DocumentTitle from 'react-document-title';
 import {Overlay, Popover, Button} from 'react-bootstrap';
 import Icon from 'react-fa';
@@ -131,7 +132,7 @@ class IssueButton extends React.Component {
           <Overlay
             show={(result != null)}
             placement="left"
-            target={()=> React.findDOMNode(this)}
+            target={()=> ReactDOM.findDOMNode(this)}
             rootClose={true}
             onHide={()=>{this.setState({result: null});}} >
               <Popover className={result && result.title.toLowerCase()} title={result && result.title}>{result && result.message}</Popover>

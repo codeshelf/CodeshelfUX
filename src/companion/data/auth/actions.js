@@ -28,6 +28,14 @@ export function login(fields) {
 
 export function loginCookies() {
     return getUser()
+        .catch((e) => {
+          // babel does not support instance of when extending error object
+          if (e.name === 'ConnectionError') {
+            const err = new ConnectionError ('Server is unavailable, please contact support and try again later', 'password');
+            loginError(err);
+            throw err;
+          }
+        })
         .then((user) => {
             logged(user, null);
             return user;
@@ -44,9 +52,10 @@ function validateForm(fields) {
 function authenticateCredentials(fields) {
     let {email, password} = fields;
     return authenticate(email, password)
-        .catch((e) =>{
-            if (e instanceof ConnectionError) {
-                throw e;
+        .catch((e) => {
+            // babel does not support instance of when extending error object
+            if (e.name === 'ConnectionError') {
+                throw new ConnectionError ('Server is unavailable, please contact support and try again later', 'password');
             } else {
                 throw new ValidationError ('Wrong username or password', 'password');
             }

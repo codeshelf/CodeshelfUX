@@ -1,11 +1,8 @@
 import moment from "moment";
-import _ from "lodash";
 import {Map, Record} from 'immutable';
 import {getWorkerPickChart} from "./get";
 
-import {getFacilityContextFromState} from "../Facility/get";
-
-import {getWorkerPickCharts, getWorkerPickByWorker} from "./mockGetWorkerPickCharts";
+import {getFacilityContextFromState} from "../../Facility/get";
 
 const initState = new (Record({
   whatIsLoaded: null, // store what we are loading. Currently idOfItem
@@ -15,13 +12,33 @@ const initState = new (Record({
   error: null,
   whatIsLoading: null,
   loadedTime: null,
+  purposes: {
+    data: null,
+    error: null,
+    loading: null,
+  },
+  view: 'graph', //table or graph
 }));
+
+
+function getCurrentTimeRounded(endtime, interval) {
+  if (interval.minutes()) {
+    const remainder = endtime.minute() % interval.asMinutes();
+    endtime.subtract('minutes', remainder);
+  } else if (interval.hours()) {
+    endtime.subtract('minutes', endtime.minute());
+    //const remainder = endtime.hour() % interval.hours();
+    //endtime.subtract('hours', remainder);
+  }
+  return endtime;
+}
 
 function getDefaultFilter() {
   return new (Record({
     interval: moment.duration(5, 'minutes'),
     window: moment.duration(2, 'hours'),
-    endtime: moment(),
+    endtime: getCurrentTimeRounded(moment(), moment.duration(5, 'minutes')),
+    purposes: [],
   }));
 }
 
@@ -31,7 +48,9 @@ const STATUS_OK = "ok";
 const STATUS_ERROR = "error";
 
 const SET_FILTER = "WPCH - set filter ";
-const TOGGLE_EXPAND = "toggle expand";
+const TOGGLE_VIEW = "toggle view";
+
+const LOADING_PURPOSES = "loding purposes";
 
 export function workerPickChartReducer(state = initState, action) {
   switch (action.type) {
@@ -71,19 +90,56 @@ export function workerPickChartReducer(state = initState, action) {
         }
       }
     }
+    case LOADING_PURPOSES: {
+      switch (action.status) {
+        case STATUS_STARTED: {
+          return state.merge(new Map({
+              purposes: {
+                data: null,
+                error: null,
+                loading: true,
+              },
+          }));
+        }
+        case STATUS_OK: {
+          const {data} = action;
+          return state.merge(new Map({
+              purposes: {
+                data: data.purpose,
+                error: null,
+                loading: false,
+              }
+          }));
+        }
+        case STATUS_ERROR: {
+          const {error} = action;
+          return state.merge(new Map({
+            purposes: {
+              data: null,
+              error: error,
+              loading: false,
+            },
+          }));
+        }
+      }
+    }
     case SET_FILTER: {
-      const {filter} = action;
+      let {filter} = action;
+      filter = filter.set('endtime', getCurrentTimeRounded(filter.endtime, filter.interval));
       if (!state.filter) {
         state = state.set("filter", getDefaultFilter());
       }
       return state.mergeIn(["filter"], new Map(filter));
+    }
+    case TOGGLE_VIEW: {
+      return state.set('view', state.view === 'graph' ? 'table': 'graph');
     }
     default: return state;
   }
 }
 
 export function acSetDefaultFilter() {
-  return (dispatch, getState) => {
+  return (dispatch, getState) => { // eslint-disable-line no-unused-vars
     dispatch(acSetFilter(getDefaultFilter()));
     dispatch(acSearch(true));
   }
@@ -118,11 +174,46 @@ function search(status, data) {
   };
 }
 
-export function filterToParams({endtime, window, interval}) {
+export function filterToParams({endtime, window, interval, purposes}) {
   return {
     startAt: moment(endtime).subtract(window),
     endAt: endtime,
     interval: interval,
+    purposes: purposes,
+  }
+}
+
+function getPurposes(status, data) {
+  return {
+    type: LOADING_PURPOSES,
+    status,
+    ...data,
+  }
+}
+
+export function acGetPurposes() {
+  return (dispatch, getState) => {
+    const localState = getWorkerPickChart(getState());
+    const {purposes: {data}} = localState;
+    if (data) {
+      console.info(`Skip loading purposes beacuse they are already loaded`);
+      return;
+    }
+    dispatch(getPurposes(STATUS_STARTED));
+
+    const facilityContext = getFacilityContextFromState(getState());
+    if (!facilityContext) {
+      dispatch(getPurposes(STATUS_ERROR));
+      return;
+    }
+
+    facilityContext.getEventPurposes()
+    .catch((error) => { // eslint-disable-line no-unused-vars
+        dispatch(getPurposes(STATUS_ERROR));
+    })
+    .then((data) => {
+        dispatch(getPurposes(STATUS_OK, {data}));
+    });
   }
 }
 
@@ -138,7 +229,8 @@ export function acSearch(forceLoad) {
 
     const facilityContext = getFacilityContextFromState(getState());
     if (!facilityContext) {
-      dispatch(search(STATUS_ERROR, {error: "Want to search for worker pick chart but no facility context is provided"}));
+      dispatch(search(STATUS_ERROR, {error: "Want to search for worker pick chart\
+                                             but no facility context is provided"}));
       return;
     }
 
@@ -147,7 +239,8 @@ export function acSearch(forceLoad) {
       //getWorkerPickCharts(filter),
       facilityContext.getWorkerPicksWithnWindow(filterToParams(filter)),
       //getWorkerPickByWorker(filter)
-      facilityContext.getWorkerPicksWithnWindowAllWorkers(filterToParams(filter)).then((result) => {
+      facilityContext.getWorkerPicksWithnWindowAllWorkers(filterToParams(filter))
+                     .then((result) => {
         result.sort((a,b) => {
            return (a.events.total -  b.events.total) * -1; //descending
         });
@@ -167,5 +260,11 @@ export function acSearch(forceLoad) {
         dispatch(search(STATUS_OK, {data, filter}));
       }
     });
+  }
+}
+
+export function acToggleView() {
+  return {
+    type: TOGGLE_VIEW,
   }
 }

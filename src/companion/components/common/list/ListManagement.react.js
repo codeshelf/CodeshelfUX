@@ -1,4 +1,5 @@
-import  React from "react";
+import React from "react";
+import ReactDOM from 'react-dom';
 import DocumentTitle from "react-document-title";
 import {Row, Col} from 'components/common/pagelayout';
 import {Input, Button} from 'react-bootstrap';
@@ -8,8 +9,15 @@ import PureComponent from 'components/common/PureComponent';
 import {EditButtonLink, AddButtonLink} from 'components/common/TableButtons';
 import ListView from "./ListView";
 import Immutable from 'immutable';
+import _ from 'lodash';
 
-export default class ListManagement extends React.Component {
+import exposeRouter, {toURL} from 'components/common/exposerouter';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {acMoveColumns, acSortColumn, acChangeColumns} from './store';
+import {getListMutable} from "./get";
+
+class ListManagement extends React.Component {
 
     constructor(props) {
         super(props);
@@ -22,16 +30,17 @@ export default class ListManagement extends React.Component {
         this.handleSearchChange = this.handleSearchChange.bind(this);
     }
 
-    static toEditButton(editButtonPropsFn: Function) {
-        class Edit extends React.Component {
-            render() {
-                var {rowData, ...rest}  = this.props;
-                return (<EditButtonLink {...editButtonPropsFn(rowData)} {...rest}>
-                        </EditButtonLink>);
-            }
+    shouldComponentUpdate(nextProps){
+        return !_.isEqual(nextProps, this.props);
+    }
 
-        }
-        return Edit;
+    static toEditButton(editButtonPropsFn: Function) {
+      return (props) => {
+        var {rowData, ...rest}  = props;
+        return (<EditButtonLink {...editButtonPropsFn(rowData)} {...rest}>
+                </EditButtonLink>);
+
+      };
     }
 
 
@@ -77,7 +86,7 @@ export default class ListManagement extends React.Component {
 
     generateCsv(columnMetadata, results) {
         var csv = encodeURIComponent(this.refs.listView.getCSV());
-        let anchor = React.findDOMNode(this.refs.export);
+        let anchor = ReactDOM.findDOMNode(this.refs.export);
         anchor.setAttribute("href", "data:attachment/csv," + csv);
     }
 
@@ -86,12 +95,23 @@ export default class ListManagement extends React.Component {
              , addButtonRoute
              , results
              , allowExport = false
+             , storeName
+             , tables
              , ...other} = this.props;
 
         var filteredResults = this.search(
                 this.state.search,
                 columnMetadata,
                 results);
+        let columnsManagement = {}
+        if (tables.get(storeName)) {
+            columnsManagement = {
+                columns: tables.getIn([storeName, 'columns']),
+                onColumnMove: (moved, value) => this.props.acMoveColumns(moved, value, storeName),
+                onColumnSortChange: (moved, value) => this.props.acSortColumn(moved, value, storeName),
+                sortSpecs: tables.getIn([storeName, 'sortSpecs'])
+            }
+        }
         return (
             <SingleCellIBox>
                 <Row>
@@ -109,13 +129,26 @@ export default class ListManagement extends React.Component {
                         }
                    </Col>
                 </Row>
-                <ListView ref="listView" {...other} results={filteredResults} columnMetadata={columnMetadata}/>
+                <ListView
+                    ref="listView"
+                    {...other}
+                    storeName={storeName}
+                    results={filteredResults}
+                    {...columnsManagement}
+                    onChange={this.props.acChangeColumns}
+                    columnMetadata={columnMetadata} />
             </SingleCellIBox>);
     }
 };
+
 ListManagement.toColumnMetadataFromProperties = ListView.toColumnMetadataFromProperties;
 ListManagement.setCustomComponent = ListView.setCustomComponent;
 
+function mapDispatch(dispatch) {
+  return bindActionCreators({acMoveColumns, acSortColumn, acChangeColumns}, dispatch);
+}
+
+export default connect(getListMutable, mapDispatch)(ListManagement);
 
 class Search extends React.Component {
 
@@ -126,8 +159,8 @@ class Search extends React.Component {
 
     handleChange(e) {
 
-        var query = React.findDOMNode(this.refs.query).getElementsByTagName("input")[0];
-        var column = React.findDOMNode(this.refs.column);
+        var query = ReactDOM.findDOMNode(this.refs.query).getElementsByTagName("input")[0];
+        var column = ReactDOM.findDOMNode(this.refs.column);
         (this.props.onChange)({
             search: {
                 query: query.value,

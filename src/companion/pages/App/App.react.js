@@ -1,6 +1,6 @@
 import DocumentTitle from 'react-document-title';
 import React from 'react';
-import {Link, RouteHandler} from 'react-router';
+import {Link} from 'react-router';
 import {fetchFacilities, selectFirstFacility, selectFacilityByName} from 'data/facilities/actions';
 import {getSelectedFacility} from 'data/facilities/store';
 import {isLoggedIn, getSelectedTenant} from 'data/user/store';
@@ -19,19 +19,18 @@ class App extends React.Component {
     }
 
     handleRouting(props) {
-        var router = props.router;
-        var params = router.getCurrentParams();
-        var facilityName = params.facilityName;
-        const facility = getSelectedFacility();
-        if (facilityName != null) {
-            if (!facility || (facility && facility.domainId !== facilityName)) {
-                selectFacilityByName(facilityName);
-            }
-        } else if (facility != null) {
-            router.transitionTo("facility", {facilityName: facility.domainId});
-        } else {
-            selectFirstFacility();
+      const {router, params} = props;
+      var facilityName = params.facilityName;
+      const facility = getSelectedFacility();
+      if (facilityName != null) {
+        if (!facility || (facility && facility.domainId !== facilityName)) {
+          selectFacilityByName(facilityName);
         }
+      } else if (facility != null) {
+        router.push(`/facilities/${facility.domainId}`);
+      } else {
+        selectFirstFacility();
+      }
     }
 
     render() {
@@ -40,7 +39,7 @@ class App extends React.Component {
         let tenant = getSelectedTenant();
         let {state} = this.props;
         return (facility && tenant) ?
-            <RouteHandler facility={facility} tenant={tenant} state={state}/>
+            React.cloneElement(this.props.children, { state, facility, tenant })
             :
             <span>Retrieving Facilities...</span>;
     }

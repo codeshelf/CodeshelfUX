@@ -1,29 +1,31 @@
 import  React from "react";
-import {ButtonLink} from 'components/common/bootstrap';
 import Icon from 'react-fa';
+import {LinkContainer} from 'react-router-bootstrap';
+import {NavItem, MenuItem, Button, ListGroupItem} from 'react-bootstrap';
 
-export class EditButtonLink extends React.Component{
+function wrapLink(Component) {
+  return (props) => {
+    return (<LinkContainer {...props}>
+            <Component {...props}>
+            {props.children}
+            </Component>
+            </LinkContainer>);
+  };
+}
 
-    constructor(props) {
-        super(props);
-    }
+const ButtonLink = wrapLink(Button);
+export function EditButtonLink(props) {
+  return (
+      <ButtonLink className="edit" title="Edit" bsStyle="primary" {...props}>
+        <Icon name="edit" />
+      </ButtonLink>);
 
-    render() {
-        return (<ButtonLink title="Edit" bsStyle="primary" {...this.props}>
-                    <Icon name="edit" />
-                </ButtonLink>);
-    }
-};
+  return wrapLink()
+}
 
-export class AddButtonLink extends React.Component{
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (<ButtonLink bsStyle="primary" {...this.props} id="add" >
-                <Icon name="plus" />
-                </ButtonLink>);
-    }
-};
+export function AddButtonLink(props) {
+  return (
+      <ButtonLink className="add" title="Add" bsStyle="primary" {...props}>
+        <Icon name="plus" />
+      </ButtonLink>);
+}

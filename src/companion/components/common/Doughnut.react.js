@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from 'react-dom';
 import Doughnut from "lib/chart/doughnut.js";
 
 var DoughnutChart = React.createClass({
@@ -7,7 +8,7 @@ var DoughnutChart = React.createClass({
     },
     componentDidMount: function() {
         var chartData = this.props.chartData;
-        var el = this.getDOMNode();
+        var el = ReactDOM.findDOMNode(this);
         var chart = new Doughnut(el, chartData, {
             percentageInnerCutout: 75,
             animation: false,

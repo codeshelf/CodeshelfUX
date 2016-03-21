@@ -1,12 +1,13 @@
 import React from 'react';
-import {Link} from 'react-router';
+import {Link} from '../../links.js';
 import {Tabs, Tab} from 'react-bootstrap';
 import {SingleCellLayout} from 'components/common/pagelayout';
+import {IBox} from 'pages/IBox';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import UploadForm from 'components/common/UploadForm';
 import {Checkbox, changeState} from 'components/common/Form';
 import {Authz, authz, isAuthorized} from 'components/common/auth';
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import ImportList from './ImportList';
 import ImportSearch from './ImportSearch';
 import search from "data/search";
@@ -70,7 +71,7 @@ export default class Imports extends React.Component{
                 promise.cancel();
             }
         }
-        promise =  getFacilityContext().findImportReceipts(filter).then((receipts) => {
+        promise =  getAPIContext().findImportReceipts(filter).then((receipts) => {
             this.handleResultsUpdated(receipts, receipts.length);
         });
         promise.then(()=> this.forceUpdate());
@@ -93,7 +94,7 @@ export default class Imports extends React.Component{
     }
 
     handleImportSubmit(method, formInput) {
-      return getFacilityContext()[method](formInput).then(function() {
+      return getAPIContext()[method](formInput).then(function() {
         this.handleRefresh();
       }.bind(this));
     }
@@ -147,18 +148,20 @@ export default class Imports extends React.Component{
     }
 
     render() {
-      const facility = getFacilityContext().facility;
+      const {facility, domainId} = getAPIContext();
       return (
         <SingleCellLayout title="Manage Imports">
-          <Authz permission="facility:edit">
-            <Link id="configure" to="edigateways" params={{facilityName: facility.domainId}}>Configure EDI</Link>
-          </Authz>
-          <Tabs className="nav-tabs-simple" defaultActiveKey="orders">
-            {this.renderOrder(facility)}
-            {isAuthorized("location:import") && this.renderLocation()}
-            {isAuthorized("location:import") && this.renderAisle()}
-            {isAuthorized("inventory:import") && this.renderInventory()}
-          </Tabs>
+          <IBox>
+            <Authz permission="facility:edit">
+          <Link id="configure" to="edigateways" params={{facilityName: domainId}} shouldHaveFacility={true}>Configure EDI</Link>
+            </Authz>
+            <Tabs className="nav-tabs-simple" defaultActiveKey="orders">
+              {this.renderOrder(facility)}
+              {isAuthorized("location:import") && this.renderLocation()}
+              {isAuthorized("location:import") && this.renderAisle()}
+              {isAuthorized("inventory:import") && this.renderInventory()}
+            </Tabs>
+          </IBox>
         </SingleCellLayout>);
     }
 };

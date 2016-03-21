@@ -1,9 +1,16 @@
 import React from 'react';
-import Navigation from "../Navigation";
+import {Navigation, AuthzMenuItem} from "../../Sidebar/Navigation";
 import exposeRouter from 'components/common/exposerouter';
 
-const AuthzMenuItem = Navigation.AuthzMenuItem;
 class AdminNavigation extends React.Component {
+
+  componentWillMount() {
+    document.body.classList.add("fixed-header", "dashboard", "sidebar-visible", "menu-pin");
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove("fixed-header", "dashboard", "sidebar-visible", "menu-pin");
+  }
 
   getUXUrl(facility) {
       let uxURL = "/ux/?facilityId=" + facility.get("domainId");
@@ -11,10 +18,10 @@ class AdminNavigation extends React.Component {
   }
 
   render() {
-      var params = this.props.router.getCurrentParams();
+      var params = this.props.params;
       let {facility} = this.props;
-      return (<Navigation {...this.props}>
-                  <AuthzMenuItem className="m-t-30" to="users" params={params} title="Users" iconName="users" />
+      return (<Navigation {...this.props} hideFacilitySelector={true} docked={true} desktop={true} availableFacilities={this.props.facilities}>
+                <AuthzMenuItem normalLinks={true} to="/admin/users" params={params} title="Users" iconName="users" />
               </Navigation>);
   }
 

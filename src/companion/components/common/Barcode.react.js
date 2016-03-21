@@ -1,10 +1,11 @@
 import React from "react";
+import ReactDOM from 'react-dom';
 import bardcode from "bardcode";
 
 export class Barcode extends React.Component {
   componentDidMount() {
     const {value, width, height} = this.props;
-    var node = React.findDOMNode(this);
+    var node = ReactDOM.findDOMNode(this);
     var g = node.getContext("2d");
     g.fillStyle = "white";
     g.fillRect(0, 0, width, height);

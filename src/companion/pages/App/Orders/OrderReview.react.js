@@ -3,7 +3,7 @@ import {DropdownButton} from "react-bootstrap";
 import Icon from "react-fa";
 import _ from "lodash";
 import {Map, List, fromJS, Record, Seq} from "immutable";
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 import {StatusSummary} from "data/types";
 import {Table} from "components/common/Table";
 import ListManagement from "components/common/list/ListManagement";
@@ -94,7 +94,7 @@ export default class OrderReview extends React.Component{
     }
 
     fetchOrderDetails(orderId) {
-        getFacilityContext().getOrderDetails(orderId).then((orderDetails) => {
+        getAPIContext().getOrderDetails(orderId).then((orderDetails) => {
             let oldOrderDetails = this.state.orderDetails;
             let newOrderDetails = oldOrderDetails.set(orderId, fromJS(orderDetails));
             this.setState({"orderDetails": newOrderDetails});
@@ -130,23 +130,6 @@ export default class OrderReview extends React.Component{
         return result;
     }
 
-    handleColumnMove(moved, afterName) {
-
-        this.props.columns((columns) => {
-            let formerPosition = columns.indexOf(moved);
-            let newPosition = columns.indexOf(afterName);
-            let after = columns.splice(formerPosition, 1)
-                    .splice(newPosition, 0, moved);
-            return after;
-        });
-    }
-
-    handleColumnSortChange(columnName, direction) {
-            this.props.sortSpecs((oldSortSpec)=>{
-                return oldSortSpec.set(columnName, Map({order: direction}));
-            });
-    }
-
     render() {
 
         let {columns, sortSpecs, orders} = this.props;
@@ -156,8 +139,8 @@ export default class OrderReview extends React.Component{
                 <ListManagement results={orders}
                  columns={columns}
                  columnMetadata={columnMetadata}
+                 storeName="planning"
                  keyColumn="orderId"
-                 sortSpecs={sortSpecs}
                  expand={this.shouldExpand}
                  onRowExpand={this.handleRowExpand}
                  onRowCollapse={this.handleRowCollapse}

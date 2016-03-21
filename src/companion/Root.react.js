@@ -1,22 +1,32 @@
 /*eslint strict:0 */
 import React from 'react';
-import {RouteHandler} from 'react-router';
 import {state} from './data/state';
 import storage from 'lib/storage';
 import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd/modules/backends/HTML5';
-
+import HTML5Backend from 'react-dnd-html5-backend';
 import 'bootstrap/less/bootstrap.less';
 import 'pages/less/pages.less';
+require('pdfjs-dist/build/pdf.combined');
 require('assets/css/app.styl');
 
 require('imports?this=>window!assets/plugins/modernizr.custom.js');
 require("imports?classie=assets/plugins/classie/classie.js!pages/js/pages.js");
+import {Iterable} from 'immutable';
 
+Iterable.prototype[Symbol.for('get')] = function(value) {return this.get(value); };
 
 class Root extends React.Component {
 
     componentDidMount() {
+
+      window.onerror = (errorMsg, url, lineNumber, columnNumber, error) => {
+        if (error instanceof URIError) {
+          console.error("Error occured: " + errorMsg, error);//or any message
+          window.location = "/";
+        }
+        return false;
+      };
+
         document.addEventListener('keypress', this.onDocumentKeypress);
 
         // Return to codebase if we see problems on older devices
@@ -64,7 +74,7 @@ class Root extends React.Component {
    }
 
    render() {
-       return (<RouteHandler state={state}/>);
+     return React.cloneElement(this.props.children, { state: state });
 
    }
 };

@@ -14,6 +14,9 @@ var yargs = require('yargs');
 var closureCompiler = require('gulp-closure-compiler');
 var path = require('path');
 var karma = require('karma');
+var babel = require('gulp-babel');
+var sourcemaps = require('gulp-sourcemaps');
+var nightwatch = require('gulp-nightwatch');
 
 var args = yargs
   .alias('p', 'production')
@@ -48,13 +51,58 @@ gulp.task('build', ['build-webpack']);
 
 gulp.task('eslint', function() {
   return gulp.src([
-      'gulpfile.js',
-      'src/companion/**/*.js',
-      'webpack/*.js'
+      //'gulpfile.js',
+      'src/companion/pages/Mobile/**/*.js',
+      //'webpack/*.js'
     ])
-    .pipe(eslint())
-    .pipe(eslint.format());
-    //.pipe(eslint.failOnError());
+    .pipe(eslint({
+        'parserOptions': {
+            'ecmaVersion': 6,
+            'sourceType': 'module',
+            'ecmaFeatures': {
+                'jsx': true,
+                'impliedStrict': true,
+                'experimentalObjectRestSpread': true
+            }
+        },
+        'parser': 'babel-eslint',
+        'env': {
+            'jasmine': true,
+            'mocha': true,
+            'browser': true,
+            'node': true,
+            'es6': true
+        },
+        'plugins': [
+            'react'   
+        ],
+        'rules': {
+            'no-empty': 1,
+            'no-debugger': 2,
+            'no-alert': 1,
+            'no-delete-var': 1,
+            'no-undef': 2,
+            'no-unused-vars': 1,
+            'no-this-before-super': 2,
+            'constructor-super': 2,
+            'react/jsx-no-undef': 2,
+            'react/jsx-uses-vars': 2,
+            'no-dupe-keys': 1,
+            'no-duplicate-case': 1,
+            'no-sparse-arrays': 1,
+            'no-unreachable': 1,
+            'use-isnan': 1,
+            'valid-typeof': 1,
+            //'indent': [1, 2],
+            //'quotes': [1, 'single', 'avoid-escape'],
+            'curly': 1,
+            'max-len': [1, 100, 4],
+            'eol-last': 1,
+            'no-trailing-spaces': 1
+        }
+    }))
+    .pipe(eslint.format())
+    .pipe(eslint.failOnError());
 });
 
 gulp.task('karma-ci', function(done) {
@@ -67,8 +115,9 @@ gulp.task('karma', function(done) {
 
 gulp.task('test', function(done) {
   // Run test tasks serially, because it doesn't make sense to build when tests
-  // are not passing, and it doesn't make sense to run tests, if lint has failed.
-  // Gulp deps aren't helpful, because we want to run tasks without deps as well.
+  // are not passing, and it doesn't make sense to run tests, if lint
+  // has failed. Gulp deps aren't helpful, because we want to run tasks
+  // without deps as well.
   runSequence('eslint', 'jest', 'build-webpack-production', done);
 });
 
@@ -77,34 +126,44 @@ gulp.task('tdd', function (done) {
     runSequence('server', 'karma', done);
 });
 
-
 gulp.task('server', ['env', 'build'], bg('node', 'src/server'));
 
 gulp.task('default', ['server']);
 
-gulp.task('closure', function() {
-    return gulp.src([
-        'bower_components/closure-library/closure/**/*.js',
-        'src/lib/closure/src/**/*.js'
-    ])
-        .pipe(closureCompiler({
-            compilerPath: 'bower_components/compiler-latest/compiler.jar',
-            fileName: 'index.js',
-            continueWithWarnings: true,
-            compilerFlags: {
-                language_in: 'ECMASCRIPT6',
-                language_out: 'ES5',
-                closure_entry_point: 'index',
-                compilation_level: 'ADVANCED_OPTIMIZATIONS',
-                define: [
-                    'goog.DEBUG=false',
-                    'goog.dom.animationFrame.polyfill.ENABLED=false'
-                ],
-                externs: ['src/lib/closure/externs.js'],
-                only_closure_dependencies: true,
-                output_wrapper: '(function(){%output%})();',
-                warning_level: 'VERBOSE'
-            }
-        }))
-        .pipe(gulp.dest('src/lib/closure'));
+
+// var testDirs = ['test/selenium', 'test/pages'];
+// var allTestJS = testDirs.map(function(path) {
+//   return path + "**/*.js";
+// });
+
+// gulp.task("watch-tests", function() {
+//   gulp.watch(allTestJS, ["build-tests", "build-pages"]);
+// });
+
+
+gulp.task('build-tests', function() {
+  return gulp.src('test/selenium/**/*.js')
+    .pipe(sourcemaps.init())
+    .pipe(babel({
+      plugins: ["add-module-exports"]
+    }))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('target/test/selenium'));
+});
+
+gulp.task('build-pages', function() {
+  return gulp.src('test/pages/**/*.js')
+    .pipe(sourcemaps.init())
+    .pipe(babel({
+      plugins: ["add-module-exports"]
+    }))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('target/test/pages'));
+});
+
+gulp.task('nightwatch', ['build-tests', 'build-pages'], function() {
+  return gulp.src('')
+    .pipe(nightwatch({
+      configFile: 'nightwatch.json'
+    }));
 });

@@ -3,7 +3,7 @@ import Icon from "react-fa";
 import {Modal, Button} from 'react-bootstrap';
 import {Form, SubmitButton} from 'components/common/Form';
 
-import exposeRouter from 'components/common/exposerouter';
+import exposeRouter, {toURL} from 'components/common/exposerouter';
 
 class ModalForm extends React.Component{
 
@@ -21,15 +21,16 @@ class ModalForm extends React.Component{
     handleClose() {
         this.setState({"show": false});
         //Transition away, so make sure unmount tears down the modal
-        let routeName = this.props.returnRoute;
-        let params = this.props.router.getCurrentParams();
-        this.props.router.transitionTo(routeName, params);
+        this.props.router.push(this.props.returnRoute);
     }
 
     handleSave(e) {
         e.preventDefault();
+
         return this.props.onSave().then(() => {
-            this.handleClose();
+            if (!this.props.actionError) {
+                this.handleClose();
+            }
         })
         .catch((e) => {
             this.forceUpdate();
@@ -38,19 +39,52 @@ class ModalForm extends React.Component{
 
     componentWillUnmount() {
         //always teardown modal before transitioning away
-        this.refs.modal.onHide();
+        if (this.props.actionError) {
+            this.props.acUnsetError();
+        }
+        this.handleClose();
     }
 
     render() {
-        var {title, formData} = this.props;
+        const {title, formData, actionError} = this.props;
         let {show} = this.state;
-        var modalTitle = formData ? title : "Not Found"
-;        return (
-                <Modal ref="modal" show={show} title={modalTitle} onHide={this.handleClose}>
-                    <Modal.Header><h5>{modalTitle}</h5></Modal.Header>
-                    { formData ? this.renderForm(formData, this.handleSave, this.handleClose ) : this.renderNotFound()}
+        const modalTitle = formData ? title : "Not Found";
+        const widthClass = this.props.widerModal ? "widerDialog" : "";
+
+        const errorStyle = {
+            color: '#8D1414'
+        };
+        let errorMessage = "";
+
+        if (actionError && actionError !== 400) {
+            errorMessage = "An error occurred on the server contact support and try again.";
+
+            return (
+                <Modal ref="modal"
+                       show={show}
+                       title={modalTitle}
+                       onHide={this.handleClose}>
+                    <Modal.Header>
+                        <h5>{modalTitle}</h5>
+                        <h5 style={errorStyle}>{errorMessage}</h5>
+                    </Modal.Header>
+                    <Modal.Footer>
+                        <Button  id="cancel" onClick={this.handleClose}>Cancel</Button>
+                    </Modal.Footer>
                 </Modal>
             );
+        }
+        if (actionError) {
+            errorMessage = "Invalid input please correct the form.";
+        }
+        return (
+          <Modal dialogClassName={widthClass} ref="modal" show={show} title={modalTitle} onHide={this.handleClose}>
+            <Modal.Header>
+              <h5>{modalTitle}</h5>
+              <h5 style={errorStyle}>{errorMessage}</h5>
+            </Modal.Header>
+                    { formData ? this.renderForm(formData, this.handleSave, this.handleClose ) : this.renderNotFound()}
+          </Modal>);
     }
 
     renderNotFound() {

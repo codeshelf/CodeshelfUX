@@ -1,12 +1,12 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import {Badge, TabbedArea, TabPane} from 'react-bootstrap';
+import {Badge, Tabs, Tab} from 'react-bootstrap';
 import _ from 'lodash';
-import {PageGrid, Row, Col} from 'components/common/pagelayout';
+import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {IBox, IBoxBody} from 'components/common/IBox';
 import {Form, WrapInput, Input, Select, SubmitButton, getRefInputValue} from 'components/common/Form';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import {fetchUnresolvedIssuesByType, fetchTypeIssues} from 'data/issues/actions';
 import {getIssuesSummary} from 'data/issues/store';
 import {List} from 'immutable';
@@ -93,16 +93,16 @@ export default class BlockedWork extends React.Component {
         return (
                 <IBox>
                 <IBoxBody>
-                <TabbedArea className="nav-tabs-simple" defaultActiveKey={firstType} >
+                <Tabs className="nav-tabs-simple" defaultActiveKey={firstType}>
                 {
                     issuesSummary.map((summary) => {
                         let type = summary.get("eventType");
                         let description = this.toDescription(type);
                         let total = summary.get("count");
-                        return (<TabPane eventKey={type}
+                        return (<Tab eventKey={type}
                                  key={type}
-                                 tab={<span>
-                                      <span className="name">{description && description.toUpperCase()}</span>
+                                 title={<span>
+                                      {description && description.toUpperCase()}
                                       <Badge style={{marginLeft: "1em"}} className="badge-primary">{total}</Badge>
                                       </span>}>
                                 <IBox>
@@ -115,10 +115,10 @@ export default class BlockedWork extends React.Component {
                                   }
                                   </IBoxBody>
                                 </IBox>
-                                </TabPane>);
+                                </Tab>);
                                 }).toArray()
                     }
-            </TabbedArea>
+            </Tabs>
                 </IBoxBody>
                 </IBox>
 
@@ -137,8 +137,7 @@ export default class BlockedWork extends React.Component {
       }).sortBy((summary) => summary.get("eventType"));
       const {groupBy} = this.state;
       return (
-                <DocumentTitle title={title}>
-                  <PageGrid>
+                  <SingleCellLayout title={title}>
                     <Row>
                       <Col sm={12} lg={3}>
                         <WrapInput label="Created Date">
@@ -163,10 +162,8 @@ export default class BlockedWork extends React.Component {
                         </IBoxBody>
                     </IBox>
                 }
-                </Col>
-                </Row>
-       </PageGrid>
-       </DocumentTitle>
+          </Col></Row>
+       </SingleCellLayout>
        );
    }
 }

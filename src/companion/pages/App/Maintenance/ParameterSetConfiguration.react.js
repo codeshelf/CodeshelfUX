@@ -1,12 +1,11 @@
 import  React from "react";
-import {RouteHandler} from "react-router";
-import exposeRouter from 'components/common/exposerouter';
+import exposeRouter, {toURL} from 'components/common/exposerouter';
 import {Map, List, fromJS} from 'immutable';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {WrapInput, Input, Checkbox, ErrorDisplay} from 'components/common/Form';
 import {Button, List as BSList} from 'components/common/bootstrap';
 import Icon from 'react-fa';
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import {EditButtonLink} from "components/common/TableButtons";
 
 class ParameterSetConfiguration extends React.Component{
@@ -18,16 +17,15 @@ class ParameterSetConfiguration extends React.Component{
     }
 
     addToEdit() {
-            return getFacilityContext().addExtensionPoint({type: this.parameterType})
-            .then((newExtensionPoint) => {
-                let params = this.props.router.getCurrentParams();
-                    params.parameterType = this.parameterType;
-                    this.props.router.transitionTo("parametersetedit", params);
+        return getAPIContext().addExtensionPoint({type: this.parameterType})
+              .then((newExtensionPoint) => {
+                let {router} = this.props;
+                router.push(toURL(this.props, `parameterset/${this.parameterType}`));
             });
     }
 
     handleExtensionPointUpdate(extensionPoint) {
-        return getFacilityContext().updateExtensionPoint(extensionPoint.toJS()).then((updatedExtensionPoint) => {
+        return getAPIContext().updateExtensionPoint(extensionPoint.toJS()).then((updatedExtensionPoint) => {
             return this.props.onUpdate();
         });
     }
@@ -65,7 +63,7 @@ class ParameterSetConfiguration extends React.Component{
                                 <div>
                                     <Checkbox name={parameterType + "useDefaults"} id={parameterType + "useDefaults"} label="Use Defaults" value={useDefaults} onChange={this.handleChange.bind(this, extensionPoint, useDefaults)} />
 
-                                    <EditButtonLink name="edit" to="parametersetedit" params={{parameterType: parameterType}} disabled={useDefaults} />
+                                    <EditButtonLink name="edit" to={toURL(this.props, "maintenance/parameterset/" + parameterType)} disabled={useDefaults} />
                                 </div>
                                :
                                 <WrapInput label="Change Configuration">

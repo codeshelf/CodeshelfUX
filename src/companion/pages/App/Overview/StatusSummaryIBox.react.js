@@ -7,6 +7,7 @@ import SummaryFilter from "./SummaryFilter";
 import SummaryList from "components/common/SummaryList";
 import DoughnutSummary from "components/common/DoughnutSummary";
 import ibox from "components/common/IBox";
+import _ from 'lodash';
 var IBox = ibox.IBox;
 var IBoxTitleBar = ibox.IBoxTitleBar;
 var IBoxTitleText = ibox.IBoxTitleText;

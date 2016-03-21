@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from 'react-dom';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import {Form, SubmitButton, SuccessDisplay, ErrorDisplay, Input} from 'components/common/Form';
 
@@ -11,7 +12,7 @@ export default class UploadForm extends React.Component{
 
     handleSubmit(e) {
         e.preventDefault();
-        var input = React.findDOMNode(this.refs.fileInput);
+        var input = ReactDOM.findDOMNode(this.refs.fileInput);
         let file = input.getElementsByTagName("input")[0].files[0];
         this.setState({errorMessage: null});
         this.setState({successMessage: null});

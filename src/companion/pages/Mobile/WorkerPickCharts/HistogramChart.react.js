@@ -1,20 +1,22 @@
-import React, {Component} from "react";
+import {Component} from "react";
 import moment from "moment";
 import d3 from "d3";
 import ReactFauxDOM from 'react-faux-dom';
 import {connect} from 'react-redux';
-import {getSelectedFacility} from '../Facility/get';
+import {getSelectedFacility} from '../../Facility/get';
 
 require('./histogramChart.styl');
 
 function printChart(node, expanded, limit, interval, utcOffset, data, style) {
   const duration = interval.asMilliseconds();
   const bins = (data.endTime - data.startTime) / duration;
-  // Larger barSize if we show also day names, which is needed when interval size is more than hour
+  // Larger barSize if we show also day names, which is needed when
+  // interval size is more than hour
   const barSize = interval.asMinutes() >= 60 ? 85: 60;
   const {height, margins} = style;
   const binCount = expanded ? bins: Math.min(bins, style.width/barSize);
-  const barWidth = expanded ? style.barWidth: (style.width - margins.left - margins.right)/bins;
+  const barWidth = expanded ? style.barWidth :
+                   (style.width - margins.left - margins.right)/bins;
   const width = expanded ? Math.max(style.width, bins * barWidth): style.width;
 
   /* Define ranges */
@@ -22,12 +24,12 @@ function printChart(node, expanded, limit, interval, utcOffset, data, style) {
   const xRange = d3.scale.linear()
       .domain([0, bins])
       .range([margins.left, width - margins.right]);
-  const yRange = d3.scale.linear().range([height - (margins.top + margins.bottom), 20]).domain([ 0,
-    d3.max(data.bins, (d) => {
-      max = Math.max(d.value === 0 ? d.value + 1 : d.value, max);
-      return d.value === 0 ? d.value + 1 : d.value;
-    })
-  ])
+  const yRange = d3.scale.linear()
+                         .range([height - (margins.top + margins.bottom), 20])
+                         .domain([0, d3.max(data.bins, (d) => {
+                            max = Math.max(d.value === 0 ? d.value + 1 : d.value, max);
+                            return d.value === 0 ? d.value + 1 : d.value;
+                          })])
 
   let yGridValues = [0, max];
   if (max %2 == 0) {
@@ -79,7 +81,8 @@ function printChart(node, expanded, limit, interval, utcOffset, data, style) {
   /* Create axis */
   svg.append("g")
       .attr('class', 'x axis')
-      .attr('transform', 'translate(0,' + (height - (margins.bottom + margins.top)) + ')')
+      .attr('transform', 'translate(0,' +
+           (height - (margins.bottom + margins.top)) + ')')
       .call(xAxis);
 
   svg.append("g")
@@ -92,7 +95,9 @@ function printChart(node, expanded, limit, interval, utcOffset, data, style) {
       .data(data.bins)
     .enter().append("g")
       .attr("class", "bar")
-      .attr("transform", (d) => "translate(" + xRange((d.start - data.startTime)/duration) + "," + yRange(d.value) + ")")
+      .attr("transform", (d) => "translate(" +
+                                xRange((d.start - data.startTime)/duration) +
+                                "," + yRange(d.value) + ")")
 
   bar.append("rect")
         .attr("width", barWidth)
@@ -115,7 +120,9 @@ function printChart(node, expanded, limit, interval, utcOffset, data, style) {
 class HistogramChartDummy extends Component {
   render() {
    const {chartStyle, pickRates, interval, utcOffset, expanded, limit} = this.props;
-   const svg = printChart(ReactFauxDOM.createElement('svg'), expanded, limit, interval, utcOffset, pickRates, chartStyle);
+   const svg = printChart(ReactFauxDOM.createElement('svg'),
+                          expanded, limit, interval, utcOffset,
+                          pickRates, chartStyle);
    return (
       <div
         className={expanded ? "histogram": null}>

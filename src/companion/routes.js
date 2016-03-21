@@ -1,7 +1,6 @@
 import React from 'react';
-import {Route, DefaultRoute, NotFoundRoute, RouteHandler, Redirect} from 'react-router';
+import {Route, IndexRoute, NotFoundRoute, RouteHandler, Redirect, IndexRedirect} from 'react-router';
 import Root from './Root.react.js';
-import App from './pages/App/App.react.js';
 import Admin from './pages/App/Admin/Admin.react.js';
 import Facility from './pages/App/Facility/Facility.react.js';
 import NotFound from 'pages/NotFound';
@@ -12,9 +11,14 @@ import BlockedWork from './pages/App/BlockedWork/BlockedWork.react.js';
 import WorkResults from './pages/App/WorkResults/WorkResults.react.js';
 import WorkerMgmt from './pages/App/WorkerMgmt/WorkerMgmt.react.js';
 import WorkerDisplay from './pages/App/WorkerMgmt/WorkerDisplay.react.js';
+import PrintingTemplates from './pages/App/PrintingTemplates/PrintingTemplates.react.js';
+import TemplateDisplay from './pages/App/PrintingTemplates/TemplateDisplay.react.js';
 import Import from './pages/App/Import/Import.react.js';
 import EDIGateways from './pages/App/Import/EDIGateways.react.js';
 import EDIGatewayEdit from './pages/App/Import/EDIGatewayEdit.react.js';
+import CartSearch from './pages/App/CartSearch/CartSearch.react.js';
+import WorkerSearch from './pages/App/WorkerSearch/WorkerSearch.react.js';
+import OrderSearch from './pages/App/OrderSearch/OrderSearch.react.js';
 import {authn} from './components/common/auth.js';
 import Login from './pages/Login/Login.react.js';
 import Users from './pages/Users/Users.react.js';
@@ -30,6 +34,7 @@ import TestScript from './pages/App/TestScript/TestScript.react.js';
 import ExtensionPointsPage from "./pages/App/ExtensionPoints/ExtensionPointsPage.react.js";
 import ExtensionPointEdit from "./pages/App/ExtensionPoints/ExtensionPointEdit.react.js";
 import ExtensionPointAdd from "./pages/App/ExtensionPoints/ExtensionPointAdd.react.js";
+import ScheduledJobs from "./pages/App/Maintenance/ScheduledJobs.react.js";
 import ScheduledJobEdit from "./pages/App/Maintenance/ScheduledJobsEdit.react.js";
 import ScheduledJobAdd from "./pages/App/Maintenance/ScheduledJobAdd.react.js";
 
@@ -40,88 +45,122 @@ import DetectMobile from "./components/common/DetectMobile.react.js";
 import mApp from './pages/Mobile/App.react.js';
 import mHomeSearch from  './pages/Mobile/HomeSearch/HomeSearch.react.js';
 import mOrderSearch from './pages/Mobile/OrderSearch/OrderSearch.react.js';
-import mOrderDeatil from './pages/Mobile/OrderDetail/OrderDetail.react.js';
+import OrderDetail from './pages/Detail/OrderDetail/OrderDetail.react.js';
 import mWorkerSearch from './pages/Mobile/WorkerSearch/WorkerSearch.react.js';
-import mWorkerDetail from './pages/Mobile/WorkerDetail/WorkerDetail.react.js';
+import WorkerDetail from './pages/Detail/WorkerDetail/WorkerDetail.react.js';
 import mCartSearch from './pages/Mobile/CartSearch/CartSearch.react.js';
-import mCartDetail from './pages/Mobile/CartDetail/CartDetail.react.js';
+import CartDetail from './pages/Detail/CartDetail/CartDetail.react.js';
 import mWorkerPickCharts from './pages/Mobile/WorkerPickCharts/WorkerPickCharts.react.js';
-import LoadFacility from './pages/Mobile/Facility/LoadFacility.react.js';
-import FacilityWrapper from './pages/Mobile/Facility/FacilityWrapper.react.js';
-import Mobile from './pages/Mobile/Mobile.react.js';
+
+import LoadContext from './pages/Facility/LoadContext.react.js';
+import ContextWrapper from './pages/Facility/ContextWrapper.react.js';
+import ReduxMobile from './pages/Mobile/Mobile.react.js';
+import ReduxFacility from './pages/App/ReduxFacility.react.js';
+import {reduxAdmin} from './pages/App/Admin/ReduxAdmin.react.js';
 
 export default (
-  <Route handler={Root} path="/">
+  <Route component={Root} path="/">
     {/* Redirect to mobile or desktop web component */}
-    <DefaultRoute handler={DetectMobile} />
-    <Route handler={authn(App)} name="facilities"> //ensure auth and default facility
-      <Route handler={Facility} name="facility" path=":facilityName">
-        <DefaultRoute handler={WorkResults} name="workresults" />
-        <NotFoundRoute handler={NotFound} name="not-found" />
-        <Route handler={Orders} name="orders" />
-        <Route handler={WorkInstructions} name="workinstructions" />
-        <Route handler={BlockedWork} name="blockedwork" />
-        <Route handler={Overview} name="overview" />
-        <Route handler={Import} name="import" />
-        <Route handler={EDIGateways} name="edigateways">
-          <Route handler={EDIGatewayEdit} name="edigatewayedit" path=":id"/>
-        </Route>
-        <Route handler={WorkerMgmt} name="workermgmt">
-          <Route handler={WorkerDisplay} name="workernew" path="new" />
-          <Route handler={WorkerDisplay} name="workerdisplay" path=":workerId" />
-        </Route>
-        <Route handler={Maintenance} name="maintenance">
-          <Route handler={ExtensionPointEdit} name="parametersetedit" path="parametersset/:parameterType" />
-          <Route handler={ScheduledJobAdd} name="scheduledjobadd" path="newscheduledjob" />
-          <Route handler={ScheduledJobEdit} name="scheduledjobedit" path="scheduledjobs/:type" />
-        </Route>
-        <Route handler={TestScript} name="testscript" />
-        <Route handler={ExtensionPointsPage} name="extensionpoints">
-          <Route handler={ExtensionPointAdd} name="extensionpointadd" path="new" />
-          <Route handler={ExtensionPointEdit} name="extensionpointedit" path=":extensionPointId" />
-        </Route>
+    <IndexRoute component={DetectMobile} />
+    <Route component={authn(ReduxFacility)} path="facilities"> //ensure auth and default facility
+      <IndexRoute component={LoadContext} />
+      <Route component={ContextWrapper} path=":facilityName/customers/:customerName">
+        <Route component={Facility}>
+          <IndexRedirect to="workresults" />
+
+          <Route component={WorkResults} path="workresults" />
+          <Route component={Orders} path="orders" />
+          <Route component={WorkInstructions} path="workinstructions" />
+          <Route component={BlockedWork} path="blockedwork" />
+          <Route component={Overview} path="overview" />
+          <Route component={Import} path="import" />
+          <Route component={EDIGateways} path="edigateways">
+            <Route component={EDIGatewayEdit} path=":id"/>
+          </Route>
+          <Route component={WorkerMgmt} path="workers">
+            <Route component={WorkerDisplay} path="new" />
+            <Route component={WorkerDisplay} path=":workerId" />
+          </Route>
+          <Route component={PrintingTemplates} path="templates">
+            <Route component={TemplateDisplay} path="new" />
+            <Route component={TemplateDisplay} path=":templateId" />
+          </Route>
+          <Route component={Maintenance} path="maintenance">
+            <Route component={ExtensionPointEdit} path="parameterset/:parameterType" />
+          </Route>
+          <Route component={ScheduledJobs} path="scheduledjobs">
+           <Route component={ScheduledJobAdd} path="new" />
+           <Route component={ScheduledJobEdit} path=":type" />
+          </Route>
+          <Route component={TestScript} path="testscript" />
+          <Route component={OrderSearch} path="ordersearch" />
+          <Route component={OrderDetail} path="orders/:id">
+            <IndexRedirect to="detail" />
+            <Route component={OrderDetail} path=":tab" />
+          </Route>
+          <Route component={WorkerSearch} path="workersearch" />
+          <Route component={WorkerDetail} path="worker/:id">
+            <IndexRedirect to="detail" />
+            <Route component={WorkerDetail} path=":tab" />
+          </Route>
+          <Route component={CartSearch} path="cartsearch" />
+          <Route component={CartDetail} path="carts/:id">
+            <IndexRedirect to="detail" />
+            <Route component={CartDetail} path=":tab" />
+          </Route>
+          <Route component={ExtensionPointsPage} path="extensionpoints">
+            <Route component={ExtensionPointAdd} path="new" />
+            <Route component={ExtensionPointEdit} path=":extensionPointId" />
+          </Route>
+          <Route component={NotFound} path="*" />
+       </Route>
       </Route>
     </Route>
 
     // Rotues for mobile version
 
-    <Redirect from="/mobile" to="mobile" />
-    <Redirect from="/mobile/" to="mobile" />
-    <Redirect from="/mobile/facilities/" to="mobile" />
+    <Redirect from="/mobile" to="/mobile/facilities" />
+    <Redirect from="/mobile/" to="mobile/facilities" />
+    <Redirect from="/mobile/facilities/" to="/mobile/facilities" />
 
-    <Route handler={authn(Mobile)} name="mobile" path="mobile/facilities">
-      <DefaultRoute handler={LoadFacility} />
-      <Route handler={FacilityWrapper} name="mobile-facility" path=":facilityName">
-        <Route handler={mApp}>
-          <Route handler={mOrderSearch} name="mobile-search-orders" path="search/order" />
-          <Route handler={mOrderDeatil} name="mobile-order-datail" path="orderDetail/:id/:tab" />
-          <Route handler={mOrderDeatil} name="mobile-order-datail-default" path="orderDetail/:id" />
-          <Route handler={mWorkerSearch} name="mobile-search-workers" path="search/worker" />
-          <Route handler={mWorkerDetail} name="mobile-worker-detail" path="workerDetail/:id/:tab" />
-          <Route handler={mWorkerDetail} name="mobile-worker-detail-default" path="workerDetail/:id" />
-          <Route handler={mCartSearch} name="mobile-search-carts" path="search/cart" />
-          <Route handler={mCartDetail} name="mobile-cart-detail" path="cartDetail/:id/:tab" />
-          <Route handler={mCartDetail} name="mobile-cart-detail-default" path="cartDetail/:id" />
-          <DefaultRoute handler={mWorkerPickCharts} name="mobile-events" path="events" />
+    <Route component={authn(ReduxMobile)} path="mobile/facilities">
+      <IndexRoute component={LoadContext} />
+      <Route component={ContextWrapper} path=":facilityName/customers/:customerName">
+        <Route component={mApp}>
+          <IndexRedirect to="events" />
+          <Route component={mWorkerPickCharts}  path="events"/>
+          <Route component={mOrderSearch} path="orders" />
+          <Route component={OrderDetail} path="orders/:id">
+            <IndexRedirect to="order" />
+            <Route component={OrderDetail} path=":tab" />
+          </Route>
+          <Route component={mWorkerSearch} path="workers" />
+          <Route component={WorkerDetail} path="workers/:id">
+            <IndexRedirect to="detail" />
+            <Route component={WorkerDetail} path=":tab" />
+          </Route>
+          <Route component={mCartSearch} path="carts" />
+          <Route component={CartDetail} path="carts/:id">
+            <IndexRedirect to="detail" />
+            <Route component={CartDetail} path=":tab" />
+          </Route>
         </Route>
       </Route>
     </Route>
 
     // Routes from admin panel
-
-    <Route handler={authn(Admin)} name="admin" path="admin">
-      <Route handler={Users} name="users">
-        <Route handler={UserAdd} name="usernew" path="new"/>
-        <Route handler={UserEdit} name="useredit" path=":userId"/>
+    <Route component={authn(reduxAdmin(Admin))} path="admin">
+      <Route component={Users} path="users">
+        <Route component={UserAdd} path="new"/>
+        <Route component={UserEdit} path=":userId"/>
       </Route>
     </Route>
-
     // Routes for user credentials
 
-    <Route handler={Login} name="login" />
-    <Route handler={SetupPassword} name="setuppassword" path="setuppassword"/>
-    <Route handler={ChangePassword} name="changepassword" />
-    <Route handler={RecoverPassword} name="recoverpassword" />
-    <Route handler={RecoverSuccess} name="recoversuccess" />
+    <Route component={Login} path="login" />
+    <Route component={SetupPassword} path="password/setup" />
+    <Route component={ChangePassword} path="password/change" />
+    <Route component={RecoverPassword} path="password/recover" />
+    <Route component={RecoverSuccess} path="password/success" />
   </Route>
 );

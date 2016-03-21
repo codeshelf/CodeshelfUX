@@ -3,6 +3,7 @@
 */
 import Promise from 'bluebird';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import validator from 'validator';
 
 
@@ -19,7 +20,7 @@ export function focusInvalidField(component) {
   return (error) => {
     if (error instanceof ValidationError) {
       if (!error.prop) return;
-      const node = React.findDOMNode(component);
+      const node = ReactDOM.findDOMNode(component);
       if (!node) return;
       const el = node.querySelector(`[name=${error.prop}]`);
       if (!el) return;

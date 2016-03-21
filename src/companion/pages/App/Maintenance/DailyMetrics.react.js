@@ -3,60 +3,65 @@ import ListManagement from "components/common/list/ListManagement";
 import ListView from "components/common/list/ListView";
 import {Form, SubmitButton, Input, getRefInputValue} from "components/common/Form";
 import DateDisplay from "components/common/DateDisplay";
-import {properties, keyColumn} from "data/types/DailyMetric";
-import {fromJS, List} from "immutable";
-import {getFacilityContext} from "data/csapi";
-export default class DailyMetrics extends React.Component{
+import {getAPIContext} from "data/csapi";
+
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+
+import {getDailyMetricsMutable} from './get';
+import {acLoadMetrics} from './store';
+
+class DailyMetrics extends React.Component{
 
     constructor(props) {
         super(props);
-        let columnMetadata = ListView.toColumnMetadataFromProperties(properties);
-      //columnMetadata = ListView.setCustomComponent("date", FacilityDateOnlyDisplay, columnMetadata);
-        columnMetadata = ListView.setCustomComponent("dateLocalUI", LocalDateDisplay, columnMetadata);
-        this.state = {
-            results: List(),
-            columnMetadata: columnMetadata
-        };
+        this.columnMetadata = ListView.toColumnMetadata([
+          {'columnName': 'dateLocalUI', displayName: 'Date'},
+          {'columnName': 'ordersPicked', 'displayName': 'Orders Picked'},
+          {'columnName': 'linesPicked', 'displayName': 'Lines Picked'},
+          {'columnName': 'linesPickedEach', 'displayName': 'Lines Picked Each'},
+          {'columnName': 'linesPickedCase', 'displayName': 'Lines Picked Case'},
+          {'columnName': 'linesPickedOther', 'displayName': 'Lines Picked Other'},
+          {'columnName': 'countPicked', 'displayName': 'Count Picked'},
+          {'columnName': 'countPickedEach', 'displayName': 'Count Picked Each'},
+          {'columnName': 'countPickedCase', 'displayName': 'Count Picked Case'},
+          {'columnName': 'countPickedOther', 'displayName': 'Count Picked Other'},
+          {'columnName': 'houseKeeping', 'displayName': 'Housekeeping'},
+          {'columnName': 'putWallPuts', 'displayName': 'Putwall Puts'},
+          {'columnName': 'skuWallPuts', 'displayName': 'Skuwall Puts'},
+          {'columnName': 'palletizerPuts', 'displayName': 'Palletizer Puts'},
+          {'columnName': 'replenishPuts', 'displayName': 'Replenish Puts'},
+          {'columnName': 'skipScanEvents', 'displayName': 'Skipscan Event'},
+          {'columnName': 'shortEvents', 'displayName': 'Short Event'},
+        ])
     }
 
-    componentDidMount() {
-        getFacilityContext().getMetrics().then((metrics) => {
-            this.setState({results: metrics});
-        });
+    componentWillMount() {
+        this.props.acLoadMetrics();
     }
 
     handleSubmit() {
-        let date =  getRefInputValue(this.refs.date);
-        return getFacilityContext().computeMetrics(date).then(() => {
-            this.componentDidMount();
+        const date =  getRefInputValue(this.refs.date);
+        return getAPIContext().computeMetrics(date).then(() => {
+            this.componentWillMount();
         });
     }
 
-
-
       render() {
-        let timeZoneDisplay = getFacilityContext().facility.timeZoneDisplay;
-
-        const {results, columnMetadata} = this.state;
-        let columnsCursor  = this.props.appState.cursor(["preferences", "dailymetric", "table", "columns"]);
-        let columnSortSpecsCursor = this.props.appState.cursor(["preferences", "dailymetric", "table", "sortSpecs"]);
-
+        const timeZoneDisplay = this.props.facility.selected.selectedFacility.timeZoneDisplay;
         return (
             <div>
                 <div>Facility TimeZone: {timeZoneDisplay}</div>
-
                 <Form onSubmit={this.handleSubmit.bind(this)}>
                     <Input ref="date" name="date" label="Date" />
                     <SubmitButton label="Recompute" />
                 </Form>
                 <ListManagement
-
                     allowExport={true}
-                    results={results}
+                    results={this.props.dailyMetrics.items.get('data')}
                     keyColumn="date"
-                    columns={columnsCursor}
-                    columnMetadata={columnMetadata}
-                    sortSpecs={columnSortSpecsCursor}/>
+                    storeName={"dailymetric"}
+                    columnMetadata={this.columnMetadata}/>
            </div>
         );
     }
@@ -64,7 +69,7 @@ export default class DailyMetrics extends React.Component{
 
 class FacilityDateOnlyDisplay extends React.Component {
   render() {
-    let utcOffset = getFacilityContext().facility.utcOffset;
+    let utcOffset = getAPIContext().facility.utcOffset;
     let {cellData, rowData} = this.props;
 
     return (
@@ -82,3 +87,16 @@ class LocalDateDisplay extends React.Component {
     );
   }
 }
+
+function mapDispatch(dispatch) {
+  return bindActionCreators({acLoadMetrics}, dispatch);
+}
+
+function mapStateToProps(state){
+    return {
+        dailyMetrics: state.dailyMetrics,
+        facility: state.facility,
+    }
+}
+
+export default connect(mapStateToProps, mapDispatch)(DailyMetrics);

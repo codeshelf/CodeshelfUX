@@ -3,18 +3,15 @@ import Icon from 'react-fa';
 import _ from "lodash";
 import DocumentTitle from "react-document-title";
 import ListManagement from "components/common/list/ListManagement";
-import {getFacilityContext} from "data/csapi";
-import exposeRouter from 'components/common/exposerouter';
+import {getAPIContext} from "data/csapi";
+import exposeRouter, {toURL} from 'components/common/exposerouter';
 import ConfirmAction from 'components/common/ConfirmAction';
-import {RouteHandler} from "react-router";
 import {Button} from 'react-bootstrap';
 import {fromJS, Map, List} from "immutable";
 import {types, keyColumn, properties} from "data/types/ScheduledJob";
 import DateDisplay from "components/common/DateDisplay";
 
 const title = "Scheduled Jobs";
-const addRoute = "scheduledjobadd";
-const editRoute = "scheduledjobedit";
 const allTypes = fromJS(types);
 const typeLabelMap = allTypes.reduce((map, option) => {
     return map.set(option.get("value"), option.get("label"));
@@ -34,32 +31,33 @@ class Type extends React.Component {
 }
 
 
-function editRouteFactory(row) {
+
+
+function createRowActionComponent(onActionComplete, props) {
+  function editRouteFactory(row) {
     return {
-        to: editRoute,
-        params: {type: row.get("type")}
+      to:  toURL(props, 'scheduledjobs/' + row.get("type"))
     };
-}
+  }
 
 
-function createRowActionComponent(onActionComplete) {
-    class ScheduledJobActions extends React.Component {
+  class ScheduledJobActions extends React.Component {
 
         trigger(type) {
-            return getFacilityContext().triggerSchedule(type).then(() => {
+            return getAPIContext().triggerSchedule(type).then(() => {
                 onActionComplete();
             });
         }
 
         cancel(type) {
-            return getFacilityContext().cancelJob(type).then(() => {
+            return getAPIContext().cancelJob(type).then(() => {
                 onActionComplete();
             });
         }
 
         delete(rowData) {
             let type = rowData.get("type");
-            return getFacilityContext().deleteJob(type).then(() => {
+            return getAPIContext().deleteJob(type).then(() => {
                 onActionComplete();
             });
         }
@@ -96,7 +94,7 @@ function createRowActionComponent(onActionComplete) {
 
 class DateTimeArray extends React.Component {
     render() {
-        let utcOffset = getFacilityContext().facility.utcOffset;
+        let utcOffset = getAPIContext().facility.utcOffset;
         let {cellData, rowData} = this.props;
         let style = (rowData.get("active")) ? {} : {textDecoration: "line-through"};
         return (<span>
@@ -124,22 +122,25 @@ class ScheduledJobs extends React.Component{
         super(props);
         this.state = {
         };
-        this.rowActionComponent = createRowActionComponent(this.handleActionComplete.bind(this));
+        this.rowActionComponent = createRowActionComponent(this.handleActionComplete.bind(this), props);
         this.columnMetadata = ListManagement.toColumnMetadataFromProperties(properties);
         this.columnMetadata = ListManagement.setCustomComponent("futureScheduled", DateTimeArray, this.columnMetadata);
         this.columnMetadata = ListManagement.setCustomComponent("type", TypeLabel, this.columnMetadata);
     }
 
     findSchedule(props) {
-        let selectedScheduleType = this.props.router.getCurrentParams().type;
+        let selectedScheduleType = props.params.type;
         if (selectedScheduleType) {
             let {scheduledJobs} = this.state;
-            this.setState({"scheduledJob": scheduledJobs.find((j) => j.get("type") === selectedScheduleType)});
+            const scheduledJob =  scheduledJobs.find((j) => {
+              return j.get("type") === selectedScheduleType;
+            });
+            this.setState({scheduledJob});
         }
     }
 
     handleActionComplete() {
-        getFacilityContext().getScheduledJobs().then((jobs) => {
+        getAPIContext().getScheduledJobs().then((jobs) => {
             this.setState({"scheduledJobs": fromJS(jobs)});
         });
     }
@@ -154,14 +155,14 @@ class ScheduledJobs extends React.Component{
     }
 
     render() {
-        let timeZoneDisplay = getFacilityContext().facility.timeZoneDisplay;
+        let timeZoneDisplay = getAPIContext().facility.timeZoneDisplay;
 
         let {scheduledJobs: list = List(), scheduledJob: selected} = this.state;
 
         let {rowActionComponent, columnMetadata} = this;
         let availableTypes = toAvailableTypes(list, allTypes);
-        let addButtonRoute = (availableTypes.count() <= 0) ? null : addRoute;
-        let lastRoute = this.props.router.getCurrentRoutes().slice(-1)[0];
+        let addButtonRoute = (availableTypes.count() <= 0) ? null : toURL(this.props, 'scheduledjobs/new');
+        let returnRoute = toURL(this.props, '../scheduledjobs');
         return (<DocumentTitle title={title}>
                    <div>
                        <div>TimeZone: {timeZoneDisplay}</div>
@@ -171,14 +172,13 @@ class ScheduledJobs extends React.Component{
                             columnMetadata={columnMetadata}
                             rowActionComponent={rowActionComponent}
                             addButtonRoute={addButtonRoute} />
-                        {(lastRoute.name === addRoute || lastRoute.name == editRoute)
-                          ?
-                          <RouteHandler scheduledJob={selected}
-                              availableTypes={availableTypes}
-                              onUpdate={this.handleActionComplete.bind(this)}
-                              onAdd={this.handleActionComplete.bind(this)}
-                              returnRoute="maintenance"/>
-                          : null}
+                        {this.props.children &&
+                          React.cloneElement(this.props.children, {scheduledJob: selected,
+                                                                  availableTypes: availableTypes,
+                                                                  onUpdate: this.handleActionComplete.bind(this),
+                                                                  onAdd: this.handleActionComplete.bind(this),
+                                                                  returnRoute })
+                        }
                     </div>
                 </DocumentTitle>
                );
@@ -186,7 +186,7 @@ class ScheduledJobs extends React.Component{
 };
 
 ScheduledJobs.propTypes = {
-    router: React.PropTypes.func
+    router: React.PropTypes.object.isRequired
 };
 
 export default exposeRouter(ScheduledJobs);

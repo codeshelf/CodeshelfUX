@@ -1,4 +1,4 @@
-//var log = cli.log, api = cli.csapi.getFacilityContext(), jspath = cli.jspath
+//var log = cli.log, api = cli.csapi.getAPIContext(), jspath = cli.jspath
 //cli.generateEvents("CHE1", "CSLGO001", "2016-01-13T15:01:01T-0800", "2016-01-13T17:01:01-0800", 40);
 
 import * as api from "data/csapi";
@@ -39,5 +39,5 @@ export function generateTimes(start, end, n) {
 export function generateEvents(cheName, workerId, start, end, n) {
   generateTimes(start, end, n)
     .map( x => x.toISOString())
-    .map( time => csapi.getFacilityContext().createEvent(cheName, workerId, "COMPLETE", time));
+    .map( time => csapi.getAPIContext().createEvent(cheName, workerId, "COMPLETE", time));
 }

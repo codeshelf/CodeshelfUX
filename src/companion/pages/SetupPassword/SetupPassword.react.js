@@ -18,7 +18,7 @@ const fields = [{name: "new", label: "New Password"},
                     ];
 const statePath = ["auth", "setuppassword"];
 function executePasswordAction(props, form) {
-    let queryData = props.router.getCurrentQuery();
+    let queryData = props.location.query;
     let newPassword = form.getIn(["values", "new"]);
     return setupPassword(newPassword, queryData);
 }
@@ -38,7 +38,7 @@ class SetupPassword extends React.Component {
   }
 
   handleSubmit(formCursor) {
-    const nextPath = this.props.router.getCurrentQuery().nextPath;
+    const nextPath = this.props.location.query.nextPath;
     return validate(formCursor().get("values").toJS())
         .prop("new").matchesProp("confirm").promise
         .then(() => {
@@ -54,7 +54,7 @@ class SetupPassword extends React.Component {
           this.resetForm(formCursor);
           // TODO: Probably use hard reload for Chrome to remember password.
           // https://code.google.com/p/chromium/issues/detail?id=43219#c56
-          this.props.router.replaceWith(nextPath || '/');
+          this.props.router.push({pathname: nextPath || '/'});
         })
         /* Not sure why the type doesn't come through
         .catch(ValidationError,  (error) =>{
@@ -117,7 +117,7 @@ class SetupPassword extends React.Component {
                         }
                         <Row>
                           <Col sm={12} >
-                            <Link to="recoverpassword" >Regenerate Recovery Email</Link>
+                            <Link to="/password/recover" >Regenerate Recovery Email</Link>
                           </Col>
                         </Row>
 

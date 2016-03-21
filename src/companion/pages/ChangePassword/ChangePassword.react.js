@@ -37,8 +37,8 @@ class ChangePassword extends React.Component {
   }
 
   handleSubmit(formCursor) {
-    const nextPath = this.props.router.getCurrentQuery().nextPath;
-    console.info(nextPath, this.props.router.getCurrentQuery(),'!!!!!!!PATH');
+    const nextPath = this.props.location.query.nextPath;
+    console.info(nextPath, this.props.query,'!!!!!!!PATH');
     return validate(formCursor().get("values").toJS()).prop("new").matchesProp("confirm").promise
           .then(function() {
               return executePasswordAction(this.props, formCursor());
@@ -50,7 +50,7 @@ class ChangePassword extends React.Component {
               });
               // TODO: Probably use hard reload for Chrome to remember password.
               // https://code.google.com/p/chromium/issues/detail?id=43219#c56
-              this.props.router.replaceWith(nextPath || '/');
+              this.props.router.push({pathname: nextPath || '/'});
           })
           .catch((error) =>{
               console.log(error);
@@ -107,7 +107,7 @@ class ChangePassword extends React.Component {
       let values = form.get("values");
       let errors = form.get("errors");
       return (
-          <Row>
+          <Row key={id}>
               <Col sm={12}>
                   <Input id={id}
                    label={label}
@@ -126,7 +126,7 @@ class ChangePassword extends React.Component {
 }
 
 ChangePassword.propTypes = {
-  router: React.PropTypes.func
+  router: React.PropTypes.object.isRequired
 };
 
 export default exposeRouter(ChangePassword);

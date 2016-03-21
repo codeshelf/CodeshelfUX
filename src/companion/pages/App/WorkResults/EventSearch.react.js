@@ -2,7 +2,9 @@ import {Map} from "immutable";
 import {Row, Col} from 'components/common/pagelayout';
 import {Form, Input, WrapInput, MultiSelect, SubmitButton, getRefInputValue} from 'components/common/Form';
 import DayOfWeekFilter from 'components/common/DayOfWeekFilter';
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
+import React from 'react';
+
 
 export default class EventSearch extends React.Component {
 
@@ -13,7 +15,7 @@ export default class EventSearch extends React.Component {
     }
 
     componentWillMount() {
-        getFacilityContext().getEventPurposes().then((searchSpec) => {
+        getAPIContext().getEventPurposes().then((searchSpec) => {
           this.setState({purposeOptions: searchSpec.purpose});
         });
         this.handleChange("createdInterval", 0);

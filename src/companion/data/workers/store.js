@@ -6,8 +6,7 @@ import {selectedWorkerCursor, workersCursor} from 'data/state';
 import _ from 'lodash';
 
 export const NEWID = "new";
-export const Worker = Record(
-    {
+export const Worker = new Record({
         "className": "Worker",
         "persistentId": NEWID,
         "middleInitial": null,
@@ -18,9 +17,7 @@ export const Worker = Record(
         "groupName": null,
         "updated": null,
         "active": true
-
-    }
-);
+});
 
 export const dispatchToken = register(({action, data}) => {
 

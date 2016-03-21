@@ -1,6 +1,6 @@
 import setToString from 'lib/settostring';
 import * as dispatcher from 'dispatcher';
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import {KeyedIterable} from 'immutable';
 
 import _ from 'lodash';
@@ -22,14 +22,14 @@ export function getSubscriptions(key) : KeyedIterable {
 };
 
 export function replenItem(issue) {
-  return dispatch(replenItem, getFacilityContext().replenishItem(issue.toJS())).then((result) => {
+  return dispatch(replenItem, getAPIContext().replenishItem(issue.toJS())).then((result) => {
     return result;
 });
 
 }
 
 export function resolveIssue(issue) {
-    dispatch(resolveIssue, getFacilityContext().resolveIssue(issue)).then(() => {
+    dispatch(resolveIssue, getAPIContext().resolveIssue(issue)).then(() => {
         //onsuccess
         let subscriptions = getSubscriptions("issues");
         subscriptions.map((v, k) => {
@@ -44,7 +44,7 @@ export function resolveIssue(issue) {
 };
 
 export function fetchItemIssues(storageKeys, criteria) {
-    dispatch(fetchItemIssues, getFacilityContext().getIssues(criteria).then((data) => {
+    dispatch(fetchItemIssues, getAPIContext().getIssues(criteria).then((data) => {
         return {
             storageKeys: storageKeys,
             data: data
@@ -57,11 +57,11 @@ export function fetchUnresolvedIssuesByType(filter) {
         filterBy: filter,
         groupBy: "type"
     };
-    return dispatch(fetchUnresolvedIssuesByType, getFacilityContext().getIssues(criteria));
+    return dispatch(fetchUnresolvedIssuesByType, getAPIContext().getIssues(criteria));
 };
 
 export function fetchTypeIssues(storageKeys, criteria) {
-    dispatch(fetchTypeIssues, getFacilityContext().getIssues(criteria)
+    dispatch(fetchTypeIssues, getAPIContext().getIssues(criteria)
         .then((data) => {
             return {
                 storageKeys: storageKeys,
@@ -74,31 +74,7 @@ export function issueSelected(issue) {
     dispatch(issueSelected, issue);
 }
 
-export function selectIssueByName(name) {
-    getIssues().done((issues) => {
-        let issue = _.find(issues, "domainId", name);
-        if (issue) {
-            dispatch(issueSelected, issue);
-        } else {
-            throw `no matching issue for ${name}`;
-        }
-    });
-};
-
-
-export function selectFirstIssue() {
-    getIssues().done((issues) => {
-        if (issues && issues.length > 0) {
-            dispatch(issueSelected, issues[0]);
-        }
-        else {
-            throw "no issues available";
-        }
-    });
-};
-
-
 // Override actions toString for logging.
 setToString('issues', {
-    resolveIssue, replenItem, fetchTypeIssues, fetchItemIssues, fetchUnresolvedIssuesByType, selectFirstIssue, selectIssueByName, issueSelected
+    resolveIssue, replenItem, fetchTypeIssues, fetchItemIssues, fetchUnresolvedIssuesByType, issueSelected
 });

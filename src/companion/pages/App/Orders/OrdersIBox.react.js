@@ -3,14 +3,15 @@ import _ from "lodash";
 import DocumentTitle from "react-document-title";
 import {fromJS, Set} from "immutable";
 import moment from "moment";
-        import {SingleCellLayout, Row, Col} from "components/common/pagelayout";
+import {SingleCellLayout, Row1} from "components/common/pagelayout";
+import {IBox} from "pages/IBox";
 import {SingleCellIBox} from 'components/common/IBox';
 import PivotTable from "components/common/pivot/PivotTable";
 import OrderSearch from "./OrderSearch";
 import OrderReview from "./OrderReview";
 import Promise from "bluebird";
 import search from "data/search";
-import {getFacilityContext} from "data/csapi";
+import {getAPIContext} from "data/csapi";
 import SearchStatus from "components/common/SearchStatus";
 
 export default class OrdersIBox extends React.Component{
@@ -22,13 +23,13 @@ export default class OrdersIBox extends React.Component{
         var resultsPath = ["pivot", "orders"];
 
         this.state = {
-            refreshingAction: Promise.resolve([])
+          refreshingAction: Promise.resolve([]),
+          selected: Set()
         };
         let {state}=  this.props;
         this.columnsCursor  = state.cursor(rootPath.concat(["table", "columns"]));
         this.columnSortSpecsCursor = state.cursor(rootPath.concat(["table", "sortSpecs"]));
         this.pivotOptionsCursor = state.cursor(rootPath.concat(["pivot"]));
-        this.selectedCursor = state.cursor(selectedPath);
         this.resultsCursor = state.cursor(resultsPath);
 
         this.handleRefresh = this.handleRefresh.bind(this);
@@ -88,8 +89,8 @@ export default class OrdersIBox extends React.Component{
                 promise.cancel();
             }
         }
-        promise =  search(getFacilityContext().findOrderReferences,
-                          _.partial(getFacilityContext().getOrder, properties),
+        promise =  search(getAPIContext().findOrderReferences,
+                          _.partial(getAPIContext().getOrder, properties),
                           this.handleResultsUpdated.bind(this),
                           filter);
 
@@ -116,33 +117,27 @@ export default class OrdersIBox extends React.Component{
     }
 
     handleDrillDown(selected) {
-        this.selectedCursor((previousSelected) =>{
-            return previousSelected.clear().concat(fromJS(selected));
-        });
+      this.setState({selected: fromJS(selected)});
     }
 
     render() {
-        let {refreshingAction, errorMessage} = this.state;
+        let {refreshingAction, errorMessage, selected} = this.state;
         let results = this.resultsCursor();
         let orders = results.get("values");
-        let selectedOrders = this.selectedCursor();
         let pivotOptions = this.pivotOptionsCursor;
         let columns = this.columnsCursor;
         let sortSpecs = this.columnSortSpecsCursor;
         return (
-            <SingleCellIBox
+            <IBox
               title={this.title}
               style={{display: "inline-block"}}
-              isRefreshing={refreshingAction.isPending()} onRefresh={this.handleRefresh}>
-                <Row>
-                    <Col md={6}>
-
-                            <OrderSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
-                    </Col>
-                </Row>
+              loading={refreshingAction.isPending()} reloadFunction={this.handleRefresh}>
+                <Row1 md={6}>
+                  <OrderSearch ref="search" onFilterChange={this.handleFilterChange.bind(this)}/>
+                </Row1>
                 <SearchStatus {...{results, errorMessage}} />
                 <PivotTable results={orders} options={pivotOptions} onDrillDown={this.handleDrillDown.bind(this)}/>
-                <OrderReview orders={selectedOrders} columns={columns} sortSpecs={sortSpecs}/>
-            </SingleCellIBox>);
+                <OrderReview orders={selected} columns={columns} sortSpecs={sortSpecs}/>
+            </IBox>);
     }
 };

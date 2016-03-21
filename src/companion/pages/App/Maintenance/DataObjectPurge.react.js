@@ -1,9 +1,8 @@
 import React from 'react';
-import {RouteHandler} from "react-router";
 import exposeRouter from 'components/common/exposerouter';
 import _ from 'lodash';
 import {Map, List, fromJS} from 'immutable';
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import {SingleCellIBox, IBoxSection} from 'components/common/IBox';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {Button, List as BSList} from 'components/common/bootstrap';
@@ -22,14 +21,14 @@ class DataObjectPurge extends React.Component{
     }
 
     findSchedule(type) {
-        getFacilityContext().findSchedule(type).then((schedule) => {
+        getAPIContext().findSchedule(type).then((schedule) => {
             this.setState({schedule: schedule});
         });
     }
 
     handleSubmit(type, schedule, e) {
         e.preventDefault();
-        return getFacilityContext().updateSchedule(type, schedule).then((newSchedule) => {
+        return getAPIContext().updateSchedule(type, schedule).then((newSchedule) => {
             this.setState({schedule: schedule});
         }).catch((error) => {
             console.error(error);
@@ -51,19 +50,19 @@ class DataObjectPurge extends React.Component{
     }
 
     loadSummary() {
-        return getFacilityContext().getDataSummary().then((summaries) => {
+        return getAPIContext().getDataSummary().then((summaries) => {
             this.changeState("dataSummary", summaries != null && summaries.join('\n'));
         });
     }
 
     triggerPurge() {
-        return getFacilityContext().triggerSchedule("DatabasePurge").then(function() {
+        return getAPIContext().triggerSchedule("DatabasePurge").then(function() {
             return this.loadSummary();
         }.bind(this));
     }
 
     cancelPurge() {
-        return getFacilityContext().cancelJob("DatabasePurge").then(function() {
+        return getAPIContext().cancelJob("DatabasePurge").then(function() {
             return this.loadSummary();
         }.bind(this));
     }
@@ -75,7 +74,7 @@ class DataObjectPurge extends React.Component{
         let {parameterSet = {}} = configuration;
         let {purgeAfterDays} = parameterSet;
         return (<SingleCellIBox title="Database Object Purge">
-                    <ParameterSetConfiguration parameterType={parameterType} configuration={configuration} onUpdate={onConfigurationUpdate}/>
+                   <ParameterSetConfiguration {...this.props} parameterType={parameterType} configuration={configuration} onUpdate={onConfigurationUpdate}/>
                        <Row>
                            <Col md={8}><pre>{dataSummary}</pre></Col>
                            <Col md={4}>

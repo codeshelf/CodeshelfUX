@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from 'react-dom';
 var _ = require('lodash');
 var Immutable = require('immutable');
 //require("tablesaw/dist/tablesaw.css");
@@ -29,8 +30,9 @@ function toShownColumns(columnMetadata, columns) {
 }
 
 class Row extends PureComponent {
+
     getWidth(columnName) {
-        var tdNode = React.findDOMNode(this.refs[columnName]);
+        var tdNode = ReactDOM.findDOMNode(this.refs[columnName]);
         var scrollWidth = tdNode.scrollWidth;
         return scrollWidth + 1;
     }
@@ -238,6 +240,13 @@ var Table = React.createClass({
         expand: React.PropTypes.func
     },
 
+    componentWillMount: function() {
+        this.onRowExpand = function (){ console.log("row expand not set");};
+        this.onRowCollapse = function (){ console.log("row collapse not set");};
+        this.onColumnMove = () => { console.log("column moveHandler not set");};
+        this.onColumnSortChange = () => { console.log("onColumnSortChange  not set");};
+    },
+
     getDefaultProps: function(){
         return {
             "caption": "",
@@ -317,10 +326,10 @@ var Table = React.createClass({
              keyColumn,
              sortedBy,
              rowActionComponent,
-             onRowExpand = function (){ console.log("row expand not set");},
-             onRowCollapse = function (){ console.log("row collapse not set");},
-             onColumnMove = () => { console.log("column moveHandler not set");},
-             onColumnSortChange = () => { console.log("onColumnSortChange  not set");},
+             onRowExpand = this.onRowExpand,
+             onRowCollapse = this.onRowCollapse,
+             onColumnMove = this.onColumnMove,
+             onColumnSortChange = this.onColumnSortChange,
              expand} = this.props;
         if (columns.constructor === Array) {
             columns = Immutable.fromJS(columns);

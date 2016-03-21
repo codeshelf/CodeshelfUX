@@ -1,37 +1,34 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import {Link, RouteHandler} from 'react-router';
+import {Link} from 'react-router';
+import {PageGrid} from 'components/common/pagelayout';
 import FacilityNavigation from './FacilityNavigation.react.js';
 import TopNavBar from '../TopNavBar.react';
 import Footer from '../Footer.react.js';
+
+//temp old store
 import {getSelectedTenant} from 'data/user/store';
-import {fetchFacilities} from 'data/facilities/actions';
-import {getSelectedFacility, getFacilities} from 'data/facilities/store';
+import {state} from 'data/state';
 
 export default class Facility extends React.Component {
-    componentWillMount() {
-      document.body.classList.add("fixed-header", "dashboard", "sidebar-visible", "menu-pin");
-    }
-
-    componentWillUnmount() {
-      document.body.classList.remove("fixed-header", "dashboard", "sidebar-visible", "menu-pin");
-    }
 
     render() {
-        let {facility, tenant, state} = this.props;
+        let {selected, availableFacilities, acToggleSidebar} = this.props;
+        const tenant = getSelectedTenant();
         let tenantName = tenant.get("name");
-        let facilities = getFacilities();
         return (
             <DocumentTitle title='CS Companion'>
             {
-                    facility ?
+                    selected ?
                           <div>
-                              <FacilityNavigation title={tenantName} facility={facility} facilities={facilities} />
+                              <FacilityNavigation title={tenantName} selected={selected} facilities={availableFacilities} acToggleSidebar={acToggleSidebar}/>
                               <div id="page-wrapper" className="page-container">
-                                  <TopNavBar title={tenantName} facility={facility} facilities={facilities}/>
+                                  <TopNavBar title={tenantName} selected={selected} availableFacilities={availableFacilities}/>
                                   <div className="page-content-wrapper">
                                       <div className="content">
-                                          <RouteHandler state={state}/>
+                                        <PageGrid>
+                                          { React.cloneElement(this.props.children, { state: state })}
+                                        </PageGrid>
                                       </div>
                                   </div>
                               </div>

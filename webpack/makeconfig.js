@@ -37,7 +37,7 @@ module.exports = function(isDevelopment, isTest) {
   var config = {
     cache: isDevelopment,
     debug: isDevelopment,
-    devtool: isDevelopment ? 'eval-source-map' : '',
+    devtool: isDevelopment ? 'eval' : '',
     entry: {
       app: isDevelopment ? [
         'webpack-dev-server/client?http://localhost:8888',
@@ -73,7 +73,7 @@ module.exports = function(isDevelopment, isTest) {
           { test: /\.svg([\?]?.*)$/,  loader: "url-loader?limit=10000&mimetype=image/svg+xml" },
           { test: /\.(gif|jpg|png)$/, loader: 'url-loader?limit=100000' },
           {
-              exclude: [/node_modules/, /bower_components/, /web_modules/],
+              exclude: [/node_modules/, /web_modules/],
               loaders: isDevelopment ? [
                   'react-hot', 'babel-loader'
                   ] : [
@@ -112,7 +112,12 @@ module.exports = function(isDevelopment, isTest) {
           NotifyPlugin,
           new webpack.HotModuleReplacementPlugin(),
           // Tell reloader to not reload if there is an error.
-          new webpack.NoErrorsPlugin()
+          new webpack.NoErrorsPlugin(),
+          new webpack.optimize.UglifyJsPlugin({
+            compress: {
+              warnings: false
+            }
+          })
         );
       else
         plugins.push(
@@ -135,12 +140,9 @@ module.exports = function(isDevelopment, isTest) {
         alias: {
             "react": path.resolve(process.cwd(), './node_modules/react'),
             "react/addons": path.resolve(process.cwd(), './node_modules/react'),
-            "react-addons-test-utils": "react/addons", //TODO remove when switched to react 14
-            "react-dom/server": "react" // TODO remove when switched to react 14
 
         },
-        root: [ path.resolve(process.cwd(), './src/companion'),
-                path.resolve(process.cwd(), './bower_components')],
+        root: [ path.resolve(process.cwd(), './src/companion')],
         extensions: ['', '.js', '.json', '.react.js']
     }
   };

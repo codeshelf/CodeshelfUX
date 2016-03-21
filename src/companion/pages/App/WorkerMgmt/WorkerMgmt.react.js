@@ -1,16 +1,15 @@
-import React from 'react';
+import React, {Component} from 'react';
 import _ from 'lodash';
 import DocumentTitle from 'react-document-title';
 import {Modal, Input} from 'react-bootstrap';
 import Icon from 'react-fa';
 import Immutable from 'immutable';
-import {RouteHandler} from 'react-router';
 import PureComponent from 'components/common/PureComponent';
 import {SingleCellLayout, Row, Col} from 'components/common/pagelayout';
 import {SingleCellIBox} from 'components/common/IBox';
 import UploadForm from 'components/common/UploadForm';
 import {Checkbox, changeState} from 'components/common/Form';
-
+import {toURL} from 'components/common/exposerouter';
 
 import ListView from "components/common/list/ListView";
 import ListManagement from "components/common/list/ListManagement";
@@ -18,10 +17,17 @@ import {EditButtonLink, AddButtonLink} from 'components/common/TableButtons';
 import {Authz} from 'components/common/auth';
 
 
-import {getFacilityContext} from 'data/csapi';
+import {getAPIContext} from 'data/csapi';
 import {fetchWorkers} from 'data/workers/actions';
 import {getWorkers} from 'data/workers/store';
 import DateDisplay from "components/common/DateDisplay";
+// new imports redux
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+
+import {getWorkerMgmtMutable} from "./get";
+import {acGetWorkers, acHandleImport, acMoveColumns, acSortColumn} from "./store";
+
 const keyColumn = "persistentId";
 
 
@@ -47,7 +53,7 @@ class WorkerUploadForm extends React.Component {
   }
 }
 
-export default class WorkerMgmt extends React.Component{
+class WorkerMgmt extends Component{
 
     constructor(props) {
         super(props);
@@ -91,48 +97,51 @@ export default class WorkerMgmt extends React.Component{
                 displayName: "Active"
             },
         ]);
-            this.rowActionComponent = ListManagement.toEditButton((row) => {
-            return {    to: "workerdisplay",
-                        params: {workerId: row.get(keyColumn)}};
+        this.rowActionComponent = ListManagement.toEditButton((row) => {
+          return { to: toURL(this.props, "workers/" + row.get(keyColumn))};
         });
-        let {state} = props;
-        this.columnsCursor  = state.cursor(["preferences", "workers", "table", "columns"]);
-        this.columnSortSpecsCursor = state.cursor(["preferences", "workers", "table", "sortSpecs"]);
-
     }
-
 
     componentWillMount() {
-        fetchWorkers({limit: 5000});
+        this.props.acGetWorkers({limit: 20});
     }
 
-    handleImportSubmit(method, formInput) {
-      return getFacilityContext()[method](formInput).then(function() {
-        fetchWorkers({limit: 5000});
-      }.bind(this));
+    handleImportSubmit(method, file) {
+        let formData = new FormData();
+        formData.append("file", file);
+        return this.props.acHandleImport(method, formData);
     }
 
     render() {
-        var rows = getWorkers();
-        let title = "Manage Workers";
+        const {table, items} = this.props;
+        const title = "Manage Workers";
+
         return (
             <SingleCellLayout title={title}>
-                <Authz permission="worker:import">
-                    <WorkerUploadForm label="Workers"
-                            onImportSubmit={this.handleImportSubmit.bind(this, "importWorkers")} />
-                </Authz>
-                <ListManagement
-                        allowExport={true}
-                        addButtonRoute="workernew"
-                        columns={this.columnsCursor}
-                        columnMetadata={this.columnMetadata}
-                        sortSpecs={this.columnSortSpecsCursor}
-                        rowActionComponent={this.rowActionComponent}
-                        results={rows}
-                        keyColumn={keyColumn}/>
-                <RouteHandler formMetadata={this.columnMetadata}/>
+              <Authz permission="worker:import">
+                  <WorkerUploadForm label="Workers"
+                    onImportSubmit={(file) => this.handleImportSubmit("importWorkers", file)} />
+              </Authz>
+              { items.get('loading')
+                ? <div>Loading...</div>
+                : <ListManagement
+                    allowExport={true}
+                    addButtonRoute={toURL(this.props, 'workers/new')}
+                    storeName={'workersManagement'}
+                    columnMetadata={this.columnMetadata}
+                    rowActionComponent={this.rowActionComponent}
+                    results={items.get('data')}
+                    keyColumn={keyColumn}/>
+              }
+              {this.props.children && React.cloneElement(this.props.children, { formMetadata: this.columnMetadata})}
            </SingleCellLayout>);
     }
 
 
 };
+
+function mapDispatch(dispatch) {
+  return bindActionCreators({acGetWorkers, acHandleImport, acMoveColumns, acSortColumn}, dispatch);
+}
+
+export default connect(getWorkerMgmtMutable, mapDispatch)(WorkerMgmt);
