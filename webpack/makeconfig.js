@@ -37,7 +37,7 @@ module.exports = function(isDevelopment, isTest) {
   var config = {
     cache: isDevelopment,
     debug: isDevelopment,
-    devtool: isDevelopment ? 'eval' : '',
+    devtool: isDevelopment ? 'cheap-module-eval-source-map' : '',
     entry: {
       app: isDevelopment ? [
         'webpack-dev-server/client?http://localhost:8888',
