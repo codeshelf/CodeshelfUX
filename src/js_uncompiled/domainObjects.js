@@ -55,6 +55,16 @@ domainobjects = {
 				'title': 'Controller',
 				'width': 25
 			},
+			'firstLedNumAlongPath': {
+				'id':    'firstLedNumAlongPath',
+				'title': 'First LED',
+				'width': 10
+			},
+			'lastLedNumAlongPath': {
+				'id':    'lastLedNumAlongPath',
+				'title': 'Last LED',
+				'width': 10
+			},
 			'persistentId': {
 				'id':    'persistentId',
 				'title': 'Persistent ID',
@@ -200,6 +210,16 @@ domainobjects = {
 				'id':    'ledControllerIdUi',
 				'title': 'Controller',
 				'width': 25
+			},
+			'firstLedNumAlongPath': {
+				'id':    'firstLedNumAlongPath',
+				'title': 'First LED',
+				'width': 10
+			},
+			'lastLedNumAlongPath': {
+				'id':    'lastLedNumAlongPath',
+				'title': 'Last LED',
+				'width': 10
 			},
 			'posconIndex': {
 				'id':    'posconIndex',
