@@ -31,15 +31,29 @@ export default class PivotTable extends Component {
               }
           }
         }
-    this.topParams = ['province', 'age', 'party'];
-    this.sideParams = ['gender'];
-  }
+    this.topParams = ['province', 'age'];
+    this.sideParams = ['party','gender'];
+
+  this.data2 = {
+   columns: ['count', 'province', 'agebin', 'party', 'gender'], 
+   data: [
+     [0, 'Alberta', '30', 'Bloc Quebecois', 'Male'],
+     [5, 'Alberta', '20', 'Conservative', 'Male'],
+     [0, 'Alberta', '30', 'Bloc Quebecois', 'Female'],
+   ]
+  };
+}
 
   render() {
     const {topParams, sideParams, data} = this.props;
     return (
       <table>
-        <TopRows {...this.props} data={this.data.data} topParams={this.topParams} sideParams={this.sideParams}/>
+        <TopRows {...this.props} data={this.data.data}
+                                 topParams={this.topParams}
+                                 sideParams={this.sideParams}/>
+        {<SideRows {...this.props} data={this.data2.data}
+                                 topParams={this.topParams}
+                                 sideParams={this.sideParams}/>}
       </table>
     )
   }
@@ -57,6 +71,7 @@ class TopRows extends Component {
       const tmpVal = [];
       const newObj = {};
       let num = 0;
+
       for (let key in data) {
         const tmp = data[key];
         for (let key2 in tmp) {
@@ -70,21 +85,208 @@ class TopRows extends Component {
       data = newObj;
       index++;
     }
-    console.info(topRows, rows);
+    console.info("rows", rows);
     return (
-      <div>
+      <thead>
       { topParams.map((param, index) => { 
         return (
           <tr>
             { index === 0 && <th colSpan={sideParams.length} rowSpan={topParams.lenght}></th>}
             { index === topParams.length - 1 && sideParams.map((param) => <th>{param}</th>)}
-            { index === topParams.length - 1 && <th rowSpan={sideParams.length} colSpan={topParams.lenght}></th>)} 
+            { index === topParams.length - 1 && <th rowSpan={sideParams.length} 
+                                                    colSpan={topParams.lenght}></th>} 
             <th>{param}</th>
             { rows[index].map((obj) => {return (<th colSpan={obj['colspacing']}>{obj['value']}</th>)}
               )}
           </tr>
         )})
 
-    }</div>)
+    }</thead>);
+  }
+}
+
+class SideRows extends Component {
+
+  constructor(props) {
+    super(props);
+    this.weight = '%weight%';
+    this.position = '%position%';
+  }
+
+  // set element Weight in map table
+  setWeight(dataMap) {
+    let weight = 0;
+    
+    if (!dataMap.size) {
+      dataMap.set(this.weight, 1);
+      return 1;
+    }
+
+    dataMap.forEach((value, key) => {
+      weight += this.setWeight(dataMap.get(key));
+    })
+
+    dataMap.set(this.weight, weight);
+    return weight;
+  }
+
+  // set element position in MapTable
+  setPosition(dataMap) {
+    let position = 0;
+
+    const posRecursive = (dataMap) => {
+      
+      // if we have only one item it is weight and
+      // therefore we are in the end
+      if (dataMap.size <= 1) {
+        dataMap.set(this.position, position);
+        position++;
+        return;
+      }
+
+      dataMap.forEach((value, key) => {
+        if (key !== this.weight) {
+          posRecursive(dataMap.get(key))
+        }
+      })
+    };
+    posRecursive(dataMap);
+  }
+
+  // get Side bar data in Map Form
+  getSideBarMap(data, topParams, sideParams) {
+    let dataMap = new Map();
+
+    for (let i = 0; i < data.length; i++) {
+      this.getMapRecursive(dataMap, i, 1 + topParams.length, data[0].length, data)
+    }
+
+    return dataMap;
+  }
+
+  // get Top Bar data in Map form
+  getTopBarMap(data, topParams, sideParams) {
+    let dataMap = new Map();
+
+    for (let i = 0; i < data.length; i++) {
+      this.getMapRecursive(dataMap, i, 1, 1 + topParams.length, data)
+    }
+
+    return dataMap;
+  }
+
+  // use by getSideBarMap and getTopBarMap
+  getMapRecursive(dataMap, i, j, maxj, data) {
+    if (j < maxj) {
+      if (!dataMap.get(data[i][j])) {
+        dataMap.set(data[i][j], new Map());
+      }
+      this.getMapRecursive(dataMap.get(data[i][j]), i, j+1, maxj, data);
+    }
+  }
+
+  // get Data for inner table without counting total for now
+  getInnerTableData(data, sideBarMap, topBarMap, topParams) {
+    let innerTable = [];
+
+    data.forEach((row, i) => {
+      let t = topBarMap;
+      for (let col = 1; col < topParams.length + 1; col++) {
+        t = t.get(data[i][col]);
+      }
+      const y = t.get(this.position);
+
+      let s = sideBarMap;
+      for (let col = 1 + topParams.length; col < data[0].length; col++) {
+        s = s.get(data[i][col]);
+      }
+      const x = s.get(this.position);
+
+      if (!innerTable[x]) {
+        innerTable[x] = [];
+      }
+      innerTable[x][y] = data[i][0];
+    })
+
+    return innerTable;
+  }
+
+  // fill sideBarTable which is used to determine rowspan
+  fillRowspanTable(sideBarMap, offsets, sideBarTable, i) {
+    if (i >= offsets.length) {
+      return;
+    }
+    sideBarMap.forEach((value, key) => {
+        if (key != this.weight && key != this.position) {
+          if (!sideBarTable[offsets[i]]) {
+            sideBarTable[offsets[i]] = [];
+        }
+
+        sideBarTable[offsets[i]][i] = {value: sideBarMap.get(key).get(this.weight),
+                                       name: key};
+        offsets[i] += sideBarMap.get(key).get(this.weight);
+        }
+      
+      if (key != this.weight && key != this.position) {
+        this.fillRowspanTable(sideBarMap.get(key), offsets, sideBarTable, i+1)
+      }
+    })
+  }
+
+  render() {
+    let {topParams, sideParams, data} = this.props;
+
+    let sideBarMap = this.getSideBarMap(data, topParams, sideParams);
+    let topBarMap = this.getTopBarMap(data, topParams, sideParams);
+    let sideBarTable = [];
+    console.info("sideBar", sideBarMap);
+    console.info("topBar", topBarMap);
+
+    this.setWeight(sideBarMap);
+    console.info("changed", sideBarMap);
+
+    this.setPosition(sideBarMap);
+    console.info("changed2", sideBarMap);
+
+    this.setWeight(topBarMap);
+    console.info("changed", topBarMap);
+
+    this.setPosition(topBarMap);
+    console.info("changed2", topBarMap);
+
+    const innerData = this.getInnerTableData(data, sideBarMap, topBarMap, topParams);
+    console.info("innerData", innerData);
+
+    let offsets = [];
+    for (let i = 0; i < sideParams.length; i++) {
+      offsets.push(0);
+    }
+    this.fillRowspanTable(sideBarMap, offsets, sideBarTable, 0);
+    console.info("sideBar", sideBarTable);
+
+    const getRows = () => {
+      let ret = "";
+      for (let i = 0; i < innerData.length; i++) {
+        ret += "<tr>";
+        for (let j = 0; j < sideParams.length + innerData.length - 1; j++) {
+          if (j < sideParams.length) {
+            if (sideBarTable[i][j]) {
+              let pom = sideBarTable[i][j];
+              ret += `<td rowSpan=${pom.value}>${pom.name}</td>`;
+            }
+          } else {
+            let cell = (innerData[i][j-sideParams.length] !== undefined) ?
+                       innerData[i][j-sideParams.length] : '';
+            ret += `<td>${cell}</td>`;
+          }
+        }
+        ret += "</tr>";
+      }
+      return <div dangerouslySetInnerHTML={{__html: ret}}></div>;
+    }
+    return (
+      <tbody>
+      {getRows()}
+      </tbody>);
   }
 }
