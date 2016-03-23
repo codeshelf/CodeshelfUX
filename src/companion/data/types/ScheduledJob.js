@@ -7,7 +7,8 @@ export function toLabel(property) {
 
 export const types = [
     {value: "AccumulateDailyMetrics", label: "Accumulate Daily Metrics"},
-    {value: "CheckActiveSiteControllerHealth", label: "Active Site Controller Health Check"},
+    {value: "CheckActiveSiteControllerHealth", label: "Active Site Controllers Health Check"},
+    {value: "CheckStandbySiteControllerHealth", label: "Standby Site Controllers Health Check"},
     {value: "DatabaseConnection", label: "Database Connection Check"},
     {value: "DatabasePurge", label: "Database Purge"},
     {value: "DatabaseSizeCheck", label: "Database Size Check"},
