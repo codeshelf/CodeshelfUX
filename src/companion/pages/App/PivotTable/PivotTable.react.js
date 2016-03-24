@@ -31,11 +31,33 @@ export default class PivotTable extends Component {
               }
           }
         }
+
+    //this.topParams = [];
+    //this.sideParams = [];
+
     this.topParams = ['province', 'age'];
-    this.sideParams = ['party','gender'];
+    this.sideParams = ['party', 'gender'];
+
+    //this.topParams = [];
+    //this.sideParams = ['province', 'age', 'party', 'gender'];
+
+    //this.topParams = ['province', 'age', 'party', 'gender'];
+    //this.sideParams = [];
+
+    //this.topParams = ['age', 'party'];
+    //this.sideParams = ['gender'];
+    
+    //this.topParams = ['gender'];
+    //this.sideParams = ['age', 'party'];
+
+    //this.topParams = ['gender'];
+    //this.sideParams = ['age', 'party'];
+
+    //this.topParams = ['gender', 'party'];
+    //this.sideParams = ['age'];
 
   this.data2 = {
-   columns: ['count', 'province', 'agebin', 'party', 'gender'], 
+   columns: ['count', 'province', 'age', 'party', 'gender'], 
    data: [
      [0, 'Alberta', '30', 'Bloc Quebecois', 'Male'],
      [5, 'Alberta', '20', 'Conservative', 'Male'],
@@ -46,6 +68,7 @@ export default class PivotTable extends Component {
 
   render() {
     const {topParams, sideParams, data} = this.props;
+
     return (
       <table>
         <TopRows {...this.props} data={this.data.data}
@@ -53,7 +76,8 @@ export default class PivotTable extends Component {
                                  sideParams={this.sideParams}/>
         {<SideRows {...this.props} data={this.data2.data}
                                  topParams={this.topParams}
-                                 sideParams={this.sideParams}/>}
+                                 sideParams={this.sideParams}
+                                 columns={this.data2.columns}/>}
       </table>
     )
   }
@@ -154,61 +178,72 @@ class SideRows extends Component {
   }
 
   // get Side bar data in Map Form
-  getSideBarMap(data, topParams, sideParams) {
+  getSideBarMap(data, topParams, sideParams, columns) {
     let dataMap = new Map();
 
     for (let i = 0; i < data.length; i++) {
-      this.getMapRecursive(dataMap, i, 1 + topParams.length, data[0].length, data)
+      this.getMapRecursive(dataMap, i, 0, data, sideParams, columns);
     }
 
     return dataMap;
   }
 
   // get Top Bar data in Map form
-  getTopBarMap(data, topParams, sideParams) {
+  getTopBarMap(data, topParams, sideParams, columns) {
     let dataMap = new Map();
 
     for (let i = 0; i < data.length; i++) {
-      this.getMapRecursive(dataMap, i, 1, 1 + topParams.length, data)
+      this.getMapRecursive(dataMap, i, 0, data, topParams, columns);
     }
 
     return dataMap;
   }
 
   // use by getSideBarMap and getTopBarMap
-  getMapRecursive(dataMap, i, j, maxj, data) {
-    if (j < maxj) {
-      if (!dataMap.get(data[i][j])) {
-        dataMap.set(data[i][j], new Map());
+  getMapRecursive(dataMap, i, j, data, params, columns) {
+    if (j < params.length) {
+      let key = data[i][columns.indexOf(params[j])];
+      if (!dataMap.get(key)) {
+        dataMap.set(key, new Map());
       }
-      this.getMapRecursive(dataMap.get(data[i][j]), i, j+1, maxj, data);
+      this.getMapRecursive(dataMap.get(key), i, j+1, data, params, columns);
     }
   }
 
   // get Data for inner table without counting total for now
-  getInnerTableData(data, sideBarMap, topBarMap, topParams) {
+  getInnerTableData(data, sideBarMap, topBarMap, topParams, sideParams, columns) {
     let innerTable = [];
+    let width = 0;
+    let height = 0;
 
     data.forEach((row, i) => {
       let t = topBarMap;
-      for (let col = 1; col < topParams.length + 1; col++) {
-        t = t.get(data[i][col]);
+      for (let col = 0; col < topParams.length; col++) {
+        t = t.get(data[i][columns.indexOf(topParams[col])]);
+
       }
-      const y = t.get(this.position);
+      const x = t.get(this.position);
+      if (x > width) {
+        width = x;
+      }
 
       let s = sideBarMap;
-      for (let col = 1 + topParams.length; col < data[0].length; col++) {
-        s = s.get(data[i][col]);
+      for (let col = 0; col < sideParams.length; col++) {
+        s = s.get(data[i][columns.indexOf(sideParams[col])]);
       }
-      const x = s.get(this.position);
-
-      if (!innerTable[x]) {
-        innerTable[x] = [];
+      const y = s.get(this.position);
+      if (y > height) {
+        height = y;
       }
-      innerTable[x][y] = data[i][0];
+      if (!innerTable[y]) {
+        innerTable[y] = [];
+      }
+      innerTable[y][x] = data[i][0];
     })
 
-    return innerTable;
+    width++;
+    height++;
+    return {innerData: innerTable, width, height};
   }
 
   // fill sideBarTable which is used to determine rowspan
@@ -231,61 +266,103 @@ class SideRows extends Component {
         this.fillRowspanTable(sideBarMap.get(key), offsets, sideBarTable, i+1)
       }
     })
-  }
+  }  
 
   render() {
-    let {topParams, sideParams, data} = this.props;
+    let {columns, topParams, sideParams, data} = this.props;
 
-    let sideBarMap = this.getSideBarMap(data, topParams, sideParams);
-    let topBarMap = this.getTopBarMap(data, topParams, sideParams);
+    let sideBarMap = this.getSideBarMap(data, topParams, sideParams, columns);
+    let topBarMap = this.getTopBarMap(data, topParams, sideParams, columns);
     let sideBarTable = [];
-    console.info("sideBar", sideBarMap);
-    console.info("topBar", topBarMap);
+    console.info('sideBar', sideBarMap);
+    console.info('topBar', topBarMap);
 
     this.setWeight(sideBarMap);
-    console.info("changed", sideBarMap);
+    console.info('changed', sideBarMap);
 
     this.setPosition(sideBarMap);
-    console.info("changed2", sideBarMap);
+    console.info('changed', sideBarMap);
 
     this.setWeight(topBarMap);
-    console.info("changed", topBarMap);
+    console.info('changed', topBarMap);
 
     this.setPosition(topBarMap);
-    console.info("changed2", topBarMap);
+    console.info('changed2', topBarMap);
 
-    const innerData = this.getInnerTableData(data, sideBarMap, topBarMap, topParams);
-    console.info("innerData", innerData);
+    const {innerData, width, height} = this.getInnerTableData(data, sideBarMap,
+                                                              topBarMap, topParams,
+                                                              sideParams, columns);
+    console.info('innerData', innerData, width, height);
 
     let offsets = [];
     for (let i = 0; i < sideParams.length; i++) {
       offsets.push(0);
     }
     this.fillRowspanTable(sideBarMap, offsets, sideBarTable, 0);
-    console.info("sideBar", sideBarTable);
+    console.info('sideBar', sideBarTable);
+
+    const tableStyle = {
+      border: '1px solid black'
+    };
 
     const getRows = () => {
-      let ret = "";
-      for (let i = 0; i < innerData.length; i++) {
-        ret += "<tr>";
-        for (let j = 0; j < sideParams.length + innerData.length - 1; j++) {
+      let ret = '';
+      let total = 0;
+      const bc = '#A6E6EC';
+      const fw = 'bold';
+        
+      let bottomTotals = [];
+      for (let i = 0; i < width; i++) {
+        bottomTotals[i] = 0;
+      }
+
+      for (let i = 0; i < height; i++) {
+        ret += '<tr>';
+
+        let currenTotal = 0;
+        for (let j = 0; j < sideParams.length + width; j++) {
           if (j < sideParams.length) {
-            if (sideBarTable[i][j]) {
+            if (sideBarTable[i] && sideBarTable[i][j]) {
               let pom = sideBarTable[i][j];
-              ret += `<td rowSpan=${pom.value}>${pom.name}</td>`;
+              ret += `<td style='background: ${bc}; font-weight: ${fw}' rowSpan=${pom.value}>${pom.name}</td>`;
             }
           } else {
             let cell = (innerData[i][j-sideParams.length] !== undefined) ?
                        innerData[i][j-sideParams.length] : '';
-            ret += `<td>${cell}</td>`;
+            
+            if (sideParams.length && topParams.length) {
+              ret += `<td>${cell}</td>`;
+            }
+
+            if (cell != '') {
+              currenTotal += cell;
+              bottomTotals[j-sideParams.length] += cell;
+            }
           }
         }
-        ret += "</tr>";
+        total += currenTotal;
+
+        if (sideParams.length) {
+          ret += `<td style='font-weight: ${fw}'>${currenTotal}</td>`;
+        }
+
+        ret += '</tr>';
       }
+      ret += '<tr>';
+
+      ret += `<td style='background: ${bc}; font-weight: ${fw}' colSpan=${sideParams.length}>Totals</td>`;
+      if (topParams.length) {
+        bottomTotals.forEach((value, key) => {
+          ret += `<td style='font-weight: ${fw}'>${value}</td>`;
+        });
+      }
+      ret += `<td style='font-weight: ${fw}'>${total}</td>`;
+      ret += '</tr>';
       return <div dangerouslySetInnerHTML={{__html: ret}}></div>;
-    }
+   }
+
     return (
-      <tbody>
+      <tbody style={tableStyle}>
       {getRows()}
       </tbody>);
   }
