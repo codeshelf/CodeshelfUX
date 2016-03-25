@@ -206,6 +206,11 @@ domainobjects = {
 				'title': 'Tape Id',
 				'width': 40
 			},
+			'ledChannelUi': {
+				'id':    'ledChannelUi',
+				'title': 'Channel',
+				'width': 8
+			},
 			'ledControllerIdUi': {
 				'id':    'ledControllerIdUi',
 				'title': 'Controller',
