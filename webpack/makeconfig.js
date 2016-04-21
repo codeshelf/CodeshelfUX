@@ -109,7 +109,7 @@ module.exports = function(isDevelopment, isTest) {
       ];
       if (isDevelopment)
         plugins.push(
-          NotifyPlugin,
+//          NotifyPlugin,
           new webpack.HotModuleReplacementPlugin(),
           // Tell reloader to not reload if there is an error.
           new webpack.NoErrorsPlugin(),
