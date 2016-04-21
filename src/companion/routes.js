@@ -24,6 +24,7 @@ import Login from './pages/Login/Login.react.js';
 import Users from './pages/Users/Users.react.js';
 import UserAdd from './pages/Users/UserAdd.react.js';
 import UserEdit from './pages/Users/UserEdit.react.js';
+import AuthRoot from './pages/Login/AuthRoot.react.js';
 import SetupPassword from './pages/SetupPassword/SetupPassword.react.js';
 import ChangePassword from './pages/ChangePassword/ChangePassword.react.js';
 import RecoverPassword from './pages/RecoverPassword/RecoverPassword.react.js';
@@ -157,10 +158,12 @@ export default (
     </Route>
     // Routes for user credentials
 
-    <Route component={Login} path="login" />
-    <Route component={SetupPassword} path="password/setup" />
-    <Route component={ChangePassword} path="password/change" />
-    <Route component={RecoverPassword} path="password/recover" />
-    <Route component={RecoverSuccess} path="password/success" />
+    <Route component={AuthRoot}>
+      <Route component={Login} path="login" />
+      <Route component={SetupPassword} path="password/setup" />
+      <Route component={ChangePassword} path="password/change" />
+      <Route component={RecoverPassword} path="password/recover" />
+      <Route component={RecoverSuccess} path="password/success" />
+    </Route>
   </Route>
 );
