@@ -24,8 +24,10 @@ class LoadContext extends Component {
 
   loadAndRedirect() {
     const {availableFacilities} = this.props;
-    if (!availableFacilities || availableFacilities.length === 0) {
+    if (!availableFacilities) {
       this.props.acInitialLoadFacilities();
+    } else if (availableFacilities.length === 0) {
+      console.log("No facilities");
     } else {
       const {router, location} = this.props;
       const newUri = new URI(`./facilities/${availableFacilities[0].domainId}/customers/ALL`);
@@ -35,9 +37,18 @@ class LoadContext extends Component {
   }
 
   render() {
+    const {availableFacilities} = this.props;
+    let message = "";
+    if (!availableFacilities) {
+      message = "Finding Facilities...";
+    } else if (availableFacilities.length === 0) {
+      message = "No Facilities";
+    } else {
+      message = "Loading Facility...";
+    }
     return (
       <div>
-        Loading Facility...
+        {message}
       </div>
     );
   }
