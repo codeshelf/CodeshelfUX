@@ -34,6 +34,8 @@ export function loginCookies() {
             const err = new ConnectionError ('Server is unavailable, please contact support and try again later', 'password');
             loginError(err);
             throw err;
+          } else {
+            throw e;
           }
         })
         .then((user) => {
