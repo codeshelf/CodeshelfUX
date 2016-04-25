@@ -26,13 +26,12 @@ export class ContextSelector extends React.Component {
         const {selected, availableFacilities, desktop, closeSidebar} = this.props;
         const basePath = (desktop) ? '' : '/mobile';
         return (<DropdownButton id="facility-dropdown" className="facility-dropdown" bsStyle="link" title={renderContextLabel(selected)}>
-                <div className="sidebar-menu" style={{maxHeight: 500, overflowY: 'scroll',width: 200}}>
+                <div className="sidebar-menu" style={{maxHeight: '500', overflowY: 'scroll',width: '200'}}>
                 {
                     availableFacilities.map((facility) => {
                         const {name, persistentId, domainId, description} = facility;
-                        return (
-                           <ul key={domainId} style={{listStyleType: 'none', paddingLeft: 15, paddingTop: 3}}>
-                              <MenuItemLink
+                        return (<ul style={{listStyleType: 'none', paddingLeft: 15, paddingTop: 3}}>
+                              <MenuItemLink key={domainId}
                                              to={`${basePath}/facilities/${domainId}/customers/ALL`}
                                              data-persistentid={persistentId}
                                              onClick={closeSidebar}

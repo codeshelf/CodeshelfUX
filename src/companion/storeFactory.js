@@ -2,8 +2,7 @@ import { combineReducers, createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import createLogger from "redux-logger";
 import * as storage from 'redux-storage';
-import createEngine from 'redux-storage-engine-localstorage';
-import filter from 'redux-storage-decorator-filter';
+import createEngine from 'redux-storage/engines/localStorage';
 
 
 
@@ -19,7 +18,7 @@ export function createApplicationStore(rootReducer,  storageConfig = {}) {
 
   let storageEngine = null;
   if (key) {
-    storageEngine = filter(
+    storageEngine = storage.decorators.filter(
       createEngine(key),
       pathsToSync);
 
